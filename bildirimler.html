@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bildirimler – Kaynak Akademi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; color: #1e2d4d; background: #f6f8ff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    :root {
+      --blue: #1a3c8f; --blue-dk: #122a6e; --teal: #0ea5c9; --orange: #f97316;
+      --amber: #fbbf24; --yesil: #16a34a; --bg-soft: #f0f4ff; --text: #1e2d4d; --muted: #64748b;
+      --radius: 14px; --shadow: 0 4px 24px rgba(26,60,143,.10); --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+    }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 24px; border-radius: 50px; font-size: .9rem; font-weight: 600;
+      cursor: pointer; transition: all .25s; border: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #ea6000; }
+    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: #fff; }
+    .btn-kucuk { padding: 7px 14px; font-size: .78rem; }
+    .tag {
+      display: inline-flex; align-items: center; background: rgba(26,60,143,.07); color: var(--blue);
+      padding: 4px 12px; border-radius: 50px; font-size: .75rem; font-weight: 600;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26,60,143,.08);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); flex-shrink: 0; }
+    .logo-icon { width: 48px; height: 48px; object-fit: contain; }
+    .logo span { color: var(--orange); }
+    .kullanici-alan { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .kullanici-rozet {
+      display: flex; align-items: center; gap: 10px; background: var(--bg-soft);
+      padding: 6px 16px 6px 6px; border-radius: 50px; font-size: .85rem; font-weight: 600; color: var(--blue);
+    }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange), var(--amber));
+      color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700;
+    }
+
+    /* ── UYGULAMA MENÜSÜ (öğretmen/öğrenci) ─────────────────── */
+    .ana-menu {
+      display: flex; align-items: center; gap: 4px; flex: 1;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .ana-menu::-webkit-scrollbar { display: none; }
+    .menu-link {
+      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+      padding: 9px 16px; border-radius: 50px; font-size: .85rem; font-weight: 600;
+      color: var(--muted); transition: all .2s;
+    }
+    .menu-link:hover { background: var(--bg-soft); color: var(--blue); }
+    .menu-link.aktif { background: var(--blue); color: #fff; }
+    .menu-rozet {
+      background: #ef4444; color: #fff; font-size: .64rem; font-weight: 800;
+      border-radius: 50px; padding: 1px 6px; min-width: 16px; text-align: center; line-height: 1.4;
+    }
+    @media (max-width: 860px) {
+      .nav-inner { flex-wrap: wrap; height: auto; padding: 10px 0; row-gap: 8px; }
+      .ana-menu { order: 3; width: 100%; flex: none; justify-content: flex-start; }
+    }
+
+    .panel-bas { padding: 36px 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .panel-bas h1 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; }
+    .panel-bas h1 span { color: var(--orange); }
+
+    .bolum {
+      background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 26px; margin: 20px 0 40px;
+    }
+    .arac-cubugu { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .filtreler { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filtre {
+      border: none; background: var(--bg-soft); font-family: inherit; cursor: pointer;
+      padding: 8px 18px; border-radius: 50px; font-size: .82rem; font-weight: 600;
+      color: var(--muted); transition: all .2s;
+    }
+    .filtre.aktif { background: var(--blue); color: #fff; }
+    .arac-butonlar { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .bildirim {
+      display: flex; align-items: flex-start; gap: 14px;
+      border: 1px solid rgba(26,60,143,.10); border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 10px; background: #fff;
+      cursor: pointer; transition: all .15s; position: relative;
+    }
+    .bildirim:hover { border-color: var(--teal); }
+    .bildirim.yeni { background: #f4f8ff; border-left: 4px solid var(--blue); }
+    .bildirim-ikon {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+    }
+    .bildirim-govde { flex: 1; min-width: 0; }
+    .bildirim-govde p { font-size: .88rem; line-height: 1.5; }
+    .bildirim.yeni .bildirim-govde p { font-weight: 600; }
+    .bildirim-tarih { font-size: .72rem; color: var(--muted); margin-top: 5px; font-weight: 500; }
+    .yeni-nokta {
+      width: 9px; height: 9px; border-radius: 50%; background: var(--blue);
+      position: absolute; top: 16px; right: 14px;
+    }
+    .sil-btn {
+      border: none; background: #fef2f2; color: #b91c1c; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 8px; font-size: .85rem; flex-shrink: 0;
+      transition: all .2s; font-family: inherit;
+    }
+    .sil-btn:hover { background: #b91c1c; color: #fff; }
+    .bos-mesaj { text-align: center; color: var(--muted); font-size: .9rem; padding: 40px 10px; }
+    .bos-mesaj .ikon { font-size: 2.6rem; display: block; margin-bottom: 10px; }
+
+    @media (max-width: 560px) { .kullanici-rozet span { display: none; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
+        Kaynak <span>Akademi</span>
+      </a>
+      <nav class="ana-menu" id="anaMenu"></nav>
+      <div class="kullanici-alan">
+        <div class="kullanici-rozet">
+          <div class="avatar" id="avatarKutu">?</div>
+          <span id="kullaniciAdi">—</span>
+        </div>
+        <button class="btn btn-outline btn-kucuk" onclick="KA.cikisYap()">Çıkış Yap</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="panel-bas">
+    <h1>🔔 <span>Bildirimler</span></h1>
+    <a href="#" class="btn btn-outline btn-kucuk" id="panelDon">← Panele Dön</a>
+  </div>
+
+  <div class="bolum">
+    <div class="arac-cubugu">
+      <div class="filtreler">
+        <button class="filtre aktif" data-filtre="tumu" onclick="filtreSec(this)">Tümü <span id="fTumu"></span></button>
+        <button class="filtre" data-filtre="okunmamis" onclick="filtreSec(this)">Okunmamış <span id="fYeni"></span></button>
+      </div>
+      <div class="arac-butonlar">
+        <button class="btn btn-outline btn-kucuk" onclick="tumunuOkundu()">✓ Tümünü Okundu Say</button>
+        <button class="btn btn-outline btn-kucuk" onclick="temizle()" style="border-color:#b91c1c; color:#b91c1c;">🗑 Temizle</button>
+      </div>
+    </div>
+    <div id="bildirimListe"></div>
+  </div>
+</main>
+
+<script src="assets/kocluk.js"></script>
+<script>
+  /* Her iki rol de görebilir; oturum yoksa girişe yönlendir */
+  const kul = KA.oturum();
+  if (!kul) location.href = "giris.html";
+
+  let aktifFiltre = "tumu";
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, c =>
+      ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  }
+
+  if (kul) {
+    document.getElementById("kullaniciAdi").textContent = kul.ad;
+    document.getElementById("avatarKutu").textContent =
+      kul.ad.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
+    document.getElementById("panelDon").href = kul.rol === "koc" ? "koc-panel.html" : "ogrenci-panel.html";
+  }
+
+  function filtreSec(btn) {
+    document.querySelectorAll(".filtre").forEach(f => f.classList.remove("aktif"));
+    btn.classList.add("aktif");
+    aktifFiltre = btn.dataset.filtre;
+    ciz();
+  }
+
+  /* "2026-07-20 14:35" → "20.07.2026 14:35" (bugünse "Bugün 14:35") */
+  function zamanStr(t) {
+    const parca = String(t || "").split(" ");
+    const gun = parca[0] === KA.bugun() ? "Bugün" : KA.tarihStr(parca[0]);
+    return gun + (parca[1] ? " · " + parca[1] : "");
+  }
+
+  function ciz() {
+    const hepsi = KA.bildirimler(kul.id);
+    const yeniSayi = hepsi.filter(b => !b.okundu).length;
+    document.getElementById("fTumu").textContent = hepsi.length ? `(${hepsi.length})` : "";
+    document.getElementById("fYeni").textContent = yeniSayi ? `(${yeniSayi})` : "";
+    KA.menuCiz(document.getElementById("anaMenu"), kul, "bildirimler.html");
+    const liste = aktifFiltre === "okunmamis" ? hepsi.filter(b => !b.okundu) : hepsi;
+    const kutu = document.getElementById("bildirimListe");
+    if (!liste.length) {
+      kutu.innerHTML = `<p class="bos-mesaj"><span class="ikon">🔕</span>
+        ${aktifFiltre === "okunmamis" ? "Okunmamış bildirimin yok, hepsine baktın. 👏" : "Henüz bildirimin yok. Talepler, onaylar ve ders güncellemeleri burada görünecek."}</p>`;
+      return;
+    }
+    kutu.innerHTML = liste.map(b => `
+      <div class="bildirim ${b.okundu ? "" : "yeni"}" onclick="tikla('${b.id}')"
+        title="${b.hedef ? "İlgili kayda git" : (b.okundu ? "Okunmadı olarak işaretle" : "Okundu olarak işaretle")}">
+        <div class="bildirim-ikon">${b.ikon || "🔔"}</div>
+        <div class="bildirim-govde">
+          <p>${esc(b.metin)}</p>
+          <div class="bildirim-tarih">🕐 ${esc(zamanStr(b.tarih))}</div>
+        </div>
+        ${b.okundu ? "" : '<span class="yeni-nokta"></span>'}
+        <button class="sil-btn" title="Bildirimi sil" onclick="event.stopPropagation(); sil('${b.id}')">✕</button>
+      </div>`).join("");
+  }
+
+  /* Bildirime tıklanınca: okundu işaretle, hedefi varsa ilgili panelde ilgili kayda git */
+  function tikla(id) {
+    const b = KA.bildirimler(kul.id).find(x => x.id === id);
+    if (!b) return;
+    if (b.hedef) {
+      KA.bildirimOkundu(id, true);
+      const h = b.hedef;
+      location.href = kul.rol === "koc"
+        ? "koc-panel.html?ogrenci=" + encodeURIComponent(h.ogrenciId) + "&sekme=" + encodeURIComponent(h.tur) + "&kayit=" + encodeURIComponent(h.kayitId)
+        : "ogrenci-panel.html?kayit=" + encodeURIComponent(h.kayitId);
+      return;
+    }
+    /* Hedefi olmayan bildirimlerde tıklama okundu/okunmadı anahtarı gibi çalışır */
+    KA.bildirimOkundu(id, !b.okundu);
+    ciz();
+  }
+  function sil(id) {
+    KA.bildirimSil(id);
+    ciz();
+  }
+  function tumunuOkundu() {
+    KA.bildirimTumunuOkundu(kul.id);
+    ciz();
+  }
+  function temizle() {
+    if (!confirm("Tüm bildirimlerin silinsin mi?")) return;
+    KA.bildirimTemizle(kul.id);
+    ciz();
+  }
+
+  ciz();
+</script>
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Etkinlikler – İlkokul · Ortaokul · Lise – Kaynak Akademi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    /* ── RESET & BASE ────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #1e2d4d;
+      background: #fff;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ── TOKENS ──────────────────────────────────────────── */
+    :root {
+      --blue:    #1a3c8f;
+      --blue-dk: #122a6e;
+      --teal:    #0ea5c9;
+      --orange:  #f97316;
+      --amber:   #fbbf24;
+      --bg-soft: #f0f4ff;
+      --text:    #1e2d4d;
+      --muted:   #64748b;
+      --white:   #ffffff;
+      --radius:  14px;
+      --shadow:  0 4px 24px rgba(26,60,143,.10);
+      --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+    }
+
+    /* ── UTILITIES ───────────────────────────────────────── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 50px; font-size: .95rem;
+      font-weight: 600; cursor: pointer; transition: all .25s;
+      border: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #ea6000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
+    .tag {
+      display: inline-flex; align-items: center;
+      background: rgba(26,60,143,.07); color: var(--blue);
+      padding: 4px 12px; border-radius: 50px; font-size: .75rem; font-weight: 600;
+    }
+
+    /* ── HEADER ──────────────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,60,143,.08);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
+    .logo-icon {
+      width: 48px; height: 48px; object-fit: contain;
+    }
+    footer .logo-icon { background: #fff; border-radius: 10px; padding: 3px; }
+    .logo span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a:hover { background: var(--bg-soft); color: var(--blue); }
+    nav a.active { color: var(--blue); font-weight: 700; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue); margin: 5px 0; border-radius: 2px; transition: .3s; }
+
+    .mobile-nav {
+      display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
+      background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
+      padding: 24px; flex-direction: column; gap: 8px;
+      border-top: 1px solid rgba(26,60,143,.08);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; color: var(--text); transition: .2s; }
+    .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
+    .mobile-nav .btn { margin-top: 8px; text-align: center; justify-content: center; }
+
+    /* ── PAGE HERO / BREADCRUMB ─────────────────────────── */
+    .page-hero {
+      background: linear-gradient(140deg, #e8effe 0%, #f0f4ff 50%, #fef3e8 100%);
+      padding: 48px 0 40px; position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: -140px; right: -140px;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,165,201,.12) 0%, transparent 70%);
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem; color: var(--muted); margin-bottom: 14px; position: relative;
+      flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--blue); font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .page-hero h1 { font-size: clamp(1.7rem, 3.2vw, 2.5rem); font-weight: 800; position: relative; }
+    .page-hero h1 span { color: var(--orange); }
+    .page-hero p { color: var(--muted); margin-top: 10px; max-width: 640px; position: relative; }
+
+    /* ── CLASS TABS ─────────────────────────────────────── */
+    .class-tabs {
+      display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; position: relative;
+    }
+    .class-tab {
+      background: #fff; border: 2px solid transparent; border-radius: 50px;
+      padding: 10px 22px; font-size: .88rem; font-weight: 700; color: var(--text);
+      cursor: pointer; transition: all .25s; box-shadow: var(--shadow); font-family: inherit;
+    }
+    .class-tab:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+    .class-tab.active { background: var(--blue); color: #fff; }
+
+    /* ── LAYOUT ─────────────────────────────────────────── */
+    .listing { padding: 56px 0 80px; background: #fff; }
+    .listing-grid { display: grid; grid-template-columns: 280px 1fr; gap: 36px; align-items: start; }
+
+    /* ── SIDEBAR ────────────────────────────────────────── */
+    .sidebar { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 96px; }
+    .side-box {
+      background: var(--bg-soft); border-radius: var(--radius); padding: 22px;
+    }
+    .side-box h3 {
+      font-size: .95rem; font-weight: 800; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .side-list li { margin-bottom: 4px; }
+    .side-list button {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; font-family: inherit; cursor: pointer;
+      padding: 9px 12px; border-radius: 10px; font-size: .85rem; font-weight: 600;
+      color: var(--text); transition: all .2s; text-align: left;
+    }
+    .side-list button:hover { background: #fff; color: var(--blue); }
+    .side-list button.active { background: var(--blue); color: #fff; }
+    .side-count {
+      background: rgba(26,60,143,.10); color: var(--blue);
+      font-size: .72rem; font-weight: 700; padding: 2px 9px; border-radius: 50px;
+    }
+    .side-list button.active .side-count { background: rgba(255,255,255,.2); color: #fff; }
+
+    .recent-item {
+      display: flex; gap: 10px; align-items: center; padding: 8px 0;
+      border-bottom: 1px solid rgba(26,60,143,.07);
+    }
+    .recent-item:last-child { border-bottom: none; }
+    .recent-thumb {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+      background: #fff;
+    }
+    .recent-title { font-size: .8rem; font-weight: 600; line-height: 1.35; }
+    .recent-date { font-size: .7rem; color: var(--muted); margin-top: 2px; }
+
+    /* visitor stats */
+    .stats-box {
+      background: linear-gradient(135deg, var(--blue), var(--blue-dk));
+      color: #fff; border-radius: var(--radius); padding: 22px;
+    }
+    .stats-box h3 { font-size: .95rem; font-weight: 800; margin-bottom: 14px; display: flex; gap: 8px; align-items: center; }
+    .visitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .visitor-item { background: rgba(255,255,255,.08); border-radius: 10px; padding: 10px 12px; }
+    .visitor-num { font-size: 1.05rem; font-weight: 800; }
+    .visitor-num.online { color: #4ade80; }
+    .visitor-label { font-size: .68rem; opacity: .7; margin-top: 2px; font-weight: 500; }
+    .online-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #4ade80; margin-right: 5px;
+      box-shadow: 0 0 0 3px rgba(74,222,128,.25); animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,.25); } 50% { box-shadow: 0 0 0 6px rgba(74,222,128,.12); } }
+
+    .insta-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff; border-radius: var(--radius); padding: 14px; font-weight: 700;
+      font-size: .88rem; transition: all .25s;
+    }
+    .insta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(220,39,67,.35); }
+
+    /* ── TOOLBAR (search + sort) ────────────────────────── */
+    .toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px;
+      background: var(--bg-soft); border-radius: 50px; padding: 12px 20px;
+      border: 2px solid transparent; transition: all .2s;
+    }
+    .search-box:focus-within { border-color: var(--blue); background: #fff; box-shadow: var(--shadow); }
+    .search-box input {
+      flex: 1; border: none; background: none; outline: none;
+      font-family: inherit; font-size: .88rem; color: var(--text);
+    }
+    .result-info { font-size: .82rem; color: var(--muted); font-weight: 500; }
+    .result-info b { color: var(--blue); }
+
+    /* ── FILTER CHIPS ───────────────────────────────────── */
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .chip {
+      background: var(--bg-soft); border: none; font-family: inherit; cursor: pointer;
+      padding: 8px 16px; border-radius: 50px; font-size: .8rem; font-weight: 600;
+      color: var(--text); transition: all .2s;
+    }
+    .chip:hover { background: rgba(26,60,143,.12); color: var(--blue); }
+    .chip.active { background: var(--orange); color: #fff; }
+
+    /* ── ACTIVITY CARDS ─────────────────────────────────── */
+    .activity-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .activity-card {
+      background: #fff; border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); transition: all .3s;
+      display: flex; flex-direction: column;
+    }
+    .activity-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .activity-thumb {
+      height: 150px; display: flex; align-items: center; justify-content: center;
+      font-size: 3.2rem; position: relative;
+    }
+    .activity-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--orange); color: #fff;
+      padding: 3px 11px; border-radius: 50px; font-size: .68rem; font-weight: 700;
+    }
+    .activity-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+    .activity-meta { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .activity-title { font-size: .93rem; font-weight: 700; line-height: 1.45; margin-bottom: 10px; flex: 1; }
+    .activity-info {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .74rem; color: var(--muted); margin-bottom: 14px;
+    }
+    .activity-actions { display: flex; gap: 8px; }
+    .activity-actions .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: .8rem; border-radius: 10px; }
+
+    .empty-state {
+      grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+      background: var(--bg-soft); border-radius: var(--radius);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { color: var(--muted); font-size: .95rem; }
+
+    /* ── PAGINATION ─────────────────────────────────────── */
+    .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; flex-wrap: wrap; }
+    .page-btn {
+      min-width: 42px; height: 42px; border-radius: 12px; border: none;
+      background: var(--bg-soft); color: var(--text); font-family: inherit;
+      font-size: .88rem; font-weight: 700; cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center; padding: 0 12px;
+    }
+    .page-btn:hover:not(:disabled) { background: var(--blue); color: #fff; transform: translateY(-2px); }
+    .page-btn.active { background: var(--blue); color: #fff; }
+    .page-btn:disabled { opacity: .4; cursor: default; }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    footer { background: #0d1b3e; color: rgba(255,255,255,.75); padding: 60px 0 0; margin-top: 40px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand .logo { color: #fff; margin-bottom: 14px; }
+    .footer-brand p { font-size: .85rem; line-height: 1.75; opacity: .7; }
+    .footer-col h4 { color: #fff; font-size: .9rem; font-weight: 700; margin-bottom: 16px; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a { font-size: .83rem; transition: color .2s; }
+    .footer-col ul a:hover { color: var(--amber); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 20px 0; display: flex; justify-content: space-between;
+      align-items: center; font-size: .78rem; opacity: .55; flex-wrap: wrap; gap: 10px;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .activity-grid { grid-template-columns: repeat(2, 1fr); }
+      .listing-grid { grid-template-columns: 240px 1fr; gap: 24px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav, .nav-actions { display: none; }
+      .hamburger { display: block; }
+      .listing-grid { grid-template-columns: 1fr; }
+      .sidebar { position: static; order: 2; }
+      .listing-main { order: 1; }
+      .activity-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
+        Kaynak <span>Akademi</span>
+      </a>
+
+      <nav>
+        <a href="index.html">Ana Sayfa</a>
+        <a href="index.html#subjects">Dersler</a>
+        <a href="index.html#courses">Kurslar</a>
+        <a href="etkinlikler.html" class="active">Etkinlikler</a>
+        <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
+        <a href="ders-programi.html">Ders Programı</a>
+        <a href="haberler.html">Haberler</a>
+        <a href="#">İletişim</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="giris.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem;">Giriş Yap</a>
+        <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:.85rem;">Ücretsiz Başla</a>
+      </div>
+
+      <button class="hamburger" id="menuBtn" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="index.html#subjects">Dersler</a>
+    <a href="index.html#courses">Kurslar</a>
+    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <a href="haberler.html">Haberler</a>
+    <a href="#">İletişim</a>
+    <a href="giris.html" class="btn btn-outline">Giriş Yap</a>
+    <a href="#" class="btn btn-primary">Ücretsiz Başla ✨</a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Ana Sayfa</a> <span>›</span>
+      <a href="etkinlikler.html">Etkinlikler</a> <span>›</span>
+      <span id="crumbNow">1. Sınıf Etkinlikleri</span>
+    </div>
+    <h1 id="pageTitle">1. Sınıf <span>Etkinlikleri</span></h1>
+    <p id="pageDesc">Okuma yazma öğretimi, ses grupları, matematik ve hayat bilgisi için özenle hazırlanmış, indirilebilir 1. sınıf etkinlik sayfaları.</p>
+
+    <div class="class-tabs" id="levelTabs"></div>
+    <div class="class-tabs" id="gradeTabs" style="margin-top:12px;"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ LISTING -->
+<section class="listing">
+  <div class="container">
+    <div class="listing-grid">
+
+      <!-- ── SIDEBAR ── -->
+      <aside class="sidebar">
+
+        <div class="side-box">
+          <h3>📚 Dersler</h3>
+          <ul class="side-list" id="categoryList"></ul>
+        </div>
+
+        <div class="side-box" id="soundBox">
+          <h3>🔤 Ses Grupları <small style="font-weight:600;color:var(--muted)">(1. Sınıf)</small></h3>
+          <ul class="side-list" id="soundList">
+            <li><button data-ses="elakin">1. Grup · e-l-a-k-i-n <span class="side-count" data-count="elakin"></span></button></li>
+            <li><button data-ses="omutuy">2. Grup · o-m-u-t-ü-y <span class="side-count" data-count="omutuy"></span></button></li>
+            <li><button data-ses="oridsb">3. Grup · ö-r-ı-d-s-b <span class="side-count" data-count="oridsb"></span></button></li>
+            <li><button data-ses="zcgscp">4. Grup · z-ç-g-ş-c-p <span class="side-count" data-count="zcgscp"></span></button></li>
+            <li><button data-ses="hvgfj">5. Grup · h-v-ğ-f-j <span class="side-count" data-count="hvgfj"></span></button></li>
+          </ul>
+        </div>
+
+        <div class="side-box">
+          <h3>🕘 Son Eklenenler</h3>
+          <div id="recentList"></div>
+        </div>
+
+        <div class="stats-box">
+          <h3>📊 Ziyaretçi İstatistikleri</h3>
+          <div class="visitor-grid">
+            <div class="visitor-item">
+              <div class="visitor-num online"><span class="online-dot"></span><span id="vOnline">24</span></div>
+              <div class="visitor-label">Online</div>
+            </div>
+            <div class="visitor-item">
+              <div class="visitor-num" id="vToday">1.451</div>
+              <div class="visitor-label">Bugün</div>
+            </div>
+            <div class="visitor-item">
+              <div class="visitor-num" id="vYesterday">2.489</div>
+              <div class="visitor-label">Dün</div>
+            </div>
+            <div class="visitor-item">
+              <div class="visitor-num" id="vTotal">1.445.938</div>
+              <div class="visitor-label">Toplam</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="insta-btn">📸 Instagram'da Takip Et</a>
+
+      </aside>
+
+      <!-- ── MAIN ── -->
+      <main class="listing-main">
+
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Etkinlik ara... (ör. dikte, kesir, toplama)" />
+          </div>
+          <div class="result-info" id="resultInfo"></div>
+        </div>
+
+        <div class="chips" id="chips"></div>
+
+        <div class="activity-grid" id="activityGrid"></div>
+
+        <div class="pagination" id="pagination"></div>
+
+      </main>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
+          Kaynak <span style="color:var(--amber)">Akademi</span>
+        </div>
+        <p>Türkiye'nin en kapsamlı online eğitim platformu. Uzman eğitmenler, kaliteli materyaller ve kişiselleştirilmiş öğrenme deneyimi.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="index.html#courses">Kurslar</a></li>
+          <li><a href="index.html#subjects">Dersler</a></li>
+          <li><a href="etkinlikler.html">Etkinlikler</a></li>
+          <li><a href="#">Testler</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Sınıflar</h4>
+        <ul>
+          <li><a href="etkinlikler.html">1. Sınıf Etkinlikleri</a></li>
+          <li><a href="#">2. Sınıf Etkinlikleri</a></li>
+          <li><a href="#">3. Sınıf Etkinlikleri</a></li>
+          <li><a href="#">4. Sınıf Etkinlikleri</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Şirket</h4>
+        <ul>
+          <li><a href="#">Hakkımızda</a></li>
+          <li><a href="#">İletişim</a></li>
+          <li><a href="#">Gizlilik Politikası</a></li>
+          <li><a href="#">Çerez Politikası</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Kaynak Akademi. Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile Tasarlandı</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════ SCRIPTS -->
+<script>
+  /* ══════════ KADEME / DERS / MÜFREDAT TANIMLARI ══════════ */
+  const LEVELS = {
+    ilkokul:  { name: "🎒 İlkokul",  grades: [1, 2, 3, 4],
+      desc: "1-4. sınıflar için MEB güncel müfredatına uygun, tüm derslerde indirilebilir etkinlik sayfaları, çalışma kağıtları ve testler." },
+    ortaokul: { name: "🏫 Ortaokul", grades: [5, 6, 7, 8],
+      desc: "5-8. sınıflar için MEB güncel müfredatındaki tüm derslerde ünite ünite çalışma kağıtları, konu testleri ve etkinlikler." },
+    lise:     { name: "🎓 Lise",     grades: [9, 10, 11, 12],
+      desc: "9-12. sınıflar için MEB güncel müfredatındaki tüm derslerde ünite ünite çalışma kağıtları, konu testleri ve değerlendirme sınavları." },
+  };
+
+  const SUBJECTS = {
+    turkce:    { n: "Türkçe",                       i: "📖", bg: "linear-gradient(135deg,#fef3c7,#fde68a)" },
+    tde:       { n: "Türk Dili ve Edebiyatı",       i: "📜", bg: "linear-gradient(135deg,#fef3c7,#fde68a)" },
+    matematik: { n: "Matematik",                    i: "🔢", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)" },
+    geometri:  { n: "Geometri",                     i: "📐", bg: "linear-gradient(135deg,#e0e7ff,#c7d2fe)" },
+    hayat:     { n: "Hayat Bilgisi",                i: "🌱", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)" },
+    fen:       { n: "Fen Bilimleri",                i: "⚗️", bg: "linear-gradient(135deg,#d1fae5,#a7f3d0)" },
+    fizik:     { n: "Fizik",                        i: "🧲", bg: "linear-gradient(135deg,#e0e7ff,#c7d2fe)" },
+    kimya:     { n: "Kimya",                        i: "🧪", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)" },
+    biyoloji:  { n: "Biyoloji",                     i: "🧬", bg: "linear-gradient(135deg,#d1fae5,#a7f3d0)" },
+    sosyal:    { n: "Sosyal Bilgiler",              i: "🌍", bg: "linear-gradient(135deg,#ffedd5,#fed7aa)" },
+    tarih:     { n: "Tarih",                        i: "🏛️", bg: "linear-gradient(135deg,#ffedd5,#fed7aa)" },
+    cografya:  { n: "Coğrafya",                     i: "🗺️", bg: "linear-gradient(135deg,#ecfccb,#d9f99d)" },
+    felsefe:   { n: "Felsefe",                      i: "🤔", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)" },
+    din:       { n: "Din Kültürü ve Ahlak Bilgisi", i: "🕌", bg: "linear-gradient(135deg,#cffafe,#a5f3fc)" },
+    ingilizce: { n: "İngilizce",                    i: "🇬🇧", bg: "linear-gradient(135deg,#dbeafe,#c7d2fe)" },
+    almanca:   { n: "Almanca",                      i: "🇩🇪", bg: "linear-gradient(135deg,#fee2e2,#fecaca)" },
+    bilisim:   { n: "Bilişim Teknolojileri",        i: "💻", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)" },
+    teknoloji: { n: "Teknoloji ve Tasarım",         i: "🛠️", bg: "linear-gradient(135deg,#f1f5f9,#e2e8f0)" },
+    defter:    { n: "Defter Etkinlikleri",          i: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)" },
+    dikte:     { n: "Görsel Dikte",                 i: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)" },
+  };
+
+  const LEVEL_SUBJECTS = {
+    ilkokul:  ["turkce", "matematik", "hayat", "fen", "sosyal", "ingilizce", "din", "defter", "dikte"],
+    ortaokul: ["turkce", "matematik", "fen", "sosyal", "din", "ingilizce", "bilisim", "teknoloji"],
+    lise:     ["tde", "matematik", "geometri", "fizik", "kimya", "biyoloji", "tarih", "cografya", "felsefe", "ingilizce", "almanca", "din"],
+  };
+
+  /* Dersin MEB müfredatında okutulduğu sınıflar */
+  const AVAIL = {
+    turkce: [1,2,3,4,5,6,7,8], tde: [9,10,11,12], matematik: [1,2,3,4,5,6,7,8,9,10,11,12],
+    geometri: [9,10,11,12], hayat: [1,2,3], fen: [3,4,5,6,7,8],
+    fizik: [9,10,11,12], kimya: [9,10,11,12], biyoloji: [9,10,11,12],
+    sosyal: [4,5,6,7,8], tarih: [9,10,11,12], cografya: [9,10,11,12], felsefe: [10,11],
+    din: [4,5,6,7,8,9,10,11,12], ingilizce: [2,3,4,5,6,7,8,9,10,11,12], almanca: [9,10,11,12],
+    bilisim: [5,6], teknoloji: [7,8], defter: [1], dikte: [1],
+  };
+
+  /* ══════════ MEB GÜNCEL MÜFREDAT ÜNİTELERİ ══════════ */
+  const UNITS = {
+    turkce: {
+      1: ["İlk Okuma Yazma: Ses Grupları", "Harfler ve Alfabemiz", "Hece – Kelime – Cümle", "Büyük Harflerin Kullanımı", "Noktalama İşaretleri", "Okuduğunu Anlama"],
+      2: ["Alfabetik Sıralama", "Eş ve Zıt Anlamlı Kelimeler", "Eş Sesli Kelimeler", "Yazım Kuralları", "Noktalama İşaretleri", "Cümle Bilgisi", "Okuduğunu Anlama"],
+      3: ["Gerçek ve Mecaz Anlam", "Eş – Zıt – Eş Sesli Kelimeler", "Adlar (İsimler)", "Kök ve Ekler", "Yazım ve Noktalama", "Paragraf ve Metin Anlama"],
+      4: ["Gerçek – Mecaz – Terim Anlam", "Deyimler ve Atasözleri", "Adlar, Sıfatlar, Zamirler", "Yapım ve Çekim Ekleri", "Cümle Bilgisi", "Noktalama ve Yazım", "Metin Türleri"],
+      5: ["Sözcükte Anlam", "Deyimler ve Atasözleri", "Cümlede Anlam", "Paragraf", "Yazım Kuralları", "Noktalama İşaretleri", "Kök ve Ekler"],
+      6: ["Sözcükte ve Cümlede Anlam", "Paragraf", "İsimler ve İsim Tamlamaları", "Sıfatlar", "Zamirler", "Edat – Bağlaç – Ünlem", "Yazım ve Noktalama"],
+      7: ["Sözcükte ve Cümlede Anlam", "Paragraf", "Fiiller: Kip ve Kişi", "Zarflar", "Ek Fiil", "Fiilde Yapı", "Anlatım Bozuklukları"],
+      8: ["Sözcükte ve Cümlede Anlam", "Paragraf", "Fiilimsiler", "Cümlenin Ögeleri", "Cümle Türleri", "Yazım ve Noktalama", "Söz Sanatları"],
+    },
+    tde: {
+      9:  ["Giriş: Edebiyat Nedir?", "Hikâye", "Şiir", "Masal / Fabl", "Roman", "Tiyatro", "Biyografi – Otobiyografi", "Mektup – E-posta", "Günlük – Blog"],
+      10: ["Edebiyat Tarihi ve Dönemler", "Dede Korkut ve Halk Hikâyesi", "İslamiyet Öncesi ve Geçiş Dönemi Şiiri", "Halk ve Divan Şiiri", "Destan – Efsane", "Roman", "Tiyatro", "Anı", "Gezi Yazısı – Haber Metni"],
+      11: ["Edebiyat ve Toplum", "Cumhuriyet Dönemi Hikâyesi", "Tanzimat'tan Cumhuriyet'e Şiir", "Makale – Sohbet – Fıkra", "Tanzimat ve Servetifünun Romanı", "Cumhuriyet Dönemi Romanı", "Tiyatro", "Eleştiri", "Mülakat – Röportaj"],
+      12: ["Edebiyat ve Felsefe – Psikoloji", "1960 Sonrası Hikâye", "Cumhuriyet Sonrası Şiir", "Dünya Edebiyatında Roman", "1950 Sonrası Türk Romanı", "Tiyatro", "Deneme", "Söylev (Nutuk)"],
+    },
+    matematik: {
+      1: ["20'ye Kadar Doğal Sayılar", "Ritmik Sayma", "Toplama İşlemi", "Çıkarma İşlemi", "Geometrik Şekiller ve Cisimler", "Ölçme: Uzunluk ve Zaman"],
+      2: ["100'e Kadar Doğal Sayılar", "Eldeli Toplama", "Onluk Bozarak Çıkarma", "Çarpma İşlemine Giriş", "Bölme İşlemine Giriş", "Kesirler: Bütün, Yarım, Çeyrek", "Geometrik Cisimler", "Paralarımız"],
+      3: ["Üç Basamaklı Doğal Sayılar", "Toplama İşlemi", "Çıkarma İşlemi", "Çarpma ve Çarpım Tablosu", "Bölme İşlemi", "Kesirler", "Zaman Ölçme", "Çevre Uzunluğu", "Veri Grafikleri"],
+      4: ["Büyük Doğal Sayılar ve Basamak Değeri", "Dört İşlem", "Kesirlerle İşlemler", "Zaman Problemleri", "Açılar ve Açı Ölçme", "Çevre ve Alan", "Veri Toplama ve Grafik"],
+      5: ["Doğal Sayılar ve İşlemler", "Kesirler ve Kesirlerle İşlemler", "Ondalık Gösterim", "Yüzdeler", "Temel Geometrik Kavramlar", "Üçgen ve Dörtgenler", "Veri Analizi", "Uzunluk ve Alan Ölçme"],
+      6: ["Üslü İfadeler ve İşlem Önceliği", "Çarpanlar ve Katlar", "Tam Sayılar", "Kesirlerle İşlemler", "Ondalık Gösterimlerle İşlemler", "Oran", "Cebirsel İfadeler", "Alan ve Hacim"],
+      7: ["Tam Sayılarla İşlemler", "Rasyonel Sayılar", "Birinci Dereceden Denklemler", "Oran ve Orantı", "Yüzdeler", "Doğrular ve Açılar", "Çokgenler: Çevre ve Alan", "Veri Analizi"],
+      8: ["Çarpanlar ve Katlar (EBOB – EKOK)", "Üslü İfadeler", "Kareköklü İfadeler", "Özdeşlikler ve Çarpanlara Ayırma", "Denklemler ve Eşitsizlikler", "Doğrusal Denklemler ve Eğim", "Üçgenler", "Olasılık"],
+      9: ["Önermeler ve Mantık", "Kümeler", "Denklemler ve Eşitsizlikler", "Üslü ve Köklü İfadeler", "Üçgenler", "Veri – İstatistik"],
+      10: ["Sayma ve Olasılık", "Fonksiyonlar", "Polinomlar", "İkinci Dereceden Denklemler", "Dörtgenler ve Çokgenler", "Uzay Geometri: Katı Cisimler"],
+      11: ["Trigonometri", "Analitik Geometri", "Fonksiyonlarda Uygulamalar", "Denklem ve Eşitsizlik Sistemleri", "Çember ve Daire", "Olasılık"],
+      12: ["Üstel ve Logaritmik Fonksiyonlar", "Diziler", "Trigonometri", "Türev", "İntegral", "Analitik Geometri"],
+    },
+    geometri: {
+      9:  ["Üçgende Açılar", "Üçgende Açı – Kenar Bağıntıları", "Dik Üçgen ve Pisagor", "Üçgende Alan"],
+      10: ["Dörtgenler", "Özel Dörtgenler", "Çokgenler", "Katı Cisimler: Prizma ve Silindir"],
+      11: ["Çemberde Açılar", "Çemberde Uzunluk ve Daire Alanı", "Analitik Geometri: Doğru", "Analitik Geometri: Nokta ve Uzaklık"],
+      12: ["Analitik Geometri: Çember Denklemi", "Dönüşüm Geometrisi", "Trigonometrik Uygulamalar", "Katı Cisimlerde Hacim"],
+    },
+    hayat: {
+      1: ["Ben ve Okulum", "Sağlığım ve Güvenliğim", "Ailem ve Toplum", "Yaşadığım Yer ve Ülkem", "Doğa ve Çevre", "Bilim, Teknoloji ve Sanat"],
+      2: ["Ben ve Okulum", "Sağlığım ve Güvenliğim", "Ailem ve Toplum", "Yaşadığım Yer ve Ülkem", "Doğa ve Çevre", "Bilim, Teknoloji ve Sanat"],
+      3: ["Okulumuzda Hayat", "Evimizde Hayat", "Sağlıklı Hayat", "Güvenli Hayat", "Ülkemizde Hayat", "Doğada Hayat"],
+    },
+    fen: {
+      3: ["Gezegenimizi Tanıyalım", "Beş Duyumuz", "Kuvveti Tanıyalım", "Maddeyi Tanıyalım", "Çevremizdeki Işık ve Sesler", "Canlılar Dünyasına Yolculuk", "Elektrikli Araçlar"],
+      4: ["Yer Kabuğu ve Dünya'mızın Hareketleri", "Besinlerimiz", "Kuvvetin Etkileri", "Maddenin Özellikleri", "Aydınlatma ve Ses Teknolojileri", "İnsan ve Çevre", "Basit Elektrik Devreleri"],
+      5: ["Güneş, Dünya ve Ay", "Canlılar Dünyası", "Kuvvetin Ölçülmesi ve Sürtünme", "Madde ve Değişim", "Işığın Yayılması", "İnsan ve Çevre", "Elektrik Devre Elemanları"],
+      6: ["Güneş Sistemi ve Tutulmalar", "Vücudumuzdaki Sistemler", "Kuvvet ve Hareket", "Madde ve Isı", "Ses ve Özellikleri", "Elektriğin İletimi"],
+      7: ["Güneş Sistemi ve Ötesi", "Hücre ve Bölünmeler", "Kuvvet ve Enerji", "Saf Madde ve Karışımlar", "Işığın Madde ile Etkileşimi", "Canlılarda Üreme, Büyüme ve Gelişme", "Elektrik Devreleri"],
+      8: ["Mevsimler ve İklim", "DNA ve Genetik Kod", "Basınç", "Madde ve Endüstri", "Basit Makineler", "Enerji Dönüşümleri", "Elektrik Yükleri ve Elektrik Enerjisi"],
+    },
+    fizik: {
+      9:  ["Fizik Bilimine Giriş", "Madde ve Özellikleri", "Hareket ve Kuvvet", "Enerji", "Isı ve Sıcaklık", "Elektrostatik"],
+      10: ["Elektrik ve Manyetizma", "Basınç ve Kaldırma Kuvveti", "Dalgalar", "Optik"],
+      11: ["Vektörler ve Bağıl Hareket", "Newton'un Hareket Yasaları", "İş, Güç ve Enerji", "İtme ve Momentum", "Elektrik ve Manyetizma"],
+      12: ["Çembersel Hareket", "Basit Harmonik Hareket", "Dalga Mekaniği", "Atom Fiziğine Giriş ve Radyoaktivite", "Modern Fizik", "Modern Fiziğin Uygulamaları"],
+    },
+    kimya: {
+      9:  ["Kimya Bilimi", "Atom ve Periyodik Sistem", "Kimyasal Türler Arası Etkileşimler", "Maddenin Hâlleri", "Doğa ve Kimya"],
+      10: ["Kimyanın Temel Kanunları", "Mol Kavramı ve Kimyasal Hesaplamalar", "Karışımlar", "Asitler, Bazlar ve Tuzlar", "Kimya Her Yerde"],
+      11: ["Modern Atom Teorisi", "Gazlar", "Sıvı Çözeltiler ve Çözünürlük", "Kimyasal Tepkimelerde Enerji", "Kimyasal Tepkimelerde Hız", "Kimyasal Tepkimelerde Denge"],
+      12: ["Kimya ve Elektrik", "Karbon Kimyasına Giriş", "Organik Bileşikler", "Enerji Kaynakları ve Bilimsel Gelişmeler"],
+    },
+    biyoloji: {
+      9:  ["Yaşam Bilimi Biyoloji", "Hücre", "Canlılar Dünyası"],
+      10: ["Hücre Bölünmeleri", "Kalıtımın Genel İlkeleri", "Ekosistem Ekolojisi ve Güncel Çevre Sorunları"],
+      11: ["İnsan Fizyolojisi: Sistemler", "Komünite ve Popülasyon Ekolojisi"],
+      12: ["Genden Proteine", "Canlılarda Enerji Dönüşümleri", "Bitki Biyolojisi", "Canlılar ve Çevre"],
+    },
+    sosyal: {
+      4: ["Birey ve Toplum", "Kültür ve Miras", "İnsanlar, Yerler ve Çevreler", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
+      5: ["Birey ve Toplum", "Kültür ve Miras (Anadolu Uygarlıkları)", "İnsanlar, Yerler ve Çevreler", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
+      6: ["Birey ve Toplum", "Kültür ve Miras (İlk Türk Devletleri)", "İnsanlar, Yerler ve Çevreler", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
+      7: ["İletişim ve İnsan İlişkileri", "Kültür ve Miras (Osmanlı)", "İnsanlar, Yerler ve Çevreler (Nüfus)", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
+      8: ["Bir Kahraman Doğuyor", "Millî Uyanış: Bağımsızlık Yolunda Atılan Adımlar", "Millî Bir Destan: Ya İstiklal Ya Ölüm!", "Atatürkçülük ve Çağdaşlaşan Türkiye", "Demokratikleşme Çabaları", "Atatürk Dönemi Türk Dış Politikası", "Atatürk'ün Ölümü ve Sonrası"],
+    },
+    tarih: {
+      9:  ["Tarih ve Zaman", "İnsanlığın İlk Dönemleri", "Orta Çağ'da Dünya", "İlk ve Orta Çağlarda Türk Dünyası", "İslam Medeniyetinin Doğuşu", "Türklerin İslamiyet'i Kabulü ve İlk Türk İslam Devletleri"],
+      10: ["Yerleşme ve Devletleşme Sürecinde Selçuklu Türkiyesi", "Beylikten Devlete Osmanlı Siyaseti", "Devletleşme Sürecinde Savaşçılar ve Askerler", "Beylikten Devlete Osmanlı Medeniyeti", "Dünya Gücü Osmanlı", "Sultan ve Osmanlı Merkez Teşkilatı", "Klasik Çağda Osmanlı Toplum Düzeni"],
+      11: ["Değişen Dünya Dengeleri Karşısında Osmanlı Siyaseti", "Değişim Çağında Avrupa ve Osmanlı", "Uluslararası İlişkilerde Denge Stratejisi", "Devrimler Çağında Değişen Devlet – Toplum İlişkileri", "Sermaye ve Emek", "XIX ve XX. Yüzyılda Değişen Gündelik Hayat"],
+      12: ["20. Yüzyıl Başlarında Osmanlı Devleti ve Dünya", "Millî Mücadele", "Atatürkçülük ve Türk İnkılabı", "İki Savaş Arasındaki Dönem", "II. Dünya Savaşı Sonrasında Türkiye ve Dünya", "Toplumsal Devrim Çağında Dünya ve Türkiye", "21. Yüzyılın Eşiğinde Türkiye ve Dünya"],
+    },
+    cografya: {
+      9:  ["Doğa ve İnsan", "Dünya'nın Şekli ve Hareketleri", "Harita Bilgisi", "İklim Bilgisi", "Yer'in Şekillenmesi", "Nüfus ve Yerleşme", "Bölgeler ve Ülkeler"],
+      10: ["Kayaçlar ve Yer'in Yapısı", "İç ve Dış Kuvvetler", "Su, Toprak ve Bitki Varlığı", "Nüfusun Gelişimi ve Dağılışı", "Göçlerin Nedenleri ve Sonuçları", "Ekonomik Faaliyetler", "Uluslararası Ulaşım Hatları", "Doğal Afetler"],
+      11: ["Biyoçeşitlilik ve Ekosistem", "Nüfus Politikaları", "Şehirleşme ve Ekonomik Faaliyetler", "Türkiye Ekonomisi", "Doğal Kaynaklar ve Çevre", "İlk Kültür Merkezleri", "Ülkeler Arası Etkileşim", "Çevre Sorunları"],
+      12: ["Ekstrem Doğa Olayları", "Küresel İklim Değişimi", "Türkiye'nin Jeopolitik Konumu", "Bölgesel Kalkınma Projeleri (GAP vb.)", "Türkiye'nin İşlevsel Bölgeleri", "Küresel Ticaret ve Turizm", "Çevre Sorunlarının Çözümü"],
+    },
+    felsefe: {
+      10: ["Felsefeyi Tanıma", "Felsefe ile Düşünme", "Varlık Felsefesi", "Bilgi Felsefesi", "Ahlak Felsefesi", "Sanat, Din ve Siyaset Felsefesi"],
+      11: ["İlk Çağ Felsefesi", "MS 2. – 15. Yüzyıl Felsefesi", "15. – 17. Yüzyıl Felsefesi", "18. – 19. Yüzyıl Felsefesi", "20. Yüzyıl Felsefesi"],
+    },
+    din: {
+      4: ["Günlük Hayattaki Dinî İfadeler", "İslam'ı Tanıyalım", "Güzel Ahlak", "Hz. Muhammed'i Tanıyalım", "Din ve Temizlik"],
+      5: ["Allah İnancı", "Ramazan ve Orucu", "Adap ve Nezaket", "Hz. Muhammed ve Aile Hayatı", "Çevremizde Dinin İzleri"],
+      6: ["Peygamber ve İlahi Kitap İnancı", "Namaz", "Zararlı Alışkanlıklar", "Hz. Muhammed'in Hayatı", "Temel Değerlerimiz"],
+      7: ["Melek ve Ahiret İnancı", "Hac ve Kurban", "Ahlaki Davranışlar", "Allah'ın Kulu ve Elçisi: Hz. Muhammed", "İslam Düşüncesinde Yorumlar"],
+      8: ["Kader İnancı", "Zekât ve Sadaka", "Din ve Hayat", "Hz. Muhammed'in Örnekliği", "Kur'an-ı Kerim ve Özellikleri"],
+      9: ["Bilgi ve İnanç", "Din ve İslam", "İslam ve İbadet", "Gençlik ve Değerler", "Gönül Coğrafyamız"],
+      10: ["Allah – İnsan İlişkisi", "Hz. Muhammed ve Gençlik", "Din ve Hayat", "Ahlaki Tutum ve Davranışlar", "İslam Düşüncesinde Yorumlar"],
+      11: ["Dünya ve Ahiret", "Kur'an'a Göre Hz. Muhammed", "Kur'an'da Bazı Kavramlar", "İnançla İlgili Meseleler", "Yahudilik ve Hristiyanlık"],
+      12: ["İslam ve Bilim", "Anadolu'da İslam", "Tasavvufi Yorumlar", "Güncel Dinî Meseleler", "Hint ve Çin Dinleri"],
+    },
+    ingilizce: {
+      2: ["Words", "Friends", "In the Classroom", "Numbers", "Colours", "At the Playground", "Body Parts", "Pets", "Fruit", "Animals"],
+      3: ["Greeting", "My Family", "People I Love", "Feelings", "Toys and Games", "My House", "In My City", "Transportation", "Weather", "Nature"],
+      4: ["Classroom Rules", "Nationality", "Cartoon Characters", "Free Time", "My Day", "Fun with Science", "Jobs", "My Clothes", "My Friends", "Food and Drinks"],
+      5: ["Hello!", "My Town", "Games and Hobbies", "My Daily Routine", "Health", "Movies", "Party Time", "Fitness", "The Animal Shelter", "Festivals"],
+      6: ["Life", "Yummy Breakfast", "Downtown", "Weather and Emotions", "At the Fair", "Occupations", "Holidays", "Bookworms", "Saving the Planet", "Democracy"],
+      7: ["Appearance and Personality", "Sports", "Biographies", "Wild Animals", "Television", "Celebrations", "Dreams", "Public Buildings", "Environment", "Planets"],
+      8: ["Friendship", "Teen Life", "In the Kitchen", "On the Phone", "The Internet", "Adventures", "Tourism", "Chores", "Science", "Natural Forces"],
+      9: ["Studying Abroad", "My Environment", "Movies", "Traditions", "Travel", "Helpful Tips", "Food and Festivals", "Digital Era", "Invitations and Celebrations"],
+      10: ["School Life", "Plans", "Legendary Figure", "Traditions", "Travel", "Helpful Tips", "Food and Festivals", "Digital Era", "Modern Heroes", "Shopping"],
+      11: ["Future Jobs", "Hobbies and Skills", "Hard Times", "What a Life", "Back to the Past", "Open Your Heart", "Facts about Turkey", "Sports", "My Friends", "Values and Norms"],
+      12: ["Music", "Friendship", "Human Rights", "Coming Soon", "Psychology", "Favors", "News Stories", "Alternative Energy", "Technology", "Manners"],
+    },
+    almanca: {
+      9:  ["Hallo! – Tanışma", "Kennenlernen – Kendini Tanıtma", "Familie – Aile", "Schule – Okul", "Zahlen und Uhrzeit – Sayılar ve Saat"],
+      10: ["Einkaufen – Alışveriş", "Essen und Trinken – Yiyecek İçecek", "Wohnen – Ev ve Yaşam", "Tagesablauf – Günlük Rutin", "Freizeit – Boş Zaman"],
+      11: ["Reisen – Seyahat", "Gesundheit – Sağlık", "Kleidung – Kıyafetler", "Wetter – Hava Durumu", "Feste – Bayramlar ve Kutlamalar"],
+      12: ["Berufe – Meslekler", "Medien – Medya", "Umwelt – Çevre", "Zukunftspläne – Gelecek Planları", "Kultur – Kültür"],
+    },
+    bilisim: {
+      5: ["Bilişim Teknolojilerinin Temelleri", "Etik ve Güvenlik", "İletişim, Araştırma ve İş Birliği", "Ürün Oluşturma", "Problem Çözme ve Programlamaya Giriş"],
+      6: ["Bilişim Sistemleri", "Dijital Vatandaşlık ve Güvenlik", "Görsel Ürün Tasarımı", "Algoritma ve Akış Şemaları", "Blok Tabanlı Programlama (Scratch)"],
+    },
+    teknoloji: {
+      7: ["Teknoloji ve Tasarımın Temelleri", "Tasarım Süreci ve Tanıtım", "Yapılı Çevre ve Ürün", "İhtiyaçlar ve Yenilikçilik"],
+      8: ["Tasarım Odaklı Süreç", "Ürün Geliştirme", "Enerjinin Dönüşümü ve Tasarım", "Bilgi ve İletişim Teknolojileri ile Tasarım"],
+    },
+  };
+
+  // ── 1. sınıfa özel, elle hazırlanmış etkinlikler ─────────
+  // cat: ders anahtarı | ses: elakin | omutuy | oridsb | zcgscp | hvgfj | null
+  const ACTIVITIES = [
+    { title: "e-l-a-k-i-n Grubu Hece Okuma Çalışması", cat: "turkce", ses: "elakin", icon: "📖", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", date: "12 Temmuz 2026", pages: 6, badge: "Yeni" },
+    { title: "e Sesi Yazma ve Boyama Etkinliği", cat: "turkce", ses: "elakin", icon: "✏️", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", date: "10 Temmuz 2026", pages: 4 },
+    { title: "l Sesi Hece ve Kelime Oluşturma", cat: "turkce", ses: "elakin", icon: "🔤", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", date: "8 Temmuz 2026", pages: 5 },
+    { title: "o-m-u-t-ü-y Grubu Kelime Türetme Etkinliği", cat: "turkce", ses: "omutuy", icon: "📝", bg: "linear-gradient(135deg,#e0e7ff,#c7d2fe)", date: "5 Temmuz 2026", pages: 8, badge: "Popüler" },
+    { title: "m Sesi Görsel Okuma Kartları", cat: "turkce", ses: "omutuy", icon: "🃏", bg: "linear-gradient(135deg,#e0e7ff,#c7d2fe)", date: "3 Temmuz 2026", pages: 12 },
+    { title: "ö-r-ı-d-s-b Grubu Cümle Kurma Çalışması", cat: "turkce", ses: "oridsb", icon: "💬", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "1 Temmuz 2026", pages: 6 },
+    { title: "r Sesi Okuma Anlama Metni", cat: "turkce", ses: "oridsb", icon: "📚", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "28 Haziran 2026", pages: 3 },
+    { title: "z-ç-g-ş-c-p Grubu Hece Tablosu", cat: "turkce", ses: "zcgscp", icon: "🧩", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)", date: "25 Haziran 2026", pages: 7 },
+    { title: "ç Sesi Eğlenceli Bulmaca Etkinliği", cat: "turkce", ses: "zcgscp", icon: "🧠", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)", date: "22 Haziran 2026", pages: 4 },
+    { title: "h-v-ğ-f-j Grubu Serbest Okuma Metinleri", cat: "turkce", ses: "hvgfj", icon: "📕", bg: "linear-gradient(135deg,#ffedd5,#fed7aa)", date: "20 Haziran 2026", pages: 10, badge: "Popüler" },
+    { title: "f Sesi Kelime Avı Etkinliği", cat: "turkce", ses: "hvgfj", icon: "🔎", bg: "linear-gradient(135deg,#ffedd5,#fed7aa)", date: "18 Haziran 2026", pages: 5 },
+    { title: "1'den 20'ye Kadar Ritmik Sayma", cat: "matematik", ses: null, icon: "🔢", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "15 Haziran 2026", pages: 6, badge: "Yeni" },
+    { title: "Toplama İşlemi Boyamalı Alıştırmalar", cat: "matematik", ses: null, icon: "➕", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "12 Haziran 2026", pages: 8 },
+    { title: "Çıkarma İşlemi Problem Kartları", cat: "matematik", ses: null, icon: "➖", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "10 Haziran 2026", pages: 6 },
+    { title: "Geometrik Şekiller Eşleştirme Oyunu", cat: "matematik", ses: null, icon: "🔷", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "8 Haziran 2026", pages: 4 },
+    { title: "Onluk ve Birlik Kavrama Etkinliği", cat: "matematik", ses: null, icon: "🧮", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "5 Haziran 2026", pages: 7 },
+    { title: "Okulumuzu Tanıyalım Etkinlik Sayfası", cat: "hayat", ses: null, icon: "🏫", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "2 Haziran 2026", pages: 5 },
+    { title: "Sağlıklı Beslenme Tabağım", cat: "hayat", ses: null, icon: "🥗", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "30 Mayıs 2026", pages: 3 },
+    { title: "Trafik Kuralları Boyama ve Eşleştirme", cat: "hayat", ses: null, icon: "🚦", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "28 Mayıs 2026", pages: 6 },
+    { title: "Mevsimler ve Hava Durumu Etkinliği", cat: "hayat", ses: null, icon: "🌦️", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "25 Mayıs 2026", pages: 4 },
+    { title: "Defter Etkinliği: e-l-a-k-i-n Güzel Yazı", cat: "defter", ses: "elakin", icon: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", date: "22 Mayıs 2026", pages: 9, badge: "Yöntem" },
+    { title: "Defter Etkinliği: o-m-u-t-ü-y Satır Çalışması", cat: "defter", ses: "omutuy", icon: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", date: "20 Mayıs 2026", pages: 8, badge: "Yöntem" },
+    { title: "Defter Etkinliği: ö-r-ı-d-s-b Hece Defteri", cat: "defter", ses: "oridsb", icon: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", date: "18 Mayıs 2026", pages: 10 },
+    { title: "Görsel Dikte Sınavı: 1. Grup Sesler", cat: "dikte", ses: "elakin", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "15 Mayıs 2026", pages: 2, badge: "Sınav" },
+    { title: "Görsel Dikte Sınavı: 2. Grup Sesler", cat: "dikte", ses: "omutuy", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "12 Mayıs 2026", pages: 2, badge: "Sınav" },
+    { title: "Görsel Dikte Sınavı: 3. Grup Sesler", cat: "dikte", ses: "oridsb", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "10 Mayıs 2026", pages: 2, badge: "Sınav" },
+    { title: "Görsel Dikte Sınavı: 4. Grup Sesler", cat: "dikte", ses: "zcgscp", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "8 Mayıs 2026", pages: 2 },
+    { title: "Görsel Dikte Sınavı: 5. Grup Sesler", cat: "dikte", ses: "hvgfj", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "5 Mayıs 2026", pages: 2 },
+  ];
+
+  const SES_LABELS = { elakin: "e-l-a-k-i-n", omutuy: "o-m-u-t-ü-y", oridsb: "ö-r-ı-d-s-b", zcgscp: "z-ç-g-ş-c-p", hvgfj: "h-v-ğ-f-j" };
+
+  const PER_PAGE = 9;
+  let state = { level: "ilkokul", grade: 1, cat: "all", ses: null, search: "", page: 1 };
+
+  const grid = document.getElementById("activityGrid");
+  const paginationEl = document.getElementById("pagination");
+  const resultInfo = document.getElementById("resultInfo");
+
+  /* ── Ünitelerden etkinlik üretimi (sınıf başına önbellekli) ── */
+  const ACT_TYPES = ["Çalışma Kağıdı", "Konu Testi", "Etkinlik Sayfası", "Boşluk Doldurma Etkinliği", "Değerlendirme Sınavı", "Kavram Haritası"];
+  const genCache = {};
+  function levelOfGrade(g) { return g <= 4 ? "ilkokul" : g <= 8 ? "ortaokul" : "lise"; }
+  function generatedFor(grade) {
+    if (genCache[grade]) return genCache[grade];
+    const out = [];
+    let k = 0;
+    LEVEL_SUBJECTS[levelOfGrade(grade)].forEach(s => {
+      if (!(AVAIL[s] || []).includes(grade)) return;
+      const units = (UNITS[s] && UNITS[s][grade]) || [];
+      units.forEach((u, ui) => {
+        const d = new Date(2026, 6, 18);
+        d.setDate(d.getDate() - k * 2);
+        out.push({
+          title: `${u} – ${ACT_TYPES[(ui + k) % ACT_TYPES.length]}`,
+          cat: s, ses: null,
+          icon: SUBJECTS[s].i, bg: SUBJECTS[s].bg,
+          date: d.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }),
+          pages: 2 + ((ui * 3 + k) % 9),
+          badge: ui === 0 ? "Yeni" : (k % 9 === 4 ? "Popüler" : null),
+        });
+        k++;
+      });
+    });
+    genCache[grade] = out;
+    return out;
+  }
+  /* 1. sınıfta elle hazırlanmış etkinlikler + üretilenler; diğer sınıflarda üretilenler */
+  function poolFor() {
+    const gen = generatedFor(state.grade);
+    return state.grade === 1 ? ACTIVITIES.concat(gen) : gen;
+  }
+
+  function filtered() {
+    return poolFor().filter(a => {
+      if (state.cat !== "all" && a.cat !== state.cat) return false;
+      if (state.ses && a.ses !== state.ses) return false;
+      if (state.search) {
+        const q = state.search.toLocaleLowerCase("tr");
+        const hay = (a.title + " " + (SUBJECTS[a.cat] ? SUBJECTS[a.cat].n : "") + " " + (a.ses ? SES_LABELS[a.ses] : "")).toLocaleLowerCase("tr");
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
+  function render() {
+    const items = filtered();
+    const totalPages = Math.max(1, Math.ceil(items.length / PER_PAGE));
+    if (state.page > totalPages) state.page = totalPages;
+    const start = (state.page - 1) * PER_PAGE;
+    const pageItems = items.slice(start, start + PER_PAGE);
+
+    // cards
+    if (!pageItems.length) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🔍</div>
+          <p>Aradığınız kriterlere uygun etkinlik bulunamadı.<br>Filtreleri temizleyip tekrar deneyin.</p>
+        </div>`;
+    } else {
+      grid.innerHTML = pageItems.map(a => `
+        <article class="activity-card">
+          <div class="activity-thumb" style="background:${a.bg}">
+            ${a.icon}
+            ${a.badge ? `<span class="activity-badge">${a.badge}</span>` : ""}
+          </div>
+          <div class="activity-body">
+            <div class="activity-meta">
+              <span class="tag">${SUBJECTS[a.cat] ? SUBJECTS[a.cat].n : a.cat}</span>
+              <span class="tag">${state.grade}. Sınıf</span>
+              ${a.ses ? `<span class="tag">${SES_LABELS[a.ses]}</span>` : ""}
+            </div>
+            <div class="activity-title">${a.title}</div>
+            <div class="activity-info">
+              <span>📅 ${a.date}</span>
+              <span>📄 ${a.pages} sayfa</span>
+            </div>
+            <div class="activity-actions">
+              <a href="#" class="btn btn-outline">👁 İncele</a>
+              <a href="#" class="btn btn-primary">⬇ İndir</a>
+            </div>
+          </div>
+        </article>`).join("");
+    }
+
+    // pagination
+    let pgHtml = `<button class="page-btn" ${state.page === 1 ? "disabled" : ""} data-page="${state.page - 1}">‹ Önceki</button>`;
+    for (let i = 1; i <= totalPages; i++) {
+      pgHtml += `<button class="page-btn ${i === state.page ? "active" : ""}" data-page="${i}">${i}</button>`;
+    }
+    pgHtml += `<button class="page-btn" ${state.page === totalPages ? "disabled" : ""} data-page="${state.page + 1}">Sonraki ›</button>`;
+    paginationEl.innerHTML = totalPages > 1 ? pgHtml : "";
+
+    // result info
+    resultInfo.innerHTML = `<b>${items.length}</b> etkinlik bulundu`;
+  }
+
+  paginationEl.addEventListener("click", e => {
+    const btn = e.target.closest(".page-btn");
+    if (!btn || btn.disabled) return;
+    state.page = parseInt(btn.dataset.page, 10);
+    render();
+    document.querySelector(".toolbar").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // ── Kademe / sınıf sekmeleri ─────────────────────────────
+  function renderTabs() {
+    document.getElementById("levelTabs").innerHTML = Object.entries(LEVELS).map(([k, v]) =>
+      `<button class="class-tab ${state.level === k ? "active" : ""}" data-level="${k}">${v.name}</button>`).join("");
+    document.getElementById("gradeTabs").innerHTML = LEVELS[state.level].grades.map(g =>
+      `<button class="class-tab ${state.grade === g ? "active" : ""}" data-grade="${g}">${g}. Sınıf</button>`).join("");
+    document.getElementById("crumbNow").textContent = `${state.grade}. Sınıf Etkinlikleri`;
+    document.getElementById("pageTitle").innerHTML = `${state.grade}. Sınıf <span>Etkinlikleri</span>`;
+    document.getElementById("pageDesc").textContent = LEVELS[state.level].desc;
+    document.getElementById("soundBox").style.display = state.grade === 1 ? "" : "none";
+  }
+  document.getElementById("levelTabs").addEventListener("click", e => {
+    const b = e.target.closest("[data-level]"); if (!b) return;
+    state.level = b.dataset.level;
+    state.grade = LEVELS[state.level].grades[0];
+    state.cat = "all"; state.ses = null; state.page = 1;
+    renderAll();
+  });
+  document.getElementById("gradeTabs").addEventListener("click", e => {
+    const b = e.target.closest("[data-grade]"); if (!b) return;
+    state.grade = +b.dataset.grade;
+    state.cat = "all"; state.ses = null; state.page = 1;
+    renderAll();
+  });
+
+  // ── Ders filtreleri (sidebar + chips senkron) ────────────
+  function subjectsForGrade() {
+    return LEVEL_SUBJECTS[state.level].filter(s => (AVAIL[s] || []).includes(state.grade));
+  }
+  function renderFilters() {
+    const pool = poolFor();
+    const count = c => c === "all" ? pool.length : pool.filter(a => a.cat === c).length;
+    document.getElementById("categoryList").innerHTML =
+      `<li><button data-cat="all" class="${state.cat === "all" ? "active" : ""}">Tümü <span class="side-count">${count("all")}</span></button></li>` +
+      subjectsForGrade().map(s =>
+        `<li><button data-cat="${s}" class="${state.cat === s ? "active" : ""}">${SUBJECTS[s].n} <span class="side-count">${count(s)}</span></button></li>`).join("");
+    document.getElementById("chips").innerHTML =
+      `<button class="chip ${state.cat === "all" ? "active" : ""}" data-cat="all">Tümü</button>` +
+      subjectsForGrade().map(s =>
+        `<button class="chip ${state.cat === s ? "active" : ""}" data-cat="${s}">${SUBJECTS[s].i} ${SUBJECTS[s].n}</button>`).join("");
+  }
+  function renderRecent() {
+    document.getElementById("recentList").innerHTML = poolFor().slice(0, 5).map(a => `
+      <div class="recent-item">
+        <div class="recent-thumb" style="background:${a.bg}">${a.icon}</div>
+        <div>
+          <div class="recent-title">${a.title}</div>
+          <div class="recent-date">📅 ${a.date}</div>
+        </div>
+      </div>`).join("");
+  }
+  function renderAll() { renderTabs(); renderFilters(); renderRecent(); render(); }
+
+  function setCategory(cat) {
+    state.cat = cat;
+    state.page = 1;
+    renderFilters();
+    render();
+  }
+  document.getElementById("categoryList").addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (btn) setCategory(btn.dataset.cat);
+  });
+  document.getElementById("chips").addEventListener("click", e => {
+    const btn = e.target.closest(".chip");
+    if (btn) setCategory(btn.dataset.cat);
+  });
+
+  // ── Ses grubu filtresi (toggle) ─────────────────────────
+  document.getElementById("soundList").addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const ses = btn.dataset.ses;
+    state.ses = (state.ses === ses) ? null : ses;
+    state.page = 1;
+    document.querySelectorAll("#soundList button").forEach(b => b.classList.toggle("active", b.dataset.ses === state.ses));
+    render();
+  });
+
+  // ── Arama ───────────────────────────────────────────────
+  document.getElementById("searchInput").addEventListener("input", e => {
+    state.search = e.target.value.trim();
+    state.page = 1;
+    render();
+  });
+
+  // ── Ziyaretçi sayacı (canlı görünüm) ────────────────────
+  const fmt = n => n.toLocaleString("tr-TR");
+  let online = 24, today = 1451, total = 1445938;
+  setInterval(() => {
+    online = Math.max(8, online + (Math.random() > .5 ? 1 : -1));
+    if (Math.random() > .6) { today += 1; total += 1; }
+    document.getElementById("vOnline").textContent = online;
+    document.getElementById("vToday").textContent = fmt(today);
+    document.getElementById("vTotal").textContent = fmt(total);
+  }, 3000);
+
+  // ── Mobil menü ──────────────────────────────────────────
+  const btn = document.getElementById("menuBtn");
+  const nav = document.getElementById("mobileNav");
+  btn.addEventListener("click", () => {
+    nav.classList.toggle("open");
+    const spans = btn.querySelectorAll("span");
+    const open = nav.classList.contains("open");
+    spans[0].style.transform = open ? "rotate(45deg) translate(5px,5px)" : "";
+    spans[1].style.opacity   = open ? "0" : "1";
+    spans[2].style.transform = open ? "rotate(-45deg) translate(5px,-5px)" : "";
+  });
+  nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+    nav.classList.remove("open");
+    btn.querySelectorAll("span").forEach(s => { s.style.transform = ""; s.style.opacity = "1"; });
+  }));
+
+  // İlk çizim
+  renderAll();
+</script>
+</body>
+</html>

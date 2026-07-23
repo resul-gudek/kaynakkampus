@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ders Programı Oluştur – Kaynak Akademi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: #1e2d4d; background: #fff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    :root {
+      --blue: #1a3c8f; --blue-dk: #122a6e; --teal: #0ea5c9; --orange: #f97316;
+      --amber: #fbbf24; --bg-soft: #f0f4ff; --text: #1e2d4d; --muted: #64748b;
+      --radius: 14px; --shadow: 0 4px 24px rgba(26,60,143,.10); --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+    }
+
+    .container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+      border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
+      transition: all .25s; border: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #ea6000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
+    .btn-ghost { background: #fff; color: var(--muted); border: 2px solid #e2e8f0; }
+    .btn-ghost:hover { border-color: #dc2626; color: #dc2626; }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26,60,143,.08);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
+    .logo-icon {
+      width: 48px; height: 48px; object-fit: contain;
+    }
+    .logo span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a:hover { background: var(--bg-soft); color: var(--blue); }
+    nav a.active { color: var(--blue); font-weight: 700; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue); margin: 5px 0; border-radius: 2px; }
+    .mobile-nav {
+      display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
+      background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
+      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(26,60,143,.08);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
+    .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
+
+    /* PAGE HERO */
+    .page-hero { background: linear-gradient(140deg, #e8effe 0%, #f0f4ff 50%, #fef3e8 100%); padding: 44px 0 36px; }
+    .page-hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; }
+    .page-hero h1 span { color: var(--orange); }
+    .page-hero p { color: var(--muted); margin-top: 8px; max-width: 720px; font-size: .95rem; }
+    .hero-badge2 {
+      display: inline-flex; align-items: center; gap: 8px; background: #fff;
+      padding: 7px 16px; border-radius: 50px; font-size: .78rem; font-weight: 700;
+      color: var(--blue); box-shadow: var(--shadow); margin-bottom: 14px;
+    }
+
+    /* BUILDER */
+    .builder { padding: 40px 0 80px; }
+    .builder-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
+    .panel { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 92px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
+    .panel::-webkit-scrollbar { width: 6px; }
+    .panel::-webkit-scrollbar-thumb { background: rgba(26,60,143,.2); border-radius: 3px; }
+
+    .step-box { background: var(--bg-soft); border-radius: var(--radius); padding: 16px 18px; }
+    .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .75rem; flex-shrink: 0;
+    }
+    .step-title { font-size: .9rem; font-weight: 800; }
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill {
+      background: #fff; border: 2px solid transparent; border-radius: 50px;
+      padding: 7px 14px; font-size: .8rem; font-weight: 700; cursor: pointer;
+      transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(26,60,143,.06);
+    }
+    .pill:hover { border-color: var(--blue); color: var(--blue); }
+    .pill.active { background: var(--blue); color: #fff; }
+
+    .opt-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+    .opt-row label { font-size: .78rem; font-weight: 600; }
+    .opt-row select, .opt-row input {
+      font-family: inherit; font-size: .78rem; font-weight: 600; padding: 6px 10px;
+      border-radius: 8px; border: 1px solid rgba(26,60,143,.2); background: #fff; color: var(--text); outline: none;
+    }
+    .opt-row input[type="text"] { width: 58%; }
+    .opt-row input[type="time"] { width: 100px; }
+    .opt-row input[type="number"] { width: 70px; }
+    .hint { font-size: .7rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+    /* SUBJECT PALETTE */
+    .palette { display: flex; flex-wrap: wrap; gap: 7px; }
+    .swatch {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 2px solid transparent; border-radius: 10px; padding: 6px 11px;
+      font-size: .75rem; font-weight: 700; cursor: pointer; transition: all .15s;
+      font-family: inherit; color: #1e2d4d;
+    }
+    .swatch:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.12); }
+    .swatch.active { border-color: #1e2d4d; box-shadow: 0 3px 10px rgba(0,0,0,.18); }
+    .swatch.eraser { background: #fff; border: 2px dashed #94a3b8; color: var(--muted); }
+    .swatch.eraser.active { border-color: #dc2626; color: #dc2626; }
+    .add-lesson { display: flex; gap: 7px; margin-top: 10px; }
+    .add-lesson input {
+      flex: 1; font-family: inherit; font-size: .78rem; font-weight: 600; padding: 7px 11px;
+      border-radius: 8px; border: 1px solid rgba(26,60,143,.2); outline: none;
+    }
+    .add-lesson button {
+      border: none; background: var(--blue); color: #fff; border-radius: 8px;
+      padding: 7px 13px; font-family: inherit; font-weight: 700; font-size: .78rem; cursor: pointer;
+    }
+
+    /* THEMES */
+    .theme-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .theme-pill {
+      display: inline-flex; align-items: center; gap: 7px; background: #fff;
+      border: 2px solid transparent; border-radius: 50px; padding: 6px 13px;
+      font-size: .75rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .2s;
+      box-shadow: 0 2px 8px rgba(26,60,143,.06);
+    }
+    .theme-pill.active { border-color: var(--blue); color: var(--blue); }
+    .theme-dots { display: flex; gap: 2px; }
+    .theme-dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+
+    .gen-actions { display: flex; flex-direction: column; gap: 9px; }
+    .gen-actions .btn { justify-content: center; padding: 12px; font-size: .88rem; }
+    .action-row { display: flex; gap: 9px; }
+    .action-row .btn { flex: 1; padding: 11px; font-size: .8rem; }
+
+    /* SCHEDULE SHEET */
+    .sheet-wrap { overflow-x: auto; }
+    .sheet {
+      background: #fff; border-radius: 8px; box-shadow: var(--shadow-lg);
+      padding: 30px 34px; min-width: 720px;
+    }
+    .sheet-head { text-align: center; margin-bottom: 6px; }
+    .sheet-title {
+      font-size: 1.45rem; font-weight: 800; color: var(--sheet-accent, var(--blue)); outline: none;
+    }
+    .sheet-sub { font-size: .8rem; color: var(--muted); font-weight: 600; margin-top: 2px; }
+    .sheet-info {
+      display: flex; flex-wrap: wrap; gap: 6px 28px; justify-content: center;
+      font-size: .78rem; font-weight: 600; color: var(--muted);
+      padding: 8px 0 14px;
+    }
+    .sheet-info b { color: var(--text); }
+
+    table.schedule { width: 100%; border-collapse: separate; border-spacing: 4px; }
+    .schedule th {
+      background: var(--sheet-accent, var(--blue)); color: #fff; font-size: .78rem;
+      font-weight: 700; padding: 10px 6px; border-radius: 8px; letter-spacing: .02em;
+    }
+    .schedule th.time-h { width: 96px; }
+    .schedule td.time-cell {
+      background: var(--bg-soft); font-size: .68rem; font-weight: 700; color: var(--muted);
+      text-align: center; border-radius: 8px; padding: 6px 4px; line-height: 1.35; white-space: nowrap;
+    }
+    .schedule td.time-cell b { display: block; font-size: .78rem; color: var(--text); }
+    .schedule td.slot {
+      background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 8px;
+      height: 46px; text-align: center; font-size: .78rem; font-weight: 700;
+      cursor: pointer; transition: all .12s; user-select: none; padding: 4px 6px;
+    }
+    .schedule td.slot:hover { border-color: var(--blue); background: #eef3ff; }
+    .schedule td.slot.filled { border-style: solid; border-color: transparent; color: #1e2d4d; }
+    .schedule tr.lunch-row td {
+      background: repeating-linear-gradient(45deg, #fff7ed, #fff7ed 10px, #ffedd5 10px, #ffedd5 20px);
+      color: #c2410c; font-weight: 800; font-size: .78rem; text-align: center;
+      padding: 8px; border-radius: 8px; letter-spacing: .08em;
+    }
+    .sheet.bw .schedule th { background: #1e293b; }
+    .sheet.bw td.slot.filled { background: #fff !important; border: 2px solid #1e293b !important; }
+    .sheet.bw .sheet-title { color: #1e293b; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; justify-content: center; }
+    .legend span {
+      display: inline-flex; align-items: center; gap: 5px; font-size: .68rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 50px;
+    }
+    .sheet-footer { margin-top: 18px; text-align: center; font-size: .68rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+
+    .toolbar-float { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .toolbar-float .btn { padding: 11px 20px; font-size: .83rem; }
+    .paint-info {
+      text-align: center; font-size: .78rem; color: var(--muted); font-weight: 600;
+      background: var(--bg-soft); border-radius: 10px; padding: 9px 14px; margin-bottom: 14px;
+    }
+    .paint-info b { color: var(--blue); }
+
+    @media (max-width: 1100px) { .builder-grid { grid-template-columns: 1fr; } .panel { position: static; max-height: none; } }
+    @media (max-width: 768px) { nav, .nav-actions { display: none; } .hamburger { display: block; } .sheet { padding: 18px 14px; } }
+
+    @media print {
+      @page { size: A4 landscape; margin: 10mm; }
+      header, .page-hero, .panel, .toolbar-float, .paint-info, footer, .mobile-nav { display: none !important; }
+      .builder { padding: 0; }
+      .builder-grid { display: block; }
+      .sheet-wrap { overflow: visible; }
+      .sheet { box-shadow: none; padding: 0; min-width: 0; border-radius: 0; }
+      .schedule td.slot { cursor: default; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
+        Kaynak <span>Akademi</span>
+      </a>
+      <nav>
+        <a href="index.html">Ana Sayfa</a>
+        <a href="etkinlikler.html">Etkinlikler</a>
+        <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
+        <a href="ders-programi.html" class="active">Ders Programı</a>
+        <a href="haberler.html">Haberler</a>
+        <a href="#">İletişim</a>
+      </nav>
+      <div class="nav-actions" style="display:flex;align-items:center;gap:10px;">
+        <a href="giris.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem;">Giriş Yap</a>
+        <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:.85rem;">Ücretsiz Başla</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <a href="haberler.html">Haberler</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="hero-badge2">📅 İlkokul · Ortaokul · Lise — her kademeye uygun</div>
+    <h1>Profesyonel <span>Ders Programı</span> Oluşturucu</h1>
+    <p>Kademeni ve sınıfını seç, ders paletinden boyayarak ya da tek tıkla otomatik doldurarak haftalık programını hazırla. Zil saatleri otomatik hesaplanır; temanı seç, yazdır, duvarına as.</p>
+  </div>
+</section>
+
+<section class="builder">
+  <div class="container">
+    <div class="builder-grid">
+
+      <!-- ══════════ PANEL ══════════ -->
+      <aside class="panel">
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">1</div><div class="step-title">Kademe ve Sınıf</div></div>
+          <div class="pills" id="levelPills" style="margin-bottom:10px;"></div>
+          <div class="pills" id="gradePills"></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">2</div><div class="step-title">Zaman Ayarları</div></div>
+          <div class="opt-row"><label>Günler</label>
+            <select id="dayCount">
+              <option value="5" selected>Pazartesi – Cuma</option>
+              <option value="6">Pazartesi – Cumartesi</option>
+              <option value="7">Tüm hafta</option>
+            </select>
+          </div>
+          <div class="opt-row"><label>Günlük ders sayısı</label><input type="number" id="slotCount" min="4" max="12" value="6" /></div>
+          <div class="opt-row"><label>İlk ders başlangıcı</label><input type="time" id="startTime" value="08:30" /></div>
+          <div class="opt-row"><label>Ders süresi (dk)</label><input type="number" id="lessonMin" min="30" max="60" step="5" value="40" /></div>
+          <div class="opt-row"><label>Teneffüs (dk)</label><input type="number" id="breakMin" min="5" max="30" step="5" value="10" /></div>
+          <div class="opt-row"><label>Öğle arası</label>
+            <select id="lunchAfter">
+              <option value="0">Yok</option>
+              <option value="3">3. dersten sonra</option>
+              <option value="4" selected>4. dersten sonra</option>
+              <option value="5">5. dersten sonra</option>
+              <option value="6">6. dersten sonra</option>
+            </select>
+          </div>
+          <div class="opt-row"><label>Öğle arası süresi (dk)</label><input type="number" id="lunchMin" min="30" max="90" step="5" value="50" /></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">3</div><div class="step-title">Ders Paleti</div></div>
+          <div class="palette" id="palette"></div>
+          <div class="add-lesson">
+            <input type="text" id="newLesson" placeholder="Özel ders ekle (ör. Satranç)" maxlength="28" />
+            <button id="addLessonBtn">+ Ekle</button>
+          </div>
+          <div class="hint">Bir dersi seç, ardından tablodaki hücrelere tıklayarak (veya basılı tutup sürükleyerek) yerleştir. <b>Silgi</b> ile hücreyi temizle.</div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">4</div><div class="step-title">Görünüm</div></div>
+          <div class="theme-pills" id="themePills"></div>
+          <div style="height:10px"></div>
+          <div class="opt-row"><label>Okul Adı</label><input type="text" id="schoolName" placeholder="....... Okulu" /></div>
+          <div class="opt-row"><label>Ad Soyad</label><input type="text" id="studentName" placeholder="Öğrenci / Öğretmen" /></div>
+          <div class="opt-row"><label>Şube</label><input type="text" id="branchName" placeholder="ör. 5/A" style="width:70px" /></div>
+        </div>
+
+        <div class="gen-actions">
+          <button class="btn btn-primary" id="autoBtn">✨ Otomatik Doldur</button>
+          <div class="action-row">
+            <button class="btn btn-outline" id="printBtn">🖨 Yazdır / PDF</button>
+            <button class="btn btn-outline" id="saveBtn">💾 Kaydet</button>
+            <button class="btn btn-ghost" id="resetBtn">↺ Sıfırla</button>
+          </div>
+          <div class="hint" style="text-align:center;">Kaydet: program bu tarayıcıda saklanır, sayfayı tekrar açtığında geri yüklenir. Yazdırma penceresinde <b>PDF'e kaydet</b> seçerek indirebilirsin.</div>
+        </div>
+
+      </aside>
+
+      <!-- ══════════ SHEET ══════════ -->
+      <main>
+        <div class="paint-info" id="paintInfo">🖌 Seçili ders: <b>—</b> · Paletten bir ders seçip hücrelere tıkla.</div>
+        <div class="toolbar-float">
+          <button class="btn btn-outline" id="printBtn2">🖨 Yazdır / PDF İndir</button>
+          <button class="btn btn-outline" id="clearBtn">🧹 Tabloyu Temizle</button>
+        </div>
+        <div class="sheet-wrap">
+          <div class="sheet" id="sheet"></div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</section>
+
+<footer style="background:#0d1b3e;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
+  <div class="container">© 2026 Kaynak Akademi · Profesyonel Ders Programı Oluşturucu</div>
+</footer>
+
+<script>
+/* ═══════════ TANIMLAR ═══════════ */
+const DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
+
+const LEVELS = {
+  ilkokul:  { name: "🎒 İlkokul",  grades: [1,2,3,4],    slots: 6, start: "09:00" },
+  ortaokul: { name: "🏫 Ortaokul", grades: [5,6,7,8],    slots: 7, start: "08:30" },
+  lise:     { name: "🎓 Lise",     grades: [9,10,11,12], slots: 8, start: "08:30" },
+};
+
+/* w: otomatik doldurmada haftalık ders saati ağırlığı */
+const LESSONS = {
+  ilkokul: [
+    { n: "Türkçe", w: 8 }, { n: "Matematik", w: 5 }, { n: "Hayat Bilgisi", w: 4 },
+    { n: "Fen Bilimleri", w: 3 }, { n: "Sosyal Bilgiler", w: 3 }, { n: "İngilizce", w: 3 },
+    { n: "Din Kültürü", w: 2 }, { n: "Görsel Sanatlar", w: 1 }, { n: "Müzik", w: 1 },
+    { n: "Beden Eğitimi ve Oyun", w: 5 }, { n: "Serbest Etkinlik", w: 2 }, { n: "Trafik Güvenliği", w: 1 },
+  ],
+  ortaokul: [
+    { n: "Türkçe", w: 6 }, { n: "Matematik", w: 5 }, { n: "Fen Bilimleri", w: 4 },
+    { n: "Sosyal Bilgiler", w: 3 }, { n: "İngilizce", w: 4 }, { n: "Din Kültürü", w: 2 },
+    { n: "Beden Eğitimi ve Spor", w: 2 }, { n: "Görsel Sanatlar", w: 1 }, { n: "Müzik", w: 1 },
+    { n: "Teknoloji ve Tasarım", w: 2 }, { n: "Bilişim Teknolojileri", w: 2 }, { n: "Rehberlik", w: 1 }, { n: "Seçmeli Ders", w: 2 },
+  ],
+  lise: [
+    { n: "Türk Dili ve Edebiyatı", w: 5 }, { n: "Matematik", w: 6 }, { n: "Geometri", w: 2 },
+    { n: "Fizik", w: 2 }, { n: "Kimya", w: 2 }, { n: "Biyoloji", w: 2 },
+    { n: "Tarih", w: 2 }, { n: "Coğrafya", w: 2 }, { n: "Felsefe", w: 2 },
+    { n: "İngilizce", w: 4 }, { n: "Almanca", w: 2 }, { n: "Din Kültürü", w: 2 },
+    { n: "Beden Eğitimi", w: 2 }, { n: "Müzik / Görsel Sanatlar", w: 1 }, { n: "Rehberlik", w: 1 }, { n: "Seçmeli Ders", w: 3 },
+  ],
+};
+
+const THEMES = {
+  renkli:  { name: "Renkli",       accent: "#1a3c8f", colors: ["#dbeafe","#dcfce7","#fef3c7","#fce7f3","#ede9fe","#ffedd5","#cffafe","#fee2e2","#d9f99d","#e0e7ff","#fde68a","#bbf7d0","#fbcfe8","#c7d2fe","#fed7aa","#a5f3fc"] },
+  okyanus: { name: "Okyanus",      accent: "#0e7490", colors: ["#cffafe","#e0f2fe","#bae6fd","#a5f3fc","#ccfbf1","#d1fae5","#e0e7ff","#dbeafe","#c7d2fe","#99f6e4","#bfdbfe","#a7f3d0","#e0f2fe","#cffafe","#dbeafe","#ccfbf1"] },
+  gunbatimi:{ name: "Gün Batımı",  accent: "#c2410c", colors: ["#ffedd5","#fef3c7","#fee2e2","#fce7f3","#fde68a","#fed7aa","#fecaca","#fbcfe8","#fef9c3","#ffe4e6","#fde4cf","#fdf0d5","#fee2d5","#fce7f3","#fef3c7","#ffedd5"] },
+  orman:   { name: "Orman",        accent: "#166534", colors: ["#dcfce7","#d9f99d","#bbf7d0","#ecfccb","#d1fae5","#a7f3d0","#f0fdf4","#e0f2fe","#ccfbf1","#d9f99d","#dcfce7","#bbf7d0","#ecfccb","#d1fae5","#a7f3d0","#f0fdf4"] },
+  sb:      { name: "Siyah-Beyaz",  accent: "#1e293b", colors: ["#ffffff"] },
+};
+
+/* ═══════════ DURUM ═══════════ */
+let st = {
+  level: "ilkokul", grade: 1, theme: "renkli",
+  lessons: [],            // aktif palet: [{n, w}]
+  sel: null,              // seçili ders indexi | "erase" | null
+  grid: {},               // "d-s" -> lesson index
+};
+let painting = false;
+
+const $ = id => document.getElementById(id);
+const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = R(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+function colorOf(i) {
+  const t = THEMES[st.theme];
+  return t.colors[i % t.colors.length];
+}
+
+/* ═══════════ PANEL ═══════════ */
+function loadLessons() { st.lessons = LESSONS[st.level].map(l => ({ ...l })); }
+
+function renderLevels() {
+  $("levelPills").innerHTML = Object.entries(LEVELS).map(([k, v]) =>
+    `<button class="pill ${st.level === k ? "active" : ""}" data-l="${k}">${v.name}</button>`).join("");
+  $("gradePills").innerHTML = LEVELS[st.level].grades.map(g =>
+    `<button class="pill ${st.grade === g ? "active" : ""}" data-g="${g}">${g}. Sınıf</button>`).join("");
+}
+function renderPalette() {
+  $("palette").innerHTML = st.lessons.map((l, i) =>
+    `<button class="swatch ${st.sel === i ? "active" : ""}" data-i="${i}" style="background:${colorOf(i)}">${l.n}</button>`
+  ).join("") + `<button class="swatch eraser ${st.sel === "erase" ? "active" : ""}" data-i="erase">🧽 Silgi</button>`;
+  $("paintInfo").innerHTML = st.sel === null
+    ? `🖌 Seçili ders: <b>—</b> · Paletten bir ders seçip hücrelere tıkla.`
+    : st.sel === "erase"
+      ? `🧽 <b>Silgi</b> aktif · Temizlemek istediğin hücrelere tıkla.`
+      : `🖌 Seçili ders: <b>${st.lessons[st.sel].n}</b> · Hücrelere tıkla veya basılı tutup sürükle.`;
+}
+function renderThemes() {
+  $("themePills").innerHTML = Object.entries(THEMES).map(([k, t]) => `
+    <button class="theme-pill ${st.theme === k ? "active" : ""}" data-t="${k}">
+      <span class="theme-dots">${t.colors.slice(0, 3).map(c => `<i style="background:${c};border:1px solid rgba(0,0,0,.12)"></i>`).join("")}</span>
+      ${t.name}
+    </button>`).join("");
+}
+
+/* ═══════════ SAAT HESABI ═══════════ */
+function timeStr(min) { return `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`; }
+function slotTimes() {
+  const [h, m] = ($("startTime").value || "08:30").split(":").map(Number);
+  let t = h * 60 + m;
+  const les = +$("lessonMin").value || 40, brk = +$("breakMin").value || 10;
+  const lunchAfter = +$("lunchAfter").value, lunch = +$("lunchMin").value || 50;
+  const out = [];
+  const n = +$("slotCount").value || 6;
+  for (let i = 0; i < n; i++) {
+    out.push({ from: timeStr(t), to: timeStr(t + les), lunchNext: lunchAfter === i + 1 });
+    t += les + (lunchAfter === i + 1 ? lunch : brk);
+  }
+  return out;
+}
+
+/* ═══════════ TABLO ═══════════ */
+function renderSheet() {
+  const dayN = +$("dayCount").value;
+  const times = slotTimes();
+  const t = THEMES[st.theme];
+  const school = $("schoolName").value.trim();
+  const stu = $("studentName").value.trim();
+  const br = $("branchName").value.trim();
+
+  let head = `<tr><th class="time-h">🕐 Saat</th>${DAYS.slice(0, dayN).map(d => `<th>${d}</th>`).join("")}</tr>`;
+  let rows = "";
+  times.forEach((tm, s) => {
+    rows += `<tr><td class="time-cell"><b>${s + 1}. Ders</b>${tm.from} – ${tm.to}</td>`;
+    for (let d = 0; d < dayN; d++) {
+      const li = st.grid[`${d}-${s}`];
+      const filled = li !== undefined && st.lessons[li];
+      rows += `<td class="slot ${filled ? "filled" : ""}" data-d="${d}" data-s="${s}" ${filled ? `style="background:${colorOf(li)}"` : ""}>${filled ? st.lessons[li].n : ""}</td>`;
+    }
+    rows += `</tr>`;
+    if (tm.lunchNext) rows += `<tr class="lunch-row"><td colspan="${dayN + 1}">🍽 ÖĞLE ARASI</td></tr>`;
+  });
+
+  const used = [...new Set(Object.values(st.grid))].filter(i => st.lessons[i] !== undefined);
+  const legend = used.length ? `<div class="legend">${used.map(i => `<span style="background:${colorOf(i)}">${st.lessons[i].n}</span>`).join("")}</div>` : "";
+
+  $("sheet").innerHTML = `
+    <div class="sheet-head">
+      <div class="sheet-title" contenteditable="true">📅 Haftalık Ders Programı</div>
+      <div class="sheet-sub">${LEVELS[st.level].name.replace(/^\S+\s/, "")} · ${st.grade}. Sınıf${br ? " (" + br + ")" : ""}</div>
+    </div>
+    <div class="sheet-info">
+      ${school ? `<span>🏫 <b>${school}</b></span>` : ""}
+      ${stu ? `<span>👤 <b>${stu}</b></span>` : ""}
+      <span>📆 ${new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}</span>
+    </div>
+    <table class="schedule">${head}${rows}</table>
+    ${legend}
+    <div class="sheet-footer">Kaynak Akademi · Ders Programı Oluşturucu</div>
+  `;
+  $("sheet").style.setProperty("--sheet-accent", t.accent);
+  $("sheet").classList.toggle("bw", st.theme === "sb");
+}
+
+/* ═══════════ BOYAMA ═══════════ */
+function paintCell(td) {
+  if (st.sel === null) return;
+  const key = `${td.dataset.d}-${td.dataset.s}`;
+  if (st.sel === "erase") delete st.grid[key];
+  else st.grid[key] = st.sel;
+  renderSheet();
+}
+$("sheet").addEventListener("mousedown", e => {
+  const td = e.target.closest("td.slot"); if (!td) return;
+  painting = true; paintCell(td); e.preventDefault();
+});
+$("sheet").addEventListener("mouseover", e => {
+  if (!painting) return;
+  const td = e.target.closest("td.slot"); if (td) paintCell(td);
+});
+document.addEventListener("mouseup", () => painting = false);
+
+/* ═══════════ OTOMATİK DOLDURMA ═══════════ */
+function autoFill() {
+  const dayN = +$("dayCount").value, slotN = +$("slotCount").value;
+  const total = dayN * slotN;
+  /* ağırlıklara göre havuz oluştur */
+  let pool = [];
+  st.lessons.forEach((l, i) => { for (let k = 0; k < l.w; k++) pool.push(i); });
+  /* havuzu toplam hücre sayısına ölçekle */
+  while (pool.length < total) pool = pool.concat(pool);
+  pool = shuffle(pool).slice(0, total);
+
+  /* aynı dersin aynı günde 3'ten fazla tekrarını azalt */
+  st.grid = {};
+  const dayCount = {};
+  let p = 0;
+  for (let d = 0; d < dayN; d++) {
+    dayCount[d] = {};
+    for (let s = 0; s < slotN; s++) {
+      let tries = 0, li = pool[p % pool.length];
+      while ((dayCount[d][li] || 0) >= 2 && tries < 10) { p++; li = pool[p % pool.length]; tries++; }
+      st.grid[`${d}-${s}`] = li;
+      dayCount[d][li] = (dayCount[d][li] || 0) + 1;
+      p++;
+    }
+  }
+  renderSheet();
+}
+
+/* ═══════════ KAYDET / YÜKLE ═══════════ */
+const KEY = "ka-ders-programi";
+function save() {
+  const data = {
+    st: { level: st.level, grade: st.grade, theme: st.theme, lessons: st.lessons, grid: st.grid },
+    opts: ["dayCount","slotCount","startTime","lessonMin","breakMin","lunchAfter","lunchMin","schoolName","studentName","branchName"]
+      .reduce((o, id) => (o[id] = $(id).value, o), {}),
+  };
+  localStorage.setItem(KEY, JSON.stringify(data));
+  $("saveBtn").textContent = "✅ Kaydedildi";
+  setTimeout(() => $("saveBtn").textContent = "💾 Kaydet", 1500);
+}
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem(KEY));
+    if (!data) return false;
+    Object.assign(st, data.st);
+    st.sel = null;
+    Object.entries(data.opts).forEach(([id, v]) => { if ($(id)) $(id).value = v; });
+    return true;
+  } catch { return false; }
+}
+
+/* ═══════════ OLAYLAR ═══════════ */
+$("levelPills").addEventListener("click", e => {
+  const b = e.target.closest("[data-l]"); if (!b) return;
+  st.level = b.dataset.l;
+  st.grade = LEVELS[st.level].grades[0];
+  $("slotCount").value = LEVELS[st.level].slots;
+  $("startTime").value = LEVELS[st.level].start;
+  st.grid = {}; st.sel = null;
+  loadLessons(); renderLevels(); renderPalette(); renderSheet();
+});
+$("gradePills").addEventListener("click", e => {
+  const b = e.target.closest("[data-g]"); if (!b) return;
+  st.grade = +b.dataset.g; renderLevels(); renderSheet();
+});
+$("palette").addEventListener("click", e => {
+  const b = e.target.closest(".swatch"); if (!b) return;
+  const v = b.dataset.i === "erase" ? "erase" : +b.dataset.i;
+  st.sel = st.sel === v ? null : v;
+  renderPalette();
+});
+$("addLessonBtn").onclick = () => {
+  const v = $("newLesson").value.trim();
+  if (!v) return;
+  st.lessons.push({ n: v, w: 1 });
+  $("newLesson").value = "";
+  st.sel = st.lessons.length - 1;
+  renderPalette();
+};
+$("newLesson").addEventListener("keydown", e => { if (e.key === "Enter") $("addLessonBtn").click(); });
+$("themePills").addEventListener("click", e => {
+  const b = e.target.closest("[data-t]"); if (!b) return;
+  st.theme = b.dataset.t; renderThemes(); renderPalette(); renderSheet();
+});
+["dayCount","slotCount","startTime","lessonMin","breakMin","lunchAfter","lunchMin","schoolName","studentName","branchName"]
+  .forEach(id => $(id).addEventListener("input", renderSheet));
+
+$("autoBtn").onclick = autoFill;
+$("clearBtn").onclick = () => { st.grid = {}; renderSheet(); };
+$("resetBtn").onclick = () => {
+  if (!confirm("Program ve tüm ayarlar sıfırlansın mı?")) return;
+  localStorage.removeItem(KEY);
+  st = { level: st.level, grade: st.grade, theme: "renkli", lessons: [], sel: null, grid: {} };
+  loadLessons(); renderLevels(); renderThemes(); renderPalette(); renderSheet();
+};
+$("saveBtn").onclick = save;
+$("printBtn").onclick = () => window.print();
+$("printBtn2").onclick = () => window.print();
+
+/* Mobil menü */
+$("menuBtn").addEventListener("click", () => $("mobileNav").classList.toggle("open"));
+
+/* ═══════════ BAŞLAT ═══════════ */
+if (!load()) loadLessons();
+renderLevels(); renderThemes(); renderPalette(); renderSheet();
+</script>
+</body>
+</html>

@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEP Oluştur – Kaynak Akademi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: #1e2d4d; background: #fff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    :root {
+      --blue: #1a3c8f; --blue-dk: #122a6e; --teal: #0ea5c9; --orange: #f97316;
+      --amber: #fbbf24; --bg-soft: #f0f4ff; --text: #1e2d4d; --muted: #64748b;
+      --radius: 14px; --shadow: 0 4px 24px rgba(26,60,143,.10); --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+      border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
+      transition: all .25s; border: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #ea6000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26,60,143,.08);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
+    .logo-icon { width: 48px; height: 48px; object-fit: contain; }
+    .logo span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a:hover { background: var(--bg-soft); color: var(--blue); }
+    nav a.active { color: var(--blue); font-weight: 700; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue); margin: 5px 0; border-radius: 2px; }
+    .mobile-nav {
+      display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
+      background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
+      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(26,60,143,.08);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
+    .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
+
+    /* PAGE HERO */
+    .page-hero {
+      background: linear-gradient(140deg, #e8effe 0%, #f0f4ff 50%, #fef3e8 100%);
+      padding: 44px 0 36px;
+    }
+    .page-hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; }
+    .page-hero h1 span { color: var(--orange); }
+    .page-hero p { color: var(--muted); margin-top: 8px; max-width: 760px; font-size: .95rem; }
+    .meb-badge {
+      display: inline-flex; align-items: center; gap: 8px; background: #fff;
+      padding: 7px 16px; border-radius: 50px; font-size: .78rem; font-weight: 700;
+      color: var(--blue); box-shadow: var(--shadow); margin-bottom: 14px;
+    }
+
+    /* BUILDER LAYOUT */
+    .builder { padding: 40px 0 80px; }
+    .builder-grid { display: grid; grid-template-columns: 400px 1fr; gap: 30px; align-items: start; }
+
+    .panel { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 92px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
+    .panel::-webkit-scrollbar { width: 6px; }
+    .panel::-webkit-scrollbar-thumb { background: rgba(26,60,143,.2); border-radius: 3px; }
+
+    .step-box { background: var(--bg-soft); border-radius: var(--radius); padding: 18px 20px; }
+    .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .8rem; flex-shrink: 0;
+    }
+    .step-title { font-size: .92rem; font-weight: 800; }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      background: #fff; border: 2px solid transparent; border-radius: 50px;
+      padding: 8px 16px; font-size: .82rem; font-weight: 700; cursor: pointer;
+      transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(26,60,143,.06);
+    }
+    .pill:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+    .pill.active { background: var(--blue); color: #fff; }
+    .pill:disabled { opacity: .35; cursor: not-allowed; }
+
+    .opt-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .opt-row label { font-size: .8rem; font-weight: 600; flex-shrink: 0; }
+    .opt-row select, .opt-row input {
+      font-family: inherit; font-size: .8rem; font-weight: 600; padding: 7px 12px;
+      border-radius: 8px; border: 1px solid rgba(26,60,143,.2); background: #fff; color: var(--text); outline: none;
+    }
+    .opt-row input[type="text"], .opt-row input[type="date"] { width: 62%; }
+    .opt-row input:focus, .opt-row select:focus { border-color: var(--blue); }
+    .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; }
+    .check-row input { accent-color: var(--blue); width: 15px; height: 15px; flex-shrink: 0; }
+    .check-row span { font-size: .8rem; font-weight: 600; }
+    .hint { font-size: .72rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+    .gen-actions { display: flex; flex-direction: column; gap: 10px; }
+    .gen-actions .btn { justify-content: center; }
+    .action-row { display: flex; gap: 10px; }
+    .action-row .btn { flex: 1; padding: 12px; font-size: .85rem; }
+
+    /* BEP DOCUMENT PREVIEW */
+    .preview-wrap { min-height: 400px; }
+    .preview-empty {
+      background: var(--bg-soft); border: 2px dashed rgba(26,60,143,.25);
+      border-radius: var(--radius); padding: 80px 30px; text-align: center;
+    }
+    .preview-empty .icon { font-size: 3.4rem; margin-bottom: 14px; }
+    .preview-empty p { color: var(--muted); font-size: .95rem; }
+
+    .toolbar-float { display: flex; gap: 10px; justify-content: center; margin-bottom: 18px; flex-wrap: wrap; }
+    .toolbar-float .btn { padding: 11px 22px; font-size: .85rem; }
+
+    .sheet {
+      background: #fff; border-radius: 6px; box-shadow: var(--shadow-lg);
+      padding: 40px 44px; max-width: 900px; margin: 0 auto;
+      font-size: var(--sheet-fs, .88rem); line-height: 1.55;
+    }
+    .sheet.bw, .sheet.bw * { color: #111 !important; }
+    .sheet.bw .bep-h, .sheet.bw th { background: #eee !important; }
+    .sheet [contenteditable]:hover { outline: 1.5px dashed rgba(26,60,143,.35); outline-offset: 2px; }
+    .sheet [contenteditable]:focus { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+    .bep-head { text-align: center; border-bottom: 3px double var(--blue); padding-bottom: 14px; margin-bottom: 18px; }
+    .bep-head .tc { font-size: .85em; font-weight: 700; letter-spacing: .08em; }
+    .bep-head .okul { font-size: .95em; font-weight: 700; letter-spacing: .04em; margin-top: 2px; }
+    .bep-head h2 { color: var(--blue); font-size: 1.25em; font-weight: 800; margin-top: 8px; letter-spacing: .02em; }
+    .bep-head .yil { font-size: .82em; color: var(--muted); font-weight: 600; margin-top: 4px; }
+
+    .bep-h {
+      background: var(--bg-soft); color: var(--blue); font-weight: 800; font-size: .95em;
+      padding: 8px 14px; border-radius: 8px; margin: 22px 0 12px; letter-spacing: .02em;
+      break-after: avoid;
+    }
+    .bep-h small { color: var(--muted); font-weight: 600; }
+
+    table.bep-t { width: 100%; border-collapse: collapse; font-size: .92em; }
+    table.bep-t th, table.bep-t td { border: 1px solid #c9d4ee; padding: 7px 10px; text-align: left; vertical-align: top; }
+    table.bep-t th { background: #e8effe; color: var(--blue-dk); font-weight: 700; font-size: .88em; }
+    table.bep-t td b { color: var(--blue-dk); }
+    .kimlik-t td:nth-child(odd) { background: #f7f9ff; font-weight: 700; width: 18%; white-space: nowrap; }
+    .kimlik-t td:nth-child(even) { width: 32%; }
+
+    .uda-block { margin-bottom: 18px; break-inside: avoid; }
+    .uda-title { font-weight: 800; color: var(--blue-dk); margin-bottom: 8px; font-size: .95em; }
+    .uda-title .no { color: var(--orange); }
+
+    .perf-p, .uyar-li { text-align: justify; }
+    ul.bep-ul { padding-left: 20px; list-style: disc; display: flex; flex-direction: column; gap: 5px; }
+
+    .sign-t td { height: 64px; text-align: center; vertical-align: bottom; padding-bottom: 8px; }
+    .sign-t .rol { height: auto; background: #f7f9ff; font-weight: 700; vertical-align: middle; }
+
+    .sheet-footer { margin-top: 26px; text-align: center; font-size: .72em; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+    .edit-note { font-size: .74rem; color: var(--muted); text-align: center; margin-bottom: 12px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .builder-grid { grid-template-columns: 1fr; }
+      .panel { position: static; max-height: none; }
+      .sheet { padding: 26px 18px; }
+    }
+    @media (max-width: 768px) {
+      nav, .nav-actions { display: none; }
+      .hamburger { display: block; }
+      table.bep-t { font-size: .8em; }
+    }
+
+    /* PRINT */
+    @media print {
+      header, .page-hero, .panel, .toolbar-float, footer, .mobile-nav, .edit-note { display: none !important; }
+      .builder { padding: 0; }
+      .builder-grid { display: block; }
+      .sheet { box-shadow: none; padding: 0; max-width: none; border-radius: 0; }
+      .bep-h { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      table.bep-t th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page-break { page-break-before: always; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
+        Kaynak <span>Akademi</span>
+      </a>
+      <nav>
+        <a href="index.html">Ana Sayfa</a>
+        <a href="index.html#subjects">Dersler</a>
+        <a href="etkinlikler.html">Etkinlikler</a>
+        <a href="odev-olustur.html">Ödev Oluştur</a>
+        <a href="bep-olustur.html" class="active">BEP Oluştur</a>
+        <a href="ders-programi.html">Ders Programı</a>
+        <a href="haberler.html">Haberler</a>
+        <a href="#">İletişim</a>
+      </nav>
+      <div class="nav-actions" style="display:flex;align-items:center;gap:10px;">
+        <a href="giris.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem;">Giriş Yap</a>
+        <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:.85rem;">Ücretsiz Başla</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <a href="haberler.html">Haberler</a>
+    <a href="#">İletişim</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="meb-badge">🇹🇷 MEB Özel Eğitim Hizmetleri Yönetmeliği'ne uygun format</div>
+    <h1>Akıllı <span>BEP Oluşturucu</span></h1>
+    <p>Bireyselleştirilmiş Eğitim Programı'nı dakikalar içinde hazırla: sınıf, tanı ve dersleri seç; performans düzeyi, uyarlamalar, uzun ve kısa dönemli amaçlar tablolarıyla birlikte yazdırmaya hazır BEP dosyan otomatik oluşturulsun. İlkokul, ortaokul ve lise — 1'den 12. sınıfa kadar tüm kademeler. Tüm alanlar çıktı almadan önce üzerine tıklanarak düzenlenebilir.</p>
+  </div>
+</section>
+
+<section class="builder">
+  <div class="container">
+    <div class="builder-grid">
+
+      <!-- ══════════ PANEL ══════════ -->
+      <aside class="panel">
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">1</div><div class="step-title">Öğrenci Bilgileri</div></div>
+          <div class="opt-row"><label>Ad Soyad</label><input type="text" id="stName" placeholder="Öğrencinin adı soyadı" /></div>
+          <div class="opt-row"><label>Doğum Tarihi</label><input type="date" id="stBirth" /></div>
+          <div class="opt-row"><label>Okul No</label><input type="text" id="stNo" placeholder="Örn. 124" /></div>
+          <div class="opt-row"><label>Veli Adı</label><input type="text" id="stParent" placeholder="Veli adı soyadı" /></div>
+          <div style="font-size:.8rem;font-weight:700;margin:12px 0 8px;">Sınıf</div>
+          <div class="pills" id="gradePills"></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">2</div><div class="step-title">Tanılama Bilgileri</div></div>
+          <div class="pills" id="disabPills"></div>
+          <div class="opt-row" style="margin-top:12px;"><label>RAM Rapor No</label><input type="text" id="ramNo" placeholder="İsteğe bağlı" /></div>
+          <div class="opt-row"><label>Rapor Tarihi</label><input type="date" id="ramDate" /></div>
+          <div class="hint">Tanı; performans düzeyi, öğretim uyarlamaları ve amaç ölçütlerinin buna göre şekillenmesini sağlar.</div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">3</div><div class="step-title">Destek Eğitim Hizmetleri</div></div>
+          <div id="supportList"></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">4</div><div class="step-title">Dersler</div></div>
+          <div id="subjectList"></div>
+          <div class="hint" id="subjectHint">Seçilen her ders için uzun ve kısa dönemli amaç tabloları ayrı ayrı oluşturulur.</div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">5</div><div class="step-title">BEP Dönemi ve Kurum</div></div>
+          <div class="opt-row"><label>Başlangıç</label><input type="date" id="termStart" /></div>
+          <div class="opt-row"><label>Bitiş</label><input type="date" id="termEnd" /></div>
+          <div class="opt-row"><label>Okul Adı</label><input type="text" id="schoolName" placeholder="....... İlkokulu" /></div>
+          <div class="opt-row"><label>İl / İlçe</label><input type="text" id="schoolCity" placeholder="Örn. Ankara / Çankaya" /></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">6</div><div class="step-title">BEP Geliştirme Birimi</div></div>
+          <div class="opt-row"><label>Müdür / Bşk.</label><input type="text" id="mPrincipal" placeholder="Ad Soyad" /></div>
+          <div class="opt-row"><label>Sınıf Öğretmeni</label><input type="text" id="mTeacher" placeholder="Ad Soyad" /></div>
+          <div class="opt-row"><label>Rehber Öğretmen</label><input type="text" id="mCounselor" placeholder="Ad Soyad" /></div>
+          <div class="opt-row"><label>Özel Eğitim Öğrt.</label><input type="text" id="mSpecial" placeholder="Varsa" /></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-head"><div class="step-num">7</div><div class="step-title">Belge Ayarları</div></div>
+          <div class="opt-row">
+            <label>Yazı Boyutu</label>
+            <select id="fontSize">
+              <option value=".8rem">Küçük</option>
+              <option value=".88rem" selected>Normal</option>
+              <option value=".98rem">Büyük</option>
+            </select>
+          </div>
+          <label class="check-row"><input type="checkbox" id="optUyarlama" checked /><span>Öğretim uyarlamaları bölümünü ekle</span></label>
+          <label class="check-row"><input type="checkbox" id="optDegerlendirme" checked /><span>İzleme ve değerlendirme bölümünü ekle</span></label>
+          <label class="check-row"><input type="checkbox" id="optSign" checked /><span>BEP birimi imza bloğunu ekle</span></label>
+          <label class="check-row"><input type="checkbox" id="optBW" /><span>Siyah-beyaz çıktı (toner dostu)</span></label>
+        </div>
+
+        <div class="gen-actions">
+          <button class="btn btn-primary" id="genBtn" style="font-size:1rem;">📋 BEP'i Oluştur</button>
+          <div class="action-row">
+            <button class="btn btn-outline" id="printBtn">🖨 Yazdır / PDF</button>
+            <button class="btn btn-outline" id="clearBtn">🗑 Temizle</button>
+          </div>
+          <div class="hint" style="text-align:center;">💡 Girdiğin bilgiler tarayıcında otomatik saklanır; sayfayı kapatıp açsan da kaybolmaz. "Yazdır / PDF" penceresinde <b>PDF'e kaydet</b> seçerek dosya indirebilirsin.</div>
+        </div>
+
+      </aside>
+
+      <!-- ══════════ PREVIEW ══════════ -->
+      <main class="preview-wrap" id="previewWrap">
+        <div class="preview-empty" id="previewEmpty">
+          <div class="icon">🧩</div>
+          <p><b>BEP dosyası burada görünecek.</b><br>Soldan öğrenci bilgilerini gir, tanı ve dersleri seç, "BEP'i Oluştur" butonuna bas.</p>
+        </div>
+        <div id="sheetArea" style="display:none;">
+          <div class="toolbar-float">
+            <button class="btn btn-outline" id="regenBtn">🔄 Yeniden Oluştur</button>
+            <button class="btn btn-primary" id="printBtn2">🖨 Yazdır / PDF İndir</button>
+          </div>
+          <div class="edit-note">✏️ Belgedeki tüm metinlerin üzerine tıklayarak yazdırmadan önce düzenleyebilirsin.</div>
+          <div class="sheet" id="sheet"></div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</section>
+
+<footer style="background:#0d1b3e;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
+  <div class="container">© 2026 Kaynak Akademi · BEP formatı, MEB Özel Eğitim Hizmetleri Yönetmeliği ve BEP hazırlama kılavuzları esas alınarak hazırlanmıştır. Oluşturulan taslak, BEP geliştirme birimince öğrenciye göre gözden geçirilmelidir.</div>
+</footer>
+
+<script>
+/* ═══════════════ VERİ: TANILAR ═══════════════ */
+const DISAB = {
+  zihinsel: { name: "Zihinsel Yetersizlik",
+    perf: "öğrenme hızı akranlarına göre daha yavaş olup yeni bilgileri somut yaşantılar, bol tekrar ve küçük adımlara bölünmüş öğretimle daha kalıcı öğrenmektedir. Kısa ve net yönergeleri takip edebilmekte, model olunduğunda etkinliklere katılmaktadır",
+    uyar: ["Yönergeler kısa, net ve tek basamaklı verilir; gerektiğinde model olunarak tekrarlanır.",
+      "Konular küçük adımlara bölünür, her adım sık tekrar ve olumlu pekiştireçlerle desteklenir.",
+      "Somut materyaller, gerçek nesneler ve görsellerle öğretim yapılır; soyut kavramlar günlük yaşam örnekleriyle ilişkilendirilir.",
+      "Değerlendirmelerde ek süre tanınır, soru sayısı azaltılır ve basitleştirilmiş dil kullanılır.",
+      "Kazanılan beceriler farklı ortam ve kişilerle genellenerek kalıcılığı sağlanır."] },
+  ogrenme: { name: "Özel Öğrenme Güçlüğü",
+    perf: "genel zihinsel performansı yaşıtlarıyla uyumlu olmakla birlikte okuma, yazma ve/veya matematik alanlarında akranlarına göre belirgin güçlük yaşamaktadır. Çok duyulu öğretim ve yapılandırılmış çalışmalarla desteklendiğinde ilerleme göstermektedir",
+    uyar: ["Çok duyulu (görsel, işitsel, dokunsal) öğretim teknikleri kullanılır.",
+      "Okuma metinleri büyük punto ve satır aralığı geniş olacak şekilde sadeleştirilir.",
+      "Yazılı sınavlar yerine gerektiğinde sözlü değerlendirme yapılır; ek süre verilir.",
+      "Ses temelli okuma-yazma çalışmaları ve hece tabanlı akıcılık egzersizleri düzenli uygulanır.",
+      "Yönergeler tek tek verilir; tahtaya yazılan bilgiler için fotokopi/yazılı destek sağlanır."] },
+  dehb: { name: "Dikkat Eksikliği ve Hiperaktivite",
+    perf: "bilişsel becerileri yaşına uygun olmakla birlikte dikkat süresi kısa olup uzun süreli masa başı etkinliklerinde odaklanmakta zorlanmaktadır. Kısa, hareket molalarıyla bölünmüş ve ilgi çekici etkinliklerde başarılı katılım göstermektedir",
+    uyar: ["Öğrenci, öğretmene yakın ve dikkat dağıtıcılardan uzak bir yerde oturtulur.",
+      "Görevler kısa parçalara bölünür; her parçanın tamamlanması anında pekiştirilir.",
+      "Ders aralarında kısa hareket molaları ve sorumluluk görevleri (tahta silme, kâğıt dağıtma) verilir.",
+      "Yönerge vermeden önce göz teması kurulur; yönergenin öğrenci tarafından tekrar edilmesi istenir.",
+      "Sınavlar sakin bir ortamda, gerektiğinde bireysel olarak ve ek süreyle uygulanır."] },
+  otizm: { name: "Otizm Spektrum Bozukluğu",
+    perf: "rutinlere bağlılık göstermekte, değişikliklere hazırlıksız yakalandığında kaygı yaşayabilmektedir. Görsel desteklerle yapılandırılmış etkinliklerde katılımı artmakta; sosyal etkileşim ve iletişim becerilerinde desteğe ihtiyaç duymaktadır",
+    uyar: ["Günlük akış görsel etkinlik çizelgesiyle sunulur; değişiklikler önceden haber verilir.",
+      "Yönergelerde açık, somut ve mecazsız dil kullanılır.",
+      "Sosyal beceriler; sosyal öyküler, video model ve rol oynama teknikleriyle öğretilir.",
+      "Duyusal hassasiyetler (ses, ışık, dokunma) gözetilerek sınıf ortamı düzenlenir.",
+      "Geçişlerden önce uyarı verilir (örn. '5 dakika sonra toplanıyoruz'); ilgi alanları öğretime dahil edilir."] },
+  isitme: { name: "İşitme Yetersizliği",
+    perf: "işitme kaybı nedeniyle sözel iletişimde ve dinleme gerektiren etkinliklerde desteğe ihtiyaç duymaktadır. Görsel materyaller, yazılı yönergeler ve yüz yüze iletişimle desteklendiğinde öğrenme sürecine etkin katılmaktadır",
+    uyar: ["Öğrenci, öğretmenin yüzünü rahatça görebileceği ön sırada oturtulur.",
+      "Konuşurken öğrenciyle yüz yüze bakılır; normal hızda ve net konuşulur.",
+      "Sözel anlatım; yazılı yönerge, görsel ve şema gibi desteklerle zenginleştirilir.",
+      "İşitme cihazı / koklear implantın çalışırlığı her gün kontrol edilir.",
+      "Film ve videolarda altyazı kullanılır; önemli duyurular yazılı olarak da verilir."] },
+  gorme: { name: "Görme Yetersizliği",
+    perf: "görme yetersizliği nedeniyle yazılı ve görsel materyallere erişimde desteğe ihtiyaç duymaktadır. Dokunsal ve işitsel materyaller ile uygun büyütme/aydınlatma sağlandığında öğrenme etkinliklerine başarıyla katılmaktadır",
+    uyar: ["Materyaller büyük punto, yüksek kontrast veya gerektiğinde Braille/sesli formatta hazırlanır.",
+      "Öğrencinin oturduğu yerde uygun aydınlatma sağlanır; tahtaya yazılanlar sesli okunur.",
+      "Dokunsal materyaller, kabartma haritalar ve üç boyutlu modeller kullanılır.",
+      "Sınıf yerleşimi değiştirildiğinde öğrenci bilgilendirilir ve ortam tanıtılır.",
+      "Sınavlarda ek süre, okuyucu/işaretleyici desteği veya büyütülmüş form sağlanır."] },
+  fiziksel: { name: "Fiziksel / Ortopedik Yetersizlik",
+    perf: "bilişsel becerileri öğrenme sürecini sürdürmeye elverişli olup motor beceriler ve fiziksel erişim gerektiren etkinliklerde desteğe ihtiyaç duymaktadır. Uygun ergonomik düzenlemelerle etkinliklere aktif katılım sağlamaktadır",
+    uyar: ["Sınıf ve okul içi fiziksel erişilebilirlik (rampa, sıra düzeni, ulaşım yolu) sağlanır.",
+      "Kalem tutucu, eğik masa, uyarlanmış makas gibi ergonomik araçlar kullanılır.",
+      "Yazma gerektiren görevlerde alternatif yanıt yolları (sözlü, işaretleme, klavye) sunulur.",
+      "Etkinlik ve sınavlarda ek süre tanınır; yorgunluk belirtilerinde mola verilir.",
+      "Beden eğitimi etkinlikleri öğrencinin katılabileceği biçimde uyarlanır."] },
+  dil: { name: "Dil ve Konuşma Güçlüğü",
+    perf: "alıcı ve/veya ifade edici dil becerilerinde yaşıtlarına göre gecikme/güçlük göstermektedir. Model olunduğunda, bekleme süresi tanındığında ve görsel iletişim destekleriyle desteklendiğinde iletişim çabası artmaktadır",
+    uyar: ["Öğrencinin konuşması sabırla dinlenir, sözü kesilmez; doğru model tekrar edilerek sunulur.",
+      "Yanıt vermesi için yeterli bekleme süresi tanınır; sınıf önünde okuma baskısı yapılmaz.",
+      "Resimli kartlar ve görsel iletişim destekleri kullanılır.",
+      "Dil ve konuşma terapisi hedefleri sınıf içi etkinliklerle koordineli yürütülür.",
+      "Söz alma ve sırayla konuşma etkinlikleriyle iletişim güveni desteklenir."] },
+  suregen: { name: "Süreğen Hastalık",
+    perf: "süreğen hastalığı nedeniyle zaman zaman okula devamda güçlük yaşayabilmekte ve çabuk yorulabilmektedir. Esnek ödevlendirme ve telafi çalışmalarıyla desteklendiğinde müfredat kazanımlarını edinebilmektedir",
+    uyar: ["Devamsızlık dönemleri için telafi planı ve eve/hastaneye ödev-materyal desteği sağlanır.",
+      "Yorgunluk belirtilerinde dinlenme molası verilir; fiziksel etkinlikler uyarlanır.",
+      "İlaç ve beslenme saatleri konusunda okul yönetimi ve aile ile iş birliği yapılır.",
+      "Sınav tarihleri sağlık durumu gözetilerek esnetilir; gerektiğinde bireysel uygulanır.",
+      "Evde eğitim / hastane sınıfı süreçleriyle koordinasyon sağlanır."] },
+  diger: { name: "Diğer",
+    perf: "bireysel gereksinimleri doğrultusunda eğitim sürecinde desteğe ihtiyaç duymaktadır. Uygun uyarlamalar ve bireyselleştirilmiş öğretimle öğrenme hedeflerine ulaşabilmektedir",
+    uyar: ["Yönergeler öğrencinin anlayabileceği biçimde sadeleştirilir.",
+      "Öğretim; öğrencinin güçlü yönleri ve ilgi alanları temel alınarak planlanır.",
+      "Değerlendirmelerde ek süre ve alternatif yanıt biçimleri sunulur.",
+      "Aile ile düzenli bilgi alışverişi yapılır; ev çalışmaları koordine edilir.",
+      "İlerleme düzenli aralıklarla izlenir ve program güncellenir."] },
+};
+
+/* ═══════════════ VERİ: DESTEK HİZMETLERİ ═══════════════ */
+const SUPPORTS = [
+  { id: "destekoda", name: "Destek Eğitim Odası", detail: "Haftalık plan dahilinde birebir/küçük grup çalışması" },
+  { id: "kaynastirma", name: "Kaynaştırma / Bütünleştirme", detail: "Tam zamanlı, sınıf içi destekle" },
+  { id: "ozelsinif", name: "Özel Eğitim Sınıfı", detail: "Okul bünyesindeki özel eğitim sınıfında" },
+  { id: "rehberlik", name: "Rehberlik Servisi Desteği", detail: "Düzenli bireysel görüşme ve izleme" },
+  { id: "dilterapi", name: "Dil ve Konuşma Terapisi", detail: "Destek eğitim kurumu ile koordineli" },
+  { id: "fizyoterapi", name: "Fizyoterapi", detail: "Destek eğitim kurumu ile koordineli" },
+  { id: "psikolojik", name: "Psikolojik Danışmanlık", detail: "Öğrenci ve aileye yönelik" },
+];
+
+/* ═══════════════ VERİ: DERSLER VE AMAÇ BANKASI ═══════════════
+   Her ders için sınıf bantlarına göre UDA (uzun dönemli amaç) ve
+   KDA (kısa dönemli amaçlar: metin + ölçüt + yöntem) tanımlıdır. */
+const SUBJECTS = {
+  tr: { name: "Türkçe", icon: "📖", grades: [1,2,3,4,5,6,7,8],
+    bands: {
+      "1-2": [
+        { uda: "Öğrenci, ilk okuma yazma becerilerini kazanır.",
+          kda: [
+            { t: "Kendisine söylenen sesleri ayırt ederek ilgili harfi gösterir/yazar.", o: "10 denemenin 8'inde", y: "Ses temelli cümle yöntemi, model olma" },
+            { t: "Verilen heceleri birleştirerek anlamlı kelimeler okur.", o: "%80 doğrulukla", y: "Hece kartları, tekrarlı okuma" },
+            { t: "Kısa ve basit cümleleri akıcı biçimde okur.", o: "Art arda 3 gözlemde", y: "Eşli okuma, yankı okuma" },
+            { t: "Söylenen 2-3 kelimelik cümleyi kurallı biçimde yazar.", o: "5 denemenin 4'ünde", y: "Dikte çalışması, yazma şablonu" },
+          ] },
+        { uda: "Öğrenci, dinlediğini anlama becerisini geliştirir.",
+          kda: [
+            { t: "Dinlediği kısa metinle ilgili sorulan sorulara cevap verir.", o: "3 sorunun en az 2'sine", y: "Sesli okuma, soru-cevap" },
+            { t: "Dinlediği olayları oluş sırasına göre sıralar.", o: "5 denemenin 4'ünde", y: "Olay sıralama kartları" },
+            { t: "İki basamaklı sözel yönergeleri yerine getirir.", o: "%80 doğrulukla", y: "Model olma, ipucu sunma ve silikleştirme" },
+          ] },
+      ],
+      "3-4": [
+        { uda: "Öğrenci, okuduğunu anlama becerisini geliştirir.",
+          kda: [
+            { t: "Okuduğu metinle ilgili 5N1K sorularını cevaplar.", o: "%80 doğrulukla", y: "Sesli/sessiz okuma, soru-cevap" },
+            { t: "Okuduğu metnin konusunu ve ana fikrini söyler.", o: "4 metnin 3'ünde", y: "Metin haritası, düşün-eşleş-paylaş" },
+            { t: "Metindeki bilinmeyen kelimelerin anlamını bağlamdan tahmin eder.", o: "10 kelimenin 7'sinde", y: "Bağlam ipuçları, sözlük çalışması" },
+            { t: "Okuduğu olayları oluş sırasına göre özetler.", o: "Art arda 3 çalışmada", y: "Olay şeridi, grafik düzenleyici" },
+          ] },
+        { uda: "Öğrenci, akıcı okuma becerisini geliştirir.",
+          kda: [
+            { t: "Sınıf düzeyine uygun metni uygun hız ve vurguyla okur.", o: "Dakikada hedef kelime sayısının %80'i ile", y: "Tekrarlı okuma, eşli okuma" },
+            { t: "Noktalama işaretlerine dikkat ederek okur.", o: "Art arda 3 gözlemde", y: "Model okuma, işaretli metin" },
+          ] },
+        { uda: "Öğrenci, yazılı anlatım becerisini geliştirir.",
+          kda: [
+            { t: "Verilen konuda 4-5 cümlelik kısa bir paragraf yazar.", o: "3 çalışmanın 2'sinde", y: "Cümle başlatıcılar, yazma çerçevesi" },
+            { t: "Yazılarında büyük harf ve noktalama kurallarını uygular.", o: "%70 doğrulukla", y: "Kontrol listesi, düzeltme çalışması" },
+            { t: "Dikte edilen cümleleri yazım kurallarına uygun yazar.", o: "10 kelimenin 7'sinde", y: "Dikte, görsel yazım kartları" },
+          ] },
+      ],
+      "5-8": [
+        { uda: "Öğrenci, okuduğunu anlama ve yorumlama becerisini geliştirir.",
+          kda: [
+            { t: "Okuduğu paragrafın ana fikrini ve yardımcı fikirlerini belirler.", o: "%80 doğrulukla", y: "Paragraf analizi, altını çizme stratejisi" },
+            { t: "Metinden hareketle çıkarım gerektiren soruları cevaplar.", o: "5 sorunun 3'ünde", y: "Sesli düşünme, soru-cevap" },
+            { t: "Okuduğu metni kendi cümleleriyle özetler.", o: "Art arda 3 çalışmada", y: "Özet şeması, ana hat çıkarma" },
+          ] },
+        { uda: "Öğrenci, söz varlığını zenginleştirir.",
+          kda: [
+            { t: "Verilen kelimelerin eş ve zıt anlamlılarını söyler/yazar.", o: "10 kelimenin 8'inde", y: "Kelime kartları, eşleştirme oyunları" },
+            { t: "Sık kullanılan deyimlerin anlamlarını örnek cümle içinde açıklar.", o: "5 deyimin 4'ünde", y: "Görsel destekli anlatım, bağlam çalışması" },
+          ] },
+        { uda: "Öğrenci, yazılı anlatım becerisini geliştirir.",
+          kda: [
+            { t: "Giriş-gelişme-sonuç bölümlerine uygun kısa bir metin yazar.", o: "3 çalışmanın 2'sinde", y: "Yazma planı şablonu, taslak-düzeltme döngüsü" },
+            { t: "Yazılarında yazım kuralları ve noktalama işaretlerini uygular.", o: "%80 doğrulukla", y: "Öz düzeltme kontrol listesi" },
+          ] },
+      ],
+    } },
+  mat: { name: "Matematik", icon: "🔢", grades: [1,2,3,4,5,6,7,8,9,10,11,12],
+    bands: {
+      "1-2": [
+        { uda: "Öğrenci, doğal sayıları tanır ve sayma becerisi kazanır.",
+          kda: [
+            { t: "1-20 (2. sınıfta 100) arasındaki sayıları ileri-geri ritmik sayar.", o: "Art arda 3 denemede hatasız", y: "Sayı şeridi, somut nesnelerle sayma" },
+            { t: "Gösterilen rakamları okur ve söylenen sayıları yazar.", o: "10 denemenin 9'unda", y: "Rakam kartları, kum havuzunda yazma" },
+            { t: "İki sayı arasında büyük-küçük karşılaştırması yapar.", o: "%90 doğrulukla", y: "Somut nesne karşılaştırma, sayı doğrusu" },
+          ] },
+        { uda: "Öğrenci, toplama ve çıkarma işlemi becerisi kazanır.",
+          kda: [
+            { t: "Toplamı 20'yi geçmeyen iki sayıyı nesne desteğiyle toplar.", o: "%80 doğrulukla", y: "Abaküs, sayma pulları" },
+            { t: "20 içinde eldesiz çıkarma işlemi yapar.", o: "10 işlemin 8'inde", y: "Somut materyal, parmakla sayma stratejisi" },
+            { t: "Günlük yaşamla ilgili basit toplama-çıkarma problemini çözer.", o: "5 problemin 3'ünde", y: "Problemi canlandırma, şema çizme" },
+          ] },
+        { uda: "Öğrenci, geometrik şekilleri tanır ve temel ölçme becerisi kazanır.",
+          kda: [
+            { t: "Kare, üçgen, dikdörtgen ve daireyi gösterir/adlandırır.", o: "4 şeklin 4'ünde", y: "Şekil blokları, çevreden örnek bulma" },
+            { t: "Nesneleri uzunluklarına göre karşılaştırır ve sıralar.", o: "5 denemenin 4'ünde", y: "Standart olmayan ölçme araçları" },
+          ] },
+      ],
+      "3-4": [
+        { uda: "Öğrenci, üç basamaklı doğal sayılarla işlem yapma becerisi kazanır.",
+          kda: [
+            { t: "Üç basamaklı sayıları okur, yazar ve basamak değerlerini söyler.", o: "10 denemenin 8'inde", y: "Basamak tablosu, onluk taban blokları" },
+            { t: "Eldeli toplama ve onluk bozarak çıkarma işlemi yapar.", o: "%80 doğrulukla", y: "Adım adım işlem şeması, somut materyal" },
+            { t: "Çarpım tablosundaki temel çarpımları söyler.", o: "10 sorunun 8'inde", y: "Ritmik sayma, çarpım tablosu oyunları" },
+            { t: "İki işlem gerektiren problemleri çözer.", o: "5 problemin 3'ünde", y: "Problem çözme basamakları şeması" },
+          ] },
+        { uda: "Öğrenci, kesirleri tanır ve temel ölçme becerilerini geliştirir.",
+          kda: [
+            { t: "Bütün, yarım ve çeyreği model üzerinde gösterir.", o: "5 denemenin 4'ünde", y: "Kesir pizzası, kâğıt katlama" },
+            { t: "Tam ve yarım saatleri okur.", o: "%80 doğrulukla", y: "Model saat üzerinde uygulama" },
+            { t: "Bir şeklin çevre uzunluğunu hesaplar.", o: "5 sorunun 4'ünde", y: "Kareli kâğıt, cetvelle ölçme" },
+          ] },
+      ],
+      "5-8": [
+        { uda: "Öğrenci, doğal sayılarla dört işlem akıcılığı kazanır.",
+          kda: [
+            { t: "Çok basamaklı sayılarla dört işlem yapar.", o: "%80 doğrulukla", y: "İşlem basamakları kartı, günlük alıştırma" },
+            { t: "İşlem önceliğine uygun karma işlemleri çözer.", o: "5 sorunun 4'ünde", y: "Renk kodlama, adım adım çözüm şablonu" },
+            { t: "Günlük yaşam problemlerini uygun işlemi seçerek çözer.", o: "5 problemin 3'ünde", y: "Anahtar kelime stratejisi, şema ile modelleme" },
+          ] },
+        { uda: "Öğrenci, kesir, ondalık gösterim ve yüzde kavramlarını kullanır.",
+          kda: [
+            { t: "Kesirlerle toplama ve çıkarma işlemi yapar.", o: "%70 doğrulukla", y: "Kesir modelleri, sayı doğrusu" },
+            { t: "Kesir, ondalık ve yüzde gösterimleri arasında dönüşüm yapar.", o: "10 sorunun 7'sinde", y: "Dönüşüm tablosu, market broşürü etkinliği" },
+            { t: "Basit yüzde problemlerini (indirim, artış) çözer.", o: "5 problemin 3'ünde", y: "Gerçek yaşam senaryoları" },
+          ] },
+        { uda: "Öğrenci, temel geometri ve veri okuma becerilerini geliştirir.",
+          kda: [
+            { t: "Açı çeşitlerini tanır ve açıölçerle açı ölçer.", o: "5 denemenin 4'ünde", y: "Açıölçer uygulaması, açı avı etkinliği" },
+            { t: "Dikdörtgen ve karenin çevre ve alanını hesaplar.", o: "%80 doğrulukla", y: "Kareli kâğıt, formül kartı" },
+            { t: "Tablo ve sütun grafiğindeki verileri okur ve yorumlar.", o: "5 sorunun 4'ünde", y: "Gerçek veri grafikleri, grafik oluşturma" },
+          ] },
+      ],
+      "9-12": [
+        { uda: "Öğrenci, sayılar ve cebirsel ifadelerle işlem yapma becerisini geliştirir.",
+          kda: [
+            { t: "Rasyonel sayılarla dört işlem içeren ifadeleri hesaplar.", o: "%80 doğrulukla", y: "Adım adım çözüm şablonu, hesap makinesi desteği" },
+            { t: "Birinci dereceden bir bilinmeyenli denklemleri çözer.", o: "10 sorunun 7'sinde", y: "Terazi modeli, işlem basamağı kartları" },
+            { t: "Üslü ve köklü ifadelerde temel özellikleri kullanarak sadeleştirme yapar.", o: "5 sorunun 3'ünde", y: "Kural kartları, örnek çözümlü alıştırma" },
+            { t: "Günlük yaşam problemini denklem kurarak çözer.", o: "5 problemin 3'ünde", y: "Gerçek yaşam senaryoları, şema ile modelleme" },
+          ] },
+        { uda: "Öğrenci, fonksiyon ve grafik okuma becerilerini geliştirir.",
+          kda: [
+            { t: "Sıralı ikilileri koordinat sisteminde gösterir.", o: "10 noktanın 8'inde", y: "Kareli kâğıt, koordinat oyunları" },
+            { t: "Tablo ile verilen bir ilişkinin grafiğini çizer / grafiği yorumlar.", o: "5 sorunun 3'ünde", y: "Günlük veri grafikleri (sıcaklık, fiyat)" },
+            { t: "Basit doğrusal fonksiyonlarda verilen değere karşılık gelen sonucu hesaplar.", o: "%70 doğrulukla", y: "Fonksiyon makinesi modeli" },
+          ] },
+        { uda: "Öğrenci, geometri ve veri-olasılık alanında temel becerileri kullanır.",
+          kda: [
+            { t: "Üçgenin iç açıları ve kenar özelliklerini kullanarak eksik açıyı bulur.", o: "5 sorunun 4'ünde", y: "Dinamik geometri yazılımı, kâğıt katlama" },
+            { t: "Dik üçgende Pisagor bağıntısını kullanarak bilinmeyen kenarı hesaplar.", o: "5 sorunun 3'ünde", y: "Kareli kâğıt ispatı, formül kartı" },
+            { t: "Merkezî eğilim ölçülerini (ortalama, medyan) hesaplar ve yorumlar.", o: "%70 doğrulukla", y: "Sınıf içi veri toplama etkinliği" },
+            { t: "Basit olayların olasılığını hesaplar.", o: "5 sorunun 3'ünde", y: "Zar-torba deneyleri, somut denemeler" },
+          ] },
+      ],
+    } },
+  hay: { name: "Hayat Bilgisi", icon: "🌱", grades: [1,2,3],
+    bands: {
+      "1-3": [
+        { uda: "Öğrenci, öz bakım ve güvenlik becerilerini geliştirir.",
+          kda: [
+            { t: "El yıkama, diş fırçalama gibi öz bakım rutinlerini bağımsız yapar.", o: "Art arda 5 gözlemde", y: "Beceri analizi, görsel adım kartları" },
+            { t: "Okul ve sınıf kurallarına uyar.", o: "Günlük gözlemlerin %80'inde", y: "Sosyal öykü, olumlu pekiştirme" },
+            { t: "Temel trafik işaret ve kurallarını söyler/uygular.", o: "5 denemenin 4'ünde", y: "Maket üzerinde canlandırma, geziler" },
+          ] },
+        { uda: "Öğrenci, sosyal katılım becerilerini geliştirir.",
+          kda: [
+            { t: "Kendini (adı, yaşı, okulu) uygun biçimde tanıtır.", o: "3 farklı ortamda", y: "Rol oynama, model olma" },
+            { t: "Grup etkinliklerinde sırasını bekler ve iş birliği yapar.", o: "Gözlemlerin %80'inde", y: "İş birlikli oyunlar, akran desteği" },
+            { t: "İhtiyaç duyduğunda uygun biçimde yardım ister.", o: "5 durumun 4'ünde", y: "Senaryo çalışması, ipucu sunma" },
+          ] },
+        { uda: "Öğrenci, çevresini ve doğayı tanır.",
+          kda: [
+            { t: "Mevsimleri ve temel özelliklerini söyler.", o: "4 mevsimin 4'ünde", y: "Mevsim panosu, görsel eşleştirme" },
+            { t: "Canlı ve cansız varlıkları ayırt eder.", o: "10 örneğin 8'inde", y: "Doğa gözlemi, sınıflama kartları" },
+            { t: "Geri dönüşüm kutularına uygun atıkları atar.", o: "Art arda 3 gözlemde", y: "Uygulamalı etkinlik, renk kodlama" },
+          ] },
+      ],
+    } },
+  fen: { name: "Fen Bilimleri", icon: "⚗️", grades: [3,4,5,6,7,8],
+    bands: {
+      "3-4": [
+        { uda: "Öğrenci, duyu organlarını ve canlıları tanır.",
+          kda: [
+            { t: "Beş duyu organını gösterir ve görevlerini söyler.", o: "5 duyunun 4'ünde", y: "Vücut şeması, duyu istasyonları" },
+            { t: "Canlı ve cansız varlıkları örneklerle ayırt eder.", o: "%90 doğrulukla", y: "Gözlem, sınıflama etkinliği" },
+            { t: "Bitki ve hayvanların temel ihtiyaçlarını söyler.", o: "5 sorunun 4'ünde", y: "Sınıf içi bitki yetiştirme, görseller" },
+          ] },
+        { uda: "Öğrenci, maddeyi ve temel özelliklerini tanır.",
+          kda: [
+            { t: "Katı, sıvı ve gaz maddelere günlük yaşamdan örnek verir.", o: "Her hâl için 2 örnekle", y: "Deney, gerçek nesne inceleme" },
+            { t: "Maddeleri renk, koku ve sertlik özelliklerine göre karşılaştırır.", o: "5 denemenin 4'ünde", y: "Dokunma torbası, karşılaştırma tablosu" },
+          ] },
+        { uda: "Öğrenci, kuvvet, ışık ve ses olaylarını fark eder.",
+          kda: [
+            { t: "İtme ve çekme kuvvetine günlük yaşamdan örnek verir.", o: "4 örneğin 3'ünde", y: "Oyunla öğretim, gösteri deneyi" },
+            { t: "Doğal ve yapay ışık kaynaklarına örnek verir.", o: "5 örneğin 4'ünde", y: "Görsel kartlar, çevre gözlemi" },
+          ] },
+      ],
+      "5-8": [
+        { uda: "Öğrenci, canlıların yapısını ve vücut sistemlerini tanır.",
+          kda: [
+            { t: "Hücrenin temel kısımlarını model üzerinde gösterir.", o: "3 kısmın 3'ünde", y: "Hücre modeli yapımı, görsel şema" },
+            { t: "Sindirim/dolaşım gibi sistemlerin temel organlarını şema üzerinde gösterir.", o: "%80 doğrulukla", y: "Vücut atlası, dijital animasyon" },
+            { t: "Sağlıklı yaşam için yapılması gerekenleri açıklar.", o: "5 maddenin 4'ünde", y: "Beyin fırtınası, afiş hazırlama" },
+          ] },
+        { uda: "Öğrenci, madde ve değişim konularında temel kavramları kullanır.",
+          kda: [
+            { t: "Hâl değişimlerini (erime, donma, buharlaşma) örneklerle açıklar.", o: "4 örneğin 3'ünde", y: "Basit deneyler, kavram haritası" },
+            { t: "Karışımları uygun yöntemlerle (süzme, eleme, mıknatıs) ayırır.", o: "3 uygulamanın 2'sinde", y: "Uygulamalı deney, gösteri" },
+          ] },
+        { uda: "Öğrenci, fiziksel olaylarla ilgili temel becerileri geliştirir.",
+          kda: [
+            { t: "Basit bir elektrik devresi kurar ve elemanlarını adlandırır.", o: "3 denemenin 2'sinde bağımsız", y: "Deney seti, adım kartları" },
+            { t: "Kuvvetin cisimler üzerindeki etkilerini örneklerle açıklar.", o: "4 örneğin 3'ünde", y: "Gösteri deneyi, günlük yaşam örnekleri" },
+            { t: "Sürat ile alınan yol ve zaman arasındaki ilişkiyi basit örneklerde kullanır.", o: "5 sorunun 3'ünde", y: "Somut problem senaryoları" },
+          ] },
+      ],
+    } },
+  sos: { name: "Sosyal Bilgiler", icon: "🌍", grades: [4,5,6,7,8],
+    bands: {
+      "4-8": [
+        { uda: "Öğrenci, birey ve toplum ilişkilerine yönelik temel becerileri geliştirir.",
+          kda: [
+            { t: "Kimlik bilgilerini (ad, soyad, adres) doğru söyler/yazar.", o: "5 denemenin 5'inde", y: "Kimlik kartı çalışması, tekrar" },
+            { t: "Evde ve okuldaki hak ve sorumluluklarına örnek verir.", o: "5 örneğin 4'ünde", y: "Örnek olay, drama" },
+            { t: "Farklılıklara saygı gerektiren durumlarda uygun davranışı seçer.", o: "Senaryoların %80'inde", y: "Sosyal öykü, rol oynama" },
+          ] },
+        { uda: "Öğrenci, kültürel ve tarihî değerlerimizi tanır.",
+          kda: [
+            { t: "Millî bayramları ve önemini söyler.", o: "4 bayramın 3'ünde", y: "Görsel kartlar, tören katılımı" },
+            { t: "Atatürk'ün hayatının önemli dönemlerini kronolojik sıralar.", o: "Art arda 3 çalışmada", y: "Zaman şeridi, görsel biyografi" },
+            { t: "Yaşadığı yerin tarihî ve kültürel ögelerine örnek verir.", o: "3 örnekle", y: "Sanal/yerinde gezi, fotoğraf inceleme" },
+          ] },
+        { uda: "Öğrenci, temel coğrafya ve vatandaşlık becerilerini geliştirir.",
+          kda: [
+            { t: "Yön bulma yöntemlerini kullanarak temel yönleri gösterir.", o: "4 yönün 4'ünde", y: "Pusula uygulaması, kroki çizimi" },
+            { t: "Harita ve kroki üzerindeki temel sembolleri okur.", o: "10 sembolün 8'inde", y: "Harita inceleme, sembol eşleştirme" },
+            { t: "Temel kamu kurumlarını ve görevlerini eşleştirir.", o: "5 kurumun 4'ünde", y: "Eşleştirme kartları, örnek olay" },
+          ] },
+      ],
+    } },
+  ing: { name: "İngilizce", icon: "🇬🇧", grades: [2,3,4,5,6,7,8,9,10,11,12],
+    bands: {
+      "2-4": [
+        { uda: "Öğrenci, temel İngilizce kelime dağarcığı edinir.",
+          kda: [
+            { t: "Renk, sayı ve hayvan isimlerini görselle eşleştirir.", o: "10 kelimenin 8'inde", y: "Flash card, eşleştirme oyunu" },
+            { t: "Selamlaşma ifadelerini (hello, goodbye, thank you) uygun durumda kullanır.", o: "5 durumun 4'ünde", y: "Rol oynama, şarkılar" },
+            { t: "Sınıf içi temel yönergeleri (sit down, open your book) yerine getirir.", o: "%80 doğrulukla", y: "TPR (toplam fiziksel tepki) yöntemi" },
+          ] },
+        { uda: "Öğrenci, temel düzeyde kendini ifade eder.",
+          kda: [
+            { t: "Adını ve yaşını söyleyerek kendini tanıtır.", o: "3 farklı ortamda", y: "Model diyalog, tekrar" },
+            { t: "Sevdiği nesne/hayvanı 'I like...' kalıbıyla söyler.", o: "5 denemenin 4'ünde", y: "Kalıp cümle kartları, oyun" },
+          ] },
+      ],
+      "5-8": [
+        { uda: "Öğrenci, ünite kelime dağarcığını geliştirir.",
+          kda: [
+            { t: "İşlenen ünitenin temel kelimelerini görselle/anlamıyla eşleştirir.", o: "%70 doğrulukla", y: "Kelime defteri, dijital oyunlar" },
+            { t: "Öğrendiği kelimeleri basit cümle içinde kullanır.", o: "5 kelimenin 3'ünde", y: "Cümle kalıpları, boşluk doldurma" },
+          ] },
+        { uda: "Öğrenci, kısa metinleri okuyup anlar.",
+          kda: [
+            { t: "Kısa ve basit bir metinle ilgili soruları cevaplar.", o: "5 sorunun 3'ünde", y: "Basitleştirilmiş metin, görsel destek" },
+            { t: "Görsellerle desteklenmiş yönergeleri okuyarak uygular.", o: "%80 doğrulukla", y: "Adım adım görsel yönerge" },
+          ] },
+        { uda: "Öğrenci, temel düzeyde konuşma ve yazma becerisi geliştirir.",
+          kda: [
+            { t: "Kendini ve ailesini 3-4 cümleyle tanıtır.", o: "Art arda 2 denemede", y: "Model metin, hazırlıklı konuşma" },
+            { t: "Kalıp ifadelerle kısa diyalogda rol alır.", o: "3 diyaloğun 2'sinde", y: "Rol oynama, diyalog kartları" },
+          ] },
+      ],
+      "9-12": [
+        { uda: "Öğrenci, günlük yaşam temalarında kelime ve kalıp bilgisini geliştirir.",
+          kda: [
+            { t: "İşlenen ünitenin temel kelime ve kalıplarını anlamıyla eşleştirir.", o: "%70 doğrulukla", y: "Kelime defteri, dijital kelime oyunları" },
+            { t: "Öğrendiği kalıpları (like/dislike, ability, plans) cümle içinde kullanır.", o: "5 denemenin 3'ünde", y: "Cümle kalıbı kartları, boşluk doldurma" },
+          ] },
+        { uda: "Öğrenci, düzeyine uygun metinleri okuyup anlar ve dinlediğini takip eder.",
+          kda: [
+            { t: "Basitleştirilmiş kısa bir metinle ilgili soruları cevaplar.", o: "5 sorunun 3'ünde", y: "Görsel destekli metin, ön bilgi etkinliği" },
+            { t: "Yavaş ve net konuşulan kısa diyalogda temel bilgiyi (kim, nerede) belirler.", o: "5 sorunun 3'ünde", y: "Tekrarlı dinleme, altyazılı video" },
+            { t: "Tabela, menü, afiş gibi işlevsel metinlerdeki bilgiyi bulur.", o: "%80 doğrulukla", y: "Gerçek yaşam materyalleri" },
+          ] },
+        { uda: "Öğrenci, temel düzeyde kendini sözlü ve yazılı ifade eder.",
+          kda: [
+            { t: "Kendini, ailesini ve ilgi alanlarını 4-5 cümleyle tanıtır.", o: "Art arda 2 denemede", y: "Model metin, hazırlıklı sunum" },
+            { t: "Günlük konularda kalıp ifadelerle kısa diyalogda rol alır.", o: "3 diyaloğun 2'sinde", y: "Rol oynama, diyalog kartları" },
+            { t: "Verilen şablonu kullanarak kısa bir paragraf (tanıtım, plan) yazar.", o: "3 çalışmanın 2'sinde", y: "Yazma çerçevesi, örnek paragraf" },
+          ] },
+      ],
+    } },
+  din: { name: "Din Kültürü ve Ahlak Bilgisi", icon: "🕌", grades: [4,5,6,7,8,9,10,11,12],
+    bands: {
+      "4-8": [
+        { uda: "Öğrenci, günlük hayattaki temel dinî ifadeleri ve kavramları tanır.",
+          kda: [
+            { t: "Günlük hayatta kullanılan dinî ifadeleri (selamlaşma, teşekkür) uygun yerde kullanır.", o: "%80 doğrulukla", y: "Örnek olay, canlandırma" },
+            { t: "Temel dinî kavramların anlamlarını söyler.", o: "5 kavramın 4'ünde", y: "Kavram kartları, eşleştirme" },
+          ] },
+        { uda: "Öğrenci, ahlaki değerleri günlük yaşamına yansıtır.",
+          kda: [
+            { t: "Dürüstlük, yardımlaşma ve paylaşmaya günlük yaşamdan örnek verir.", o: "5 örneğin 4'ünde", y: "Örnek olay inceleme, drama" },
+            { t: "Arkadaşlık ilişkilerinde güzel ahlaklı davranışları seçer.", o: "Senaryoların %80'inde", y: "Sosyal öykü, değerler panosu" },
+          ] },
+        { uda: "Öğrenci, temel ibadet bilgisi edinir.",
+          kda: [
+            { t: "Temel ibadetleri (namaz, oruç, zekât, hac) adlandırır.", o: "4 ibadetin 3'ünde", y: "Görsel kartlar, anlatım" },
+            { t: "Dinî bayramları ve önemini söyler.", o: "2 bayramın 2'sinde", y: "Takvim çalışması, sohbet" },
+          ] },
+      ],
+      "9-12": [
+        { uda: "Öğrenci, temel inanç ve ibadet kavramlarını tanır.",
+          kda: [
+            { t: "Temel inanç esaslarını söyler.", o: "5 esasın 4'ünde", y: "Kavram haritası, anlatım" },
+            { t: "Temel ibadetleri ve yapılış amaçlarını açıklar.", o: "4 ibadetin 3'ünde", y: "Görsel kartlar, soru-cevap" },
+            { t: "Günlük hayatta kullanılan dinî ifadeleri uygun bağlamda kullanır.", o: "%80 doğrulukla", y: "Örnek olay, canlandırma" },
+          ] },
+        { uda: "Öğrenci, ahlaki değerleri ve toplumsal yaşam kurallarını içselleştirir.",
+          kda: [
+            { t: "Dürüstlük, adalet ve sorumluluk kavramlarına günlük yaşamdan örnek verir.", o: "5 örneğin 4'ünde", y: "Örnek olay inceleme, tartışma" },
+            { t: "Farklı inanç ve görüşlere saygı gerektiren durumlarda uygun tutumu seçer.", o: "Senaryoların %80'inde", y: "Sosyal öykü, değerler etkinliği" },
+          ] },
+        { uda: "Öğrenci, din, kültür ve medeniyet ilişkisine dair temel bilgi edinir.",
+          kda: [
+            { t: "Dinin kültürümüzdeki izlerine (mimari, sanat, gelenek) örnek verir.", o: "3 örnekle", y: "Görsel inceleme, sanal gezi" },
+            { t: "Dinî gün ve gecelerin toplumsal önemini açıklar.", o: "3 örneğin 2'sinde", y: "Takvim çalışması, sohbet" },
+          ] },
+      ],
+    } },
+  fiz: { name: "Fizik", icon: "🧲", grades: [9,10,11,12],
+    bands: {
+      "9-12": [
+        { uda: "Öğrenci, fiziksel büyüklükleri tanır ve ölçme becerisi kazanır.",
+          kda: [
+            { t: "Temel büyüklükleri (uzunluk, kütle, zaman) ve birimlerini eşleştirir.", o: "5 büyüklüğün 4'ünde", y: "Eşleştirme kartları, ölçme uygulaması" },
+            { t: "Cetvel, terazi ve kronometre ile ölçüm yapar ve kaydeder.", o: "3 ölçümün 2'sinde bağımsız", y: "Uygulamalı laboratuvar etkinliği" },
+            { t: "Verilen değerler arasında birim dönüşümü (m-cm, kg-g) yapar.", o: "%70 doğrulukla", y: "Dönüşüm tablosu, adım kartı" },
+          ] },
+        { uda: "Öğrenci, hareket ve kuvvet kavramlarını günlük yaşamla ilişkilendirir.",
+          kda: [
+            { t: "Sürat, alınan yol ve zaman ilişkisini basit problemlerde kullanır.", o: "5 sorunun 3'ünde", y: "Somut senaryolar, formül kartı" },
+            { t: "Dengelenmiş ve dengelenmemiş kuvvetlerin etkisini örneklerle açıklar.", o: "4 örneğin 3'ünde", y: "Gösteri deneyi, günlük yaşam örnekleri" },
+            { t: "Sürtünme kuvvetinin günlük yaşamdaki etkilerine örnek verir.", o: "3 örnekle", y: "Deney, video izleme" },
+          ] },
+        { uda: "Öğrenci, enerji ve elektrik konularında temel kavramları kullanır.",
+          kda: [
+            { t: "Enerji türlerine ve dönüşümlerine günlük yaşamdan örnek verir.", o: "4 örneğin 3'ünde", y: "Kavram haritası, istasyon etkinliği" },
+            { t: "Basit bir elektrik devresi kurar ve devre elemanlarını adlandırır.", o: "3 denemenin 2'sinde bağımsız", y: "Deney seti, adım kartları" },
+            { t: "Elektrik enerjisini bilinçli kullanma yollarını söyler.", o: "3 maddeyle", y: "Beyin fırtınası, afiş çalışması" },
+          ] },
+      ],
+    } },
+  kim: { name: "Kimya", icon: "🧪", grades: [9,10,11,12],
+    bands: {
+      "9-12": [
+        { uda: "Öğrenci, kimya bilimini ve laboratuvar güvenliğini tanır.",
+          kda: [
+            { t: "Temel laboratuvar güvenlik uyarı işaretlerinin anlamlarını söyler.", o: "8 işaretin 6'sında", y: "Güvenlik kartları, eşleştirme oyunu" },
+            { t: "Laboratuvar araç-gereçlerini (beher, mezür, deney tüpü) adlandırır.", o: "5 aracın 4'ünde", y: "Gerçek araç inceleme, etiketleme" },
+            { t: "Günlük yaşamda kullanılan kimyasalların (temizlik, gıda) etiket bilgilerini okur.", o: "3 üründe", y: "Gerçek ürün etiketleri inceleme" },
+          ] },
+        { uda: "Öğrenci, maddeyi ve özelliklerini tanır.",
+          kda: [
+            { t: "Katı, sıvı ve gaz hâllerinin ayırt edici özelliklerini söyler.", o: "3 hâlin 3'ünde", y: "Deney, gözlem, karşılaştırma tablosu" },
+            { t: "Hâl değişimlerini (erime, buharlaşma, yoğuşma) örneklerle açıklar.", o: "4 örneğin 3'ünde", y: "Basit deneyler, görsel şema" },
+            { t: "Element ve bileşik kavramlarını örneklerle ayırt eder.", o: "5 örneğin 3'ünde", y: "Model yapımı, kavram kartları" },
+          ] },
+        { uda: "Öğrenci, karışımları ve günlük yaşam kimyasını tanır.",
+          kda: [
+            { t: "Homojen ve heterojen karışımlara günlük yaşamdan örnek verir.", o: "4 örneğin 3'ünde", y: "Gerçek karışım hazırlama, gözlem" },
+            { t: "Karışımları uygun yöntemle (süzme, buharlaştırma, mıknatıs) ayırır.", o: "3 uygulamanın 2'sinde", y: "Uygulamalı deney" },
+            { t: "Asit ve bazlara günlük yaşamdan örnek verir, uyarı işaretlerini tanır.", o: "%70 doğrulukla", y: "Turnusol deneyi, etiket inceleme" },
+          ] },
+      ],
+    } },
+  bio: { name: "Biyoloji", icon: "🧬", grades: [9,10,11,12],
+    bands: {
+      "9-12": [
+        { uda: "Öğrenci, canlıların ortak özelliklerini ve çeşitliliğini tanır.",
+          kda: [
+            { t: "Canlıların ortak özelliklerini (beslenme, solunum, üreme) söyler.", o: "5 özelliğin 4'ünde", y: "Kavram haritası, görsel kartlar" },
+            { t: "Canlıları temel gruplarına (bitki, hayvan, mantar, mikroorganizma) ayırır.", o: "10 örneğin 7'sinde", y: "Sınıflama etkinliği, doğa gözlemi" },
+          ] },
+        { uda: "Öğrenci, hücre ve vücut sistemlerine ilişkin temel bilgi edinir.",
+          kda: [
+            { t: "Hücrenin temel kısımlarını (zar, sitoplazma, çekirdek) model üzerinde gösterir.", o: "3 kısmın 3'ünde", y: "Hücre modeli yapımı, mikroskop gözlemi" },
+            { t: "Bitki ve hayvan hücresi arasındaki temel farkları söyler.", o: "3 farkın 2'sinde", y: "Karşılaştırma tablosu, görsel inceleme" },
+            { t: "Vücut sistemlerinin (sindirim, dolaşım, solunum) temel görevlerini eşleştirir.", o: "%80 doğrulukla", y: "Vücut atlası, eşleştirme kartları" },
+          ] },
+        { uda: "Öğrenci, sağlıklı yaşam ve çevre bilinci geliştirir.",
+          kda: [
+            { t: "Dengeli beslenme için besin gruplarına örnek verir.", o: "4 grubun 3'ünde", y: "Besin piramidi etkinliği, menü hazırlama" },
+            { t: "Kişisel hijyen kurallarını günlük rutinlerinde uygular.", o: "Gözlemlerin %80'inde", y: "Görsel adım kartları, kontrol listesi" },
+            { t: "Çevre sorunlarına ve çözüm yollarına örnek verir.", o: "3 örnekle", y: "Örnek olay, proje çalışması" },
+          ] },
+      ],
+    } },
+  tarih: { name: "Tarih", icon: "🏛️", grades: [9,10,11,12],
+    bands: {
+      "9-12": [
+        { uda: "Öğrenci, tarih bilimine ilişkin temel kavram ve becerileri kullanır.",
+          kda: [
+            { t: "Yüzyıl, çağ ve takvim kavramlarını kullanarak basit kronoloji sorularını cevaplar.", o: "5 sorunun 3'ünde", y: "Zaman şeridi, somut örnekler" },
+            { t: "Verilen olayları oluş sırasına göre zaman şeridine yerleştirir.", o: "5 olayın 4'ünde", y: "Zaman şeridi etkinliği, kartlar" },
+          ] },
+        { uda: "Öğrenci, Türk tarihinin önemli dönem ve şahsiyetlerini tanır.",
+          kda: [
+            { t: "İlk Türk devletlerine ve özelliklerine örnek verir.", o: "3 örneğin 2'sinde", y: "Harita çalışması, görsel anlatım" },
+            { t: "Osmanlı Devleti'nin kuruluş ve yükselme dönemindeki önemli olayları söyler.", o: "5 olayın 3'ünde", y: "Hikâyeleştirme, belgesel izleme" },
+            { t: "Atatürk'ün hayatını ve Millî Mücadele'nin ana evrelerini kronolojik sıralar.", o: "Art arda 2 çalışmada", y: "Zaman şeridi, görsel biyografi" },
+          ] },
+        { uda: "Öğrenci, kültürel mirası tanır ve tarihsel empati geliştirir.",
+          kda: [
+            { t: "Yaşadığı bölgedeki tarihî eserlere örnek verir.", o: "3 örnekle", y: "Yerinde/sanal gezi, fotoğraf inceleme" },
+            { t: "Geçmişteki insanların yaşam koşullarını günümüzle karşılaştırır.", o: "3 karşılaştırmanın 2'sinde", y: "Görsel karşılaştırma, drama" },
+          ] },
+      ],
+    } },
+  cog: { name: "Coğrafya", icon: "🗺️", grades: [9,10,11,12],
+    bands: {
+      "9-12": [
+        { uda: "Öğrenci, harita ve yön becerilerini geliştirir.",
+          kda: [
+            { t: "Harita üzerinde temel yönleri ve yön bulma yöntemlerini kullanır.", o: "4 yönün 4'ünde", y: "Pusula uygulaması, kroki çizimi" },
+            { t: "Harita lejantındaki sembolleri okur ve haritadan bilgi çıkarır.", o: "10 sembolün 7'sinde", y: "Harita inceleme, sembol eşleştirme" },
+            { t: "Türkiye haritasında bölgeleri ve önemli şehirleri gösterir.", o: "7 bölgenin 5'inde", y: "Dilsiz harita, yapboz etkinliği" },
+          ] },
+        { uda: "Öğrenci, doğal sistemleri ve iklim özelliklerini tanır.",
+          kda: [
+            { t: "Hava durumu ve iklim kavramlarını ayırt eder.", o: "5 örneğin 4'ünde", y: "Hava durumu takibi, karşılaştırma" },
+            { t: "Yaşadığı yerin iklim özelliklerini ve bunun günlük yaşama etkisini söyler.", o: "3 etkiyle", y: "Gözlem günlüğü, görseller" },
+            { t: "Yer şekillerine (dağ, ova, plato, akarsu) örnek verir ve görselle eşleştirir.", o: "%80 doğrulukla", y: "Maket inceleme, fotoğraf eşleştirme" },
+          ] },
+        { uda: "Öğrenci, insan-çevre ilişkisi ve doğal afetler konusunda bilinç geliştirir.",
+          kda: [
+            { t: "Doğal afetleri (deprem, sel, çığ) tanır ve korunma yollarını söyler.", o: "3 afetin 3'ünde", y: "Tatbikat, video, afiş çalışması" },
+            { t: "Doğal kaynakların bilinçli kullanımına örnek verir.", o: "3 örnekle", y: "Örnek olay, proje etkinliği" },
+          ] },
+      ],
+    } },
+  tde: { name: "Türk Dili ve Edebiyatı", icon: "📜", grades: [9,10,11,12],
+    bands: {
+      "9-12": [
+        { uda: "Öğrenci, okuduğu edebî metinleri anlama ve çözümleme becerisini geliştirir.",
+          kda: [
+            { t: "Okuduğu hikâye/romanın kişi, yer, zaman ve olay örgüsünü belirler.", o: "4 unsurun 3'ünde", y: "Metin haritası, grafik düzenleyici" },
+            { t: "Okuduğu şiirin konusunu ve uyandırdığı duyguyu söyler.", o: "3 şiirin 2'sinde", y: "Sesli okuma, yönlendirici sorular" },
+            { t: "Metindeki bilinmeyen kelime ve söz gruplarının anlamını bağlamdan çıkarır.", o: "10 kelimenin 7'sinde", y: "Bağlam ipuçları, sözlük kullanımı" },
+            { t: "Okuduğu metnin ana düşüncesini/temasını belirler.", o: "%70 doğrulukla", y: "Paragraf analizi, özetleme" },
+          ] },
+        { uda: "Öğrenci, edebî tür ve dönemlere ilişkin temel bilgileri kullanır.",
+          kda: [
+            { t: "Hikâye, şiir, tiyatro ve roman türlerinin ayırt edici özelliklerini söyler.", o: "4 türün 3'ünde", y: "Karşılaştırma tablosu, örnek metinler" },
+            { t: "Verilen metnin hangi edebî türe ait olduğunu belirler.", o: "5 metnin 4'ünde", y: "Tür özellik kartları, eşleştirme" },
+          ] },
+        { uda: "Öğrenci, yazılı ve sözlü anlatım becerilerini geliştirir.",
+          kda: [
+            { t: "Giriş-gelişme-sonuç bölümlerine uygun bir kompozisyon yazar.", o: "3 çalışmanın 2'sinde", y: "Yazma planı şablonu, taslak-düzeltme" },
+            { t: "Yazılarında yazım kuralları ve noktalama işaretlerini uygular.", o: "%80 doğrulukla", y: "Öz düzeltme kontrol listesi" },
+            { t: "Hazırlık yaparak bir konuda kısa sunum yapar.", o: "Dönemde 2 sunumla", y: "Sunum planı, prova, görsel destek" },
+          ] },
+      ],
+    } },
+};
+
+const ASSESS = [
+  "Ölçüt bağımlı testler (her kısa dönemli amaç için öğretim öncesi ve sonrası uygulanır)",
+  "Yapılandırılmış gözlem formları ve kontrol listeleri",
+  "Öğrenci ürün dosyası (portfolyo) incelemesi",
+  "Sözlü değerlendirme ve performans görevleri",
+  "Aile görüşmeleri ile ev ortamındaki genelleme takibi",
+];
+
+/* ═══════════════ DURUM ═══════════════ */
+const state = { grade: null, disab: null };
+
+/* ═══════════════ PANEL KURULUM ═══════════════ */
+const $ = id => document.getElementById(id);
+
+function buildGradePills() {
+  const box = $("gradePills");
+  box.innerHTML = "";
+  for (let g = 1; g <= 12; g++) {
+    const b = document.createElement("button");
+    b.className = "pill"; b.textContent = g + ". Sınıf";
+    b.onclick = () => { state.grade = g; [...box.children].forEach(x => x.classList.remove("active")); b.classList.add("active"); buildSubjectList(); saveDraft(); };
+    box.appendChild(b);
+  }
+}
+
+function buildDisabPills() {
+  const box = $("disabPills");
+  box.innerHTML = "";
+  Object.entries(DISAB).forEach(([key, d]) => {
+    const b = document.createElement("button");
+    b.className = "pill"; b.textContent = d.name; b.dataset.key = key;
+    b.onclick = () => { state.disab = key; [...box.children].forEach(x => x.classList.remove("active")); b.classList.add("active"); saveDraft(); };
+    box.appendChild(b);
+  });
+}
+
+function buildSupportList() {
+  const box = $("supportList");
+  box.innerHTML = "";
+  SUPPORTS.forEach(s => {
+    const l = document.createElement("label");
+    l.className = "check-row";
+    l.innerHTML = `<input type="checkbox" data-sup="${s.id}" ${s.id === "kaynastirma" ? "checked" : ""} /><span>${s.name}</span>`;
+    l.querySelector("input").addEventListener("change", saveDraft);
+    box.appendChild(l);
+  });
+}
+
+const SUBJECT_ORDER = ["tr", "tde", "mat", "hay", "fen", "fiz", "kim", "bio", "sos", "tarih", "cog", "ing", "din"];
+
+function buildSubjectList() {
+  const box = $("subjectList");
+  const prev = new Set([...box.querySelectorAll("input:checked")].map(i => i.dataset.sub));
+  box.innerHTML = "";
+  if (!state.grade) { box.innerHTML = '<div class="hint">Önce sınıf seçmelisin.</div>'; return; }
+  SUBJECT_ORDER.map(k => [k, SUBJECTS[k]]).forEach(([key, s]) => {
+    if (!s.grades.includes(state.grade)) return;
+    const l = document.createElement("label");
+    l.className = "check-row";
+    const on = prev.size ? prev.has(key) : (key === "tr" || key === "tde" || key === "mat");
+    l.innerHTML = `<input type="checkbox" data-sub="${key}" ${on ? "checked" : ""} /><span>${s.icon} ${s.name}</span>`;
+    l.querySelector("input").addEventListener("change", saveDraft);
+    box.appendChild(l);
+  });
+}
+
+/* ═══════════════ TARİH YARDIMCILARI ═══════════════ */
+const AYLAR = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const fmtD = iso => { if (!iso) return "…/…/……"; const [y, m, d] = iso.split("-"); return `${d}.${m}.${y}`; };
+const fmtAy = dt => `${AYLAR[dt.getMonth()]} ${dt.getFullYear()}`;
+
+function defaultTerm() {
+  const now = new Date();
+  const y = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+  return { start: `${y}-09-08`, end: `${y + 1}-06-18`, label: `${y} – ${y + 1} Eğitim Öğretim Yılı` };
+}
+
+/* KDA satırlarına dönem içinde ardışık tarih aralığı dağıtır */
+function kdaRanges(startIso, endIso, n) {
+  const s = new Date(startIso), e = new Date(endIso);
+  const total = Math.max(1, (e - s) / 86400000);
+  const step = total / n, out = [];
+  for (let i = 0; i < n; i++) {
+    const a = new Date(s.getTime() + step * i * 86400000);
+    const b = new Date(s.getTime() + step * (i + 1) * 86400000);
+    out.push(`${fmtAy(a)} – ${fmtAy(b)}`);
+  }
+  return out;
+}
+
+function bandFor(subKey, grade) {
+  const bands = Object.keys(SUBJECTS[subKey].bands);
+  return bands.find(b => { const [a, z] = b.split("-").map(Number); return grade >= a && grade <= z; }) || bands[0];
+}
+
+/* ═══════════════ BEP OLUŞTURMA ═══════════════ */
+const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const dash = s => esc(s) || "………………………………";
+
+function generate() {
+  if (!state.grade) { alert("Lütfen önce sınıf seçin."); return; }
+  if (!state.disab) { alert("Lütfen tanılama bölümünden yetersizlik türü seçin."); return; }
+  const subs = [...document.querySelectorAll("#subjectList input:checked")].map(i => i.dataset.sub);
+  if (!subs.length) { alert("En az bir ders seçmelisin."); return; }
+
+  const d = DISAB[state.disab];
+  const term = { start: $("termStart").value || defaultTerm().start, end: $("termEnd").value || defaultTerm().end };
+  const yilLabel = `${new Date(term.start).getFullYear()} – ${new Date(term.end).getFullYear()} Eğitim Öğretim Yılı`;
+  const okul = dash($("schoolName").value);
+  const name = dash($("stName").value);
+  const sups = [...document.querySelectorAll("#supportList input:checked")].map(i => SUPPORTS.find(s => s.id === i.dataset.sup));
+
+  let h = `
+    <div class="bep-head">
+      <div class="tc" contenteditable="true">T.C. MİLLÎ EĞİTİM BAKANLIĞI</div>
+      <div class="okul" contenteditable="true">${okul}${$("schoolCity").value ? " · " + esc($("schoolCity").value) : ""}</div>
+      <h2>BİREYSELLEŞTİRİLMİŞ EĞİTİM PROGRAMI (BEP)</h2>
+      <div class="yil" contenteditable="true">${yilLabel} · ${fmtD(term.start)} – ${fmtD(term.end)}</div>
+    </div>
+
+    <div class="bep-h">1. ÖĞRENCİNİN KİMLİK BİLGİLERİ</div>
+    <table class="bep-t kimlik-t" contenteditable="true"><tbody>
+      <tr><td>Adı Soyadı</td><td>${name}</td><td>Sınıfı</td><td>${state.grade}. Sınıf</td></tr>
+      <tr><td>Doğum Tarihi</td><td>${$("stBirth").value ? fmtD($("stBirth").value) : "…/…/……"}</td><td>Okul No</td><td>${dash($("stNo").value)}</td></tr>
+      <tr><td>Veli Adı</td><td>${dash($("stParent").value)}</td><td>Tanı</td><td><b>${d.name}</b></td></tr>
+      <tr><td>RAM Rapor No</td><td>${dash($("ramNo").value)}</td><td>Rapor Tarihi</td><td>${$("ramDate").value ? fmtD($("ramDate").value) : "…/…/……"}</td></tr>
+    </tbody></table>
+
+    <div class="bep-h">2. EĞİTSEL PERFORMANS DÜZEYİ</div>
+    <p class="perf-p" contenteditable="true">${name !== "………………………………" ? esc($("stName").value) : "Öğrenci"}, ${d.name} tanısı doğrultusunda ${d.perf}. Aşağıdaki ders bazlı amaçlar, öğrencinin mevcut performans düzeyi (yapabildikleri) temel alınarak BEP geliştirme birimi tarafından belirlenmiştir. Performans düzeyi; kaba değerlendirme formları, öğretmen gözlemleri ve veli görüşmeleri ile tespit edilmiştir.</p>`;
+
+  if ($("optUyarlama").checked) {
+    h += `
+    <div class="bep-h">3. ÖĞRETİM SÜRECİNDE YAPILACAK UYARLAMALAR</div>
+    <ul class="bep-ul" contenteditable="true">${d.uyar.map(u => `<li class="uyar-li">${u}</li>`).join("")}</ul>`;
+  }
+
+  h += `
+    <div class="bep-h">${$("optUyarlama").checked ? 4 : 3}. DESTEK EĞİTİM HİZMETLERİ</div>
+    <table class="bep-t" contenteditable="true">
+      <thead><tr><th style="width:38%">Destek Hizmeti</th><th>Açıklama / Uygulama Biçimi</th></tr></thead>
+      <tbody>${sups.length ? sups.map(s => `<tr><td><b>${s.name}</b></td><td>${s.detail}</td></tr>`).join("") : `<tr><td colspan="2">Destek eğitim hizmeti seçilmedi.</td></tr>`}</tbody>
+    </table>`;
+
+  let sec = ($("optUyarlama").checked ? 4 : 3) + 1;
+  h += `<div class="bep-h page-break">${sec}. UZUN VE KISA DÖNEMLİ AMAÇLAR <small>· UDA: Uzun Dönemli Amaç, KDA: Kısa Dönemli Amaç</small></div>`;
+
+  subs.forEach(subKey => {
+    const s = SUBJECTS[subKey];
+    const goals = s.bands[bandFor(subKey, state.grade)];
+    h += `<div class="bep-h" style="background:#fff;border:1.5px solid #c9d4ee;">${s.icon} ${s.name} <small>· ${state.grade}. Sınıf</small></div>`;
+    goals.forEach((g, gi) => {
+      const ranges = kdaRanges(term.start, term.end, g.kda.length);
+      h += `
+      <div class="uda-block">
+        <div class="uda-title" contenteditable="true"><span class="no">UDA ${gi + 1}.</span> ${g.uda}</div>
+        <table class="bep-t" contenteditable="true">
+          <thead><tr>
+            <th style="width:4%">No</th><th style="width:36%">Kısa Dönemli Amaç</th>
+            <th style="width:15%">Başarı Ölçütü</th><th style="width:25%">Yöntem / Teknik ve Materyal</th>
+            <th style="width:14%">Tarih Aralığı</th><th style="width:6%">Ulaşıldı mı?</th>
+          </tr></thead>
+          <tbody>${g.kda.map((k, ki) => `<tr>
+            <td><b>${gi + 1}.${ki + 1}</b></td><td>${k.t}</td><td>${k.o}</td><td>${k.y}</td><td>${ranges[ki]}</td><td></td>
+          </tr>`).join("")}</tbody>
+        </table>
+      </div>`;
+    });
+  });
+
+  if ($("optDegerlendirme").checked) {
+    sec++;
+    h += `
+    <div class="bep-h">${sec}. İZLEME VE DEĞERLENDİRME</div>
+    <p contenteditable="true">Kısa dönemli amaçlara ulaşma düzeyi aşağıdaki yöntemlerle izlenir. BEP geliştirme birimi, programın işleyişini her dönem sonunda gözden geçirir; amaçlara ulaşılamadığında ölçütler, yöntemler ve süreler güncellenir.</p>
+    <ul class="bep-ul" contenteditable="true">${ASSESS.map(a => `<li>${a}</li>`).join("")}</ul>`;
+  }
+
+  if ($("optSign").checked) {
+    sec++;
+    const rows = [
+      ["BEP Birimi Başkanı (Müdür / Md. Yrd.)", $("mPrincipal").value],
+      ["Sınıf / Ders Öğretmeni", $("mTeacher").value],
+      ["Rehber Öğretmen / Psikolojik Danışman", $("mCounselor").value],
+      ["Özel Eğitim Öğretmeni", $("mSpecial").value],
+      ["Veli", $("stParent").value],
+    ];
+    h += `
+    <div class="bep-h">${sec}. BEP GELİŞTİRME BİRİMİ</div>
+    <p style="font-size:.85em;" contenteditable="true">Bu Bireyselleştirilmiş Eğitim Programı, ${fmtD(term.start)} tarihinde BEP geliştirme birimi tarafından hazırlanmış olup aşağıdaki üyelerce kabul edilmiştir.</p>
+    <table class="bep-t sign-t" contenteditable="true">
+      <thead><tr><th style="width:40%">Görevi</th><th style="width:35%">Adı Soyadı</th><th>İmza</th></tr></thead>
+      <tbody>${rows.map(r => `<tr><td class="rol">${r[0]}</td><td style="vertical-align:middle;text-align:center;">${dash(r[1])}</td><td></td></tr>`).join("")}</tbody>
+    </table>`;
+  }
+
+  h += `<div class="sheet-footer">Kaynak Akademi BEP Oluşturucu ile hazırlanmıştır · Bu belge bir taslaktır; BEP geliştirme birimince öğrencinin bireysel gereksinimlerine göre düzenlenerek kullanılmalıdır.</div>`;
+
+  const sheet = $("sheet");
+  sheet.innerHTML = h;
+  sheet.style.setProperty("--sheet-fs", $("fontSize").value);
+  sheet.classList.toggle("bw", $("optBW").checked);
+  $("previewEmpty").style.display = "none";
+  $("sheetArea").style.display = "block";
+  saveDraft();
+  if (window.innerWidth < 1024) $("sheetArea").scrollIntoView({ behavior: "smooth" });
+}
+
+/* ═══════════════ TASLAK SAKLAMA ═══════════════ */
+const FIELDS = ["stName","stBirth","stNo","stParent","ramNo","ramDate","termStart","termEnd","schoolName","schoolCity","mPrincipal","mTeacher","mCounselor","mSpecial","fontSize"];
+const CHECKS = ["optUyarlama","optDegerlendirme","optSign","optBW"];
+
+function saveDraft() {
+  try {
+    const data = { grade: state.grade, disab: state.disab, f: {}, c: {}, sup: [], sub: [] };
+    FIELDS.forEach(id => data.f[id] = $(id).value);
+    CHECKS.forEach(id => data.c[id] = $(id).checked);
+    document.querySelectorAll("#supportList input:checked").forEach(i => data.sup.push(i.dataset.sup));
+    document.querySelectorAll("#subjectList input:checked").forEach(i => data.sub.push(i.dataset.sub));
+    localStorage.setItem("bepDraft", JSON.stringify(data));
+  } catch (e) { /* localStorage kapalıysa sessizce geç */ }
+}
+
+function loadDraft() {
+  let data;
+  try { data = JSON.parse(localStorage.getItem("bepDraft")); } catch (e) { return; }
+  if (!data) return;
+  FIELDS.forEach(id => { if (data.f && data.f[id] != null) $(id).value = data.f[id]; });
+  CHECKS.forEach(id => { if (data.c && data.c[id] != null) $(id).checked = data.c[id]; });
+  if (data.grade) { state.grade = data.grade; [...$("gradePills").children][data.grade - 1]?.classList.add("active"); }
+  if (data.disab && DISAB[data.disab]) {
+    state.disab = data.disab;
+    [...$("disabPills").children].find(b => b.dataset.key === data.disab)?.classList.add("active");
+  }
+  document.querySelectorAll("#supportList input").forEach(i => i.checked = (data.sup || []).includes(i.dataset.sup));
+  buildSubjectList();
+  if (data.sub && data.sub.length) document.querySelectorAll("#subjectList input").forEach(i => i.checked = data.sub.includes(i.dataset.sub));
+}
+
+function clearAll() {
+  if (!confirm("Tüm form alanları ve kayıtlı taslak silinsin mi?")) return;
+  try { localStorage.removeItem("bepDraft"); } catch (e) {}
+  location.reload();
+}
+
+/* ═══════════════ OLAYLAR ═══════════════ */
+buildGradePills(); buildDisabPills(); buildSupportList(); buildSubjectList();
+const t = defaultTerm();
+$("termStart").value = t.start; $("termEnd").value = t.end;
+loadDraft();
+
+FIELDS.forEach(id => $(id).addEventListener("change", saveDraft));
+CHECKS.forEach(id => $(id).addEventListener("change", saveDraft));
+$("genBtn").onclick = generate;
+$("regenBtn").onclick = generate;
+$("printBtn").onclick = () => { if ($("sheetArea").style.display === "none") generate(); window.print(); };
+$("printBtn2").onclick = () => window.print();
+$("clearBtn").onclick = clearAll;
+
+/* Mobil menü */
+const btn = $("menuBtn"), nav = $("mobileNav");
+btn.addEventListener("click", () => nav.classList.toggle("open"));
+nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => nav.classList.remove("open")));
+</script>
+</body>
+</html>
