@@ -1,0 +1,23 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  async rewrites() {
+    return {
+      // Ana sayfa public/index.html'den sunulur (Next, public/index.html'i kökte otomatik sunmaz)
+      beforeFiles: [{ source: "/", destination: "/index.html" }],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
+  async redirects() {
+    // Eski statik sayfa linkleri yeni React rotalarına yönlenir
+    return [
+      { source: "/giris.html", destination: "/giris", permanent: false },
+      { source: "/koc-panel.html", destination: "/koc", permanent: false },
+      { source: "/ogrenci-panel.html", destination: "/ogrenci", permanent: false },
+      { source: "/bildirimler.html", destination: "/bildirimler", permanent: false },
+    ];
+  },
+};
+
+export default nextConfig;
