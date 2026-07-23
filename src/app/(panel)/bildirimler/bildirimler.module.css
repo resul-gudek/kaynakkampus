@@ -1,0 +1,48 @@
+/* legacy/bildirimler.html'den birebir taşınan stiller */
+
+.bolum {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 26px; margin: 20px 0 40px;
+}
+.aracCubugu { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.filtreler { display: flex; gap: 8px; flex-wrap: wrap; }
+.filtre {
+  border: none; background: var(--bg-soft); font-family: inherit; cursor: pointer;
+  padding: 8px 18px; border-radius: 50px; font-size: .82rem; font-weight: 600;
+  color: var(--muted); transition: all .2s;
+}
+.filtreAktif { composes: filtre; background: var(--blue); color: #fff; }
+.aracButonlar { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.bildirim {
+  display: flex; align-items: flex-start; gap: 14px;
+  border: 1px solid rgba(26,60,143,.10); border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+  cursor: pointer; transition: all .15s; position: relative;
+}
+.bildirim:hover { border-color: var(--teal); }
+.yeni { composes: bildirim; background: #f4f8ff; border-left: 4px solid var(--blue); }
+.ikon {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+}
+.govde { flex: 1; min-width: 0; }
+.govde p { font-size: .88rem; line-height: 1.5; }
+.yeni .govde p { font-weight: 600; }
+.tarih { font-size: .72rem; color: var(--muted); margin-top: 5px; font-weight: 500; }
+.yeniNokta {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--blue);
+  position: absolute; top: 16px; right: 14px;
+}
+.silBtn {
+  border: none; background: #fef2f2; color: #b91c1c; cursor: pointer;
+  width: 30px; height: 30px; border-radius: 8px; font-size: .85rem; flex-shrink: 0;
+  transition: all .2s; font-family: inherit;
+}
+.silBtn:hover { background: #b91c1c; color: #fff; }
+.bosMesaj { text-align: center; color: var(--muted); font-size: .9rem; padding: 40px 10px; }
+.bosMesaj .bosIkon { font-size: 2.6rem; display: block; margin-bottom: 10px; }
+
+.panelBas { padding: 36px 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.panelBas h1 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; }
+.panelBas h1 span { color: var(--orange); }
