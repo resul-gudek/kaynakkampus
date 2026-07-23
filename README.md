@@ -60,6 +60,22 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
 - Gün bazlı tarihler (`@db.Date`) UTC gece yarısı `Date` nesnesidir; karşılaştırma
   ve format `src/lib/hesap.ts`'teki yardımcılarla ISO dizgesi üzerinden yapılır.
 
+## Loglama
+
+Yapılandırılmış loglama **pino** ile `src/lib/log.ts`'ten yapılır (yalnız sunucu tarafı):
+
+- Geliştirmede renkli/okunur konsol çıktısı, production'da JSON satırları (stdout).
+- `LOG_LEVEL` ile seviye (`debug` seviyesinde Prisma sorguları da loglanır),
+  `LOG_DOSYA` ile konsola ek dosya çıktısı (`logs/uygulama.log` gibi) açılır.
+- **Otomatik loglanan olaylar:** giriş denemeleri (başarılı/reddedilen, nedeniyle),
+  tüm server action hataları (stack ile, `hataMetni` üzerinden merkezî),
+  Prisma uyarı/hataları, yakalanmamış istek hataları (`src/instrumentation.ts`).
+- **Denetim (audit) kayıtları:** önemli mutasyonlar `denetim(islem, kimlik, detay)`
+  ile `modul: "denetim"` etiketli loglanır — kim, neyi, hangi kayıtta yaptı
+  (ödev ekle/sil/durum, özel ders ekle/güncelle/sil, deneme, yol haritası,
+  öğrenci ekle/ata ve tüm admin işlemleri).
+- Yeni modülde log için: `const log = logcu("modul-adi")` → `log.info({...}, "mesaj")`.
+
 ## Yol haritası
 
 - [x] Faz 1–7: koçluk uygulamasının Next.js + MSSQL'e taşınması (bkz. `PLAN.md`)

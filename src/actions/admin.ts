@@ -5,16 +5,17 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { kullaniciAdiNormalize } from "@/lib/hesap";
 import { KocEkleSemasi } from "@/lib/dogrulama";
+import { denetim } from "@/lib/log";
 import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
 
 export async function kocEkle(girdi: unknown): Promise<EylemSonuc> {
   try {
-    await oturumGerekli("admin");
+    const admin = await oturumGerekli("admin");
     const veri = KocEkleSemasi.parse(girdi);
     const kullanici = kullaniciAdiNormalize(veri.kullanici);
     const mevcut = await prisma.kullanici.findUnique({ where: { kullanici } });
     if (mevcut) return { hata: "Bu kullanıcı adı zaten kayıtlı." };
-    await prisma.kullanici.create({
+    const yeni = await prisma.kullanici.create({
       data: {
         rol: "koc",
         ad: veri.ad,
@@ -23,30 +24,32 @@ export async function kocEkle(girdi: unknown): Promise<EylemSonuc> {
         brans: veri.brans,
       },
     });
+    denetim("admin.kocEkle", admin, { kocId: yeni.id, kullanici });
     revalidatePath("/admin");
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "admin.kocEkle") };
   }
 }
 
 /** Koçu pasifleştir/aktifleştir — pasif koç giriş yapamaz */
 export async function kocAktifDegistir(kocId: string, aktif: boolean): Promise<EylemSonuc> {
   try {
-    await oturumGerekli("admin");
+    const admin = await oturumGerekli("admin");
     const k = await prisma.kullanici.findUnique({ where: { id: kocId } });
     if (!k || k.rol !== "koc") return { hata: "Koç bulunamadı." };
     await prisma.kullanici.update({ where: { id: kocId }, data: { aktif } });
+    denetim("admin.kocAktif", admin, { kocId, kullanici: k.kullanici, aktif });
     revalidatePath("/admin");
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "admin.kocAktif") };
   }
 }
 
 export async function kocSifreSifirla(kocId: string, yeniSifre: string): Promise<EylemSonuc> {
   try {
-    await oturumGerekli("admin");
+    const admin = await oturumGerekli("admin");
     if (!yeniSifre || yeniSifre.length < 4) return { hata: "Şifre en az 4 karakter olmalı." };
     const k = await prisma.kullanici.findUnique({ where: { id: kocId } });
     if (!k || k.rol !== "koc") return { hata: "Koç bulunamadı." };
@@ -54,10 +57,11 @@ export async function kocSifreSifirla(kocId: string, yeniSifre: string): Promise
       where: { id: kocId },
       data: { sifreHash: bcrypt.hashSync(yeniSifre, 10) },
     });
+    denetim("admin.kocSifreSifirla", admin, { kocId, kullanici: k.kullanici });
     revalidatePath("/admin");
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "admin.kocSifreSifirla") };
   }
 }
 
@@ -65,7 +69,7 @@ export async function kocSifreSifirla(kocId: string, yeniSifre: string): Promise
     (MSSQL çoklu cascade yolu kabul etmediği için bağımlılar açıkça silinir.) */
 export async function kocSil(kocId: string): Promise<EylemSonuc> {
   try {
-    await oturumGerekli("admin");
+    const admin = await oturumGerekli("admin");
     const k = await prisma.kullanici.findUnique({ where: { id: kocId } });
     if (!k || k.rol !== "koc") return { hata: "Koç bulunamadı." };
 
@@ -78,9 +82,10 @@ export async function kocSil(kocId: string): Promise<EylemSonuc> {
       await tx.kullanici.updateMany({ where: { kocId }, data: { kocId: null } });
       await tx.kullanici.delete({ where: { id: kocId } });
     });
+    denetim("admin.kocSil", admin, { kocId, kullanici: k.kullanici, ad: k.ad });
     revalidatePath("/admin");
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "admin.kocSil") };
   }
 }

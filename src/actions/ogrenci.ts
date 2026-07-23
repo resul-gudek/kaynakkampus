@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { kullaniciAdiNormalize, telefonDuzelt } from "@/lib/hesap";
 import { OgrenciEkleSemasi, ProfilSemasi } from "@/lib/dogrulama";
+import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
 export async function ogrenciEkle(girdi: unknown): Promise<EylemSonuc & { ogrenciId?: string }> {
@@ -28,10 +29,11 @@ export async function ogrenciEkle(girdi: unknown): Promise<EylemSonuc & { ogrenc
         veliTelefon: telefonDuzelt(veri.veliTelefon),
       },
     });
+    denetim("ogrenci.ekle", koc, { ogrenciId: yeni.id, kullanici });
     panelleriTazele();
     return { tamam: true, ogrenciId: yeni.id };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ogrenci.ekle") };
   }
 }
 
@@ -43,10 +45,11 @@ export async function ogrenciAta(ogrenciId: string): Promise<EylemSonuc> {
     if (!o || o.rol !== "ogrenci") return { hata: "Öğrenci bulunamadı." };
     if (o.kocId) return { hata: "Bu öğrenci zaten bir koça atanmış." };
     await prisma.kullanici.update({ where: { id: ogrenciId }, data: { kocId: koc.id } });
+    denetim("ogrenci.ata", koc, { ogrenciId, kullanici: o.kullanici });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ogrenci.ata") };
   }
 }
 

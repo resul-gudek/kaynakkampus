@@ -1,5 +1,8 @@
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
+import { logcu } from "@/lib/log";
+
+const log = logcu("eylem");
 
 export type EylemSonuc = { hata?: string; tamam?: boolean };
 
@@ -20,8 +23,13 @@ export function panelleriTazele() {
   revalidatePath("/", "layout"); // header'daki okunmamış rozeti
 }
 
-/** Hata nesnesini kullanıcıya gösterilecek metne çevirir */
-export function hataMetni(e: unknown): string {
-  if (e instanceof Error && e.message) return e.message;
+/** Hata nesnesini loglar ve kullanıcıya gösterilecek metne çevirir.
+    Tüm action catch blokları buradan geçtiği için hatalar merkezî loglanır. */
+export function hataMetni(e: unknown, eylem?: string): string {
+  if (e instanceof Error && e.message) {
+    log.error({ eylem, hata: e.message, stack: e.stack }, "eylem hatası");
+    return e.message;
+  }
+  log.error({ eylem, hata: String(e) }, "eylem hatası");
   return "Beklenmeyen bir hata oluştu.";
 }

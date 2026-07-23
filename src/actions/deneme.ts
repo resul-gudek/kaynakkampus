@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { netHesapla, tarihNesnesi } from "@/lib/hesap";
 import { DenemeSemasi } from "@/lib/dogrulama";
+import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
 export async function denemeEkle(girdi: unknown): Promise<EylemSonuc> {
@@ -22,7 +23,7 @@ export async function denemeEkle(girdi: unknown): Promise<EylemSonuc> {
     }));
     const toplamNet = Math.round(dersler.reduce((t, d) => t + d.net, 0) * 100) / 100;
 
-    await prisma.deneme.create({
+    const yeni = await prisma.deneme.create({
       data: {
         ogrenciId: veri.ogrenciId,
         ad: veri.ad,
@@ -41,10 +42,11 @@ export async function denemeEkle(girdi: unknown): Promise<EylemSonuc> {
         },
       },
     });
+    denetim("deneme.ekle", kim, { denemeId: yeni.id, ogrenciId: veri.ogrenciId, tur: veri.tur, net: toplamNet });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "deneme.ekle") };
   }
 }
 
@@ -56,9 +58,10 @@ export async function denemeSil(id: string): Promise<EylemSonuc> {
     const yetkili = kim.rol === "ogrenci" ? dn.ogrenciId === kim.id : dn.ogrenci.kocId === kim.id;
     if (!yetkili) return { hata: "Bu kayıt üzerinde yetkiniz yok." };
     await prisma.deneme.delete({ where: { id } }); // DenemeDers cascade ile silinir
+    denetim("deneme.sil", kim, { denemeId: id, ogrenciId: dn.ogrenciId, ad: dn.ad });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "deneme.sil") };
   }
 }

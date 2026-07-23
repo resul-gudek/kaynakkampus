@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { YolAdimiSemasi } from "@/lib/dogrulama";
+import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
 export async function yolEkle(girdi: unknown): Promise<EylemSonuc> {
@@ -20,10 +21,11 @@ export async function yolEkle(girdi: unknown): Promise<EylemSonuc> {
         data: { ...veri, kocId: koc.id, sira: (son._max.sira ?? 0) + 1 },
       });
     });
+    denetim("yol.ekle", koc, { ogrenciId: veri.ogrenciId, ders: veri.ders, konu: veri.konu });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "yol.ekle") };
   }
 }
 
@@ -33,10 +35,11 @@ export async function yolSil(id: string): Promise<EylemSonuc> {
     const a = await prisma.yolAdimi.findUnique({ where: { id } });
     if (!a || a.kocId !== koc.id) return { hata: "Adım bulunamadı." };
     await prisma.yolAdimi.delete({ where: { id } });
+    denetim("yol.sil", koc, { adimId: id, ogrenciId: a.ogrenciId, konu: a.konu });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "yol.sil") };
   }
 }
 

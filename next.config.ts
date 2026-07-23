@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // pino worker-thread transport'ları bundle edilmemeli
+  serverExternalPackages: ["pino", "pino-pretty"],
   async rewrites() {
     return {
       // Ana sayfa public/index.html'den sunulur (Next, public/index.html'i kökte otomatik sunmaz)

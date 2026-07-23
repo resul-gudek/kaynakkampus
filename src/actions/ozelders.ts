@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { bildirimEkle } from "@/lib/bildirim";
 import { ozelDersMetni, tarihNesnesi } from "@/lib/hesap";
 import { OzelDersSemasi, OzelDersGuncelleSemasi } from "@/lib/dogrulama";
+import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
 /* Bildirim metinleri legacy/kocluk.js ozelDersEkle/ozelDersGuncelle'den birebir */
@@ -32,6 +33,7 @@ export async function ozelDersEkle(girdi: unknown): Promise<EylemSonuc> {
       veri.ucret = 0;
     }
 
+    let denetimKayitId = "";
     await prisma.$transaction(async (tx) => {
       const kayit = await tx.ozelDers.create({
         data: {
@@ -59,11 +61,18 @@ export async function ozelDersEkle(girdi: unknown): Promise<EylemSonuc> {
       } else if (kayit.durum === "planlandi" && kayit.olusturan === "koc") {
         await bildirimEkle(tx, kayit.ogrenciId, "📅", "Öğretmenin özel ders planladı: " + m, hedef);
       }
+      denetimKayitId = kayit.id;
+    });
+    denetim("ozelders.ekle", kim, {
+      dersId: denetimKayitId,
+      ogrenciId: veri.ogrenciId,
+      durum: veri.durum,
+      olusturan: veri.olusturan,
     });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ozelders.ekle") };
   }
 }
 
@@ -79,10 +88,11 @@ export async function ozelDersSil(id: string): Promise<EylemSonuc> {
         : x.ogrenciId === kim.id && x.olusturan === "ogrenci" && x.durum === "talep";
     if (!yetkili) return { hata: "Bu kayıt üzerinde yetkiniz yok." };
     await prisma.ozelDers.delete({ where: { id } });
+    denetim("ozelders.sil", kim, { dersId: id, ogrenciId: x.ogrenciId, durum: x.durum });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ozelders.sil") };
   }
 }
 
@@ -160,9 +170,15 @@ export async function ozelDersGuncelle(id: string, girdi: unknown): Promise<Eyle
         await bildirimEkle(tx, yeni.ogrenciId, "💰", "Ders ödemen kaydedildi: " + m + (+yeni.ucret ? " · " + yeni.ucret + " ₺" : ""), hedef);
       }
     });
+    denetim("ozelders.guncelle", kim, {
+      dersId: id,
+      ogrenciId: x.ogrenciId,
+      ...(alanlar.durum !== undefined && { eskiDurum, yeniDurum: alanlar.durum }),
+      ...(alanlar.odendi !== undefined && { odendi: alanlar.odendi }),
+    });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ozelders.guncelle") };
   }
 }

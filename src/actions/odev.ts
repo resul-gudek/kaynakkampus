@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { bildirimEkle } from "@/lib/bildirim";
 import { tarihNesnesi, tarihStr } from "@/lib/hesap";
 import { OdevSemasi, OdevDurumSemasi } from "@/lib/dogrulama";
+import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
 export async function odevEkle(girdi: unknown): Promise<EylemSonuc> {
@@ -16,6 +17,7 @@ export async function odevEkle(girdi: unknown): Promise<EylemSonuc> {
       return { hata: "Bu öğrenci size atanmış değil." };
     }
 
+    let kayitId = "";
     await prisma.$transaction(async (tx) => {
       const kayit = await tx.odev.create({
         data: {
@@ -37,11 +39,13 @@ export async function odevEkle(girdi: unknown): Promise<EylemSonuc> {
           (kayit.sonTarih ? " · Son tarih: " + tarihStr(kayit.sonTarih) : ""),
         { tur: "odev", ogrenciId: kayit.ogrenciId, kayitId: kayit.id }
       );
+      kayitId = kayit.id;
     });
+    denetim("odev.ekle", koc, { odevId: kayitId, ogrenciId: veri.ogrenciId, ders: veri.ders, konu: veri.konu });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "odev.ekle") };
   }
 }
 
@@ -51,10 +55,11 @@ export async function odevSil(id: string): Promise<EylemSonuc> {
     const o = await prisma.odev.findUnique({ where: { id } });
     if (!o || o.kocId !== koc.id) return { hata: "Ödev bulunamadı." };
     await prisma.odev.delete({ where: { id } });
+    denetim("odev.sil", koc, { odevId: id, ogrenciId: o.ogrenciId, ders: o.ders, konu: o.konu });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "odev.sil") };
   }
 }
 
@@ -81,9 +86,10 @@ export async function odevDurum(id: string, durum: string): Promise<EylemSonuc> 
         );
       }
     });
+    denetim("odev.durum", kim, { odevId: id, eski: o.durum, yeni: yeniDurum });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "odev.durum") };
   }
 }
