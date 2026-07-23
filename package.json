@@ -6,9 +6,9 @@
     "seed": "tsx prisma/seed.ts"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 37337",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 37337",
     "lint": "eslint"
   },
   "dependencies": {
