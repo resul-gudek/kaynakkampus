@@ -1,7 +1,7 @@
 /* legacy/bildirimler.html'den birebir taşınan stiller */
 
 .bolum {
-  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
   padding: 26px; margin: 20px 0 40px;
 }
 .aracCubugu { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
@@ -11,17 +11,17 @@
   padding: 8px 18px; border-radius: 50px; font-size: .82rem; font-weight: 600;
   color: var(--muted); transition: all .2s;
 }
-.filtreAktif { composes: filtre; background: var(--blue); color: #fff; }
+.filtreAktif { composes: filtre; background: var(--nav-aktif-bg); color: var(--nav-aktif-renk); }
 .aracButonlar { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .bildirim {
   display: flex; align-items: flex-start; gap: 14px;
-  border: 1px solid rgba(26,60,143,.10); border-radius: 12px;
-  padding: 14px 16px; margin-bottom: 10px; background: #fff;
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 10px; background: var(--surface);
   cursor: pointer; transition: all .15s; position: relative;
 }
 .bildirim:hover { border-color: var(--teal); }
-.yeni { composes: bildirim; background: #f4f8ff; border-left: 4px solid var(--blue); }
+.yeni { composes: bildirim; background: var(--tint); border-left: 4px solid var(--blue); }
 .ikon {
   width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
   background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 1.15rem;

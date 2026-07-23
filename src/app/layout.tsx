@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import TemaSaglayici from "@/components/TemaSaglayici";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -20,8 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className={poppins.variable}>
-      <body>{children}</body>
+    /* suppressHydrationWarning: next-themes ilk boyamada <html>'e
+       data-theme yazdığı için gerekli */
+    <html lang="tr" className={poppins.variable} suppressHydrationWarning>
+      <body>
+        <TemaSaglayici>{children}</TemaSaglayici>
+      </body>
     </html>
   );
 }

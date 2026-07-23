@@ -3,6 +3,7 @@
    yalnızca ilgili tablo o öğrenci için boşsa eklenir. */
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { VARSAYILAN_SABLONLAR } from "../src/lib/mail-sablonlari";
 
 const prisma = new PrismaClient();
 
@@ -229,6 +230,16 @@ async function main() {
         metin: `Öğretmenin özel ders önerdi: Matematik – Kareköklü İfadeler · ${tarihStr(talep2.tarih)} 17:30 · Onayın bekleniyor.`,
         hedefTur: "ozel", hedefOgrenciId: ogr2.id, hedefKayitId: talep2.id,
       },
+    });
+  }
+
+  // ── E-posta altyapısı: tek satır ayar + varsayılan şablonlar ──
+  await prisma.mailAyar.upsert({ where: { id: 1 }, update: {}, create: { id: 1 } });
+  for (const s of VARSAYILAN_SABLONLAR) {
+    await prisma.mailSablon.upsert({
+      where: { anahtar: s.anahtar },
+      update: {},
+      create: { anahtar: s.anahtar, ad: s.ad, konu: s.konu, govde: s.govde },
     });
   }
 

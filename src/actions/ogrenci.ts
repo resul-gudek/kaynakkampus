@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { kullaniciAdiNormalize, telefonDuzelt } from "@/lib/hesap";
 import { OgrenciEkleSemasi, ProfilSemasi } from "@/lib/dogrulama";
+import { hosgeldinMailiKuyrukla } from "@/lib/mail";
 import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
@@ -27,8 +28,10 @@ export async function ogrenciEkle(girdi: unknown): Promise<EylemSonuc & { ogrenc
         kocId: koc.id,
         telefon: telefonDuzelt(veri.telefon),
         veliTelefon: telefonDuzelt(veri.veliTelefon),
+        eposta: veri.eposta,
       },
     });
+    await hosgeldinMailiKuyrukla(yeni); // e-posta girildiyse hoş geldin maili kuyruklanır
     denetim("ogrenci.ekle", koc, { ogrenciId: yeni.id, kullanici });
     panelleriTazele();
     return { tamam: true, ogrenciId: yeni.id };

@@ -1,0 +1,8 @@
+[wsl2]
+networkingMode=mirrored
+memory=8GB
+processors=4
+swap=2GB
+dnsTunneling=true
+firewall=true
+autoProxy=true

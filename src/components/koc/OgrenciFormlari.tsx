@@ -34,6 +34,7 @@ export default function OgrenciFormlari({ atanmamis }: { atanmamis: AtanmamisOgr
         sifre: String(fd.get("sifre") ?? ""),
         telefon: String(fd.get("telefon") ?? ""),
         veliTelefon: String(fd.get("veliTelefon") ?? ""),
+        eposta: String(fd.get("eposta") ?? ""),
       });
       if (sonuc.hata) {
         setYeniMesaj({ metin: sonuc.hata, ok: false });
@@ -116,6 +117,10 @@ export default function OgrenciFormlari({ atanmamis }: { atanmamis: AtanmamisOgr
             <div className={s.formGrup}>
               <label>Veli Telefonu (WhatsApp)</label>
               <input name="veliTelefon" placeholder="05xx xxx xx xx" />
+            </div>
+            <div className={s.formGrup}>
+              <label>E-posta (hoş geldin ve ders hatırlatma mailleri)</label>
+              <input name="eposta" type="email" placeholder="ornek@eposta.com" />
             </div>
           </div>
           <div className={s.formAlt}>

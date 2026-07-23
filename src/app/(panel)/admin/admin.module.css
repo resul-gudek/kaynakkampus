@@ -1,5 +1,5 @@
 .bolum {
-  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
   padding: 26px; margin: 20px 0;
 }
 .bolum h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; }
@@ -10,7 +10,7 @@
   text-align: left; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em;
   color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--bg-soft);
 }
-.tablo td { padding: 12px; border-bottom: 1px solid rgba(26,60,143,.08); vertical-align: middle; }
+.tablo td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .tablo tr:last-child td { border-bottom: none; }
 .tabloSarici { overflow-x: auto; }
 
@@ -25,10 +25,10 @@
 }
 .islemler { display: flex; gap: 6px; flex-wrap: wrap; }
 
-.form { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 12px; align-items: end; }
+.form { display: grid; grid-template-columns: repeat(5, 1fr) auto; gap: 12px; align-items: end; }
 .formGrup label { display: block; font-size: .78rem; font-weight: 600; margin-bottom: 5px; }
 .formGrup input {
-  width: 100%; padding: 10px 14px; border: 2px solid rgba(26,60,143,.12);
+  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
   border-radius: 10px; font-family: inherit; font-size: .9rem;
 }
 .formGrup input:focus { outline: none; border-color: var(--teal); }
@@ -54,7 +54,7 @@
 
 .cevrimiciSatir {
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px; border-bottom: 1px solid rgba(26,60,143,.08);
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
 }
 .cevrimiciSatir:last-child { border-bottom: none; }
 .nokta {
@@ -66,8 +66,8 @@
   display: inline-flex; padding: 2px 10px; border-radius: 50px;
   font-size: .7rem; font-weight: 700;
 }
-.rolKoc { composes: rolEtiket; background: rgba(26,60,143,.1); color: var(--blue); }
-.rolOgrenci { composes: rolEtiket; background: rgba(14,165,201,.12); color: #0284a8; }
+.rolKoc { composes: rolEtiket; background: var(--tint); color: var(--blue); }
+.rolOgrenci { composes: rolEtiket; background: rgba(14,165,201,.12); color: var(--teal); }
 .rolAdmin { composes: rolEtiket; background: rgba(249,115,22,.12); color: var(--orange); }
 .sonGorulme { margin-left: auto; color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .yenileBilgi { color: var(--muted); font-size: .74rem; font-weight: 500; }

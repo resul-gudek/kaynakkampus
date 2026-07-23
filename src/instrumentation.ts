@@ -6,6 +6,12 @@ export async function register() {
     { ortam: process.env.NODE_ENV, port: process.env.PORT ?? "37337" },
     "uygulama başlatıldı"
   );
+
+  // Mail kuyruğu işleyicisi yalnız Node.js çalışma zamanında (edge'de değil)
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    const { mailIsleyiciBaslat } = await import("@/lib/mail-isleyici");
+    mailIsleyiciBaslat();
+  }
 }
 
 export async function onRequestError(

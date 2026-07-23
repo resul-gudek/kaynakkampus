@@ -13,6 +13,8 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
 | `/giris` | Kullanıcı adı + şifre girişi (öğretmen / öğrenci / yönetici) |
 | `/koc` | Koç paneli: ajanda, öğrenciler, ödev/takip/yol haritası/deneme/özel ders yönetimi |
 | `/ogrenci` | Öğrenci paneli: oyunlaştırılmış yol haritası, ödevler, deneme girişi + net grafiği |
+| `/siniflar` | Öğretmen ve öğrenci için online sınıflar, üyelikler ve canlı ders programı |
+| `/canli-ders/[id]` | Zaman ve sınıf üyeliği kontrollü canlı ders hazırlık/katılım ekranı |
 | `/bildirimler` | Bildirim kutusu (koç + öğrenci), kayda deep-link |
 | `/admin` | Yönetici: koç hesapları (ekle / pasifleştir / şifre sıfırla / sil) |
 | `/odev-olustur.html`, `/bep-olustur.html`, `/ders-programi.html`, `/etkinlikler.html`, `/haberler.html` | Bağımsız statik araçlar (`public/`) |
@@ -55,6 +57,10 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
   alıcı başına 200 kayıt tavanı) ve `hedef*` alanlarıyla ilgili kayda link verir.
 - **Silme işlemleri** uygulama katmanında transaction ile yapılır — SQL Server,
   `Kullanici`'ye giden çoklu FK yolları nedeniyle cascade kabul etmez.
+- **Online sınıflar:** Kalıcı öğrenci grubu `OnlineSinif`, belirli tarih/saatteki ders
+  `DersOturumu` olarak ayrı tutulur. Canlı medya BigBlueButton API adaptörü üzerinden
+  sağlanır; `BBB_API_URL` ve `BBB_SECRET` yoksa sınıf planlanabilir ancak oda açılmaz.
+  Ders kaydı KVKK süreci tamamlanana kadar uygulama ve veritabanı seviyesinde kapalıdır.
 - **Kullanıcı adları** her yerde `toLocaleLowerCase("tr-TR")` ile normalize edilir
   (İ/ı tuzağı — bkz. `kullaniciAdiNormalize`).
 - Gün bazlı tarihler (`@db.Date`) UTC gece yarısı `Date` nesnesidir; karşılaştırma

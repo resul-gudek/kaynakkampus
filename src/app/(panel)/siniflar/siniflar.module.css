@@ -1,0 +1,71 @@
+.ustEylem, .sinifKart, .form, .bos {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.ustEylem { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px 24px; margin:24px 0 14px; }
+.ustEylem h2 { font-size:1.05rem; }
+.ustEylem p, .aciklama { color:var(--muted); font-size:.82rem; margin-top:3px; }
+.form { padding:22px; margin-bottom:18px; }
+.formIzgara { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.form label, .dersForm { display:flex; flex-direction:column; gap:6px; }
+.form label > span { font-size:.75rem; font-weight:700; color:var(--muted); }
+.form input, .form textarea, .form select, .dersForm input, .dersForm select, .ekleSatir select {
+  width:100%; border:1px solid var(--border); background:var(--bg-soft); color:var(--text);
+  border-radius:10px; padding:10px 12px; outline:none;
+}
+.form textarea { resize:vertical; margin-bottom:12px; }
+.sinifListe { display:grid; gap:18px; margin:22px 0 50px; }
+.sinifKart { padding:22px; }
+.sinifBas { display:flex; align-items:center; gap:13px; }
+.sinifBas > div:nth-child(2) { flex:1; }
+.sinifBas h2 { font-size:1.12rem; }
+.sinifBas p { color:var(--muted); font-size:.78rem; }
+.sinifIkon { width:46px; height:46px; display:grid; place-items:center; border-radius:12px; background:var(--tint); font-size:1.25rem; }
+.aciklama { padding:12px 14px; margin:15px 0; border-radius:10px; background:var(--bg-soft); }
+.ikiKolon { display:grid; grid-template-columns:minmax(240px,.75fr) minmax(360px,1.25fr); gap:24px; margin-top:18px; }
+.ikiKolon > div + div { border-left:1px solid var(--border); padding-left:24px; }
+.altBaslik { min-height:34px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.altBaslik h3 { font-size:.86rem; }
+.altBaslik > span { color:var(--muted); font-size:.75rem; }
+.uyeListe, .oturumListe { display:grid; gap:8px; }
+.uye { display:flex; align-items:center; gap:9px; padding:8px; border-radius:10px; background:var(--bg-soft); }
+.uye > div { display:flex; flex-direction:column; flex:1; min-width:0; }
+.uye b { font-size:.78rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.uye small { color:var(--muted); font-size:.68rem; }
+.uye button { border:0; background:none; color:var(--kirmizi); cursor:pointer; font-size:1.15rem; }
+.ekleSatir { display:flex; gap:8px; margin-top:10px; }
+.dersForm { display:grid; grid-template-columns:1fr 1fr 1.15fr .75fr auto; gap:8px; padding:12px; border-radius:10px; background:var(--bg-soft); margin-bottom:10px; }
+.oturum { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--border); border-radius:11px; }
+.oturum.iptal { opacity:.55; }
+.tarihKutusu { width:46px; height:46px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:10px; color:var(--blue); background:var(--tint); flex:none; }
+.tarihKutusu b { line-height:1; }
+.tarihKutusu small { font-size:.65rem; text-transform:uppercase; }
+.oturumGovde { display:flex; flex-direction:column; flex:1; min-width:0; }
+.oturumGovde b { font-size:.81rem; }
+.oturumGovde small { color:var(--muted); font-size:.68rem; }
+.oturumEylem { display:flex; align-items:center; justify-content:flex-end; gap:7px; flex-wrap:wrap; }
+.durum { padding:3px 8px; border-radius:50px; font-size:.65rem; font-weight:700; background:var(--tint); }
+.planlandi { color:var(--blue); }
+.iptal { color:var(--kirmizi); }
+.metinButon { border:0; background:none; color:var(--kirmizi); font-size:.7rem; cursor:pointer; }
+.miniBos { color:var(--muted); font-size:.76rem; padding:12px 0; }
+.bos { display:flex; flex-direction:column; align-items:center; text-align:center; padding:48px 20px; color:var(--muted); }
+.bos span { font-size:2rem; margin-bottom:8px; }
+.bos b { color:var(--text); }
+.bos p { font-size:.82rem; margin-top:3px; }
+@media (max-width:900px) {
+  .formIzgara { grid-template-columns:repeat(2,1fr); }
+  .ikiKolon { grid-template-columns:1fr; }
+  .ikiKolon > div + div { border-left:0; padding-left:0; border-top:1px solid var(--border); padding-top:20px; }
+  .dersForm { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px) {
+  .ustEylem, .sinifBas, .oturum { align-items:flex-start; flex-direction:column; }
+  .formIzgara, .dersForm { grid-template-columns:1fr; }
+  .sinifBas .tag { align-self:flex-start; }
+  .oturum { position:relative; padding-left:66px; }
+  .tarihKutusu { position:absolute; left:10px; top:10px; }
+  .oturumEylem { justify-content:flex-start; }
+}

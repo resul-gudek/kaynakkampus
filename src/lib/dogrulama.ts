@@ -12,6 +12,13 @@ import {
 
 const isoTarih = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Geçersiz tarih");
 const saat = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Geçersiz saat").or(z.literal(""));
+/** Opsiyonel e-posta: boş bırakılabilir, doluysa biçimi doğrulanır */
+const epostaOpsiyonel = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .refine((s) => s === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s), "Geçersiz e-posta adresi")
+  .default("");
 
 export const OdevSemasi = z.object({
   ogrenciId: z.string().min(1),
@@ -105,6 +112,7 @@ export const OgrenciEkleSemasi = z.object({
   hedef: z.string().trim().default(""),
   telefon: z.string().trim().default(""),
   veliTelefon: z.string().trim().default(""),
+  eposta: epostaOpsiyonel,
 });
 
 export const KocEkleSemasi = z.object({
@@ -112,4 +120,40 @@ export const KocEkleSemasi = z.object({
   kullanici: z.string().trim().min(3, "Kullanıcı adı en az 3 karakter"),
   sifre: z.string().min(4, "Şifre en az 4 karakter"),
   brans: z.string().trim().default(""),
+  eposta: epostaOpsiyonel,
+});
+
+export const KullaniciEkleSemasi = z.object({
+  rol: z.enum(["admin", "koc", "ogrenci"], "Geçerli bir rol seçin"),
+  ad: z.string().trim().min(1, "Ad Soyad gerekli"),
+  kullanici: z.string().trim().min(3, "Kullanıcı adı en az 3 karakter"),
+  sifre: z.string().min(4, "Şifre en az 4 karakter"),
+  eposta: epostaOpsiyonel,
+  brans: z.string().trim().default(""),
+  sinif: z.string().trim().default(""),
+  hedef: z.string().trim().default(""),
+  kocId: z.string().trim().default(""),
+  telefon: z.string().trim().default(""),
+  veliTelefon: z.string().trim().default(""),
+});
+
+/* ── E-posta altyapısı ─────────────────────────────────────── */
+
+export const MailAyarSemasi = z.object({
+  aktif: z.boolean().default(false),
+  sunucu: z.string().trim().default(""),
+  port: z.coerce.number().int().min(1).max(65535).default(587),
+  guvenli: z.boolean().default(false),
+  kullaniciAdi: z.string().trim().default(""),
+  sifre: z.string().default(""), // boş bırakılırsa mevcut şifre korunur (actions/mail.ts)
+  gonderenAd: z.string().trim().default("Kaynak Akademi"),
+  gonderenAdres: epostaOpsiyonel,
+  hatirlatmaSaat: z.coerce.number().int().min(1, "En az 1 saat").max(168, "En çok 168 saat (7 gün)").default(24),
+});
+
+export const MailSablonSemasi = z.object({
+  anahtar: z.string().trim().min(1),
+  konu: z.string().trim().min(1, "Konu gerekli"),
+  govde: z.string().trim().min(1, "Gövde gerekli"),
+  aktif: z.boolean().default(true),
 });

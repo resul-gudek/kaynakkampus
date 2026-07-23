@@ -1,137 +1,197 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
-import KocYonetimi, { type KocGorunum } from "./KocYonetimi";
-import AktivitePaneli, { type Aktivite } from "./AktivitePaneli";
+import stil from "./dashboard.module.css";
 
-export const metadata: Metadata = { title: "Yönetim – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Dashboard – Kaynak Akademi" };
 
-const CEVRIMICI_PENCERE_DK = 5;
-
-/* "Bugün · 14:35" / "20.07.2026 · 14:35" (İstanbul saati) */
-function zamanStr(t: Date): string {
-  const gunFmt = new Intl.DateTimeFormat("tr-TR", {
-    timeZone: "Europe/Istanbul", day: "2-digit", month: "2-digit", year: "numeric",
-  });
-  const saatFmt = new Intl.DateTimeFormat("tr-TR", {
-    timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit",
-  });
-  const gun = gunFmt.format(t);
-  return (gun === gunFmt.format(new Date()) ? "Bugün" : gun) + " · " + saatFmt.format(t);
+function yuzde(parca: number, toplam: number): number {
+  if (toplam === 0) return 0;
+  return Math.round((parca / toplam) * 100);
 }
 
-/* "az önce" / "3 dk önce" / "2 sa önce" */
-function goreliZaman(t: Date): string {
-  const sn = Math.max(0, Math.round((Date.now() - t.getTime()) / 1000));
-  if (sn < 60) return "az önce";
-  const dk = Math.round(sn / 60);
-  if (dk < 60) return `${dk} dk önce`;
-  return `${Math.round(dk / 60)} sa önce`;
-}
-
-/* User-agent → "Chrome · Windows" gibi kısa etiket */
-function tarayiciKisalt(ua: string): string {
-  if (!ua) return "";
-  const t = ua.includes("Edg/") ? "Edge"
-    : ua.includes("OPR/") || ua.includes("Opera") ? "Opera"
-    : ua.includes("Firefox/") ? "Firefox"
-    : ua.includes("Chrome/") ? "Chrome"
-    : ua.includes("Safari/") ? "Safari"
-    : ua.includes("curl") ? "curl"
-    : "Diğer";
-  const os = ua.includes("Windows") ? "Windows"
-    : ua.includes("Android") ? "Android"
-    : ua.includes("iPhone") || ua.includes("iPad") ? "iOS"
-    : ua.includes("Mac OS") ? "macOS"
-    : ua.includes("Linux") ? "Linux"
-    : "";
-  return os ? `${t} · ${os}` : t;
-}
-
-export default async function AdminPanel() {
+export default async function AdminDashboard() {
   const admin = await aktifKullanici("admin");
-
-  const simdi = new Date();
-  const cevrimiciEsigi = new Date(simdi.getTime() - CEVRIMICI_PENCERE_DK * 60_000);
-  const son24s = new Date(simdi.getTime() - 24 * 60 * 60_000);
-  const bugunBasi = new Date(simdi);
+  const bugunBasi = new Date();
   bugunBasi.setHours(0, 0, 0, 0);
 
-  const [koclar, cevrimici, girisler, son24sAktif, toplamKullanici, bugunGirisler, ogrenciToplam, atanmamis] =
+  const [koclar, ogrenciToplam, atanmamis, bekleyenOdev, yaklasanDers, bugunGirisler] =
     await Promise.all([
       prisma.kullanici.findMany({
         where: { rol: "koc" },
-        orderBy: { ad: "asc" },
-        include: { _count: { select: { ogrenciler: true } } },
+        select: {
+          id: true,
+          ad: true,
+          aktif: true,
+          _count: { select: { ogrenciler: true } },
+        },
       }),
-      prisma.kullanici.findMany({
-        where: { sonGorulme: { gte: cevrimiciEsigi } },
-        orderBy: { sonGorulme: "desc" },
-        select: { id: true, ad: true, kullanici: true, rol: true, sonGorulme: true },
+      prisma.kullanici.count({ where: { rol: "ogrenci" } }),
+      prisma.kullanici.count({ where: { rol: "ogrenci", kocId: null } }),
+      prisma.odev.count({ where: { durum: "bekliyor" } }),
+      prisma.ozelDers.count({
+        where: { durum: "planlandi", tarih: { gte: bugunBasi } },
       }),
-      prisma.girisKaydi.findMany({
-        take: 50,
-        orderBy: { zaman: "desc" },
-        include: { kullanici: { select: { ad: true, kullanici: true, rol: true } } },
-      }),
-      prisma.kullanici.count({ where: { sonGorulme: { gte: son24s } } }),
-      prisma.kullanici.count(),
       prisma.girisKaydi.findMany({
         where: { zaman: { gte: bugunBasi } },
         select: { kullaniciId: true },
         distinct: ["kullaniciId"],
       }),
-      prisma.kullanici.count({ where: { rol: "ogrenci" } }),
-      prisma.kullanici.count({ where: { rol: "ogrenci", kocId: null } }),
     ]);
 
-  const kocGorunum: KocGorunum[] = koclar.map((k) => ({
-    id: k.id,
-    ad: k.ad,
-    kullanici: k.kullanici,
-    brans: k.brans ?? "",
-    aktif: k.aktif,
-    ogrenciSayisi: k._count.ogrenciler,
-  }));
-
-  const aktivite: Aktivite = {
-    cevrimici: cevrimici.map((k) => ({
-      id: k.id,
-      ad: k.ad,
-      kullanici: k.kullanici,
-      rol: k.rol,
-      sonGorulme: k.sonGorulme ? goreliZaman(k.sonGorulme) : "",
-    })),
-    girisler: girisler.map((g) => ({
-      id: g.id,
-      ad: g.kullanici.ad,
-      kullanici: g.kullanici.kullanici,
-      rol: g.kullanici.rol,
-      zaman: zamanStr(g.zaman),
-      ip: g.ip,
-      tarayici: tarayiciKisalt(g.tarayici),
-    })),
-    sayilar: {
-      cevrimici: cevrimici.length,
-      bugunGiris: bugunGirisler.length,
-      son24sAktif,
-      toplamKullanici,
-    },
-  };
+  const aktifKoc = koclar.filter((k) => k.aktif).length;
+  const atanmis = ogrenciToplam - atanmamis;
+  const enYogunKoclar = [...koclar]
+    .sort((a, b) => b._count.ogrenciler - a._count.ogrenciler)
+    .slice(0, 5);
+  const enYuksekOgrenci = Math.max(
+    1,
+    ...enYogunKoclar.map((k) => k._count.ogrenciler)
+  );
 
   return (
-    <main className="container" style={{ maxWidth: 980, paddingBottom: 40 }}>
-      <div className="panel-bas">
-        <h1>
-          Yönetim <span>Paneli</span>
-        </h1>
-        <p>
-          Hoş geldin, {admin.ad}. Toplam {kocGorunum.length} koç · {ogrenciToplam} öğrenci
-          {atanmamis > 0 && ` (${atanmamis} atanmamış)`}
-        </p>
-      </div>
-      <AktivitePaneli veri={aktivite} />
-      <KocYonetimi koclar={kocGorunum} />
+    <main className={`container ${stil.sayfa}`}>
+      <section className={stil.hero}>
+        <div className={stil.heroIcerik}>
+          <span className={stil.ustEtiket}>YÖNETİM MERKEZİ</span>
+          <h1>Günaydın, {admin.ad.split(" ")[0]} 👋</h1>
+          <p>
+            Akademinin genel durumunu tek bakışta gör, ihtiyaç duyduğun yönetim
+            ekranına hızlıca geç.
+          </p>
+        </div>
+        <div className={stil.heroIsaret} aria-hidden="true">
+          <span>KA</span>
+        </div>
+      </section>
+
+      <section className={stil.statGrid} aria-label="Genel istatistikler">
+        <Link href="/admin/koclar" className={`${stil.statKart} ${stil.mavi}`}>
+          <span className={stil.statIkon}>👩‍🏫</span>
+          <span>
+            <small>Toplam koç</small>
+            <b>{koclar.length}</b>
+            <em>{aktifKoc} aktif koç</em>
+          </span>
+        </Link>
+        <div className={`${stil.statKart} ${stil.turkuaz}`}>
+          <span className={stil.statIkon}>🎓</span>
+          <span>
+            <small>Toplam öğrenci</small>
+            <b>{ogrenciToplam}</b>
+            <em>{atanmis} öğrenci atanmış</em>
+          </span>
+        </div>
+        <div className={`${stil.statKart} ${stil.turuncu}`}>
+          <span className={stil.statIkon}>📚</span>
+          <span>
+            <small>Bekleyen ödev</small>
+            <b>{bekleyenOdev}</b>
+            <em>Takip edilmesi gereken</em>
+          </span>
+        </div>
+        <Link href="/admin/aktivite" className={`${stil.statKart} ${stil.yesil}`}>
+          <span className={stil.statIkon}>↗</span>
+          <span>
+            <small>Bugün giriş yapan</small>
+            <b>{bugunGirisler.length}</b>
+            <em>Aktiviteyi görüntüle</em>
+          </span>
+        </Link>
+      </section>
+
+      <section className={stil.anaGrid}>
+        <div className={stil.kart}>
+          <div className={stil.kartBaslik}>
+            <div>
+              <span className={stil.kucukBaslik}>GENEL BAKIŞ</span>
+              <h2>Öğrenci yerleşimi</h2>
+            </div>
+            <span className={stil.yuzdeRozet}>{yuzde(atanmis, ogrenciToplam)}%</span>
+          </div>
+
+          <div className={stil.buyukMetrik}>
+            <b>{atanmis}</b>
+            <span>/ {ogrenciToplam} öğrenci bir koça atanmış</span>
+          </div>
+          <div className={stil.ilerleme}>
+            <span style={{ width: `${yuzde(atanmis, ogrenciToplam)}%` }} />
+          </div>
+          <div className={stil.metrikAlt}>
+            <span><i className={stil.atanmisNokta} />Atanmış: <b>{atanmis}</b></span>
+            <span><i className={stil.atanmamisNokta} />Atanmamış: <b>{atanmamis}</b></span>
+          </div>
+
+          {atanmamis > 0 && (
+            <div className={stil.uyari}>
+              <span>!</span>
+              <p><b>{atanmamis} öğrenci</b> henüz bir koça atanmamış.</p>
+              <Link href="/admin/koclar">Koçları yönet →</Link>
+            </div>
+          )}
+        </div>
+
+        <div className={stil.kart}>
+          <div className={stil.kartBaslik}>
+            <div>
+              <span className={stil.kucukBaslik}>DAĞILIM</span>
+              <h2>Koç yoğunluğu</h2>
+            </div>
+            <Link href="/admin/koclar" className={stil.metinLink}>Tümünü gör →</Link>
+          </div>
+          <div className={stil.kocListe}>
+            {enYogunKoclar.map((k) => (
+              <div className={stil.kocSatir} key={k.id}>
+                <span className={stil.kocAvatar}>{k.ad.slice(0, 1).toLocaleUpperCase("tr-TR")}</span>
+                <div>
+                  <div className={stil.kocBilgi}>
+                    <b>{k.ad}</b>
+                    <span>{k._count.ogrenciler} öğrenci</span>
+                  </div>
+                  <div className={stil.miniIlerleme}>
+                    <span style={{ width: `${(k._count.ogrenciler / enYuksekOgrenci) * 100}%` }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+            {enYogunKoclar.length === 0 && (
+              <div className={stil.bosDurum}>Henüz kayıtlı koç bulunmuyor.</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className={stil.altGrid}>
+        <div className={stil.kart}>
+          <div className={stil.kartBaslik}>
+            <div>
+              <span className={stil.kucukBaslik}>HIZLI ERİŞİM</span>
+              <h2>Yönetim araçları</h2>
+            </div>
+          </div>
+          <div className={stil.hizliGrid}>
+            <Link href="/admin/koclar" className={stil.hizliKart}>
+              <span>👩‍🏫</span><div><b>Koç yönetimi</b><small>Listele, ekle ve düzenle</small></div><i>→</i>
+            </Link>
+            <Link href="/admin/aktivite" className={stil.hizliKart}>
+              <span>📡</span><div><b>Aktivite merkezi</b><small>Anlık durum ve girişler</small></div><i>→</i>
+            </Link>
+            <Link href="/admin/mail" className={stil.hizliKart}>
+              <span>✉️</span><div><b>E-posta yönetimi</b><small>Ayarlar ve gönderim kuyruğu</small></div><i>→</i>
+            </Link>
+          </div>
+        </div>
+
+        <div className={`${stil.kart} ${stil.dersKart}`}>
+          <span className={stil.dersIkon}>🗓️</span>
+          <div>
+            <small>PLANLANAN ÖZEL DERSLER</small>
+            <b>{yaklasanDers}</b>
+            <p>Bugün ve sonrasında planlanan ders</p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

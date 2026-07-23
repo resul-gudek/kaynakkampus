@@ -26,6 +26,9 @@ export default auth((req) => {
   if (yol.startsWith("/admin") && rol !== "admin") {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
+  if ((yol.startsWith("/siniflar") || yol.startsWith("/canli-ders")) && !["koc", "ogrenci"].includes(rol)) {
+    return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
+  }
   // Bildirimler: koç ve öğrenci; admin'in bildirimi yok
   if (yol.startsWith("/bildirimler") && rol === "admin") {
     return NextResponse.redirect(new URL("/admin", req.nextUrl));
@@ -35,5 +38,12 @@ export default auth((req) => {
 
 /* DİKKAT: açık liste — negatif catch-all public/*.html dosyalarını yakalar, kullanma */
 export const config = {
-  matcher: ["/koc/:path*", "/ogrenci/:path*", "/admin/:path*", "/bildirimler"],
+  matcher: [
+    "/koc/:path*",
+    "/ogrenci/:path*",
+    "/admin/:path*",
+    "/siniflar/:path*",
+    "/canli-ders/:path*",
+    "/bildirimler",
+  ],
 };

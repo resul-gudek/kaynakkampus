@@ -40,15 +40,18 @@ model Kullanici {
   olusturma  DateTime  @default(now())
   sonGorulme DateTime? // son istek zamanı (çevrimiçi tespiti; aktifKullanici içinde güncellenir)
 
-  odevlerOgrenci  Odev[]     @relation("OdevOgrenci")
-  odevlerKoc      Odev[]     @relation("OdevKoc")
-  takipOgrenci    Takip[]    @relation("TakipOgrenci")
-  takipKoc        Takip[]    @relation("TakipKoc")
+  odevlerOgrenci  Odev[]           @relation("OdevOgrenci")
+  odevlerKoc      Odev[]           @relation("OdevKoc")
+  takipOgrenci    Takip[]          @relation("TakipOgrenci")
+  takipKoc        Takip[]          @relation("TakipKoc")
   denemeler       Deneme[]
-  yolOgrenci      YolAdimi[] @relation("YolOgrenci")
-  yolKoc          YolAdimi[] @relation("YolKoc")
-  ozelDersOgrenci OzelDers[] @relation("OzelDersOgrenci")
-  ozelDersKoc     OzelDers[] @relation("OzelDersKoc")
+  yolOgrenci      YolAdimi[]       @relation("YolOgrenci")
+  yolKoc          YolAdimi[]       @relation("YolKoc")
+  ozelDersOgrenci OzelDers[]       @relation("OzelDersOgrenci")
+  ozelDersKoc     OzelDers[]       @relation("OzelDersKoc")
+  onlineSiniflar  OnlineSinif[]    @relation("OnlineSinifOgretmen")
+  sinifUyelikleri OnlineSinifUye[]
+  dersKatilimlari DersKatilim[]
   bildirimler     Bildirim[]
   girisKayitlari  GirisKaydi[]
 }
@@ -143,28 +146,127 @@ model YolAdimi {
 }
 
 model OzelDers {
-  id        String    @id @default(cuid())
+  id        String        @id @default(cuid())
   ogrenciId String
   kocId     String
-  ogrenci   Kullanici @relation("OzelDersOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  koc       Kullanici @relation("OzelDersKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ogrenci   Kullanici     @relation("OzelDersOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  koc       Kullanici     @relation("OzelDersKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ders      String
-  konu      String    @default("")
-  tarih     DateTime  @db.Date
-  saat      String    @default("") // "18:00"
-  sure      Int       @default(60) // dakika
-  ucret     Int       @default(0) // ₺
-  odendi    Boolean   @default(false)
-  durum     String    @default("planlandi") // "talep" | "planlandi" | "yapildi" | "reddedildi" | "iptal"
-  olusturan String    @default("koc") // "koc" | "ogrenci"
-  mesaj     String    @default("") @db.NVarChar(Max) // talep notu
-  redNotu   String    @default("") @db.NVarChar(Max)
-  not_      String    @default("") @map("not") @db.NVarChar(Max) // ders sonrası not
-  odev      String    @default("") @db.NVarChar(Max) // ders ödevi
-  olusturma DateTime  @default(now())
+  konu      String        @default("")
+  tarih     DateTime      @db.Date
+  saat      String        @default("") // "18:00"
+  sure      Int           @default(60) // dakika
+  ucret     Int           @default(0) // ₺
+  odendi    Boolean       @default(false)
+  durum     String        @default("planlandi") // "talep" | "planlandi" | "yapildi" | "reddedildi" | "iptal"
+  olusturan String        @default("koc") // "koc" | "ogrenci"
+  mesaj     String        @default("") @db.NVarChar(Max) // talep notu
+  redNotu   String        @default("") @db.NVarChar(Max)
+  not_      String        @default("") @map("not") @db.NVarChar(Max) // ders sonrası not
+  odev      String        @default("") @db.NVarChar(Max) // ders ödevi
+  olusturma DateTime      @default(now())
+  oturumlar DersOturumu[]
 
   @@index([ogrenciId])
   @@index([kocId])
+}
+
+// ── Online sınıf ve canlı ders altyapısı ─────────────────────────────────
+// Sınıf kalıcı gruptur; DersOturumu o sınıfın belirli tarih/saatteki dersidir.
+// Birebir özel dersler de isteğe bağlı ozelDersId ile aynı oturum altyapısını kullanır.
+
+model OnlineSinif {
+  id         String           @id @default(cuid())
+  ogretmenId String
+  ogretmen   Kullanici        @relation("OnlineSinifOgretmen", fields: [ogretmenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ad         String
+  ders       String
+  seviye     String           @default("")
+  aciklama   String           @default("") @db.NVarChar(Max)
+  kapasite   Int              @default(20)
+  aktif      Boolean          @default(true)
+  olusturma  DateTime         @default(now())
+  uyeler     OnlineSinifUye[]
+  oturumlar  DersOturumu[]
+
+  @@index([ogretmenId, aktif])
+}
+
+model OnlineSinifUye {
+  id          String      @id @default(cuid())
+  sinifId     String
+  kullaniciId String
+  sinif       OnlineSinif @relation(fields: [sinifId], references: [id], onDelete: Cascade)
+  kullanici   Kullanici   @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  katilma     DateTime    @default(now())
+
+  @@unique([sinifId, kullaniciId])
+  @@index([kullaniciId])
+}
+
+model DersOturumu {
+  id             String         @id @default(cuid())
+  sinifId        String?
+  ozelDersId     String?
+  sinif          OnlineSinif?   @relation(fields: [sinifId], references: [id], onDelete: Cascade)
+  ozelDers       OzelDers?      @relation(fields: [ozelDersId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  baslik         String
+  konu           String         @default("")
+  baslangic      DateTime
+  sure           Int            @default(60)
+  durum          String         @default("planlandi") // "planlandi" | "canli" | "tamamlandi" | "iptal"
+  saglayici      String         @default("bigbluebutton")
+  saglayiciOdaId String         @unique
+  kayitEtkin     Boolean        @default(false) // MVP'de daima false; KVKK süreci sonrası açılacak
+  olusturma      DateTime       @default(now())
+  katilimlar     DersKatilim[]
+  materyaller    DersMateryal[]
+  kayitlar       DersKaydi[]
+
+  @@index([sinifId, baslangic])
+  @@index([ozelDersId])
+  @@index([baslangic, durum])
+}
+
+model DersKatilim {
+  id          String      @id @default(cuid())
+  oturumId    String
+  kullaniciId String
+  oturum      DersOturumu @relation(fields: [oturumId], references: [id], onDelete: Cascade)
+  kullanici   Kullanici   @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ilkKatilma  DateTime?
+  sonAyrilma  DateTime?
+  toplamSure  Int         @default(0) // saniye
+  durum       String      @default("bekleniyor") // "bekleniyor" | "katildi" | "katilmadi"
+
+  @@unique([oturumId, kullaniciId])
+  @@index([kullaniciId])
+}
+
+model DersMateryal {
+  id        String      @id @default(cuid())
+  oturumId  String
+  oturum    DersOturumu @relation(fields: [oturumId], references: [id], onDelete: Cascade)
+  ad        String
+  adres     String      @db.NVarChar(Max)
+  tur       String      @default("baglanti")
+  olusturma DateTime    @default(now())
+
+  @@index([oturumId])
+}
+
+model DersKaydi {
+  id          String      @id @default(cuid())
+  oturumId    String
+  oturum      DersOturumu @relation(fields: [oturumId], references: [id], onDelete: Cascade)
+  saglayiciId String      @default("")
+  adres       String      @default("") @db.NVarChar(Max)
+  sure        Int         @default(0)
+  durum       String      @default("hazirlaniyor")
+  saklamaSonu DateTime?
+  olusturma   DateTime    @default(now())
+
+  @@index([oturumId])
 }
 
 // ── E-posta altyapısı ────────────────────────────────────────

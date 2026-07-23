@@ -46,6 +46,7 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
                   kullanici: f.get("kullanici"),
                   sifre: f.get("sifre"),
                   brans: f.get("brans"),
+                  eposta: f.get("eposta"),
                 }),
               "Koç eklendi."
             );
@@ -67,6 +68,10 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
           <div className={stil.formGrup}>
             <label htmlFor="brans">Branş</label>
             <input id="brans" name="brans" placeholder="örn. Matematik / Rehberlik" />
+          </div>
+          <div className={stil.formGrup}>
+            <label htmlFor="eposta">E-posta (hoş geldin maili için)</label>
+            <input id="eposta" name="eposta" type="email" placeholder="ornek@eposta.com" />
           </div>
           <button type="submit" className="btn btn-primary btn-kucuk" disabled={bekliyor}>
             Ekle

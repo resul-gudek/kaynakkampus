@@ -33,6 +33,17 @@ export default function BildirimListe({
   /* Bildirime tıklanınca: okundu işaretle, hedefi varsa ilgili panelde ilgili kayda git */
   function tikla(b: BildirimGorunum) {
     if (b.hedefTur && b.hedefKayitId) {
+      if (b.hedefTur === "sinif" || b.hedefTur === "oturum") {
+        const url =
+          b.hedefTur === "oturum"
+            ? `/canli-ders/${encodeURIComponent(b.hedefKayitId)}`
+            : `/siniflar?sinif=${encodeURIComponent(b.hedefKayitId)}`;
+        baslat(async () => {
+          await bildirimOkundu(b.id, true);
+          router.push(url);
+        });
+        return;
+      }
       const sekme = b.hedefTur === "odev" ? "odevler" : "ozel";
       const url =
         rol === "koc"
