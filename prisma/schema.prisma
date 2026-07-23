@@ -1,0 +1,166 @@
+// Kaynak Akademi — Koçluk Sistemi veri modeli (MSSQL)
+// Not: Prisma sqlserver enum desteklemez; durum/rol alanları String'dir ve
+// zod (src/lib/dogrulama.ts) + migration'a elle eklenen CHECK constraint'lerle doğrulanır.
+// Kullanici'ye çift FK (ogrenciId+kocId) ve self-FK nedeniyle SQL Server çoklu
+// cascade yolu kabul etmez → tüm kullanıcı ilişkileri NoAction; silmeler app
+// tarafında $transaction ile yapılır.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Kullanici {
+  id        String  @id @default(cuid())
+  rol       String // "admin" | "koc" | "ogrenci"
+  ad        String
+  kullanici String  @unique // tr-TR küçük harfe normalize edilmiş kullanıcı adı
+  sifreHash String
+  aktif     Boolean @default(true)
+
+  // koç alanı
+  brans String?
+
+  // öğrenci alanları
+  sinif       String?
+  hedef       String?
+  kocId       String?
+  koc         Kullanici?  @relation("KocOgrenci", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ogrenciler  Kullanici[] @relation("KocOgrenci")
+  telefon     String      @default("")
+  veliTelefon String      @default("")
+  profil      String?     @db.NVarChar(Max) // başlangıç seviye profili (JSON, zod ProfilSemasi)
+
+  olusturma DateTime @default(now())
+
+  odevlerOgrenci  Odev[]     @relation("OdevOgrenci")
+  odevlerKoc      Odev[]     @relation("OdevKoc")
+  takipOgrenci    Takip[]    @relation("TakipOgrenci")
+  takipKoc        Takip[]    @relation("TakipKoc")
+  denemeler       Deneme[]
+  yolOgrenci      YolAdimi[] @relation("YolOgrenci")
+  yolKoc          YolAdimi[] @relation("YolKoc")
+  ozelDersOgrenci OzelDers[] @relation("OzelDersOgrenci")
+  ozelDersKoc     OzelDers[] @relation("OzelDersKoc")
+  bildirimler     Bildirim[]
+}
+
+model Odev {
+  id         String    @id @default(cuid())
+  ogrenciId  String
+  kocId      String
+  ogrenci    Kullanici @relation("OdevOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  koc        Kullanici @relation("OdevKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ders       String
+  konu       String
+  aciklama   String    @default("") @db.NVarChar(Max)
+  kaynak     String    @default("")
+  soruSayisi Int?
+  sonTarih   DateTime? @db.Date
+  durum      String    @default("bekliyor") // "bekliyor" | "tamamlandi"
+  olusturma  DateTime  @default(now())
+
+  @@index([ogrenciId])
+  @@index([kocId])
+}
+
+model Takip {
+  id         String    @id @default(cuid())
+  ogrenciId  String
+  kocId      String
+  ogrenci    Kullanici @relation("TakipOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  koc        Kullanici @relation("TakipKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  gun        String // "Pazartesi" … "Pazar"
+  gorev      String    @db.NVarChar(Max)
+  tamamlandi Boolean   @default(false)
+
+  @@index([ogrenciId])
+}
+
+model Deneme {
+  id        String       @id @default(cuid())
+  ogrenciId String
+  ogrenci   Kullanici    @relation(fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ad        String
+  tur       String // "TYT" | "AYT" | "LGS" | "Branş"
+  tarih     DateTime     @db.Date
+  net       Float // toplam net
+  dersler   DenemeDers[]
+
+  @@index([ogrenciId])
+}
+
+model DenemeDers {
+  id            String @id @default(cuid())
+  denemeId      String
+  deneme        Deneme @relation(fields: [denemeId], references: [id], onDelete: Cascade)
+  ders          String
+  dogru         Int
+  yanlis        Int
+  bos           Int
+  net           Float
+  yanlisKonular String @default("[]") @db.NVarChar(Max) // JSON string dizisi
+
+  @@index([denemeId])
+}
+
+model YolAdimi {
+  id         String    @id @default(cuid())
+  ogrenciId  String
+  kocId      String
+  ogrenci    Kullanici @relation("YolOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  koc        Kullanici @relation("YolKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sira       Int
+  ders       String
+  konu       String
+  hedef      String    @default("")
+  xp         Int       @default(50)
+  tamamlandi Boolean   @default(false)
+
+  @@unique([ogrenciId, sira])
+}
+
+model OzelDers {
+  id        String    @id @default(cuid())
+  ogrenciId String
+  kocId     String
+  ogrenci   Kullanici @relation("OzelDersOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  koc       Kullanici @relation("OzelDersKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ders      String
+  konu      String    @default("")
+  tarih     DateTime  @db.Date
+  saat      String    @default("") // "18:00"
+  sure      Int       @default(60) // dakika
+  ucret     Int       @default(0) // ₺
+  odendi    Boolean   @default(false)
+  durum     String    @default("planlandi") // "talep" | "planlandi" | "yapildi" | "reddedildi" | "iptal"
+  olusturan String    @default("koc") // "koc" | "ogrenci"
+  mesaj     String    @default("") @db.NVarChar(Max) // talep notu
+  redNotu   String    @default("") @db.NVarChar(Max)
+  not_      String    @default("") @map("not") @db.NVarChar(Max) // ders sonrası not
+  odev      String    @default("") @db.NVarChar(Max) // ders ödevi
+  olusturma DateTime  @default(now())
+
+  @@index([ogrenciId])
+  @@index([kocId])
+}
+
+model Bildirim {
+  id             String    @id @default(cuid())
+  aliciId        String
+  alici          Kullanici @relation(fields: [aliciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ikon           String
+  metin          String    @db.NVarChar(Max)
+  hedefTur       String? // "ozel" | "odev"
+  hedefOgrenciId String?
+  hedefKayitId   String?
+  tarih          DateTime  @default(now())
+  okundu         Boolean   @default(false)
+
+  @@index([aliciId, okundu])
+}
