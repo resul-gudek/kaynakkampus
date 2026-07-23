@@ -34,9 +34,11 @@ model Kullanici {
   ogrenciler  Kullanici[] @relation("KocOgrenci")
   telefon     String      @default("")
   veliTelefon String      @default("")
+  eposta      String      @default("") // hoş geldin / ders hatırlatma mailleri için (opsiyonel)
   profil      String?     @db.NVarChar(Max) // başlangıç seviye profili (JSON, zod ProfilSemasi)
 
-  olusturma DateTime @default(now())
+  olusturma  DateTime  @default(now())
+  sonGorulme DateTime? // son istek zamanı (çevrimiçi tespiti; aktifKullanici içinde güncellenir)
 
   odevlerOgrenci  Odev[]     @relation("OdevOgrenci")
   odevlerKoc      Odev[]     @relation("OdevKoc")
@@ -48,6 +50,21 @@ model Kullanici {
   ozelDersOgrenci OzelDers[] @relation("OzelDersOgrenci")
   ozelDersKoc     OzelDers[] @relation("OzelDersKoc")
   bildirimler     Bildirim[]
+  girisKayitlari  GirisKaydi[]
+}
+
+// ── Kullanıcı aktivite izleme ────────────────────────────────
+// Her başarılı giriş bir kayıt üretir (admin panelindeki aktivite modülü).
+model GirisKaydi {
+  id          String    @id @default(cuid())
+  kullaniciId String
+  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  zaman       DateTime  @default(now())
+  ip          String    @default("")
+  tarayici    String    @default("") @db.NVarChar(Max) // user-agent
+
+  @@index([kullaniciId, zaman])
+  @@index([zaman])
 }
 
 model Odev {
@@ -148,6 +165,56 @@ model OzelDers {
 
   @@index([ogrenciId])
   @@index([kocId])
+}
+
+// ── E-posta altyapısı ────────────────────────────────────────
+// MailAyar: tek satırlık SMTP yapılandırması (id her zaman 1).
+// MailSablon: anahtarla erişilen, {{degisken}} yer tutuculu şablonlar.
+// MailKuyruk: gönderilecek/gönderilen mailler; worker (src/lib/mail-isleyici.ts)
+// bekleyenleri periyodik işler, hata alırsa geri-çekilmeli (backoff) tekrar dener.
+
+model MailAyar {
+  id             Int      @id @default(1)
+  aktif          Boolean  @default(false) // kapalıyken kuyruklama ve gönderim durur
+  sunucu         String   @default("") // SMTP sunucusu (örn. smtp.gmail.com)
+  port           Int      @default(587)
+  guvenli        Boolean  @default(false) // true = SSL/TLS (465), false = STARTTLS (587)
+  kullaniciAdi   String   @default("") // SMTP kullanıcı adı
+  sifre          String   @default("") // SMTP şifresi / uygulama şifresi
+  gonderenAd     String   @default("Kaynak Akademi")
+  gonderenAdres  String   @default("") // From adresi
+  hatirlatmaSaat Int      @default(24) // ders hatırlatması kaç saat önce gönderilsin
+  guncelleme     DateTime @default(now()) @updatedAt
+}
+
+model MailSablon {
+  id         String   @id @default(cuid())
+  anahtar    String   @unique // "hosgeldin" | "ders-hatirlatma"
+  ad         String
+  konu       String // {{degisken}} yer tutucular kullanılabilir
+  govde      String   @db.NVarChar(Max) // HTML gövde, {{degisken}} yer tutucular
+  aktif      Boolean  @default(true) // pasif şablon kuyruklanmaz
+  guncelleme DateTime @default(now()) @updatedAt
+}
+
+model MailKuyruk {
+  id        String    @id @default(cuid())
+  alici     String // alıcı e-posta adresi
+  aliciAd   String    @default("")
+  konu      String
+  govde     String    @db.NVarChar(Max) // şablondan doldurulmuş nihai HTML
+  durum     String    @default("bekliyor") // "bekliyor" | "gonderildi" | "hata"
+  deneme    Int       @default(0)
+  sonHata   String    @default("") @db.NVarChar(Max)
+  planlanan DateTime  @default(now()) // bu tarihten önce gönderilmez
+  gonderim  DateTime? // başarılı gönderim anı
+  sablon    String    @default("") // kaynak şablon anahtarı (bilgi amaçlı)
+  refTur    String    @default("") // tekrar kuyruklamayı önlemek için kaynak: "kullanici" | "ozelders"
+  refId     String    @default("")
+  olusturma DateTime  @default(now())
+
+  @@index([durum, planlanan])
+  @@index([sablon, refTur, refId])
 }
 
 model Bildirim {

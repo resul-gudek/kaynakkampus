@@ -42,3 +42,32 @@
 }
 @media (max-width: 860px) { .form { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .form { grid-template-columns: 1fr; } }
+
+/* ── Aktivite modülü ─────────────────────────────────── */
+.statSatir { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 4px; }
+.statKutu {
+  background: var(--bg-soft); border-radius: 12px; padding: 14px 16px;
+}
+.statKutu b { font-size: 1.35rem; display: block; }
+.statKutu small { color: var(--muted); font-size: .76rem; }
+@media (max-width: 860px) { .statSatir { grid-template-columns: repeat(2, 1fr); } }
+
+.cevrimiciSatir {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-bottom: 1px solid rgba(26,60,143,.08);
+}
+.cevrimiciSatir:last-child { border-bottom: none; }
+.nokta {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  background: var(--yesil); box-shadow: 0 0 0 3px rgba(22,163,74,.18);
+}
+.noktaBos { composes: nokta; background: #cbd5e1; box-shadow: none; }
+.rolEtiket {
+  display: inline-flex; padding: 2px 10px; border-radius: 50px;
+  font-size: .7rem; font-weight: 700;
+}
+.rolKoc { composes: rolEtiket; background: rgba(26,60,143,.1); color: var(--blue); }
+.rolOgrenci { composes: rolEtiket; background: rgba(14,165,201,.12); color: #0284a8; }
+.rolAdmin { composes: rolEtiket; background: rgba(249,115,22,.12); color: var(--orange); }
+.sonGorulme { margin-left: auto; color: var(--muted); font-size: .78rem; white-space: nowrap; }
+.yenileBilgi { color: var(--muted); font-size: .74rem; font-weight: 500; }

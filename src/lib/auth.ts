@@ -17,7 +17,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         sifre: { label: "Şifre", type: "password" },
         rol: { label: "Rol" },
       },
-      async authorize(creds) {
+      async authorize(creds, istek) {
         const kullanici = kullaniciAdiNormalize(String(creds?.kullanici ?? ""));
         const sifre = String(creds?.sifre ?? "");
         const rol = String(creds?.rol ?? "");
@@ -38,7 +38,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        log.info({ kullaniciId: u.id, kullanici, rol }, "giriş başarılı");
+        // Aktivite modülü: giriş kaydı (IP + tarayıcı) ve son görülme
+        const basliklar = istek?.headers instanceof Headers ? istek.headers : null;
+        const ip = (basliklar?.get("x-forwarded-for") ?? "").split(",")[0].trim();
+        const tarayici = basliklar?.get("user-agent") ?? "";
+        await prisma.$transaction([
+          prisma.girisKaydi.create({ data: { kullaniciId: u.id, ip, tarayici } }),
+          prisma.kullanici.update({ where: { id: u.id }, data: { sonGorulme: new Date() } }),
+        ]);
+
+        log.info({ kullaniciId: u.id, kullanici, rol, ip }, "giriş başarılı");
         return { id: u.id, name: u.ad, rol: u.rol };
       },
     }),

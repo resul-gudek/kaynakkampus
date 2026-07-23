@@ -13,5 +13,13 @@ export async function aktifKullanici(rol?: string) {
   const u = await prisma.kullanici.findUnique({ where: { id: oturum.user.id } });
   if (!u || !u.aktif) redirect("/giris");
   if (rol && u.rol !== rol) redirect(ROL_ANASAYFA[u.rol] ?? "/giris");
+
+  // Çevrimiçi tespiti için heartbeat: dakikada en çok bir kez sonGorulme güncellenir
+  const simdi = Date.now();
+  if (!u.sonGorulme || simdi - u.sonGorulme.getTime() > 60_000) {
+    prisma.kullanici
+      .update({ where: { id: u.id }, data: { sonGorulme: new Date(simdi) } })
+      .catch(() => {}); // heartbeat hatası sayfayı düşürmesin
+  }
   return u;
 }
