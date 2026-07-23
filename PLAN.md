@@ -111,6 +111,9 @@ hepsi `onDelete: NoAction`; silmeler app tarafında `$transaction` ile (önce ba
 
 ## Uygulama Sırası
 
+> **Durum (23.07.2026):** Faz 0–8 tamamlandı. Tüm fazlar commit'li, production build temiz.
+> Sonraki iş: statik araçların React'e taşınması (ayrı faz, README yol haritasında).
+
 - **Faz 0** ✅: git init + ilk commit; MSSQL erişimi doğrulandı; `kaynakakademi` +
   `kaynakakademi_shadow` DB'leri Turkish_CI_AS ile oluşturuldu
 - **Faz 1**: create-next-app (TS, App Router, src/, Tailwind yok) → statikler `public/`'e,
