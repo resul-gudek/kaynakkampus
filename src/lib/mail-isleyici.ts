@@ -23,7 +23,9 @@ export function mailIsleyiciBaslat(): void {
     try {
       // dinamik import: prisma/nodemailer yalnız ilk turda yüklensin
       const { dersHatirlatmalariKuyrukla, kuyrukIsle } = await import("@/lib/mail");
+      const { veliRaporlariKuyrukla } = await import("@/lib/veli-rapor");
       await dersHatirlatmalariKuyrukla();
+      await veliRaporlariKuyrukla();
       const sonuc = await kuyrukIsle();
       if (sonuc.gonderilen || sonuc.hatali) log.info(sonuc, "kuyruk turu tamamlandı");
     } catch (e) {

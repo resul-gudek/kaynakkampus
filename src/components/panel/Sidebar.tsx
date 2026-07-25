@@ -8,13 +8,14 @@ import type { NavKalemi } from "@/lib/navigasyon";
 interface Props {
   kalemler: NavKalemi[];
   okunmamis: number;
+  okunmamisMesaj: number;
   dar: boolean;
   mobilAcik: boolean;
   onKapat: () => void;
   onDarDegistir: () => void;
 }
 
-export default function Sidebar({ kalemler, okunmamis, dar, mobilAcik, onKapat, onDarDegistir }: Props) {
+export default function Sidebar({ kalemler, okunmamis, okunmamisMesaj, dar, mobilAcik, onKapat, onDarDegistir }: Props) {
   const yol = usePathname();
   const aktifHref = kalemler
     .filter(
@@ -56,9 +57,10 @@ export default function Sidebar({ kalemler, okunmamis, dar, mobilAcik, onKapat, 
             {!dar && <div className="nav-grup-baslik">{g.ad}</div>}
             {g.kalemler.map((m) => {
               const aktif = m.href === aktifHref;
+              const sayi = m.bildirim ? okunmamis : m.mesaj ? okunmamisMesaj : 0;
               const rozet =
-                m.bildirim && okunmamis > 0 ? (
-                  <span className="menu-rozet">{okunmamis > 99 ? "99+" : okunmamis}</span>
+                sayi > 0 ? (
+                  <span className="menu-rozet">{sayi > 99 ? "99+" : sayi}</span>
                 ) : null;
               return (
                 <Link

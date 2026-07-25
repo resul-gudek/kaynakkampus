@@ -124,7 +124,7 @@ export const KocEkleSemasi = z.object({
 });
 
 export const KullaniciEkleSemasi = z.object({
-  rol: z.enum(["admin", "koc", "ogrenci"], "Geçerli bir rol seçin"),
+  rol: z.enum(["admin", "koc", "ogrenci", "veli"], "Geçerli bir rol seçin"),
   ad: z.string().trim().min(1, "Ad Soyad gerekli"),
   kullanici: z.string().trim().min(3, "Kullanıcı adı en az 3 karakter"),
   sifre: z.string().min(4, "Şifre en az 4 karakter"),
@@ -133,8 +133,15 @@ export const KullaniciEkleSemasi = z.object({
   sinif: z.string().trim().default(""),
   hedef: z.string().trim().default(""),
   kocId: z.string().trim().default(""),
+  veliId: z.string().trim().default(""),
   telefon: z.string().trim().default(""),
   veliTelefon: z.string().trim().default(""),
+});
+
+/** Koç ↔ öğrenci mesajı */
+export const MesajSemasi = z.object({
+  aliciId: z.string().min(1),
+  govde: z.string().trim().min(1, "Mesaj boş olamaz").max(4000, "Mesaj çok uzun"),
 });
 
 /* ── E-posta altyapısı ─────────────────────────────────────── */
@@ -149,6 +156,7 @@ export const MailAyarSemasi = z.object({
   gonderenAd: z.string().trim().default("Kaynak Akademi"),
   gonderenAdres: epostaOpsiyonel,
   hatirlatmaSaat: z.coerce.number().int().min(1, "En az 1 saat").max(168, "En çok 168 saat (7 gün)").default(24),
+  veliRaporAktif: z.boolean().default(false),
 });
 
 export const MailSablonSemasi = z.object({

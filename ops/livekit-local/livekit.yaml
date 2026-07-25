@@ -1,0 +1,16 @@
+# LiveKit sunucu yapılandırması (yerel geliştirme + LAN yayını).
+# Anahtar/secret .env'deki LIVEKIT_API_KEY / LIVEKIT_API_SECRET ile eşleşmelidir.
+port: 7880
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 50060
+  use_external_ip: false
+  # LAN'daki cihazların medya (ICE) adaylarında bu IP'yi görmesi gerekir;
+  # yoksa container'ın iç IP'si duyurulur ve bağlantı kurulamaz.
+  # PC'nin IP'si değişirse burayı ve sertifikayı güncelleyin (bkz. ops/lan-yayin/README.md).
+  node_ip: 192.168.1.101
+keys:
+  kaynakakademi: 2a4db42f8cfe3202dab86e08166698cf44cdb74d2218235704b8b84eae1aa832
+logging:
+  level: info

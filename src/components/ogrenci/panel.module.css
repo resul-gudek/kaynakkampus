@@ -286,6 +286,42 @@
   .dn-baslik { display: none; }
   .dn-satir { grid-template-columns: repeat(3, 1fr); }
   .dn-satir .dn-ders, .dn-satir input.dn-konular { grid-column: 1 / -1; }
+  /* Seviye formu satırı: ders adı tam satır, alanlar 2 sütun */
+  .pr-satir { grid-template-columns: repeat(2, 1fr); }
+  .pr-satir .dn-ders { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+  /* Deneme sonucu tablosu: yan kaydırma yerine sığacak şekilde küçülür,
+     "Yanlış Konular" çipleri hücre içinde sarar. */
+  .deneme-tablo { font-size: .76rem; }
+  .deneme-tablo th, .deneme-tablo td { padding: 7px 5px; white-space: normal; }
+  .deneme-tablo th:first-child, .deneme-tablo td:first-child { padding-left: 2px; }
+  .deneme-tablo .konu-cip { margin: 2px 3px 2px 0; padding: 2px 8px; font-size: .67rem; }
+
+  /* Profil ders tablosu: kart düzeni (bildiğim/eksik konu çipleri için yer gerekir) */
+  .profil-ders-tablo, .profil-ders-tablo tbody, .profil-ders-tablo tr, .profil-ders-tablo td {
+    display: block; width: 100%;
+  }
+  .profil-ders-tablo thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .profil-ders-tablo tr {
+    margin-bottom: 10px; padding: 4px 0;
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  .profil-ders-tablo td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
+  .profil-ders-tablo tr td:last-child { border-bottom: none; }
+  .profil-ders-tablo td[data-label]::before {
+    content: attr(data-label); display: block; margin-bottom: 4px;
+    color: var(--muted); font-size: .64rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+}
+
+@media (max-width: 520px) {
+  .bolum { padding: 18px 16px; margin-bottom: 16px; }
+  .ic-form { padding: 14px; }
+  .yol-ust { padding: 14px; gap: 12px; }
+  .liste-satir { padding: 12px; gap: 10px; }
 }
 
 .kutla { font-size: .85rem; font-weight: 700; color: var(--yesil); margin-bottom: 12px; display: none; }

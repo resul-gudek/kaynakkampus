@@ -9,6 +9,7 @@ interface Props {
   kullanici: { ad: string; etiket: string };
   kalemler: NavKalemi[];
   okunmamis: number;
+  okunmamisMesaj: number;
   cikisAction: () => Promise<void>;
   children: React.ReactNode;
 }
@@ -22,7 +23,7 @@ const darAbone = (cb: () => void) => {
 };
 const darOku = () => localStorage.getItem("sidebar-dar") === "1";
 
-export default function PanelKabuk({ kullanici, kalemler, okunmamis, cikisAction, children }: Props) {
+export default function PanelKabuk({ kullanici, kalemler, okunmamis, okunmamisMesaj, cikisAction, children }: Props) {
   const [mobilAcik, setMobilAcik] = useState(false);
   const dar = useSyncExternalStore(darAbone, darOku, () => false);
 
@@ -38,6 +39,7 @@ export default function PanelKabuk({ kullanici, kalemler, okunmamis, cikisAction
       <Sidebar
         kalemler={kalemler}
         okunmamis={okunmamis}
+        okunmamisMesaj={okunmamisMesaj}
         dar={dar}
         mobilAcik={mobilAcik}
         onKapat={() => setMobilAcik(false)}

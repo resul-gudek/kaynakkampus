@@ -12,7 +12,7 @@
 }
 .tablo td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .tablo tr:last-child td { border-bottom: none; }
-.tabloSarici { overflow-x: auto; }
+.tabloSarici { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 .pasif { opacity: .55; }
 .durumAktif {
@@ -71,3 +71,32 @@
 .rolAdmin { composes: rolEtiket; background: rgba(249,115,22,.12); color: var(--orange); }
 .sonGorulme { margin-left: auto; color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .yenileBilgi { color: var(--muted); font-size: .74rem; font-weight: 500; }
+
+/* ── Dar ekran: veri tabloları yan kaydırma yerine kart düzenine geçer ── */
+@media (max-width: 640px) {
+  .tabloSarici { overflow-x: visible; }
+  .tablo thead {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .tablo, .tablo tbody, .tablo tr, .tablo td { display: block; width: 100%; }
+  .tablo tr {
+    margin-bottom: 12px; padding: 4px 0;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
+  }
+  .tablo td {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 9px 16px; border-bottom: 1px solid var(--border);
+    text-align: right; white-space: normal;
+  }
+  .tablo tr td:last-child { border-bottom: none; }
+  .tablo td[data-label]::before {
+    content: attr(data-label); flex: 0 0 38%; text-align: left;
+    color: var(--muted); font-size: .66rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  /* İlk hücre (kimlik) tam genişlik başlık gibi */
+  .tablo td:first-child { justify-content: flex-start; text-align: left; }
+  .tablo td:first-child::before { display: none; }
+  .islemler { justify-content: flex-end; }
+}

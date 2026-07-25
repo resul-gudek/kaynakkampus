@@ -25,7 +25,7 @@ export const PROFIL_DERSLERI: Record<string, string[]> = {
   LGS: ["Türkçe", "Matematik", "Fen Bilimleri", "İnkılap Tarihi", "Din Kültürü", "İngilizce"],
 };
 
-export const ROLLER = ["admin", "koc", "ogrenci"] as const;
+export const ROLLER = ["admin", "koc", "ogrenci", "veli"] as const;
 export const ODEV_DURUMLARI = ["bekliyor", "tamamlandi"] as const;
 export const DENEME_TURLERI = ["TYT", "AYT", "LGS", "Branş"] as const;
 export const OZEL_DERS_DURUMLARI = ["talep", "planlandi", "yapildi", "reddedildi", "iptal"] as const;

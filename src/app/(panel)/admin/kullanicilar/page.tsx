@@ -11,7 +11,7 @@ import stil from "./kullanicilar.module.css";
 export const metadata: Metadata = { title: "Kullanıcı Listesi – Kaynak Akademi" };
 
 const SAYFA_BOYUTU = 20;
-const ROLLER = ["admin", "koc", "ogrenci"] as const;
+const ROLLER = ["admin", "koc", "ogrenci", "veli"] as const;
 
 type AramaParametreleri = Promise<Record<string, string | string[] | undefined>>;
 
@@ -73,17 +73,23 @@ export default async function KullanicilarSayfasi({
       : {}),
   };
 
-  const [toplam, aktifToplam, rolSayilari, filtreliToplam, kocSecenekleri] = await Promise.all([
-    prisma.kullanici.count(),
-    prisma.kullanici.count({ where: { aktif: true } }),
-    prisma.kullanici.groupBy({ by: ["rol"], _count: { _all: true } }),
-    prisma.kullanici.count({ where }),
-    prisma.kullanici.findMany({
-      where: { rol: "koc", aktif: true },
-      orderBy: { ad: "asc" },
-      select: { id: true, ad: true },
-    }),
-  ]);
+  const [toplam, aktifToplam, rolSayilari, filtreliToplam, kocSecenekleri, veliSecenekleri] =
+    await Promise.all([
+      prisma.kullanici.count(),
+      prisma.kullanici.count({ where: { aktif: true } }),
+      prisma.kullanici.groupBy({ by: ["rol"], _count: { _all: true } }),
+      prisma.kullanici.count({ where }),
+      prisma.kullanici.findMany({
+        where: { rol: "koc", aktif: true },
+        orderBy: { ad: "asc" },
+        select: { id: true, ad: true },
+      }),
+      prisma.kullanici.findMany({
+        where: { rol: "veli", aktif: true },
+        orderBy: { ad: "asc" },
+        select: { id: true, ad: true },
+      }),
+    ]);
 
   const sayfaSayisi = Math.max(1, Math.ceil(filtreliToplam / SAYFA_BOYUTU));
   const sayfa = Math.min(istenenSayfa, sayfaSayisi);
@@ -103,9 +109,10 @@ export default async function KullanicilarSayfasi({
       brans: true,
       sinif: true,
       koc: { select: { ad: true } },
+      veli: { select: { ad: true } },
       sonGorulme: true,
       olusturma: true,
-      _count: { select: { ogrenciler: true } },
+      _count: { select: { ogrenciler: true, cocuklar: true } },
     },
   });
 
@@ -125,7 +132,7 @@ export default async function KullanicilarSayfasi({
         <p>Tüm yönetici, koç ve öğrenci hesaplarını tek ekrandan görüntüleyin.</p>
       </div>
 
-      <KullaniciEkleFormu koclar={kocSecenekleri} />
+      <KullaniciEkleFormu koclar={kocSecenekleri} veliler={veliSecenekleri} />
 
       <section className={stil.ozetGrid} aria-label="Kullanıcı özeti">
         <div className={stil.ozetKart}>
@@ -165,6 +172,7 @@ export default async function KullanicilarSayfasi({
               <option value="admin">Yönetici</option>
               <option value="koc">Koç</option>
               <option value="ogrenci">Öğrenci</option>
+              <option value="veli">Veli</option>
             </select>
           </label>
           <label>
@@ -207,9 +215,11 @@ export default async function KullanicilarSayfasi({
                 const baglanti =
                   kullanici.rol === "koc"
                     ? `${kullanici._count.ogrenciler} öğrenci`
-                    : kullanici.rol === "ogrenci"
-                      ? kullanici.koc?.ad ?? "Koç atanmamış"
-                      : "Yönetim erişimi";
+                    : kullanici.rol === "veli"
+                      ? `${kullanici._count.cocuklar} çocuk`
+                      : kullanici.rol === "ogrenci"
+                        ? kullanici.koc?.ad ?? "Koç atanmamış"
+                        : "Yönetim erişimi";
                 const detay =
                   kullanici.eposta ||
                   (kullanici.rol === "koc"
@@ -231,24 +241,24 @@ export default async function KullanicilarSayfasi({
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="Rol">
                       <span className={`${stil.rol} ${stil[`rol_${kullanici.rol}`] ?? ""}`}>
                         {ROL_ETIKETLERI[kullaniciRol] ?? kullanici.rol}
                       </span>
                     </td>
-                    <td className={stil.ikincil}>{detay || "—"}</td>
-                    <td>
+                    <td className={stil.ikincil} data-label="İletişim / Detay">{detay || "—"}</td>
+                    <td data-label="Bağlantı">
                       <span className={kullanici.rol === "ogrenci" && !kullanici.koc ? stil.uyari : ""}>
                         {baglanti}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Son görülme">
                       <span className={stil.tarih}>{tarihMetni(kullanici.sonGorulme)}</span>
                       <small className={stil.kayitTarihi}>
                         Kayıt: {tarihMetni(kullanici.olusturma)}
                       </small>
                     </td>
-                    <td>
+                    <td data-label="Durum">
                       <span className={kullanici.aktif ? stil.durumAktif : stil.durumPasif}>
                         <i /> {kullanici.aktif ? "Aktif" : "Pasif"}
                       </span>

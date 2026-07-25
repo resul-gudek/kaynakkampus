@@ -27,6 +27,7 @@ export interface AyarGorunum {
   gonderenAd: string;
   gonderenAdres: string;
   hatirlatmaSaat: number;
+  veliRaporAktif: boolean;
 }
 
 export interface SablonGorunum {
@@ -116,6 +117,7 @@ export default function MailYonetimi({
                   gonderenAd: f.get("gonderenAd"),
                   gonderenAdres: f.get("gonderenAdres"),
                   hatirlatmaSaat: f.get("hatirlatmaSaat"),
+                  veliRaporAktif: f.get("veliRaporAktif") === "on",
                 }),
               "Ayarlar kaydedildi.",
               setAyarMesaj
@@ -165,6 +167,10 @@ export default function MailYonetimi({
             <label className={ek.onayKutu}>
               <input type="checkbox" name="aktif" defaultChecked={ayar.aktif} />
               <b>Mail gönderimi aktif</b>
+            </label>
+            <label className={ek.onayKutu}>
+              <input type="checkbox" name="veliRaporAktif" defaultChecked={ayar.veliRaporAktif} />
+              Haftalık veli ilerleme raporu (otomatik)
             </label>
           </div>
           <div className={ek.butonSira}>
@@ -316,11 +322,11 @@ export default function MailYonetimi({
                     <b>{m.aliciAd || "—"}</b>
                     <div className={ek.kucukNot}>{m.alici}</div>
                   </td>
-                  <td className={ek.konuHucre} title={m.konu}>
+                  <td className={ek.konuHucre} title={m.konu} data-label="Konu">
                     {m.konu}
                   </td>
-                  <td>{m.sablon || "—"}</td>
-                  <td>
+                  <td data-label="Şablon">{m.sablon || "—"}</td>
+                  <td data-label="Durum">
                     <span
                       className={
                         m.durum === "gonderildi"
@@ -335,10 +341,10 @@ export default function MailYonetimi({
                     </span>
                     {m.sonHata && <div className={ek.hataNot} title={m.sonHata}>{m.sonHata}</div>}
                   </td>
-                  <td>{m.deneme}</td>
-                  <td>{m.planlanan}</td>
-                  <td>{m.gonderim || "—"}</td>
-                  <td>
+                  <td data-label="Deneme">{m.deneme}</td>
+                  <td data-label="Planlanan">{m.planlanan}</td>
+                  <td data-label="Gönderim">{m.gonderim || "—"}</td>
+                  <td data-label="İşlemler">
                     <div className={stil.islemler}>
                       {m.durum !== "gonderildi" && (
                         <button

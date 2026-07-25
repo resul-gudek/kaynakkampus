@@ -121,10 +121,10 @@ export default function ProfilBolumu({ ogrenciId, profil }: { ogrenciId: string;
                   <td>
                     <b>{d.ders}</b>
                   </td>
-                  <td>
+                  <td data-label="Seviyem">
                     <span className={`${s["seviye-cip"]} ${s[seviyeSinif(d.seviye)]}`}>{d.seviye}</span>
                   </td>
-                  <td>
+                  <td data-label="Bildiğim Konular">
                     {(d.bilinen || []).length
                       ? d.bilinen.map((k) => (
                           <span key={k} className={s["konu-cip"]}>
@@ -133,7 +133,7 @@ export default function ProfilBolumu({ ogrenciId, profil }: { ogrenciId: string;
                         ))
                       : "—"}
                   </td>
-                  <td>
+                  <td data-label="Eksik Konularım">
                     {(d.eksik || []).length
                       ? d.eksik.map((k) => (
                           <span key={k} className={`${s["konu-cip"]} ${s.eksik}`}>

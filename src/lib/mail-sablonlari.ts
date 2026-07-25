@@ -3,7 +3,7 @@
    Gövde/konu içinde {{degisken}} yer tutucuları kullanılır; gövde değerleri
    gönderim öncesi HTML kaçışından geçirilir (bkz. sablonDoldur). */
 
-export const MAIL_SABLON_ANAHTARLARI = ["hosgeldin", "ders-hatirlatma"] as const;
+export const MAIL_SABLON_ANAHTARLARI = ["hosgeldin", "ders-hatirlatma", "veli-rapor"] as const;
 export type MailSablonAnahtar = (typeof MAIL_SABLON_ANAHTARLARI)[number];
 
 export interface MailSablonTanim {
@@ -70,5 +70,38 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     <b>Koç:</b> {{koc}}
   </p>
   <p>Derse hazır olman dileğiyle, başarılar! 📚</p>`),
+  },
+  {
+    anahtar: "veli-rapor",
+    ad: "Veli İlerleme Raporu",
+    aciklama:
+      "Öğrencinin haftalık gelişim özetini veliye gönderir. Koç manuel gönderebilir; Mail Ayarları'nda otomatik veli raporu açıksa haftalık olarak da kuyruklanır.",
+    degiskenler: [
+      { ad: "veliAd", aciklama: "Velinin ad soyadı" },
+      { ad: "ogrenciAd", aciklama: "Öğrencinin ad soyadı" },
+      { ad: "koc", aciklama: "Koçun ad soyadı" },
+      { ad: "donem", aciklama: "Rapor dönemi (örn. bu hafta)" },
+      { ad: "odev", aciklama: "Ödev tamamlama (örn. 8/10 · %80)" },
+      { ad: "takip", aciklama: "Haftalık takip tamamlama (örn. %75)" },
+      { ad: "sonNet", aciklama: "Son deneme neti ve değişim" },
+      { ad: "seviye", aciklama: "Yol haritası seviyesi ve XP" },
+      { ad: "zayif", aciklama: "Öne çıkan zayıf konular" },
+      { ad: "sonrakiDers", aciklama: "Sıradaki planlı özel ders" },
+      { ad: "panelAdresi", aciklama: "Uygulama adresi (UYGULAMA_URL)" },
+    ],
+    konu: "{{ogrenciAd}} · Haftalık İlerleme Raporu 📊",
+    govde: gomlek(`<h2 style="color:#1a3c8f;margin-top:0">Haftalık İlerleme Raporu 📊</h2>
+  <p>Sayın {{veliAd}},</p>
+  <p><b>{{ogrenciAd}}</b> için {{donem}} gelişim özeti aşağıdadır:</p>
+  <table style="width:100%;border-collapse:collapse;background:#f3f4f6;border-radius:8px;margin:16px 0">
+    <tr><td style="padding:8px 14px;color:#6b7280">Ödev tamamlama</td><td style="padding:8px 14px;text-align:right"><b>{{odev}}</b></td></tr>
+    <tr><td style="padding:8px 14px;color:#6b7280">Haftalık takip</td><td style="padding:8px 14px;text-align:right"><b>{{takip}}</b></td></tr>
+    <tr><td style="padding:8px 14px;color:#6b7280">Son deneme neti</td><td style="padding:8px 14px;text-align:right"><b>{{sonNet}}</b></td></tr>
+    <tr><td style="padding:8px 14px;color:#6b7280">Yol haritası</td><td style="padding:8px 14px;text-align:right"><b>{{seviye}}</b></td></tr>
+    <tr><td style="padding:8px 14px;color:#6b7280">Öne çıkan zayıf konular</td><td style="padding:8px 14px;text-align:right"><b>{{zayif}}</b></td></tr>
+    <tr><td style="padding:8px 14px;color:#6b7280">Sıradaki özel ders</td><td style="padding:8px 14px;text-align:right"><b>{{sonrakiDers}}</b></td></tr>
+  </table>
+  <p>Detaylı takip için veli panelinize giriş yapabilirsiniz: {{panelAdresi}}/giris</p>
+  <p style="color:#6b7280">Sorularınız için öğrencinin koçu {{koc}} ile iletişime geçebilirsiniz.</p>`),
   },
 ];

@@ -45,10 +45,11 @@ export default function BildirimListe({
         return;
       }
       const sekme = b.hedefTur === "odev" ? "odevler" : "ozel";
+      const ogrenciSayfa = b.hedefTur === "odev" ? "/ogrenci/odevler" : "/ogrenci/ozel-dersler";
       const url =
         rol === "koc"
-          ? `/koc?ogrenci=${encodeURIComponent(b.hedefOgrenciId ?? "")}&sekme=${sekme}&kayit=${encodeURIComponent(b.hedefKayitId)}`
-          : `/ogrenci?sekme=${sekme}&kayit=${encodeURIComponent(b.hedefKayitId)}`;
+          ? `/koc/ogrenciler?ogrenci=${encodeURIComponent(b.hedefOgrenciId ?? "")}&sekme=${sekme}&kayit=${encodeURIComponent(b.hedefKayitId)}`
+          : `${ogrenciSayfa}?kayit=${encodeURIComponent(b.hedefKayitId)}`;
       baslat(async () => {
         await bildirimOkundu(b.id, true);
         router.push(url);

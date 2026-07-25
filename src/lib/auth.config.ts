@@ -27,4 +27,5 @@ export const ROL_ANASAYFA: Record<string, string> = {
   admin: "/admin",
   koc: "/koc",
   ogrenci: "/ogrenci",
+  veli: "/veli",
 };

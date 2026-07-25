@@ -8,10 +8,15 @@ import PanelKabuk from "@/components/panel/PanelKabuk";
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const kullanici = await aktifKullanici();
   const rol = kullanici.rol as Rol;
-  const okunmamis =
-    rol === "admin"
-      ? 0
-      : await prisma.bildirim.count({ where: { aliciId: kullanici.id, okundu: false } });
+  const bildirimliRol = rol === "koc" || rol === "ogrenci";
+  const [okunmamis, okunmamisMesaj] = await Promise.all([
+    bildirimliRol
+      ? prisma.bildirim.count({ where: { aliciId: kullanici.id, okundu: false } })
+      : Promise.resolve(0),
+    bildirimliRol
+      ? prisma.mesaj.count({ where: { aliciId: kullanici.id, okundu: false } })
+      : Promise.resolve(0),
+  ]);
 
   async function cikisYap() {
     "use server";
@@ -23,6 +28,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       kullanici={{ ad: kullanici.ad, etiket: ROL_ETIKETLERI[rol] }}
       kalemler={rolNavigasyonu(rol)}
       okunmamis={okunmamis}
+      okunmamisMesaj={okunmamisMesaj}
       cikisAction={cikisYap}
     >
       {children}

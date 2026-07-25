@@ -51,6 +51,7 @@ export default async function MailSayfasi() {
     gonderenAd: ayarSatiri.gonderenAd,
     gonderenAdres: ayarSatiri.gonderenAdres,
     hatirlatmaSaat: ayarSatiri.hatirlatmaSaat,
+    veliRaporAktif: ayarSatiri.veliRaporAktif,
   };
 
   const sablonlar: SablonGorunum[] = sablonSatirlari.map((s) => {

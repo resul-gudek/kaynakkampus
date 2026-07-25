@@ -34,6 +34,15 @@ export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
       if (!koc.aktif) return { hata: "Pasif bir koça öğrenci atanamaz." };
     }
 
+    if (veri.rol === "ogrenci" && veri.veliId) {
+      const veli = await prisma.kullanici.findUnique({
+        where: { id: veri.veliId },
+        select: { rol: true, aktif: true },
+      });
+      if (!veli || veli.rol !== "veli") return { hata: "Seçilen veli bulunamadı." };
+      if (!veli.aktif) return { hata: "Pasif bir veliye öğrenci bağlanamaz." };
+    }
+
     const yeni = await prisma.kullanici.create({
       data: {
         rol: veri.rol,
@@ -46,6 +55,7 @@ export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
           sinif: veri.sinif,
           hedef: veri.hedef,
           kocId: veri.kocId || null,
+          veliId: veri.veliId || null,
           telefon: telefonDuzelt(veri.telefon),
           veliTelefon: telefonDuzelt(veri.veliTelefon),
         }),
@@ -58,6 +68,7 @@ export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
       kullanici,
       rol: veri.rol,
       kocId: veri.rol === "ogrenci" ? veri.kocId || null : undefined,
+      veliId: veri.rol === "ogrenci" ? veri.veliId || null : undefined,
     });
     adminSayfalariniYenile();
     return { tamam: true };

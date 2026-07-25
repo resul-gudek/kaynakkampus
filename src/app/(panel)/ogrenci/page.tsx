@@ -1,26 +1,51 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
-import { ogrenciOzet, profilAyristir } from "@/lib/hesap";
-import DenemeBolumu from "@/components/ogrenci/DenemeBolumu";
-import KayitOdagi from "@/components/ogrenci/KayitOdagi";
-import OdevListesi from "@/components/ogrenci/OdevListesi";
-import OzelDersBolumu from "@/components/ogrenci/OzelDersBolumu";
-import ProfilBolumu from "@/components/ogrenci/ProfilBolumu";
-import Takvim from "@/components/ogrenci/Takvim";
-import TakipListesi from "@/components/ogrenci/TakipListesi";
-import YolHaritasi from "@/components/ogrenci/YolHaritasi";
-import s from "@/components/ogrenci/panel.module.css";
+import { isoTarih, ogrenciOzet, ozelDersOzet, tarihStr } from "@/lib/hesap";
+import d from "@/components/panel/dashboard.module.css";
 
 export const metadata: Metadata = { title: "Öğrenci Paneli – Kaynak Akademi" };
+
+/* Bölüm sayfaları — hızlı erişim kartları ve legacy ?sekme= yönlendirmesi
+   aynı eşlemeden beslenir */
+const BOLUMLER = [
+  { href: "/ogrenci/takvim", ikon: "📅", ad: "Takvimim", tanim: "Ödev, ders ve deneme günlerin" },
+  { href: "/ogrenci/odevler", ikon: "📘", ad: "Ödevlerim", tanim: "Verilen ödevleri gör, tamamla" },
+  { href: "/ogrenci/takip", ikon: "✅", ad: "Haftalık Takip Listem", tanim: "Haftalık görevlerini işaretle" },
+  { href: "/ogrenci/yol-haritasi", ikon: "🗺️", ad: "Yol Haritam", tanim: "Adımları tamamla, XP kazan" },
+  { href: "/ogrenci/denemeler", ikon: "📈", ad: "Deneme Sonuçlarım", tanim: "Net gelişimini takip et" },
+  { href: "/ogrenci/ozel-dersler", ikon: "🎓", ad: "Özel Derslerim", tanim: "Ders planla ve talep et" },
+  { href: "/ogrenci/profil", ikon: "🎯", ad: "Seviye Formum", tanim: "Başlangıç seviyeni güncelle" },
+];
+
+/* Eski derin bağlantı sözleşmesi (?sekme=<bolum>&kayit=<id>) yeni sayfalara taşındı */
+const SEKME_YONLENDIRME: Record<string, string> = {
+  takvim: "/ogrenci/takvim",
+  odev: "/ogrenci/odevler",
+  odevler: "/ogrenci/odevler",
+  takip: "/ogrenci/takip",
+  yol: "/ogrenci/yol-haritasi",
+  deneme: "/ogrenci/denemeler",
+  denemeler: "/ogrenci/denemeler",
+  ozel: "/ogrenci/ozel-dersler",
+  profil: "/ogrenci/profil",
+};
 
 export default async function OgrenciPanel({
   searchParams,
 }: {
   searchParams: Promise<{ sekme?: string; kayit?: string }>;
 }) {
-  const ogrenci = await aktifKullanici("ogrenci");
   const sp = await searchParams;
+  if (sp.sekme && SEKME_YONLENDIRME[sp.sekme]) {
+    redirect(
+      SEKME_YONLENDIRME[sp.sekme] + (sp.kayit ? `?kayit=${encodeURIComponent(sp.kayit)}` : "")
+    );
+  }
+
+  const ogrenci = await aktifKullanici("ogrenci");
 
   const [koc, odevler, takip, denemeler, yolAdimlari, ozelDersler] = await Promise.all([
     ogrenci.kocId
@@ -28,11 +53,7 @@ export default async function OgrenciPanel({
       : Promise.resolve(null),
     prisma.odev.findMany({ where: { ogrenciId: ogrenci.id } }),
     prisma.takip.findMany({ where: { ogrenciId: ogrenci.id } }),
-    prisma.deneme.findMany({
-      where: { ogrenciId: ogrenci.id },
-      include: { dersler: true },
-      orderBy: { tarih: "asc" },
-    }),
+    prisma.deneme.findMany({ where: { ogrenciId: ogrenci.id }, orderBy: { tarih: "asc" } }),
     prisma.yolAdimi.findMany({ where: { ogrenciId: ogrenci.id }, orderBy: { sira: "asc" } }),
     prisma.ozelDers.findMany({
       where: { ogrenciId: ogrenci.id, NOT: { durum: "iptal" } },
@@ -40,8 +61,8 @@ export default async function OgrenciPanel({
     }),
   ]);
 
-  const profil = profilAyristir(ogrenci.profil);
   const oz = ogrenciOzet(odevler, takip, denemeler, yolAdimlari);
+  const ozelOz = ozelDersOzet(ozelDersler);
 
   const kocHarfler = koc
     ? koc.ad
@@ -52,93 +73,157 @@ export default async function OgrenciPanel({
         .toLocaleUpperCase("tr-TR")
     : "";
 
+  const sonDeneme = denemeler.length ? denemeler[denemeler.length - 1] : null;
+  const bekleyenOdevler = odevler
+    .filter((o) => o.durum === "bekliyor")
+    .sort((a, b) => isoTarih(a.sonTarih).localeCompare(isoTarih(b.sonTarih)));
+  const enYakinTeslim = bekleyenOdevler.find((o) => o.sonTarih)?.sonTarih ?? null;
+
   return (
     <main className="container">
-      <KayitOdagi kayit={sp.kayit} sekme={sp.sekme} />
-
-      {/* ── Sayfa başı ── */}
-      <div className="panel-bas">
-        <h1>
-          📚 Öğrenci <span>Paneli</span>
-        </h1>
-        <p>Öğretmeninin verdiği ödevleri ve haftalık takip listeni buradan izle, tamamladıklarını işaretle.</p>
-        <div className={s["koc-kart"]}>
+      {/* ── Hero ── */}
+      <section className={d.hero}>
+        <div className={d.heroIcerik}>
+          <span className={d.ustEtiket}>ÖĞRENCİ PANELİ</span>
+          <h1>Merhaba, {ogrenci.ad.split(" ")[0]} 👋</h1>
+          <p>
+            Ödevlerini, haftalık takip listeni ve deneme gelişimini buradan izle;
+            tamamladıklarını işaretleyip XP kazan.
+          </p>
+        </div>
+        <div className={d.heroKart}>
           {koc ? (
             <>
               <div className="avatar">{kocHarfler}</div>
               <div>
                 <small>Öğretmenin</small>
                 <b>{koc.ad}</b>
-                <small>{koc.brans || ""}</small>
-              </div>
-              <div style={{ marginLeft: "auto", textAlign: "right" }}>
-                <small>Hedefin</small>
-                <b>{ogrenci.hedef || "—"}</b>
+                <em>
+                  {koc.brans || "—"} · Hedefin: {ogrenci.hedef || "—"}
+                </em>
               </div>
             </>
           ) : (
             <div>
-              <b>Henüz bir öğretmene atanmadın.</b>
-              <small>Öğretmen ataması yapıldığında ödev ve takip listen burada görünecek.</small>
+              <small>Öğretmen</small>
+              <b>Henüz atanmadı</b>
+              <em>Atama yapıldığında ödev ve takip listen burada görünecek.</em>
             </div>
           )}
         </div>
-      </div>
+      </section>
 
       {/* ── İstatistikler ── */}
-      <div className="stat-grid">
-        <div className="stat-kart">
-          <div className="stat-ikon" style={{ background: "#f0fdf4" }}>✅</div>
-          <div>
+      <section className={d.statGrid} aria-label="Genel istatistikler">
+        <Link href="/ogrenci/odevler" className={`${d.statKart} ${d.yesil}`}>
+          <span className={d.statIkon}>✅</span>
+          <span>
+            <small>Ödev tamamlama</small>
             <b>%{oz.odevYuzde}</b>
-            <small>Ödev Tamamlama</small>
-          </div>
-        </div>
-        <div className="stat-kart">
-          <div className="stat-ikon" style={{ background: "#ecfeff" }}>📊</div>
-          <div>
+            <em>{oz.odevTamam}/{oz.odevToplam} ödev tamamlandı</em>
+          </span>
+        </Link>
+        <Link href="/ogrenci/takip" className={`${d.statKart} ${d.turkuaz}`}>
+          <span className={d.statIkon}>📊</span>
+          <span>
+            <small>Takip listesi</small>
             <b>%{oz.takipYuzde}</b>
-            <small>Takip Listesi</small>
-          </div>
-        </div>
-        <div className="stat-kart">
-          <div className="stat-ikon" style={{ background: "#e8effe" }}>🎯</div>
-          <div>
+            <em>{oz.takipTamam}/{oz.takipToplam} görev tamamlandı</em>
+          </span>
+        </Link>
+        <Link href="/ogrenci/denemeler" className={`${d.statKart} ${d.mavi}`}>
+          <span className={d.statIkon}>🎯</span>
+          <span>
+            <small>Son deneme neti</small>
             <b>
               {oz.sonNet === null ? "—" : oz.sonNet}
               {oz.netFarki !== null && (
                 <>
                   {" "}
-                  <span
-                    className={oz.netFarki >= 0 ? s["net-artis"] : s["net-dusus"]}
-                    style={{ fontSize: ".85rem" }}
-                  >
+                  <span className={`${d.fark} ${oz.netFarki >= 0 ? d.artis : d.dusus}`}>
                     {oz.netFarki >= 0 ? "▲ +" : "▼ "}
                     {oz.netFarki}
                   </span>
                 </>
               )}
             </b>
-            <small>Son Deneme Neti</small>
-          </div>
-        </div>
-        <div className="stat-kart">
-          <div className="stat-ikon" style={{ background: "#fff7ed" }}>⭐</div>
-          <div>
+            <em>{sonDeneme ? sonDeneme.ad : "Henüz deneme sonucu yok"}</em>
+          </span>
+        </Link>
+        <Link href="/ogrenci/yol-haritasi" className={`${d.statKart} ${d.turuncu}`}>
+          <span className={d.statIkon}>⭐</span>
+          <span>
+            <small>Seviye</small>
             <b>Seviye {oz.seviye}</b>
-            <small>{oz.xp} XP</small>
+            <em>{oz.xp} XP · Yol haritası %{oz.yolYuzde}</em>
+          </span>
+        </Link>
+      </section>
+
+      {/* ── Günün özeti ── */}
+      <section className={d.ozetGrid} aria-label="Günün özeti">
+        <Link href="/ogrenci/odevler" className={d.ozetKart}>
+          <span>📘</span>
+          <div>
+            <b>{bekleyenOdevler.length ? `${bekleyenOdevler.length} bekleyen ödev` : "Bekleyen ödevin yok"}</b>
+            <small>
+              {enYakinTeslim ? `En yakın teslim: ${tarihStr(enYakinTeslim)}` : "Tüm ödevler güncel 🎉"}
+            </small>
+          </div>
+        </Link>
+        <Link href="/ogrenci/ozel-dersler" className={d.ozetKart}>
+          <span>🎓</span>
+          <div>
+            <b>
+              {ozelOz.sonraki
+                ? `Sıradaki özel ders: ${tarihStr(ozelOz.sonraki.tarih)}${ozelOz.sonraki.saat ? " " + ozelOz.sonraki.saat : ""}`
+                : "Planlanmış özel ders yok"}
+            </b>
+            <small>
+              {ozelOz.sonraki
+                ? ozelOz.sonraki.ders + (ozelOz.sonraki.konu ? " – " + ozelOz.sonraki.konu : "")
+                : "Özel Derslerim sayfasından ders talep edebilirsin"}
+            </small>
+          </div>
+        </Link>
+        <Link href="/ogrenci/ozel-dersler" className={d.ozetKart}>
+          <span>🙋</span>
+          <div>
+            <b>
+              {ozelOz.onayBekleyenOgr
+                ? `${ozelOz.onayBekleyenOgr} ders önerisi onayını bekliyor`
+                : "Onay bekleyen öneri yok"}
+            </b>
+            <small>
+              {ozelOz.onayBekleyenOgr
+                ? "Özel Derslerim sayfasından yanıtla"
+                : "Öğretmenin ders önerdiğinde burada görünür"}
+            </small>
+          </div>
+        </Link>
+      </section>
+
+      {/* ── Hızlı erişim ── */}
+      <section className={d.kart} aria-label="Hızlı erişim">
+        <div className={d.kartBaslik}>
+          <div>
+            <span className={d.kucukBaslik}>HIZLI ERİŞİM</span>
+            <h2>Çalışma alanların</h2>
           </div>
         </div>
-      </div>
-
-      {/* ── Bölümler (legacy sırasıyla) ── */}
-      <Takvim odevler={odevler} ozelDersler={ozelDersler} denemeler={denemeler} takip={takip} />
-      <ProfilBolumu ogrenciId={ogrenci.id} profil={profil} />
-      <YolHaritasi adimlar={yolAdimlari} />
-      <OdevListesi odevler={odevler} />
-      <OzelDersBolumu ogrenciId={ogrenci.id} kocVar={!!ogrenci.kocId} dersler={ozelDersler} />
-      <TakipListesi takip={takip} />
-      <DenemeBolumu ogrenciId={ogrenci.id} denemeler={denemeler} profil={profil} />
+        <div className={d.hizliGrid}>
+          {BOLUMLER.map((b) => (
+            <Link key={b.href} href={b.href} className={d.hizliKart}>
+              <span>{b.ikon}</span>
+              <div>
+                <b>{b.ad}</b>
+                <small>{b.tanim}</small>
+              </div>
+              <i>→</i>
+            </Link>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }

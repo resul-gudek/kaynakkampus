@@ -1,0 +1,140 @@
+/* ── Mesajlaşma — iki panelli sohbet düzeni ── */
+
+.sayfa { max-width: 1040px; }
+
+.duzen {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 16px;
+  margin-top: 24px;
+  height: calc(100vh - 150px);
+  min-height: 460px;
+}
+
+/* ── Konuşma listesi ── */
+.liste {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+}
+.listeBas {
+  position: sticky;
+  top: 0;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 1rem;
+}
+.konusma {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  transition: background .15s;
+}
+.konusma:hover { background: var(--bg-soft); }
+.konusma.aktif { background: var(--tint); }
+.konusmaGovde { min-width: 0; flex: 1; }
+.konusmaUst { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.konusmaUst b { font-size: .86rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.konusmaUst small { flex: 0 0 auto; color: var(--muted); font-size: .66rem; }
+.konusmaAlt { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 2px; }
+.onizleme { overflow: hidden; color: var(--muted); font-size: .74rem; white-space: nowrap; text-overflow: ellipsis; }
+.rozet {
+  flex: 0 0 auto;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--blue);
+  color: #fff;
+  font-size: .66rem;
+  font-weight: 700;
+}
+
+/* ── Sohbet paneli ── */
+.sohbet {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.sohbetBas {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.sohbetBas b { display: block; font-size: .92rem; }
+.sohbetBas small { display: block; color: var(--muted); font-size: .72rem; }
+.geriBtn { display: none; font-size: 1.2rem; color: var(--muted); }
+
+.akis {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  overflow-y: auto;
+  background: var(--bg-soft);
+}
+.balon {
+  max-width: 74%;
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: .86rem;
+  line-height: 1.5;
+}
+.balon p { white-space: pre-wrap; word-break: break-word; }
+.zaman { display: block; margin-top: 3px; font-size: .62rem; opacity: .7; text-align: right; }
+.benden { align-self: flex-end; background: var(--blue); color: #fff; border-bottom-right-radius: 4px; }
+.karsi { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+
+/* ── Yazma alanı ── */
+.yazma { border-top: 1px solid var(--border); padding: 12px 14px; background: var(--surface); }
+.yazmaSatir { display: flex; gap: 10px; align-items: flex-end; }
+.yazmaSatir textarea {
+  flex: 1;
+  resize: none;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-soft);
+  color: inherit;
+  font: inherit;
+  font-size: .86rem;
+}
+.yazmaSatir textarea:focus { outline: none; border-color: var(--blue); }
+.hata { margin-bottom: 8px; color: #dc2626; font-size: .78rem; }
+
+.bosNot { padding: 18px; color: var(--muted); font-size: .82rem; line-height: 1.6; }
+.bosSohbet {
+  flex: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.bosSohbet span { font-size: 2.4rem; }
+
+.mobilGizle { }
+
+@media (max-width: 720px) {
+  .duzen { grid-template-columns: 1fr; height: calc(100vh - 130px); }
+  .duzen .mobilGizle { display: none; }
+  .geriBtn { display: inline; }
+}

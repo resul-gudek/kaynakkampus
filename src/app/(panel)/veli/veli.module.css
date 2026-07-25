@@ -1,0 +1,72 @@
+/* ── Veli paneli — salt-okunur çocuk gelişim özeti ── */
+
+.bosMesaj {
+  padding: 8px 2px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Birden çok çocuk arasında geçiş kartları */
+.cocukSecim {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 22px 0;
+}
+.cocukKart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: inherit;
+  transition: transform .2s, border-color .2s;
+}
+.cocukKart:hover { transform: translateY(-2px); border-color: rgba(26,60,143,.22); }
+.cocukKart.aktif { border-color: var(--blue); background: var(--tint); }
+.cocukKart b { display: block; font-size: .9rem; }
+.cocukKart small { display: block; margin-top: 1px; color: var(--muted); font-size: .72rem; }
+
+/* İki sütunlu detay ızgarası (zayıf konular + denemeler) */
+.detayIzgara {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media (max-width: 900px) {
+  .detayIzgara { grid-template-columns: 1fr; }
+}
+
+/* Ortak liste (zayıf konu / deneme / ödev) */
+.liste { display: flex; flex-direction: column; gap: 10px; }
+.liste li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-soft);
+}
+.liste b { display: block; font-size: .84rem; }
+.liste small { display: block; margin-top: 1px; color: var(--muted); font-size: .72rem; }
+
+.rozet {
+  flex: 0 0 auto;
+  min-width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+.rozet.net { color: var(--yesil); }

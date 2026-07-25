@@ -3,12 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { aktifKullanici } from "@/lib/oturum";
 import {
-  bigBlueButtonHazir,
+  canliDersHazir,
   dersOturumuErisimi,
   katilimPenceresi,
   KATILIM_ONCESI_OGRENCI_DK,
   KATILIM_ONCESI_OGRETMEN_DK,
 } from "@/lib/canli-ders";
+import DersOdasi from "@/components/canli-ders/DersOdasi";
 import s from "./canli-ders.module.css";
 
 export const metadata: Metadata = { title: "Canlı Ders – Kaynak Akademi" };
@@ -34,7 +35,7 @@ export default async function CanliDersSayfasi({
 
   const { oturum, moderator } = erisim;
   const pencere = katilimPenceresi(oturum.baslangic, oturum.sure, moderator);
-  const yapilandirilmis = bigBlueButtonHazir();
+  const yapilandirilmis = canliDersHazir();
   const iptal = oturum.durum === "iptal";
   const katilabilir = !iptal && pencere.acik && yapilandirilmis;
   const sinifAd = oturum.sinif?.ad ?? "Birebir özel ders";
@@ -88,18 +89,16 @@ export default async function CanliDersSayfasi({
               ? "Yeni bir ders planlandığında bildirim alacaksın."
               : !yapilandirilmis
                 ? moderator
-                  ? "BigBlueButton API adresi ve gizli anahtarı sunucu ortamına eklendiğinde ders odası kullanılabilir olacak."
+                  ? "LiveKit sunucu adresi ve API anahtarları sunucu ortamına eklendiğinde ders odası kullanılabilir olacak."
                   : "Canlı sınıf altyapısı öğretmenin tarafından hazırlanıyor."
                 : pencere.erken
                   ? `${moderator ? KATILIM_ONCESI_OGRETMEN_DK : KATILIM_ONCESI_OGRENCI_DK} dakika önce katılım açılır: ${tarihSaat.format(pencere.acilis)}`
                   : pencere.gec
                     ? "Bu oturumun güvenli katılım bağlantısı artık kullanılamaz."
-                    : "Bağlantı yalnızca sana özel ve kısa süreli olarak sunucu tarafından oluşturulur."}
+                    : "Ders bu sayfada açılır; erişim jetonu yalnızca sana özel olarak sunucu tarafından oluşturulur."}
           </p>
           {katilabilir && (
-            <a className="btn btn-primary" href={`/api/canli-ders/${oturum.id}/katil`}>
-              {moderator ? "Dersi Başlat" : "Derse Katıl"}
-            </a>
+            <DersOdasi oturumId={oturum.id} baslik={oturum.baslik} moderator={moderator} />
           )}
           {!katilabilir && !iptal && (
             <Link className="btn btn-outline" href="/siniflar">Ders programına dön</Link>

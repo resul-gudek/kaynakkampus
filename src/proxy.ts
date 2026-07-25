@@ -26,12 +26,19 @@ export default auth((req) => {
   if (yol.startsWith("/admin") && rol !== "admin") {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
+  if (yol.startsWith("/veli") && rol !== "veli") {
+    return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
+  }
   if ((yol.startsWith("/siniflar") || yol.startsWith("/canli-ders")) && !["koc", "ogrenci"].includes(rol)) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  // Bildirimler: koç ve öğrenci; admin'in bildirimi yok
-  if (yol.startsWith("/bildirimler") && rol === "admin") {
-    return NextResponse.redirect(new URL("/admin", req.nextUrl));
+  // Mesajlar: koç ve öğrenci arası; admin/veli dışarıda
+  if (yol.startsWith("/mesajlar") && !["koc", "ogrenci"].includes(rol)) {
+    return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
+  }
+  // Bildirimler: koç ve öğrenci; admin/veli'nin bildirimi yok
+  if (yol.startsWith("/bildirimler") && !["koc", "ogrenci"].includes(rol)) {
+    return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
   return NextResponse.next();
 });
@@ -42,8 +49,10 @@ export const config = {
     "/koc/:path*",
     "/ogrenci/:path*",
     "/admin/:path*",
+    "/veli/:path*",
     "/siniflar/:path*",
     "/canli-ders/:path*",
+    "/mesajlar/:path*",
     "/bildirimler",
   ],
 };

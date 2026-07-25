@@ -114,14 +114,14 @@ export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
                     <b>{g.ad}</b>{" "}
                     <span style={{ color: "var(--muted)", fontSize: ".8rem" }}>@{g.kullanici}</span>
                   </td>
-                  <td>
+                  <td data-label="Rol">
                     <span className={stil[ROL_SINIF[g.rol]] ?? stil.rolEtiket}>
                       {ROL_AD[g.rol] ?? g.rol}
                     </span>
                   </td>
-                  <td style={{ whiteSpace: "nowrap" }}>{g.zaman}</td>
-                  <td>{g.ip || "—"}</td>
-                  <td>{g.tarayici || "—"}</td>
+                  <td data-label="Zaman" style={{ whiteSpace: "nowrap" }}>{g.zaman}</td>
+                  <td data-label="IP">{g.ip || "—"}</td>
+                  <td data-label="Tarayıcı">{g.tarayici || "—"}</td>
                 </tr>
               ))}
               {veri.girisler.length === 0 && (

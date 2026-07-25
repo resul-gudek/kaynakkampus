@@ -17,7 +17,7 @@ datasource db {
 
 model Kullanici {
   id        String  @id @default(cuid())
-  rol       String // "admin" | "koc" | "ogrenci"
+  rol       String // "admin" | "koc" | "ogrenci" | "veli"
   ad        String
   kullanici String  @unique // tr-TR küçük harfe normalize edilmiş kullanıcı adı
   sifreHash String
@@ -32,6 +32,12 @@ model Kullanici {
   kocId       String?
   koc         Kullanici?  @relation("KocOgrenci", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ogrenciler  Kullanici[] @relation("KocOgrenci")
+
+  // veli ilişkisi: öğrenci → veli (bir veli birden çok çocuğa bakabilir)
+  veliId   String?
+  veli     Kullanici?  @relation("VeliOgrenci", fields: [veliId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cocuklar Kullanici[] @relation("VeliOgrenci")
+
   telefon     String      @default("")
   veliTelefon String      @default("")
   eposta      String      @default("") // hoş geldin / ders hatırlatma mailleri için (opsiyonel)
@@ -54,6 +60,25 @@ model Kullanici {
   dersKatilimlari DersKatilim[]
   bildirimler     Bildirim[]
   girisKayitlari  GirisKaydi[]
+  mesajGonderilen Mesaj[]          @relation("MesajGonderen")
+  mesajAlinan     Mesaj[]          @relation("MesajAlici")
+}
+
+// ── Mesajlaşma ───────────────────────────────────────────────
+// Koç ↔ öğrenci arası çift yönlü mesajlar. Bir konuşma iki kullanıcı
+// arasındaki tüm mesajların tarih sırasıdır; ayrı "Konusma" tablosu yok.
+model Mesaj {
+  id         String    @id @default(cuid())
+  gonderenId String
+  aliciId    String
+  gonderen   Kullanici @relation("MesajGonderen", fields: [gonderenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  alici      Kullanici @relation("MesajAlici", fields: [aliciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  govde      String    @db.NVarChar(Max)
+  okundu     Boolean   @default(false)
+  tarih      DateTime  @default(now())
+
+  @@index([aliciId, okundu])
+  @@index([gonderenId, aliciId, tarih])
 }
 
 // ── Kullanıcı aktivite izleme ────────────────────────────────
@@ -215,7 +240,7 @@ model DersOturumu {
   baslangic      DateTime
   sure           Int            @default(60)
   durum          String         @default("planlandi") // "planlandi" | "canli" | "tamamlandi" | "iptal"
-  saglayici      String         @default("bigbluebutton")
+  saglayici      String         @default("livekit")
   saglayiciOdaId String         @unique
   kayitEtkin     Boolean        @default(false) // MVP'de daima false; KVKK süreci sonrası açılacak
   olusturma      DateTime       @default(now())
@@ -286,6 +311,7 @@ model MailAyar {
   gonderenAd     String   @default("Kaynak Akademi")
   gonderenAdres  String   @default("") // From adresi
   hatirlatmaSaat Int      @default(24) // ders hatırlatması kaç saat önce gönderilsin
+  veliRaporAktif Boolean  @default(false) // açıksa haftalık veli ilerleme raporu otomatik kuyruklanır
   guncelleme     DateTime @default(now()) @updatedAt
 }
 

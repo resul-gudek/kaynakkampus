@@ -211,7 +211,7 @@
 .listeBaslik p, .listeBaslik > span { color: var(--muted); font-size: .75rem; }
 .listeBaslik p { margin-top: 2px; }
 
-.tabloSarici { overflow-x: auto; }
+.tabloSarici { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tablo { width: 100%; border-collapse: collapse; font-size: .82rem; }
 .tablo th {
   padding: 11px 14px;
@@ -263,6 +263,7 @@
 .rol_admin { color: var(--orange); background: rgba(249, 115, 22, .11); }
 .rol_koc { color: var(--blue); background: var(--tint); }
 .rol_ogrenci { color: var(--teal); background: rgba(14, 165, 201, .11); }
+.rol_veli { color: var(--yesil); background: rgba(22, 163, 74, .11); }
 .uyari { color: var(--orange); font-weight: 700; }
 
 .tarih, .kayitTarihi { display: block; white-space: nowrap; }
@@ -314,6 +315,35 @@
   .ozetGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filtreler { flex-wrap: wrap; }
   .aramaAlani { max-width: none; flex-basis: 100%; }
+}
+
+/* ── Dar ekran: kullanıcı tablosu kart düzenine geçer ── */
+@media (max-width: 640px) {
+  .tabloSarici { overflow-x: visible; }
+  .tablo thead {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .tablo, .tablo tbody, .tablo tr, .tablo td { display: block; width: 100%; }
+  .tablo tr {
+    margin: 0 14px 12px; padding: 4px 0;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
+  }
+  .tablo td {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 9px 16px; border-bottom: 1px solid var(--border);
+    text-align: right; white-space: normal;
+  }
+  .tablo th:first-child, .tablo td:first-child,
+  .tablo th:last-child, .tablo td:last-child { padding-left: 16px; padding-right: 16px; }
+  .tablo tr td:last-child { border-bottom: none; }
+  .tablo td[data-label]::before {
+    content: attr(data-label); flex: 0 0 38%; text-align: left;
+    color: var(--muted); font-size: .66rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .tablo td:first-child { justify-content: flex-start; text-align: left; }
+  .tablo td:first-child::before { display: none; }
 }
 
 @media (max-width: 520px) {

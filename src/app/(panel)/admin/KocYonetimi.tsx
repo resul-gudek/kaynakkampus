@@ -103,15 +103,15 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
                   <td>
                     <b>{k.ad}</b>
                   </td>
-                  <td>{k.kullanici}</td>
-                  <td>{k.brans || "—"}</td>
-                  <td>{k.ogrenciSayisi}</td>
-                  <td>
+                  <td data-label="Kullanıcı">{k.kullanici}</td>
+                  <td data-label="Branş">{k.brans || "—"}</td>
+                  <td data-label="Öğrenci">{k.ogrenciSayisi}</td>
+                  <td data-label="Durum">
                     <span className={k.aktif ? stil.durumAktif : stil.durumPasif}>
                       {k.aktif ? "Aktif" : "Pasif"}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="İşlemler">
                     <div className={stil.islemler}>
                       <button
                         className="btn btn-outline btn-kucuk"

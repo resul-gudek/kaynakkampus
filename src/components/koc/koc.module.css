@@ -142,6 +142,37 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   .profilSatir .profilSatirDers { grid-column: 1 / -1; }
 }
 
+@media (max-width: 640px) {
+  /* Deneme sonucu tablosu: yan kaydırma yerine sığacak şekilde küçülür */
+  table.denemeTablo { font-size: .76rem; }
+  table.denemeTablo th, table.denemeTablo td { padding: 7px 5px; white-space: normal; }
+  table.denemeTablo th:first-child, table.denemeTablo td:first-child { padding-left: 2px; }
+  table.denemeTablo .konuCip { margin: 2px 3px 2px 0; padding: 2px 8px; font-size: .67rem; }
+
+  /* Profil ders tablosu: kart düzeni (konu çipleri için yer gerekir) */
+  table.profilDersTablo, table.profilDersTablo tbody,
+  table.profilDersTablo tr, table.profilDersTablo td { display: block; width: 100%; }
+  table.profilDersTablo thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.profilDersTablo tr {
+    margin-bottom: 10px; padding: 4px 0;
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  table.profilDersTablo td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
+  table.profilDersTablo tr td:last-child { border-bottom: none; }
+  table.profilDersTablo td[data-label]::before {
+    content: attr(data-label); display: block; margin-bottom: 4px;
+    color: var(--muted); font-size: .64rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+}
+
+@media (max-width: 520px) {
+  .bolum { padding: 18px 16px; margin-bottom: 16px; }
+  .kutuForm { padding: 14px; }
+  .listeSatir { padding: 12px; gap: 10px; }
+  .sekme { padding: 8px 14px; font-size: .8rem; }
+}
+
 .dnToplam {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--surface); border: 1px solid var(--border);

@@ -5,14 +5,20 @@ import { useRouter } from "next/navigation";
 import { kullaniciEkle } from "@/actions/admin";
 import stil from "./kullanicilar.module.css";
 
-interface KocSecenegi {
+interface KullaniciSecenegi {
   id: string;
   ad: string;
 }
 
-export default function KullaniciEkleFormu({ koclar }: { koclar: KocSecenegi[] }) {
+export default function KullaniciEkleFormu({
+  koclar,
+  veliler,
+}: {
+  koclar: KullaniciSecenegi[];
+  veliler: KullaniciSecenegi[];
+}) {
   const [acik, setAcik] = useState(false);
-  const [rol, setRol] = useState<"admin" | "koc" | "ogrenci">("ogrenci");
+  const [rol, setRol] = useState<"admin" | "koc" | "ogrenci" | "veli">("ogrenci");
   const [mesaj, setMesaj] = useState<{ hata?: string; tamam?: string }>({});
   const [bekliyor, baslat] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
@@ -31,6 +37,7 @@ export default function KullaniciEkleFormu({ koclar }: { koclar: KocSecenegi[] }
         sinif: formData.get("sinif") ?? "",
         hedef: formData.get("hedef") ?? "",
         kocId: formData.get("kocId") ?? "",
+        veliId: formData.get("veliId") ?? "",
         telefon: formData.get("telefon") ?? "",
         veliTelefon: formData.get("veliTelefon") ?? "",
       });
@@ -54,7 +61,7 @@ export default function KullaniciEkleFormu({ koclar }: { koclar: KocSecenegi[] }
           <span className={stil.eklemeIkon}>＋</span>
           <div>
             <h2>Yeni kullanıcı ekle</h2>
-            <p>Yönetici, koç veya öğrenci hesabı oluşturun.</p>
+            <p>Yönetici, koç, öğrenci veya veli hesabı oluşturun.</p>
           </div>
         </div>
         <button
@@ -89,6 +96,7 @@ export default function KullaniciEkleFormu({ koclar }: { koclar: KocSecenegi[] }
               >
                 <option value="ogrenci">Öğrenci</option>
                 <option value="koc">Koç</option>
+                <option value="veli">Veli</option>
                 <option value="admin">Yönetici</option>
               </select>
             </label>
@@ -149,6 +157,15 @@ export default function KullaniciEkleFormu({ koclar }: { koclar: KocSecenegi[] }
                     <option value="">Şimdilik atama</option>
                     {koclar.map((koc) => (
                       <option key={koc.id} value={koc.id}>{koc.ad}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className={stil.formGrup}>
+                  <span>Veli Bağlama</span>
+                  <select name="veliId" defaultValue="">
+                    <option value="">Veli bağlama (opsiyonel)</option>
+                    {veliler.map((veli) => (
+                      <option key={veli.id} value={veli.id}>{veli.ad}</option>
                     ))}
                   </select>
                 </label>

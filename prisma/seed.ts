@@ -49,16 +49,30 @@ async function main() {
     },
   });
 
+  const veli = await prisma.kullanici.upsert({
+    where: { kullanici: "veli1" },
+    update: {},
+    create: {
+      rol: "veli", ad: "Fatma Demir", kullanici: "veli1", sifreHash: hash("1234"),
+      eposta: "veli@example.com", // veli ilerleme raporu buraya gider
+    },
+  });
+
   const ogr1 = await prisma.kullanici.upsert({
     where: { kullanici: "ogrenci1" },
     update: {},
     create: {
       rol: "ogrenci", ad: "Elif Demir", kullanici: "ogrenci1", sifreHash: hash("1234"),
-      sinif: "12. Sınıf", hedef: "YKS – Tıp", kocId: koc.id,
+      sinif: "12. Sınıf", hedef: "YKS – Tıp", kocId: koc.id, veliId: veli.id,
       telefon: "905001112233", veliTelefon: "905004445566",
       profil: JSON.stringify(demoProfil()),
     },
   });
+
+  // Halihazırda tohumlanmış DB'lerde de veli bağını kur (idempotent)
+  if (!(await prisma.kullanici.findFirst({ where: { id: ogr1.id, veliId: veli.id } }))) {
+    await prisma.kullanici.update({ where: { id: ogr1.id }, data: { veliId: veli.id } });
+  }
 
   const ogr2 = await prisma.kullanici.upsert({
     where: { kullanici: "ogrenci2" },
@@ -233,6 +247,18 @@ async function main() {
     });
   }
 
+  // ── Mesajlaşma (koç ↔ öğrenci demo konuşması) ──
+  if ((await prisma.mesaj.count({ where: { gonderenId: koc.id, aliciId: ogr1.id } })) === 0) {
+    const dk = (n: number) => new Date(Date.now() - n * 60_000);
+    await prisma.mesaj.createMany({
+      data: [
+        { gonderenId: koc.id, aliciId: ogr1.id, govde: "Merhaba Elif, bu haftaki türev ödevin nasıl gidiyor?", okundu: true, tarih: dk(180) },
+        { gonderenId: ogr1.id, aliciId: koc.id, govde: "Merhaba hocam, yarısını bitirdim. Zincir kuralında biraz zorlanıyorum.", okundu: true, tarih: dk(120) },
+        { gonderenId: koc.id, aliciId: ogr1.id, govde: "Anladım, pazartesi özel derste onu detaylı çalışalım. Bu arada 10 örnek daha çöz.", okundu: false, tarih: dk(60) },
+      ],
+    });
+  }
+
   // ── E-posta altyapısı: tek satır ayar + varsayılan şablonlar ──
   await prisma.mailAyar.upsert({ where: { id: 1 }, update: {}, create: { id: 1 } });
   for (const s of VARSAYILAN_SABLONLAR) {
@@ -243,7 +269,7 @@ async function main() {
     });
   }
 
-  console.log("Seed tamam:", { admin: admin.kullanici, koc: koc.kullanici });
+  console.log("Seed tamam:", { admin: admin.kullanici, koc: koc.kullanici, veli: veli.kullanici });
 }
 
 main()

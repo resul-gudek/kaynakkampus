@@ -1,0 +1,24 @@
+# LAN yayını için reverse proxy.
+# - https://192.168.1.101:8443 -> Next.js uygulaması (127.0.0.1:37337)
+# - wss://192.168.1.101:8444   -> LiveKit sinyal kanalı (127.0.0.1:7880)
+# Sertifikalar mkcert ile üretildi (ops/lan-yayin/sertifika/). İstemci cihazların
+# mkcert kök sertifikasına güvenmesi gerekir — bkz. README.md.
+#
+# Neden 443 değil? WSL "mirrored" ağ modunda, WSL içindeki eski BigBlueButton
+# kalıntıları (haproxy: 443, freeswitch: 7443) bu portları Windows tarafında da
+# rezerve ediyor. BBB servisleri WSL'den kaldırılırsa buradaki 8443 -> 443
+# yapılıp .env/README'deki adresler sadeleştirilebilir.
+
+{
+	auto_https off
+}
+
+https://192.168.1.101:8443 {
+	tls c:/Repos/kaynakakademi/ops/lan-yayin/sertifika/lan.pem c:/Repos/kaynakakademi/ops/lan-yayin/sertifika/lan-key.pem
+	reverse_proxy 127.0.0.1:37337
+}
+
+https://192.168.1.101:8444 {
+	tls c:/Repos/kaynakakademi/ops/lan-yayin/sertifika/lan.pem c:/Repos/kaynakakademi/ops/lan-yayin/sertifika/lan-key.pem
+	reverse_proxy 127.0.0.1:7880
+}

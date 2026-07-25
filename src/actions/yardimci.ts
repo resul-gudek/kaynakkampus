@@ -17,8 +17,8 @@ export async function oturumGerekli(...roller: string[]) {
 
 /** Mutasyon sonrası panellerin tazelenmesi */
 export function panelleriTazele() {
-  revalidatePath("/koc");
-  revalidatePath("/ogrenci");
+  revalidatePath("/koc", "layout"); // dashboard + alt sayfalar (ajanda, ogrenciler)
+  revalidatePath("/ogrenci", "layout"); // dashboard + tüm alt sayfalar (odevler, takip, ...)
   revalidatePath("/bildirimler");
   revalidatePath("/", "layout"); // header'daki okunmamış rozeti
 }

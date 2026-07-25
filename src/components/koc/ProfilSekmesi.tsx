@@ -176,17 +176,17 @@ export default function ProfilSekmesi({ ogrenciId, sinif, profil, zayif }: Props
                   <td>
                     <b>{d.ders}</b>
                   </td>
-                  <td>
+                  <td data-label="Seviye">
                     <span className={`${s.seviyeCip} ${seviyeSinif(d.seviye)}`}>{d.seviye}</span>
                   </td>
-                  <td>
+                  <td data-label="Bildiği Konular">
                     {(d.bilinen || []).length
                       ? d.bilinen.map((k, j) => (
                           <span key={j} className={s.konuCip}>✓ {k}</span>
                         ))
                       : "—"}
                   </td>
-                  <td>
+                  <td data-label="Eksik Konuları">
                     {(d.eksik || []).length
                       ? d.eksik.map((k, j) => (
                           <span key={j} className={`${s.konuCip} ${s.eksik}`}>! {k}</span>
