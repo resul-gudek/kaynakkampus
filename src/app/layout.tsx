@@ -12,8 +12,12 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Kaynak Akademi",
   description: "Doğru Kaynak, Doğru Gelecek — koçluk ve takip sistemi",
-  icons: { icon: "/assets/logo.png" },
+  icons: { icon: "/assets/logo.png", apple: "/assets/logo.png" },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "Kaynak Akademi", statusBarStyle: "default" },
 };
+
+export const viewport = { themeColor: "#18377f" };
 
 export default function RootLayout({
   children,

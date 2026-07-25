@@ -62,6 +62,23 @@ model Kullanici {
   girisKayitlari  GirisKaydi[]
   mesajGonderilen Mesaj[]          @relation("MesajGonderen")
   mesajAlinan     Mesaj[]          @relation("MesajAlici")
+  pushAbonelikleri PushAbonelik[]
+}
+
+// ── Web Push abonelikleri ────────────────────────────────────
+// Kullanicinin push izni verdigi her cihaz/tarayici bir kayittir.
+// Gonderim basarisiz olursa (410/404) kayit budanir.
+model PushAbonelik {
+  id          String    @id @default(cuid())
+  kullaniciId String
+  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  endpoint    String    @db.NVarChar(1000)
+  p256dh      String    @db.NVarChar(400)
+  auth        String    @db.NVarChar(400)
+  tarayici    String    @default("") @db.NVarChar(400) // user-agent (bilgi amacli)
+  olusturma   DateTime  @default(now())
+
+  @@index([kullaniciId])
 }
 
 // ── Mesajlaşma ───────────────────────────────────────────────
@@ -210,6 +227,7 @@ model OnlineSinif {
   aciklama   String           @default("") @db.NVarChar(Max)
   kapasite   Int              @default(20)
   aktif      Boolean          @default(true)
+  hatirlatmaDk Int?           // derse kaç dk kala bildirim; null ise MailAyar.dersHatirlatmaDk (global) kullanılır
   olusturma  DateTime         @default(now())
   uyeler     OnlineSinifUye[]
   oturumlar  DersOturumu[]
@@ -238,8 +256,12 @@ model DersOturumu {
   baslik         String
   konu           String         @default("")
   baslangic      DateTime
-  sure           Int            @default(60)
+  sure           Int            @default(60) // planlanan süre (dk)
+  canliBaslangic DateTime?      // ders gerçekten "canlı"ya geçtiği an (ilk katılım)
+  bitis          DateTime?      // ders "tamamlandı"ya çekildiği an
+  gercekSure     Int?           // gerçek süre (dk) = round((bitis - canliBaslangic)/60000)
   durum          String         @default("planlandi") // "planlandi" | "canli" | "tamamlandi" | "iptal"
+  hatirlatildi   Boolean        @default(false) // derse-kala bildirimi gönderildi mi (tekrar koruması)
   saglayici      String         @default("livekit")
   saglayiciOdaId String         @unique
   kayitEtkin     Boolean        @default(false) // MVP'de daima false; KVKK süreci sonrası açılacak
@@ -310,9 +332,10 @@ model MailAyar {
   sifre          String   @default("") // SMTP şifresi / uygulama şifresi
   gonderenAd     String   @default("Kaynak Akademi")
   gonderenAdres  String   @default("") // From adresi
-  hatirlatmaSaat Int      @default(24) // ders hatırlatması kaç saat önce gönderilsin
-  veliRaporAktif Boolean  @default(false) // açıksa haftalık veli ilerleme raporu otomatik kuyruklanır
-  guncelleme     DateTime @default(now()) @updatedAt
+  hatirlatmaSaat   Int      @default(24) // özel ders hatırlatma maili kaç saat önce gönderilsin
+  veliRaporAktif   Boolean  @default(false) // açıksa haftalık veli ilerleme raporu otomatik kuyruklanır
+  dersHatirlatmaDk Int      @default(15) // online derse kaç dk kala bildirim (sınıf override etmezse)
+  guncelleme       DateTime @default(now()) @updatedAt
 }
 
 model MailSablon {

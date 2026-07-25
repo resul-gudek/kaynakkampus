@@ -157,6 +157,7 @@ export const MailAyarSemasi = z.object({
   gonderenAdres: epostaOpsiyonel,
   hatirlatmaSaat: z.coerce.number().int().min(1, "En az 1 saat").max(168, "En çok 168 saat (7 gün)").default(24),
   veliRaporAktif: z.boolean().default(false),
+  dersHatirlatmaDk: z.coerce.number().int().min(1, "En az 1 dakika").max(1440, "En çok 1440 dakika (24 saat)").default(15),
 });
 
 export const MailSablonSemasi = z.object({

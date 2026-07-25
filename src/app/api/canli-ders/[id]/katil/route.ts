@@ -67,7 +67,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         });
       }
       if (erisim.oturum.durum === "planlandi") {
-        await tx.dersOturumu.update({ where: { id }, data: { durum: "canli" } });
+        // İlk katılımda ders "canlı"ya geçer; gerçek başlangıç anı kaydedilir
+        await tx.dersOturumu.update({
+          where: { id },
+          data: { durum: "canli", canliBaslangic: new Date() },
+        });
       }
     });
     denetim("sinif.derse_katil", kullanici, { oturumId: id, moderator: erisim.moderator });

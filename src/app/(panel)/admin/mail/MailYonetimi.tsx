@@ -28,6 +28,7 @@ export interface AyarGorunum {
   gonderenAdres: string;
   hatirlatmaSaat: number;
   veliRaporAktif: boolean;
+  dersHatirlatmaDk: number;
 }
 
 export interface SablonGorunum {
@@ -118,6 +119,7 @@ export default function MailYonetimi({
                   gonderenAdres: f.get("gonderenAdres"),
                   hatirlatmaSaat: f.get("hatirlatmaSaat"),
                   veliRaporAktif: f.get("veliRaporAktif") === "on",
+                  dersHatirlatmaDk: f.get("dersHatirlatmaDk"),
                 }),
               "Ayarlar kaydedildi.",
               setAyarMesaj
@@ -155,8 +157,12 @@ export default function MailYonetimi({
               <input id="m-gonderenAdres" name="gonderenAdres" defaultValue={ayar.gonderenAdres} placeholder="bilgi@kaynakakademi.com" />
             </div>
             <div className={stil.formGrup}>
-              <label htmlFor="m-hatirlatma">Ders Hatırlatması (saat önce)</label>
+              <label htmlFor="m-hatirlatma">Özel Ders Hatırlatma Maili (saat önce)</label>
               <input id="m-hatirlatma" name="hatirlatmaSaat" type="number" min={1} max={168} defaultValue={ayar.hatirlatmaSaat} />
+            </div>
+            <div className={stil.formGrup}>
+              <label htmlFor="m-ders-hatirlatma">Online Ders Bildirimi (dk önce, varsayılan)</label>
+              <input id="m-ders-hatirlatma" name="dersHatirlatmaDk" type="number" min={1} max={1440} defaultValue={ayar.dersHatirlatmaDk} />
             </div>
           </div>
           <div className={ek.onaylar}>

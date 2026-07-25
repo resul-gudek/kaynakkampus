@@ -14,6 +14,11 @@ const SinifSemasi = z.object({
   seviye: z.string().trim().max(50).default(""),
   aciklama: z.string().trim().max(1000).default(""),
   kapasite: z.coerce.number().int().min(1).max(100).default(20),
+  // boş bırakılırsa (null) global varsayılan (MailAyar.dersHatirlatmaDk) kullanılır
+  hatirlatmaDk: z.preprocess(
+    (v) => (v === "" || v === null || v === undefined ? null : v),
+    z.coerce.number().int().min(1).max(1440).nullable()
+  ).default(null),
 });
 
 const OturumSemasi = z.object({
@@ -233,7 +238,7 @@ export async function dersOturumuTamamla(oturumId: string): Promise<EylemSonuc> 
     const kim = await oturumGerekli("koc");
     const oturum = await prisma.dersOturumu.findFirst({
       where: { id: oturumId, sinif: { ogretmenId: kim.id } },
-      select: { id: true, sinifId: true, baslangic: true, durum: true },
+      select: { id: true, sinifId: true, baslangic: true, durum: true, canliBaslangic: true },
     });
     if (!oturum) return { hata: "Ders oturumu bulunamadı." };
     if (!["planlandi", "canli"].includes(oturum.durum)) {
@@ -243,14 +248,24 @@ export async function dersOturumuTamamla(oturumId: string): Promise<EylemSonuc> 
       return { hata: "Başlamamış bir ders tamamlandı olarak işaretlenemez." };
     }
 
+    // Gerçek süre: canlıya geçmiş bir ders için (bitiş − canlıBaşlangıç); hiç
+    // katılım olmadıysa (canliBaslangic yok) süre kaydedilmez.
+    const bitis = new Date();
+    const gercekSure = oturum.canliBaslangic
+      ? Math.max(1, Math.round((bitis.getTime() - oturum.canliBaslangic.getTime()) / 60_000))
+      : null;
+
     await prisma.$transaction([
-      prisma.dersOturumu.update({ where: { id: oturumId }, data: { durum: "tamamlandi" } }),
+      prisma.dersOturumu.update({
+        where: { id: oturumId },
+        data: { durum: "tamamlandi", bitis, gercekSure },
+      }),
       prisma.dersKatilim.updateMany({
         where: { oturumId, durum: "bekleniyor" },
         data: { durum: "katilmadi" },
       }),
     ]);
-    denetim("sinif.oturum_tamamla", kim, { sinifId: oturum.sinifId, oturumId });
+    denetim("sinif.oturum_tamamla", kim, { sinifId: oturum.sinifId, oturumId, gercekSure });
     siniflariTazele(oturumId);
     return { tamam: true };
   } catch (e) {

@@ -4,6 +4,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import { rolNavigasyonu, ROL_ETIKETLERI } from "@/lib/navigasyon";
 import type { Rol } from "@/lib/sabitler";
 import PanelKabuk from "@/components/panel/PanelKabuk";
+import PushKur from "@/components/panel/PushKur";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const kullanici = await aktifKullanici();
@@ -32,6 +33,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       cikisAction={cikisYap}
     >
       {children}
+      {bildirimliRol && <PushKur />}
     </PanelKabuk>
   );
 }

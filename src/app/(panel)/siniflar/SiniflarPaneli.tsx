@@ -19,6 +19,7 @@ export interface OturumGorunum {
   konu: string;
   baslangic: string;
   sure: number;
+  gercekSure: number | null;
   durum: string;
   kayitEtkin: boolean;
 }
@@ -80,6 +81,7 @@ export default function SiniflarPaneli({ rol, siniflar, ogrenciler }: Props) {
           seviye: fd.get("seviye"),
           aciklama: fd.get("aciklama"),
           kapasite: fd.get("kapasite"),
+          hatirlatmaDk: fd.get("hatirlatmaDk"),
         }),
       () => {
         form.reset();
@@ -142,6 +144,7 @@ export default function SiniflarPaneli({ rol, siniflar, ogrenciler }: Props) {
             <label><span>Ders</span><input name="ders" required placeholder="Matematik" /></label>
             <label><span>Seviye / sınıf</span><input name="seviye" placeholder="8. Sınıf" /></label>
             <label><span>Kapasite</span><input name="kapasite" type="number" min={1} max={100} defaultValue={12} /></label>
+            <label><span>Derse kala bildirim (dk)</span><input name="hatirlatmaDk" type="number" min={1} max={1440} placeholder="Boş = varsayılan" /></label>
           </div>
           <label><span>Açıklama</span><textarea name="aciklama" rows={3} placeholder="Sınıfın amacı ve çalışma düzeni" /></label>
           <button className="btn btn-primary btn-kucuk" disabled={bekliyor}>Sınıfı Oluştur</button>
@@ -300,7 +303,12 @@ function SinifKarti({
                 </div>
                 <div className={s.oturumGovde}>
                   <b>{oturum.baslik}</b>
-                  <small>{tarihSaat.format(new Date(oturum.baslangic))} · {oturum.sure} dk</small>
+                  <small>
+                    {tarihSaat.format(new Date(oturum.baslangic))} · {oturum.sure} dk planlı
+                    {oturum.durum === "tamamlandi" && oturum.gercekSure != null
+                      ? ` · ⏱ ${oturum.gercekSure} dk sürdü`
+                      : ""}
+                  </small>
                   {oturum.konu && <small>{oturum.konu}</small>}
                 </div>
                 <div className={s.oturumEylem}>

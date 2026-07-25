@@ -29,6 +29,7 @@ function sinifGorunumu(
       konu: oturum.konu,
       baslangic: oturum.baslangic.toISOString(),
       sure: oturum.sure,
+      gercekSure: oturum.gercekSure,
       durum: oturum.durum,
       kayitEtkin: oturum.kayitEtkin,
     })),
