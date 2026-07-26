@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eğitim Oyunları – Kaynak Kampüs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: #2F343D; background: #fff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    :root {
+      --blue: #7A2035; --blue-dk: #5E1728; --teal: #C98792; --orange: #C98792;
+      --amber: #C98792; --bg-soft: #FAF7F5; --text: #2F343D; --muted: #7C7883;
+      --radius: 14px; --shadow: 0 4px 24px rgba(122,32,53,.10); --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
+      --p1: #7A2035; --p1-bg: #FCF2F4; --p2: #175A68; --p2-bg: #EDF6F8;
+    }
+
+    .container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px;
+      border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
+      transition: all .25s; border: none; font-family: inherit;
+    }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
+    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover:not(:disabled) { background: var(--blue); color: #fff; transform: translateY(-2px); }
+    .btn-ghost { background: var(--bg-soft); color: var(--blue); }
+    .btn-ghost:hover:not(:disabled) { background: #F0E4E7; }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(122,32,53,.08);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
+    .logo-icon { width: 48px; height: 48px; object-fit: contain; }
+    .logo span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a:hover { background: var(--bg-soft); color: var(--blue); }
+    nav a.active { color: var(--blue); font-weight: 700; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue); margin: 5px 0; border-radius: 2px; }
+    .mobile-nav {
+      display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
+      background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
+      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(122,32,53,.08);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
+    .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
+
+    /* PAGE HERO */
+    .page-hero { background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%); padding: 40px 0 30px; }
+    .page-hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; }
+    .page-hero h1 span { color: var(--orange); }
+    .page-hero p { color: var(--muted); margin-top: 8px; max-width: 760px; font-size: .95rem; }
+    .kk-badge {
+      display: inline-flex; align-items: center; gap: 8px; background: #fff;
+      padding: 7px 16px; border-radius: 50px; font-size: .78rem; font-weight: 700;
+      color: var(--blue); box-shadow: var(--shadow); margin-bottom: 14px;
+    }
+
+    main { padding: 30px 0 80px; min-height: 55vh; }
+
+    .blok-baslik { font-size: 1.3rem; font-weight: 800; margin: 6px 0 4px; }
+    .konu-bas { font-size: 1.05rem; font-weight: 800; color: var(--blue); margin: 22px 0 12px; }
+    .konu-blok + .konu-blok { margin-top: 8px; }
+
+    /* ÖZET ŞERİT */
+    .ozet-serit {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      background: linear-gradient(120deg, var(--blue), #9A3550); color: #fff;
+      border-radius: 18px; padding: 20px 24px; box-shadow: var(--shadow-lg); margin-bottom: 26px;
+    }
+    .ozet-ana { display: flex; flex-direction: column; }
+    .ozet-etiket { font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; opacity: .85; }
+    .ozet-puan { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+    .ozet-mini { text-align: center; background: rgba(255,255,255,.14); border-radius: 12px; padding: 8px 16px; }
+    .ozet-mini b { display: block; font-size: 1.4rem; font-weight: 800; }
+    .ozet-mini span { font-size: .72rem; opacity: .85; }
+    .ozet-btn { margin-left: auto; }
+    .ozet-btnler { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* SEÇİM KARTLARI */
+    .secim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 18px; }
+    .secim-kart {
+      display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+      background: #fff; border: 2px solid #EEE3E6; border-radius: 18px; padding: 22px 16px;
+      cursor: pointer; transition: all .2s; font-family: inherit; color: var(--text);
+    }
+    .secim-kart:hover { border-color: var(--blue); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .secim-emoji { font-size: 2rem; line-height: 1; }
+    .secim-ad { font-size: 1.02rem; font-weight: 800; }
+    .secim-alt { font-size: .78rem; color: var(--muted); font-weight: 600; }
+
+    /* KIRINTI */
+    .kirinti { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: .85rem; margin-bottom: 14px; }
+    .kirinti .kb { background: none; border: none; cursor: pointer; font-family: inherit; font-size: .85rem; font-weight: 600; color: var(--blue); padding: 4px 6px; border-radius: 6px; }
+    .kirinti .kb:hover { background: var(--bg-soft); }
+    .kirinti .kx { font-weight: 700; color: var(--text); padding: 4px 6px; }
+    .kirinti .kok { color: var(--muted); }
+
+    /* OYUN KARTLARI */
+    .oyun-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .oyun-kart {
+      display: flex; flex-direction: column; gap: 8px; text-align: left;
+      background: #fff; border: 1px solid #EEE3E6; border-radius: 16px; padding: 18px;
+      cursor: pointer; transition: all .2s; font-family: inherit; color: var(--text); box-shadow: var(--shadow);
+    }
+    .oyun-kart:hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .ok-ust { display: flex; align-items: center; justify-content: space-between; }
+    .ok-ikon { font-size: 1.7rem; }
+    .ok-ad { font-size: 1.05rem; font-weight: 800; line-height: 1.25; }
+    .ok-tur { font-size: .78rem; color: var(--muted); font-weight: 600; }
+    .ok-skor { font-size: .8rem; color: var(--text); margin-top: 2px; }
+    .ok-skor b { color: var(--blue); }
+    .ok-skor.yeni { color: var(--muted); font-style: italic; }
+
+    .zor { font-size: .68rem; font-weight: 800; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; letter-spacing: .03em; }
+    .zor.z1 { background: #E6F3EA; color: #2E7D46; }
+    .zor.z2 { background: #FBF0E1; color: #A8701B; }
+    .zor.z3 { background: #F7E4E7; color: #B23A4E; }
+
+    /* İKİ KİŞİLİK ETİKETİ */
+    .kisi-et {
+      display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+      font-size: .68rem; font-weight: 800; padding: 3px 10px; border-radius: 50px;
+      text-transform: uppercase; letter-spacing: .03em; color: #4A2430;
+      background: linear-gradient(90deg, #F7E1E6 0 50%, #DDEDF1 50% 100%);
+      box-shadow: inset 0 0 0 1px rgba(122,32,53,.10);
+    }
+    .ok-etiketler { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .ikili-aciklama { color: var(--muted); font-size: .9rem; margin: 2px 0 4px; max-width: 760px; }
+
+    /* OYUN ÜST BAR */
+    .oyun-ust { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .oyun-cik { padding: 9px 16px; font-size: .82rem; }
+    .oyun-etiket { font-size: .82rem; color: var(--muted); font-weight: 600; }
+    .oyun-etiket span { color: var(--text); }
+
+    /* EŞLEŞTİRME */
+    .es-durum { font-size: .88rem; color: var(--muted); margin-bottom: 14px; }
+    .es-durum b { color: var(--blue); }
+    .es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .es-kol { display: flex; flex-direction: column; gap: 10px; }
+    .es-oge {
+      padding: 14px 16px; border-radius: 12px; border: 2px solid #E7DDE0; background: #fff;
+      cursor: pointer; font-family: inherit; font-size: .95rem; font-weight: 600; color: var(--text); transition: all .15s;
+    }
+    .es-oge:hover:not(.eslesti) { border-color: #C98792; background: #FCF7F8; }
+    .es-oge.secili { border-color: var(--blue); background: #F6ECEF; }
+    .es-oge.eslesti { border-color: #9FCBAE; background: #EAF6EE; color: #2E7D46; cursor: default; }
+    .es-oge.hata { border-color: #D98A9A; background: #FBEDF0; animation: sars .3s; }
+    @keyframes sars { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+    /* HAFIZA */
+    .hf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+    .hf-kart {
+      aspect-ratio: 3/4; border-radius: 14px; border: none; cursor: pointer; position: relative;
+      background: linear-gradient(135deg, var(--blue), #9A3550); transition: transform .15s; font-family: inherit;
+    }
+    .hf-kart::after { content: "?"; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,.85); font-size: 1.6rem; font-weight: 800; }
+    .hf-kart:hover { transform: translateY(-3px); }
+    .hf-yuz { position: absolute; inset: 0; display: grid; place-items: center; padding: 6px; text-align: center; font-size: 1.05rem; font-weight: 700; color: var(--text); opacity: 0; }
+    .hf-kart.acik, .hf-kart.bulundu { background: #fff; border: 2px solid #E7DDE0; transform: none; cursor: default; }
+    .hf-kart.acik::after, .hf-kart.bulundu::after { content: none; }
+    .hf-kart.acik .hf-yuz, .hf-kart.bulundu .hf-yuz { opacity: 1; }
+    .hf-kart.bulundu { border-color: #9FCBAE; background: #EAF6EE; }
+
+    /* SÜRÜKLE-BIRAK */
+    .sb-ipucu { font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+    .sb-havuz { display: flex; flex-wrap: wrap; gap: 10px; min-height: 40px; margin-bottom: 18px; padding: 12px; border: 2px dashed #E0D2D6; border-radius: 14px; }
+    .sb-oge {
+      padding: 10px 16px; border-radius: 50px; border: 2px solid #E7DDE0; background: #fff;
+      cursor: grab; font-family: inherit; font-size: .9rem; font-weight: 600; color: var(--text); transition: all .15s;
+    }
+    .sb-oge:hover { border-color: #C98792; }
+    .sb-oge.secili { border-color: var(--blue); background: #F6ECEF; }
+    .sb-oge.yerlesti { border-color: #9FCBAE; background: #EAF6EE; color: #2E7D46; cursor: default; }
+    .sb-oge.hata { animation: sars .3s; border-color: #D98A9A; }
+    .sb-kutular { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+    .sb-kutu { border: 2px solid #E7DDE0; border-radius: 16px; padding: 14px; background: var(--bg-soft); min-height: 120px; transition: all .15s; }
+    .sb-kutu.uzerinde { border-color: var(--blue); background: #F6ECEF; }
+    .sb-kutu-bas { font-weight: 800; color: var(--blue); font-size: .95rem; margin-bottom: 10px; text-align: center; }
+    .sb-kutu-ic { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+    /* MATEMATİK */
+    .mt-ilerle { font-size: .88rem; color: var(--muted); margin-bottom: 16px; }
+    .mt-ilerle b { color: var(--blue); }
+    .mt-soru { font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; text-align: center; margin: 20px 0 26px; letter-spacing: .02em; }
+    .mt-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .mt-girdi {
+      width: 160px; padding: 14px 18px; border-radius: 14px; border: 2px solid #E7DDE0;
+      font-family: inherit; font-size: 1.4rem; font-weight: 700; text-align: center; color: var(--text);
+    }
+    .mt-girdi:focus { outline: none; border-color: var(--blue); }
+    .mt-geri { text-align: center; font-weight: 700; font-size: 1.05rem; margin-top: 18px; min-height: 26px; }
+    .mt-geri.dogru { color: #2E7D46; }
+    .mt-geri.yanlis { color: #B23A4E; }
+
+    /* İKİ KİŞİLİK DÜELLO */
+    .dl-hazir { background: #fff; border: 1px solid #EEE3E6; border-radius: 20px; padding: 26px 24px; box-shadow: var(--shadow); max-width: 640px; margin: 0 auto; }
+    .dl-hazir h3 { font-size: 1.2rem; font-weight: 800; text-align: center; }
+    .dl-hazir-alt { text-align: center; color: var(--muted); font-size: .86rem; margin-top: 6px; font-weight: 600; }
+    .dl-adlar { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 22px 0 4px; }
+    .dl-ad-alan { display: flex; flex-direction: column; gap: 6px; }
+    .dl-ad-alan label { font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+    .dl-ad-alan.a1 label { color: var(--p1); }
+    .dl-ad-alan.a2 label { color: var(--p2); }
+    .dl-ad-alan input { padding: 12px 14px; border-radius: 12px; border: 2px solid #E7DDE0; font-family: inherit; font-size: .95rem; font-weight: 600; color: var(--text); }
+    .dl-ad-alan.a1 input:focus { outline: none; border-color: var(--p1); }
+    .dl-ad-alan.a2 input:focus { outline: none; border-color: var(--p2); }
+    .dl-kural { background: var(--bg-soft); border-radius: 14px; padding: 14px 18px; margin: 18px 0 22px; font-size: .84rem; color: var(--muted); }
+    .dl-kural li { margin: 5px 0; padding-left: 16px; position: relative; }
+    .dl-kural li::before { content: "›"; position: absolute; left: 3px; color: var(--blue); font-weight: 800; }
+
+    .dl-arac { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 12px; }
+    .dl-arac-not { font-size: .76rem; color: var(--muted); font-weight: 600; }
+    .dl-buyut { padding: 9px 16px; font-size: .82rem; }
+
+    .dl-skor { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; background: #fff; border: 1px solid #EEE3E6; border-radius: 18px; padding: 12px 18px; box-shadow: var(--shadow); margin-bottom: 14px; }
+    .dl-skor-taraf { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .dl-skor-taraf.s2 { text-align: right; }
+    .dl-skor-ad { font-size: .84rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dl-skor-taraf.s1 .dl-skor-ad { color: var(--p1); }
+    .dl-skor-taraf.s2 .dl-skor-ad { color: var(--p2); }
+    .dl-skor-puan { font-size: 1.9rem; font-weight: 800; line-height: 1.05; }
+    .dl-vs { font-size: .7rem; font-weight: 800; color: var(--muted); background: var(--bg-soft); padding: 6px 11px; border-radius: 50px; letter-spacing: .04em; }
+
+    .dl-soru-kart { background: linear-gradient(120deg, var(--blue), #9A3550); color: #fff; border-radius: 18px; padding: 20px; text-align: center; box-shadow: var(--shadow-lg); }
+    .dl-tur-bilgi { font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; opacity: .8; margin-bottom: 8px; }
+    .dl-soru { font-size: clamp(1.02rem, 2.3vw, 1.32rem); font-weight: 700; line-height: 1.45; }
+    .dl-sure-yol { height: 6px; background: rgba(255,255,255,.25); border-radius: 50px; margin-top: 16px; overflow: hidden; }
+    .dl-sure-dolgu { height: 100%; width: 100%; background: #fff; border-radius: 50px; }
+    .dl-bildirim { text-align: center; font-weight: 700; font-size: .95rem; min-height: 24px; margin: 14px 0 4px; color: var(--muted); }
+    .dl-bildirim.k1 { color: var(--p1); font-weight: 800; }
+    .dl-bildirim.k2 { color: var(--p2); font-weight: 800; }
+
+    .dl-taraflar { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .dl-panel { border: 2px solid #E7DDE0; border-radius: 18px; padding: 14px; transition: opacity .2s; }
+    .dl-panel.p1 { border-color: #EAD3D9; background: var(--p1-bg); }
+    .dl-panel.p2 { border-color: #CFE4E8; background: var(--p2-bg); }
+    .dl-panel.pas { opacity: .5; pointer-events: none; }
+    .dl-panel-bas { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .84rem; font-weight: 800; margin-bottom: 10px; }
+    .dl-panel.p1 .dl-panel-bas { color: var(--p1); }
+    .dl-panel.p2 .dl-panel-bas { color: var(--p2); }
+    .dl-panel-ad { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dl-panel-not { flex: 0 0 auto; font-size: .7rem; font-weight: 700; color: var(--muted); }
+    .dl-kartlar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .dl-kart {
+      display: flex; align-items: center; gap: 8px; text-align: left; min-height: 60px;
+      background: #fff; border: 2px solid #E7DDE0; border-radius: 14px; padding: 11px 12px;
+      cursor: pointer; font-family: inherit; font-size: .88rem; font-weight: 600; color: var(--text); transition: all .15s;
+    }
+    .dl-kart:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .dl-panel.p1 .dl-kart:hover:not(:disabled) { border-color: var(--p1); }
+    .dl-panel.p2 .dl-kart:hover:not(:disabled) { border-color: var(--p2); }
+    .dl-kart-tus { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: .72rem; font-weight: 800; background: var(--bg-soft); color: var(--muted); }
+    .dl-panel.p1 .dl-kart-tus { background: #F3DFE4; color: var(--p1); }
+    .dl-panel.p2 .dl-kart-tus { background: #DBEBEF; color: var(--p2); }
+    .dl-kart:disabled { cursor: default; transform: none; box-shadow: none; }
+    .dl-kart.acik { border-color: #7FBF97; background: #F3FAF6; }
+    .dl-kart.dogru { border-color: #7FBF97; background: #EAF6EE; color: #2E7D46; }
+    .dl-kart.yanlis { border-color: #D98A9A; background: #FBEDF0; color: #B23A4E; animation: sars .3s; }
+
+    /* BÜYÜK EKRAN / AKILLI TAHTA MODU — sahne tam ekrana alınır, yazı ve kartlar büyür */
+    .dl-sahne.buyuk { background: #fff; }
+    .dl-sahne.buyuk .dl-arac-not { display: none; }
+    .dl-sahne.buyuk .dl-skor-ad { font-size: 1.15rem; }
+    .dl-sahne.buyuk .dl-skor-puan { font-size: 2.9rem; }
+    .dl-sahne.buyuk .dl-vs { font-size: .9rem; padding: 8px 14px; }
+    .dl-sahne.buyuk .dl-tur-bilgi { font-size: 1rem; }
+    .dl-sahne.buyuk .dl-soru { font-size: clamp(1.5rem, 2.9vw, 2.6rem); }
+    .dl-sahne.buyuk .dl-sure-yol { height: 10px; }
+    .dl-sahne.buyuk .dl-bildirim { font-size: 1.3rem; min-height: 34px; }
+    .dl-sahne.buyuk .dl-panel-bas { font-size: 1.15rem; }
+    .dl-sahne.buyuk .dl-panel-not { font-size: .95rem; }
+    .dl-sahne.buyuk .dl-kart { font-size: clamp(1.05rem, 1.5vw, 1.6rem); min-height: 104px; padding: 16px 18px; gap: 12px; border-radius: 18px; }
+    .dl-sahne.buyuk .dl-kart-tus { display: grid; width: 34px; height: 34px; border-radius: 10px; font-size: 1rem; }
+    .dl-sahne:fullscreen { display: flex; flex-direction: column; gap: 10px; padding: 20px 26px; overflow: auto; }
+    .dl-sahne:fullscreen .dl-arac { margin-bottom: 0; }
+    .dl-sahne:fullscreen .dl-skor { margin-bottom: 0; }
+    .dl-sahne:fullscreen .dl-bildirim { margin: 4px 0; }
+    .dl-sahne:fullscreen .dl-taraflar { flex: 1; min-height: 0; }
+    .dl-sahne:fullscreen .dl-panel { display: flex; flex-direction: column; }
+    .dl-sahne:fullscreen .dl-kartlar { flex: 1; }
+    /* Tam ekranda kartlar mevcut yüksekliğe göre esner; alçak ekranlarda taşma olmaz */
+    .dl-sahne:fullscreen .dl-kart { height: 100%; min-height: 0; justify-content: center; }
+    /* Alçak ekranlarda (ör. 1024x600) büyük mod ölçüleri kısılır ki tahta tek ekrana sığsın */
+    @media (max-height: 700px) {
+      .dl-sahne.buyuk .dl-soru { font-size: clamp(1.1rem, 2.2vw, 1.7rem); }
+      .dl-sahne.buyuk .dl-skor-puan { font-size: 1.9rem; }
+      .dl-sahne.buyuk .dl-skor-ad { font-size: .95rem; }
+      .dl-sahne.buyuk .dl-bildirim { font-size: 1rem; min-height: 22px; }
+      .dl-sahne.buyuk .dl-panel-bas { font-size: .95rem; margin-bottom: 6px; }
+      .dl-sahne.buyuk .dl-kart { font-size: clamp(.95rem, 1.2vw, 1.25rem); padding: 10px 12px; }
+      .dl-sahne.buyuk .dl-sure-yol { height: 7px; margin-top: 10px; }
+      .dl-sahne:fullscreen { padding: 12px 18px; gap: 8px; }
+      .dl-sahne:fullscreen .dl-panel { padding: 10px; }
+    }
+
+    .dl-sonuc-skor { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin: 18px 0 4px; }
+    .dl-sonuc-taraf { background: var(--bg-soft); border-radius: 16px; padding: 14px 8px; }
+    .dl-sonuc-taraf b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1; }
+    .dl-sonuc-taraf span { display: block; font-size: .78rem; font-weight: 700; color: var(--muted); margin-top: 4px; }
+    .dl-sonuc-taraf.t1 b { color: var(--p1); }
+    .dl-sonuc-taraf.t2 b { color: var(--p2); }
+    .dl-sonuc-taraf.t1.kazanan { background: #FAEDF0; box-shadow: inset 0 0 0 2px var(--p1); }
+    .dl-sonuc-taraf.t2.kazanan { background: #E9F4F6; box-shadow: inset 0 0 0 2px var(--p2); }
+
+    /* SONUÇ */
+    .sonuc-kart { background: #fff; border: 1px solid #EEE3E6; border-radius: 20px; padding: 34px 28px; box-shadow: var(--shadow); text-align: center; max-width: 560px; margin: 0 auto; }
+    .sonuc-emoji { font-size: 3.2rem; }
+    .sonuc-baslik { font-size: 1.5rem; font-weight: 800; margin-top: 4px; }
+    .sonuc-puan { font-size: 3.6rem; font-weight: 800; color: var(--blue); line-height: 1; margin: 12px 0; }
+    .sonuc-puan span { font-size: 1rem; font-weight: 700; color: var(--muted); margin-left: 6px; }
+    .sonuc-rekor { display: inline-block; background: #FBF0E1; color: #A8701B; font-weight: 800; font-size: .85rem; padding: 6px 16px; border-radius: 50px; margin-bottom: 14px; }
+    .sonuc-detay { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0; }
+    .sonuc-detay > div { background: var(--bg-soft); border-radius: 12px; padding: 12px 6px; }
+    .sonuc-detay b { display: block; font-size: 1.1rem; font-weight: 800; }
+    .sonuc-detay span { font-size: .74rem; color: var(--muted); }
+    .sonuc-alt { font-size: .85rem; color: var(--muted); margin-bottom: 20px; }
+    .sonuc-alt b { color: var(--blue); }
+
+    /* İSTATİSTİK */
+    .ist-ozet { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin-bottom: 8px; }
+    .ist-kutu { background: #fff; border: 1px solid #EEE3E6; border-radius: 16px; padding: 18px; text-align: center; box-shadow: var(--shadow); }
+    .ist-kutu span { display: block; font-size: .76rem; color: var(--muted); font-weight: 600; }
+    .ist-kutu b { font-size: 1.8rem; font-weight: 800; color: var(--blue); }
+    .ist-tablo { border: 1px solid #EEE3E6; border-radius: 14px; overflow: hidden; }
+    .ist-satir { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 12px 16px; align-items: center; font-size: .9rem; }
+    .ist-satir:nth-child(even) { background: var(--bg-soft); }
+    .ist-satir span:not(.ist-ad) { text-align: right; }
+    .ist-bas { background: #F3E9EC !important; font-weight: 800; color: var(--blue); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+    .ist-ad { font-weight: 700; }
+    .son-liste { display: flex; flex-direction: column; gap: 8px; }
+    .son-oge { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #EEE3E6; border-radius: 12px; padding: 12px 16px; }
+    .son-ad { font-weight: 700; font-size: .92rem; }
+    .son-meta { font-size: .78rem; color: var(--muted); margin-left: auto; }
+    .son-puan { font-weight: 800; color: var(--blue); }
+
+    .bos-mesaj { background: var(--bg-soft); border: 1px dashed #D8C6CB; border-radius: 14px; padding: 28px; text-align: center; color: var(--muted); font-weight: 600; }
+
+    footer { background: #241018; color: rgba(255,255,255,.6); padding: 24px 0; text-align: center; font-size: .78rem; }
+
+    @media (max-width: 860px) { nav { display: none; } .hamburger { display: block; } }
+    @media (max-width: 640px) {
+      .dl-taraflar { grid-template-columns: 1fr; gap: 10px; }
+      .dl-adlar { grid-template-columns: 1fr; }
+      .dl-kart-tus { display: none; }
+      .dl-kart { min-height: 50px; padding: 9px 11px; font-size: .86rem; }
+      .dl-kartlar { gap: 8px; }
+      .dl-skor { padding: 9px 14px; margin-bottom: 10px; }
+      .dl-skor-puan { font-size: 1.5rem; }
+      .dl-soru-kart { padding: 14px; }
+      .dl-sure-yol { margin-top: 12px; }
+      .dl-panel { padding: 10px; }
+      .dl-panel-bas { margin-bottom: 8px; }
+      .dl-bildirim { margin: 10px 0 8px; font-size: .88rem; }
+      .dl-arac { margin-bottom: 8px; }
+      .dl-arac-not { display: none; }
+    }
+    @media (max-width: 560px) {
+      .ozet-btn { margin-left: 0; width: 100%; }
+      .ozet-btnler { margin-left: 0; width: 100%; flex-direction: column; gap: 8px; }
+      .ozet-btnler .btn { width: 100%; padding: 12px 20px; }
+      .sonuc-detay { grid-template-columns: repeat(2, 1fr); }
+      .btn-row .btn { flex: 1; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
+
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+        </div>
+      </div>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <a href="etkinlikler.html">Etkinlikler</a>
+      <a href="/blog">Blog</a>
+      <a href="haberler.html">Haberler</a>
+      <a href="index.html#how">Nasıl Çalışır</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+    </nav>
+
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
+    </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="sh-drawer" id="shMobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
+    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="/blog">Blog</a>
+    <a href="haberler.html">Haberler</a>
+    <a href="index.html#how">Nasıl Çalışır</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="kk-badge">🎮 Eğitim Oyunları</span>
+    <h1>Oyna, Öğren, <span>Puan Kazan</span></h1>
+    <p>Kademe, sınıf, ders ve konuya göre düzenlenmiş eğitici oyunlarla öğrenirken eğlen. Her oyun sonunda doğru sayın, hızın ve zorluk seviyene göre puan kazan; en yüksek skorlarını takip et. İlerlemen bu cihazda saklanır.</p>
+  </div>
+</section>
+
+<main>
+  <div class="container" id="app"><!-- JS ile doldurulur --></div>
+</main>
+
+<footer>
+  <div class="container">© 2026 Kaynak Kampüs · Eğitim oyunları öğrenmeyi desteklemek amacıyla hazırlanmış eğlenceli alıştırmalardır. Kazanılan puanlar ve ilerleme yalnızca bu tarayıcıda (cihazda) saklanır.</div>
+</footer>
+
+<script>
+/* ═════════════ YARDIMCILAR ═════════════ */
+const $ = id => document.getElementById(id);
+function karistir(a){ const r = a.slice(); for (let i = r.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; }
+function zorlukAd(z){ return { 1: "Kolay", 2: "Orta", 3: "Zor" }[z] || "—"; }
+function zorlukEtiket(z){ return `<span class="zor z${z}">${zorlukAd(z)}</span>`; }
+function bosMesaj(m){ return `<div class="bos-mesaj">🚧 ${m}</div>`; }
+function kisiEtiket(){ return `<span class="kisi-et">👥 2 Kişi</span>`; }
+function ikiOyunculuMu(o){ return (TUR_ISLEYICI[o.tur] || {}).kisi === 2; }
+function ikiliOyunlar(){ return OYUNLAR.filter(ikiOyunculuMu); }
+function kacis(s){ return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function dersEmoji(d){
+  return { "Türkçe":"📖","Matematik":"🔢","Hayat Bilgisi":"🌍","Fen Bilimleri":"🔬","Sosyal Bilgiler":"🗺️",
+    "İngilizce":"🔤","Biyoloji":"🧬","Fizik":"⚛️","Kimya":"🧪","Geometri":"📐","Tarih":"🏛️","Coğrafya":"🌐",
+    "T.C. İnkılap Tarihi ve Atatürkçülük":"🇹🇷" }[d] || "📚";
+}
+
+/* ═════════════ KADEME / SINIF TANIMI ═════════════ */
+const KADEMELER = [
+  { id: "ilkokul",  ad: "İlkokul",  emoji: "🎒", siniflar: ["1", "2", "3", "4"] },
+  { id: "ortaokul", ad: "Ortaokul", emoji: "📚", siniflar: ["5", "6", "7", "8"] },
+  { id: "lise",     ad: "Lise",     emoji: "🎓", siniflar: ["9", "10", "11", "12"] },
+];
+
+/* ═════════════ OYUN İÇERİĞİ (veri-güdümlü — genişletmek için diziye kayıt ekle) ═════════════
+   Alanlar: id, kademe, sinif, ders, konu, tur, zorluk (1-3), baslik, veri
+   tur şemaları:
+     eslestirme  → veri.ciftler: [[sol, sag], ...]
+     hafiza      → veri.ciftler: [[a, b], ...]
+     suruklebirak→ veri.kategoriler: [...], veri.ogeler: [{ metin, kategori }, ...]
+     matematik   → veri.islem: "toplama|cikarma|carpma|bolme", min, max, soruSayisi
+     duello      → veri.sorular: [{ soru, secenekler: [4 metin], dogru: index }, ...], veri.turSayisi, veri.saniye
+                   (aynı cihazda iki oyuncu — her tur iki panele de sorulur, doğru kartı ilk tıklayan turu alır)
+*/
+const OYUNLAR = [
+  /* ---- İLKOKUL ---- */
+  { id: "ilk1-toplama", kademe: "ilkokul", sinif: "1", ders: "Matematik", konu: "Toplama", tur: "matematik", zorluk: 1,
+    baslik: "Toplama Yarışı", veri: { islem: "toplama", min: 1, max: 9, soruSayisi: 10 } },
+  { id: "ilk2-carpim", kademe: "ilkokul", sinif: "2", ders: "Matematik", konu: "Çarpma İşlemi", tur: "matematik", zorluk: 2,
+    baslik: "Çarpım Tablosu", veri: { islem: "carpma", min: 1, max: 10, soruSayisi: 10 } },
+  { id: "ilk2-sozcuk-gorsel", kademe: "ilkokul", sinif: "2", ders: "Türkçe", konu: "Sözcük ve Görsel", tur: "hafiza", zorluk: 1,
+    baslik: "Sözcük Hafızası", veri: { ciftler: [["Elma", "🍎"], ["Araba", "🚗"], ["Ev", "🏠"], ["Kedi", "🐱"], ["Güneş", "☀️"], ["Kitap", "📕"]] } },
+  { id: "ilk3-bolme", kademe: "ilkokul", sinif: "3", ders: "Matematik", konu: "Bölme İşlemi", tur: "matematik", zorluk: 2,
+    baslik: "Bölme Ustası", veri: { islem: "bolme", min: 2, max: 9, soruSayisi: 10 } },
+  { id: "ilk3-duyu", kademe: "ilkokul", sinif: "3", ders: "Hayat Bilgisi", konu: "Duyu Organları", tur: "hafiza", zorluk: 1,
+    baslik: "Duyu Organları", veri: { ciftler: [["Göz", "Görme"], ["Kulak", "İşitme"], ["Burun", "Koklama"], ["Dil", "Tatma"], ["Deri", "Dokunma"]] } },
+  { id: "ilk4-esanlam", kademe: "ilkokul", sinif: "4", ders: "Türkçe", konu: "Eş Anlamlı Kelimeler", tur: "eslestirme", zorluk: 2,
+    baslik: "Eş Anlamlılar", veri: { ciftler: [["güzel", "hoş"], ["fakir", "yoksul"], ["siyah", "kara"], ["ihtiyar", "yaşlı"], ["okul", "mektep"], ["cevap", "yanıt"]] } },
+  { id: "ilk4-zitanlam", kademe: "ilkokul", sinif: "4", ders: "Türkçe", konu: "Zıt Anlamlı Kelimeler", tur: "eslestirme", zorluk: 1,
+    baslik: "Zıt Anlamlılar", veri: { ciftler: [["büyük", "küçük"], ["uzun", "kısa"], ["iyi", "kötü"], ["hızlı", "yavaş"], ["açık", "kapalı"], ["dolu", "boş"]] } },
+  { id: "ilk3-carpim-duello", kademe: "ilkokul", sinif: "3", ders: "Matematik", konu: "Çarpma İşlemi", tur: "duello", zorluk: 1,
+    baslik: "Çarpım Tablosu Düellosu", veri: { turSayisi: 10, saniye: 15, sorular: [
+      { soru: "6 × 7 = ?", secenekler: ["42", "36", "48", "40"], dogru: 0 },
+      { soru: "8 × 9 = ?", secenekler: ["72", "64", "81", "76"], dogru: 0 },
+      { soru: "5 × 6 = ?", secenekler: ["30", "25", "35", "36"], dogru: 0 },
+      { soru: "7 × 7 = ?", secenekler: ["49", "42", "56", "47"], dogru: 0 },
+      { soru: "4 × 8 = ?", secenekler: ["32", "28", "36", "24"], dogru: 0 },
+      { soru: "9 × 3 = ?", secenekler: ["27", "24", "21", "29"], dogru: 0 },
+      { soru: "6 × 6 = ?", secenekler: ["36", "30", "42", "32"], dogru: 0 },
+      { soru: "8 × 5 = ?", secenekler: ["40", "35", "45", "48"], dogru: 0 },
+      { soru: "7 × 9 = ?", secenekler: ["63", "56", "72", "69"], dogru: 0 },
+      { soru: "4 × 4 = ?", secenekler: ["16", "12", "20", "8"], dogru: 0 },
+      { soru: "9 × 9 = ?", secenekler: ["81", "72", "90", "79"], dogru: 0 },
+      { soru: "3 × 8 = ?", secenekler: ["24", "21", "28", "18"], dogru: 0 },
+      { soru: "10 × 7 = ?", secenekler: ["70", "17", "60", "77"], dogru: 0 },
+      { soru: "6 × 8 = ?", secenekler: ["48", "42", "54", "46"], dogru: 0 },
+    ] } },
+  { id: "ilk4-sozcuk-duello", kademe: "ilkokul", sinif: "4", ders: "Türkçe", konu: "Sözcükte Anlam", tur: "duello", zorluk: 2,
+    baslik: "Kelime Düellosu", veri: { turSayisi: 10, saniye: 15, sorular: [
+      { soru: "Cömert sözcüğünün zıt anlamlısı hangisidir?", secenekler: ["Cimri", "Eli açık", "Kibar", "Zengin"], dogru: 0 },
+      { soru: "Yoksul sözcüğünün eş anlamlısı hangisidir?", secenekler: ["Fakir", "Zengin", "Mutlu", "Çalışkan"], dogru: 0 },
+      { soru: "Ak sözcüğünün zıt anlamlısı hangisidir?", secenekler: ["Kara", "Beyaz", "Gri", "Temiz"], dogru: 0 },
+      { soru: "Konuk sözcüğünün eş anlamlısı hangisidir?", secenekler: ["Misafir", "Komşu", "Arkadaş", "Ev sahibi"], dogru: 0 },
+      { soru: "Göz atmak deyimi ne anlama gelir?", secenekler: ["Kısaca bakmak", "Uzun süre izlemek", "Göz kırpmak", "Dikkat çekmek"], dogru: 0 },
+      { soru: "Pabucu dama atılmak deyimi ne anlama gelir?", secenekler: ["Değerini yitirmek", "Ayakkabısını kaybetmek", "Çok yorulmak", "Aceleci olmak"], dogru: 0 },
+      { soru: "Kolay sözcüğünün zıt anlamlısı hangisidir?", secenekler: ["Zor", "Basit", "Uzun", "Sade"], dogru: 0 },
+      { soru: "Sevinç sözcüğünün zıt anlamlısı hangisidir?", secenekler: ["Üzüntü", "Neşe", "Mutluluk", "Coşku"], dogru: 0 },
+      { soru: "Yanıt sözcüğünün eş anlamlısı hangisidir?", secenekler: ["Cevap", "Soru", "Sonuç", "Öneri"], dogru: 0 },
+      { soru: "Kalbi kırılmak deyimi ne anlama gelir?", secenekler: ["Üzülmek", "Hastalanmak", "Korkmak", "Sevinmek"], dogru: 0 },
+      { soru: "Yaşlı sözcüğünün eş anlamlısı hangisidir?", secenekler: ["İhtiyar", "Genç", "Çocuk", "Olgun"], dogru: 0 },
+      { soru: "Ucuz sözcüğünün zıt anlamlısı hangisidir?", secenekler: ["Pahalı", "Bedava", "İndirimli", "Küçük"], dogru: 0 },
+      { soru: "El üstünde tutmak deyimi ne anlama gelir?", secenekler: ["Çok değer vermek", "Havaya kaldırmak", "Yardım istemek", "Beğenmemek"], dogru: 0 },
+      { soru: "Başlamak sözcüğünün zıt anlamlısı hangisidir?", secenekler: ["Bitirmek", "Sürdürmek", "Denemek", "Hazırlanmak"], dogru: 0 },
+    ] } },
+  { id: "ilk4-canli", kademe: "ilkokul", sinif: "4", ders: "Fen Bilimleri", konu: "Canlı ve Cansız", tur: "suruklebirak", zorluk: 1,
+    baslik: "Canlı mı, Cansız mı?", veri: { kategoriler: ["Canlı", "Cansız"],
+      ogeler: [{ metin: "Ağaç", kategori: "Canlı" }, { metin: "Kedi", kategori: "Canlı" }, { metin: "Kuş", kategori: "Canlı" }, { metin: "Çiçek", kategori: "Canlı" },
+        { metin: "Taş", kategori: "Cansız" }, { metin: "Masa", kategori: "Cansız" }, { metin: "Kalem", kategori: "Cansız" }, { metin: "Bardak", kategori: "Cansız" }] } },
+
+  /* ---- ORTAOKUL ---- */
+  { id: "ort5-cikarma", kademe: "ortaokul", sinif: "5", ders: "Matematik", konu: "Çıkarma İşlemi", tur: "matematik", zorluk: 2,
+    baslik: "Çıkarma İşlemleri", veri: { islem: "cikarma", min: 10, max: 99, soruSayisi: 10 } },
+  { id: "ort5-madde", kademe: "ortaokul", sinif: "5", ders: "Fen Bilimleri", konu: "Maddenin Halleri", tur: "suruklebirak", zorluk: 2,
+    baslik: "Maddenin Halleri", veri: { kategoriler: ["Katı", "Sıvı", "Gaz"],
+      ogeler: [{ metin: "Buz", kategori: "Katı" }, { metin: "Taş", kategori: "Katı" }, { metin: "Demir", kategori: "Katı" },
+        { metin: "Su", kategori: "Sıvı" }, { metin: "Süt", kategori: "Sıvı" }, { metin: "Zeytinyağı", kategori: "Sıvı" },
+        { metin: "Hava", kategori: "Gaz" }, { metin: "Su Buharı", kategori: "Gaz" }, { metin: "Oksijen", kategori: "Gaz" }] } },
+  { id: "ort5-kesir-duello", kademe: "ortaokul", sinif: "5", ders: "Matematik", konu: "Kesirler", tur: "duello", zorluk: 2,
+    baslik: "Kesir Düellosu", veri: { turSayisi: 10, saniye: 14, sorular: [
+      { soru: "1/2 kesrinin ondalık gösterimi hangisidir?", secenekler: ["0,5", "0,2", "1,2", "0,25"], dogru: 0 },
+      { soru: "3/4 ile 2/4 kesirlerinden hangisi daha büyüktür?", secenekler: ["3/4", "2/4", "İkisi eşittir", "Karşılaştırılamaz"], dogru: 0 },
+      { soru: "1/4 + 2/4 işleminin sonucu kaçtır?", secenekler: ["3/4", "3/8", "2/8", "1/2"], dogru: 0 },
+      { soru: "5/5 kesri hangi sayıya eşittir?", secenekler: ["1", "0", "5", "10"], dogru: 0 },
+      { soru: "7/3 kesri için hangisi doğrudur?", secenekler: ["Bileşik kesirdir", "Basit kesirdir", "Birim kesirdir", "Tam sayıdır"], dogru: 0 },
+      { soru: "1/8 kesri hangi tür kesirdir?", secenekler: ["Birim kesir", "Bileşik kesir", "Tam sayılı kesir", "Ondalık gösterim"], dogru: 0 },
+      { soru: "2/3 kesrine denk olan kesir hangisidir?", secenekler: ["4/6", "3/4", "2/6", "6/3"], dogru: 0 },
+      { soru: "8 dilimli bir pizzanın 3 dilimi yendi. Kalan kısım kesirle nasıl gösterilir?", secenekler: ["5/8", "3/8", "8/5", "5/3"], dogru: 0 },
+      { soru: "1 tam 1/2 sayısının bileşik kesir gösterimi hangisidir?", secenekler: ["3/2", "2/3", "1/2", "4/2"], dogru: 0 },
+      { soru: "3/4 kesrinin yüzde olarak karşılığı nedir?", secenekler: ["%75", "%34", "%25", "%50"], dogru: 0 },
+      { soru: "1/3, 1/5 ve 1/4 kesirlerinden en büyüğü hangisidir?", secenekler: ["1/3", "1/5", "1/4", "Üçü eşittir"], dogru: 0 },
+      { soru: "6/8 kesrinin sadeleştirilmiş hâli hangisidir?", secenekler: ["3/4", "2/4", "6/4", "4/3"], dogru: 0 },
+      { soru: "0,25 sayısının kesir gösterimi hangisidir?", secenekler: ["1/4", "1/2", "2/5", "1/25"], dogru: 0 },
+      { soru: "Payı paydasından küçük olan kesirlere ne denir?", secenekler: ["Basit kesir", "Bileşik kesir", "Tam sayılı kesir", "Denk kesir"], dogru: 0 },
+    ] } },
+  { id: "ort6-ingkelime-duello", kademe: "ortaokul", sinif: "6", ders: "İngilizce", konu: "Temel Kelimeler", tur: "duello", zorluk: 1,
+    baslik: "Kelime Kapışması", veri: { turSayisi: 10, saniye: 12, sorular: [
+      { soru: "library kelimesinin Türkçe karşılığı nedir?", secenekler: ["Kütüphane", "Kitapçı", "Sınıf", "Laboratuvar"], dogru: 0 },
+      { soru: "breakfast kelimesinin Türkçe karşılığı nedir?", secenekler: ["Kahvaltı", "Akşam yemeği", "Öğle yemeği", "Tatlı"], dogru: 0 },
+      { soru: "Tuesday hangi gündür?", secenekler: ["Salı", "Perşembe", "Pazar", "Cumartesi"], dogru: 0 },
+      { soru: "hungry kelimesinin Türkçe karşılığı nedir?", secenekler: ["Aç", "Susuz", "Yorgun", "Mutlu"], dogru: 0 },
+      { soru: "winter hangi mevsimdir?", secenekler: ["Kış", "Yaz", "İlkbahar", "Sonbahar"], dogru: 0 },
+      { soru: "hospital kelimesinin Türkçe karşılığı nedir?", secenekler: ["Hastane", "Otel", "Eczane", "Okul"], dogru: 0 },
+      { soru: "brother kelimesinin Türkçe karşılığı nedir?", secenekler: ["Erkek kardeş", "Kız kardeş", "Kuzen", "Amca"], dogru: 0 },
+      { soru: "grapes kelimesinin Türkçe karşılığı nedir?", secenekler: ["Üzüm", "Elma", "Karpuz", "Armut"], dogru: 0 },
+      { soru: "sometimes kelimesinin Türkçe karşılığı nedir?", secenekler: ["Bazen", "Asla", "Her zaman", "Genellikle"], dogru: 0 },
+      { soru: "expensive kelimesinin Türkçe karşılığı nedir?", secenekler: ["Pahalı", "Ucuz", "Ücretsiz", "Kolay"], dogru: 0 },
+      { soru: "kitchen kelimesinin Türkçe karşılığı nedir?", secenekler: ["Mutfak", "Banyo", "Yatak odası", "Bahçe"], dogru: 0 },
+      { soru: "How old are you? sorusu neyi öğrenmek için sorulur?", secenekler: ["Yaşını", "Adını", "Nerede yaşadığını", "Nasıl olduğunu"], dogru: 0 },
+      { soru: "cloudy kelimesi havayı nasıl tanımlar?", secenekler: ["Bulutlu", "Güneşli", "Karlı", "Rüzgârlı"], dogru: 0 },
+      { soru: "always kelimesinin Türkçe karşılığı nedir?", secenekler: ["Her zaman", "Asla", "Nadiren", "Bazen"], dogru: 0 },
+    ] } },
+  { id: "ort6-ingkelime", kademe: "ortaokul", sinif: "6", ders: "İngilizce", konu: "Temel Kelimeler", tur: "eslestirme", zorluk: 1,
+    baslik: "Kelime Eşleştirme", veri: { ciftler: [["apple", "elma"], ["book", "kitap"], ["house", "ev"], ["water", "su"], ["friend", "arkadaş"], ["school", "okul"]] } },
+  { id: "ort6-kita", kademe: "ortaokul", sinif: "6", ders: "Sosyal Bilgiler", konu: "Kıtalar ve Okyanuslar", tur: "suruklebirak", zorluk: 2,
+    baslik: "Kıta mı, Okyanus mu?", veri: { kategoriler: ["Kıta", "Okyanus"],
+      ogeler: [{ metin: "Asya", kategori: "Kıta" }, { metin: "Afrika", kategori: "Kıta" }, { metin: "Avrupa", kategori: "Kıta" }, { metin: "Antarktika", kategori: "Kıta" },
+        { metin: "Atlas", kategori: "Okyanus" }, { metin: "Hint", kategori: "Okyanus" }, { metin: "Pasifik", kategori: "Okyanus" }, { metin: "Arktik", kategori: "Okyanus" }] } },
+  { id: "ort7-carpma", kademe: "ortaokul", sinif: "7", ders: "Matematik", konu: "Çarpma İşlemi", tur: "matematik", zorluk: 3,
+    baslik: "Hızlı Çarpma", veri: { islem: "carpma", min: 2, max: 20, soruSayisi: 10 } },
+  { id: "ort7-uzay-duello", kademe: "ortaokul", sinif: "7", ders: "Fen Bilimleri", konu: "Güneş Sistemi ve Ötesi", tur: "duello", zorluk: 2,
+    baslik: "Uzay Düellosu", veri: { turSayisi: 10, saniye: 12, sorular: [
+      { soru: "Güneş Sistemi'nin merkezinde hangi gök cismi bulunur?", secenekler: ["Güneş", "Dünya", "Ay", "Jüpiter"], dogru: 0 },
+      { soru: "Güneş'e en yakın gezegen hangisidir?", secenekler: ["Merkür", "Venüs", "Mars", "Dünya"], dogru: 0 },
+      { soru: "Güneş Sistemi'nin en büyük gezegeni hangisidir?", secenekler: ["Jüpiter", "Satürn", "Neptün", "Uranüs"], dogru: 0 },
+      { soru: "Kızıl Gezegen olarak bilinen gezegen hangisidir?", secenekler: ["Mars", "Venüs", "Merkür", "Satürn"], dogru: 0 },
+      { soru: "Belirgin halkalarıyla tanınan gezegen hangisidir?", secenekler: ["Satürn", "Neptün", "Dünya", "Mars"], dogru: 0 },
+      { soru: "Dünya'nın tek doğal uydusu hangisidir?", secenekler: ["Ay", "Titan", "Europa", "Phobos"], dogru: 0 },
+      { soru: "Güneş Sistemi'nde kaç gezegen vardır?", secenekler: ["8", "7", "9", "10"], dogru: 0 },
+      { soru: "Milyarlarca yıldızın kütle çekimiyle bir arada bulunduğu dev sisteme ne denir?", secenekler: ["Galaksi", "Takımyıldız", "Gezegen sistemi", "Uydu"], dogru: 0 },
+      { soru: "Gök taşının atmosfere girip sürtünme nedeniyle yanarken oluşturduğu ışıklı ize ne denir?", secenekler: ["Meteor", "Meteorit", "Asteroit", "Kuyruklu yıldız"], dogru: 0 },
+      { soru: "Buz, gaz ve tozdan oluşan; Güneş'e yaklaştığında kuyruk oluşturan gök cismi hangisidir?", secenekler: ["Kuyruklu yıldız", "Meteor", "Doğal uydu", "Asteroit"], dogru: 0 },
+      { soru: "Asteroit kuşağı hangi iki gezegen arasında yer alır?", secenekler: ["Mars ile Jüpiter", "Dünya ile Mars", "Jüpiter ile Satürn", "Venüs ile Dünya"], dogru: 0 },
+      { soru: "Dünya'nın Güneş çevresindeki bir tam dolanımı yaklaşık ne kadar sürer?", secenekler: ["365 gün", "24 saat", "30 gün", "12 saat"], dogru: 0 },
+      { soru: "Gece ile gündüzün oluşmasının nedeni nedir?", secenekler: ["Dünya'nın kendi ekseni etrafında dönmesi", "Dünya'nın Güneş çevresinde dolanması", "Ay'ın Dünya çevresinde dolanması", "Güneş'in kendi ekseni etrafında dönmesi"], dogru: 0 },
+      { soru: "Güneş tutulması hangi durumda oluşur?", secenekler: ["Ay, Dünya ile Güneş arasına girdiğinde", "Dünya, Ay ile Güneş arasına girdiğinde", "Güneş, Ay ile Dünya arasına girdiğinde", "Ay, Dünya'nın gölgesinden çıktığında"], dogru: 0 },
+      { soru: "Uzayı ve gök cisimlerini inceleyen bilim dalı hangisidir?", secenekler: ["Astronomi", "Astroloji", "Jeoloji", "Meteoroloji"], dogru: 0 },
+      { soru: "Işığın bir yılda gittiği uzaklığı belirten birim hangisidir?", secenekler: ["Işık yılı", "Kilometre", "Deniz mili", "Newton"], dogru: 0 },
+    ] } },
+  { id: "ort8-element", kademe: "ortaokul", sinif: "8", ders: "Fen Bilimleri", konu: "Periyodik Sistem", tur: "eslestirme", zorluk: 3,
+    baslik: "Element Sembolleri", veri: { ciftler: [["Hidrojen", "H"], ["Oksijen", "O"], ["Karbon", "C"], ["Altın", "Au"], ["Demir", "Fe"], ["Sodyum", "Na"]] } },
+
+  { id: "ort8-inkilap-duello", kademe: "ortaokul", sinif: "8", ders: "T.C. İnkılap Tarihi ve Atatürkçülük", konu: "Millî Mücadele", tur: "duello", zorluk: 3,
+    baslik: "Millî Mücadele Düellosu", veri: { turSayisi: 10, saniye: 14, sorular: [
+      { soru: "Mustafa Kemal, Millî Mücadele'yi başlatmak üzere 19 Mayıs 1919'da hangi şehre çıktı?", secenekler: ["Samsun", "Erzurum", "Sivas", "Ankara"], dogru: 0 },
+      { soru: "Toplanış amacı bölgesel olmasına rağmen aldığı kararlar ulusal nitelik taşıyan kongre hangisidir?", secenekler: ["Erzurum Kongresi", "Sivas Kongresi", "Balıkesir Kongresi", "Alaşehir Kongresi"], dogru: 0 },
+      { soru: "Misakımillî (Millî Ant) hangi mecliste kabul edilmiştir?", secenekler: ["Son Osmanlı Mebusan Meclisi", "TBMM", "Sivas Kongresi", "Erzurum Kongresi"], dogru: 0 },
+      { soru: "TBMM hangi tarihte açılmıştır?", secenekler: ["23 Nisan 1920", "19 Mayıs 1919", "29 Ekim 1923", "30 Ağustos 1922"], dogru: 0 },
+      { soru: "Düzenli ordunun ilk askerî başarısı sayılan savaş hangisidir?", secenekler: ["I. İnönü Savaşı", "Sakarya Savaşı", "Başkomutanlık Savaşı", "Kütahya-Eskişehir Savaşları"], dogru: 0 },
+      { soru: "Hattı müdafaa yoktur, sathı müdafaa vardır sözü hangi savaşta söylenmiştir?", secenekler: ["Sakarya Savaşı", "I. İnönü Savaşı", "II. İnönü Savaşı", "Büyük Taarruz"], dogru: 0 },
+      { soru: "Mustafa Kemal'e Gazi ve Mareşal unvanları hangi savaştan sonra verilmiştir?", secenekler: ["Sakarya Savaşı", "I. İnönü Savaşı", "Büyük Taarruz", "Kütahya-Eskişehir Savaşları"], dogru: 0 },
+      { soru: "Kurtuluş Savaşı'nın askerî aşamasını sona erdiren ateşkes hangisidir?", secenekler: ["Mudanya Ateşkes Antlaşması", "Mondros Ateşkes Antlaşması", "Ankara Antlaşması", "Lozan Barış Antlaşması"], dogru: 0 },
+      { soru: "Yeni Türk Devleti'nin bağımsızlığının dünyaya kabul ettirildiği antlaşma hangisidir?", secenekler: ["Lozan Barış Antlaşması", "Sevr Antlaşması", "Moskova Antlaşması", "Kars Antlaşması"], dogru: 0 },
+      { soru: "Cumhuriyet hangi tarihte ilan edilmiştir?", secenekler: ["29 Ekim 1923", "23 Nisan 1920", "30 Ağustos 1922", "1 Kasım 1922"], dogru: 0 },
+      { soru: "Sevr Antlaşması'nı imzalayan hükümet hangisidir?", secenekler: ["Osmanlı Hükümeti", "TBMM Hükümeti", "Ankara Hükümeti", "Temsil Heyeti"], dogru: 0 },
+      { soru: "Büyük Taarruz sonrasında 9 Eylül 1922'de hangi şehir düşman işgalinden kurtarılmıştır?", secenekler: ["İzmir", "Bursa", "Ankara", "Edirne"], dogru: 0 },
+      { soru: "TBMM'nin kabul ettiği ilk anayasa hangisidir?", secenekler: ["1921 Teşkilât-ı Esasiye Kanunu", "1924 Anayasası", "Kanun-i Esasi", "1961 Anayasası"], dogru: 0 },
+      { soru: "Amasya Genelgesi'ndeki milletin bağımsızlığını yine milletin azim ve kararı kurtaracaktır ifadesi neyi vurgular?", secenekler: ["Millî egemenliği", "Padişahın yetkilerini", "Manda ve himayeyi", "İşgallerin haklılığını"], dogru: 0 },
+    ] } },
+
+  /* ---- LİSE ---- */
+  { id: "lise9-fizik-duello", kademe: "lise", sinif: "9", ders: "Fizik", konu: "Fizik Bilimine Giriş", tur: "duello", zorluk: 2,
+    baslik: "Fizik Düellosu", veri: { turSayisi: 10, saniye: 13, sorular: [
+      { soru: "Uluslararası Birim Sistemi'nde (SI) kütlenin temel birimi nedir?", secenekler: ["Kilogram", "Gram", "Newton", "Litre"], dogru: 0 },
+      { soru: "Aşağıdakilerden hangisi temel büyüklüktür?", secenekler: ["Zaman", "Kuvvet", "Hacim", "Enerji"], dogru: 0 },
+      { soru: "Kuvvetin SI birimi nedir?", secenekler: ["Newton", "Joule", "Pascal", "Watt"], dogru: 0 },
+      { soru: "Aşağıdakilerden hangisi skaler bir büyüklüktür?", secenekler: ["Kütle", "Kuvvet", "Yer değiştirme", "İvme"], dogru: 0 },
+      { soru: "Aşağıdakilerden hangisi vektörel bir büyüklüktür?", secenekler: ["Ağırlık", "Kütle", "Sıcaklık", "Zaman"], dogru: 0 },
+      { soru: "Sıcaklığın SI temel birimi nedir?", secenekler: ["Kelvin", "Santigrat derece", "Fahrenhayt", "Joule"], dogru: 0 },
+      { soru: "Hareketi ve hareketin nedenlerini inceleyen fizik alt alanı hangisidir?", secenekler: ["Mekanik", "Optik", "Termodinamik", "Atom fiziği"], dogru: 0 },
+      { soru: "Işığın yapısını ve davranışını inceleyen fizik alt alanı hangisidir?", secenekler: ["Optik", "Mekanik", "Elektromanyetizma", "Nükleer fizik"], dogru: 0 },
+      { soru: "Isı alışverişi ve enerji dönüşümlerini inceleyen fizik alt alanı hangisidir?", secenekler: ["Termodinamik", "Optik", "Katıhâl fiziği", "Mekanik"], dogru: 0 },
+      { soru: "Atom çekirdeğini ve çekirdek tepkimelerini inceleyen alt alan hangisidir?", secenekler: ["Nükleer fizik", "Optik", "Termodinamik", "Mekanik"], dogru: 0 },
+      { soru: "Elektrik akımının SI birimi nedir?", secenekler: ["Amper", "Volt", "Ohm", "Coulomb"], dogru: 0 },
+      { soru: "Aşağıdakilerden hangisi türetilmiş büyüklüktür?", secenekler: ["Hacim", "Uzunluk", "Kütle", "Zaman"], dogru: 0 },
+      { soru: "Madde miktarının SI temel birimi nedir?", secenekler: ["Mol", "Kilogram", "Litre", "Newton"], dogru: 0 },
+      { soru: "Bir büyüklüğün yönü de belirtilmek zorundaysa bu büyüklük nasıl adlandırılır?", secenekler: ["Vektörel büyüklük", "Skaler büyüklük", "Temel büyüklük", "Türetilmiş büyüklük"], dogru: 0 },
+    ] } },
+  { id: "lise10-tarih-duello", kademe: "lise", sinif: "10", ders: "Tarih", konu: "Beylikten Devlete (1300-1453)", tur: "duello", zorluk: 3,
+    baslik: "Osmanlı Düellosu", veri: { turSayisi: 10, saniye: 14, sorular: [
+      { soru: "Osmanlı Devleti'nin kurucusu kimdir?", secenekler: ["Osman Bey", "Ertuğrul Gazi", "Orhan Bey", "I. Murat"], dogru: 0 },
+      { soru: "Orhan Bey döneminde fethedilerek başkent yapılan şehir hangisidir?", secenekler: ["Bursa", "Edirne", "İznik", "Söğüt"], dogru: 0 },
+      { soru: "Osmanlıların Rumeli'de ele geçirdiği ilk toprak hangisidir?", secenekler: ["Çimpe Kalesi", "Niğbolu", "Sofya", "Selanik"], dogru: 0 },
+      { soru: "I. Kosova Savaşı hangi padişah döneminde kazanılmıştır?", secenekler: ["I. Murat", "Orhan Bey", "Yıldırım Bayezid", "II. Murat"], dogru: 0 },
+      { soru: "Ankara Savaşı hangi iki hükümdar arasında yapılmıştır?", secenekler: ["Yıldırım Bayezid - Timur", "I. Murat - Timur", "II. Murat - Timur", "Fatih - Uzun Hasan"], dogru: 0 },
+      { soru: "Osmanlı tarihinde Fetret Devri hangi savaştan sonra başlamıştır?", secenekler: ["Ankara Savaşı", "I. Kosova Savaşı", "Niğbolu Savaşı", "Varna Savaşı"], dogru: 0 },
+      { soru: "İstanbul'u fetheden padişah kimdir?", secenekler: ["II. Mehmet", "II. Murat", "Yıldırım Bayezid", "I. Murat"], dogru: 0 },
+      { soru: "Niğbolu Savaşı hangi padişah döneminde kazanılmıştır?", secenekler: ["Yıldırım Bayezid", "I. Murat", "II. Murat", "Orhan Bey"], dogru: 0 },
+      { soru: "Osmanlı Devleti'nde devşirme sistemiyle asker alınan piyade ocağı hangisidir?", secenekler: ["Yeniçeri Ocağı", "Tımarlı Sipahiler", "Akıncılar", "Azaplar"], dogru: 0 },
+      { soru: "Osmanlı Devleti'nde ilk medrese hangi padişah döneminde açılmıştır?", secenekler: ["Orhan Bey", "Osman Bey", "I. Murat", "Yıldırım Bayezid"], dogru: 0 },
+      { soru: "Varna ve II. Kosova savaşları hangi padişah döneminde yapılmıştır?", secenekler: ["II. Murat", "I. Murat", "II. Mehmet", "Yıldırım Bayezid"], dogru: 0 },
+      { soru: "Osmanlı Beyliği, hangi devletin zayıflaması sonucu kurulan beyliklerden biridir?", secenekler: ["Anadolu Selçuklu Devleti", "Büyük Selçuklu Devleti", "Karahanlılar", "Gazneliler"], dogru: 0 },
+      { soru: "İstanbul'un fethi ile hangi devlet tarih sahnesinden silinmiştir?", secenekler: ["Bizans (Doğu Roma) İmparatorluğu", "Kutsal Roma-Germen İmparatorluğu", "Venedik Cumhuriyeti", "Trabzon Rum İmparatorluğu"], dogru: 0 },
+      { soru: "1453'te İstanbul'un fethiyle hangi çağ kapanmıştır?", secenekler: ["Orta Çağ", "İlk Çağ", "Yakın Çağ", "Yeni Çağ"], dogru: 0 },
+    ] } },
+  { id: "lise9-organel", kademe: "lise", sinif: "9", ders: "Biyoloji", konu: "Hücre Organelleri", tur: "eslestirme", zorluk: 3,
+    baslik: "Organel ve Görevi", veri: { ciftler: [["Mitokondri", "Enerji üretimi"], ["Ribozom", "Protein sentezi"], ["Kloroplast", "Fotosentez"], ["Çekirdek", "Kalıtımı yönetme"], ["Lizozom", "Hücre içi sindirim"], ["Koful", "Depolama"]] } },
+  { id: "lise9-baskent", kademe: "lise", sinif: "9", ders: "Coğrafya", konu: "Ülkeler ve Başkentler", tur: "eslestirme", zorluk: 2,
+    baslik: "Ülke ve Başkent", veri: { ciftler: [["Türkiye", "Ankara"], ["Fransa", "Paris"], ["Japonya", "Tokyo"], ["Almanya", "Berlin"], ["İtalya", "Roma"], ["Mısır", "Kahire"]] } },
+  { id: "lise9-carpma", kademe: "lise", sinif: "9", ders: "Matematik", konu: "İşlem Pratiği", tur: "matematik", zorluk: 3,
+    baslik: "Zihinden Çarpma", veri: { islem: "carpma", min: 5, max: 25, soruSayisi: 12 } },
+  { id: "lise10-element", kademe: "lise", sinif: "10", ders: "Kimya", konu: "Elementler", tur: "hafiza", zorluk: 3,
+    baslik: "Element Hafızası", veri: { ciftler: [["Helyum", "He"], ["Azot", "N"], ["Klor", "Cl"], ["Kalsiyum", "Ca"], ["Gümüş", "Ag"], ["Bakır", "Cu"]] } },
+];
+
+/* ═════════════ KALICILIK (localStorage) ═════════════ */
+const ANAHTAR = "ka-oyunlar";
+function bosVeri(){ return { toplamPuan: 0, oyunlar: {}, gecmis: [] }; }
+function veriOku(){
+  try {
+    const ham = localStorage.getItem(ANAHTAR);
+    if (!ham) return bosVeri();
+    const d = JSON.parse(ham);
+    return { toplamPuan: d.toplamPuan || 0, oyunlar: d.oyunlar || {}, gecmis: Array.isArray(d.gecmis) ? d.gecmis : [] };
+  } catch (e) { return bosVeri(); }
+}
+function veriYaz(){ try { localStorage.setItem(ANAHTAR, JSON.stringify(VERI)); } catch (e) {} }
+let VERI = veriOku();
+
+/* ═════════════ PUANLAMA MOTORU ═════════════ */
+function puanHesapla({ dogru, yanlis, sure, hedefSure, zorluk }){
+  const zorlukKat = { 1: 1.0, 2: 1.25, 3: 1.5 }[zorluk] || 1;
+  let hizBonus = 1.0;
+  if (hedefSure > 0){
+    const oran = sure / hedefSure;               // 1 = tam zamanında
+    hizBonus = oran <= 1 ? 1.5 : Math.max(1.0, 1.5 - 0.5 * (oran - 1));
+  }
+  const puan = Math.max(0, Math.round(dogru * 100 * zorlukKat * hizBonus - yanlis * 25));
+  return { puan, hizBonus };
+}
+
+/* ═════════════ DURUM ═════════════ */
+let durum = { ekran: "panel", kademe: null, sinif: null, ders: null, oyunKaynak: null };
+let aktifOyun = null, sonSonuc = null, oyunBaslangic = 0;
+function sn(){ return Math.max(1, Math.round((Date.now() - oyunBaslangic) / 1000)); }
+
+/* Ekran değişince zamanlayıcı/olay dinleyicilerini bırakan oyunlar buraya kayıt olur */
+let temizleyici = [];
+function temizle(){ const l = temizleyici; temizleyici = []; l.forEach(f => { try { f(); } catch (e) {} }); }
+
+/* ═════════════ FİLTRELER ═════════════ */
+function filtre(f){
+  return OYUNLAR.filter(o =>
+    (!f.kademe || o.kademe === f.kademe) &&
+    (!f.sinif  || o.sinif  === f.sinif) &&
+    (!f.ders   || o.ders   === f.ders));
+}
+function sayiOyun(f){ return filtre(f).length; }
+
+/* ═════════════ OYUN BİTİŞİ + KAYIT ═════════════ */
+function oyunBitir(oyun, sonuc){
+  const { puan, hizBonus } = puanHesapla({ ...sonuc, zorluk: oyun.zorluk });
+  const kayit = VERI.oyunlar[oyun.id] || { baslik: oyun.baslik, enYuksek: 0, sonPuan: 0, oynanma: 0, sonOynama: null };
+  const oncekiEnYuksek = kayit.enYuksek || 0;
+  kayit.baslik = oyun.baslik;
+  kayit.sonPuan = puan;
+  kayit.enYuksek = Math.max(oncekiEnYuksek, puan);
+  kayit.oynanma = (kayit.oynanma || 0) + 1;
+  kayit.sonOynama = new Date().toISOString();
+  VERI.oyunlar[oyun.id] = kayit;
+  VERI.toplamPuan = (VERI.toplamPuan || 0) + puan;
+  VERI.gecmis.unshift({ oyunId: oyun.id, baslik: oyun.baslik, ders: oyun.ders, konu: oyun.konu,
+    puan, dogru: sonuc.dogru, yanlis: sonuc.yanlis, sure: sonuc.sure, tarih: new Date().toISOString() });
+  VERI.gecmis = VERI.gecmis.slice(0, 15);
+  veriYaz();
+  sonSonuc = { oyun, puan, hizBonus, dogru: sonuc.dogru, yanlis: sonuc.yanlis, sure: sonuc.sure,
+    ikili: sonuc.ikili || null,
+    enYuksek: kayit.enYuksek, yeniRekor: puan > oncekiEnYuksek && kayit.oynanma > 1 };
+  durum.ekran = "sonuc";
+  render();
+}
+
+/* ═════════════ OYUN TÜRÜ EKLENTİLERİ (registry) ═════════════ */
+function oyunBaslik(oyun){
+  const isl = TUR_ISLEYICI[oyun.tur];
+  return `<div class="oyun-ust">
+    <button class="btn btn-ghost oyun-cik" data-eylem="liste">← Oyunlardan Çık</button>
+    <div class="oyun-etiket">${isl.ikon} <span>${oyun.baslik}</span> · ${oyun.ders} / ${oyun.konu} · ${zorlukEtiket(oyun.zorluk)}${isl.kisi === 2 ? " " + kisiEtiket() : ""}</div>
+  </div>`;
+}
+
+function islemUret(islem, min, max){
+  const r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  let a = r(min, max), b = r(min, max), sonuc, sembol;
+  if (islem === "toplama"){ sonuc = a + b; sembol = "+"; }
+  else if (islem === "cikarma"){ if (b > a) [a, b] = [b, a]; sonuc = a - b; sembol = "−"; }
+  else if (islem === "carpma"){ sonuc = a * b; sembol = "×"; }
+  else { // bolme — tam bölünen üret
+    b = r(Math.max(2, min), Math.max(2, Math.min(max, 12)));
+    const q = r(Math.max(2, min), Math.max(2, max));
+    a = b * q; sonuc = q; sembol = "÷";
+  }
+  return { metin: `${a} ${sembol} ${b}`, sonuc };
+}
+
+const TUR_ISLEYICI = {
+  eslestirme: {
+    ad: "Eşleştirme", ikon: "🧩",
+    baslat(oyun, bitir){
+      const ciftler = oyun.veri.ciftler;
+      const sol = karistir(ciftler.map((c, i) => ({ metin: c[0], id: i })));
+      const sag = karistir(ciftler.map((c, i) => ({ metin: c[1], id: i })));
+      const hedefSure = ciftler.length * 4;
+      let seciliSol = null, yanlis = 0, kalan = ciftler.length;
+      oyunBaslangic = Date.now();
+      $("app").innerHTML = `${oyunBaslik(oyun)}
+        <div class="es-durum">Soldaki bir öğeyi, sağdaki eşiyle eşleştir. · Kalan: <b id="esK">${kalan}</b> · Yanlış: <b id="esY">0</b></div>
+        <div class="es-grid">
+          <div class="es-kol">${sol.map(x => `<button class="es-oge" data-taraf="sol" data-id="${x.id}">${x.metin}</button>`).join("")}</div>
+          <div class="es-kol">${sag.map(x => `<button class="es-oge" data-taraf="sag" data-id="${x.id}">${x.metin}</button>`).join("")}</div>
+        </div>`;
+      const guncelle = () => { $("esK").textContent = kalan; $("esY").textContent = yanlis; };
+      $("app").querySelectorAll(".es-oge").forEach(b => {
+        b.addEventListener("click", () => {
+          if (b.classList.contains("eslesti")) return;
+          if (b.dataset.taraf === "sol"){
+            $("app").querySelectorAll('[data-taraf="sol"]').forEach(x => x.classList.remove("secili"));
+            b.classList.add("secili"); seciliSol = b;
+          } else {
+            if (!seciliSol) return;
+            if (seciliSol.dataset.id === b.dataset.id){
+              seciliSol.classList.add("eslesti"); b.classList.add("eslesti");
+              seciliSol.classList.remove("secili"); seciliSol = null; kalan--; guncelle();
+              if (kalan === 0) setTimeout(() => bitir({ dogru: ciftler.length, yanlis, sure: sn(), hedefSure }), 320);
+            } else {
+              yanlis++; b.classList.add("hata"); const s = seciliSol;
+              setTimeout(() => { b.classList.remove("hata"); if (s) s.classList.remove("secili"); }, 400);
+              seciliSol = null; guncelle();
+            }
+          }
+        });
+      });
+    }
+  },
+
+  hafiza: {
+    ad: "Hafıza Kartları", ikon: "🃏",
+    baslat(oyun, bitir){
+      const ciftler = oyun.veri.ciftler;
+      let kartlar = [];
+      ciftler.forEach((c, i) => { kartlar.push({ pid: i, yuz: c[0] }); kartlar.push({ pid: i, yuz: c[1] }); });
+      kartlar = karistir(kartlar);
+      const hedefSure = ciftler.length * 6;
+      let acik = [], kilitli = false, yanlis = 0, bulunan = 0, hamle = 0;
+      oyunBaslangic = Date.now();
+      $("app").innerHTML = `${oyunBaslik(oyun)}
+        <div class="es-durum">Kartları çevir, eş çiftleri bul. · Çift: <b>${ciftler.length}</b> · Hamle: <b id="hfH">0</b> · Yanlış: <b id="hfY">0</b></div>
+        <div class="hf-grid">${kartlar.map((k, idx) => `<button class="hf-kart" data-idx="${idx}" data-pid="${k.pid}"><span class="hf-yuz">${k.yuz}</span></button>`).join("")}</div>`;
+      $("app").querySelectorAll(".hf-kart").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (kilitli || btn.classList.contains("acik") || btn.classList.contains("bulundu")) return;
+          btn.classList.add("acik"); acik.push(btn);
+          if (acik.length === 2){
+            hamle++; $("hfH").textContent = hamle; kilitli = true;
+            if (acik[0].dataset.pid === acik[1].dataset.pid){
+              setTimeout(() => {
+                acik.forEach(a => a.classList.add("bulundu")); acik = []; kilitli = false; bulunan++;
+                if (bulunan === ciftler.length) setTimeout(() => bitir({ dogru: ciftler.length, yanlis, sure: sn(), hedefSure }), 300);
+              }, 380);
+            } else {
+              yanlis++; $("hfY").textContent = yanlis;
+              setTimeout(() => { acik.forEach(a => a.classList.remove("acik")); acik = []; kilitli = false; }, 750);
+            }
+          }
+        });
+      });
+    }
+  },
+
+  suruklebirak: {
+    ad: "Sürükle-Bırak", ikon: "🖐️",
+    baslat(oyun, bitir){
+      const kats = oyun.veri.kategoriler;
+      const ogeler = karistir(oyun.veri.ogeler.map((o, i) => ({ ...o, id: i })));
+      const hedefSure = ogeler.length * 4;
+      let sec = null, dogru = 0, yanlis = 0, kalan = ogeler.length;
+      oyunBaslangic = Date.now();
+      $("app").innerHTML = `${oyunBaslik(oyun)}
+        <p class="sb-ipucu">Bir öğeyi seç, sonra ait olduğu kutuya dokun — ya da sürükleyip bırak.</p>
+        <div class="es-durum">Doğru: <b id="sbD">0</b> · Yanlış: <b id="sbY">0</b></div>
+        <div class="sb-havuz" id="sbHavuz">${ogeler.map(o => `<button class="sb-oge" draggable="true" data-id="${o.id}" data-kat="${o.kategori}">${o.metin}</button>`).join("")}</div>
+        <div class="sb-kutular">${kats.map(k => `<div class="sb-kutu" data-kat="${k}"><div class="sb-kutu-bas">${k}</div><div class="sb-kutu-ic"></div></div>`).join("")}</div>`;
+      const app = $("app");
+      const guncelle = () => { $("sbD").textContent = dogru; $("sbY").textContent = yanlis; };
+      function yerlestir(oge, kat){
+        if (!oge || oge.classList.contains("yerlesti")) return;
+        if (oge.dataset.kat === kat){
+          dogru++; kalan--; oge.classList.add("yerlesti"); oge.classList.remove("secili"); oge.setAttribute("draggable", "false");
+          const kutu = [...app.querySelectorAll(".sb-kutu")].find(k => k.dataset.kat === kat);
+          if (kutu) kutu.querySelector(".sb-kutu-ic").appendChild(oge);
+          guncelle();
+          if (kalan === 0) setTimeout(() => bitir({ dogru, yanlis, sure: sn(), hedefSure }), 320);
+        } else {
+          yanlis++; oge.classList.add("hata"); oge.classList.remove("secili");
+          setTimeout(() => oge.classList.remove("hata"), 400); guncelle();
+        }
+      }
+      app.querySelectorAll(".sb-oge").forEach(oge => {
+        oge.addEventListener("click", () => {
+          if (oge.classList.contains("yerlesti")) return;
+          const zaten = oge.classList.contains("secili");
+          app.querySelectorAll(".sb-oge").forEach(x => x.classList.remove("secili"));
+          if (!zaten){ oge.classList.add("secili"); sec = oge; } else sec = null;
+        });
+        oge.addEventListener("dragstart", () => { sec = oge; });
+      });
+      app.querySelectorAll(".sb-kutu").forEach(kutu => {
+        kutu.addEventListener("click", () => { if (sec){ const s = sec; sec = null; yerlestir(s, kutu.dataset.kat); } });
+        kutu.addEventListener("dragover", e => { e.preventDefault(); kutu.classList.add("uzerinde"); });
+        kutu.addEventListener("dragleave", () => kutu.classList.remove("uzerinde"));
+        kutu.addEventListener("drop", e => { e.preventDefault(); kutu.classList.remove("uzerinde"); const s = sec; sec = null; yerlestir(s, kutu.dataset.kat); });
+      });
+    }
+  },
+
+  duello: {
+    ad: "İki Kişilik Düello", ikon: "⚔️", kisi: 2,
+    baslat(oyun, bitir){
+      const v = oyun.veri;
+      const havuz = v.sorular || [];
+      const turSayisi = Math.max(1, Math.min(v.turSayisi || 10, havuz.length));
+      const turSure = v.saniye || 12;
+      const hedefSure = turSayisi * 7;
+      const TUSLAR = [["1", "2", "3", "4"], ["7", "8", "9", "0"]];
+      const RENK = ["🔴", "🔵"];
+      const adlar = ["Oyuncu 1", "Oyuncu 2"];
+      const skor = [0, 0];
+      let sorular = [], tur = 0, yanlisSayi = 0;
+      let kilit = [false, false], turBitti = true;
+      let sayac = null, zamanlar = [], tusDinle = null, canli = true;
+
+      let buyuk = false;
+
+      const bekle = (f, ms) => { const t = setTimeout(() => { if (canli) f(); }, ms); zamanlar.push(t); };
+      function tusBirak(){ if (tusDinle){ document.removeEventListener("keydown", tusDinle); tusDinle = null; } }
+      function sayacDur(){ if (sayac){ clearInterval(sayac); sayac = null; } }
+      function durdur(){
+        canli = false; sayacDur(); zamanlar.forEach(clearTimeout); zamanlar = []; tusBirak();
+        document.removeEventListener("fullscreenchange", tamEkranDegisti);
+        tamEkrandanCik();
+      }
+      temizleyici.push(durdur);
+
+      /* ---- Büyük ekran / akıllı tahta modu ---- */
+      function tamEkrandanCik(){
+        const s = $("dlSahne");
+        if (s && document.fullscreenElement === s && document.exitFullscreen){
+          try { const p = document.exitFullscreen(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        }
+      }
+      function buyukAyarla(v){
+        buyuk = v;
+        const s = $("dlSahne"), d = $("dlBuyut");
+        if (s) s.classList.toggle("buyuk", v);
+        if (d){ d.textContent = v ? "⤢ Küçült" : "⛶ Büyük Ekran"; d.setAttribute("aria-pressed", v ? "true" : "false"); }
+      }
+      function buyutDegistir(){
+        const s = $("dlSahne");
+        if (!s) return;
+        if (buyuk){ tamEkrandanCik(); buyukAyarla(false); return; }
+        buyukAyarla(true);                       // tam ekran çalışmasa da yazı/kartlar büyür
+        if (!document.fullscreenElement && s.requestFullscreen){
+          try { const p = s.requestFullscreen(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        }
+      }
+      function tamEkranDegisti(){
+        // Esc ile tam ekrandan çıkılırsa büyük mod da kapansın
+        if (!document.fullscreenElement && buyuk) buyukAyarla(false);
+      }
+
+      function bildir(metin, sinif){
+        const el = $("dlBildirim");
+        if (el){ el.textContent = metin; el.className = "dl-bildirim" + (sinif ? " " + sinif : ""); }
+      }
+
+      function skorSerit(){
+        return `<div class="dl-skor">
+          <div class="dl-skor-taraf s1"><span class="dl-skor-ad">${RENK[0]} ${kacis(adlar[0])}</span><span class="dl-skor-puan" id="dlS0">${skor[0]}</span></div>
+          <span class="dl-vs">VS</span>
+          <div class="dl-skor-taraf s2"><span class="dl-skor-ad">${kacis(adlar[1])} ${RENK[1]}</span><span class="dl-skor-puan" id="dlS1">${skor[1]}</span></div>
+        </div>`;
+      }
+
+      function hazirEkran(){
+        $("app").innerHTML = `${oyunBaslik(oyun)}
+          <div class="dl-hazir">
+            <h3>⚔️ Aynı Cihazda İki Kişilik Düello</h3>
+            <p class="dl-hazir-alt">${oyun.ders} · ${oyun.konu} · ${turSayisi} tur · tur başına ${turSure} saniye</p>
+            <div class="dl-adlar">
+              <div class="dl-ad-alan a1"><label for="dlAd1">🔴 1. Oyuncu</label><input id="dlAd1" maxlength="14" placeholder="Oyuncu 1" autocomplete="off" /></div>
+              <div class="dl-ad-alan a2"><label for="dlAd2">🔵 2. Oyuncu</label><input id="dlAd2" maxlength="14" placeholder="Oyuncu 2" autocomplete="off" /></div>
+            </div>
+            <ul class="dl-kural">
+              <li>Cihazı ikinizin arasına koyun: soru ortada, cevap kartları her oyuncu için ayrı panelde.</li>
+              <li>Doğru kartı ilk tıklayan turu kazanır ve 1 puan alır.</li>
+              <li>Yanlış karta basan oyuncu o turda pas kalır; rakibi cevaplamayı sürdürür.</li>
+              <li>Süre dolarsa tur boş geçer ve doğru cevap gösterilir.</li>
+              <li>Bilgisayarda klavye de çalışır → 1. oyuncu: <b>1 2 3 4</b> · 2. oyuncu: <b>7 8 9 0</b></li>
+              <li>Akıllı tahta / projeksiyon gibi büyük ekranlarda oyun içindeki <b>⛶ Büyük Ekran</b> düğmesiyle tahtayı tam ekrana alıp yazıları büyütebilirsiniz.</li>
+            </ul>
+            <div style="display:flex;justify-content:center"><button class="btn btn-primary" id="dlBasla">Düelloyu Başlat</button></div>
+          </div>`;
+        $("dlBasla").addEventListener("click", () => {
+          const a1 = $("dlAd1").value.trim(), a2 = $("dlAd2").value.trim();
+          adlar[0] = a1 || "Oyuncu 1";
+          adlar[1] = a2 || "Oyuncu 2";
+          if (adlar[0] === adlar[1]) adlar[1] += " (2)";
+          sorular = karistir(havuz).slice(0, turSayisi).map(s => {
+            const sec = karistir(s.secenekler.map((m, i) => ({ metin: m, dg: i === s.dogru })));
+            return { soru: s.soru, secenekler: sec, dogruIdx: sec.findIndex(x => x.dg) };
+          });
+          tur = 0; skor[0] = 0; skor[1] = 0; yanlisSayi = 0;
+          oyunBaslangic = Date.now();
+          tahtaKur();
+          turGoster();
+          // Küçük ekranda iki panelin de görünmesi için sayfa başlığını geçip tahtaya odaklan
+          $("app").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
+      /* Tahta bir kez kurulur; turlar yalnızca içeriği günceller.
+         Böylece tam ekran (büyük ekran modu) turlar arasında bozulmaz. */
+      function tahtaKur(){
+        $("app").innerHTML = `${oyunBaslik(oyun)}
+          <div class="dl-sahne" id="dlSahne">
+            <div class="dl-arac">
+              <span class="dl-arac-not">Akıllı tahtada mı oynuyorsunuz?</span>
+              <button type="button" class="btn btn-ghost dl-buyut" id="dlBuyut" aria-pressed="false">⛶ Büyük Ekran</button>
+            </div>
+            ${skorSerit()}
+            <div class="dl-soru-kart">
+              <div class="dl-tur-bilgi" id="dlTur"></div>
+              <div class="dl-soru" id="dlSoru"></div>
+              <div class="dl-sure-yol"><div class="dl-sure-dolgu" id="dlSure"></div></div>
+            </div>
+            <div class="dl-bildirim" id="dlBildirim">Doğru kartı ilk bulan turu kapar!</div>
+            <div class="dl-taraflar">
+              ${[0, 1].map(p => `
+                <div class="dl-panel p${p + 1}" id="dlPanel${p}">
+                  <div class="dl-panel-bas">
+                    <span class="dl-panel-ad">${RENK[p]} ${kacis(adlar[p])}</span>
+                    <span class="dl-panel-not" id="dlNot${p}">0 puan</span>
+                  </div>
+                  <div class="dl-kartlar" id="dlKartlar${p}"></div>
+                </div>`).join("")}
+            </div>
+          </div>`;
+        $("dlBuyut").addEventListener("click", buyutDegistir);
+        document.addEventListener("fullscreenchange", tamEkranDegisti);
+      }
+
+      function turGoster(){
+        const s = sorular[tur];
+        kilit = [false, false];
+        turBitti = false;
+        $("dlTur").textContent = `Tur ${tur + 1} / ${turSayisi}`;
+        $("dlSoru").textContent = s.soru;
+        $("dlSure").style.width = "100%";
+        bildir("Doğru kartı ilk bulan turu kapar!", "");
+        [0, 1].forEach(p => {
+          $("dlPanel" + p).classList.remove("pas");
+          $("dlNot" + p).textContent = skor[p] + " puan";
+          $("dlKartlar" + p).innerHTML = s.secenekler.map((o, i) =>
+            `<button class="dl-kart" data-o="${p}" data-i="${i}"><span class="dl-kart-tus">${TUSLAR[p][i]}</span><span>${kacis(o.metin)}</span></button>`).join("");
+        });
+        $("app").querySelectorAll(".dl-kart").forEach(b => {
+          b.addEventListener("click", () => cevap(+b.dataset.o, +b.dataset.i));
+        });
+        tusDinle = e => {
+          if (turBitti) return;
+          for (let p = 0; p < 2; p++){
+            const i = TUSLAR[p].indexOf(e.key);
+            if (i >= 0){ e.preventDefault(); cevap(p, i); return; }
+          }
+        };
+        document.addEventListener("keydown", tusDinle);
+        sureBaslat();
+      }
+
+      function sureBaslat(){
+        const bas = Date.now();
+        sayacDur();
+        sayac = setInterval(() => {
+          const oran = Math.max(0, 1 - (Date.now() - bas) / (turSure * 1000));
+          const dolgu = $("dlSure");
+          if (dolgu) dolgu.style.width = (oran * 100).toFixed(1) + "%";
+          if (oran <= 0){ sayacDur(); if (!turBitti) turKapat(null); }
+        }, 100);
+      }
+
+      function cevap(p, i){
+        if (turBitti || kilit[p]) return;
+        const s = sorular[tur];
+        const kart = $("app").querySelector(`.dl-kart[data-o="${p}"][data-i="${i}"]`);
+        if (s.secenekler[i].dg){
+          skor[p]++;
+          if (kart) kart.classList.add("dogru");
+          turKapat(p);
+          return;
+        }
+        yanlisSayi++;
+        kilit[p] = true;
+        if (kart){ kart.classList.add("yanlis"); kart.disabled = true; }
+        const panel = $("dlPanel" + p), not = $("dlNot" + p);
+        if (panel) panel.classList.add("pas");
+        if (not) not.textContent = "⛔ pas";
+        const rakip = 1 - p;
+        if (kilit[rakip]) turKapat(null);
+        else bildir(`❌ ${adlar[p]} yanlış bildi — sıra tamamen ${adlar[rakip]}'de!`, p === 0 ? "k1" : "k2");
+      }
+
+      function turKapat(kazanan){
+        turBitti = true;
+        sayacDur();
+        tusBirak();
+        const s = sorular[tur];
+        $("app").querySelectorAll(".dl-kart").forEach(b => {
+          b.disabled = true;
+          if (+b.dataset.i === s.dogruIdx && !b.classList.contains("dogru")) b.classList.add("acik");
+        });
+        [0, 1].forEach(p => {
+          const panel = $("dlPanel" + p), not = $("dlNot" + p), s0 = $("dlS" + p);
+          if (panel) panel.classList.remove("pas");
+          if (not) not.textContent = skor[p] + " puan";
+          if (s0) s0.textContent = skor[p];
+        });
+        if (kazanan === null) bildir(`⏱️ Turu kimse alamadı — doğru cevap: ${s.secenekler[s.dogruIdx].metin}`, "");
+        else bildir(`🎉 ${adlar[kazanan]} turu kaptı! (+1 puan)`, kazanan === 0 ? "k1" : "k2");
+        tur++;
+        bekle(() => { if (tur >= turSayisi) sonlandir(); else turGoster(); }, 1600);
+      }
+
+      function sonlandir(){
+        const sure = sn();
+        durdur();
+        bitir({ dogru: skor[0] + skor[1], yanlis: yanlisSayi, sure, hedefSure,
+          ikili: { adlar: adlar.slice(), skor: skor.slice(), tur: turSayisi } });
+      }
+
+      hazirEkran();
+    }
+  },
+
+  matematik: {
+    ad: "Matematik İşlem", ikon: "➗",
+    baslat(oyun, bitir){
+      const v = oyun.veri, n = v.soruSayisi || 10;
+      const sorular = Array.from({ length: n }, () => islemUret(v.islem, v.min, v.max));
+      const hedefSure = n * 8;
+      let idx = 0, dogru = 0, yanlis = 0;
+      oyunBaslangic = Date.now();
+      function goster(){
+        if (idx >= n){ bitir({ dogru, yanlis, sure: sn(), hedefSure }); return; }
+        const s = sorular[idx];
+        $("app").innerHTML = `${oyunBaslik(oyun)}
+          <div class="mt-ilerle">Soru <b>${idx + 1}</b>/${n} · Doğru: <b>${dogru}</b> · Yanlış: <b>${yanlis}</b></div>
+          <div class="mt-soru">${s.metin} = ?</div>
+          <form id="mtForm" class="mt-form">
+            <input id="mtG" class="mt-girdi" type="number" inputmode="numeric" autocomplete="off" placeholder="?" />
+            <button class="btn btn-primary" type="submit">Cevapla</button>
+          </form>
+          <div class="mt-geri" id="mtGeri"></div>`;
+        const inp = $("mtG"), geri = $("mtGeri");
+        inp.focus();
+        $("mtForm").addEventListener("submit", e => {
+          e.preventDefault();
+          if (inp.value === "") return;
+          const val = parseInt(inp.value, 10);
+          if (isNaN(val)) return;
+          if (val === s.sonuc){ dogru++; geri.textContent = "✅ Doğru!"; geri.className = "mt-geri dogru"; }
+          else { yanlis++; geri.textContent = `❌ Doğru cevap: ${s.sonuc}`; geri.className = "mt-geri yanlis"; }
+          idx++;
+          inp.disabled = true;
+          setTimeout(goster, 700);
+        });
+      }
+      goster();
+    }
+  },
+};
+
+/* ═════════════ EKRANLAR ═════════════ */
+function ozetSerit(){
+  const oynanan = Object.keys(VERI.oyunlar).length;
+  const enYuksek = Object.values(VERI.oyunlar).reduce((m, o) => Math.max(m, o.enYuksek || 0), 0);
+  return `<div class="ozet-serit">
+    <div class="ozet-ana"><span class="ozet-etiket">Toplam Puanın</span><span class="ozet-puan">${VERI.toplamPuan}</span></div>
+    <div class="ozet-mini"><b>${oynanan}</b><span>oyun</span></div>
+    <div class="ozet-mini"><b>${enYuksek}</b><span>en yüksek</span></div>
+    <div class="ozet-btnler">
+      <button class="btn btn-ghost" data-eylem="ikili">👥 İki Kişilik (${ikiliOyunlar().length})</button>
+      <button class="btn btn-ghost" data-eylem="istatistik">📊 İstatistiklerim</button>
+    </div>
+  </div>`;
+}
+
+function ekranIkili(){
+  const liste = ikiliOyunlar();
+  return `<h2 class="blok-baslik">👥 İki Kişilik Oyunlar</h2>
+    <p class="ikili-aciklama">Bu oyunlar aynı cihazda karşı karşıya oynanır: soru ortada, cevap kartları her oyuncu için ayrı panelde. Doğru kartı ilk tıklayan turu kapar. Akıllı tahta veya büyük ekranda oynarken oyun içindeki <b>⛶ Büyük Ekran</b> düğmesiyle tahtayı büyütebilirsiniz.</p>
+    ${KADEMELER.map(k => {
+      const g = liste.filter(o => o.kademe === k.id).sort((a, b) => a.sinif - b.sinif);
+      if (!g.length) return "";
+      return `<div class="konu-blok">
+        <h3 class="konu-bas">${k.emoji} ${k.ad}</h3>
+        <div class="oyun-grid">${g.map(o => oyunKart(o, true)).join("")}</div>
+      </div>`;
+    }).join("")}
+    <div class="btn-row" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px;">
+      <button class="btn btn-outline" data-eylem="panel">← Tüm Oyunlar</button>
+    </div>`;
+}
+
+function kirinti(){
+  const parts = [{ ad: "🎮 Oyunlar", eylem: "panel" }];
+  if (durum.kademe){ const k = KADEMELER.find(x => x.id === durum.kademe); parts.push({ ad: k.ad, eylem: "kademe:" + durum.kademe }); }
+  if (durum.sinif && (durum.ekran === "ders" || durum.ekran === "liste")) parts.push({ ad: durum.sinif + ". Sınıf", eylem: "sinif:" + durum.sinif });
+  if (durum.ders && durum.ekran === "liste") parts.push({ ad: durum.ders, eylem: null });
+  return `<div class="kirinti">` + parts.map((p, i) => {
+    const son = i === parts.length - 1;
+    const oge = (son || !p.eylem) ? `<span class="kx">${p.ad}</span>` : `<button class="kb" data-eylem="${p.eylem}">${p.ad}</button>`;
+    return oge + (son ? "" : `<span class="kok">›</span>`);
+  }).join("") + `</div>`;
+}
+
+function ekranPanel(){
+  return `${ozetSerit()}
+    <h2 class="blok-baslik">Kademe Seç</h2>
+    <div class="secim-grid">
+      ${KADEMELER.map(k => `
+        <button class="secim-kart" data-eylem="kademe:${k.id}">
+          <span class="secim-emoji">${k.emoji}</span>
+          <span class="secim-ad">${k.ad}</span>
+          <span class="secim-alt">${sayiOyun({ kademe: k.id })} oyun</span>
+        </button>`).join("")}
+    </div>`;
+}
+
+function ekranSinif(){
+  const k = KADEMELER.find(x => x.id === durum.kademe);
+  return `${kirinti()}<h2 class="blok-baslik">${k.ad} — Sınıf Seç</h2>
+    <div class="secim-grid">
+      ${k.siniflar.map(s => {
+        const sayi = sayiOyun({ kademe: k.id, sinif: s });
+        return `<button class="secim-kart" data-eylem="sinif:${s}"${sayi === 0 ? ' disabled style="opacity:.5;cursor:not-allowed"' : ""}>
+          <span class="secim-emoji">${s}</span>
+          <span class="secim-ad">${s}. Sınıf</span>
+          <span class="secim-alt">${sayi} oyun</span>
+        </button>`;
+      }).join("")}
+    </div>`;
+}
+
+function ekranDers(){
+  const oyunlar = filtre({ kademe: durum.kademe, sinif: durum.sinif });
+  const dersler = [...new Set(oyunlar.map(o => o.ders))];
+  return `${kirinti()}<h2 class="blok-baslik">${durum.sinif}. Sınıf — Ders Seç</h2>` +
+    (dersler.length ? `<div class="secim-grid">
+      ${dersler.map(d => `
+        <button class="secim-kart" data-eylem="ders:${d}">
+          <span class="secim-emoji">${dersEmoji(d)}</span>
+          <span class="secim-ad">${d}</span>
+          <span class="secim-alt">${sayiOyun({ kademe: durum.kademe, sinif: durum.sinif, ders: d })} oyun</span>
+        </button>`).join("")}
+    </div>` : bosMesaj("Bu sınıf için henüz oyun eklenmedi."));
+}
+
+function ekranListe(){
+  const oyunlar = filtre({ kademe: durum.kademe, sinif: durum.sinif, ders: durum.ders });
+  const konular = [...new Set(oyunlar.map(o => o.konu))];
+  return `${kirinti()}<h2 class="blok-baslik">${durum.ders} Oyunları</h2>` +
+    konular.map(konu => `
+      <div class="konu-blok">
+        <h3 class="konu-bas">${konu}</h3>
+        <div class="oyun-grid">${oyunlar.filter(o => o.konu === konu).map(o => oyunKart(o)).join("")}</div>
+      </div>`).join("");
+}
+
+function oyunKart(o, yerBilgisi){
+  const kayit = VERI.oyunlar[o.id];
+  const isl = TUR_ISLEYICI[o.tur];
+  return `<button class="oyun-kart" data-eylem="oyun:${o.id}">
+    <span class="ok-ust"><span class="ok-ikon">${isl.ikon}</span><span class="ok-etiketler">${isl.kisi === 2 ? kisiEtiket() : ""}${zorlukEtiket(o.zorluk)}</span></span>
+    <span class="ok-ad">${o.baslik}</span>
+    <span class="ok-tur">${isl.ad}${yerBilgisi ? ` · ${o.sinif}. Sınıf · ${o.ders}` : ""}</span>
+    ${kayit ? `<span class="ok-skor">🏆 En yüksek: <b>${kayit.enYuksek}</b> · son: ${kayit.sonPuan}</span>` : `<span class="ok-skor yeni">Henüz oynanmadı</span>`}
+  </button>`;
+}
+
+function ekranSonucIkili(){
+  const s = sonSonuc, o = s.oyun, { adlar, skor } = s.ikili;
+  const berabere = skor[0] === skor[1];
+  const kazanan = berabere ? -1 : (skor[0] > skor[1] ? 0 : 1);
+  return `<div class="sonuc-kart">
+    <div class="sonuc-emoji">${berabere ? "🤝" : "🏆"}</div>
+    <h2 class="sonuc-baslik">${berabere ? "Berabere!" : kacis(adlar[kazanan]) + " kazandı!"}</h2>
+    <div class="dl-sonuc-skor">
+      <div class="dl-sonuc-taraf t1${kazanan === 0 ? " kazanan" : ""}"><b>${skor[0]}</b><span>🔴 ${kacis(adlar[0])}</span></div>
+      <span class="dl-vs">VS</span>
+      <div class="dl-sonuc-taraf t2${kazanan === 1 ? " kazanan" : ""}"><b>${skor[1]}</b><span>${kacis(adlar[1])} 🔵</span></div>
+    </div>
+    <div class="sonuc-puan">${s.puan}<span>ortak puan</span></div>
+    ${s.yeniRekor ? `<div class="sonuc-rekor">🏆 Bu oyunda yeni en yüksek skor!</div>` : ""}
+    <div class="sonuc-detay">
+      <div><b>${s.ikili.tur}</b><span>Tur</span></div>
+      <div><b>${s.dogru}</b><span>Alınan Tur</span></div>
+      <div><b>${s.yanlis}</b><span>Yanlış</span></div>
+      <div><b>${s.sure} sn</b><span>Süre</span></div>
+    </div>
+    <div class="sonuc-alt">Düello puanı iki oyuncunun ortak başarısıdır. Bu oyundaki en yüksek: <b>${s.enYuksek}</b> · Toplam puan: <b>${VERI.toplamPuan}</b></div>
+    <div class="btn-row" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+      <button class="btn btn-primary" data-eylem="tekrar">↻ Rövanş</button>
+      <button class="btn btn-outline" data-eylem="liste">Oyunlara Dön</button>
+      <button class="btn btn-ghost" data-eylem="istatistik">İstatistiklerim</button>
+    </div>
+  </div>`;
+}
+
+function ekranSonuc(){
+  const s = sonSonuc, o = s.oyun;
+  if (s.ikili) return ekranSonucIkili();
+  return `<div class="sonuc-kart">
+    <div class="sonuc-emoji">${s.puan >= 400 ? "🏅" : s.puan > 0 ? "🎉" : "💪"}</div>
+    <h2 class="sonuc-baslik">Oyun Bitti!</h2>
+    <div class="sonuc-puan">${s.puan}<span>puan</span></div>
+    ${s.yeniRekor ? `<div class="sonuc-rekor">🏆 Yeni en yüksek skorun!</div>` : ""}
+    <div class="sonuc-detay">
+      <div><b>${s.dogru}</b><span>Doğru</span></div>
+      <div><b>${s.yanlis}</b><span>Yanlış</span></div>
+      <div><b>${s.sure} sn</b><span>Süre</span></div>
+      <div><b>${zorlukAd(o.zorluk)}</b><span>Zorluk</span></div>
+    </div>
+    <div class="sonuc-alt">Bu oyundaki en yüksek: <b>${s.enYuksek}</b> · Toplam puanın: <b>${VERI.toplamPuan}</b></div>
+    <div class="btn-row" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+      <button class="btn btn-primary" data-eylem="tekrar">↻ Tekrar Oyna</button>
+      <button class="btn btn-outline" data-eylem="liste">Oyunlara Dön</button>
+      <button class="btn btn-ghost" data-eylem="istatistik">İstatistiklerim</button>
+    </div>
+  </div>`;
+}
+
+function ekranIstatistik(){
+  const oyunlar = Object.entries(VERI.oyunlar);
+  const enYuksekGenel = oyunlar.reduce((m, [, o]) => Math.max(m, o.enYuksek || 0), 0);
+  const toplamOynama = oyunlar.reduce((sum, [, o]) => sum + (o.oynanma || 0), 0);
+  return `<h2 class="blok-baslik">📊 İstatistiklerim</h2>
+    <div class="ist-ozet">
+      <div class="ist-kutu"><span>Toplam Puan</span><b>${VERI.toplamPuan}</b></div>
+      <div class="ist-kutu"><span>Oynanan Oyun</span><b>${oyunlar.length}</b></div>
+      <div class="ist-kutu"><span>En Yüksek Skor</span><b>${enYuksekGenel}</b></div>
+      <div class="ist-kutu"><span>Toplam Oynama</span><b>${toplamOynama}</b></div>
+    </div>
+    <h3 class="konu-bas">Oynadığın Oyunlar</h3>
+    ${oyunlar.length ? `<div class="ist-tablo">
+      <div class="ist-satir ist-bas"><span>Oyun</span><span>Son</span><span>En Yüksek</span><span>Oynama</span></div>
+      ${oyunlar.sort((a, b) => (b[1].enYuksek || 0) - (a[1].enYuksek || 0)).map(([, o]) => `
+        <div class="ist-satir"><span class="ist-ad">${o.baslik}</span><span>${o.sonPuan || 0}</span><span><b style="color:var(--blue)">${o.enYuksek || 0}</b></span><span>${o.oynanma || 0}×</span></div>`).join("")}
+    </div>` : bosMesaj("Henüz oyun oynamadın. Hadi bir oyun seç ve başla!")}
+    <h3 class="konu-bas">Son Oynadıkların</h3>
+    ${VERI.gecmis.length ? `<div class="son-liste">${VERI.gecmis.map(g => `
+      <div class="son-oge"><span class="son-ad">${g.baslik}</span><span class="son-meta">${g.dogru}✓ ${g.yanlis}✗ · ${g.sure} sn</span><span class="son-puan">+${g.puan}</span></div>`).join("")}</div>` : `<div class="bos-mesaj">Kayıtlı oyun geçmişi yok.</div>`}
+    <div class="btn-row" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px;">
+      <button class="btn btn-outline" data-eylem="panel">← Oyunlara Dön</button>
+      ${oyunlar.length ? `<button class="btn btn-ghost" data-eylem="sil">Geçmişi Sıfırla</button>` : ""}
+    </div>`;
+}
+
+function ekranOyun(){
+  const isl = TUR_ISLEYICI[aktifOyun.tur];
+  if (!isl){ $("app").innerHTML = oyunBaslik(aktifOyun) + bosMesaj("Bu oyun türü henüz hazır değil."); return; }
+  isl.baslat(aktifOyun, sonuc => oyunBitir(aktifOyun, sonuc));
+}
+
+/* ═════════════ RENDER + YÖNLENDİRME ═════════════ */
+function render(){
+  temizle();
+  const app = $("app");
+  switch (durum.ekran){
+    case "sinif": app.innerHTML = ekranSinif(); break;
+    case "ders": app.innerHTML = ekranDers(); break;
+    case "liste": app.innerHTML = ekranListe(); break;
+    case "ikili": app.innerHTML = ekranIkili(); break;
+    case "istatistik": app.innerHTML = ekranIstatistik(); break;
+    case "sonuc": app.innerHTML = ekranSonuc(); break;
+    case "oyun": ekranOyun(); break;
+    default: app.innerHTML = ekranPanel();
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("app").addEventListener("click", e => {
+  const el = e.target.closest("[data-eylem]");
+  if (!el || el.disabled) return;
+  const raw = el.dataset.eylem, ci = raw.indexOf(":");
+  const eylem = ci < 0 ? raw : raw.slice(0, ci);
+  const arg = ci < 0 ? null : raw.slice(ci + 1);
+  switch (eylem){
+    case "panel": durum.ekran = "panel"; render(); break;
+    case "istatistik": durum.ekran = "istatistik"; render(); break;
+    case "kademe": durum.kademe = arg; durum.sinif = null; durum.ders = null; durum.ekran = "sinif"; render(); break;
+    case "sinif": durum.sinif = arg; durum.ders = null; durum.ekran = "ders"; render(); break;
+    case "ders": durum.ders = arg; durum.ekran = "liste"; render(); break;
+    case "ikili": durum.ekran = "ikili"; render(); break;
+    case "liste": durum.ekran = durum.oyunKaynak === "ikili" ? "ikili" : "liste"; render(); break;
+    case "oyun":
+      aktifOyun = OYUNLAR.find(o => o.id === arg);
+      if (aktifOyun){
+        // İki kişilik listeden girilebildiği için kırıntı/geri dönüş bilgisini oyundan al
+        durum.oyunKaynak = durum.ekran === "ikili" ? "ikili" : "liste";
+        durum.kademe = aktifOyun.kademe; durum.sinif = aktifOyun.sinif; durum.ders = aktifOyun.ders;
+      }
+      durum.ekran = "oyun"; render(); break;
+    case "tekrar": if (aktifOyun){ durum.ekran = "oyun"; render(); } break;
+    case "sil": if (confirm("Tüm puanların ve oyun geçmişin silinsin mi? Bu işlem geri alınamaz.")){ VERI = bosVeri(); veriYaz(); durum.ekran = "panel"; render(); } break;
+  }
+});
+
+/* ═════════════ BAŞLAT ═════════════ */
+render();
+
+/* Mobil menü davranışı assets/site-header.js içinde */
+</script>
+</body>
+</html>

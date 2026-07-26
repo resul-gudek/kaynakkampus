@@ -4,7 +4,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import { profilAyristir } from "@/lib/hesap";
 import DenemeBolumu from "@/components/ogrenci/DenemeBolumu";
 
-export const metadata: Metadata = { title: "Deneme Sonuçlarım – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Deneme Sonuçlarım – Kaynak Kampüs" };
 
 export default async function DenemelerSayfasi() {
   const ogrenci = await aktifKullanici("ogrenci");

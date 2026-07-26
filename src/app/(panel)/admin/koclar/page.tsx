@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import KocYonetimi, { type KocGorunum } from "../KocYonetimi";
 
-export const metadata: Metadata = { title: "Koçlar Listesi – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Koçlar Listesi – Kaynak Kampüs" };
 
 export default async function KoclarSayfasi() {
   await aktifKullanici("admin");

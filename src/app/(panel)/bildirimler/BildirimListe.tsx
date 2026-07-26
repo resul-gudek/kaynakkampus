@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { bildirimOkundu, bildirimSil, bildirimTumunuOkundu, bildirimTemizle } from "@/actions/bildirim";
+import BosDurum from "@/components/maskot/BosDurum";
 import stil from "./bildirimler.module.css";
 
 export interface BildirimGorunum {
@@ -41,6 +42,26 @@ export default function BildirimListe({
         baslat(async () => {
           await bildirimOkundu(b.id, true);
           router.push(url);
+        });
+        return;
+      }
+      // Süreli test: koç sonuç tablosundaki oturuma, öğrenci test listesindeki karta gider
+      if (b.hedefTur === "test") {
+        const url =
+          rol === "koc"
+            ? `/koc/testler?kayit=${encodeURIComponent(b.hedefKayitId)}`
+            : `/ogrenci/testler?kayit=${encodeURIComponent(b.hedefKayitId)}`;
+        baslat(async () => {
+          await bildirimOkundu(b.id, true);
+          router.push(url);
+        });
+        return;
+      }
+      // Video ders: bildirim yalnız öğrenciye düşer, doğrudan detay sayfasına gider
+      if (b.hedefTur === "video") {
+        baslat(async () => {
+          await bildirimOkundu(b.id, true);
+          router.push(`/ogrenci/videolar/${encodeURIComponent(b.hedefKayitId!)}`);
         });
         return;
       }
@@ -101,12 +122,15 @@ export default function BildirimListe({
       </div>
 
       {liste.length === 0 ? (
-        <p className={stil.bosMesaj}>
-          <span className={stil.bosIkon}>🔕</span>
-          {filtre === "okunmamis"
-            ? "Okunmamış bildirimin yok, hepsine baktın. 👏"
-            : "Henüz bildirimin yok. Talepler, onaylar ve ders güncellemeleri burada görünecek."}
-        </p>
+        filtre === "okunmamis" ? (
+          <BosDurum ifade="onay" baslik="Okunmamış bildirimin yok." metin="Hepsine baktın." />
+        ) : (
+          <BosDurum
+            ifade="sakin"
+            baslik="Henüz bildirimin yok."
+            metin="Talepler, onaylar ve ders güncellemeleri burada görünecek."
+          />
+        )
       ) : (
         liste.map((b) => (
           <div

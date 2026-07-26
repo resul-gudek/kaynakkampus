@@ -5,7 +5,7 @@ import { isoTarih } from "@/lib/hesap";
 import Ajanda from "@/components/koc/Ajanda";
 import type { AjandaOlay } from "@/components/koc/tipler";
 
-export const metadata: Metadata = { title: "Ajanda – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Ajanda – Kaynak Kampüs" };
 
 export default async function AjandaSayfasi() {
   const koc = await aktifKullanici("koc");

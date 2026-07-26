@@ -1,0 +1,198 @@
+.durumSecici label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.durumSecici select {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.kucukBilgi {
+  color: var(--yesil);
+  font-size: 0.74rem;
+  margin-top: 6px;
+  display: block;
+}
+.ipucuNot {
+  color: var(--muted);
+  font-size: 0.72rem;
+  margin-top: 8px;
+  display: block;
+  line-height: 1.4;
+}
+.hata {
+  color: var(--kirmizi);
+  font-size: 0.78rem;
+  margin-top: 6px;
+  display: block;
+}
+
+/* ── Notlar ────────────────────────────────────────────────── */
+.gizliUyari {
+  font-size: 0.74rem;
+  color: var(--muted);
+  background: var(--tint);
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.notEkle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.notEkle textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 0.85rem;
+  resize: vertical;
+}
+.notEkle button {
+  align-self: flex-end;
+}
+.notListe {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+.notListe li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-soft);
+}
+.notListe p {
+  font-size: 0.86rem;
+  white-space: pre-wrap;
+}
+.notListe small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+.notSil {
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.notSil:hover {
+  color: var(--kirmizi);
+}
+.bosNot {
+  color: var(--muted);
+  font-size: 0.82rem;
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+}
+
+/* ── Mülakat paneli ────────────────────────────────────────── */
+.mulakatOzet {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mulakatSatir {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.86rem;
+}
+.mulakatSatir:first-child {
+  border-top: none;
+}
+.mulakatSatir span {
+  color: var(--muted);
+}
+.mulakatSatir a {
+  color: var(--blue);
+  word-break: break-all;
+  text-align: right;
+}
+.mulakatForm,
+.sonucForm {
+  margin-top: 6px;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.formGrid .tam {
+  grid-column: 1 / -1;
+}
+.formGrid input,
+.formGrid select,
+.formGrid textarea {
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 0.86rem;
+}
+.formGrid textarea {
+  resize: vertical;
+}
+.formAlt {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+.altBaslik {
+  display: block;
+  margin: 18px 0 8px;
+  font-size: 0.9rem;
+}
+.sonucForm {
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+  margin-top: 16px;
+}
+.gecmis {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.gecmis ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.gecmis li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.8rem;
+  padding: 5px 0;
+}
+.gecmis small {
+  color: var(--muted);
+}

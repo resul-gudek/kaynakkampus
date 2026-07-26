@@ -1,0 +1,351 @@
+.sayfa {
+  padding-bottom: 48px;
+}
+
+/* ── Sekmeler ──────────────────────────────────────────────── */
+.sekmeler {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 14px;
+}
+.sekme,
+.sekmeAktif {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.sekme:hover {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+.sekme b,
+.sekmeAktif b {
+  font-size: 0.78rem;
+  background: var(--tint);
+  padding: 1px 8px;
+  border-radius: 50px;
+}
+.sekmeAktif {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.sekmeAktif b {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+/* ── Durum çipleri ─────────────────────────────────────────── */
+.durumFiltre {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.cip,
+.cipAktif {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+}
+.cip:hover {
+  color: var(--blue);
+}
+.cipAktif {
+  background: var(--tint);
+  color: var(--blue);
+  border-color: var(--blue);
+}
+.cipAdet {
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50px;
+  font-size: 0.66rem;
+  padding: 0 6px;
+}
+
+.sonucBilgi {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}
+
+/* ── Kart ızgarası ─────────────────────────────────────────── */
+.kartGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.kart {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.kart:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.kartUst {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.kartAd {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.kartBilgi {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.kartAlt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 2px;
+}
+.kartRozetler {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Tür / durum rozetleri ─────────────────────────────────── */
+.turRozet,
+.durumRozet {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.turRozet {
+  background: var(--tint);
+  color: var(--blue);
+}
+.tur_ogretmen {
+  background: rgba(26, 60, 143, 0.14);
+  color: var(--blue);
+}
+.tur_ogrenci {
+  background: rgba(14, 165, 201, 0.16);
+  color: #B5677A;
+}
+.tur_koc {
+  background: rgba(249, 115, 22, 0.16);
+  color: #7A2035;
+}
+
+.durumRozet {
+  background: rgba(100, 116, 139, 0.14);
+  color: var(--muted);
+}
+.durum_yeni {
+  background: rgba(26, 60, 143, 0.14);
+  color: var(--blue);
+}
+.durum_inceleniyor {
+  background: rgba(14, 165, 201, 0.16);
+  color: #B5677A;
+}
+.durum_ek_bilgi {
+  background: rgba(251, 191, 36, 0.2);
+  color: #b45309;
+}
+.durum_mulakata_uygun,
+.durum_mulakat_planlandi {
+  background: rgba(14, 165, 201, 0.18);
+  color: #B5677A;
+}
+.durum_mulakat_tamamlandi {
+  background: rgba(26, 60, 143, 0.14);
+  color: var(--blue);
+}
+.durum_olumlu {
+  background: rgba(22, 163, 74, 0.16);
+  color: #15803d;
+}
+.durum_olumsuz {
+  background: rgba(220, 38, 38, 0.14);
+  color: #b91c1c;
+}
+
+.bosDurum {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--muted);
+}
+.bosDurum span {
+  font-size: 2.4rem;
+}
+.bosDurum b {
+  display: block;
+  margin-top: 10px;
+  color: var(--text);
+}
+
+.sayfalama {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 28px;
+  font-size: 0.86rem;
+}
+.sayfalama a {
+  color: var(--blue);
+  font-weight: 600;
+}
+.sayfalama span {
+  color: var(--muted);
+}
+
+/* ── Detay sayfası ─────────────────────────────────────────── */
+.detayUst {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.geri {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.86rem;
+}
+.detayGrid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .detayGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.panelBaslik {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.veriListe > div {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+.veriListe > div:first-child {
+  border-top: none;
+}
+.veriListe dt {
+  color: var(--muted);
+  font-weight: 600;
+}
+.veriListe dd {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+@media (max-width: 560px) {
+  .veriListe > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+.grupBaslik {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 18px 0 4px;
+}
+
+.dosyalar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dosyaSatir {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  font-size: 0.85rem;
+}
+.dosyaSatir a {
+  color: var(--blue);
+  font-weight: 600;
+}
+.dosyaBoyut {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+/* Kişisel bilgi kutusu (yan panel) */
+.ozetKutu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.86rem;
+}
+.ozetKutu a {
+  color: var(--blue);
+}
+.gizliNot {
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: var(--tint);
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}

@@ -6,7 +6,7 @@ import { ROL_ANASAYFA } from "@/lib/auth.config";
 import GirisForm from "./GirisForm";
 import stil from "./giris.module.css";
 
-export const metadata: Metadata = { title: "Giriş Yap – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Giriş Yap – Kaynak Kampüs" };
 
 export default async function GirisPage() {
   // Zaten oturum açıksa doğrudan ilgili panele geç (legacy davranışı)
@@ -22,8 +22,8 @@ export default async function GirisPage() {
           <div className={stil.navIc}>
             <Link href="/" className={stil.logo}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/logo.png" alt="Kaynak Akademi Logosu" className={stil.logoIkon} />
-              Kaynak <span>Akademi</span>
+              <img src="/assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" className={stil.logoIkon} />
+              Kaynak <span>Kampüs</span>
             </Link>
             <Link href="/" className={stil.geriLink}>← Ana Sayfaya Dön</Link>
           </div>

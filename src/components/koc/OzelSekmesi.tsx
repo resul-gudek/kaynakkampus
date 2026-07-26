@@ -3,14 +3,22 @@
 /* 🎓 Özel Dersler sekmesi — legacy ozelCiz / ozelForm / ozelOnayla / ozelReddet /
    ozelYapildi / ozelNot / ozelIptal / ozelOdeme / ozelSilBtn / waDersHatirlat. */
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { bugun, tarihStr } from "@/lib/hesap";
 import { ozelDersEkle, ozelDersSil, ozelDersGuncelle } from "@/actions/ozelders";
+import DegerlendirmeFormu from "@/components/degerlendirme/DegerlendirmeFormu";
+import DegerlendirmeGoster from "@/components/degerlendirme/DegerlendirmeGoster";
+import type { DegerlendirmeS } from "@/components/degerlendirme/alanlar";
+import dg from "@/components/degerlendirme/degerlendirme.module.css";
 import { waGonder, waNumaraAl } from "./wa";
 import { useVurgu } from "./vurgu";
 import type { OzelS, OzelOzetS } from "./tipler";
 import s from "./koc.module.css";
+
+/* Gizlilik: öğretmen yalnızca kendi değerlendirmesini görür; öğrencinin
+   öğretmen hakkındaki değerlendirmesi bu bileşene hiç gelmez. */
+type DegerlendirmeIkili = { benim?: DegerlendirmeS };
 
 interface Props {
   ogrenciId: string;
@@ -20,11 +28,13 @@ interface Props {
   dersler: OzelS[];
   ozet: OzelOzetS;
   vurguId?: string;
+  degerlendirmeler: Record<string, DegerlendirmeIkili>;
 }
 
-export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, dersler, ozet, vurguId }: Props) {
+export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, dersler, ozet, vurguId, degerlendirmeler }: Props) {
   const router = useRouter();
   const [bekliyor, baslat] = useTransition();
+  const [degAcik, setDegAcik] = useState<string | null>(null);
   const vurgu = useVurgu(vurguId);
   const simdi = bugun();
 
@@ -114,7 +124,7 @@ export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, ders
     waGonder(
       num,
       `Merhaba ${ogrenciAd.split(" ")[0]}! 👋\n\n` +
-        `🎓 Kaynak Akademi – Özel Ders Hatırlatması\n\n` +
+        `🎓 Kaynak Kampüs – Özel Ders Hatırlatması\n\n` +
         `📅 ${tarihStr(x.tarih)}${x.saat ? " · 🕐 " + x.saat : ""}\n` +
         `📘 ${x.ders}${x.konu ? " – " + x.konu : ""} (${x.sure || 60} dk)\n\n` +
         `Derse hazırlıklı gelmeyi unutma. Görüşmek üzere! 💪\n${kocAd}`
@@ -342,6 +352,52 @@ export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, ders
                   </>
                 )}
               </div>
+              {x.durum === "yapildi" &&
+                (() => {
+                  const deg = degerlendirmeler[x.id] ?? {};
+                  const acik = degAcik === x.id;
+                  return (
+                    <>
+                      <div className={dg.blok}>
+                        <div className={dg.blokBas}>
+                          <b>⭐ Öğrenci değerlendirmen</b>
+                          {deg.benim && !acik && (
+                            <button
+                              type="button"
+                              className="btn btn-outline btn-kucuk"
+                              onClick={() => setDegAcik(x.id)}
+                            >
+                              ✏️ Düzenle
+                            </button>
+                          )}
+                        </div>
+                        {acik ? (
+                          <DegerlendirmeFormu
+                            ozelDersId={x.id}
+                            yon="kocOgrenci"
+                            mevcut={deg.benim}
+                            onKapat={() => setDegAcik(null)}
+                          />
+                        ) : deg.benim ? (
+                          <DegerlendirmeGoster deger={deg.benim} />
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-kucuk"
+                            onClick={() => setDegAcik(x.id)}
+                          >
+                            ⭐ Öğrenciyi Değerlendir
+                          </button>
+                        )}
+                        <small className={dg.gizlilik}>
+                          🔒 Bu değerlendirme öğrenciye gösterilmez; velisi yalnızca puan özetini
+                          görür, yazdığınız yorumları görmez. Tam hâlini yalnızca okul yönetimi
+                          görür. Öğrencinin sizinle ilgili değerlendirmesi de size gösterilmez.
+                        </small>
+                      </div>
+                    </>
+                  );
+                })()}
             </div>
             <button
               type="button"

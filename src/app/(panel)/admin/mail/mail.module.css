@@ -29,7 +29,7 @@
 .metinAlani:focus { outline: none; border-color: var(--teal); }
 
 .degisken {
-  display: inline-block; background: var(--tint); color: var(--blue, #1a3c8f);
+  display: inline-block; background: var(--tint); color: var(--blue, #7A2035);
   border-radius: 6px; padding: 2px 8px; margin: 2px 4px 2px 0;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .74rem;
   cursor: help;

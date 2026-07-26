@@ -6,7 +6,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import { bugun, tarihStr } from "@/lib/hesap";
 import d from "@/components/panel/dashboard.module.css";
 
-export const metadata: Metadata = { title: "Öğretmen Paneli – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Öğretmen Paneli – Kaynak Kampüs" };
 
 /* Bölüm sayfaları — hızlı erişim kartları buradan beslenir */
 const BOLUMLER = [

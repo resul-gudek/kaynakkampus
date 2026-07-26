@@ -13,19 +13,31 @@ import {
   yolDurumlu,
   zayifKonular,
 } from "@/lib/hesap";
+import { kanitUrl } from "@/lib/odev-kanit";
+import DegerlendirmeGoster from "@/components/degerlendirme/DegerlendirmeGoster";
+import { degerlendirmeSerile } from "@/components/degerlendirme/alanlar";
 import d from "@/components/panel/dashboard.module.css";
 import s from "./veli.module.css";
 
-export const metadata: Metadata = { title: "Veli Paneli – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Veli Paneli – Kaynak Kampüs" };
 
 /* Bir velinin çocuğu için gereken tüm ilerleme kayıtları. */
 const COCUK_INCLUDE = {
   koc: { select: { ad: true, brans: true } },
-  odevlerOgrenci: { orderBy: { sonTarih: "asc" } },
+  odevlerOgrenci: {
+    orderBy: { sonTarih: "asc" },
+    // Tamamlanan ödevlerin kanıt fotoğrafları (veli salt-okunur görür)
+    include: { kanitlar: { select: { id: true, ad: true }, orderBy: { olusturma: "asc" } } },
+  },
   takipOgrenci: true,
   denemeler: { include: { dersler: true }, orderBy: [{ tarih: "asc" }, { id: "asc" }] },
   yolOgrenci: { orderBy: { sira: "asc" } },
-  ozelDersOgrenci: { orderBy: [{ tarih: "asc" }, { saat: "asc" }] },
+  ozelDersOgrenci: {
+    orderBy: [{ tarih: "asc" }, { saat: "asc" }],
+    // Veli yalnızca öğretmenin öğrenci hakkındaki değerlendirmesini, o da
+    // puan özeti olarak görür (metin yorumlar mod="ozet" ile gizlenir).
+    include: { degerlendirmeler: { where: { yon: "kocOgrenci" } } },
+  },
 } satisfies Prisma.KullaniciInclude;
 
 type Cocuk = Prisma.KullaniciGetPayload<{ include: typeof COCUK_INCLUDE }>;
@@ -122,6 +134,12 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
   const sonDenemeler = [...cocuk.denemeler].slice(-5).reverse();
   const aktifAdim = yolDurumlu(cocuk.yolOgrenci).find((a) => a.durum === "aktif");
   const bekleyenOdev = cocuk.odevlerOgrenci.filter((o) => o.durum === "bekliyor").length;
+  // Fotoğrafıyla tamamlanan son ödevler (en yeni önce)
+  const kanitliOdevler = cocuk.odevlerOgrenci
+    .filter((o) => o.durum === "tamamlandi" && o.kanitlar.length > 0)
+    .sort((a, b) => isoTarih(b.sonTarih).localeCompare(isoTarih(a.sonTarih)))
+    .slice(0, 6);
+  const degerliDersler = cocuk.ozelDersOgrenci.filter((x) => x.degerlendirmeler.length > 0);
 
   return (
     <>
@@ -288,6 +306,84 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
           <p className={s.bosMesaj}>Bekleyen ödev yok. Tüm ödevler tamamlanmış. 🎉</p>
         )}
       </section>
+
+      {/* ── Tamamlanan ödevlerin fotoğrafları (salt okunur) ── */}
+      {kanitliOdevler.length > 0 && (
+        <section className={d.kart}>
+          <div className={d.kartBaslik}>
+            <div>
+              <span className={d.kucukBaslik}>ÖDEVLER</span>
+              <h2>Tamamlanan ödev fotoğrafları</h2>
+              <p style={{ color: "var(--muted)", fontSize: ".78rem", marginTop: 4 }}>
+                {cocuk.ad.split(" ")[0]} ödevi tamamlarken çözüm sayfalarının fotoğrafını
+                yükledi. Büyütmek için fotoğrafa dokunabilirsiniz.
+              </p>
+            </div>
+          </div>
+          <div className={s.kanitListe}>
+            {kanitliOdevler.map((o) => (
+              <div key={o.id} className={s.kanitOdev}>
+                <b>
+                  {o.ders}
+                  {o.konu ? " – " + o.konu : ""}
+                  <small>
+                    {o.sonTarih ? `Son teslim: ${tarihStr(o.sonTarih)} · ` : ""}
+                    {o.kanitlar.length} fotoğraf
+                  </small>
+                </b>
+                <div className={s.kanitSerit}>
+                  {o.kanitlar.map((k) => (
+                    <a
+                      key={k.id}
+                      className={s.kanitKart}
+                      href={kanitUrl(k.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`${k.ad} — büyütmek için tıklayın`}
+                    >
+                      {/* Fotoğraflar public dizinde değil; API'den akar → next/image kullanılmaz */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={kanitUrl(k.id)} alt={k.ad} loading="lazy" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Öğretmen ders değerlendirmeleri (salt okunur) ── */}
+      {degerliDersler.length > 0 && (
+        <section className={d.kart}>
+          <div className={d.kartBaslik}>
+            <div>
+              <span className={d.kucukBaslik}>ÖZEL DERS</span>
+              <h2>Öğretmen ders değerlendirmeleri</h2>
+              <p style={{ color: "var(--muted)", fontSize: ".78rem", marginTop: 4 }}>
+                Öğretmenin ders sonu puan özeti. Ayrıntılı yazılı görüşler yalnızca okul
+                yönetiminde tutulur; merak ettiğiniz bir konu olursa yönetimle iletişime
+                geçebilirsiniz.
+              </p>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {[...degerliDersler].reverse().map((x) => (
+              <div key={x.id}>
+                <b style={{ fontSize: ".9rem" }}>
+                  {x.ders}
+                  {x.konu ? " – " + x.konu : ""}
+                  <small style={{ color: "var(--muted)", fontWeight: 500, marginLeft: 8 }}>
+                    {tarihStr(x.tarih)}
+                    {x.saat ? " · " + x.saat : ""}
+                  </small>
+                </b>
+                <DegerlendirmeGoster deger={degerlendirmeSerile(x.degerlendirmeler[0])} mod="ozet" />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 }

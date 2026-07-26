@@ -1,0 +1,189 @@
+/* Ders sonrası değerlendirme — form + salt-okunur gösterim stilleri */
+
+.blok {
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-top: 12px;
+  background: var(--bg-soft);
+}
+
+.blokBas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.blokBas b {
+  font-size: 0.9rem;
+}
+
+.blokBas small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+/* Gizlilik uyarısı — değerlendirmenin karşı tarafa gösterilmediğini belirtir */
+.gizlilik {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.45;
+}
+
+/* ── Form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.izgara {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.grup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.grup > label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.grup select,
+.grup textarea {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+}
+
+.grup textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.genelPuan {
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+
+.formAlt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Yıldız ── */
+.yildizlar {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.yildiz {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 2px;
+  color: #d8b400;
+  filter: grayscale(1) opacity(0.45);
+  transition: filter 0.12s, transform 0.12s;
+}
+
+.yildizDolu {
+  filter: none;
+}
+
+.yildiz:hover {
+  transform: scale(1.15);
+}
+
+.yildizSalt {
+  font-size: 1rem;
+  color: #d8b400;
+  letter-spacing: 1px;
+}
+
+.yildizSaltBos {
+  color: var(--border);
+}
+
+/* ── Salt-okunur özet ── */
+.ozet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.satir {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.satir:last-child {
+  border-bottom: none;
+}
+
+.satirEtiket {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.satirDeger {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+}
+
+.metinDeger {
+  font-weight: 500;
+  white-space: pre-wrap;
+  text-align: left;
+  grid-column: 1 / -1;
+  margin-top: 2px;
+}
+
+.rozetSecim {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 50px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: var(--tint);
+  color: var(--blue);
+}
+
+.genelSatir {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.85rem;
+  font-weight: 600;
+}

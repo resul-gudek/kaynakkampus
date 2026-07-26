@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hakkımızda – Kaynak Kampüs</title>
+  <meta name="description" content="Kaynak Kampüs; öğrencileri, öğretmenleri ve velileri aynı eğitim çatısı altında buluşturan kapsamlı bir eğitim platformudur." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: #2F343D; background: #fff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    :root {
+      --blue: #7A2035; --blue-dk: #5E1728; --teal: #C98792; --orange: #C98792;
+      --amber: #C98792; --bg-soft: #FAF7F5; --text: #2F343D; --muted: #7C7883;
+      --radius: 14px; --shadow: 0 4px 24px rgba(122,32,53,.10); --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
+    }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+    /* SAYFA BAŞLIĞI */
+    .page-hero {
+      background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%);
+      padding: 56px 0 48px; position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: -140px; right: -110px;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,135,146,.14) 0%, transparent 70%);
+    }
+    .page-hero .container { position: relative; z-index: 1; }
+    .page-hero h1 { font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 800; line-height: 1.2; }
+    .page-hero h1 span { color: var(--orange); }
+    .hero-rule {
+      width: 64px; height: 4px; border-radius: 4px; margin-top: 18px;
+      background: linear-gradient(90deg, var(--blue), var(--orange));
+    }
+
+    /* İÇERİK */
+    .about { padding: 56px 0 88px; }
+    .about-body { max-width: 780px; }
+    .about-body p {
+      font-size: 1.05rem; line-height: 1.95; color: #4A4550;
+    }
+    .about-body p + p { margin-top: 24px; }
+    .about-body p:first-child::first-letter {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 3.2rem; font-weight: 600; color: var(--blue);
+      float: left; line-height: .9; padding: 6px 12px 0 0;
+    }
+    .about-body strong { color: var(--blue); font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 40px 0 34px; }
+      .about { padding: 38px 0 60px; }
+      .about-body p { font-size: 1rem; line-height: 1.85; }
+      .about-body p + p { margin-top: 20px; }
+      .about-body p:first-child::first-letter { font-size: 2.6rem; padding: 4px 9px 0 0; }
+    }
+  </style>
+  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
+
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+        </div>
+      </div>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <a href="etkinlikler.html">Etkinlikler</a>
+      <a href="/blog">Blog</a>
+      <a href="haberler.html">Haberler</a>
+      <a href="index.html#how">Nasıl Çalışır</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+    </nav>
+
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
+    </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="sh-drawer" id="shMobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
+    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="/blog">Blog</a>
+    <a href="haberler.html">Haberler</a>
+    <a href="index.html#how">Nasıl Çalışır</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Hakkı<span>mızda</span></h1>
+    <div class="hero-rule"></div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="container">
+    <div class="about-body">
+      <p>Kaynak Kampüs; öğrencileri, öğretmenleri ve velileri aynı eğitim çatısı altında buluşturan kapsamlı bir eğitim platformudur. Öğrencilerin gelişimini desteklemek, öğretmenlerin bilgi ve deneyimlerini daha geniş kitlelere ulaştırmak ve velilerin eğitim sürecini güvenle takip edebilmesini sağlamak amacıyla kurulmuştur.</p>
+      <p>Platformumuzda özel ders, eğitim koçluğu, öğrenci takibi, dijital materyaller, çalışma kâğıtları, eğitici oyunlar, etkinlikler ve testler bir arada sunulur. Her öğrencinin ihtiyacının farklı olduğuna inanır; öğrenme sürecini daha verimli, planlı ve keyifli hâle getirmeyi hedefleriz.</p>
+      <p>Kaynak Kampüs yalnızca içerik sunan bir platform değil; öğrencinin gelişimini destekleyen, öğretmenin emeğini görünür kılan ve velinin sürece bilinçli şekilde dâhil olmasını sağlayan bütüncül bir eğitim alanıdır.</p>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#241018;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
+  <div class="container">© 2026 Kaynak Kampüs. Tüm hakları saklıdır.</div>
+</footer>
+
+</body>
+</html>

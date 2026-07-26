@@ -93,14 +93,14 @@ function NetGrafik({ denemeler }: { denemeler: DenemeS[] }) {
           {izgara.map((g, i) => (
             <g key={i}>
               <line x1={L} x2={W - R} y1={g.y} y2={g.y} stroke="#e8edf9" strokeWidth={1} />
-              <text x={L - 8} y={g.y + 4} textAnchor="end" fontSize={11} fill="#64748b">
+              <text x={L - 8} y={g.y + 4} textAnchor="end" fontSize={11} fill="#7C7883">
                 {g.etiket}
               </text>
             </g>
           ))}
           {liste.map((d, i) =>
             i % adim && i !== liste.length - 1 ? null : (
-              <text key={d.id} x={x(i)} y={H - 10} textAnchor="middle" fontSize={11} fill="#64748b">
+              <text key={d.id} x={x(i)} y={H - 10} textAnchor="middle" fontSize={11} fill="#7C7883">
                 {tarihStr(d.tarih).slice(0, 5)}
               </text>
             )
@@ -108,14 +108,14 @@ function NetGrafik({ denemeler }: { denemeler: DenemeS[] }) {
           <path
             d={yolStr}
             fill="none"
-            stroke="#1a3c8f"
+            stroke="#7A2035"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           {liste.map((d, i) => (
             <g key={d.id}>
-              <circle cx={x(i)} cy={y(d.net)} r={4.5} fill="#1a3c8f" stroke="#fff" strokeWidth={2} />
+              <circle cx={x(i)} cy={y(d.net)} r={4.5} fill="#7A2035" stroke="#fff" strokeWidth={2} />
               <circle
                 cx={x(i)}
                 cy={y(d.net)}
@@ -134,7 +134,7 @@ function NetGrafik({ denemeler }: { denemeler: DenemeS[] }) {
               textAnchor="middle"
               fontSize={12}
               fontWeight={700}
-              fill="#1a3c8f"
+              fill="#7A2035"
             >
               {son.net}
             </text>

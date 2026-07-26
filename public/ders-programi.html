@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ders Programı Oluştur – Kaynak Akademi</title>
+  <title>Ders Programı Oluştur – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Poppins', sans-serif; color: #1e2d4d; background: #fff; overflow-x: hidden; }
+    body { font-family: 'Poppins', sans-serif; color: #2F343D; background: #fff; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
     ul { list-style: none; }
 
     :root {
-      --blue: #1a3c8f; --blue-dk: #122a6e; --teal: #0ea5c9; --orange: #f97316;
-      --amber: #fbbf24; --bg-soft: #f0f4ff; --text: #1e2d4d; --muted: #64748b;
-      --radius: 14px; --shadow: 0 4px 24px rgba(26,60,143,.10); --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+      --blue: #7A2035; --blue-dk: #5E1728; --teal: #C98792; --orange: #C98792;
+      --amber: #C98792; --bg-soft: #FAF7F5; --text: #2F343D; --muted: #7C7883;
+      --radius: 14px; --shadow: 0 4px 24px rgba(122,32,53,.10); --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
     }
 
     .container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
@@ -27,8 +27,8 @@
       border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
       transition: all .25s; border: none; font-family: inherit;
     }
-    .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { background: #ea6000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
     .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
     .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
     .btn-ghost { background: #fff; color: var(--muted); border: 2px solid #e2e8f0; }
@@ -37,7 +37,7 @@
     /* HEADER */
     header {
       position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
-      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26,60,143,.08);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(122,32,53,.08);
     }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
     .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
@@ -54,14 +54,14 @@
     .mobile-nav {
       display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
       background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
-      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(26,60,143,.08);
+      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
     .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
 
     /* PAGE HERO */
-    .page-hero { background: linear-gradient(140deg, #e8effe 0%, #f0f4ff 50%, #fef3e8 100%); padding: 44px 0 36px; }
+    .page-hero { background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%); padding: 44px 0 36px; }
     .page-hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; }
     .page-hero h1 span { color: var(--orange); }
     .page-hero p { color: var(--muted); margin-top: 8px; max-width: 720px; font-size: .95rem; }
@@ -76,7 +76,7 @@
     .builder-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
     .panel { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 92px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
     .panel::-webkit-scrollbar { width: 6px; }
-    .panel::-webkit-scrollbar-thumb { background: rgba(26,60,143,.2); border-radius: 3px; }
+    .panel::-webkit-scrollbar-thumb { background: rgba(122,32,53,.2); border-radius: 3px; }
 
     .step-box { background: var(--bg-soft); border-radius: var(--radius); padding: 16px 18px; }
     .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -89,7 +89,7 @@
     .pill {
       background: #fff; border: 2px solid transparent; border-radius: 50px;
       padding: 7px 14px; font-size: .8rem; font-weight: 700; cursor: pointer;
-      transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(26,60,143,.06);
+      transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(122,32,53,.06);
     }
     .pill:hover { border-color: var(--blue); color: var(--blue); }
     .pill.active { background: var(--blue); color: #fff; }
@@ -98,7 +98,7 @@
     .opt-row label { font-size: .78rem; font-weight: 600; }
     .opt-row select, .opt-row input {
       font-family: inherit; font-size: .78rem; font-weight: 600; padding: 6px 10px;
-      border-radius: 8px; border: 1px solid rgba(26,60,143,.2); background: #fff; color: var(--text); outline: none;
+      border-radius: 8px; border: 1px solid rgba(122,32,53,.2); background: #fff; color: var(--text); outline: none;
     }
     .opt-row input[type="text"] { width: 58%; }
     .opt-row input[type="time"] { width: 100px; }
@@ -111,16 +111,16 @@
       display: inline-flex; align-items: center; gap: 6px;
       border: 2px solid transparent; border-radius: 10px; padding: 6px 11px;
       font-size: .75rem; font-weight: 700; cursor: pointer; transition: all .15s;
-      font-family: inherit; color: #1e2d4d;
+      font-family: inherit; color: #2F343D;
     }
     .swatch:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.12); }
-    .swatch.active { border-color: #1e2d4d; box-shadow: 0 3px 10px rgba(0,0,0,.18); }
+    .swatch.active { border-color: #2F343D; box-shadow: 0 3px 10px rgba(0,0,0,.18); }
     .swatch.eraser { background: #fff; border: 2px dashed #94a3b8; color: var(--muted); }
     .swatch.eraser.active { border-color: #dc2626; color: #dc2626; }
     .add-lesson { display: flex; gap: 7px; margin-top: 10px; }
     .add-lesson input {
       flex: 1; font-family: inherit; font-size: .78rem; font-weight: 600; padding: 7px 11px;
-      border-radius: 8px; border: 1px solid rgba(26,60,143,.2); outline: none;
+      border-radius: 8px; border: 1px solid rgba(122,32,53,.2); outline: none;
     }
     .add-lesson button {
       border: none; background: var(--blue); color: #fff; border-radius: 8px;
@@ -133,7 +133,7 @@
       display: inline-flex; align-items: center; gap: 7px; background: #fff;
       border: 2px solid transparent; border-radius: 50px; padding: 6px 13px;
       font-size: .75rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .2s;
-      box-shadow: 0 2px 8px rgba(26,60,143,.06);
+      box-shadow: 0 2px 8px rgba(122,32,53,.06);
     }
     .theme-pill.active { border-color: var(--blue); color: var(--blue); }
     .theme-dots { display: flex; gap: 2px; }
@@ -145,7 +145,11 @@
     .action-row .btn { flex: 1; padding: 11px; font-size: .8rem; }
 
     /* SCHEDULE SHEET */
-    .sheet-wrap { overflow-x: auto; }
+    /* min-width:0 şart: ızgara çocuğu (burada <main>) varsayılan olarak
+       içeriği kadar genişler, o zaman overflow-x çalışmaz ve 720px'lik
+       tablo tüm sayfayı yatay kaydırır (mobilde bozuk görünüm). */
+    .builder-grid > main { min-width: 0; }
+    .sheet-wrap { overflow-x: auto; min-width: 0; -webkit-overflow-scrolling: touch; }
     .sheet {
       background: #fff; border-radius: 8px; box-shadow: var(--shadow-lg);
       padding: 30px 34px; min-width: 720px;
@@ -179,10 +183,10 @@
       cursor: pointer; transition: all .12s; user-select: none; padding: 4px 6px;
     }
     .schedule td.slot:hover { border-color: var(--blue); background: #eef3ff; }
-    .schedule td.slot.filled { border-style: solid; border-color: transparent; color: #1e2d4d; }
+    .schedule td.slot.filled { border-style: solid; border-color: transparent; color: #2F343D; }
     .schedule tr.lunch-row td {
-      background: repeating-linear-gradient(45deg, #fff7ed, #fff7ed 10px, #ffedd5 10px, #ffedd5 20px);
-      color: #c2410c; font-weight: 800; font-size: .78rem; text-align: center;
+      background: repeating-linear-gradient(45deg, #FBF1F3, #FBF1F3 10px, #F5E6E9 10px, #F5E6E9 20px);
+      color: #7A2035; font-weight: 800; font-size: .78rem; text-align: center;
       padding: 8px; border-radius: 8px; letter-spacing: .08em;
     }
     .sheet.bw .schedule th { background: #1e293b; }
@@ -204,51 +208,151 @@
     }
     .paint-info b { color: var(--blue); }
 
-    @media (max-width: 1100px) { .builder-grid { grid-template-columns: 1fr; } .panel { position: static; max-height: none; } }
+    /* ── SÜRE AYARLARI (satır bazlı) ── */
+    @media screen { .schedule th.time-h { width: 118px; } }
+    .dur-ctl { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }
+    td.time-cell .dur-ctl { display: flex; justify-content: center; margin-top: 4px; }
+    .step-btn {
+      width: 17px; height: 17px; flex-shrink: 0; padding: 0; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(122,32,53,.25); background: #fff; color: var(--blue);
+      border-radius: 5px; font-family: inherit; font-size: .72rem; font-weight: 800; line-height: 1;
+      transition: all .15s;
+    }
+    .step-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .step-btn.rst { font-size: .62rem; }
+    .dur-in {
+      width: 34px; padding: 1px 2px; text-align: center; background: #fff; outline: none;
+      border: 1px solid rgba(122,32,53,.2); border-radius: 5px;
+      font-family: inherit; font-size: .68rem; font-weight: 800; color: var(--text);
+      -moz-appearance: textfield;
+    }
+    .dur-in::-webkit-outer-spin-button, .dur-in::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dur-in:focus { border-color: var(--blue); }
+    .dur-in.custom { border-color: var(--blue); background: #FBF1F3; color: var(--blue); }
+
+    tr.break-row td { background: transparent; padding: 1px 0; text-align: center; }
+    .brk-box {
+      display: inline-flex; align-items: center; gap: 6px; padding: 3px 11px;
+      background: var(--bg-soft); border: 1px dashed rgba(122,32,53,.22); border-radius: 50px;
+      font-size: .66rem; font-weight: 700; color: var(--muted); line-height: 1.2;
+    }
+    .brk-box.block { background: #F0E3E6; border-style: solid; border-color: rgba(122,32,53,.3); color: var(--blue); }
+    .brk-box b { color: var(--blue); }
+    .brk-link {
+      border: none; background: none; padding: 0 1px; cursor: pointer;
+      font-family: inherit; font-size: .64rem; font-weight: 800; color: var(--blue);
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .brk-link:hover { color: #C98792; }
+    .lunch-ctl { margin-left: 8px; }
+    .mini-btn {
+      width: 100%; margin-top: 9px; padding: 7px; cursor: pointer;
+      background: #fff; border: 1px dashed rgba(122,32,53,.3); border-radius: 8px;
+      font-family: inherit; font-size: .72rem; font-weight: 700; color: var(--blue); transition: all .2s;
+    }
+    .mini-btn:hover { background: var(--blue); color: #fff; border-style: solid; }
+    .mini-btn[hidden] { display: none; }
+
+    @media (max-width: 1100px) { .builder-grid { grid-template-columns: 1fr; } .panel { position: static; max-height: none; overflow: visible; } }
     @media (max-width: 768px) { nav, .nav-actions { display: none; } .hamburger { display: block; } .sheet { padding: 18px 14px; } }
+
+    /* ── DOKUNMATİK: küçük kontrolleri parmakla kullanılabilir yap ──── */
+    @media (hover: none) and (pointer: coarse) {
+      .step-btn { width: 30px; height: 30px; font-size: .85rem; border-radius: 7px; }
+      .step-btn.rst { font-size: .72rem; }
+      .dur-in { width: 46px; padding: 5px 3px; font-size: .78rem; }
+      .dur-ctl { gap: 6px; }
+      .brk-link { padding: 6px 4px; font-size: .72rem; }
+      .brk-box { padding: 5px 12px; font-size: .7rem; }
+      .schedule td.slot { min-height: 46px; }
+    }
+    .sheet-hint {
+      display: none; text-align: center; font-size: .72rem; font-weight: 600;
+      color: var(--muted); background: var(--bg-soft); border-radius: 8px;
+      padding: 7px 12px; margin-bottom: 10px;
+    }
+    /* tabloyu yatay kaydırabileceğini belli et; saat sütunu sabit kalsın */
+    @media (max-width: 900px) {
+      .sheet-wrap { position: relative; }
+      .sheet-hint { display: block; }
+      .schedule th.time-h, .schedule td.time-cell { position: sticky; left: 0; z-index: 2; }
+      .sheet { padding-left: 12px; }
+    }
 
     @media print {
       @page { size: A4 landscape; margin: 10mm; }
-      header, .page-hero, .panel, .toolbar-float, .paint-info, footer, .mobile-nav { display: none !important; }
+      header, .page-hero, .panel, .toolbar-float, .paint-info, footer, .mobile-nav,
+      .sheet-hint, .no-print { display: none !important; }
       .builder { padding: 0; }
       .builder-grid { display: block; }
       .sheet-wrap { overflow: visible; }
       .sheet { box-shadow: none; padding: 0; min-width: 0; border-radius: 0; }
       .schedule td.slot { cursor: default; }
+      /* süre düzenleme araçları çıktıya girmez */
+      tr.break-row, .dur-ctl, .lunch-ctl { display: none !important; }
       body { background: #fff; }
     }
   </style>
+  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
 </head>
 <body>
 
-<header>
-  <div class="container">
-    <div class="nav-inner">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
-        Kaynak <span>Akademi</span>
-      </a>
-      <nav>
-        <a href="index.html">Ana Sayfa</a>
-        <a href="etkinlikler.html">Etkinlikler</a>
-        <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
-        <a href="ders-programi.html" class="active">Ders Programı</a>
-        <a href="haberler.html">Haberler</a>
-        <a href="#">İletişim</a>
-      </nav>
-      <div class="nav-actions" style="display:flex;align-items:center;gap:10px;">
-        <a href="giris.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem;">Giriş Yap</a>
-        <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:.85rem;">Ücretsiz Başla</a>
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
+
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+        </div>
       </div>
-      <button class="hamburger" id="menuBtn" aria-label="Menü"><span></span><span></span><span></span></button>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <a href="etkinlikler.html">Etkinlikler</a>
+      <a href="/blog">Blog</a>
+      <a href="haberler.html">Haberler</a>
+      <a href="index.html#how">Nasıl Çalışır</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+    </nav>
+
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
     </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <div class="mobile-nav" id="mobileNav">
+
+  <div class="sh-drawer" id="shMobileNav">
     <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
     <a href="etkinlikler.html">Etkinlikler</a>
-    <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
-    <a href="ders-programi.html">Ders Programı</a>
+    <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
+    <a href="index.html#how">Nasıl Çalışır</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
   </div>
 </header>
 
@@ -286,6 +390,7 @@
           <div class="opt-row"><label>İlk ders başlangıcı</label><input type="time" id="startTime" value="08:30" /></div>
           <div class="opt-row"><label>Ders süresi (dk)</label><input type="number" id="lessonMin" min="30" max="60" step="5" value="40" /></div>
           <div class="opt-row"><label>Teneffüs (dk)</label><input type="number" id="breakMin" min="5" max="30" step="5" value="10" /></div>
+          <div class="hint">Bunlar <b>genel</b> sürelerdir; tüm dersler ve teneffüsler bu değerle başlar. Tablodaki her satırdan tek tek değiştirebilirsin.</div>
           <div class="opt-row"><label>Öğle arası</label>
             <select id="lunchAfter">
               <option value="0">Yok</option>
@@ -296,6 +401,8 @@
             </select>
           </div>
           <div class="opt-row"><label>Öğle arası süresi (dk)</label><input type="number" id="lunchMin" min="30" max="90" step="5" value="50" /></div>
+          <div class="hint">🔧 Tabloda her dersin süresini <b>+ / −</b> ile ayarlayabilir, teneffüs satırından süreyi değiştirebilir ya da <b>blok yap</b> diyerek iki dersi teneffüssüz birleştirebilirsin. Sonraki saatler otomatik kayar.</div>
+          <button class="mini-btn" id="resetDurBtn" hidden>↺ Özel süreleri sıfırla (<span id="durCount">0</span>)</button>
         </div>
 
         <div class="step-box">
@@ -336,6 +443,7 @@
           <button class="btn btn-outline" id="printBtn2">🖨 Yazdır / PDF İndir</button>
           <button class="btn btn-outline" id="clearBtn">🧹 Tabloyu Temizle</button>
         </div>
+        <div class="sheet-hint no-print">↔ Tabloyu yana kaydırarak tüm günleri görebilirsin.</div>
         <div class="sheet-wrap">
           <div class="sheet" id="sheet"></div>
         </div>
@@ -345,8 +453,8 @@
   </div>
 </section>
 
-<footer style="background:#0d1b3e;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
-  <div class="container">© 2026 Kaynak Akademi · Profesyonel Ders Programı Oluşturucu</div>
+<footer style="background:#241018;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
+  <div class="container">© 2026 Kaynak Kampüs · Profesyonel Ders Programı Oluşturucu</div>
 </footer>
 
 <script>
@@ -383,9 +491,9 @@ const LESSONS = {
 };
 
 const THEMES = {
-  renkli:  { name: "Renkli",       accent: "#1a3c8f", colors: ["#dbeafe","#dcfce7","#fef3c7","#fce7f3","#ede9fe","#ffedd5","#cffafe","#fee2e2","#d9f99d","#e0e7ff","#fde68a","#bbf7d0","#fbcfe8","#c7d2fe","#fed7aa","#a5f3fc"] },
-  okyanus: { name: "Okyanus",      accent: "#0e7490", colors: ["#cffafe","#e0f2fe","#bae6fd","#a5f3fc","#ccfbf1","#d1fae5","#e0e7ff","#dbeafe","#c7d2fe","#99f6e4","#bfdbfe","#a7f3d0","#e0f2fe","#cffafe","#dbeafe","#ccfbf1"] },
-  gunbatimi:{ name: "Gün Batımı",  accent: "#c2410c", colors: ["#ffedd5","#fef3c7","#fee2e2","#fce7f3","#fde68a","#fed7aa","#fecaca","#fbcfe8","#fef9c3","#ffe4e6","#fde4cf","#fdf0d5","#fee2d5","#fce7f3","#fef3c7","#ffedd5"] },
+  renkli:  { name: "Renkli",       accent: "#7A2035", colors: ["#F0E3E6","#dcfce7","#fef3c7","#fce7f3","#ede9fe","#F5E6E9","#cffafe","#fee2e2","#d9f99d","#F0E3E6","#fde68a","#bbf7d0","#fbcfe8","#E4C4CB","#EAD3D8","#a5f3fc"] },
+  okyanus: { name: "Okyanus",      accent: "#0e7490", colors: ["#cffafe","#e0f2fe","#bae6fd","#a5f3fc","#ccfbf1","#d1fae5","#F0E3E6","#F0E3E6","#E4C4CB","#99f6e4","#bfdbfe","#a7f3d0","#e0f2fe","#cffafe","#F0E3E6","#ccfbf1"] },
+  gunbatimi:{ name: "Gün Batımı",  accent: "#7A2035", colors: ["#F5E6E9","#fef3c7","#fee2e2","#fce7f3","#fde68a","#EAD3D8","#fecaca","#fbcfe8","#fef9c3","#ffe4e6","#fde4cf","#fdf0d5","#fee2d5","#fce7f3","#fef3c7","#F5E6E9"] },
   orman:   { name: "Orman",        accent: "#166534", colors: ["#dcfce7","#d9f99d","#bbf7d0","#ecfccb","#d1fae5","#a7f3d0","#f0fdf4","#e0f2fe","#ccfbf1","#d9f99d","#dcfce7","#bbf7d0","#ecfccb","#d1fae5","#a7f3d0","#f0fdf4"] },
   sb:      { name: "Siyah-Beyaz",  accent: "#1e293b", colors: ["#ffffff"] },
 };
@@ -396,6 +504,8 @@ let st = {
   lessons: [],            // aktif palet: [{n, w}]
   sel: null,              // seçili ders indexi | "erase" | null
   grid: {},               // "d-s" -> lesson index
+  durs: {},               // ders sırası -> özel ders süresi (dk); yoksa genel süre
+  brks: {},               // teneffüs sırası (i. dersten sonra) -> özel süre; 0 = blok ders
 };
 let painting = false;
 
@@ -436,19 +546,71 @@ function renderThemes() {
 }
 
 /* ═══════════ SAAT HESABI ═══════════ */
+const LIM = { dur: [5, 120], brk: [0, 60], lunch: [0, 180] };
+const clamp = (v, [a, b]) => Math.max(a, Math.min(b, v));
+
 function timeStr(min) { return `${String(Math.floor(min / 60) % 24).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`; }
+function slotN() { return +$("slotCount").value || 6; }
+
+/* genel (varsayılan) süreler */
+function genDur()   { return clamp(+$("lessonMin").value || 40, LIM.dur); }
+function genBrk()   { return clamp(+$("breakMin").value  || 10, LIM.brk); }
+function genLunch() { return clamp(+$("lunchMin").value  || 50, LIM.lunch); }
+
+/* satır bazlı süreler: özel değer varsa o, yoksa genel süre */
+function durOf(i) { const v = st.durs[i]; return v == null ? genDur() : clamp(+v, LIM.dur); }
+function brkOf(i) { const v = st.brks[i]; return v == null ? genBrk() : clamp(+v, LIM.brk); }
+
+/* özel süre yaz; genel süreye eşitse özel kaydı kaldır */
+function setDur(i, v) { v = clamp(Math.round(v) || 0, LIM.dur); if (v === genDur()) delete st.durs[i]; else st.durs[i] = v; }
+function setBrk(i, v) { v = clamp(Math.round(v) || 0, LIM.brk); if (v === genBrk()) delete st.brks[i]; else st.brks[i] = v; }
+
+/* geçerli program içindeki özel süre sayısı */
+function customCount() {
+  const n = slotN(), lunchAfter = +$("lunchAfter").value;
+  let c = 0;
+  for (let i = 0; i < n; i++) {
+    if (st.durs[i] != null) c++;
+    if (i < n - 1 && lunchAfter !== i + 1 && st.brks[i] != null) c++;
+  }
+  return c;
+}
+
 function slotTimes() {
   const [h, m] = ($("startTime").value || "08:30").split(":").map(Number);
-  let t = h * 60 + m;
-  const les = +$("lessonMin").value || 40, brk = +$("breakMin").value || 10;
-  const lunchAfter = +$("lunchAfter").value, lunch = +$("lunchMin").value || 50;
+  let t = (h || 0) * 60 + (m || 0);
+  const lunchAfter = +$("lunchAfter").value, lunch = genLunch();
+  const n = slotN();
   const out = [];
-  const n = +$("slotCount").value || 6;
   for (let i = 0; i < n; i++) {
-    out.push({ from: timeStr(t), to: timeStr(t + les), lunchNext: lunchAfter === i + 1 });
-    t += les + (lunchAfter === i + 1 ? lunch : brk);
+    const dur = durOf(i), isLunch = lunchAfter === i + 1, last = i === n - 1;
+    /* son dersten sonra ve öğle arası olan yerde normal teneffüs yok */
+    const brk = (!last && !isLunch) ? brkOf(i) : null;
+    out.push({ from: timeStr(t), to: timeStr(t + dur), dur, lunchNext: isLunch, brk });
+    t += dur + (isLunch ? lunch : (last ? 0 : brk));
   }
   return out;
+}
+
+/* ═══════════ SÜRE KONTROLLERİ ═══════════ */
+function stepper(kind, i, val, custom) {
+  const [lo, hi] = LIM[kind];
+  return `<span class="dur-ctl">
+    <button type="button" class="step-btn" data-act="dec" data-k="${kind}" data-i="${i}" title="5 dk azalt">−</button>
+    <input type="number" class="dur-in${custom ? " custom" : ""}" data-k="${kind}" data-i="${i}"
+           value="${val}" min="${lo}" max="${hi}" step="5" aria-label="Süre (dakika)" />
+    <button type="button" class="step-btn" data-act="inc" data-k="${kind}" data-i="${i}" title="5 dk artır">+</button>
+    ${custom ? `<button type="button" class="step-btn rst" data-act="rst" data-k="${kind}" data-i="${i}" title="Genel süreye dön">↺</button>` : ""}
+  </span>`;
+}
+function breakRow(i, mins, cols) {
+  const custom = st.brks[i] != null, block = mins === 0;
+  const body = block
+    ? `⛓ <b>Blok ders</b> · teneffüs yok
+       <button type="button" class="brk-link" data-act="unblock" data-i="${i}">teneffüs ekle</button>`
+    : `☕ Teneffüs ${stepper("brk", i, mins, custom)} dk
+       <button type="button" class="brk-link" data-act="block" data-i="${i}">blok yap</button>`;
+  return `<tr class="break-row"><td colspan="${cols}"><span class="brk-box${block ? " block" : ""}">${body}</span></td></tr>`;
 }
 
 /* ═══════════ TABLO ═══════════ */
@@ -463,14 +625,18 @@ function renderSheet() {
   let head = `<tr><th class="time-h">🕐 Saat</th>${DAYS.slice(0, dayN).map(d => `<th>${d}</th>`).join("")}</tr>`;
   let rows = "";
   times.forEach((tm, s) => {
-    rows += `<tr><td class="time-cell"><b>${s + 1}. Ders</b>${tm.from} – ${tm.to}</td>`;
+    rows += `<tr><td class="time-cell"><b>${s + 1}. Ders</b>${tm.from} – ${tm.to}${stepper("dur", s, tm.dur, st.durs[s] != null)}</td>`;
     for (let d = 0; d < dayN; d++) {
       const li = st.grid[`${d}-${s}`];
       const filled = li !== undefined && st.lessons[li];
       rows += `<td class="slot ${filled ? "filled" : ""}" data-d="${d}" data-s="${s}" ${filled ? `style="background:${colorOf(li)}"` : ""}>${filled ? st.lessons[li].n : ""}</td>`;
     }
     rows += `</tr>`;
-    if (tm.lunchNext) rows += `<tr class="lunch-row"><td colspan="${dayN + 1}">🍽 ÖĞLE ARASI</td></tr>`;
+    if (tm.lunchNext) {
+      rows += `<tr class="lunch-row"><td colspan="${dayN + 1}">🍽 ÖĞLE ARASI<span class="lunch-ctl">${stepper("lunch", 0, genLunch(), false)} dk</span></td></tr>`;
+    } else if (tm.brk !== null) {
+      rows += breakRow(s, tm.brk, dayN + 1);
+    }
   });
 
   const used = [...new Set(Object.values(st.grid))].filter(i => st.lessons[i] !== undefined);
@@ -488,10 +654,14 @@ function renderSheet() {
     </div>
     <table class="schedule">${head}${rows}</table>
     ${legend}
-    <div class="sheet-footer">Kaynak Akademi · Ders Programı Oluşturucu</div>
+    <div class="sheet-footer">Kaynak Kampüs · Ders Programı Oluşturucu</div>
   `;
   $("sheet").style.setProperty("--sheet-accent", t.accent);
   $("sheet").classList.toggle("bw", st.theme === "sb");
+
+  const c = customCount();
+  $("durCount").textContent = c;
+  $("resetDurBtn").hidden = c === 0;
 }
 
 /* ═══════════ BOYAMA ═══════════ */
@@ -511,6 +681,36 @@ $("sheet").addEventListener("mouseover", e => {
   const td = e.target.closest("td.slot"); if (td) paintCell(td);
 });
 document.addEventListener("mouseup", () => painting = false);
+
+/* ═══════════ SATIR BAZLI SÜRE DÜZENLEME ═══════════ */
+function applyVal(kind, i, v) {
+  if (kind === "dur") setDur(i, v);
+  else if (kind === "brk") setBrk(i, v);
+  else if (kind === "lunch") $("lunchMin").value = clamp(Math.round(v) || 0, LIM.lunch);
+}
+function currentVal(kind, i) {
+  return kind === "dur" ? durOf(i) : kind === "brk" ? brkOf(i) : genLunch();
+}
+$("sheet").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const act = b.dataset.act, k = b.dataset.k, i = +b.dataset.i;
+  if (act === "inc" || act === "dec") applyVal(k, i, currentVal(k, i) + (act === "inc" ? 5 : -5));
+  else if (act === "rst") { if (k === "dur") delete st.durs[i]; else if (k === "brk") delete st.brks[i]; }
+  else if (act === "block") st.brks[i] = 0;
+  else if (act === "unblock") { delete st.brks[i]; if (brkOf(i) === 0) st.brks[i] = 10; }
+  else return;
+  renderSheet();
+});
+/* change → değer yazıp Enter'a basınca ya da alandan çıkınca uygulanır */
+$("sheet").addEventListener("change", e => {
+  const inp = e.target.closest("input.dur-in"); if (!inp) return;
+  const k = inp.dataset.k, i = +inp.dataset.i, v = parseInt(inp.value, 10);
+  applyVal(k, i, isNaN(v) ? currentVal(k, i) : v);
+  renderSheet();
+});
+$("sheet").addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.closest("input.dur-in")) { e.preventDefault(); e.target.blur(); }
+});
 
 /* ═══════════ OTOMATİK DOLDURMA ═══════════ */
 function autoFill() {
@@ -544,7 +744,7 @@ function autoFill() {
 const KEY = "ka-ders-programi";
 function save() {
   const data = {
-    st: { level: st.level, grade: st.grade, theme: st.theme, lessons: st.lessons, grid: st.grid },
+    st: { level: st.level, grade: st.grade, theme: st.theme, lessons: st.lessons, grid: st.grid, durs: st.durs, brks: st.brks },
     opts: ["dayCount","slotCount","startTime","lessonMin","breakMin","lunchAfter","lunchMin","schoolName","studentName","branchName"]
       .reduce((o, id) => (o[id] = $(id).value, o), {}),
   };
@@ -558,6 +758,9 @@ function load() {
     if (!data) return false;
     Object.assign(st, data.st);
     st.sel = null;
+    /* eski kayıtlarda özel süreler yok */
+    st.durs = st.durs || {};
+    st.brks = st.brks || {};
     Object.entries(data.opts).forEach(([id, v]) => { if ($(id)) $(id).value = v; });
     return true;
   } catch { return false; }
@@ -570,7 +773,7 @@ $("levelPills").addEventListener("click", e => {
   st.grade = LEVELS[st.level].grades[0];
   $("slotCount").value = LEVELS[st.level].slots;
   $("startTime").value = LEVELS[st.level].start;
-  st.grid = {}; st.sel = null;
+  st.grid = {}; st.sel = null; st.durs = {}; st.brks = {};
   loadLessons(); renderLevels(); renderPalette(); renderSheet();
 });
 $("gradePills").addEventListener("click", e => {
@@ -604,15 +807,15 @@ $("clearBtn").onclick = () => { st.grid = {}; renderSheet(); };
 $("resetBtn").onclick = () => {
   if (!confirm("Program ve tüm ayarlar sıfırlansın mı?")) return;
   localStorage.removeItem(KEY);
-  st = { level: st.level, grade: st.grade, theme: "renkli", lessons: [], sel: null, grid: {} };
+  st = { level: st.level, grade: st.grade, theme: "renkli", lessons: [], sel: null, grid: {}, durs: {}, brks: {} };
   loadLessons(); renderLevels(); renderThemes(); renderPalette(); renderSheet();
 };
+$("resetDurBtn").onclick = () => { st.durs = {}; st.brks = {}; renderSheet(); };
 $("saveBtn").onclick = save;
 $("printBtn").onclick = () => window.print();
 $("printBtn2").onclick = () => window.print();
 
-/* Mobil menü */
-$("menuBtn").addEventListener("click", () => $("mobileNav").classList.toggle("open"));
+/* Mobil menü davranışı assets/site-header.js içinde */
 
 /* ═══════════ BAŞLAT ═══════════ */
 if (!load()) loadLessons();

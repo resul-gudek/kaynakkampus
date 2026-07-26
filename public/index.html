@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kaynak Akademi – Doğru Kaynak, Doğru Gelecek</title>
+  <title>Kaynak Kampüs – Güçlü Kaynak, Sağlam Gelecek</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
   <style>
     /* ── RESET & BASE ────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Poppins', sans-serif;
-      color: #1e2d4d;
+      color: #2F343D;
       background: #fff;
       overflow-x: hidden;
     }
@@ -24,18 +24,18 @@
 
     /* ── TOKENS ──────────────────────────────────────────── */
     :root {
-      --blue:    #1a3c8f;
-      --blue-dk: #122a6e;
-      --teal:    #0ea5c9;
-      --orange:  #f97316;
-      --amber:   #fbbf24;
-      --bg-soft: #f0f4ff;
-      --text:    #1e2d4d;
-      --muted:   #64748b;
+      --blue:    #7A2035;
+      --blue-dk: #5E1728;
+      --teal:    #C98792;
+      --orange:  #C98792;
+      --amber:   #C98792;
+      --bg-soft: #FAF7F5;
+      --text:    #2F343D;
+      --muted:   #7C7883;
       --white:   #ffffff;
       --radius:  14px;
-      --shadow:  0 4px 24px rgba(26,60,143,.10);
-      --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+      --shadow:  0 4px 24px rgba(122,32,53,.10);
+      --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
     }
 
     /* ── UTILITIES ───────────────────────────────────────── */
@@ -47,9 +47,9 @@
       border: none; font-family: inherit;
     }
     .btn-primary {
-      background: var(--orange); color: #fff;
+      background: var(--blue); color: #fff;
     }
-    .btn-primary:hover { background: #ea6000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+    .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
     .btn-outline {
       background: transparent; color: var(--blue);
       border: 2px solid var(--blue);
@@ -58,10 +58,10 @@
     .btn-white {
       background: #fff; color: var(--blue);
     }
-    .btn-white:hover { background: #e8effe; transform: translateY(-2px); }
+    .btn-white:hover { background: #F3ECEE; transform: translateY(-2px); }
     .section-label {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(26,60,143,.08); color: var(--blue);
+      background: rgba(122,32,53,.08); color: var(--blue);
       padding: 6px 16px; border-radius: 50px; font-size: .8rem;
       font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px;
     }
@@ -75,7 +75,7 @@
     }
     .tag {
       display: inline-flex; align-items: center;
-      background: rgba(26,60,143,.07); color: var(--blue);
+      background: rgba(122,32,53,.07); color: var(--blue);
       padding: 4px 12px; border-radius: 50px; font-size: .75rem; font-weight: 600;
     }
 
@@ -84,7 +84,7 @@
       position: sticky; top: 0; z-index: 100;
       background: rgba(255,255,255,.92);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(26,60,143,.08);
+      border-bottom: 1px solid rgba(122,32,53,.08);
     }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
@@ -115,19 +115,19 @@
 
     /* ── HERO ────────────────────────────────────────────── */
     .hero {
-      background: linear-gradient(140deg, #e8effe 0%, #f0f4ff 50%, #fef3e8 100%);
+      background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%);
       padding: 80px 0 60px;
       position: relative; overflow: hidden;
     }
     .hero::before {
       content: ''; position: absolute; top: -120px; right: -120px;
       width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(14,165,201,.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,135,146,.12) 0%, transparent 70%);
     }
     .hero::after {
       content: ''; position: absolute; bottom: -80px; left: -80px;
       width: 380px; height: 380px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(249,115,22,.10) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,135,146,.10) 0%, transparent 70%);
     }
     .hero-inner {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -216,7 +216,7 @@
     .hf-label { font-size: .72rem; color: var(--muted); font-weight: 500; }
     .hf-val { font-size: 1.1rem; font-weight: 800; color: var(--blue); margin-top: 2px; }
     .hf-row { display: flex; align-items: center; gap: 8px; }
-    .hf-stars { color: #f59e0b; font-size: .85rem; letter-spacing: -1px; }
+    .hf-stars { color: #E4C4CB; font-size: .85rem; letter-spacing: -1px; }
 
     /* ── MARQUEE STRIP ───────────────────────────────────── */
     .marquee-strip {
@@ -258,8 +258,8 @@
     .subject-count { font-size: .75rem; color: var(--muted); margin-top: 4px; }
     .si-math { background: rgba(99,102,241,.12); }
     .si-science { background: rgba(16,185,129,.12); }
-    .si-turkish { background: rgba(249,115,22,.12); }
-    .si-english { background: rgba(14,165,201,.12); }
+    .si-turkish { background: rgba(201,135,146,.12); }
+    .si-english { background: rgba(201,135,146,.12); }
     .si-history { background: rgba(245,158,11,.12); }
     .si-art { background: rgba(236,72,153,.12); }
     .si-coding { background: rgba(59,130,246,.12); }
@@ -285,7 +285,7 @@
     }
     .course-badge {
       position: absolute; top: 14px; left: 14px;
-      background: var(--orange); color: #fff;
+      background: var(--blue); color: #fff;
       padding: 4px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700;
     }
     .course-body { padding: 20px; }
@@ -311,7 +311,7 @@
     .course-price { font-size: 1rem; font-weight: 800; color: var(--orange); }
     .course-price small { font-size: .72rem; color: var(--muted); font-weight: 400; }
     .course-stars {
-      display: flex; align-items: center; gap: 4px; font-size: .78rem; font-weight: 600; color: #f59e0b;
+      display: flex; align-items: center; gap: 4px; font-size: .78rem; font-weight: 600; color: #E4C4CB;
     }
     .course-lessons { font-size: .78rem; color: var(--muted); }
 
@@ -363,7 +363,7 @@
       box-shadow: var(--shadow); transition: all .3s;
     }
     .testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-    .testi-stars { color: #f59e0b; font-size: 1rem; letter-spacing: 2px; margin-bottom: 14px; }
+    .testi-stars { color: #E4C4CB; font-size: 1rem; letter-spacing: 2px; margin-bottom: 14px; }
     .testi-text {
       font-size: .9rem; color: var(--text); line-height: 1.75; margin-bottom: 20px;
       font-style: italic; opacity: .85;
@@ -381,7 +381,7 @@
 
     /* ── CTA BANNER ──────────────────────────────────────── */
     .cta-banner {
-      background: linear-gradient(135deg, #ff7a2f, var(--orange));
+      background: linear-gradient(135deg, #7A2035, var(--orange));
       padding: 72px 0; text-align: center; position: relative; overflow: hidden;
     }
     .cta-banner::before {
@@ -397,7 +397,7 @@
     .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
 
     /* ── FOOTER ──────────────────────────────────────────── */
-    footer { background: #0d1b3e; color: rgba(255,255,255,.75); padding: 60px 0 0; }
+    footer { background: #241018; color: rgba(255,255,255,.75); padding: 60px 0 0; }
     .footer-grid {
       display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px;
     }
@@ -430,17 +430,17 @@
     .newsletter-form input::placeholder { color: rgba(255,255,255,.4); }
     .newsletter-form button {
       padding: 10px 16px; border-radius: 8px; border: none;
-      background: var(--orange); color: #fff; font-weight: 600;
+      background: var(--blue); color: #fff; font-weight: 600;
       cursor: pointer; font-size: .83rem; font-family: inherit; transition: .2s;
     }
-    .newsletter-form button:hover { background: #ea6000; }
+    .newsletter-form button:hover { background: #C98792; }
 
     /* ── MOBILE NAV ──────────────────────────────────────── */
     .mobile-nav {
       display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
       background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
       padding: 24px; flex-direction: column; gap: 8px;
-      border-top: 1px solid rgba(26,60,143,.08);
+      border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
     .mobile-nav a {
@@ -450,10 +450,30 @@
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
     .mobile-nav .btn { margin-top: 8px; text-align: center; justify-content: center; }
 
+    /* ── ÇOKLU ZEKÂ / OYUNLAR TANITIM IZGARASI ───────────────
+       NOT: Sütun sayısı burada tanımlı; işaretlemede inline style
+       kullanılmaz — inline stil medya sorgularını ezerdi. */
+    .czt-grid {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: center;
+    }
+    .czt-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .czt-card {
+      background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+    }
+    .czt-card-emoji { font-size: 1.8rem; }
+    .czt-card-ad { font-weight: 800; margin-top: 8px; }
+    .czt-card-not { font-size: .8rem; color: var(--muted); }
+    .czt-list { margin: 20px 0 26px; display: grid; gap: 10px; }
+    .czt-list li { display: flex; align-items: center; gap: 10px; font-size: .95rem; color: var(--text); }
+    .czt-list li::before { content: "✓"; color: var(--blue); font-weight: 800; }
+
     /* ── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 1024px) {
       .courses-grid { grid-template-columns: repeat(2, 1fr); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 900px) {
+      .czt-grid { grid-template-columns: 1fr; gap: 30px; }
     }
     @media (max-width: 768px) {
       nav, .nav-actions { display: none; }
@@ -471,10 +491,19 @@
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
       .footer-bottom { flex-direction: column; text-align: center; }
       .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+      .czt-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+      .czt-grid ul { text-align: left; }
+      /* dokunma hedefleri: bağlantı satırları en az ~32px yüksek olsun */
+      .footer-col ul li { margin-bottom: 2px; }
+      .footer-col ul a { display: inline-block; padding: 7px 0; }
+      .footer-bottom a { display: inline-block; padding: 6px 0; }
     }
     @media (max-width: 480px) {
       .how-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
+      .czt-grid { gap: 24px; }
+      .czt-cards { gap: 10px; }
+      .czt-card { padding: 16px; }
     }
 
     /* ── ANIMATIONS ──────────────────────────────────────── */
@@ -484,53 +513,66 @@
     }
     .fade-up.visible { opacity: 1; transform: translateY(0); }
   </style>
+  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
 </head>
 <body>
 
 <!-- ═══════════════════════════════════════════════════════ HEADER -->
-<header>
-  <div class="container">
-    <div class="nav-inner">
-      <a href="#" class="logo">
-        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
-        Kaynak <span>Akademi</span>
-      </a>
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
 
-      <nav>
-        <a href="#" class="active">Ana Sayfa</a>
-        <a href="#subjects">Dersler</a>
-        <a href="#courses">Kurslar</a>
-        <a href="etkinlikler.html">Etkinlikler</a>
-        <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
-        <a href="ders-programi.html">Ders Programı</a>
-        <a href="haberler.html">Haberler</a>
-        <a href="#how">Nasıl Çalışır</a>
-        <a href="#">İletişim</a>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="giris.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem;">Giriş Yap</a>
-        <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:.85rem;">Ücretsiz Başla</a>
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+        </div>
       </div>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <a href="etkinlikler.html">Etkinlikler</a>
+      <a href="/blog">Blog</a>
+      <a href="haberler.html">Haberler</a>
+      <a href="#how">Nasıl Çalışır</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+    </nav>
 
-      <button class="hamburger" id="menuBtn" aria-label="Menü">
-        <span></span><span></span><span></span>
-      </button>
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
     </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 
-  <div class="mobile-nav" id="mobileNav">
-    <a href="#">Ana Sayfa</a>
-    <a href="#subjects">Dersler</a>
-    <a href="#courses">Kurslar</a>
+  <div class="sh-drawer" id="shMobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
     <a href="etkinlikler.html">Etkinlikler</a>
-    <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
-    <a href="ders-programi.html">Ders Programı</a>
+    <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
     <a href="#how">Nasıl Çalışır</a>
-    <a href="#">İletişim</a>
-    <a href="giris.html" class="btn btn-outline">Giriş Yap</a>
-    <a href="#" class="btn btn-primary">Ücretsiz Başla ✨</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
   </div>
 </header>
 
@@ -542,7 +584,7 @@
       <div class="hero-content">
         <div class="hero-badge">
           <span class="hero-badge-dot"></span>
-          Doğru Kaynak, Doğru Gelecek
+          Güçlü Kaynak, Sağlam Gelecek
         </div>
 
         <h1 class="hero-title">
@@ -558,8 +600,8 @@
         </p>
 
         <div class="hero-actions">
-          <a href="#courses" class="btn btn-primary">
-            ▶ Kurslara Göz At
+          <a href="/basvuru" class="btn btn-primary">
+            ✨ Aramıza Katıl
           </a>
           <a href="#how" class="btn btn-outline">
             Nasıl Çalışır?
@@ -677,8 +719,8 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ SUBJECTS -->
-<section class="subjects" id="subjects">
+<!-- ═══════════════════════════════════════════════════════ SUBJECTS (gizli) -->
+<section class="subjects" id="subjects" hidden>
   <div class="container">
     <div class="section-head fade-up">
       <div class="section-label">📚 Ders Kategorileri</div>
@@ -731,8 +773,8 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════ COURSES -->
-<section class="courses" id="courses">
+<!-- ═══════════════════════════════════════════════════════ COURSES (gizli) -->
+<section class="courses" id="courses" hidden>
   <div class="container">
     <div class="courses-header fade-up">
       <div>
@@ -745,7 +787,7 @@
     <div class="courses-grid">
 
       <div class="course-card fade-up">
-        <div class="course-thumb" style="background:linear-gradient(135deg,#e0e7ff,#c7d2fe)">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#F0E3E6,#E4C4CB)">
           🔢
           <span class="course-badge">En Popüler</span>
         </div>
@@ -806,7 +848,7 @@
           <div class="course-desc">Türkçe dil bilgisi kuralları, hikâye yazma teknikleri ve anlama çalışmaları. 28 ders.</div>
           <div class="course-footer">
             <div class="course-instructor">
-              <div class="ci-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">ME</div>
+              <div class="ci-avatar" style="background:linear-gradient(135deg,#E4C4CB,#A85462)">ME</div>
               <span class="ci-name">Merve Erdoğan</span>
             </div>
             <div>
@@ -820,13 +862,65 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════════════ ÇOKLU ZEKÂ TESTİ -->
+<section id="coklu-zeka" style="padding:70px 0;background:linear-gradient(140deg,#FBF1F3 0%,#FAF7F5 55%,#F3ECEE 100%);">
+  <div class="container">
+    <div class="czt-grid">
+      <div class="fade-up">
+        <div class="section-label">🧭 Öğrenme Eğilimleri Envanteri</div>
+        <h2 class="section-title">Çoklu Zekâ <span>Testi</span></h2>
+        <p class="section-sub" style="max-width:none;">Howard Gardner’ın Çoklu Zekâ Kuramı’ndan esinlenen bu ücretsiz test, öğrencinin (veya senin) hangi yöntemlerle daha rahat öğrendiğini keşfetmesine yardımcı olur. Sekiz öğrenme alanı için ayrı ayrı yüzde, radar grafiği ve kişiye özel öğrenme raporu sunar.</p>
+        <ul class="czt-list">
+          <li>Dört düzey: İlkokul, Ortaokul, Lise, Yetişkin</li>
+          <li>Sonuçta radar grafiği ve tüm alanların yüzdeleri</li>
+          <li>Kişiye özel öğrenme, çalışma, öğretmen ve veli önerileri</li>
+          <li>Üyelik gerektirmez, ücretsizdir</li>
+        </ul>
+        <a href="coklu-zeka-testi.html" class="btn btn-primary">Testi Başlat →</a>
+      </div>
+      <div class="fade-up czt-cards">
+        <div class="czt-card"><div class="czt-card-emoji">🎈</div><div class="czt-card-ad">İlkokul</div><div class="czt-card-not">7–10 yaş · sade sorular</div></div>
+        <div class="czt-card"><div class="czt-card-emoji">🧩</div><div class="czt-card-ad">Ortaokul</div><div class="czt-card-not">11–14 yaş · hazır</div></div>
+        <div class="czt-card"><div class="czt-card-emoji">🎓</div><div class="czt-card-ad">Lise</div><div class="czt-card-not">15–18 yaş · hazır</div></div>
+        <div class="czt-card"><div class="czt-card-emoji">💼</div><div class="czt-card-ad">Yetişkin</div><div class="czt-card-not">18+ · hazır</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ EĞİTİM OYUNLARI -->
+<section id="oyunlar" style="padding:70px 0;background:linear-gradient(140deg,#F3ECEE 0%,#FAF7F5 55%,#FBF1F3 100%);">
+  <div class="container">
+    <div class="czt-grid">
+      <div class="fade-up">
+        <div class="section-label">🎮 Eğitim Oyunları</div>
+        <h2 class="section-title">Oyna, Öğren, <span>Puan Kazan</span></h2>
+        <p class="section-sub" style="max-width:none;">Kademe, sınıf, ders ve konuya göre düzenlenmiş eğitici oyunlarla öğrenmeyi eğlenceye dönüştür. Her oyun sonunda doğru sayına, hızına ve zorluk seviyesine göre puan kazan; toplam puanını, en yüksek skorlarını ve son oynadığın oyunları takip et.</p>
+        <ul class="czt-list">
+          <li>İlkokul, Ortaokul ve Lise için konu konu oyunlar</li>
+          <li>Eşleştirme, hafıza, sürükle-bırak ve matematik oyunları</li>
+          <li>Kazanılan puanlar, en yüksek skorlar ve oyun geçmişi</li>
+          <li>Üyelik gerektirmez, ücretsizdir</li>
+        </ul>
+        <a href="oyunlar.html" class="btn btn-primary">Oyunlara Başla →</a>
+      </div>
+      <div class="fade-up czt-cards">
+        <div class="czt-card"><div class="czt-card-emoji">🧩</div><div class="czt-card-ad">Eşleştirme</div><div class="czt-card-not">Kelime &amp; kavram eşleştir</div></div>
+        <div class="czt-card"><div class="czt-card-emoji">🃏</div><div class="czt-card-ad">Hafıza Kartları</div><div class="czt-card-not">Eş çiftleri bul</div></div>
+        <div class="czt-card"><div class="czt-card-emoji">🖐️</div><div class="czt-card-ad">Sürükle-Bırak</div><div class="czt-card-not">Doğru gruba yerleştir</div></div>
+        <div class="czt-card"><div class="czt-card-emoji">➗</div><div class="czt-card-ad">Matematik</div><div class="czt-card-not">İşlemleri hızlı çöz</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════════════════════════════════ HOW IT WORKS -->
 <section class="how" id="how">
   <div class="container">
     <div class="section-head fade-up">
       <div class="section-label">⚡ Nasıl Çalışır?</div>
       <h2 class="section-title">4 Adımda Öğrenmeye <span>Başla</span></h2>
-      <p class="section-sub">Kaynak Akademi ile öğrenmek hiç bu kadar kolay olmamıştı.</p>
+      <p class="section-sub">Kaynak Kampüs ile öğrenmek hiç bu kadar kolay olmamıştı.</p>
     </div>
 
     <div class="how-grid">
@@ -895,7 +989,7 @@
       <div class="testi-card fade-up">
         <span class="testi-quote-icon">"</span>
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Kızım matematik sınavından hep düşük not alıyordu. Kaynak Akademi'yi keşfettikten sonra 3 ayda notları 50'den 90'a çıktı. Anlatım tarzı çok başarılı!"</p>
+        <p class="testi-text">"Kızım matematik sınavından hep düşük not alıyordu. Kaynak Kampüs'yi keşfettikten sonra 3 ayda notları 50'den 90'a çıktı. Anlatım tarzı çok başarılı!"</p>
         <div class="testi-author">
           <div class="ta-avatar">SA</div>
           <div>
@@ -923,7 +1017,7 @@
         <div class="testi-stars">★★★★★</div>
         <p class="testi-text">"Okul öğretmeni olarak materyallerin kalitesine hayran kaldım. Sınıfımda ek kaynak olarak kullanıyorum. Çocuklar çok seviyor ve motive oluyorlar."</p>
         <div class="testi-author">
-          <div class="ta-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">NÖ</div>
+          <div class="ta-avatar" style="background:linear-gradient(135deg,#E4C4CB,#A85462)">NÖ</div>
           <div>
             <div class="ta-name">Neslihan Öztürk</div>
             <div class="ta-role">İlkokul Öğretmeni</div>
@@ -944,7 +1038,8 @@
       <a href="#" class="btn btn-white" style="font-size:1rem; padding:16px 32px;">
         🚀 Ücretsiz Başla
       </a>
-      <a href="#courses" class="btn" style="font-size:1rem; padding:16px 32px; background:rgba(255,255,255,.15); color:#fff; border:2px solid rgba(255,255,255,.4);">
+      <!-- Kurslar bölümü gizli olduğu için bu buton da gizli -->
+      <a href="#courses" hidden class="btn" style="display:none; font-size:1rem; padding:16px 32px; background:rgba(255,255,255,.15); color:#fff; border:2px solid rgba(255,255,255,.4);">
         Kurslara Bak →
       </a>
     </div>
@@ -958,8 +1053,8 @@
 
       <div class="footer-brand">
         <div class="logo">
-          <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
-          Kaynak <span style="color:var(--amber)">Akademi</span>
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" class="logo-icon" />
+          Kaynak <span style="color:var(--amber)">Kampüs</span>
         </div>
         <p>Türkiye'nin en kapsamlı online eğitim platformu. Uzman eğitmenler, kaliteli materyaller ve kişiselleştirilmiş öğrenme deneyimi.</p>
         <div class="footer-socials">
@@ -1002,7 +1097,7 @@
       <div class="footer-col">
         <h4>Şirket</h4>
         <ul>
-          <li><a href="#">Hakkımızda</a></li>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
           <li><a href="#">Blog</a></li>
           <li><a href="#">İletişim</a></li>
           <li><a href="#">Kariyer</a></li>
@@ -1013,7 +1108,7 @@
     </div>
 
     <div class="footer-bottom">
-      <span>© 2025 Kaynak Akademi. Tüm hakları saklıdır.</span>
+      <span>© 2025 Kaynak Kampüs. Tüm hakları saklıdır.</span>
       <span>Türkiye'de 🇹🇷 ile Tasarlandı</span>
     </div>
   </div>
@@ -1021,22 +1116,7 @@
 
 <!-- ═══════════════════════════════════════════════════════ SCRIPTS -->
 <script>
-  // ── Mobile nav toggle
-  const btn = document.getElementById('menuBtn');
-  const nav = document.getElementById('mobileNav');
-  btn.addEventListener('click', () => {
-    nav.classList.toggle('open');
-    const spans = btn.querySelectorAll('span');
-    const open = nav.classList.contains('open');
-    spans[0].style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
-    spans[1].style.opacity   = open ? '0' : '1';
-    spans[2].style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
-  });
-  // close on link click
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    nav.classList.remove('open');
-    btn.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = '1'; });
-  }));
+  // ── Mobil menü davranışı assets/site-header.js içinde
 
   // ── Scroll fade-up
   const observer = new IntersectionObserver(entries => {
@@ -1047,7 +1127,7 @@
   // ── Header shadow on scroll
   const header = document.querySelector('header');
   window.addEventListener('scroll', () => {
-    header.style.boxShadow = window.scrollY > 10 ? '0 4px 24px rgba(26,60,143,.12)' : 'none';
+    header.style.boxShadow = window.scrollY > 10 ? '0 4px 24px rgba(122,32,53,.12)' : 'none';
   });
 
   // ── Smooth counter animation for stats
@@ -1084,5 +1164,14 @@
   const statsBanner = document.querySelector('.stats-banner');
   if (statsBanner) statsObserver.observe(statsBanner);
 </script>
+
+<!-- Kıvılcım — siteye ilk gelen ziyaretçiyi karşılar. Kapatınca hatırlar. -->
+<script src="assets/kivilcim-karsilama.js" defer
+        data-baslik="Kaynak Kampüs'e hoş geldiniz."
+        data-metin="Nasıl çalıştığımıza göz atabilir ya da hemen ön kayıt bırakabilirsiniz."
+        data-eylem="Aramıza katıl"
+        data-eylem-href="/basvuru"
+        data-ikincil="Nasıl çalışır"
+        data-ikincil-href="#how"></script>
 </body>
 </html>

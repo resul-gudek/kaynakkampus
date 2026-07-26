@@ -42,3 +42,7 @@ next-env.d.ts
 
 # .env.example commit edilir
 !.env.example
+
+# yüklenen dosyalar: başvuru belgeleri + ödev kanıt fotoğrafları
+# (varsayılan dizin; YUKLEME_DIZINI ile değişebilir)
+/veri-yukleme

@@ -1,5 +1,7 @@
 "use client";
 
+import Kivilcim from "@/components/maskot/Kivilcim";
+
 export default function HataSayfasi({
   error,
   reset,
@@ -20,7 +22,9 @@ export default function HataSayfasi({
         textAlign: "center",
       }}
     >
-      <span style={{ fontSize: "2.6rem" }}>😵</span>
+      {/* Hata, maskotun görünmesi gereken sürtünme anlarından biri;
+          anlamı başlık taşıyor, Kıvılcım dekoratif kalıyor. */}
+      <Kivilcim ifade="uyari" boyut={80} />
       <h1 style={{ fontSize: "1.3rem", fontWeight: 800 }}>Bir şeyler ters gitti</h1>
       <p style={{ color: "var(--muted)", fontSize: ".9rem", maxWidth: 420 }}>
         Beklenmeyen bir hata oluştu. Tekrar deneyebilir ya da ana sayfaya dönebilirsiniz.

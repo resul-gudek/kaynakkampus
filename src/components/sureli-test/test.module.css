@@ -1,0 +1,208 @@
+/* ── Süreli testler — öğrenci çözüm ekranı, sonuç kartı ve öğretmen yönetimi ──
+   Renk/gölge/kenar değişkenleri globals.css'ten gelir; koyu tema otomatik. */
+
+.bolum {
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 26px; margin-bottom: 24px;
+}
+.bolumBas {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.bolumBas h2 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.bosMesaj { text-align: center; color: var(--muted); font-size: .88rem; padding: 26px 10px; }
+.notMetin { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+
+/* ── Test kartı (öğrenci listesi / öğretmen bankası) ── */
+.kartlar { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.kart {
+  border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+  background: var(--surface); display: flex; flex-direction: column; gap: 10px;
+}
+.kart.cozuldu { background: rgba(22,163,74,.06); border-color: rgba(22,163,74,.25); }
+.kart.devam { border-color: var(--teal); background: var(--tint); }
+.kartBas { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.kartBas b { font-size: .95rem; line-height: 1.35; }
+.kartBas small { display: block; color: var(--muted); font-size: .78rem; margin-top: 2px; }
+.meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.butonlar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+
+.rozet { padding: 3px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700; white-space: nowrap; }
+.rozetBekliyor { background: #FBF1F3; color: var(--orange); }
+.rozetTamam { background: #f0fdf4; color: var(--yesil); }
+.rozetSure { background: #fef2f2; color: #b91c1c; }
+.rozetDevam { background: var(--tint); color: var(--blue); }
+.rozetPasif { background: rgba(124,120,131,.14); color: var(--muted); }
+
+/* ── Sayaç ── */
+.sayacCubuk {
+  position: sticky; top: calc(var(--ustbar-h) + 6px); z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 20px; margin-bottom: 18px;
+}
+.sayacBilgi b { display: block; font-size: .95rem; }
+.sayacBilgi small { color: var(--muted); font-size: .78rem; }
+.sayac {
+  display: flex; align-items: center; gap: 10px;
+  font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.6rem;
+  color: var(--blue); letter-spacing: .5px;
+}
+.sayac span { font-size: 1.2rem; }
+.sayacUyari { color: var(--kirmizi); animation: nabiz 1s ease-in-out infinite; }
+@keyframes nabiz { 50% { opacity: .45; } }
+.ilerlemeCubuk { height: 6px; border-radius: 50px; background: var(--border); overflow: hidden; width: 100%; }
+.ilerlemeCubuk i { display: block; height: 100%; background: var(--blue); transition: width 1s linear; }
+.ilerlemeCubuk i.azaldi { background: var(--kirmizi); }
+
+/* ── Soru kartı ── */
+.soru { border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+.soru.cevapli { border-color: var(--teal); background: var(--tint); }
+.soruBas { display: flex; gap: 10px; align-items: baseline; margin-bottom: 12px; }
+.soruNo {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--blue); color: #fff; font-size: .8rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.soruMetin { font-size: .92rem; font-weight: 600; line-height: 1.5; white-space: pre-wrap; }
+.secenekler { display: flex; flex-direction: column; gap: 8px; }
+.secenek {
+  display: flex; align-items: center; gap: 10px; text-align: left; width: 100%;
+  border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+  background: var(--surface); color: var(--text); font: inherit; font-size: .88rem;
+  cursor: pointer; transition: border-color .15s, background .15s;
+}
+.secenek:hover:not(:disabled) { border-color: var(--blue); }
+.secenek:disabled { cursor: default; }
+.secenek.secili { border-color: var(--blue); background: var(--tint); font-weight: 600; }
+.secenekHarf {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; font-weight: 700;
+}
+.secenek.secili .secenekHarf { background: var(--blue); border-color: var(--blue); color: #fff; }
+.secenekMetin { white-space: pre-wrap; }
+/* Sonuç incelemesi */
+.secenek.dogruSecenek { border-color: var(--yesil); background: rgba(22,163,74,.10); }
+.secenek.dogruSecenek .secenekHarf { background: var(--yesil); border-color: var(--yesil); color: #fff; }
+.secenek.yanlisSecenek { border-color: var(--kirmizi); background: rgba(220,38,38,.08); }
+.secenek.yanlisSecenek .secenekHarf { background: var(--kirmizi); border-color: var(--kirmizi); color: #fff; }
+.isaret { margin-left: auto; font-size: .78rem; font-weight: 700; }
+
+/* Cevap izleme şeridi (hangi soru cevaplandı) */
+.izleme { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.izlemeNokta {
+  width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--muted); font: inherit; font-size: .72rem; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.izlemeNokta.dolu { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+.altCubuk {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-top: 18px;
+}
+.kayitDurum { font-size: .78rem; color: var(--muted); }
+
+/* ── Sonuç kartı ── */
+.sonucIzgara {
+  display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  margin-bottom: 16px;
+}
+.sonucKutu {
+  border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; text-align: center;
+  background: var(--bg-soft);
+}
+.sonucKutu small { display: block; color: var(--muted); font-size: .74rem; font-weight: 600; }
+.sonucKutu b { display: block; font-size: 1.5rem; font-weight: 800; margin-top: 4px; line-height: 1.1; }
+.sonucKutu.yesil b { color: var(--yesil); }
+.sonucKutu.kirmizi b { color: var(--kirmizi); }
+.sonucKutu.gri b { color: var(--muted); }
+.sonucKutu.vurgulu { background: var(--tint); border-color: var(--blue); }
+.sonucKutu.vurgulu b { color: var(--blue); }
+.yuzdeCubuk { height: 10px; border-radius: 50px; background: var(--border); overflow: hidden; margin-bottom: 18px; }
+.yuzdeCubuk i { display: block; height: 100%; background: var(--yesil); }
+
+/* ── Öğretmen: form ── */
+.kutuForm {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px; margin-bottom: 20px;
+}
+.formIzgara { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-bottom: 12px; }
+.formGrup { display: flex; flex-direction: column; gap: 6px; }
+.formGrup label { font-size: .78rem; font-weight: 600; color: var(--muted); }
+.formGrup input, .formGrup select, .formGrup textarea {
+  border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px;
+  font: inherit; font-size: .86rem; background: var(--surface); color: var(--text); width: 100%;
+}
+.formGrup textarea { resize: vertical; }
+.formBaslik {
+  font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+  color: var(--muted); margin: 18px 0 10px;
+}
+.formHata {
+  background: #fef2f2; color: #b91c1c; border-radius: 10px;
+  padding: 10px 14px; font-size: .82rem; font-weight: 600; margin-bottom: 12px;
+}
+.formAlt { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+
+/* Soru düzenleyici */
+.soruKutu {
+  border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+  background: var(--surface); margin-bottom: 10px;
+}
+.soruKutuBas { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.soruKutuBas b { font-size: .84rem; }
+.secenekSatir { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.secenekSatir input[type="text"] {
+  flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px;
+  font: inherit; font-size: .84rem; background: var(--surface); color: var(--text);
+}
+.dogruEtiket {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .74rem; font-weight: 700; color: var(--muted); cursor: pointer; white-space: nowrap;
+}
+.dogruEtiket input { accent-color: var(--yesil); }
+.dogruEtiket.isaretli { color: var(--yesil); }
+.silBtn {
+  border: none; background: transparent; color: var(--muted);
+  cursor: pointer; font-size: 1rem; line-height: 1; padding: 4px 6px; border-radius: 8px;
+}
+.silBtn:hover { color: var(--kirmizi); background: #fef2f2; }
+
+/* Öğrenci seçim listesi */
+.ogrenciSecim { display: flex; gap: 8px; flex-wrap: wrap; }
+.ogrenciCip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--border); border-radius: 50px; padding: 6px 14px;
+  font-size: .8rem; cursor: pointer; background: var(--surface);
+}
+.ogrenciCip.isaretli { border-color: var(--blue); background: var(--tint); font-weight: 600; }
+.ogrenciCip input { accent-color: var(--blue); }
+
+/* ── Öğretmen: sonuç tablosu ── */
+.tabloSar { overflow-x: auto; }
+.tablo { width: 100%; border-collapse: collapse; font-size: .84rem; min-width: 620px; }
+.tablo th, .tablo td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.tablo th { font-size: .74rem; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); font-weight: 700; }
+.tablo td b { font-weight: 700; }
+.tablo tr:last-child td { border-bottom: none; }
+.sagaYasli { text-align: right; }
+.yesilYazi { color: var(--yesil); font-weight: 700; }
+.kirmiziYazi { color: var(--kirmizi); font-weight: 700; }
+.griYazi { color: var(--muted); }
+
+/* Vurgu (bildirimden gelen kayıt) */
+.vurgu { animation: vurguNabiz 1.6s ease-out 2; border-color: var(--teal) !important; }
+@keyframes vurguNabiz {
+  0%   { box-shadow: 0 0 0 0 rgba(201,135,146,.45); }
+  70%  { box-shadow: 0 0 0 12px rgba(201,135,146,0); }
+  100% { box-shadow: 0 0 0 0 rgba(201,135,146,0); }
+}
+
+@media (max-width: 640px) {
+  .bolum { padding: 18px; }
+  .sayac { font-size: 1.3rem; }
+  .kartlar { grid-template-columns: 1fr; }
+}

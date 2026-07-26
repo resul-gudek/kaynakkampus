@@ -6,13 +6,14 @@ import { aktifKullanici } from "@/lib/oturum";
 import { isoTarih, ogrenciOzet, ozelDersOzet, tarihStr } from "@/lib/hesap";
 import d from "@/components/panel/dashboard.module.css";
 
-export const metadata: Metadata = { title: "Öğrenci Paneli – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Öğrenci Paneli – Kaynak Kampüs" };
 
 /* Bölüm sayfaları — hızlı erişim kartları ve legacy ?sekme= yönlendirmesi
    aynı eşlemeden beslenir */
 const BOLUMLER = [
   { href: "/ogrenci/takvim", ikon: "📅", ad: "Takvimim", tanim: "Ödev, ders ve deneme günlerin" },
   { href: "/ogrenci/odevler", ikon: "📘", ad: "Ödevlerim", tanim: "Verilen ödevleri gör, tamamla" },
+  { href: "/ogrenci/testler", ikon: "⏱️", ad: "Süreli Testlerim", tanim: "Süre içinde çöz, sonucunu gör" },
   { href: "/ogrenci/takip", ikon: "✅", ad: "Haftalık Takip Listem", tanim: "Haftalık görevlerini işaretle" },
   { href: "/ogrenci/yol-haritasi", ikon: "🗺️", ad: "Yol Haritam", tanim: "Adımları tamamla, XP kazan" },
   { href: "/ogrenci/denemeler", ikon: "📈", ad: "Deneme Sonuçlarım", tanim: "Net gelişimini takip et" },
@@ -29,6 +30,8 @@ const SEKME_YONLENDIRME: Record<string, string> = {
   yol: "/ogrenci/yol-haritasi",
   deneme: "/ogrenci/denemeler",
   denemeler: "/ogrenci/denemeler",
+  test: "/ogrenci/testler",
+  testler: "/ogrenci/testler",
   ozel: "/ogrenci/ozel-dersler",
   profil: "/ogrenci/profil",
 };
@@ -47,7 +50,7 @@ export default async function OgrenciPanel({
 
   const ogrenci = await aktifKullanici("ogrenci");
 
-  const [koc, odevler, takip, denemeler, yolAdimlari, ozelDersler] = await Promise.all([
+  const [koc, odevler, takip, denemeler, yolAdimlari, ozelDersler, testAtamalari] = await Promise.all([
     ogrenci.kocId
       ? prisma.kullanici.findUnique({ where: { id: ogrenci.kocId } })
       : Promise.resolve(null),
@@ -59,7 +62,25 @@ export default async function OgrenciPanel({
       where: { ogrenciId: ogrenci.id, NOT: { durum: "iptal" } },
       orderBy: [{ tarih: "asc" }, { saat: "asc" }],
     }),
+    prisma.sureliTestAtama.findMany({
+      where: { ogrenciId: ogrenci.id, test: { aktif: true } },
+      select: {
+        test: {
+          select: {
+            ad: true,
+            sure: true,
+            soruSayisi: true,
+            oturumlar: { where: { ogrenciId: ogrenci.id }, select: { durum: true } },
+          },
+        },
+      },
+    }),
   ]);
+
+  /* Çözülmeyi bekleyen süreli testler: kapanmış oturumu olmayan atamalar */
+  const bekleyenTestler = testAtamalari.filter(
+    (a) => !a.test.oturumlar.some((o) => o.durum !== "basladi")
+  );
 
   const oz = ogrenciOzet(odevler, takip, denemeler, yolAdimlari);
   const ozelOz = ozelDersOzet(ozelDersler);
@@ -183,6 +204,21 @@ export default async function OgrenciPanel({
               {ozelOz.sonraki
                 ? ozelOz.sonraki.ders + (ozelOz.sonraki.konu ? " – " + ozelOz.sonraki.konu : "")
                 : "Özel Derslerim sayfasından ders talep edebilirsin"}
+            </small>
+          </div>
+        </Link>
+        <Link href="/ogrenci/testler" className={d.ozetKart}>
+          <span>⏱️</span>
+          <div>
+            <b>
+              {bekleyenTestler.length
+                ? `${bekleyenTestler.length} süreli test seni bekliyor`
+                : "Çözülecek süreli test yok"}
+            </b>
+            <small>
+              {bekleyenTestler.length
+                ? `${bekleyenTestler[0].test.ad} · ${bekleyenTestler[0].test.soruSayisi} soru · ${bekleyenTestler[0].test.sure} dk`
+                : "Öğretmenin test atadığında burada görünür"}
             </small>
           </div>
         </Link>

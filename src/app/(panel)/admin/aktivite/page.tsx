@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import AktivitePaneli, { type Aktivite } from "../AktivitePaneli";
 
-export const metadata: Metadata = { title: "Aktivite Merkezi – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Aktivite Merkezi – Kaynak Kampüs" };
 
 const CEVRIMICI_PENCERE_DK = 5;
 

@@ -36,8 +36,12 @@ export default auth((req) => {
   if (yol.startsWith("/mesajlar") && !["koc", "ogrenci"].includes(rol)) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  // Bildirimler: koç ve öğrenci; admin/veli'nin bildirimi yok
-  if (yol.startsWith("/bildirimler") && !["koc", "ogrenci"].includes(rol)) {
+  // Bildirimler: koç, öğrenci ve yönetici (değerlendirme bildirimleri); veli dışarıda
+  if (yol.startsWith("/bildirimler") && !["koc", "ogrenci", "admin"].includes(rol)) {
+    return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
+  }
+  // Video ders yönetimi: öğretmen ve yönetici (yetki "video:yonet")
+  if (yol.startsWith("/video-dersler") && !["koc", "admin"].includes(rol)) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
   return NextResponse.next();
@@ -54,5 +58,6 @@ export const config = {
     "/canli-ders/:path*",
     "/mesajlar/:path*",
     "/bildirimler",
+    "/video-dersler/:path*",
   ],
 };

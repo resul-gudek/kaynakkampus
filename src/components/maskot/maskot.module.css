@@ -1,0 +1,155 @@
+/* Kıvılcım maskot paleti.
+   Marka token'larından türetilmiyor, bilinçli olarak ayrı tanımlı: koyu temada
+   --bordo açık pembeye, --bg-soft neredeyse siyaha döndüğü için devralınan
+   renkler maskotun gözlerini ters çeviriyordu. Her iki tema elle kuruldu. */
+.kivilcim {
+  --kv-govde:  #7A2035;
+  --kv-koyu:   #5E1728;
+  --kv-gul:    #C98792;
+  --kv-gul-ac: #E3BFC5;
+  --kv-krem:   #FAF7F5;
+  display: block;
+  flex: none;
+}
+
+:global([data-theme="dark"]) .kivilcim {
+  /* koyu zeminde gövde açılıyor, göz akı krem kalıyor */
+  --kv-govde:  #B85068;
+  --kv-koyu:   #43101D;
+  --kv-gul:    #D9A0AB;
+  --kv-gul-ac: #EBC8CF;
+  --kv-krem:   #FDF6F7;
+}
+
+/* ── Boş durum ────────────────────────────────────────────
+   Mevcut .bos-mesaj deseninin yerini alır: aynı ortalanmış
+   yerleşim, üstüne maskot ve isteğe bağlı tek eylem. */
+.bos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 30px 16px 26px;
+  text-align: center;
+}
+
+.bos .baslik {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 2px 0 0;
+}
+
+.bos .metin {
+  font-size: .86rem;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: 38ch;
+  margin: 0;
+}
+
+.bos .eylem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 9px 18px;
+  border-radius: 50px;
+  background: var(--bordo);
+  color: #fff;
+  font-size: .84rem;
+  font-weight: 600;
+  transition: background .2s;
+}
+.bos .eylem:hover { background: var(--bordo-dk); }
+.bos .eylem:focus-visible { outline: 2px solid var(--gul); outline-offset: 2px; }
+
+/* ── Sayfa geçişi ─────────────────────────────────────────
+   Maskot tek seferlik 260 ms giriş hareketi yapar ve durur;
+   sürekli dönen sinyali gövde değil altındaki iz taşır. */
+.gecis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 54px 20px;
+  text-align: center;
+}
+
+.gecisTam {
+  min-height: 70vh;
+  justify-content: center;
+}
+
+.gecisIc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: kvGecisGiris .26s ease-out both;
+}
+
+@keyframes kvGecisGiris {
+  from { opacity: 0; transform: translateY(6px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+.gecisMetin {
+  margin: 2px 0 0;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.gecisNot {
+  margin: 0;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.gecisIz {
+  position: relative;
+  display: block;
+  width: 96px;
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 50px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.gecisIz i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  border-radius: 50px;
+  background: var(--bordo);
+  /* alternate + kısa yol: kenarlarda izden çıkmıyor. Uçtan uca kayan
+     klasik indeterminate barda parça her turda bir an tamamen kaybolup
+     bekleme "durmuş" gibi görünüyordu. */
+  animation: kvGecisIz .95s ease-in-out infinite alternate;
+}
+
+@keyframes kvGecisIz {
+  from { transform: translateX(-25%); }
+  to   { transform: translateX(175%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bos .eylem { transition: none; }
+
+  /* Yer değiştiren hiçbir şey kalmıyor; bekleme sinyali yalnızca
+     sönümlenen bir dolu iz olarak sürüyor. */
+  .gecisIc { animation: none; }
+  .gecisIz i {
+    width: 100%;
+    animation: kvGecisIzSolma 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes kvGecisIzSolma {
+  0%, 100% { opacity: .28; }
+  50%      { opacity: .75; }
+}

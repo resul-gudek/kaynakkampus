@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Kaynak Kampüs anka ikonu">
+  <title>Anka — geometrik ikon (D)</title>
+  <!-- favicon / PWA simgesi icin: sadece kama, egri yok -->
+  <path d="M98 76 18 34 56 80Z" fill="var(--gul, #C98792)"/>
+  <path d="M98 92 34 80 64 104Z" fill="var(--gul-ac, #E3BFC5)"/>
+  <path d="M102 76 182 34 144 80Z" fill="var(--gul, #C98792)"/>
+  <path d="M102 92 166 80 136 104Z" fill="var(--gul-ac, #E3BFC5)"/>
+  <path d="M100 150 70 196 100 168 130 196Z" fill="var(--gul, #C98792)"/>
+  <path d="M100 66 126 140 100 174 74 140Z" fill="var(--bordo, #7A2035)"/>
+  <circle cx="100" cy="56" r="18" fill="var(--bordo, #7A2035)"/>
+  <circle cx="93" cy="53" r="4.6" fill="var(--krem, #FAF7F5)"/>
+  <path d="M116 53 140 60 116 67Z" fill="var(--antrasit, #2F343D)"/>
+  <path d="M97 40 80 6 112 26Z" fill="var(--gul, #C98792)"/>
+</svg>

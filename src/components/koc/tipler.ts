@@ -10,6 +10,7 @@ export interface OdevS {
   soruSayisi: number | null;
   sonTarih: string; // ISO ya da ""
   durum: string; // "bekliyor" | "tamamlandi"
+  kanitlar: { id: string; ad: string }[]; // öğrencinin yüklediği çözüm fotoğrafları
 }
 
 export interface TakipS {

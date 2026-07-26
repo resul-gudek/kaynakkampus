@@ -43,10 +43,10 @@ export default function Sidebar({ kalemler, okunmamis, okunmamisMesaj, dar, mobi
     <aside className={`sidebar${mobilAcik ? " acik" : ""}`}>
       <Link href="/" className="sidebar-logo">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/logo.png" alt="Kaynak Akademi Logosu" className="logo-icon" />
+        <img src="/assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" className="logo-icon" />
         {!dar && (
           <span className="sidebar-logo-yazi">
-            Kaynak <span>Akademi</span>
+            Kaynak <span>Kampüs</span>
           </span>
         )}
       </Link>

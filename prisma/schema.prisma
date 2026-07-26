@@ -63,6 +63,12 @@ model Kullanici {
   mesajGonderilen Mesaj[]          @relation("MesajGonderen")
   mesajAlinan     Mesaj[]          @relation("MesajAlici")
   pushAbonelikleri PushAbonelik[]
+  sureliTestler   SureliTest[]       @relation("SureliTestKoc")
+  testAtamalari   SureliTestAtama[]  @relation("SureliTestAtamaOgrenci")
+  testOturumlari  SureliTestOturum[] @relation("SureliTestOturumOgrenci")
+  videoDersleri   VideoDers[]        @relation("VideoDersOgretmen")
+  videoAtamalari  VideoAtama[]       @relation("VideoAtamaOgrenci")
+  videoIzlemeleri VideoIzleme[]      @relation("VideoIzlemeOgrenci")
 }
 
 // ── Web Push abonelikleri ────────────────────────────────────
@@ -126,9 +132,101 @@ model Odev {
   sonTarih   DateTime? @db.Date
   durum      String    @default("bekliyor") // "bekliyor" | "tamamlandi"
   olusturma  DateTime  @default(now())
+  kanitlar   OdevKanit[]
 
   @@index([ogrenciId])
   @@index([kocId])
+}
+
+// Öğrencinin ödevi tamamladığını gösteren kanıt fotoğrafı (defter/çözüm sayfası).
+// Dosyalar public DIŞI dizinde tutulur; yalnız /api/odev/kanit/[id] üzerinden
+// ödevin öğrencisine, koçuna ve admin'e sunulur.
+model OdevKanit {
+  id        String   @id @default(cuid())
+  odevId    String
+  odev      Odev     @relation(fields: [odevId], references: [id], onDelete: Cascade)
+  ad        String // orijinal dosya adı (yalnız görüntüleme için)
+  yol       String   @db.NVarChar(1000) // saklama köküne göreli yol (public DIŞI)
+  tur       String   @default("") // MIME türü
+  boyut     Int      @default(0) // bayt
+  olusturma DateTime @default(now())
+
+  @@index([odevId])
+}
+
+// ── Süreli testler ───────────────────────────────────────────
+// Öğretmen testi bir kez tanımlar (soru bankası) ve seçtiği öğrencilere atar;
+// öğrenci testi başlattığında SureliTestOturum açılır.
+// Süre otoritesi SUNUCUDADIR: oturum açılırken bitisSiniri = baslangic + sure
+// yazılır; istemcideki sayaç yalnız bu ana göre geri sayar, puanlama ve süre
+// kontrolü daima sunucuda yapılır (bkz. src/lib/sureli-test-sunucu.ts).
+// Doğru cevaplar (SureliTestSoru.dogru) test bitene kadar istemciye GİTMEZ.
+model SureliTest {
+  id         String             @id @default(cuid())
+  kocId      String
+  koc        Kullanici          @relation("SureliTestKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ad         String
+  ders       String
+  konu       String             @default("")
+  seviye     String             @default("") // sınıf seviyesi (SINIF_SEVIYELERI); "" = seviye belirtilmedi
+  soruSayisi Int // soru satırı sayısıyla aynı olmalı (zod ile doğrulanır)
+  sure       Int // dakika
+  aktif      Boolean            @default(true) // pasif test öğrenciye görünmez
+  olusturma  DateTime           @default(now())
+  sorular    SureliTestSoru[]
+  atamalar   SureliTestAtama[]
+  oturumlar  SureliTestOturum[]
+
+  @@index([kocId, aktif])
+}
+
+model SureliTestSoru {
+  id         String     @id @default(cuid())
+  testId     String
+  test       SureliTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  sira       Int // 1'den başlar
+  metin      String     @db.NVarChar(Max)
+  secenekler String     @default("[]") @db.NVarChar(Max) // JSON string dizisi; sıra A, B, C… ile eşleşir
+  dogru      String // "A" | "B" | "C" | "D" | "E" (bkz. TEST_SECENEKLERI)
+
+  @@unique([testId, sira])
+}
+
+// Testin bir öğrenciye atanması. Öğrenci yalnız kendisine atanmış testleri görür.
+model SureliTestAtama {
+  id        String     @id @default(cuid())
+  testId    String
+  ogrenciId String
+  test      SureliTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  ogrenci   Kullanici  @relation("SureliTestAtamaOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sonTarih  DateTime?  @db.Date // opsiyonel teslim tarihi (yalnız bilgi/sıralama amaçlı)
+  olusturma DateTime   @default(now())
+
+  @@unique([testId, ogrenciId])
+  @@index([ogrenciId])
+}
+
+// Öğrencinin bir test denemesi. Cevaplar çözüm sırasında da kaydedilir
+// (cevaplar JSON) — sekme kapanırsa süre dolduğunda kayıtlı cevaplar puanlanır.
+model SureliTestOturum {
+  id          String     @id @default(cuid())
+  testId      String
+  ogrenciId   String
+  test        SureliTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  ogrenci     Kullanici  @relation("SureliTestOturumOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  baslangic   DateTime   @default(now())
+  bitisSiniri DateTime // baslangic + sure (dk) — süre otoritesi
+  bitis       DateTime? // testin kapandığı an
+  gecenSure   Int? // tamamlama süresi (saniye)
+  durum       String     @default("basladi") // "basladi" | "tamamlandi" | "sureDoldu"
+  dogru       Int        @default(0)
+  yanlis      Int        @default(0)
+  bos         Int        @default(0)
+  yuzde       Int        @default(0) // başarı yüzdesi (0..100)
+  cevaplar    String     @default("{}") @db.NVarChar(Max) // { soruId: "A" }
+
+  @@index([ogrenciId, durum])
+  @@index([testId])
 }
 
 model Takip {
@@ -208,9 +306,33 @@ model OzelDers {
   odev      String        @default("") @db.NVarChar(Max) // ders ödevi
   olusturma DateTime      @default(now())
   oturumlar DersOturumu[]
+  degerlendirmeler DersDegerlendirme[]
 
   @@index([ogrenciId])
   @@index([kocId])
+}
+
+// ── Ders sonrası karşılıklı değerlendirme ────────────────────
+// Tamamlanan ("yapildi") her özel ders için iki yönde en çok birer kayıt:
+// yon="kocOgrenci" (öğretmen öğrenciyi) ve yon="ogrenciKoc" (öğrenci öğretmeni).
+// Yapılandırılmış cevaplar veri içinde JSON tutulur (zod ile doğrulanır —
+// bkz. src/lib/dogrulama.ts); genel puan raporlama için ayrı kolondur.
+// Kullanici'ye FK yok (SQL Server çoklu-cascade tuzağı; BasvuruNot deseni):
+// yazarId/hedefId düz string. Ders silinince değerlendirmeler cascade silinir.
+model DersDegerlendirme {
+  id         String   @id @default(cuid())
+  ozelDersId String
+  ozelDers   OzelDers @relation(fields: [ozelDersId], references: [id], onDelete: Cascade)
+  yon        String // "kocOgrenci" | "ogrenciKoc"
+  yazarId    String // değerlendiren
+  hedefId    String // değerlendirilen
+  puan       Int      @default(0) // genel puan 1..5
+  veri       String   @db.NVarChar(Max) // yapılandırılmış cevaplar (JSON, zod)
+  olusturma  DateTime @default(now())
+  guncelleme DateTime @default(now()) @updatedAt
+
+  @@unique([ozelDersId, yon])
+  @@index([hedefId])
 }
 
 // ── Online sınıf ve canlı ders altyapısı ─────────────────────────────────
@@ -231,6 +353,7 @@ model OnlineSinif {
   olusturma  DateTime         @default(now())
   uyeler     OnlineSinifUye[]
   oturumlar  DersOturumu[]
+  videoAtamalari VideoAtama[]
 
   @@index([ogretmenId, aktif])
 }
@@ -374,11 +497,238 @@ model Bildirim {
   alici          Kullanici @relation(fields: [aliciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ikon           String
   metin          String    @db.NVarChar(Max)
-  hedefTur       String? // "ozel" | "odev"
+  hedefTur       String? // "ozel" | "odev" | "sinif" | "oturum" | "test"
   hedefOgrenciId String?
   hedefKayitId   String?
   tarih          DateTime  @default(now())
   okundu         Boolean   @default(false)
 
   @@index([aliciId, okundu])
+}
+
+// ── Ön mülakat / başvuru sistemi ─────────────────────────────
+// Siteye öğretmen/öğrenci/eğitim koçu olarak katılmak isteyenlerin
+// doldurduğu ön başvuru formları. Türe göre çok farklı alanlar
+// içeren form verisi Basvuru.veri içinde JSON tutulur (zod ile
+// doğrulanır — bkz. src/lib/dogrulama-basvuru.ts); listeleme/kart ve
+// filtre alanları (ad, tur, durum, telefon, eposta, sehir, tarih)
+// gerçek kolonlardır. Başvuran kayıtlı kullanıcı DEĞİLDİR; başvurusunu
+// kriptografik takipToken ile /basvuru/durum/<token> sayfasından izler.
+// tur teknik değerleri: "ogretmen" | "ogrenci" | "koc" (UI'da "Eğitim Koçu").
+model Basvuru {
+  id         String   @id @default(cuid())
+  tur        String // "ogretmen" | "ogrenci" | "koc"
+  durum      String   @default("yeni") // bkz. BASVURU_DURUMLARI (sabitler.ts)
+  ad         String // ad soyad — kart/listeleme
+  telefon    String   @default("")
+  eposta     String   @default("")
+  sehir      String   @default("")
+  veri       String   @db.NVarChar(Max) // türe özel form verisi (JSON)
+  takipToken String   @unique // kriptografik, tahmin edilemez (crypto.randomBytes)
+  olusturma  DateTime @default(now())
+  guncelleme DateTime @default(now()) @updatedAt
+
+  dosyalar   BasvuruDosya[]
+  notlar     BasvuruNot[]
+  mulakatlar Mulakat[]
+
+  @@index([tur, durum])
+  @@index([olusturma])
+}
+
+// Yüklenen belgeler public dışı bir dizinde saklanır; yalnız
+// basvuru:yonet yetkili admin, /api/basvuru/dosya/[id] üzerinden erişir.
+// Gerçek disk yolu (yol) hiçbir zaman istemciye gönderilmez.
+model BasvuruDosya {
+  id        String   @id @default(cuid())
+  basvuruId String
+  basvuru   Basvuru  @relation(fields: [basvuruId], references: [id], onDelete: Cascade)
+  alan      String // "profil" | "ozgecmis" | "diploma" | "sertifika" | "ek"
+  ad        String // orijinal dosya adı (yalnız görüntüleme için)
+  yol       String   @db.NVarChar(1000) // saklama köküne göreli yol (public DIŞI)
+  tur       String   @default("") // MIME türü
+  boyut     Int      @default(0) // bayt
+  olusturma DateTime @default(now())
+
+  @@index([basvuruId])
+}
+
+// Yönetici değerlendirme notları — YALNIZ yönetim tarafında görünür,
+// başvuranın takip sayfasında asla gösterilmez.
+model BasvuruNot {
+  id        String   @id @default(cuid())
+  basvuruId String
+  basvuru   Basvuru  @relation(fields: [basvuruId], references: [id], onDelete: Cascade)
+  yazarId   String // notu ekleyen admin (Kullanici modeli sade kalsın diye FK yok)
+  yazarAd   String   @default("")
+  metin     String   @db.NVarChar(Max)
+  olusturma DateTime @default(now())
+
+  @@index([basvuruId])
+}
+
+// Bir başvurunun birden çok mülakatı olabilir (erteleme / yeniden
+// planlama / birden fazla görüşme). Eski kayıtlar silinmez; aktif=false
+// ile geçmişte saklanır. Yeni planlanan görüşme aktif=true olur.
+model Mulakat {
+  id                         String   @id @default(cuid())
+  basvuruId                  String
+  basvuru                    Basvuru  @relation(fields: [basvuruId], references: [id], onDelete: Cascade)
+  aktif                      Boolean  @default(true) // güncel/aktif görüşme mi
+  tarih                      DateTime // görüşme tarih + saati
+  sure                       Int      @default(30) // tahmini süre (dk)
+  tur                        String   @default("online") // "online" | "telefon" | "yuzyuze"
+  baglanti                   String   @default("") @db.NVarChar(1000) // online görüşme bağlantısı
+  adres                      String   @default("") @db.NVarChar(1000) // yüz yüze görüşme adresi
+  gorusmeci                  String   @default("") // görüşmeyi yapacak kişi
+  aciklama                   String   @default("") @db.NVarChar(Max) // başvurana gönderilecek açıklama
+  sonuc                      String   @default("") // "" | "yapildi" | "katilmadi" | "yeniden" | "olumlu" | "olumsuz" | "beklemede"
+  sonucNotu                  String   @default("") @db.NVarChar(Max)
+  hatirlatma24SaatGonderildi Boolean  @default(false) // tarih/saat güncellenince false'a çekilir
+  hatirlatma1SaatGonderildi  Boolean  @default(false)
+  olusturma                  DateTime @default(now())
+  guncelleme                 DateTime @default(now()) @updatedAt
+
+  @@index([basvuruId, aktif])
+  @@index([tarih, aktif])
+}
+
+// ── Video ders notları ───────────────────────────────────────
+// Kayıt altına alınmış ya da önceden hazırlanmış ders videoları. Canlı ders
+// altyapısından (DersOturumu/DersKaydi) BAĞIMSIZDIR: videoyu öğretmen ya da
+// yönetici yükler, öğrenciye tek tek veya online sınıf üzerinden atar.
+//
+// Kaynak iki türlü olabilir:
+//   kaynakTur="baglanti" → adres (YouTube/Vimeo/doğrudan mp4 bağlantısı)
+//   kaynakTur="dosya"    → dosyaYol (public DIŞI dizin; yalnız
+//                          /api/video-ders/[id]/akis üzerinden Range destekli
+//                          akıtılır, gerçek disk yolu istemciye gitmez)
+// Yayın durumu: "taslak" (öğrenciye kapalı) | "yayinda" (listelenir) |
+// "gizli" (listelenmez, atanmış öğrenci doğrudan bağlantıyla erişir).
+model VideoDers {
+  id             String        @id @default(cuid())
+  baslik         String
+  ders           String
+  konu           String        @default("")
+  ogretmenId     String
+  ogretmen       Kullanici     @relation("VideoDersOgretmen", fields: [ogretmenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  olusturanId    String // videoyu yükleyen (admin ya da öğretmenin kendisi) — denetim için
+  aciklama       String        @default("") @db.NVarChar(Max)
+  islenenKonular String        @default("") @db.NVarChar(Max) // satır başına bir konu
+  ogretmenNotu   String        @default("") @db.NVarChar(Max)
+  tarih          DateTime      @db.Date
+  sure           Int           @default(0) // dakika
+  kaynakTur      String        @default("baglanti") // "baglanti" | "dosya"
+  adres          String        @default("") @db.NVarChar(1000) // kaynakTur="baglanti"
+  dosyaAd        String        @default("") // orijinal dosya adı (yalnız görüntüleme)
+  dosyaYol       String?       @db.NVarChar(1000) // saklama köküne göreli yol (public DIŞI)
+  dosyaTur       String        @default("") // MIME
+  dosyaBoyut     Int           @default(0) // bayt
+  kapakYol       String?       @db.NVarChar(1000)
+  kapakTur       String        @default("")
+  durum          String        @default("taslak") // "taslak" | "yayinda" | "gizli"
+  olusturma      DateTime      @default(now())
+  guncelleme     DateTime      @default(now()) @updatedAt
+  ekler          VideoEk[]
+  atamalar       VideoAtama[]
+  gorevler       VideoGorev[]
+  izlemeler      VideoIzleme[]
+
+  @@index([ogretmenId, durum])
+  @@index([durum, tarih])
+}
+
+// Videoya eklenen PDF/doküman/görsel. Dosyalar public DIŞI dizinde tutulur;
+// yalnız /api/video-ders/ek/[id] üzerinden yetkili kullanıcıya sunulur.
+model VideoEk {
+  id        String    @id @default(cuid())
+  videoId   String
+  video     VideoDers @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  ad        String // orijinal dosya adı (yalnız görüntüleme için)
+  yol       String    @db.NVarChar(1000) // saklama köküne göreli yol
+  tur       String    @default("") // MIME türü
+  boyut     Int       @default(0) // bayt
+  olusturma DateTime  @default(now())
+
+  @@index([videoId])
+}
+
+// Videonun bir öğrenciye ya da bir online sınıfa atanması. İki alandan tam
+// olarak biri doludur (zod ile doğrulanır). SQL Server tek NULL'a izin veren
+// unique index kullandığı için @@unique YOKTUR; tekrar koruması app tarafında.
+model VideoAtama {
+  id        String       @id @default(cuid())
+  videoId   String
+  video     VideoDers    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  ogrenciId String?
+  ogrenci   Kullanici?   @relation("VideoAtamaOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sinifId   String?
+  sinif     OnlineSinif? @relation(fields: [sinifId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  olusturma DateTime     @default(now())
+
+  @@index([videoId])
+  @@index([ogrenciId])
+  @@index([sinifId])
+}
+
+// Öğretmenin videoya bağladığı görevler — detay sayfasında sırayla listelenir.
+model VideoGorev {
+  id      String    @id @default(cuid())
+  videoId String
+  video   VideoDers @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  sira    Int       @default(0)
+  metin   String    @db.NVarChar(1000)
+
+  @@index([videoId])
+}
+
+// Öğrenci başına izleme durumu + kişisel not. Kayıt yoksa durum "izlenmedi"
+// sayılır; ilk oynatmada oluşturulur. notlar YALNIZ ilgili öğrenciye gösterilir
+// (öğretmen/yönetici arayüzünde hiçbir yerde okunmaz).
+model VideoIzleme {
+  id         String    @id @default(cuid())
+  videoId    String
+  ogrenciId  String
+  video      VideoDers @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  ogrenci    Kullanici @relation("VideoIzlemeOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  durum      String    @default("izlenmedi") // "izlenmedi" | "izleniyor" | "tamamlandi"
+  saniye     Int       @default(0) // en son bırakılan konum
+  yuzde      Int       @default(0) // izlenen oran (0..100)
+  notlar     String    @default("") @db.NVarChar(Max) // öğrencinin kişisel notu
+  ilkIzleme  DateTime?
+  sonIzleme  DateTime?
+  guncelleme DateTime  @default(now()) @updatedAt
+
+  @@unique([videoId, ogrenciId])
+  @@index([ogrenciId])
+}
+
+/* ── Blog ─────────────────────────────────────────────────────
+   Herkese açık içerik modülü. Kullanıcı sistemine BAĞLI DEĞİLDİR:
+   yazar serbest metindir (yazarAd), Kullanici'ye FK yoktur — böylece
+   yazar hesabı silinse bile yayın etkilenmez ve ziyaretçi oturum
+   olmadan okur. Bağlantı adresi `slug` üzerinden kurulur (/blog/<slug>).
+   Kapak görseli public DIŞI dizinde tutulur; /api/blog/kapak/[id]
+   üzerinden sunulur. */
+model BlogYazi {
+  id          String    @id @default(cuid())
+  slug        String    @unique // SEO adresi — /blog/<slug>
+  baslik      String
+  ozet        String    @default("") @db.NVarChar(1000) // kartlarda görünen kısa açıklama
+  icerik      String    @default("") @db.NVarChar(Max) // markdown-lite (bkz. lib/blog.ts)
+  kategori    String // BLOG_KATEGORILERI anahtarı
+  etiketler   String    @default("") @db.NVarChar(1000) // virgülle ayrılmış
+  seoAciklama String    @default("") @db.NVarChar(1000) // meta description
+  yazarAd     String    @default("") // serbest metin; kullanıcı kaydına bağlanmaz
+  kapakYol    String?   @db.NVarChar(1000) // saklama köküne göreli (public DIŞI)
+  kapakTur    String    @default("") // MIME
+  kapakAd     String    @default("") // orijinal dosya adı (yalnız görüntüleme)
+  durum       String    @default("taslak") // "taslak" | "yayinda"
+  yayinTarihi DateTime? // yayına alındığı an; taslakta null
+  okuma       Int       @default(0) // tahmini okuma süresi (dakika)
+  olusturma   DateTime  @default(now())
+  guncelleme  DateTime  @default(now()) @updatedAt
+
+  @@index([durum, yayinTarihi])
+  @@index([kategori, durum])
 }

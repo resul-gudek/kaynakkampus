@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Kıvılcım — tek renk">
+  <title>Kıvılcım — tek renk (sessiz mod)</title>
+  <!-- currentColor: bulundugu yerin metin rengini alir, koyu zeminde de calisir.
+       Lise / mezun varsayilani ve 16-24 px yerlesimler icin. -->
+  <defs>
+    <path id="tuy" d="M0 0C7-16 9-40 0-64C-9-40-7-16 0 0Z" fill="currentColor"/>
+  </defs>
+
+  <g fill="currentColor">
+    <g opacity=".5">
+      <g transform="translate(100,158)">
+        <use href="#tuy" transform="rotate(156) scale(.4)"/>
+        <use href="#tuy" transform="rotate(180) scale(.5)"/>
+        <use href="#tuy" transform="rotate(204) scale(.4)"/>
+      </g>
+      <ellipse cx="58" cy="138" rx="28" ry="19" transform="rotate(-22 58 138)"/>
+      <ellipse cx="142" cy="138" rx="28" ry="19" transform="rotate(22 142 138)"/>
+    </g>
+    <g transform="translate(100,64)">
+      <use href="#tuy" transform="rotate(-30) scale(.46)"/>
+      <use href="#tuy" transform="rotate(0) scale(.62)"/>
+      <use href="#tuy" transform="rotate(30) scale(.46)"/>
+    </g>
+    <path d="M100 64C129 64 152 87 152 116C152 148 129 170 100 170C71 170 48 148 48 116C48 87 71 64 100 64Z"/>
+    <g opacity=".5">
+      <rect x="74" y="165" width="15" height="12" rx="6"/>
+      <rect x="111" y="165" width="15" height="12" rx="6"/>
+    </g>
+    <!-- gozler: zemin rengiyle oyulmus, currentColor bebekler -->
+    <circle cx="81" cy="107" r="16" fill="var(--maskot-zemin, #FAF7F5)"/>
+    <circle cx="119" cy="107" r="16" fill="var(--maskot-zemin, #FAF7F5)"/>
+    <circle cx="83" cy="110" r="8"/>
+    <circle cx="121" cy="110" r="8"/>
+    <path d="M91 126C95 125 105 125 109 126C107 134 104 139 100 139C96 139 93 134 91 126Z" opacity=".6"/>
+  </g>
+</svg>

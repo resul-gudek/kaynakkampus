@@ -5,6 +5,9 @@
 import type { Deneme, DenemeDers, Odev, OzelDers, Takip, YolAdimi } from "@prisma/client";
 
 export type OdevKaydi = Odev;
+/** Ödev listesi satırı — tamamlama kanıtı fotoğrafları da gelir */
+export type KanitS = { id: string; ad: string };
+export type OdevListeKaydi = Odev & { kanitlar: KanitS[] };
 export type TakipKaydi = Takip;
 export type YolKaydi = YolAdimi;
 export type OzelDersKaydi = OzelDers;

@@ -12,7 +12,7 @@ import {
 import DersOdasi from "@/components/canli-ders/DersOdasi";
 import s from "./canli-ders.module.css";
 
-export const metadata: Metadata = { title: "Canlı Ders – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Canlı Ders – Kaynak Kampüs" };
 
 const tarihSaat = new Intl.DateTimeFormat("tr-TR", {
   timeZone: "Europe/Istanbul",

@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ödev Oluştur – Kaynak Akademi</title>
+  <title>Ödev Oluştur – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Poppins', sans-serif; color: #1e2d4d; background: #fff; overflow-x: hidden; }
+    body { font-family: 'Poppins', sans-serif; color: #2F343D; background: #fff; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
     ul { list-style: none; }
 
     :root {
-      --blue: #1a3c8f; --blue-dk: #122a6e; --teal: #0ea5c9; --orange: #f97316;
-      --amber: #fbbf24; --bg-soft: #f0f4ff; --text: #1e2d4d; --muted: #64748b;
-      --radius: 14px; --shadow: 0 4px 24px rgba(26,60,143,.10); --shadow-lg: 0 12px 40px rgba(26,60,143,.16);
+      --blue: #7A2035; --blue-dk: #5E1728; --teal: #C98792; --orange: #C98792;
+      --amber: #C98792; --bg-soft: #FAF7F5; --text: #2F343D; --muted: #7C7883;
+      --radius: 14px; --shadow: 0 4px 24px rgba(122,32,53,.10); --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
     }
 
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -27,15 +27,15 @@
       border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
       transition: all .25s; border: none; font-family: inherit;
     }
-    .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { background: #ea6000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
     .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
     .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
 
     /* HEADER */
     header {
       position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
-      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26,60,143,.08);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(122,32,53,.08);
     }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
     .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
@@ -52,7 +52,7 @@
     .mobile-nav {
       display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
       background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
-      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(26,60,143,.08);
+      padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
     .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
@@ -60,7 +60,7 @@
 
     /* PAGE HERO */
     .page-hero {
-      background: linear-gradient(140deg, #e8effe 0%, #f0f4ff 50%, #fef3e8 100%);
+      background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%);
       padding: 44px 0 36px;
     }
     .page-hero h1 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; }
@@ -78,7 +78,7 @@
 
     .panel { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 92px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
     .panel::-webkit-scrollbar { width: 6px; }
-    .panel::-webkit-scrollbar-thumb { background: rgba(26,60,143,.2); border-radius: 3px; }
+    .panel::-webkit-scrollbar-thumb { background: rgba(122,32,53,.2); border-radius: 3px; }
 
     .step-box { background: var(--bg-soft); border-radius: var(--radius); padding: 18px 20px; }
     .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -92,7 +92,7 @@
     .pill {
       background: #fff; border: 2px solid transparent; border-radius: 50px;
       padding: 8px 16px; font-size: .82rem; font-weight: 700; cursor: pointer;
-      transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(26,60,143,.06);
+      transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(122,32,53,.06);
     }
     .pill:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
     .pill.active { background: var(--blue); color: #fff; }
@@ -119,7 +119,7 @@
     .opt-row label { font-size: .8rem; font-weight: 600; }
     .opt-row select, .opt-row input[type="number"], .opt-row input[type="text"] {
       font-family: inherit; font-size: .8rem; font-weight: 600; padding: 7px 12px;
-      border-radius: 8px; border: 1px solid rgba(26,60,143,.2); background: #fff; color: var(--text); outline: none;
+      border-radius: 8px; border: 1px solid rgba(122,32,53,.2); background: #fff; color: var(--text); outline: none;
     }
     .opt-row input[type="text"] { width: 60%; }
     .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; }
@@ -135,7 +135,7 @@
     /* WORKSHEET PREVIEW */
     .preview-wrap { min-height: 400px; }
     .preview-empty {
-      background: var(--bg-soft); border: 2px dashed rgba(26,60,143,.25);
+      background: var(--bg-soft); border: 2px dashed rgba(122,32,53,.25);
       border-radius: var(--radius); padding: 80px 30px; text-align: center;
     }
     .preview-empty .icon { font-size: 3.4rem; margin-bottom: 14px; }
@@ -196,6 +196,14 @@
       .hamburger { display: block; }
       .ak-grid { grid-template-columns: 1fr; }
     }
+    /* dokunmatik: onay kutuları ve metin butonları parmak ölçüsüne gelsin */
+    @media (hover: none) and (pointer: coarse) {
+      .unit-item input, .check-row input { width: 20px; height: 20px; }
+      .unit-tools { gap: 14px; }
+      .unit-tools button { padding: 8px 2px; }
+      .check-row { padding: 4px 0; min-height: 38px; }
+      .unit-item { min-height: 42px; }
+    }
 
     /* PRINT */
     @media print {
@@ -207,40 +215,65 @@
       body { background: #fff; }
     }
   </style>
+  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
 </head>
 <body>
 
-<header>
-  <div class="container">
-    <div class="nav-inner">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Kaynak Akademi Logosu" class="logo-icon" />
-        Kaynak <span>Akademi</span>
-      </a>
-      <nav>
-        <a href="index.html">Ana Sayfa</a>
-        <a href="index.html#subjects">Dersler</a>
-        <a href="index.html#courses">Kurslar</a>
-        <a href="etkinlikler.html">Etkinlikler</a>
-        <a href="odev-olustur.html" class="active">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
-        <a href="ders-programi.html">Ders Programı</a>
-        <a href="haberler.html">Haberler</a>
-        <a href="#">İletişim</a>
-      </nav>
-      <div class="nav-actions" style="display:flex;align-items:center;gap:10px;">
-        <a href="giris.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem;">Giriş Yap</a>
-        <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:.85rem;">Ücretsiz Başla</a>
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
+
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+        </div>
       </div>
-      <button class="hamburger" id="menuBtn" aria-label="Menü"><span></span><span></span><span></span></button>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <a href="etkinlikler.html">Etkinlikler</a>
+      <a href="/blog">Blog</a>
+      <a href="haberler.html">Haberler</a>
+      <a href="index.html#how">Nasıl Çalışır</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+    </nav>
+
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
     </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <div class="mobile-nav" id="mobileNav">
+
+  <div class="sh-drawer" id="shMobileNav">
     <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
     <a href="etkinlikler.html">Etkinlikler</a>
-    <a href="odev-olustur.html">Ödev Oluştur</a> <a href="bep-olustur.html">BEP Oluştur</a>
-    <a href="ders-programi.html">Ders Programı</a>
+    <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
-    <a href="#">İletişim</a>
+    <a href="index.html#how">Nasıl Çalışır</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
   </div>
 </header>
 
@@ -356,8 +389,8 @@
   </div>
 </section>
 
-<footer style="background:#0d1b3e;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
-  <div class="container">© 2026 Kaynak Akademi · Sorular MEB güncel öğretim programları (mufredat.meb.gov.tr) esas alınarak hazırlanmıştır.</div>
+<footer style="background:#241018;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
+  <div class="container">© 2026 Kaynak Kampüs · Sorular MEB güncel öğretim programları (mufredat.meb.gov.tr) esas alınarak hazırlanmıştır.</div>
 </footer>
 
 <script>
@@ -4395,7 +4428,7 @@ function renderSheet(missing) {
     ${missing ? `<div class="sheet-note" style="color:#dc2626;">ℹ️ Bu ders için soru bankasında ${st.qs.length} özgün soru bulundu (istenen: ${st.qs.length + missing}). İşlem/Problem tipini açarak, daha fazla ünite seçerek veya soru sayısını azaltarak deneyebilirsin.</div>` : ""}
     <div class="q-grid ${$("optTwoCol").checked ? "two-col" : ""}">${qHtml}</div>
     ${akHtml}
-    <div class="sheet-footer">Kaynak Akademi Ödev Oluşturucu · MEB güncel öğretim programlarına (mufredat.meb.gov.tr) uygun hazırlanmıştır.</div>
+    <div class="sheet-footer">Kaynak Kampüs Ödev Oluşturucu · MEB güncel öğretim programlarına (mufredat.meb.gov.tr) uygun hazırlanmıştır.</div>
   `;
   $("sheet").style.setProperty("--sheet-fs", $("fontSize").value);
   $("sheet").classList.toggle("bw", $("optBW").checked);
@@ -4410,9 +4443,7 @@ $("shuffleBtn2").onclick = generate;
 $("printBtn").onclick = () => { if (!st.qs.length) generate(); window.print(); };
 $("printBtn2").onclick = () => window.print();
 
-/* Mobil menü */
-const mBtn = $("menuBtn"), mNav = $("mobileNav");
-mBtn.addEventListener("click", () => mNav.classList.toggle("open"));
+/* Mobil menü davranışı assets/site-header.js içinde */
 
 renderPanel();
 </script>

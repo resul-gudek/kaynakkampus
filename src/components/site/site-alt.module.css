@@ -1,0 +1,42 @@
+/* Public sayfaların alt bilgisi — statik sayfaların koyu bordo footer'ıyla
+   aynı dili konuşan sade sürüm. */
+
+.alt {
+  margin-top: 64px;
+  background: var(--bordo-dk);
+  color: rgba(255, 255, 255, .78);
+  padding: 44px 0 28px;
+}
+[data-theme="dark"] .alt { background: #1F1017; }
+
+.izgara {
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px;
+}
+
+.marka { display: flex; flex-direction: column; gap: 12px; }
+.markaAd {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-poppins), "Poppins", sans-serif;
+  font-weight: 800; font-size: 1.15rem; color: #fff;
+}
+.markaAd img { width: 46px; height: 46px; object-fit: contain; }
+.markaAd span { color: var(--gul); }
+.marka p { font-size: .84rem; line-height: 1.65; max-width: 44ch; }
+
+.kolon h4 {
+  color: #fff; font-size: .95rem; margin-bottom: 12px;
+  font-family: var(--font-poppins), "Poppins", sans-serif; font-weight: 700;
+}
+.kolon ul { display: grid; gap: 8px; }
+.kolon a { font-size: .84rem; transition: color .2s; }
+.kolon a:hover { color: #fff; }
+
+.telif {
+  margin-top: 32px; padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  font-size: .78rem; text-align: center;
+}
+
+@media (max-width: 760px) {
+  .izgara { grid-template-columns: 1fr; gap: 26px; }
+}

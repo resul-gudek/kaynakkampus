@@ -4,7 +4,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import { prisma } from "@/lib/prisma";
 import SiniflarPaneli, { type SinifGorunum } from "./SiniflarPaneli";
 
-export const metadata: Metadata = { title: "Online Sınıflar – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Online Sınıflar – Kaynak Kampüs" };
 
 function sinifGorunumu(
   sinif: Awaited<ReturnType<typeof kocSiniflariniGetir>>[number] | Awaited<ReturnType<typeof ogrenciSiniflariniGetir>>[number]["sinif"]

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Cormorant_Garamond } from "next/font/google";
 import TemaSaglayici from "@/components/TemaSaglayici";
 import "./globals.css";
 
@@ -9,15 +9,27 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
+const cormorant = Cormorant_Garamond({
+  weight: ["500", "600", "700"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-cormorant",
+});
+
 export const metadata: Metadata = {
-  title: "Kaynak Akademi",
-  description: "Doğru Kaynak, Doğru Gelecek — koçluk ve takip sistemi",
-  icons: { icon: "/assets/logo.png", apple: "/assets/logo.png" },
+  title: "Kaynak Kampüs",
+  description: "Güçlü Kaynak, Sağlam Gelecek — koçluk ve takip sistemi",
+  icons: {
+    icon: [
+      { url: "/assets/kaynak-kampus-logo-64.png", type: "image/png", sizes: "64x64" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/assets/kaynak-kampus-logo.png",
+  },
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "Kaynak Akademi", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Kaynak Kampüs", statusBarStyle: "default" },
 };
 
-export const viewport = { themeColor: "#18377f" };
+export const viewport = { themeColor: "#7A2035" };
 
 export default function RootLayout({
   children,
@@ -27,7 +39,7 @@ export default function RootLayout({
   return (
     /* suppressHydrationWarning: next-themes ilk boyamada <html>'e
        data-theme yazdığı için gerekli */
-    <html lang="tr" className={poppins.variable} suppressHydrationWarning>
+    <html lang="tr" className={`${poppins.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <body>
         <TemaSaglayici>{children}</TemaSaglayici>
       </body>

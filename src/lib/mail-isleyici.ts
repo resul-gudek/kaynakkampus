@@ -25,9 +25,11 @@ export function mailIsleyiciBaslat(): void {
       const { dersHatirlatmalariKuyrukla, kuyrukIsle } = await import("@/lib/mail");
       const { veliRaporlariKuyrukla } = await import("@/lib/veli-rapor");
       const { dersHatirlatmalariniUret } = await import("@/lib/ders-hatirlatma");
+      const { mulakatHatirlatmalariniKuyrukla } = await import("@/lib/mulakat-hatirlatma");
       await dersHatirlatmalariKuyrukla();
       await veliRaporlariKuyrukla();
       await dersHatirlatmalariniUret(); // online ders "derse kala" bildirimi + push
+      await mulakatHatirlatmalariniKuyrukla(); // mülakattan 1 gün / 1 saat önce hatırlatma
       const sonuc = await kuyrukIsle();
       if (sonuc.gonderilen || sonuc.hatali) log.info(sonuc, "kuyruk turu tamamlandı");
     } catch (e) {

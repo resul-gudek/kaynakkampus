@@ -21,7 +21,7 @@
   display: block; color: inherit;
 }
 .ogrenciKart:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: var(--shadow); }
-.ogrenciKart.secili { border-color: var(--orange); background: rgba(249,115,22,.08); }
+.ogrenciKart.secili { border-color: var(--orange); background: rgba(201,135,146,.08); }
 .ogrenciKartBas { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .ogrenciKartBas b { font-size: .95rem; display: block; }
 .ogrenciKartBas small { color: var(--muted); font-size: .75rem; }
@@ -70,18 +70,26 @@
 .listeGovde p { font-size: .8rem; color: var(--muted); margin-top: 3px; }
 .listeMeta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .satirButonlar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+/* Öğrencinin ödev tamamlama kanıtı fotoğrafları */
+.kanitSerit { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.kanitKart {
+  width: 74px; height: 74px; display: block; overflow: hidden;
+  border: 1px solid var(--border); border-radius: 10px; background: var(--bg-soft);
+}
+.kanitKart img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .durumRozet { padding: 3px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700; }
-.durumBekliyor { background: #fff7ed; color: var(--orange); }
+.durumBekliyor { background: #FBF1F3; color: var(--orange); }
 .durumTamam { background: #f0fdf4; color: var(--yesil); }
 .durumRed { background: #fef2f2; color: #b91c1c; }
-.durumTalep { background: #eff6ff; color: #1d4ed8; }
+.durumTalep { background: #F6EEF0; color: #7A2035; }
 
 /* Bildirimden gelinen kaydı vurgulama */
 .listeSatir.vurgu { animation: vurguNabiz 1.6s ease-out 2; border-color: var(--teal) !important; }
 @keyframes vurguNabiz {
-  0% { box-shadow: 0 0 0 0 rgba(14,165,201,.45); }
-  70% { box-shadow: 0 0 0 12px rgba(14,165,201,0); }
-  100% { box-shadow: 0 0 0 0 rgba(14,165,201,0); }
+  0% { box-shadow: 0 0 0 0 rgba(201,135,146,.45); }
+  70% { box-shadow: 0 0 0 12px rgba(201,135,146,0); }
+  100% { box-shadow: 0 0 0 0 rgba(201,135,146,0); }
 }
 
 .silBtn {
@@ -104,7 +112,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 /* ── BAŞLANGIÇ PROFİLİ & DENEME DETAYI ───────────────── */
 .seviyeCip { padding: 3px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700; }
 .seviyeIyi { background: #f0fdf4; color: var(--yesil); }
-.seviyeOrta { background: #fff7ed; color: var(--orange); }
+.seviyeOrta { background: #FBF1F3; color: var(--orange); }
 .seviyeZayif { background: #fef2f2; color: #b91c1c; }
 .konuCip {
   display: inline-flex; align-items: center; gap: 5px;
@@ -118,7 +126,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   border: none; background: var(--orange); color: #fff; cursor: pointer;
   border-radius: 50px; padding: 2px 8px; font-size: .66rem; font-weight: 700; font-family: inherit;
 }
-.konuCip button:hover { background: #ea6000; }
+.konuCip button:hover { background: #C98792; }
 .profilDersTablo { width: 100%; border-collapse: collapse; font-size: .84rem; margin-bottom: 12px; }
 .profilDersTablo th {
   text-align: left; padding: 8px 10px; background: var(--bg-soft);
@@ -190,8 +198,8 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 }
 .denemeDetay[open] summary { margin-bottom: 6px; }
 .oneriKutu {
-  background: linear-gradient(120deg, rgba(249,115,22,.10) 0%, rgba(249,115,22,.05) 100%);
-  border: 1px solid rgba(249,115,22,.25); border-radius: 12px;
+  background: linear-gradient(120deg, rgba(201,135,146,.10) 0%, rgba(201,135,146,.05) 100%);
+  border: 1px solid rgba(201,135,146,.25); border-radius: 12px;
   padding: 16px 18px; margin-bottom: 18px;
 }
 .oneriKutu h3 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; }
@@ -214,7 +222,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .gGovde { position: relative; }
 .gIpucu {
   position: absolute; transform: translate(-50%, -100%);
-  background: #1e2d4d; color: #fff; font-size: .75rem; line-height: 1.55;
+  background: #2F343D; color: #fff; font-size: .75rem; line-height: 1.55;
   padding: 8px 12px; border-radius: 8px; pointer-events: none; white-space: nowrap;
   box-shadow: var(--shadow-lg); z-index: 5;
 }
@@ -254,7 +262,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .takvimHucre:hover { border-color: var(--teal); box-shadow: var(--shadow); }
 .takvimHucre.disari { opacity: .35; background: transparent; cursor: default; }
 .takvimHucre.disari:hover { border-color: var(--border); box-shadow: none; }
-.takvimHucre.bugun { border-color: var(--orange); background: rgba(249,115,22,.08); }
+.takvimHucre.bugun { border-color: var(--orange); background: rgba(201,135,146,.08); }
 .takvimHucre.seciliGun { border: 2px solid var(--blue); }
 .takvimNo { font-size: .72rem; font-weight: 700; color: var(--muted); }
 .takvimHucre.bugun .takvimNo { color: var(--orange); }
@@ -263,9 +271,9 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .tkOlay.olayTamam { text-decoration: line-through; opacity: .6; }
-.tkOdev { background: #fff7ed; color: #c2410c; }
-.tkDeneme { background: #e8effe; color: #1e40af; }
-.tkOzel { background: #ecfeff; color: #0e7490; }
+.tkOdev { background: #FBF1F3; color: #7A2035; }
+.tkDeneme { background: #F3ECEE; color: #A85462; }
+.tkOzel { background: #F6EEF0; color: #B5677A; }
 .tkDaha { font-size: .62rem; color: var(--muted); font-weight: 700; }
 .tkNoktalar { display: none; gap: 3px; flex-wrap: wrap; }
 .takvimDetay { margin-top: 16px; }
@@ -279,8 +287,8 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 /* ── YOL HARİTASI (öğretmen görünümü) ────────────────── */
 .yolOzet {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  background: linear-gradient(120deg, rgba(249,115,22,.10) 0%, rgba(249,115,22,.05) 100%);
-  border: 1px solid rgba(249,115,22,.25);
+  background: linear-gradient(120deg, rgba(201,135,146,.10) 0%, rgba(201,135,146,.05) 100%);
+  border: 1px solid rgba(201,135,146,.25);
   border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;
   font-size: .85rem; font-weight: 600;
 }

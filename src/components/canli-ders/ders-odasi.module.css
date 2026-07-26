@@ -20,7 +20,7 @@
   padding:7px 14px; border-radius:9px; border:1px solid rgba(255,255,255,.14);
   background:transparent; color:#e6e8ee; font-size:.78rem; font-weight:700; cursor:pointer;
 }
-.sekmeAktif { background:#2563eb; border-color:#2563eb; color:#fff; }
+.sekmeAktif { background:#7A2035; border-color:#7A2035; color:#fff; }
 .sekmeDugme:hover { background:rgba(255,255,255,.08); }
 
 .govde { flex:1; min-height:0; position:relative; }
@@ -30,7 +30,7 @@
 
 .tahtaAlan { position:absolute; inset:0; display:flex; flex-direction:column; background:#fff; }
 .tahta { flex:1; min-height:0; }
-.tahtaYukleniyor { display:grid; place-items:center; height:100%; color:#64748b; font-size:.85rem; }
+.tahtaYukleniyor { display:grid; place-items:center; height:100%; color:#7C7883; font-size:.85rem; }
 .altCubuk { flex:none; background:#161b27; border-top:1px solid rgba(255,255,255,.08); }
 
 @media (max-width:560px) {

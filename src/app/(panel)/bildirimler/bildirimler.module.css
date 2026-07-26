@@ -40,8 +40,7 @@
   transition: all .2s; font-family: inherit;
 }
 .silBtn:hover { background: #b91c1c; color: #fff; }
-.bosMesaj { text-align: center; color: var(--muted); font-size: .9rem; padding: 40px 10px; }
-.bosMesaj .bosIkon { font-size: 2.6rem; display: block; margin-bottom: 10px; }
+/* Boş durum artık @/components/maskot/BosDurum ile çiziliyor (Kıvılcım). */
 
 .panelBas { padding: 36px 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .panelBas h1 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; }

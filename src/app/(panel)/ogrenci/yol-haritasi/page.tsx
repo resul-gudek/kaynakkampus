@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import YolHaritasi from "@/components/ogrenci/YolHaritasi";
 
-export const metadata: Metadata = { title: "Yol Haritam – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Yol Haritam – Kaynak Kampüs" };
 
 export default async function YolHaritasiSayfasi() {
   const ogrenci = await aktifKullanici("ogrenci");

@@ -5,6 +5,7 @@
 import { Fragment, useOptimistic, useTransition } from "react";
 import { takipDurum } from "@/actions/takip";
 import { GUNLER } from "@/lib/sabitler";
+import BosDurum from "@/components/maskot/BosDurum";
 import type { TakipKaydi } from "./tipler";
 import s from "./panel.module.css";
 
@@ -59,7 +60,11 @@ export default function TakipListesi({ takip }: { takip: TakipKaydi[] }) {
           })}
         </div>
       ) : (
-        <p className={s["bos-mesaj"]}>Takip listen boş. Öğretmenin görev ekleyince burada görünecek.</p>
+        <BosDurum
+          ifade="sakin"
+          baslik="Takip listen boş."
+          metin="Öğretmenin haftalık görev ekleyince burada görünecek."
+        />
       )}
     </section>
   );

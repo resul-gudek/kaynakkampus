@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 128" role="img" aria-label="Kaynak Kampüs">
+  <title>Kaynak Kampüs</title>
+  <!-- Monogram K — bordo gövde + gül kurusu kollar -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- gövde (bordo) -->
+    <path d="M44 24 V92" stroke="#7A2035" stroke-width="12"/>
+    <!-- üst kol (gül kurusu) -->
+    <path d="M44 60 L86 24" stroke="#C98792" stroke-width="12"/>
+    <!-- alt kol (bordo) -->
+    <path d="M44 60 L86 92" stroke="#7A2035" stroke-width="12"/>
+    <!-- ikinci K vurgusu (gül kurusu, ince) -->
+    <path d="M62 44 L82 24" stroke="#C98792" stroke-width="6" opacity=".55"/>
+  </g>
+  <!-- açık kitap -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M22 106 Q60 96 60 104 Q60 96 98 106" stroke="#2F343D" stroke-width="4.5"/>
+    <path d="M22 114 Q60 104 60 112 Q60 104 98 114" stroke="#C98792" stroke-width="4"/>
+  </g>
+</svg>

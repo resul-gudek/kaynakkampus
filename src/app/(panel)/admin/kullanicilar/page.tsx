@@ -8,7 +8,7 @@ import type { Rol } from "@/lib/sabitler";
 import KullaniciEkleFormu from "./KullaniciEkleFormu";
 import stil from "./kullanicilar.module.css";
 
-export const metadata: Metadata = { title: "Kullanıcı Listesi – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Kullanıcı Listesi – Kaynak Kampüs" };
 
 const SAYFA_BOYUTU = 20;
 const ROLLER = ["admin", "koc", "ogrenci", "veli"] as const;

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import stil from "./dashboard.module.css";
 
-export const metadata: Metadata = { title: "Dashboard – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Dashboard – Kaynak Kampüs" };
 
 function yuzde(parca: number, toplam: number): number {
   if (toplam === 0) return 0;

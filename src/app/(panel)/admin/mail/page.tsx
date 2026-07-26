@@ -9,7 +9,7 @@ import MailYonetimi, {
   type KuyrukGorunum,
 } from "./MailYonetimi";
 
-export const metadata: Metadata = { title: "E-posta Yönetimi – Kaynak Akademi" };
+export const metadata: Metadata = { title: "E-posta Yönetimi – Kaynak Kampüs" };
 
 /** Date → "23.07.2026 18:45" (İstanbul) */
 function zamanStr(d: Date | null): string {

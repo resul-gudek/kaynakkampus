@@ -1,0 +1,147 @@
+/* ── PUBLIC SİTE BAŞLIĞI ──────────────────────────────────────────────
+   Geometri public/assets/site-header.css ile birebir aynıdır; farkı
+   renklerin globals.css token'larından gelmesidir (koyu tema desteği).
+   Statik sayfalar sh-* sınıflarını kullanmayı sürdürür. */
+
+.baslik {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.ic {
+  max-width: 1280px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; gap: 14px;
+  height: 68px;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 9px;
+  flex: 0 0 auto; white-space: nowrap;
+  font-weight: 800; font-size: 1.1rem; color: var(--bordo);
+  font-family: var(--font-poppins), "Poppins", sans-serif;
+}
+.logo img { width: 52px; height: 52px; object-fit: contain; }
+.logo span { color: var(--gul); }
+
+/* ── Masaüstü menü ────────────────────────────────────────────────── */
+.menu {
+  display: flex; align-items: center; gap: 1px;
+  flex: 1 1 auto; min-width: 0; justify-content: center;
+}
+.menu > a,
+.acilir > button {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 8px; border-radius: 8px;
+  font-family: inherit; font-size: .83rem; font-weight: 500;
+  color: var(--text); white-space: nowrap;
+  background: none; border: none; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.menu > a:hover,
+.acilir > button:hover { background: var(--tint); color: var(--bordo); }
+.menu > a.aktif { color: var(--bordo); font-weight: 700; }
+
+/* ── "Araçlar" açılır menüsü ──────────────────────────────────────── */
+.acilir { position: relative; }
+.acilir > button::after {
+  content: ''; width: 5px; height: 5px; margin-left: 1px;
+  border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor;
+  transform: rotate(45deg) translateY(-1px);
+  transition: transform .2s;
+}
+.acilir.acik > button { background: var(--tint); color: var(--bordo); }
+.acilir.acik > button::after { transform: rotate(-135deg) translateY(-1px); }
+
+.acilirMenu {
+  position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  min-width: 218px; padding: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: var(--shadow-lg);
+}
+.acilirMenu a {
+  display: block; padding: 10px 12px; border-radius: 9px;
+  font-size: .87rem; font-weight: 500; color: var(--text);
+  white-space: nowrap;
+  transition: background .2s, color .2s;
+}
+.acilirMenu a:hover { background: var(--tint); color: var(--bordo); }
+
+/* ── Sağdaki aksiyon butonları ────────────────────────────────────── */
+.eylemler { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }
+.dugme {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 15px; border-radius: 50px;
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  white-space: nowrap; cursor: pointer;
+  border: 2px solid transparent; transition: all .22s;
+}
+.cizgili { color: var(--bordo); border-color: var(--bordo); background: transparent; }
+.cizgili:hover { background: var(--bordo); color: var(--white); }
+.dolu { background: var(--bordo); color: var(--white); }
+.dolu:hover { background: var(--gul); }
+
+/* ── Hamburger ────────────────────────────────────────────────────── */
+.hamburger {
+  display: none; flex: 0 0 auto;
+  background: none; border: none; cursor: pointer;
+  padding: 8px; margin-left: auto; border-radius: 8px;
+}
+.hamburger span {
+  display: block; width: 24px; height: 2px; background: var(--bordo);
+  border-radius: 2px; transition: transform .28s, opacity .2s;
+}
+.hamburger span + span { margin-top: 5px; }
+.hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobil çekmece ────────────────────────────────────────────────── */
+/* NOT: .baslik'ta backdrop-filter var; sabit (fixed) konumlu çocuklar için
+   içeren blok oluşturduğundan çekmece absolute konumlanır. */
+.cekmece {
+  display: none;
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 199;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: 18px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+  max-height: calc(100dvh - 68px);
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex-direction: column; gap: 4px;
+}
+.cekmece.acik { display: flex; }
+.cekmece a {
+  padding: 13px 14px; border-radius: 11px;
+  font-size: 1rem; font-weight: 600; color: var(--text);
+}
+.cekmece a:active { background: var(--tint); }
+.cekmece a.aktif { color: var(--bordo); background: var(--tint); }
+.cekmeceEtiket {
+  padding: 16px 14px 6px; font-size: .72rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+}
+.cekmeceEylemler {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-top: 18px; padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.cekmeceEylemler .dugme { padding: 13px 20px; font-size: .92rem; }
+
+/* ── Kırılma noktaları (statik başlıkla aynı eşik) ────────────────── */
+@media (max-width: 1279px) {
+  .menu, .eylemler { display: none; }
+  .hamburger { display: block; }
+}
+@media (min-width: 1280px) {
+  .cekmece { display: none !important; }
+}
+@media (max-width: 400px) {
+  .logo { font-size: 1rem; }
+  .logo img { width: 44px; height: 44px; }
+}
+@media print {
+  .baslik { display: none !important; }
+}

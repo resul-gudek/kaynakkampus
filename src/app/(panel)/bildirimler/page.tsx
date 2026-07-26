@@ -6,7 +6,7 @@ import { ROL_ANASAYFA } from "@/lib/auth.config";
 import BildirimListe, { type BildirimGorunum } from "./BildirimListe";
 import stil from "./bildirimler.module.css";
 
-export const metadata: Metadata = { title: "Bildirimler – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Bildirimler – Kaynak Kampüs" };
 
 /* "2026-07-20 14:35" mantığının karşılığı: bugünse "Bugün · 14:35" */
 function zamanStr(t: Date): string {

@@ -30,7 +30,7 @@ export default function WaButonlar({ veri }: { veri: WaVeri }) {
     waGonder(
       num,
       `Merhaba ${ilkAd}! 👋\n\n` +
-        `📘 Kaynak Akademi – Ödev Hatırlatması\n\n` +
+        `📘 Kaynak Kampüs – Ödev Hatırlatması\n\n` +
         `Bekleyen ödevlerin:\n${satirlar}\n\n` +
         `Takıldığın yerde bana yazabilirsin. Başarılar! 💪\n${veri.kocAd}`
     );
@@ -48,7 +48,7 @@ export default function WaButonlar({ veri }: { veri: WaVeri }) {
     const oz = veri.ozel;
     const mesaj =
       `Sayın Velimiz, merhaba. 👋\n\n` +
-      `📊 Kaynak Akademi – ${veri.ad} Gelişim Raporu (${bugun()})\n\n` +
+      `📊 Kaynak Kampüs – ${veri.ad} Gelişim Raporu (${bugun()})\n\n` +
       `📘 Ödev tamamlama: %${veri.odevYuzde} (${veri.odevTamam}/${veri.odevToplam})\n` +
       `✅ Haftalık takip listesi: %${veri.takipYuzde} (${veri.takipTamam}/${veri.takipToplam})\n` +
       `🗺️ Yol haritası ilerlemesi: %${veri.yolYuzde} (${veri.yolTamamlanan}/${veri.yolToplam} adım · Seviye ${veri.seviye} · ${veri.xp} XP)\n` +

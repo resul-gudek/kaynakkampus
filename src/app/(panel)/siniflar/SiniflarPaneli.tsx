@@ -105,11 +105,11 @@ export default function SiniflarPaneli({ rol, siniflar, ogrenciler }: Props) {
 
       <div className="stat-grid">
         <div className="stat-kart">
-          <div className="stat-ikon" style={{ background: "#e8effe" }}>🏫</div>
+          <div className="stat-ikon" style={{ background: "#F3ECEE" }}>🏫</div>
           <div><b>{siniflar.length}</b><small>Aktif Sınıf</small></div>
         </div>
         <div className="stat-kart">
-          <div className="stat-ikon" style={{ background: "#fff7ed" }}>📅</div>
+          <div className="stat-ikon" style={{ background: "#FBF1F3" }}>📅</div>
           <div><b>{gelecekOturumlar}</b><small>Yaklaşan Ders</small></div>
         </div>
         <div className="stat-kart">

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Kıvılcım — Kaynak Kampüs maskotu">
+  <title>Kıvılcım</title>
+  <!-- Yavru anka. Yuz govdeden ayri katman: rig mantigi.
+       Ifade degistirmek icin sadece gozbebegi / kapak / gaga katmanlari degisir. -->
+  <defs>
+    <path id="tuy" d="M0 0C7-16 9-40 0-64C-9-40-7-16 0 0Z" fill="currentColor"/>
+  </defs>
+
+  <!-- kuyruk: govdenin arkasinda, kucuk boyutta anka kimligini tasir -->
+  <g transform="translate(100,158)">
+    <use href="#tuy" transform="rotate(156) scale(.4)" style="color:var(--gul, #C98792)"/>
+    <use href="#tuy" transform="rotate(180) scale(.5)" style="color:var(--gul-ac, #E3BFC5)"/>
+    <use href="#tuy" transform="rotate(204) scale(.4)" style="color:var(--gul, #C98792)"/>
+  </g>
+
+  <!-- kanatlar: govdenin arkasina saklanmis egik elipsler -->
+  <ellipse cx="58" cy="138" rx="28" ry="19" transform="rotate(-22 58 138)" fill="var(--gul, #C98792)"/>
+  <ellipse cx="142" cy="138" rx="28" ry="19" transform="rotate(22 142 138)" fill="var(--gul, #C98792)"/>
+
+  <!-- sorguc = kivilcim, simetrik uc alev -->
+  <g transform="translate(100,64)">
+    <use href="#tuy" transform="rotate(-30) scale(.46)" style="color:var(--gul, #C98792)"/>
+    <use href="#tuy" transform="rotate(0) scale(.62)" style="color:var(--gul, #C98792)"/>
+    <use href="#tuy" transform="rotate(30) scale(.46)" style="color:var(--gul, #C98792)"/>
+  </g>
+
+  <!-- govde: tek yuvarlak kutle -->
+  <path d="M100 64C129 64 152 87 152 116C152 148 129 170 100 170C71 170 48 148 48 116C48 87 71 64 100 64Z" fill="var(--bordo, #7A2035)"/>
+
+  <!-- ayaklar -->
+  <g fill="var(--gul-ac, #E3BFC5)">
+    <rect x="74" y="165" width="15" height="12" rx="6"/>
+    <rect x="111" y="165" width="15" height="12" rx="6"/>
+  </g>
+
+  <!-- ── YUZ KATMANI ── -->
+  <circle cx="81" cy="107" r="16" fill="var(--krem, #FAF7F5)"/>
+  <circle cx="119" cy="107" r="16" fill="var(--krem, #FAF7F5)"/>
+  <circle cx="83" cy="110" r="8" fill="var(--bordo-dk, #5E1728)"/>
+  <circle cx="121" cy="110" r="8" fill="var(--bordo-dk, #5E1728)"/>
+  <circle cx="79.4" cy="106.4" r="3.2" fill="#fff"/>
+  <circle cx="117.4" cy="106.4" r="3.2" fill="#fff"/>
+  <!-- gaga kapali -->
+  <path d="M91 126C95 125 105 125 109 126C107 134 104 139 100 139C96 139 93 134 91 126Z" fill="var(--gul-ac, #E3BFC5)"/>
+</svg>

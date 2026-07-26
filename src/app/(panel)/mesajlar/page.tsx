@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import MesajPaneli, { type Konusma, type MesajGorunum } from "./MesajPaneli";
 
-export const metadata: Metadata = { title: "Mesajlar – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Mesajlar – Kaynak Kampüs" };
 
 /* "Bugün · 14:35" / "12.07 · 09:10" biçimi (İstanbul) */
 function zamanStr(t: Date): string {

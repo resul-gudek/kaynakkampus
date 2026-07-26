@@ -12,9 +12,9 @@ import s from "./panel.module.css";
 const TK_AYLAR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 const TK_GUNADI = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const TK_TIPLER = [
-  { tip: "ozel", ad: "Özel Ders", renk: "#0ea5c9" },
-  { tip: "odev", ad: "Ödev", renk: "#f97316" },
-  { tip: "deneme", ad: "Deneme", renk: "#1a3c8f" },
+  { tip: "ozel", ad: "Özel Ders", renk: "#C98792" },
+  { tip: "odev", ad: "Ödev", renk: "#C98792" },
+  { tip: "deneme", ad: "Deneme", renk: "#7A2035" },
   { tip: "takip", ad: "Haftalık Görev", renk: "#16a34a" },
 ] as const;
 

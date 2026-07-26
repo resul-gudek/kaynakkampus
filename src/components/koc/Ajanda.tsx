@@ -16,9 +16,9 @@ const TK_AYLAR = [
 ];
 const TK_GUNADI = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const TK_TIPLER = [
-  { tip: "ozel" as const, ad: "Özel Ders", renk: "#0ea5c9" },
-  { tip: "odev" as const, ad: "Ödev", renk: "#f97316" },
-  { tip: "deneme" as const, ad: "Deneme", renk: "#1a3c8f" },
+  { tip: "ozel" as const, ad: "Özel Ders", renk: "#C98792" },
+  { tip: "odev" as const, ad: "Ödev", renk: "#C98792" },
+  { tip: "deneme" as const, ad: "Deneme", renk: "#7A2035" },
 ];
 const OLAY_SINIF = { ozel: s.tkOzel, odev: s.tkOdev, deneme: s.tkDeneme };
 const ROZET_SINIF = { tamam: s.durumTamam, bekliyor: s.durumBekliyor, talep: s.durumTalep };

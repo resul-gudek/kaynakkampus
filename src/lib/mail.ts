@@ -339,7 +339,7 @@ export async function testMailGonder(alici: string): Promise<{ tamam?: boolean; 
     await tasiyiciOlustur(ayar).sendMail({
       from: gonderenBasligi(ayar),
       to: alici,
-      subject: "Kaynak Akademi — Test Maili ✅",
+      subject: "Kaynak Kampüs — Test Maili ✅",
       html: `<p>Merhaba,</p><p>Bu bir test mailidir. SMTP ayarlarınız doğru çalışıyor. 🎉</p>`,
       text: "Merhaba,\n\nBu bir test mailidir. SMTP ayarlarınız doğru çalışıyor.",
     });

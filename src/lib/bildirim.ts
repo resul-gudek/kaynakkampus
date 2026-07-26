@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 
 export interface BildirimHedef {
-  tur: "ozel" | "odev" | "sinif" | "oturum";
+  tur: "ozel" | "odev" | "sinif" | "oturum" | "test" | "video";
   ogrenciId: string;
   kayitId: string;
 }

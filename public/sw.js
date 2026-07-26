@@ -1,4 +1,4 @@
-/* Kaynak Akademi — Web Push service worker.
+/* Kaynak Kampüs — Web Push service worker.
    Sunucudan gelen push olayında bildirim gösterir; tıklanınca ilgili
    sayfayı açar/öne getirir. Yükü (payload) src/lib/push.ts üretir. */
 
@@ -10,13 +10,13 @@ self.addEventListener("push", (event) => {
   try {
     veri = event.data ? event.data.json() : {};
   } catch {
-    veri = { baslik: "Kaynak Akademi", govde: event.data ? event.data.text() : "" };
+    veri = { baslik: "Kaynak Kampüs", govde: event.data ? event.data.text() : "" };
   }
-  const baslik = veri.baslik || "Kaynak Akademi";
+  const baslik = veri.baslik || "Kaynak Kampüs";
   const secenekler = {
     body: veri.govde || "",
-    icon: "/assets/logo.png",
-    badge: "/assets/logo.png",
+    icon: "/assets/kaynak-kampus-logo.png",
+    badge: "/assets/kaynak-kampus-logo-192.png",
     tag: veri.etiket || "genel",
     renotify: true,
     data: { url: veri.url || "/" },

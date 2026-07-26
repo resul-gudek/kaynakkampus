@@ -67,8 +67,8 @@
   font-size: .7rem; font-weight: 700;
 }
 .rolKoc { composes: rolEtiket; background: var(--tint); color: var(--blue); }
-.rolOgrenci { composes: rolEtiket; background: rgba(14,165,201,.12); color: var(--teal); }
-.rolAdmin { composes: rolEtiket; background: rgba(249,115,22,.12); color: var(--orange); }
+.rolOgrenci { composes: rolEtiket; background: rgba(201,135,146,.12); color: var(--teal); }
+.rolAdmin { composes: rolEtiket; background: rgba(201,135,146,.12); color: var(--orange); }
 .sonGorulme { margin-left: auto; color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .yenileBilgi { color: var(--muted); font-size: .74rem; font-weight: 500; }
 

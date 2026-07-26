@@ -9,12 +9,15 @@ import PushKur from "@/components/panel/PushKur";
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const kullanici = await aktifKullanici();
   const rol = kullanici.rol as Rol;
-  const bildirimliRol = rol === "koc" || rol === "ogrenci";
+  /* Bildirim: koç, öğrenci ve yönetici (yöneticiye ders değerlendirmeleri düşer).
+     Mesajlaşma ve cihaz push'u yalnızca koç/öğrenci akışında. */
+  const bildirimliRol = rol === "koc" || rol === "ogrenci" || rol === "admin";
+  const dersRolu = rol === "koc" || rol === "ogrenci";
   const [okunmamis, okunmamisMesaj] = await Promise.all([
     bildirimliRol
       ? prisma.bildirim.count({ where: { aliciId: kullanici.id, okundu: false } })
       : Promise.resolve(0),
-    bildirimliRol
+    dersRolu
       ? prisma.mesaj.count({ where: { aliciId: kullanici.id, okundu: false } })
       : Promise.resolve(0),
   ]);
@@ -33,7 +36,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       cikisAction={cikisYap}
     >
       {children}
-      {bildirimliRol && <PushKur />}
+      {dersRolu && <PushKur />}
     </PanelKabuk>
   );
 }

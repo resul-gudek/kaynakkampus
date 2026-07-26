@@ -5,6 +5,7 @@
 import { useOptimistic, useRef, useState, useTransition } from "react";
 import { yolTamamla } from "@/actions/yol";
 import { xpOzet, yolDurumlu } from "@/lib/hesap";
+import BosDurum from "@/components/maskot/BosDurum";
 import type { YolKaydi } from "./tipler";
 import s from "./panel.module.css";
 
@@ -132,9 +133,11 @@ export default function YolHaritasi({ adimlar }: { adimlar: YolKaydi[] }) {
           ))}
         </div>
       ) : (
-        <p className={s["bos-mesaj"]}>
-          Öğretmenin henüz yol haritası oluşturmadı. Hazır olunca adımların burada görünecek. 🗺️
-        </p>
+        <BosDurum
+          ifade="bakisSag"
+          baslik="Yol haritan henüz hazır değil."
+          metin="Öğretmenin adımları oluşturunca ilerlemen burada görünecek."
+        />
       )}
     </section>
   );

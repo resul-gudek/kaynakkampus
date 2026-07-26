@@ -5,19 +5,30 @@
 import { useState, useTransition, type FormEvent } from "react";
 import { ozelDersEkle, ozelDersGuncelle, ozelDersSil } from "@/actions/ozelders";
 import { bugun, isoTarih, ozelDersOzet, tarihStr } from "@/lib/hesap";
+import DegerlendirmeFormu from "@/components/degerlendirme/DegerlendirmeFormu";
+import DegerlendirmeGoster from "@/components/degerlendirme/DegerlendirmeGoster";
+import type { DegerlendirmeS } from "@/components/degerlendirme/alanlar";
+import dg from "@/components/degerlendirme/degerlendirme.module.css";
 import type { OzelDersKaydi } from "./tipler";
 import s from "./panel.module.css";
+
+/* Gizlilik: öğrenci yalnızca kendi değerlendirmesini görür; öğretmenin
+   öğrenci hakkındaki değerlendirmesi bu bileşene hiç gelmez. */
+type DegerlendirmeIkili = { benim?: DegerlendirmeS };
 
 export default function OzelDersBolumu({
   ogrenciId,
   kocVar,
   dersler,
+  degerlendirmeler,
 }: {
   ogrenciId: string;
   kocVar: boolean;
   dersler: OzelDersKaydi[];
+  degerlendirmeler: Record<string, DegerlendirmeIkili>;
 }) {
   const [formAcik, setFormAcik] = useState(false);
+  const [degAcik, setDegAcik] = useState<string | null>(null);
   const [bekliyor, startTransition] = useTransition();
 
   const liste = dersler.filter((x) => x.durum !== "iptal");
@@ -205,6 +216,49 @@ export default function OzelDersBolumu({
                       </span>
                     )}
                   </div>
+                  {x.durum === "yapildi" &&
+                    (() => {
+                      const deg = degerlendirmeler[x.id] ?? {};
+                      const acik = degAcik === x.id;
+                      return (
+                        <>
+                          <div className={dg.blok}>
+                            <div className={dg.blokBas}>
+                              <b>⭐ Öğretmeni değerlendirmen</b>
+                              {deg.benim && !acik && (
+                                <button
+                                  className="btn btn-outline btn-kucuk"
+                                  onClick={() => setDegAcik(x.id)}
+                                >
+                                  ✏️ Düzenle
+                                </button>
+                              )}
+                            </div>
+                            {acik ? (
+                              <DegerlendirmeFormu
+                                ozelDersId={x.id}
+                                yon="ogrenciKoc"
+                                mevcut={deg.benim}
+                                onKapat={() => setDegAcik(null)}
+                              />
+                            ) : deg.benim ? (
+                              <DegerlendirmeGoster deger={deg.benim} />
+                            ) : (
+                              <button
+                                className="btn btn-primary btn-kucuk"
+                                onClick={() => setDegAcik(x.id)}
+                              >
+                                ⭐ Öğretmeni Değerlendir
+                              </button>
+                            )}
+                            <small className={dg.gizlilik}>
+                              🔒 Değerlendirmen öğretmenine gösterilmez; yalnızca okul yönetimi
+                              görür. Bu yüzden rahatça ve dürüstçe yazabilirsin.
+                            </small>
+                          </div>
+                        </>
+                      );
+                    })()}
                   {oneride && (
                     <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
                       <button

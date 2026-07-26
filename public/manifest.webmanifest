@@ -1,13 +1,13 @@
 {
-  "name": "Kaynak Akademi",
-  "short_name": "Kaynak Akademi",
+  "name": "Kaynak Kampüs",
+  "short_name": "Kaynak Kampüs",
   "description": "Koçluk ve takip sistemi",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0c1a3a",
-  "theme_color": "#18377f",
+  "background_color": "#241018",
+  "theme_color": "#7A2035",
   "icons": [
-    { "src": "/assets/logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    { "src": "/assets/kaynak-kampus-logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/kaynak-kampus-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ]
 }

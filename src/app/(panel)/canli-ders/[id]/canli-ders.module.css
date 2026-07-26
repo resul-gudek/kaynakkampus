@@ -4,7 +4,7 @@
 .hero {
   display:flex; align-items:center; gap:20px; padding:26px; margin:18px 0;
   border-radius:20px; color:#fff;
-  background:linear-gradient(135deg,#122a6e,#1a3c8f 55%,#0ea5c9);
+  background:linear-gradient(135deg,#5E1728,#7A2035 55%,#C98792);
   box-shadow:var(--shadow-lg);
 }
 .heroIkon { width:72px; height:72px; display:grid; place-items:center; flex:none; border-radius:18px; background:rgba(255,255,255,.14); font-size:2rem; }

@@ -13,6 +13,8 @@ import {
   yolDurumlu,
   zayifKonular,
 } from "@/lib/hesap";
+import { zamanMetni } from "@/lib/sureli-test";
+import { suresiGecenleriKapat } from "@/lib/sureli-test-sunucu";
 import OgrenciFormlari from "@/components/koc/OgrenciFormlari";
 import WaButonlar from "@/components/koc/WaButonlar";
 import VeliRaporButonu from "@/components/koc/VeliRaporButonu";
@@ -22,10 +24,13 @@ import TakipSekmesi from "@/components/koc/TakipSekmesi";
 import YolSekmesi from "@/components/koc/YolSekmesi";
 import DenemeSekmesi from "@/components/koc/DenemeSekmesi";
 import OzelSekmesi from "@/components/koc/OzelSekmesi";
+import TestSonuclari from "@/components/sureli-test/TestSonuclari";
+import type { KocSonucS } from "@/components/sureli-test/tipler";
 import type { WaVeri } from "@/components/koc/tipler";
+import { degerlendirmeSerile, type DegerlendirmeS } from "@/components/degerlendirme/alanlar";
 import s from "@/components/koc/koc.module.css";
 
-export const metadata: Metadata = { title: "Öğrencilerim – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Öğrencilerim – Kaynak Kampüs" };
 
 /* Derin bağlantı sözleşmesi: ?ogrenci=<id>&sekme=<...>&kayit=<id>
    Legacy sekme adları (odev/deneme) da kabul edilir. */
@@ -35,6 +40,7 @@ const SEKMELER = [
   { anahtar: "takip", etiket: "✅ Takip Listesi" },
   { anahtar: "yol", etiket: "🗺️ Yol Haritası" },
   { anahtar: "denemeler", etiket: "📈 Deneme Sonuçları" },
+  { anahtar: "testler", etiket: "⏱️ Süreli Testler" },
   { anahtar: "ozel", etiket: "🎓 Özel Dersler" },
 ] as const;
 const SEKME_ES: Record<string, string> = { odev: "odevler", deneme: "denemeler" };
@@ -56,16 +62,38 @@ export default async function OgrencilerSayfasi({
   const koc = await aktifKullanici("koc");
   const sp = await searchParams;
 
+  // Süresi geçmiş test oturumları sonuca dönüşsün (aşağıdaki sorgu nihai durumu okur)
+  await suresiGecenleriKapat({ test: { kocId: koc.id } });
+
   const [ogrenciler, atanmamis] = await Promise.all([
     prisma.kullanici.findMany({
       where: { rol: "ogrenci", kocId: koc.id },
       orderBy: { ad: "asc" },
       include: {
-        odevlerOgrenci: { orderBy: { sonTarih: "asc" } },
+        odevlerOgrenci: {
+          orderBy: { sonTarih: "asc" },
+          include: { kanitlar: { select: { id: true, ad: true }, orderBy: { olusturma: "asc" } } },
+        },
         takipOgrenci: true,
         denemeler: { include: { dersler: true }, orderBy: [{ tarih: "asc" }, { id: "asc" }] },
         yolOgrenci: { orderBy: { sira: "asc" } },
-        ozelDersOgrenci: { orderBy: [{ tarih: "asc" }, { saat: "asc" }] },
+        ozelDersOgrenci: {
+          orderBy: [{ tarih: "asc" }, { saat: "asc" }],
+          // Gizlilik: öğretmen yalnızca kendi yazdığı değerlendirmeyi görür.
+          // Öğrencinin öğretmen hakkındaki değerlendirmesi (yon="ogrenciKoc")
+          // bu yüzeye hiç taşınmaz — yalnızca yönetim görür.
+          include: { degerlendirmeler: { where: { yon: "kocOgrenci" } } },
+        },
+        // Süreli test oturumları — yalnız bu öğretmenin testleri
+        testOturumlari: {
+          where: { test: { kocId: koc.id } },
+          orderBy: { baslangic: "desc" },
+          include: {
+            test: {
+              select: { id: true, ad: true, ders: true, konu: true, soruSayisi: true, sure: true },
+            },
+          },
+        },
         veli: { select: { ad: true, eposta: true } },
       },
     }),
@@ -102,6 +130,34 @@ export default async function OgrencilerSayfasi({
     const sonDeneme = secili.denemeler.length
       ? secili.denemeler[secili.denemeler.length - 1]
       : null;
+
+    // Süreli test sonuçları (öğrenci kolonu gizli tabloya beslenir)
+    const testSonuclari: KocSonucS[] = secili.testOturumlari.map((o) => ({
+      oturumId: o.id,
+      ogrenciId: o.ogrenciId,
+      ogrenciAd: secili.ad,
+      testId: o.test.id,
+      testAd: o.test.ad,
+      ders: o.test.ders,
+      konu: o.test.konu,
+      soruSayisi: o.test.soruSayisi,
+      sure: o.test.sure,
+      durum: o.durum as KocSonucS["durum"],
+      dogru: o.dogru,
+      yanlis: o.yanlis,
+      bos: o.bos,
+      yuzde: o.yuzde,
+      gecenSure: o.gecenSure ?? 0,
+      bitis: zamanMetni(o.bitis),
+    }));
+
+    // Özel ders başına yalnızca "benim" (koç→öğrenci) değerlendirme
+    const ozelDeg: Record<string, { benim?: DegerlendirmeS }> = {};
+    for (const d of secili.ozelDersOgrenci) {
+      for (const dd of d.degerlendirmeler) {
+        (ozelDeg[d.id] ??= {}).benim = degerlendirmeSerile(dd);
+      }
+    }
 
     const waVeri: WaVeri = {
       ogrenciId: secili.id,
@@ -188,6 +244,7 @@ export default async function OgrencilerSayfasi({
               soruSayisi: x.soruSayisi,
               sonTarih: isoTarih(x.sonTarih),
               durum: x.durum,
+              kanitlar: x.kanitlar,
             }))}
           />
         )}
@@ -236,6 +293,14 @@ export default async function OgrencilerSayfasi({
             }))}
           />
         )}
+        {sekme === "testler" && (
+          <TestSonuclari
+            sonuclar={testSonuclari}
+            tekOgrenci
+            vurguId={sp.kayit}
+            baslik={`⏱️ ${secili.ad} – Süreli Test Sonuçları`}
+          />
+        )}
         {sekme === "ozel" && (
           <OzelSekmesi
             ogrenciId={secili.id}
@@ -243,6 +308,7 @@ export default async function OgrencilerSayfasi({
             telefon={secili.telefon}
             kocAd={koc.ad}
             vurguId={sp.kayit}
+            degerlendirmeler={ozelDeg}
             ozet={{
               toplam: ozelOz.toplam,
               yapilan: ozelOz.yapilan,

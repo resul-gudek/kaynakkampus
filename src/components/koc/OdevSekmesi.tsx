@@ -6,6 +6,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { tarihStr } from "@/lib/hesap";
+import { kanitUrl } from "@/lib/odev-kanit";
 import { odevEkle, odevSil, odevDurum } from "@/actions/odev";
 import { useVurgu } from "./vurgu";
 import type { OdevS } from "./tipler";
@@ -122,7 +123,26 @@ export default function OdevSekmesi({ ogrenciId, odevler, vurguId }: Props) {
                 {o.kaynak && <span className="tag">📕 {o.kaynak}</span>}
                 {!!o.soruSayisi && <span className="tag">{o.soruSayisi} soru</span>}
                 <span className="tag">📅 Son: {tarihStr(o.sonTarih) || "—"}</span>
+                {!!o.kanitlar.length && <span className="tag">📷 {o.kanitlar.length} fotoğraf</span>}
               </div>
+              {!!o.kanitlar.length && (
+                <div className={s.kanitSerit}>
+                  {o.kanitlar.map((k) => (
+                    <a
+                      key={k.id}
+                      className={s.kanitKart}
+                      href={kanitUrl(k.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`${k.ad} — büyütmek için tıkla`}
+                    >
+                      {/* Kanıtlar public dizinde değil; API'den akar → next/image kullanılmaz */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={kanitUrl(k.id)} alt={k.ad} loading="lazy" />
+                    </a>
+                  ))}
+                </div>
+              )}
               <div className={s.satirButonlar}>
                 <button
                   type="button"

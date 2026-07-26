@@ -4,7 +4,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import KayitOdagi from "@/components/ogrenci/KayitOdagi";
 import OdevListesi from "@/components/ogrenci/OdevListesi";
 
-export const metadata: Metadata = { title: "Ödevlerim – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Ödevlerim – Kaynak Kampüs" };
 
 export default async function OdevlerSayfasi({
   searchParams,
@@ -13,7 +13,12 @@ export default async function OdevlerSayfasi({
 }) {
   const ogrenci = await aktifKullanici("ogrenci");
   const sp = await searchParams;
-  const odevler = await prisma.odev.findMany({ where: { ogrenciId: ogrenci.id } });
+  const odevler = await prisma.odev.findMany({
+    where: { ogrenciId: ogrenci.id },
+    include: {
+      kanitlar: { select: { id: true, ad: true }, orderBy: { olusturma: "asc" } },
+    },
+  });
 
   return (
     <main className="container">

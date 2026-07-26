@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import Takvim from "@/components/ogrenci/Takvim";
 
-export const metadata: Metadata = { title: "Takvimim – Kaynak Akademi" };
+export const metadata: Metadata = { title: "Takvimim – Kaynak Kampüs" };
 
 export default async function TakvimSayfasi() {
   const ogrenci = await aktifKullanici("ogrenci");
