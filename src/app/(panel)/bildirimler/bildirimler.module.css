@@ -42,6 +42,56 @@
 .silBtn:hover { background: #b91c1c; color: #fff; }
 /* Boş durum artık @/components/maskot/BosDurum ile çiziliyor (Kıvılcım). */
 
+/* ── Bildirim ayarları (kullanıcının kendi tercihleri) ── */
+.ayarBolum {
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+  margin: 20px 0 0; overflow: hidden;
+}
+.ayarBaslik {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 20px; border: none; background: none; cursor: pointer;
+  font-family: inherit; font-size: .92rem; font-weight: 700; color: var(--text);
+  text-align: left;
+}
+.ayarBaslik:hover { background: var(--bg-soft); }
+.ayarOzet { font-size: .78rem; font-weight: 600; color: var(--muted); flex-shrink: 0; }
+.ayarGovde { padding: 4px 20px 20px; border-top: 1px solid var(--border); }
+.ayarNot { font-size: .8rem; color: var(--muted); line-height: 1.55; margin: 14px 0; }
+.ayarHata {
+  font-size: .8rem; color: #b91c1c; background: #fef2f2; border-radius: 10px;
+  padding: 10px 12px; margin: 10px 0;
+}
+.ayarAltBaslik { font-size: .86rem; font-weight: 700; margin: 22px 0 6px; }
+.ayarListe, .cihazListe { list-style: none; margin: 0; padding: 0; }
+
+.ayarSatir, .cihazSatir {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.ayarListe .ayarSatir:last-child, .cihazSatir:last-child { border-bottom: none; }
+.ayarMetin { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ayarMetin b { font-size: .86rem; font-weight: 650; }
+.ayarMetin span { font-size: .76rem; color: var(--muted); line-height: 1.45; }
+
+/* Anahtar (switch) — role="switch" düğmesi */
+.anahtar {
+  flex-shrink: 0; width: 46px; height: 26px; border-radius: 50px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--bg-soft); padding: 2px;
+  display: flex; align-items: center; transition: background .18s, border-color .18s;
+}
+.anahtarAcik { composes: anahtar; background: var(--teal, #0d9488); border-color: transparent; }
+.anahtarTopu {
+  width: 20px; height: 20px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .18s;
+}
+.anahtarAcik .anahtarTopu { transform: translateX(20px); }
+.anahtar:focus-visible, .anahtarAcik:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  .ayarGovde { padding: 4px 14px 18px; }
+  .ayarBaslik { padding: 14px; }
+}
+
 .panelBas { padding: 36px 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .panelBas h1 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; }
 .panelBas h1 span { color: var(--orange); }

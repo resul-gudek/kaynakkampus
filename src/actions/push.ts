@@ -17,7 +17,7 @@ const AbonelikSemasi = z.object({
 /** İstemciden gelen push aboneliğini oturum sahibine kaydeder. */
 export async function pushAboneOl(girdi: unknown): Promise<EylemSonuc> {
   try {
-    const kim = await oturumGerekli("koc", "ogrenci");
+    const kim = await oturumGerekli("koc", "ogrenci", "admin");
     const veri = AbonelikSemasi.parse(girdi);
     await prisma.$transaction([
       prisma.pushAbonelik.deleteMany({ where: { endpoint: veri.endpoint } }),
@@ -40,7 +40,7 @@ export async function pushAboneOl(girdi: unknown): Promise<EylemSonuc> {
 /** Cihaz aboneliğini kaldırır (kullanıcı bildirimleri kapatınca). */
 export async function pushAbonelikSil(endpoint: string): Promise<EylemSonuc> {
   try {
-    const kim = await oturumGerekli("koc", "ogrenci");
+    const kim = await oturumGerekli("koc", "ogrenci", "admin");
     await prisma.pushAbonelik.deleteMany({ where: { endpoint, kullaniciId: kim.id } });
     return { tamam: true };
   } catch (e) {

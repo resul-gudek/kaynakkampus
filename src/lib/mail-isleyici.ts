@@ -26,10 +26,14 @@ export function mailIsleyiciBaslat(): void {
       const { veliRaporlariKuyrukla } = await import("@/lib/veli-rapor");
       const { dersHatirlatmalariniUret } = await import("@/lib/ders-hatirlatma");
       const { mulakatHatirlatmalariniKuyrukla } = await import("@/lib/mulakat-hatirlatma");
+      const { pushKuyrugunuIsle } = await import("@/lib/push-kuyruk");
       await dersHatirlatmalariKuyrukla();
       await veliRaporlariKuyrukla();
-      await dersHatirlatmalariniUret(); // online ders "derse kala" bildirimi + push
+      await dersHatirlatmalariniUret(); // online ders "derse kala" uygulama içi bildirimi
       await mulakatHatirlatmalariniKuyrukla(); // mülakattan 1 gün / 1 saat önce hatırlatma
+      // Bildirimlerin cihaz push'u: bu tur içinde üretilenler dahil, hepsi
+      // commit sonrası buradan gönderilir (kullanıcı tercihlerine göre).
+      await pushKuyrugunuIsle();
       const sonuc = await kuyrukIsle();
       if (sonuc.gonderilen || sonuc.hatali) log.info(sonuc, "kuyruk turu tamamlandı");
     } catch (e) {

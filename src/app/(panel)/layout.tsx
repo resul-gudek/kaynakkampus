@@ -10,7 +10,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   const kullanici = await aktifKullanici();
   const rol = kullanici.rol as Rol;
   /* Bildirim: koç, öğrenci ve yönetici (yöneticiye ders değerlendirmeleri düşer).
-     Mesajlaşma ve cihaz push'u yalnızca koç/öğrenci akışında. */
+     Cihaz push'u bildirim alan her rolde açıktır; mesajlaşma yalnız koç/öğrenci. */
   const bildirimliRol = rol === "koc" || rol === "ogrenci" || rol === "admin";
   const dersRolu = rol === "koc" || rol === "ogrenci";
   const [okunmamis, okunmamisMesaj] = await Promise.all([
@@ -36,7 +36,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       cikisAction={cikisYap}
     >
       {children}
-      {dersRolu && <PushKur />}
+      {bildirimliRol && <PushKur />}
     </PanelKabuk>
   );
 }

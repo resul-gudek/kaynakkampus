@@ -63,6 +63,7 @@ model Kullanici {
   mesajGonderilen Mesaj[]          @relation("MesajGonderen")
   mesajAlinan     Mesaj[]          @relation("MesajAlici")
   pushAbonelikleri PushAbonelik[]
+  bildirimTercihleri BildirimTercih[]
   sureliTestler   SureliTest[]       @relation("SureliTestKoc")
   testAtamalari   SureliTestAtama[]  @relation("SureliTestAtamaOgrenci")
   testOturumlari  SureliTestOturum[] @relation("SureliTestOturumOgrenci")
@@ -85,6 +86,21 @@ model PushAbonelik {
   olusturma   DateTime  @default(now())
 
   @@index([kullaniciId])
+}
+
+// Kullanıcının kendi bildirim tercihleri. Satır YOKSA o tür AÇIK sayılır
+// (opt-out) — böylece yeni bir tür eklendiğinde kimse bildirimsiz kalmaz.
+// Uygulama içi bildirim her zaman yazılır (kayıt/denetim izi); tercih yalnız
+// cihaza gidecek push'u yönetir. Türler: bkz. src/lib/bildirim-tercih.ts
+model BildirimTercih {
+  id          String    @id @default(cuid())
+  kullaniciId String
+  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tur         String // "odev" | "oturum" | "sinif" | "ozel" | "test" | "video" | "genel"
+  push        Boolean   @default(true)
+  guncelleme  DateTime  @default(now()) @updatedAt
+
+  @@unique([kullaniciId, tur])
 }
 
 // ── Mesajlaşma ───────────────────────────────────────────────
@@ -503,7 +519,13 @@ model Bildirim {
   tarih          DateTime  @default(now())
   okundu         Boolean   @default(false)
 
+  // Cihaz push'u durumu: bildirim transaction içinde yazılır, push'u
+  // mail işleyicisi commit sonrası kuyruktan gönderir (bkz. lib/push-kuyruk.ts).
+  // "bekliyor" | "gonderildi" | "atlandi" (tercih kapalı / abonelik yok / süre aştı)
+  pushDurum String @default("bekliyor")
+
   @@index([aliciId, okundu])
+  @@index([pushDurum, tarih])
 }
 
 // ── Ön mülakat / başvuru sistemi ─────────────────────────────

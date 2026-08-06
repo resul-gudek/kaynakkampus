@@ -3,8 +3,10 @@
 
    Mail işleyicisi her turda çağırır. Başlamamış, planlı, henüz
    hatırlatılmamış dersler için, dersin (sınıf override'ı yoksa global)
-   hatırlatma penceresine girenlere hem uygulama içi bildirim hem de
-   (VAPID varsa) push gönderir; sonra ders `hatirlatildi=true` işaretlenir.
+   hatırlatma penceresine girenlere uygulama içi bildirim yazar; sonra ders
+   `hatirlatildi=true` işaretlenir. Cihaz push'unu bu dosya GÖNDERMEZ —
+   bildirimler pushDurum="bekliyor" ile yazılır ve gönderimi push kuyruğu
+   yapar (lib/push-kuyruk.ts), böylece kullanıcı tercihleri uygulanır.
 
    Alıcılar: sınıf dersinde öğrenciler + öğretmen; özel ders oturumunda
    öğrenci + koç.
@@ -13,7 +15,6 @@
 import { prisma } from "@/lib/prisma";
 import { bildirimEkle } from "@/lib/bildirim";
 import { mailAyarGetir } from "@/lib/mail";
-import { pushGonderCoklu } from "@/lib/push";
 import { logcu } from "@/lib/log";
 
 const log = logcu("ders-hatirlatma");
@@ -83,7 +84,6 @@ export async function dersHatirlatmalariniUret(): Promise<number> {
     const saat = saatBicim.format(o.baslangic);
     const sinifAd = o.sinif?.ad ? o.sinif.ad + ": " : "";
     const metin = `${sinifAd}${o.baslik} canlı dersi ${lead} dk içinde (${saat}) başlıyor.`;
-    const url = `/canli-ders/${o.id}`;
 
     // Uygulama içi bildirim + hatirlatildi işareti tek transaction'da
     await prisma.$transaction(async (tx) => {
@@ -97,14 +97,9 @@ export async function dersHatirlatmalariniUret(): Promise<number> {
       await tx.dersOturumu.update({ where: { id: o.id }, data: { hatirlatildi: true } });
     });
 
-    // Push (ağ işi; transaction dışında, en iyi çaba)
-    await pushGonderCoklu(alicilar, {
-      baslik: "Canlı ders yaklaşıyor ⏰",
-      govde: metin,
-      url,
-      etiket: `oturum-${o.id}`,
-    });
-
+    // Cihaz push'u burada GÖNDERİLMEZ: yukarıdaki bildirimler
+    // pushDurum="bekliyor" ile yazıldı, gönderimi push kuyruğu yapar
+    // (bkz. lib/push-kuyruk.ts) — kullanıcı tercihleri orada uygulanır.
     toplam++;
   }
 
