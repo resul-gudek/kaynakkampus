@@ -6,8 +6,13 @@
 }
 
 .ustSatir { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:28px 0 14px; }
-.geri { color:var(--blue); font-size:.84rem; font-weight:700; }
-.geri:hover { text-decoration:underline; }
+/* Dokunma hedefi: yazı yüksekliğinde kalmasın */
+.geri {
+  display:inline-flex; align-items:center; min-height:32px;
+  padding:6px 10px; margin-left:-10px; border-radius:8px;
+  color:var(--blue); font-size:.84rem; font-weight:700;
+}
+.geri:hover { text-decoration:underline; background:var(--tint); }
 .durumRozet { font-size:.7rem; font-weight:800; padding:5px 12px; border-radius:50px; background:var(--tint); color:var(--muted); }
 .durumRozet.izlenmedi { color:var(--bordo); }
 .durumRozet.izleniyor { color:#b45309; }
@@ -30,7 +35,12 @@
   display:flex; align-items:center; gap:10px; margin-top:10px; padding:9px 14px;
   border-radius:10px; background:var(--tint); color:var(--blue); font-size:.78rem; font-weight:600;
 }
-.devam button { margin-left:auto; border:0; background:none; color:var(--blue); font-size:.74rem; font-weight:700; cursor:pointer; text-decoration:underline; }
+/* Metin görünümlü buton — dokunma hedefi için kendi dolgusunu taşır */
+.devam button {
+  margin-left:auto; border:0; background:none; color:var(--blue); font-size:.74rem;
+  font-weight:700; cursor:pointer; text-decoration:underline; font-family:inherit;
+  padding:6px 9px; border-radius:8px; min-height:32px;
+}
 
 /* ── Video bilgileri ── */
 .bilgi { padding:20px 22px; margin-top:18px; }

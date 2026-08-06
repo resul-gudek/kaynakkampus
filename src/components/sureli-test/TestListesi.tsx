@@ -2,7 +2,10 @@
 
 /* ⏱️ Süreli Testlerim — öğrencinin test listesi.
    "Başlat" sunucuda oturum açar (süre o an işlemeye başlar) ve çözüm
-   ekranına götürür; yarım kalan test "Devam Et" ile aynı oturumu sürdürür. */
+   ekranına götürür; yarım kalan test "Devam Et" ile aynı oturumu sürdürür.
+
+   Süre geri alınamadığı için başlatma öncesi onay penceresi (TestBaslatOnay)
+   gösterilir; başlatma isteği de o pencerede beklenir. */
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -11,6 +14,7 @@ import { bugun, tarihStr } from "@/lib/hesap";
 import { sureEtiketi, sureMetni } from "@/lib/sureli-test";
 import { testBaslat } from "@/actions/sureli-test";
 import BosDurum from "@/components/maskot/BosDurum";
+import TestBaslatOnay from "./TestBaslatOnay";
 import { TEST_DURUM_ETIKETLERI, type TestKarti } from "./tipler";
 import s from "./test.module.css";
 
@@ -25,7 +29,10 @@ export default function TestListesi({
   vurguId?: string;
 }) {
   const router = useRouter();
-  const [bekleyen, setBekleyen] = useState("");
+  /** Onay penceresinde bekleyen test; null → pencere kapalı */
+  const [onaylanan, setOnaylanan] = useState<TestKarti | null>(null);
+  const [basliyor, setBasliyor] = useState(false);
+  const [hata, setHata] = useState("");
   const [, baslat] = useTransition();
 
   const liste = [...testler].sort(
@@ -34,22 +41,32 @@ export default function TestListesi({
   const cozulmeyen = liste.filter((t) => t.durum === "" || t.durum === "basladi").length;
   const simdi = bugun();
 
-  function testeBasla(t: TestKarti) {
-    const onay = confirm(
-      `"${t.ad}" testi başlatılıyor.\n\n` +
-        `${t.soruSayisi} soru · ${sureEtiketi(t.sure)} süre\n\n` +
-        "Süre başladıktan sonra durmaz; süre dolduğunda test otomatik tamamlanır. Başlamak istiyor musun?"
-    );
-    if (!onay) return;
-    setBekleyen(t.testId);
+  function onaySor(t: TestKarti) {
+    setHata("");
+    setOnaylanan(t);
+  }
+
+  function onayKapat() {
+    setOnaylanan(null);
+    setHata("");
+    // Hata gösterildiyse liste eskimiş olabilir (test kapanmış/atama kalkmış)
+    if (hata) router.refresh();
+  }
+
+  function testeBasla() {
+    const t = onaylanan;
+    if (!t || basliyor) return;
+    setBasliyor(true);
+    setHata("");
     baslat(async () => {
       const sonuc = await testBaslat(t.testId);
-      setBekleyen("");
       if (sonuc.hata) {
-        alert(sonuc.hata);
-        router.refresh();
+        // Pencere açık kalır: öğrenci hatayı okuyup vazgeçer ya da tekrar dener
+        setBasliyor(false);
+        setHata(sonuc.hata);
         return;
       }
+      // basliyor açık bırakılır: yönlendirme bitene dek pencere kilitli kalsın
       router.push(`/ogrenci/testler/${sonuc.oturumId}`);
     });
   }
@@ -128,10 +145,12 @@ export default function TestListesi({
                     <button
                       type="button"
                       className="btn btn-primary btn-kucuk"
-                      disabled={bekleyen === t.testId}
-                      onClick={() => testeBasla(t)}
+                      disabled={basliyor && onaylanan?.testId === t.testId}
+                      onClick={() => onaySor(t)}
                     >
-                      {bekleyen === t.testId ? "Başlatılıyor…" : "▶ Testi Başlat"}
+                      {basliyor && onaylanan?.testId === t.testId
+                        ? "Başlatılıyor…"
+                        : "▶ Testi Başlat"}
                     </button>
                   )}
                 </div>
@@ -144,6 +163,16 @@ export default function TestListesi({
           ifade="sakin"
           baslik="Henüz süreli testin yok."
           metin="Öğretmenin test atadığında burada görünecek."
+        />
+      )}
+
+      {onaylanan && (
+        <TestBaslatOnay
+          test={onaylanan}
+          basliyor={basliyor}
+          hata={hata}
+          onOnay={testeBasla}
+          onIptal={onayKapat}
         />
       )}
     </section>

@@ -90,7 +90,14 @@
   color: var(--muted);
   cursor: pointer;
   font-size: 0.9rem;
-  flex-shrink: 0;
+  /* Dokunulabilir kare hedef (yıkıcı işlem) */
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  line-height: 1;
 }
 .notSil:hover {
   color: var(--kirmizi);
@@ -195,4 +202,30 @@
 }
 .gecmis small {
   color: var(--muted);
+}
+
+/* ── Dar ekran ─────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Mülakat/sonuç formu: iki sütun 390px'te ~155px'e düşüyordu */
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .formAlt {
+    flex-direction: column-reverse;
+  }
+  .formAlt button {
+    width: 100%;
+  }
+  /* Etiket–değer satırları alt alta okunur */
+  .mulakatSatir,
+  .gecmis li {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mulakatSatir a {
+    text-align: left;
+  }
+  .notEkle button {
+    align-self: stretch;
+  }
 }

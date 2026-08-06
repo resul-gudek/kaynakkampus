@@ -115,6 +115,18 @@
   transform: scale(1.15);
 }
 
+/* Dokunmatik: 5 yıldız yan yana durduğu için yanlış dokunma puanı
+   değiştirir — hedefler parmak boyutuna çıkarılır */
+@media (hover: none) and (pointer: coarse) {
+  .yildizlar {
+    gap: 4px;
+  }
+  .yildiz {
+    font-size: 1.5rem;
+    padding: 6px;
+  }
+}
+
 .yildizSalt {
   font-size: 1rem;
   color: #d8b400;

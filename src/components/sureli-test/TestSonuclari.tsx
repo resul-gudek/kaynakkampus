@@ -84,12 +84,14 @@ export default function TestSonuclari({
                     data-kayit={x.oturumId}
                     className={vurgu === x.oturumId ? s.vurgu : ""}
                   >
+                    {/* data-label: dar ekranda tablo kart düzenine geçer,
+                        başlık satırı gizlenip her hücre kendi etiketini taşır */}
                     {!tekOgrenci && (
                       <td>
                         <b>{x.ogrenciAd}</b>
                       </td>
                     )}
-                    <td>
+                    <td data-label="Test">
                       <b>{x.testAd}</b>
                       <br />
                       <span className={s.griYazi}>
@@ -97,14 +99,14 @@ export default function TestSonuclari({
                         {x.konu ? ` – ${x.konu}` : ""} · {x.soruSayisi} soru
                       </span>
                     </td>
-                    <td className={`${s.sagaYasli} ${s.yesilYazi}`}>{suruyor ? "—" : x.dogru}</td>
-                    <td className={`${s.sagaYasli} ${s.kirmiziYazi}`}>{suruyor ? "—" : x.yanlis}</td>
-                    <td className={`${s.sagaYasli} ${s.griYazi}`}>{suruyor ? "—" : x.bos}</td>
-                    <td className={s.sagaYasli}>
+                    <td data-label="Doğru" className={`${s.sagaYasli} ${s.yesilYazi}`}>{suruyor ? "—" : x.dogru}</td>
+                    <td data-label="Yanlış" className={`${s.sagaYasli} ${s.kirmiziYazi}`}>{suruyor ? "—" : x.yanlis}</td>
+                    <td data-label="Boş" className={`${s.sagaYasli} ${s.griYazi}`}>{suruyor ? "—" : x.bos}</td>
+                    <td data-label="Başarı" className={s.sagaYasli}>
                       <b>{suruyor ? "—" : `%${x.yuzde}`}</b>
                     </td>
-                    <td className={s.sagaYasli}>{suruyor ? "—" : sureMetni(x.gecenSure)}</td>
-                    <td>
+                    <td data-label="Süre" className={s.sagaYasli}>{suruyor ? "—" : sureMetni(x.gecenSure)}</td>
+                    <td data-label="Durum">
                       <span
                         className={`${s.rozet} ${
                           suruyor

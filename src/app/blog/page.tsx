@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import { gecerliKategori, kategoriEtiketi, yayinTarihiMetni } from "@/lib/blog";
+import { gecerliKategori, yayinTarihiMetni } from "@/lib/blog";
 import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
 import BlogListe from "./BlogListe";
 import type { YaziKarti } from "./tipler";
@@ -74,12 +74,6 @@ export default async function BlogSayfasi({
           <h1>
             Eğitimde yol gösteren <span>yazılar</span>
           </h1>
-          <p>
-            Öğrenciye, öğretmene ve ebeveyne yönelik rehber içerikler; sınav hazırlığı ve ders
-            çalışma yöntemleri, eğitim koçluğu notları, etkinlik ve materyal önerileri. Tüm
-            yazılar ücretsiz ve üyelik gerektirmez.
-            {secili ? ` Şu an “${kategoriEtiketi(secili)}” kategorisi gösteriliyor.` : ""}
-          </p>
         </div>
       </section>
 

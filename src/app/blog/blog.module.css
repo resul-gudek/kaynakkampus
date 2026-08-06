@@ -97,7 +97,12 @@
   font-size: .74rem; color: var(--muted); font-weight: 600;
   padding-top: 10px; border-top: 1px solid var(--border);
 }
-.devam { color: var(--bordo); font-weight: 700; }
+/* Gerçek bir bağlantı — dokunma hedefi yazı yüksekliğinde kalmasın */
+.devam {
+  display: inline-flex; align-items: center; min-height: 32px;
+  padding: 6px 10px; margin: -6px -10px; border-radius: 8px;
+  color: var(--bordo); font-weight: 700;
+}
 .kart:hover .devam { text-decoration: underline; }
 
 /* ── Boş durum ─────────────────────────────────────────────────────── */
@@ -123,6 +128,11 @@
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   font-size: .78rem; color: var(--muted); margin-bottom: 18px;
 }
+/* İz yolu bağlantıları dar ekranda parmakla ayırt edilebilsin */
+.izYolu a {
+  display: inline-flex; align-items: center; min-height: 30px;
+  padding: 4px 2px; border-radius: 6px;
+}
 .izYolu a:hover { color: var(--bordo); text-decoration: underline; }
 .izYolu span { opacity: .5; }
 
@@ -135,7 +145,8 @@
 .yaziMeta .kategoriCip {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--tint); color: var(--bordo);
-  padding: 5px 13px; border-radius: 50px; font-size: .76rem; font-weight: 700;
+  padding: 7px 14px; border-radius: 50px; font-size: .76rem; font-weight: 700;
+  min-height: 32px; /* tıklanabilir çip — dokunma hedefi */
 }
 .yaziMeta .kategoriCip:hover { background: var(--bordo); color: #fff; }
 .yaziOzet {

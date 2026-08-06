@@ -80,7 +80,13 @@
 }
 .sohbetBas b { display: block; font-size: .92rem; }
 .sohbetBas small { display: block; color: var(--muted); font-size: .72rem; }
-.geriBtn { display: none; font-size: 1.2rem; color: var(--muted); }
+/* Yalnız dar ekranda görünür (bkz. aşağıdaki 760px bloğu) — bu yüzden
+   dokunulabilir kare bir hedef olarak boyutlanır */
+.geriBtn {
+  display: none; font-size: 1.2rem; color: var(--muted);
+  flex: none; width: 34px; height: 34px; border-radius: 8px;
+  align-items: center; justify-content: center; line-height: 1;
+}
 
 .akis {
   flex: 1;
@@ -136,5 +142,5 @@
 @media (max-width: 720px) {
   .duzen { grid-template-columns: 1fr; height: calc(100vh - 130px); }
   .duzen .mobilGizle { display: none; }
-  .geriBtn { display: inline; }
+  .geriBtn { display: inline-flex; }
 }

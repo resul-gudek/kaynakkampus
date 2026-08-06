@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { TEST_SECENEKLERI } from "@/lib/sabitler";
 import { kalanSaniye, sureEtiketi, sureMetni } from "@/lib/sureli-test";
 import { testCevapKaydet, testTamamla } from "@/actions/sureli-test";
+import TestTeslimOnay from "./TestTeslimOnay";
 import type { CozumOturumu, CozumSoru } from "./tipler";
 import s from "./test.module.css";
 
@@ -34,6 +35,8 @@ export default function TestCozum({
   const [kalan, setKalan] = useState(() => kalanSaniye(oturum.bitisSiniri));
   const [kaydediliyor, setKaydediliyor] = useState(false);
   const [teslimEdiliyor, setTeslimEdiliyor] = useState(false);
+  const [teslimOnay, setTeslimOnay] = useState(false);
+  const [teslimHata, setTeslimHata] = useState("");
 
   // Teslim bir kez olur: sayaç ve buton aynı anda tetiklenebilir
   const teslimRef = useRef(false);
@@ -53,7 +56,7 @@ export default function TestCozum({
         // Teslim başarısız → öğrenci yeniden denesin (süre dolduysa sunucu kapatır)
         teslimRef.current = false;
         setTeslimEdiliyor(false);
-        alert(sonuc.hata);
+        setTeslimHata(sonuc.hata);
         return;
       }
       router.refresh(); // sayfa artık sonuç ekranını gösterir
@@ -66,7 +69,10 @@ export default function TestCozum({
     function tik() {
       const k = kalanSaniye(oturum.bitisSiniri);
       setKalan(k);
-      if (k <= 0) void teslimEt(true);
+      if (k <= 0) {
+        setTeslimOnay(false); // onay penceresi açıksa kapanır: teslim zaten otomatik
+        void teslimEt(true);
+      }
     }
     tik(); // süre sayfa açılırken çoktan bitmiş olabilir
     const zaman = setInterval(tik, 1000);
@@ -109,15 +115,10 @@ export default function TestCozum({
     });
   }
 
-  function elleTeslim() {
-    const bosSayisi = sorular.length - Object.keys(cevaplar).length;
-    const onay = confirm(
-      bosSayisi
-        ? `${bosSayisi} soru boş kalacak. Testi tamamlamak istediğine emin misin?`
-        : "Testi tamamlamak istediğine emin misin?"
-    );
-    if (!onay) return;
-    void teslimEt(false);
+  function teslimSor() {
+    if (teslimRef.current) return;
+    setTeslimHata("");
+    setTeslimOnay(true);
   }
 
   const cevaplanan = Object.keys(cevaplar).length;
@@ -211,15 +212,38 @@ export default function TestCozum({
             type="button"
             className="btn btn-primary"
             disabled={teslimEdiliyor}
-            onClick={elleTeslim}
+            onClick={teslimSor}
           >
             {teslimEdiliyor ? "Tamamlanıyor…" : "✓ Testi Tamamla"}
           </button>
         </div>
+
+        {/* Otomatik teslim hatası: onay penceresi kapalıyken de görünür olmalı */}
+        {teslimHata && !teslimOnay && (
+          <p className={s.pencereHata} role="alert">
+            {teslimHata}
+          </p>
+        )}
+
         <p className={s.notMetin}>
           Süre dolduğunda test otomatik olarak tamamlanır; işaretlediğin cevaplar kaydedilir.
         </p>
       </section>
+
+      {teslimOnay && (
+        <TestTeslimOnay
+          soruSayisi={sorular.length}
+          cevaplanan={cevaplanan}
+          kalan={kalan}
+          hata={teslimHata}
+          teslimEdiliyor={teslimEdiliyor}
+          onOnay={() => void teslimEt(false)}
+          onIptal={() => {
+            setTeslimOnay(false);
+            setTeslimHata("");
+          }}
+        />
+      )}
     </>
   );
 }

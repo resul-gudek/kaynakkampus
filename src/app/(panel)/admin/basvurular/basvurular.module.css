@@ -240,9 +240,20 @@
   margin: 16px 0;
 }
 .geri {
+  /* Dokunma hedefi: yazı yüksekliğinde kalmasın */
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  margin-left: -10px;
+  border-radius: 8px;
   color: var(--muted);
   font-weight: 600;
   font-size: 0.86rem;
+}
+.geri:hover {
+  color: var(--blue);
+  background: var(--tint);
 }
 .detayGrid {
   display: grid;
@@ -337,9 +348,14 @@
   flex-direction: column;
   gap: 6px;
   font-size: 0.86rem;
+  /* Uzun e-posta/adres tek parça bir kelimedir; kırılmazsa ızgara sütununu
+     genişletip sayfayı yatay kaydırtır (dar ekranda ölçüldü). */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .ozetKutu a {
   color: var(--blue);
+  overflow-wrap: anywhere;
 }
 .gizliNot {
   font-size: 0.72rem;

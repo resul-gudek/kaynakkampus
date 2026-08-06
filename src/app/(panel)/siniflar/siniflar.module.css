@@ -34,7 +34,13 @@
 .uye > div { display:flex; flex-direction:column; flex:1; min-width:0; }
 .uye b { font-size:.78rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .uye small { color:var(--muted); font-size:.68rem; }
-.uye button { border:0; background:none; color:var(--kirmizi); cursor:pointer; font-size:1.15rem; }
+/* Sınıftan çıkarma: yıkıcı işlem, dokunulabilir bir kare hedefi hak eder */
+.uye button {
+  border:0; background:none; color:var(--kirmizi); cursor:pointer; font-size:1.15rem;
+  flex:none; width:32px; height:32px; border-radius:8px;
+  display:grid; place-items:center; line-height:1; transition:background .2s;
+}
+.uye button:hover { background:#fef2f2; }
 .ekleSatir { display:flex; gap:8px; margin-top:10px; }
 .dersForm { display:grid; grid-template-columns:1fr 1fr 1.15fr .75fr auto; gap:8px; padding:12px; border-radius:10px; background:var(--bg-soft); margin-bottom:10px; }
 .oturum { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--border); border-radius:11px; }
@@ -49,7 +55,13 @@
 .durum { padding:3px 8px; border-radius:50px; font-size:.65rem; font-weight:700; background:var(--tint); }
 .planlandi { color:var(--blue); }
 .iptal { color:var(--kirmizi); }
-.metinButon { border:0; background:none; color:var(--kirmizi); font-size:.7rem; cursor:pointer; }
+/* Metin görünümlü buton — dokunma hedefi için kendi dolgusunu taşır */
+.metinButon {
+  border:0; background:none; color:var(--kirmizi); font-size:.7rem; cursor:pointer;
+  padding:7px 10px; border-radius:8px; min-height:32px;
+  display:inline-flex; align-items:center; font-family:inherit;
+}
+.metinButon:hover { background:#fef2f2; }
 .miniBos { color:var(--muted); font-size:.76rem; padding:12px 0; }
 .bos { display:flex; flex-direction:column; align-items:center; text-align:center; padding:48px 20px; color:var(--muted); }
 .bos span { font-size:2rem; margin-bottom:8px; }

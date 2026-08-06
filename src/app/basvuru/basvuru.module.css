@@ -39,12 +39,20 @@
   object-fit: contain;
 }
 .geriLink {
+  /* Dokunma hedefi: yazı yüksekliğinde kalmasın */
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  margin-right: -10px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--muted);
 }
 .geriLink:hover {
   color: var(--blue);
+  background: var(--tint);
 }
 
 /* ── Giriş / seçim ekranı ─────────────────────────────────── */

@@ -1,6 +1,7 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { BLOG_KATEGORILERI, BLOG_KATEGORI_ETIKETLERI } from "@/lib/sabitler";
-import { SITE_ARACLAR, SITE_MENU } from "@/lib/site-menu";
+import { SITE_MENU, grupMu } from "@/lib/site-menu";
 import s from "./site-alt.module.css";
 
 /** İlk dört kategori alt bilgide kısayol olarak listelenir */
@@ -26,16 +27,22 @@ export default function SiteAltBilgi() {
           <div className={s.kolon}>
             <h4>Site</h4>
             <ul>
-              {SITE_MENU.map((k) => (
-                <li key={k.href}>
-                  <Link href={k.href}>{k.ad}</Link>
-                </li>
-              ))}
-              {SITE_ARACLAR.map((k) => (
-                <li key={k.href}>
-                  <a href={k.href}>{k.ad}</a>
-                </li>
-              ))}
+              {/* Gruplar alt bilgide düz listeye açılır (başlık satırı yok) */}
+              {SITE_MENU.map((oge) =>
+                grupMu(oge) ? (
+                  <Fragment key={oge.ad}>
+                    {oge.alt.map((k) => (
+                      <li key={k.href}>
+                        <a href={k.href}>{k.ad}</a>
+                      </li>
+                    ))}
+                  </Fragment>
+                ) : (
+                  <li key={oge.href}>
+                    <Link href={oge.href}>{oge.ad}</Link>
+                  </li>
+                ),
+              )}
             </ul>
           </div>
 

@@ -7,24 +7,25 @@
    harici bir script React'in yönettiği DOM'a dokunmasın. Menü kalemleri
    tek kaynaktan gelir: lib/site-menu.ts */
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ARACLAR_SIRASI, SITE_ARACLAR, SITE_MENU } from "@/lib/site-menu";
+import { SITE_MENU, grupMu } from "@/lib/site-menu";
 import s from "./site-baslik.module.css";
 
 export default function SiteBaslik({ aktif }: { aktif?: string }) {
   const [cekmece, setCekmece] = useState(false);
-  const [araclar, setAraclar] = useState(false);
-  const acilirRef = useRef<HTMLDivElement>(null);
+  /* Aynı anda tek açılır başlık açık kalır; değer grubun adıdır */
+  const [acikGrup, setAcikGrup] = useState<string | null>(null);
+  const menuRef = useRef<HTMLElement>(null);
 
   /* Dışa tıklama ve Escape her iki menüyü de kapatır */
   useEffect(() => {
     function tiklama(e: MouseEvent) {
-      if (acilirRef.current && !acilirRef.current.contains(e.target as Node)) setAraclar(false);
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setAcikGrup(null);
     }
     function tus(e: KeyboardEvent) {
       if (e.key !== "Escape") return;
-      setAraclar(false);
+      setAcikGrup(null);
       setCekmece(false);
     }
     document.addEventListener("click", tiklama);
@@ -44,6 +45,21 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
   }, []);
 
   const aktifMi = (href: string) => href === aktif;
+  /* Statik public/*.html sayfalarına Next yönlendirmesi yapılamaz */
+  const staticMi = (href: string) => href.endsWith(".html");
+  const grupAktifMi = (alt: { href: string }[]) => alt.some((k) => aktifMi(k.href));
+
+  /** Grup kalemi: statik sayfa ise düz <a>, uygulama rotası ise Link */
+  const kalem = (k: { ad: string; href: string }) =>
+    staticMi(k.href) ? (
+      <a key={k.href} href={k.href} className={aktifMi(k.href) ? s.aktif : undefined}>
+        {k.ad}
+      </a>
+    ) : (
+      <Link key={k.href} href={k.href} className={aktifMi(k.href) ? s.aktif : undefined}>
+        {k.ad}
+      </Link>
+    );
 
   return (
     <header className={s.baslik}>
@@ -54,51 +70,45 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
           Kaynak <span>Kampüs</span>
         </Link>
 
-        <nav className={s.menu} aria-label="Ana menü">
-          {SITE_MENU.slice(0, ARACLAR_SIRASI).map((k) => (
-            <Link
-              key={k.href}
-              href={k.href}
-              className={aktifMi(k.href) ? s.aktif : undefined}
-              aria-current={aktifMi(k.href) ? "page" : undefined}
-            >
-              {k.ad}
-            </Link>
-          ))}
-
-          {/* Statik sayfalardaki sırayla aynı: "Araçlar" ilk kalemden sonra */}
-          <div className={`${s.acilir} ${araclar ? s.acik : ""}`} ref={acilirRef}>
-            <button
-              type="button"
-              aria-expanded={araclar}
-              onClick={(e) => {
-                e.stopPropagation();
-                setAraclar((x) => !x);
-              }}
-            >
-              Araçlar
-            </button>
-            {araclar && (
-              <div className={s.acilirMenu}>
-                {SITE_ARACLAR.map((k) => (
-                  <a key={k.href} href={k.href}>
-                    {k.ad}
-                  </a>
-                ))}
+        <nav className={s.menu} aria-label="Ana menü" ref={menuRef}>
+          {/* Sıra lib/site-menu.ts'ten gelir; statik sayfalarla birebir aynı */}
+          {SITE_MENU.map((oge) =>
+            grupMu(oge) ? (
+              <div
+                key={oge.ad}
+                className={[
+                  s.acilir,
+                  acikGrup === oge.ad ? s.acik : "",
+                  grupAktifMi(oge.alt) ? s.aktifVar : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                <button
+                  type="button"
+                  aria-expanded={acikGrup === oge.ad}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setAcikGrup((x) => (x === oge.ad ? null : oge.ad));
+                  }}
+                >
+                  {oge.ad}
+                </button>
+                {acikGrup === oge.ad && (
+                  <div className={s.acilirMenu}>{oge.alt.map(kalem)}</div>
+                )}
               </div>
-            )}
-          </div>
-
-          {SITE_MENU.slice(ARACLAR_SIRASI).map((k) => (
-            <Link
-              key={k.href}
-              href={k.href}
-              className={aktifMi(k.href) ? s.aktif : undefined}
-              aria-current={aktifMi(k.href) ? "page" : undefined}
-            >
-              {k.ad}
-            </Link>
-          ))}
+            ) : (
+              <Link
+                key={oge.href}
+                href={oge.href}
+                className={aktifMi(oge.href) ? s.aktif : undefined}
+                aria-current={aktifMi(oge.href) ? "page" : undefined}
+              >
+                {oge.ad}
+              </Link>
+            ),
+          )}
         </nav>
 
         <div className={s.eylemler}>
@@ -126,17 +136,24 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
         className={`${s.cekmece} ${cekmece ? s.acik : ""}`}
         onClick={() => setCekmece(false)}
       >
-        {SITE_MENU.map((k) => (
-          <Link key={k.href} href={k.href} className={aktifMi(k.href) ? s.aktif : undefined}>
-            {k.ad}
-          </Link>
-        ))}
-        <div className={s.cekmeceEtiket}>Araçlar</div>
-        {SITE_ARACLAR.map((k) => (
-          <a key={k.href} href={k.href}>
-            {k.ad}
-          </a>
-        ))}
+        {/* Çekmecede açılır menü yok: gruplar başlık + altındaki kalemler olarak düzleşir */}
+        {SITE_MENU.map((oge) =>
+          grupMu(oge) ? (
+            <Fragment key={oge.ad}>
+              <div className={s.cekmeceEtiket}>{oge.ad}</div>
+              {oge.alt.map(kalem)}
+            </Fragment>
+          ) : (
+            <Link
+              key={oge.href}
+              href={oge.href}
+              className={aktifMi(oge.href) ? s.aktif : undefined}
+              aria-current={aktifMi(oge.href) ? "page" : undefined}
+            >
+              {oge.ad}
+            </Link>
+          ),
+        )}
         <div className={s.cekmeceEylemler}>
           <Link href="/giris" className={`${s.dugme} ${s.cizgili}`}>
             Giriş Yap

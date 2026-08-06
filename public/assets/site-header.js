@@ -1,11 +1,21 @@
 /* ── KAYNAK AKADEMİ · ORTAK SİTE MENÜSÜ DAVRANIŞI ────────────────────
-   Hamburger açma/kapama, "Araçlar" açılır menüsü ve aktif bağlantı
-   işaretleme. Tüm public sayfalarda aynı dosya kullanılır.
+   Hamburger açma/kapama, açılır menüler ("Araçlar", "Blog & Haberler")
+   ve aktif bağlantı işaretleme. Tüm public sayfalarda aynı dosya
+   kullanılır.
    ------------------------------------------------------------------ */
 (function () {
   var burger = document.querySelector('.sh-burger');
   var drawer = document.querySelector('.sh-drawer');
-  var drop   = document.querySelector('.sh-drop');
+  var drops  = [].slice.call(document.querySelectorAll('.sh-drop'));
+
+  function kapatAcilirlar(haric) {
+    drops.forEach(function (d) {
+      if (d === haric) return;
+      d.classList.remove('sh-open');
+      var b = d.querySelector('button');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  }
 
   /* ── Mobil çekmece ─────────────────────────────────────────────── */
   function setDrawer(open) {
@@ -31,28 +41,31 @@
     });
   }
 
-  /* ── Açılır menü ───────────────────────────────────────────────── */
-  if (drop) {
+  /* ── Açılır menüler ────────────────────────────────────────────── */
+  drops.forEach(function (drop) {
     var dropBtn = drop.querySelector('button');
+    if (!dropBtn) return;
     dropBtn.setAttribute('aria-expanded', 'false');
     dropBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       var open = !drop.classList.contains('sh-open');
+      kapatAcilirlar(drop);                     // aynı anda tek menü açık kalır
       drop.classList.toggle('sh-open', open);
       dropBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
+  });
+
+  if (drops.length) {
     document.addEventListener('click', function (e) {
-      if (!drop.contains(e.target)) {
-        drop.classList.remove('sh-open');
-        dropBtn.setAttribute('aria-expanded', 'false');
-      }
+      var ic = drops.some(function (d) { return d.contains(e.target); });
+      if (!ic) kapatAcilirlar(null);
     });
   }
 
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     setDrawer(false);
-    if (drop) drop.classList.remove('sh-open');
+    kapatAcilirlar(null);
   });
 
   /* ── Aktif bağlantı ────────────────────────────────────────────── */

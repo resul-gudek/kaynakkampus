@@ -43,7 +43,7 @@
 .acilir > button:hover { background: var(--tint); color: var(--bordo); }
 .menu > a.aktif { color: var(--bordo); font-weight: 700; }
 
-/* ── "Araçlar" açılır menüsü ──────────────────────────────────────── */
+/* ── Açılır menüler ("Araçlar", "Blog & Haberler") ────────────────── */
 .acilir { position: relative; }
 .acilir > button::after {
   content: ''; width: 5px; height: 5px; margin-left: 1px;
@@ -53,6 +53,7 @@
 }
 .acilir.acik > button { background: var(--tint); color: var(--bordo); }
 .acilir.acik > button::after { transform: rotate(-135deg) translateY(-1px); }
+.acilir.aktifVar > button { color: var(--bordo); font-weight: 700; }
 
 .acilirMenu {
   position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
@@ -67,6 +68,7 @@
   transition: background .2s, color .2s;
 }
 .acilirMenu a:hover { background: var(--tint); color: var(--bordo); }
+.acilirMenu a.aktif { background: var(--tint); color: var(--bordo); font-weight: 700; }
 
 /* ── Sağdaki aksiyon butonları ────────────────────────────────────── */
 .eylemler { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }

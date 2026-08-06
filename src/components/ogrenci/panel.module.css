@@ -51,6 +51,10 @@
   font-size: .85rem; color: #fff; transition: all .2s; font-family: inherit;
 }
 .onay-kutu.isaretli { background: var(--yesil); border-color: var(--yesil); }
+/* Dokunmatik: ödev/takip işaretleme kutusu parmakla rahat vurulsun */
+@media (hover: none) and (pointer: coarse) {
+  .onay-kutu { width: 32px; height: 32px; font-size: 1rem; }
+}
 .bos-mesaj { text-align: center; color: var(--muted); font-size: .88rem; padding: 26px 10px; }
 
 /* ── Ödev tamamlama kanıtı (fotoğraf) ── */

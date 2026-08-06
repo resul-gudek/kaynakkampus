@@ -1,5 +1,11 @@
 .geri { padding-top:28px; }
-.geri a { color:var(--blue); font-size:.82rem; font-weight:700; }
+/* Dokunma hedefi: yazı yüksekliğinde kalmasın */
+.geri a {
+  display:inline-flex; align-items:center; min-height:32px;
+  padding:6px 10px; margin-left:-10px; border-radius:8px;
+  color:var(--blue); font-size:.82rem; font-weight:700;
+}
+.geri a:hover { background:var(--tint); }
 .hata { padding:11px 14px; margin-top:14px; border:1px solid rgba(220,38,38,.25); border-radius:10px; color:var(--kirmizi); background:rgba(220,38,38,.08); font-size:.8rem; font-weight:600; }
 .hero {
   display:flex; align-items:center; gap:20px; padding:26px; margin:18px 0;

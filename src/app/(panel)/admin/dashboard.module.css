@@ -130,8 +130,14 @@ a.statKart:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); bo
   font-size: .78rem;
   font-weight: 800;
 }
-.metinLink { color: var(--blue); font-size: .75rem; font-weight: 700; }
-.metinLink:hover { color: var(--orange); }
+/* Kart başlığındaki "Tümünü gör →" bağlantısı: satır yüksekliği kadar dar
+   kalmasın diye kendi dolgusunu taşır (dokunma hedefi) */
+.metinLink {
+  display: inline-flex; align-items: center;
+  padding: 7px 10px; margin: -7px -10px; border-radius: 8px; min-height: 32px;
+  color: var(--blue); font-size: .75rem; font-weight: 700;
+}
+.metinLink:hover { color: var(--orange); background: var(--tint); }
 
 .buyukMetrik { display: flex; align-items: baseline; gap: 7px; margin-top: 6px; }
 .buyukMetrik b { font-size: 2rem; line-height: 1; color: var(--blue); }
@@ -174,7 +180,13 @@ a.statKart:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); bo
 }
 .uyari p { flex: 1; color: var(--muted); }
 .uyari p b { color: var(--text); }
-.uyari a { color: var(--orange); font-weight: 700; white-space: nowrap; }
+/* Dokunma hedefi: uyarı satırındaki eylem bağlantısı yazı yüksekliğinde kalmasın */
+.uyari a {
+  display: inline-flex; align-items: center; min-height: 32px;
+  padding: 6px 10px; margin: -6px -10px; border-radius: 8px;
+  color: var(--orange); font-weight: 700; white-space: nowrap;
+}
+.uyari a:hover { background: rgba(201,135,146,.16); }
 
 .kocListe { display: grid; gap: 15px; }
 .kocSatir { display: grid; grid-template-columns: 38px 1fr; align-items: center; gap: 11px; }

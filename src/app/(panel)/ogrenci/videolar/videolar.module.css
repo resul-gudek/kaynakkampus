@@ -19,7 +19,13 @@
 }
 .filtreIzgara select:disabled { opacity:.55; }
 .filtreAlt { display:flex; align-items:center; gap:12px; margin-top:14px; }
-.metinButon { border:0; background:none; color:var(--blue); font-size:.76rem; font-weight:600; cursor:pointer; text-decoration:underline; }
+/* Metin görünümlü buton — dokunma hedefi için kendi dolgusunu taşır */
+.metinButon {
+  border:0; background:none; color:var(--blue); font-size:.76rem; font-weight:600;
+  cursor:pointer; text-decoration:underline; font-family:inherit;
+  padding:7px 10px; border-radius:8px; min-height:32px;
+}
+.metinButon:hover { background:var(--tint); }
 
 /* ── Kart ızgarası ── */
 .izgara { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:4px 0 50px; }
