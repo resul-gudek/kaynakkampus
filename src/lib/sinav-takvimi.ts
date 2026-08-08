@@ -123,48 +123,139 @@ function son(t: HucreTarihi[]): string | null {
   return t.length ? t[t.length - 1].iso : null;
 }
 
+/** Tabloda hangi sütunun nerede olduğu; bulunmayan sütun undefined kalır */
+interface SutunHaritasi {
+  ad: number;
+  sinav?: number;
+  onBasvuru?: number;
+  basvuru?: number;
+  gec?: number;
+  sonuc?: number;
+}
+
 /**
- * ÖSYM sınav takvimi sayfasındaki tabloyu ayrıştırır.
- * Sütun düzeni: Sınav Adı | Sınav Tarihi | Ön Başvuru | Başvuru | Geç Başvuru | Sonuç
+ * Başlık satırından sütun haritası çıkarır.
+ *
+ * DİKKAT: sütun SIRASINA güvenilmez. ÖSYM 8 Ağustos 2026'da "Ön Başvuru
+ * Tarihi" sütununu kaldırdı (6 → 5 sütun); konuma bağlı ayrıştırma tüm
+ * satırları atlıyordu. Bu yüzden eşleme başlık ADINA göre yapılır.
  */
-export function osymTakvimiAyristir(html: string): Sinav[] {
+export function sutunlariEsle(basliklar: string[]): SutunHaritasi | null {
+  const harita: Partial<SutunHaritasi> = {};
+
+  basliklar.forEach((baslik, i) => {
+    const b = baslik.toLocaleLowerCase("tr").replace(/\s+/g, " ").trim();
+    // Sıra önemli: "ön başvuru" ve "geç başvuru", düz "başvuru"dan önce denetlenir
+    if (/s[ıi]nav\s*ad/.test(b)) harita.ad ??= i;
+    else if (/^ön\s*ba[şs]vuru|(?:^|\s)ön\s*ba[şs]vuru/.test(b)) harita.onBasvuru ??= i;
+    else if (/ge[çc]\s*ba[şs]vuru/.test(b)) harita.gec ??= i;
+    else if (/ba[şs]vuru/.test(b)) harita.basvuru ??= i;
+    else if (/sonu[çc]/.test(b)) harita.sonuc ??= i;
+    else if (/s[ıi]nav\s*tarih/.test(b)) harita.sinav ??= i;
+  });
+
+  // Ad sütunu ve en az bir tarih sütunu olmadan satır anlamlı değil
+  if (harita.ad == null) return null;
+  if (harita.sinav == null && harita.basvuru == null && harita.sonuc == null) return null;
+  return harita as SutunHaritasi;
+}
+
+/** Başlık okunamazsa hücre sayısına göre bilinen düzenler */
+function yedekHarita(hucreSayisi: number): SutunHaritasi | null {
+  // 5 sütun: Ad | Sınav | Başvuru | Geç Başvuru | Sonuç   (Ağustos 2026 sonrası)
+  if (hucreSayisi === 5) return { ad: 0, sinav: 1, basvuru: 2, gec: 3, sonuc: 4 };
+  // 6 sütun: Ad | Sınav | Ön Başvuru | Başvuru | Geç Başvuru | Sonuç
+  if (hucreSayisi === 6) return { ad: 0, sinav: 1, onBasvuru: 2, basvuru: 3, gec: 4, sonuc: 5 };
+  return null;
+}
+
+/**
+ * Canlı tabloda BULUNMAYAN sütunlar hiç yazılmaz (null da yazılmaz) — böylece
+ * birleştirmede çekirdekteki değeri ezmezler.
+ */
+export type CanliSinav = Partial<Sinav> & Pick<Sinav, "id" | "ad" | "kurum" | "kaynakUrl">;
+
+/**
+ * "Sınav Adı" hücresini çözer.
+ *
+ * Hücre <br> ile üç parçaya ayrılmıştır (Ağustos 2026'da bu biçime geçildi):
+ *   <b>KPSS</b> | Kamu Personel Seçme Sınavı | 2026-KPSS Ön Lisans
+ * Sınavın kimliği SON parçadır; ortadaki uzun ad açıklama olarak alınır.
+ * Tek parçalı eski biçimde tüm metin ad sayılır.
+ */
+export function sinavAdiCoz(hucreHtml: string): { ad: string; aciklama: string | null } {
+  const parcalar = hucreHtml
+    .split(/<br\s*\/?>/i)
+    .map(metneCevir)
+    .filter((p) => p.length > 0);
+
+  if (!parcalar.length) return { ad: "", aciklama: null };
+  return {
+    ad: parcalar[parcalar.length - 1],
+    aciklama: parcalar.length > 2 ? parcalar.slice(1, -1).join(" ") : null,
+  };
+}
+
+/**
+ * ÖSYM sınav takvimi sayfasındaki takvim tablosunu ayrıştırır.
+ * Sayfada iki tablo vardır; ilki takvim, ikincisi tercih tarihleridir.
+ */
+export function osymTakvimiAyristir(html: string): CanliSinav[] {
   const tablo = html.match(/<table[\s\S]*?<\/table>/i);
   if (!tablo) return [];
 
   const satirlar = tablo[0].match(/<tr[\s\S]*?<\/tr>/gi) ?? [];
-  const sinavlar: Sinav[] = [];
+  const [basSatir] = satirlar;
+  if (!basSatir) return [];
+
+  /* Hücreler HAM html olarak tutulur: ad hücresindeki <br> yapısı gerekli */
+  const hucrele = (tr: string) =>
+    (tr.match(/<t[dh][\s\S]*?<\/t[dh]>/gi) ?? []).map((h) => h.replace(/^<t[dh][^>]*>|<\/t[dh]>$/gi, ""));
+
+  const ilkSatir = hucrele(basSatir).map(metneCevir);
+  const harita = sutunlariEsle(ilkSatir) ?? yedekHarita(ilkSatir.length);
+  if (!harita) return [];
+
+  const al = (h: string[], i: number | undefined) =>
+    i == null ? [] : hucreTarihleri(metneCevir(h[i] ?? ""));
+  const sinavlar: CanliSinav[] = [];
 
   for (const tr of satirlar) {
-    const hucreler = (tr.match(/<t[dh][\s\S]*?<\/t[dh]>/gi) ?? []).map(metneCevir);
-    if (hucreler.length < 6) continue;
+    const h = hucrele(tr);
+    if (h.length <= harita.ad) continue;
 
-    const [ad, sinavC, onC, basC, gecC, sonucC] = hucreler;
+    const { ad, aciklama } = sinavAdiCoz(h[harita.ad] ?? "");
     if (!ad || /^s.nav\s*ad/i.test(ad)) continue;
-    // Adında hiç tarih/yıl geçmeyen başlık satırlarını at
+    // Adında hiç tarih/yıl geçmeyen başlık/ara satırları at
     if (!/\d{4}|\bYKS\b|KPSS|ALES/i.test(ad)) continue;
 
-    const s = hucreTarihleri(sinavC);
-    const on = hucreTarihleri(onC);
-    const b = hucreTarihleri(basC);
-    const g = hucreTarihleri(gecC);
-    const so = hucreTarihleri(sonucC);
+    const kayit: CanliSinav = { id: kimlik(ad), ad, kurum: "ÖSYM", kaynakUrl: OSYM_TAKVIM };
+    if (aciklama) kayit.not = aciklama;
 
-    sinavlar.push({
-      id: kimlik(ad),
-      ad,
-      kurum: "ÖSYM",
-      sinavTarihi: ilk(s),
-      sinavSaati: s.length ? s[0].saat : null,
-      sinavBitis: s.length > 1 ? son(s) : null,
-      onBasvuruBas: ilk(on),
-      onBasvuruBit: son(on),
-      basvuruBas: ilk(b),
-      basvuruBit: son(b),
-      gecBasvuruBas: ilk(g),
-      gecBasvuru: son(g),
-      sonucTarihi: ilk(so),
-      kaynakUrl: OSYM_TAKVIM,
-    });
+    if (harita.sinav != null) {
+      const s = al(h, harita.sinav);
+      kayit.sinavTarihi = ilk(s);
+      kayit.sinavSaati = s.length ? s[0].saat : null;
+      kayit.sinavBitis = s.length > 1 ? son(s) : null;
+    }
+    if (harita.onBasvuru != null) {
+      const on = al(h, harita.onBasvuru);
+      kayit.onBasvuruBas = ilk(on);
+      kayit.onBasvuruBit = son(on);
+    }
+    if (harita.basvuru != null) {
+      const b = al(h, harita.basvuru);
+      kayit.basvuruBas = ilk(b);
+      kayit.basvuruBit = son(b);
+    }
+    if (harita.gec != null) {
+      const g = al(h, harita.gec);
+      kayit.gecBasvuruBas = ilk(g);
+      kayit.gecBasvuru = son(g);
+    }
+    if (harita.sonuc != null) kayit.sonucTarihi = ilk(al(h, harita.sonuc));
+
+    sinavlar.push(kayit);
   }
 
   return sinavlar;
@@ -333,6 +424,20 @@ export function mebTakvimBaglantisi(html: string): { ad: string; url: string } |
 
 /* ── Birleştirme ────────────────────────────────────────────────────── */
 
+/** Canlıda yeni çıkan sınav için tüm tarih alanlarının boş başlangıcı */
+const BOS_SINAV: Omit<Sinav, "id" | "ad" | "kurum" | "kaynakUrl"> = {
+  sinavTarihi: null,
+  sinavSaati: null,
+  sinavBitis: null,
+  onBasvuruBas: null,
+  onBasvuruBit: null,
+  basvuruBas: null,
+  basvuruBit: null,
+  gecBasvuruBas: null,
+  gecBasvuru: null,
+  sonucTarihi: null,
+};
+
 /**
  * Canlı ÖSYM satırlarını çekirdek veriyle birleştirir.
  * · Aynı kimlikli satır canlı veriyle güncellenir.
@@ -342,14 +447,24 @@ export function mebTakvimBaglantisi(html: string): { ad: string; url: string } |
  *   bir canlı satır çıktığında düşer.
  * · Çekirdekteki MEB satırları korunur (ÖSYM tablosunda yer almazlar).
  */
-export function birlestir(cekirdek: Sinav[], canli: Sinav[]): Sinav[] {
+export function birlestir(cekirdek: Sinav[], canli: CanliSinav[]): Sinav[] {
   const sonuc = new Map<string, Sinav>();
   for (const s of cekirdek) sonuc.set(s.id, s);
 
   for (const c of canli) {
     const eski = sonuc.get(c.id);
+    // ÖNEMLİ: yalnız TANIMLI alanlar yazılır. Canlı tabloda bulunmayan bir
+    // sütun (ör. "Ön Başvuru" kaldırıldığında) çekirdekteki değeri ezmesin.
+    const tanimli = Object.fromEntries(
+      Object.entries(c).filter(([, v]) => v !== undefined)
+    ) as Partial<Sinav>;
     // Çekirdekteki elle girilmiş açıklama/notu koru, tarihleri canlıdan al
-    sonuc.set(c.id, eski ? { ...eski, ...c, not: eski.not ?? c.not ?? null } : c);
+    sonuc.set(
+      c.id,
+      eski
+        ? { ...eski, ...tanimli, not: eski.not ?? c.not ?? null }
+        : { ...BOS_SINAV, ...tanimli, id: c.id, ad: c.ad, kurum: c.kurum, kaynakUrl: c.kaynakUrl }
+    );
   }
 
   // Karşılığı yayımlanan yer tutucuları çıkar
@@ -414,7 +529,12 @@ export interface SenkronSonucu {
   duyurular: Duyuru[];
   kaynaklar: { ad: string; url: string }[];
   canli: boolean;
+  /** Sayfa indirildi ama tablo ayrıştırılamadıysa dolu gelir — log için */
+  ayristirmaUyarisi?: string;
 }
+
+/** Ayrıştırmanın "başarılı" sayılması için gereken en az satır */
+const EN_AZ_SATIR = 10;
 
 /**
  * ÖSYM ve MEB kaynaklarını paralel çeker, çekirdek veriyle birleştirir.
@@ -444,11 +564,22 @@ export async function senkronEt(cekirdek: TakvimVerisi): Promise<SenkronSonucu> 
     kaynaklar.push({ ad: `MEB ${mebTakvim.ad}`, url: mebTakvim.url });
   }
 
+  // Takvim tablosu yeterli satır vermediyse ayrıştırma bozulmuş sayılır
+  const basarili = canliSinavlar.length >= EN_AZ_SATIR;
+
+  /* Sayfa indirildiği HÂLDE satır çıkmıyorsa bu bir ağ sorunu değil, sayfa
+     yapısının değişmesidir (8 Ağustos 2026'da "Ön Başvuru" sütunu kaldırıldı
+     ve modül sessizce çekirdek veriye düşmüştü). Sessiz kalmasın. */
+  const ayristirmaUyarisi = takvimHtml && !basarili
+    ? `ÖSYM takvim sayfası indirildi (${takvimHtml.length} bayt) ama yalnız ` +
+      `${canliSinavlar.length} satır ayrıştırıldı — tablo yapısı değişmiş olabilir`
+    : undefined;
+
   return {
-    // Takvim tablosu en az 10 satır vermediyse ayrıştırma bozulmuş sayılır
-    sinavlar: canliSinavlar.length >= 10 ? birlestir(cekirdek.sinavlar, canliSinavlar) : cekirdek.sinavlar,
+    sinavlar: basarili ? birlestir(cekirdek.sinavlar, canliSinavlar) : cekirdek.sinavlar,
     duyurular,
     kaynaklar,
-    canli: canliSinavlar.length >= 10,
+    canli: basarili,
+    ayristirmaUyarisi,
   };
 }

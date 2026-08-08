@@ -31,14 +31,15 @@
   display: flex; align-items: center; gap: 1px;
   flex: 1 1 auto; min-width: 0; justify-content: center;
 }
-/* Menü on kalem taşır ("Sınav Takvimi" eklendiğinde 1280px'de 11px taşıyordu);
-   yatay sığması için yan boşluk ölçülerek 6px'e indirildi
-   (bkz. aşağıdaki 1280px eşiği — altında hamburger devreye girer). */
+/* Menü dokuz kalem taşır; yatay sığması için ölçüler ölçülerek daraltıldı
+   (bkz. aşağıdaki 1280px eşiği — altında hamburger devreye girer).
+   Yeni bir ÜST DÜZEY kalem eklemek 1280px'de taşmaya yol açar; sayfaları
+   "Araçlar" ya da "Blog & Haberler" açılır listesine eklemek yeğlenir. */
 .sh-nav > a,
 .sh-drop > button {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 8px 6px; border-radius: 8px;
-  font-family: inherit; font-size: .82rem; font-weight: 500;
+  padding: 8px 8px; border-radius: 8px;
+  font-family: inherit; font-size: .83rem; font-weight: 500;
   color: #2F343D; white-space: nowrap; text-decoration: none;
   background: none; border: none; cursor: pointer;
   transition: background .2s, color .2s;

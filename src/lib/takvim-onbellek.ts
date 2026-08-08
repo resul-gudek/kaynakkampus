@@ -61,6 +61,10 @@ async function senkronla(): Promise<TakvimVerisi> {
       sinavlar: s.sinavlar,
       duyurular: s.duyurular,
     };
+    if (s.ayristirmaUyarisi) {
+      // Ağ sorunu değil, kaynak sayfanın yapısı değişmiş — elle bakılması gerekir
+      log.error({ kaynak: "osym.gov.tr" }, s.ayristirmaUyarisi);
+    }
     log.info(
       { sinav: veri.sinavlar.length, duyuru: s.duyurular.length, canli: s.canli },
       "takvim senkronlandı"

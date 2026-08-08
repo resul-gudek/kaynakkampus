@@ -87,6 +87,12 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
   "takvim bekleniyor" yer tutucuları `yerineDesen`'e uyan gerçek satır çıkınca düşer.
   Durum etiketleri (Başvurular Açık, Geç Başvuru, Yaklaşıyor, Sonuç Açıklandı…) veride
   tutulmaz, istemcide tarihlerden hesaplanır (`public/assets/sinav-takvimi.js`).
+  **Kaynak sayfa kırılgandır:** ÖSYM sütun sayısını/sırasını değiştirebilir (8 Ağustos
+  2026'da "Ön Başvuru" sütununu kaldırdı ve konuma bağlı ayrıştırma tüm satırları atladı).
+  Bu yüzden sütunlar konuma değil **başlık adına** göre eşlenir (`sutunlariEsle`) ve "Sınav
+  Adı" hücresinin `<br>` ile ayrılmış SON parçası ad kabul edilir (`sinavAdiCoz`). Sayfa
+  indiği hâlde satır ayrıştırılamazsa `log.error` düşer — sessiz bozulmaz. Testler canlı
+  sayfadan alınmış fikstür kullanır (`src/lib/sinav-takvimi.test.ts`).
   **Not:** `instrumentation.ts` ile API rotası ayrı paketlere derlenir; bu yüzden
   önbellek durumu `globalThis` üzerinde tutulur (prisma tekiliyle aynı desen).
 - **Kullanıcı adları** her yerde `toLocaleLowerCase("tr-TR")` ile normalize edilir

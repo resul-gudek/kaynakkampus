@@ -22,7 +22,6 @@ export function grupMu(oge: SiteMenuOgesi): oge is SiteMenuGrubu {
 
 export const SITE_MENU: SiteMenuOgesi[] = [
   { ad: "Ana Sayfa", href: "/" },
-  { ad: "Sınav Takvimi", href: "/sinav-takvimi.html" },
   {
     ad: "Araçlar",
     alt: [
@@ -39,6 +38,7 @@ export const SITE_MENU: SiteMenuOgesi[] = [
     alt: [
       { ad: "Blog", href: "/blog" },
       { ad: "Haberler", href: "/haberler.html" },
+      { ad: "Sınav Takvimi", href: "/sinav-takvimi.html" },
     ],
   },
   { ad: "Nasıl Çalışır", href: "/#how" },
