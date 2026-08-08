@@ -450,6 +450,43 @@
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
     .mobile-nav .btn { margin-top: 8px; text-align: center; justify-content: center; }
 
+    /* ── BLOG, HABERLER & SINAV TAKVİMİ ──────────────────────
+       Tek bölüm iki alt bloktan oluşur (takvim şeridi + duyuru kartları).
+       Kart ve rozet stilleri assets/sinav-takvimi.css içinde; burada
+       yalnız bölüm çerçevesi ve alt başlıklar tanımlanır. */
+    .haberler-duyurular {
+      padding: 74px 0;
+      background: linear-gradient(140deg, #FBF1F3 0%, #FAF7F5 55%, #F3ECEE 100%);
+    }
+    .bolum-sag {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+    }
+    /* Alt blok başlığı — bölüm başlığından bir kademe küçük, ince çizgiyle ayrılır */
+    .alt-baslik {
+      margin: 34px 0 20px; padding-top: 22px;
+      border-top: 1px solid rgba(122,32,53,.12);
+    }
+    .alt-baslik h3 { font-size: 1.3rem; font-weight: 700; color: var(--blue); }
+    .alt-baslik p {
+      margin-top: 6px; font-size: .88rem; color: var(--muted);
+      line-height: 1.7; max-width: 680px;
+    }
+    .takvim-ipucu {
+      margin-top: 18px; font-size: .82rem; color: var(--muted); line-height: 1.7;
+    }
+    .takvim-ipucu a { color: var(--blue); font-weight: 600; text-decoration: underline; }
+    .bolum-eylemler {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 30px;
+    }
+    @media (max-width: 768px) {
+      .haberler-duyurular { padding: 56px 0 48px; }
+      .bolum-sag { align-items: flex-start; width: 100%; }
+      .bolum-sag .btn { width: 100%; justify-content: center; }
+      .alt-baslik { margin: 28px 0 16px; }
+      .alt-baslik h3 { font-size: 1.15rem; }
+      .bolum-eylemler .btn { width: 100%; justify-content: center; }
+    }
+
     /* ── ÇOKLU ZEKÂ / OYUNLAR TANITIM IZGARASI ───────────────
        NOT: Sütun sayısı burada tanımlı; işaretlemede inline style
        kullanılmaz — inline stil medya sorgularını ezerdi. */
@@ -515,7 +552,9 @@
   </style>
   <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
   <link rel="stylesheet" href="assets/site-header.css" />
+  <link rel="stylesheet" href="assets/sinav-takvimi.css" />
   <script src="assets/site-header.js" defer></script>
+  <script src="assets/sinav-takvimi.js" defer></script>
 </head>
 <body>
 
@@ -529,6 +568,7 @@
 
     <nav class="sh-nav" aria-label="Ana menü">
       <a href="index.html">Ana Sayfa</a>
+      <a href="sinav-takvimi.html">Sınav Takvimi</a>
       <div class="sh-drop">
         <button type="button" aria-expanded="false">Araçlar</button>
         <div class="sh-drop-menu">
@@ -563,6 +603,7 @@
 
   <div class="sh-drawer" id="shMobileNav">
     <a href="index.html">Ana Sayfa</a>
+    <a href="sinav-takvimi.html">Sınav Takvimi</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
     <a href="#how">Nasıl Çalışır</a>
@@ -724,6 +765,65 @@
     <span>Din Kültürü ve Ahlak Bilgisi</span><span class="dot">✦</span>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════════════════ BLOG, HABERLER & SINAV TAKVİMİ
+     Tek bölüm: üstte güncel sınav takvimi şeridi, altta ÖSYM/MEB duyuruları.
+     Kartlar assets/sinav-takvimi.js tarafından doldurulur; veri
+     /api/sinav-takvimi (ÖSYM + MEB) → assets/sinav-takvimi.json sırasıyla alınır.
+     Sınavlar takvim şeridinde zaten öne çıktığı için duyuru kartlarında
+     tekrarlanmaz (data-one-cikan="0"); duyuru alınamazsa yerini onlar doldurur. -->
+<section class="haberler-duyurular st-scope" id="haberler">
+  <div class="container">
+
+    <div class="st-bolum-bas fade-up">
+      <div>
+        <div class="section-label">📰 Blog, Haberler &amp; Sınav Takvimi</div>
+        <h2 class="section-title">Yaklaşan Sınavlar ve <span>Önemli Duyurular</span></h2>
+        <p class="section-sub">
+          Sırada hangi sınav var, hangi başvuru açıldı, hangi sonuç açıklandı?
+          ÖSYM ve MEB'in güncel takvimi ile son duyuruları tek tıklama uzağında.
+        </p>
+      </div>
+      <div class="bolum-sag">
+        <span data-kk-sinav="canli" class="st-canli"><span class="st-canli-nokta"></span>Takvim yükleniyor…</span>
+        <a href="sinav-takvimi.html" class="btn btn-outline">Tüm Sınav Takvimi →</a>
+      </div>
+    </div>
+
+    <!-- ── Güncel sınav takvimi ─────────────────────────────────────── -->
+    <div class="alt-baslik fade-up" id="sinav-takvimi">
+      <h3>🗓️ Güncel Sınav Takvimi</h3>
+      <p>
+        YKS, LGS, AGS, KPSS, ALES, YDS, YÖKDİL, TUS, DUS, MSÜ, DGS ve bursluluk sınavı için
+        başvuru, geç başvuru, sınav ve sonuç tarihleri — durumu her gün kendiliğinden güncellenir.
+      </p>
+    </div>
+
+    <div class="st-serit" data-kk-sinav="serit" data-adet="6" data-mod="baglanti"
+         aria-label="Yaklaşan sınavlar"></div>
+
+    <p class="takvim-ipucu fade-up">
+      Tarihler <a href="https://www.osym.gov.tr/Sayfa/SinavTakvimi" target="_blank" rel="noopener noreferrer">ÖSYM Sınav Takvimi</a>
+      ve <a href="https://www.meb.gov.tr/" target="_blank" rel="noopener noreferrer">MEB duyurularından</a>
+      düzenli olarak alınır. Bir sınavın tüm ayrıntıları ve resmî kılavuz bağlantısı için karta dokun.
+    </p>
+
+    <!-- ── ÖSYM / MEB duyuruları ────────────────────────────────────── -->
+    <div class="alt-baslik fade-up">
+      <h3>📢 ÖSYM &amp; MEB Duyuruları</h3>
+      <p>Kılavuz, başvuru, giriş belgesi ve sonuç duyuruları doğrudan resmî kaynaklardan.</p>
+    </div>
+
+    <div class="st-duyurular" data-kk-sinav="duyurular" data-adet="6" data-one-cikan="0"
+         aria-label="ÖSYM ve MEB duyuruları"></div>
+
+    <div class="bolum-eylemler fade-up">
+      <a href="haberler.html" class="btn btn-outline">Tüm Haberler →</a>
+      <a href="/blog" class="btn btn-outline">Blog Yazıları →</a>
+    </div>
+
+  </div>
+</section>
 
 <!-- ═══════════════════════════════════════════════════════ SUBJECTS (gizli) -->
 <section class="subjects" id="subjects" hidden>
@@ -1081,6 +1181,7 @@
       <div class="footer-col">
         <h4>Platform</h4>
         <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
           <li><a href="#">Kurslar</a></li>
           <li><a href="#">Dersler</a></li>
           <li><a href="#">Testler</a></li>
@@ -1095,8 +1196,8 @@
           <li><a href="etkinlikler.html">1-4. Sınıf</a></li>
           <li><a href="#">5-8. Sınıf</a></li>
           <li><a href="#">Lise</a></li>
-          <li><a href="#">LGS Hazırlık</a></li>
-          <li><a href="#">YKS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
         </ul>
       </div>
 

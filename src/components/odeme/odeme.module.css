@@ -1,0 +1,123 @@
+/* Ödemeler modülünün paylaşılan görsel dili — öğrenci, öğretmen ve yönetici
+   sayfaları aynı tablo/rozet/özet kutusu biçimini kullanır.
+   Renkler yalnız tema değişkenlerinden gelir (açık/koyu tema birlikte çalışır). */
+
+.bolum {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin: 20px 0;
+}
+.bolum > h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+.bolum > h2 span { color: var(--orange); }
+.bolumNot { color: var(--muted); font-size: .8rem; line-height: 1.5; margin-bottom: 16px; }
+
+/* ── Özet kutuları ── */
+.ozet { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0; }
+.ozetKutu {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 15px 17px; box-shadow: var(--shadow);
+}
+.ozetKutu b { display: block; font-size: 1.3rem; font-weight: 800; }
+.ozetKutu small { display: block; color: var(--muted); font-size: .75rem; margin-top: 2px; }
+.ozetKutu.olumlu b { color: var(--yesil); }
+.ozetKutu.bekleyen b { color: var(--bordo); }
+
+/* ── Tablo ── */
+.tabloSarici { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tablo { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.tablo th {
+  text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--bg-soft);
+  white-space: nowrap;
+}
+.tablo td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.tablo tbody tr:last-child td { border-bottom: none; }
+.tutar { font-weight: 700; white-space: nowrap; }
+.sag { text-align: right; }
+.iptalSatir { opacity: .55; }
+.bos { text-align: center; color: var(--muted); padding: 26px 12px; }
+
+/* ── Durum rozetleri ── */
+.rozet {
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  padding: 3px 12px; border-radius: 50px; font-size: .74rem; font-weight: 700;
+}
+.olumlu { background: rgba(22,163,74,.12); color: var(--yesil); }
+.bekleyen { background: rgba(201,135,146,.16); color: var(--bordo); }
+.notr { background: var(--bg-soft); color: var(--muted); }
+
+/* ── Yönetici: taraf hücresi ve pay sütunları ── */
+.taraf { display: flex; flex-direction: column; line-height: 1.3; }
+.taraf small { color: var(--muted); font-size: .72rem; }
+.platform { font-weight: 800; color: var(--bordo); white-space: nowrap; }
+.islemler { display: flex; gap: 6px; flex-wrap: wrap; }
+.durumSecim {
+  border: 1px solid var(--border); background: var(--bg-soft); color: var(--text);
+  border-radius: 9px; padding: 6px 8px; font-size: .78rem; font-family: inherit;
+  min-height: 34px;
+}
+
+/* ── Yönetici formu ── */
+.form { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: end; }
+.alan { display: flex; flex-direction: column; gap: 5px; }
+.alan > label { font-size: .76rem; font-weight: 700; }
+.alan input, .alan select, .alan textarea {
+  width: 100%; padding: 9px 12px; border: 2px solid var(--border); border-radius: 10px;
+  font-family: inherit; font-size: .87rem; background: var(--surface); color: var(--text);
+}
+.alan textarea { min-height: 62px; resize: vertical; }
+.alan input:focus, .alan select:focus, .alan textarea:focus { outline: none; border-color: var(--gul); }
+.genis { grid-column: 1 / -1; }
+.formAlt { grid-column: 1 / -1; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.hesap { color: var(--muted); font-size: .8rem; }
+.hesap b { color: var(--bordo); }
+
+.hata, .tamam {
+  border-radius: 10px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
+  border: 1px solid;
+}
+.hata { background: rgba(220,38,38,.08); color: var(--kirmizi); border-color: rgba(220,38,38,.3); }
+.tamam { background: rgba(22,163,74,.08); color: var(--yesil); border-color: rgba(22,163,74,.3); }
+
+/* ── Filtre çubuğu ── */
+.filtreler { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
+.filtreler .alan { min-width: 170px; }
+
+@media (max-width: 1000px) {
+  .ozet { grid-template-columns: repeat(2, 1fr); }
+  .form { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Dar ekran: tablo kart düzenine geçer (paneldeki diğer tablolarla aynı desen) */
+@media (max-width: 640px) {
+  .ozet { grid-template-columns: repeat(2, 1fr); }
+  .form { grid-template-columns: 1fr; }
+  .bolum { padding: 18px 15px; }
+  .tabloSarici { overflow-x: visible; }
+  .tablo thead {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .tablo, .tablo tbody, .tablo tr, .tablo td { display: block; width: 100%; }
+  .tablo tr {
+    margin-bottom: 12px; padding: 4px 0;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
+  }
+  .tablo td {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 9px 15px; border-bottom: 1px solid var(--border);
+    text-align: right; white-space: normal;
+  }
+  .tablo tr td:last-child { border-bottom: none; }
+  .tablo td[data-label]::before {
+    content: attr(data-label); flex: 0 0 40%; text-align: left;
+    color: var(--muted); font-size: .66rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .tablo td.bos { display: block; text-align: center; }
+  .tablo td.bos::before { display: none; }
+  .islemler { justify-content: flex-end; }
+}

@@ -150,6 +150,9 @@ export async function kocSil(kocId: string): Promise<EylemSonuc> {
       await tx.yolAdimi.deleteMany({ where: { kocId } });
       await tx.ozelDers.deleteMany({ where: { kocId } });
       await tx.bildirim.deleteMany({ where: { aliciId: kocId } });
+      // Ödemeler SİLİNMEZ: öğrencinin ödeme geçmişi ve platform cirosu
+      // öğretmen hesabı kapansa da durmalı — bağ koparılır (kocId null).
+      await tx.odeme.updateMany({ where: { kocId }, data: { kocId: null } });
       await tx.kullanici.updateMany({ where: { kocId }, data: { kocId: null } });
       await tx.kullanici.delete({ where: { id: kocId } });
     });

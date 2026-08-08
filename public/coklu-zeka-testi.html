@@ -127,7 +127,9 @@
     }
     .opt:hover { border-color: #C98792; background: #FCF7F8; }
     .opt.secili { border-color: var(--blue); background: #F6ECEF; font-weight: 600; }
-    .opt-emoji { font-size: 1.5rem; line-height: 1; width: 30px; text-align: center; flex-shrink: 0; }
+    /* Sıklık halkası (○ ◔ ◑ ◕ ●) — nötr doluluk göstergesi */
+    .opt-emoji { font-size: 1.4rem; line-height: 1; width: 30px; text-align: center; flex-shrink: 0; color: #C0A3AA; }
+    .opt.secili .opt-emoji { color: var(--blue); }
     .opt-mark { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #CBBDC1; flex-shrink: 0; display: grid; place-items: center; }
     .opt.secili .opt-mark { border-color: var(--blue); background: var(--blue); }
     .opt.secili .opt-mark::after { content: "✓"; color: #fff; font-size: .72rem; font-weight: 800; }
@@ -175,6 +177,29 @@
     /* overflow:visible → etiket birkaç piksel taşarsa kırpılmasın */
     .radar-wrap svg { width: 100%; max-width: 460px; height: auto; overflow: visible; }
 
+    .top-flag { font-size: .8rem; font-weight: 600; color: #55505A; background: #fff; border-radius: 8px; padding: 8px 10px; margin-top: 8px; line-height: 1.5; }
+
+    /* ALAN ALAN AYRINTI */
+    .alan-det { border: 1px solid #EEE3E6; border-radius: 14px; margin-top: 10px; background: #fff; }
+    .alan-det[open] { background: var(--bg-soft); }
+    .alan-det > summary {
+      display: flex; align-items: center; gap: 10px; padding: 13px 16px; cursor: pointer;
+      list-style: none; font-weight: 700; font-size: .95rem; border-radius: 14px;
+    }
+    .alan-det > summary::-webkit-details-marker { display: none; }
+    .alan-det > summary::after { content: "▾"; margin-left: 4px; color: var(--muted); transition: transform .2s; }
+    .alan-det[open] > summary::after { transform: rotate(180deg); }
+    .alan-nokta { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .alan-ad { flex: 1; min-width: 0; }
+    .alan-pct { font-weight: 800; font-size: 1rem; }
+    .alan-govde { padding: 0 16px 16px; }
+    .alan-govde p { font-size: .88rem; line-height: 1.65; color: #45414C; }
+    .alan-yorum { font-weight: 600; color: var(--blue) !important; margin-bottom: 6px; }
+    .alan-govde h5 { font-size: .82rem; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: .03em; margin: 12px 0 4px; }
+    .alan-govde ul.dots { margin: 0; padding-left: 2px; }
+    .alan-govde ul.dots li { font-size: .88rem; line-height: 1.6; color: #45414C; padding-left: 18px; position: relative; }
+    .alan-govde ul.dots li::before { content: "•"; color: var(--blue); position: absolute; left: 3px; font-weight: 800; }
+
     .rapor h4 { font-size: 1rem; font-weight: 800; color: var(--blue); margin: 18px 0 6px; }
     .rapor p { font-size: .92rem; line-height: 1.7; color: #45414C; }
     .rapor ul.dots { margin: 6px 0 0; padding-left: 2px; }
@@ -213,6 +238,8 @@
       header, footer, .no-print { display: none !important; }
       .card, .q-card { box-shadow: none; border-color: #ccc; }
       main { padding: 0; }
+      .alan-det { break-inside: avoid; page-break-inside: avoid; }
+      .alan-det > summary::after { display: none; }
     }
   </style>
   <link rel="stylesheet" href="assets/site-header.css" />
@@ -229,6 +256,7 @@
 
     <nav class="sh-nav" aria-label="Ana menü">
       <a href="index.html">Ana Sayfa</a>
+      <a href="sinav-takvimi.html">Sınav Takvimi</a>
       <div class="sh-drop">
         <button type="button" aria-expanded="false">Araçlar</button>
         <div class="sh-drop-menu">
@@ -263,6 +291,7 @@
 
   <div class="sh-drawer" id="shMobileNav">
     <a href="index.html">Ana Sayfa</a>
+    <a href="sinav-takvimi.html">Sınav Takvimi</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
     <a href="index.html#how">Nasıl Çalışır</a>
@@ -308,7 +337,7 @@ const ALANLAR = {
   sozel: {
     ad: "Sözel-Dilsel", kisaAd: "Sözel-Dilsel", renk: "#3E6FB0",
     kisa: "Kelimeleri anlama, kullanma, konuşma, yazma ve anlatma yoluyla öğrenme eğilimidir.",
-    nasil: "Konuyu kendi cümlelerinle anlatarak, özet çıkararak ve sesli okuyarak daha kalıcı öğrenebilirsin.",
+    nasil: "Konuyu kendi cümlelerinle anlatarak, özet çıkararak ve sesli okuyarak daha kalıcı öğrenebilirsin.", nasilF: "Konuyu kendi cümlelerinizle anlatarak, özet çıkararak ve sesli okuyarak daha kalıcı öğrenebilirsiniz.",
     yontemler: ["Konuyu kendi cümlelerinle anlatma", "Sesli okuma", "Kısa özet çıkarma", "Kelime kartlarıyla çalışma", "Bir konuyu arkadaşına anlatma"],
     ders: ["Konuyu kendi cümleleriyle anlatma", "Hikâyeleştirme", "Sesli okuma", "Özet yazma", "Kelime kartları", "Soru-cevap", "Arkadaşına ders anlatma", "Günlük veya kısa not tutma"],
     ogretmen: "Konuyu öğrencinin kendi cümleleriyle anlatmasını isteyin; tartışma, sunum, hikâyeleştirme ve yazma etkinliklerinden yararlanın.",
@@ -317,7 +346,7 @@ const ALANLAR = {
   mantik: {
     ad: "Mantıksal-Matematiksel", kisaAd: "Mantıksal-Mat.", renk: "#6E5AA6",
     kisa: "Problemleri çözme, düzenleri fark etme ve neden-sonuç ilişkileri kurma eğilimidir.",
-    nasil: "Konuyu adımlara ayırarak, karşılaştırarak ve örüntü bularak daha kolay kavrayabilirsin.",
+    nasil: "Konuyu adımlara ayırarak, karşılaştırarak ve örüntü bularak daha kolay kavrayabilirsin.", nasilF: "Konuyu adımlara ayırarak, karşılaştırarak ve örüntü bularak daha kolay kavrayabilirsiniz.",
     yontemler: ["Konuyu adımlara ayırma", "Neden-sonuç ilişkisi kurma", "Sınıflandırma ve karşılaştırma", "Problem çözme", "Örüntü bulma"],
     ders: ["Konuyu adımlara ayırma", "Neden-sonuç tablosu hazırlama", "Sınıflandırma", "Problem çözme", "Örüntü bulma", "Deney yapma", "Bilgileri karşılaştırma", "Kural ve sistem oluşturma"],
     ogretmen: "Sınıflandırma, sıralama ve problem çözme çalışmaları sunun; kuralları öğrencinin kendisinin keşfetmesine olanak verin.",
@@ -326,7 +355,7 @@ const ALANLAR = {
   gorsel: {
     ad: "Görsel-Uzamsal", kisaAd: "Görsel-Uzamsal", renk: "#C0637E",
     kisa: "Bilgiyi resim, renk, şema, grafik ve zihinsel canlandırmalarla işleme eğilimidir.",
-    nasil: "Renkli notlar, şemalar, zihin haritaları ve videolarla daha rahat öğrenebilirsin.",
+    nasil: "Renkli notlar, şemalar, zihin haritaları ve videolarla daha rahat öğrenebilirsin.", nasilF: "Renkli notlar, şemalar, zihin haritaları ve videolarla daha rahat öğrenebilirsiniz.",
     yontemler: ["Renkli notlar alma", "Şema ve zihin haritası çizme", "Grafik ve tablo kullanma", "Video içeriklerden yararlanma", "Konuyu zihinde canlandırma"],
     ders: ["Renkli notlar", "Şemalar", "Zihin haritaları", "Grafikler", "Tablolar", "Video içerikleri", "Resim ve semboller", "Konuyu zihinde canlandırma"],
     ogretmen: "Renkli şema, resim ve kartlar kullanın; bilgiyi görsellerle destekleyin ve öğrencinin çizerek anlatmasına olanak verin.",
@@ -335,7 +364,7 @@ const ALANLAR = {
   beden: {
     ad: "Bedensel-Kinestetik", kisaAd: "Bedensel-Kin.", renk: "#D98A3A",
     kisa: "Hareket, deneyim, dokunma ve uygulama yoluyla öğrenme eğilimidir.",
-    nasil: "Yaparak, deneyerek ve somut materyallerle çalıştığında daha rahat öğrenebilirsin.",
+    nasil: "Yaparak, deneyerek ve somut materyallerle çalıştığında daha rahat öğrenebilirsin.", nasilF: "Yaparak, deneyerek ve somut materyallerle çalıştığınızda daha rahat öğrenebilirsiniz.",
     yontemler: ["Yaparak-yaşayarak öğrenme", "Somut materyallerle çalışma", "Drama ve canlandırma", "Deney yapma", "Hareketli tekrar"],
     ders: ["Yaparak öğrenme", "Drama", "Rol oynama", "Deney", "Maket hazırlama", "Hareketli tekrar", "Kartlarla çalışma", "Somut materyaller kullanma"],
     ogretmen: "Hareketli etkinlikler ve somut materyaller kullanın; öğrenciye deneyerek ve uygulayarak öğrenme fırsatı verin.",
@@ -344,7 +373,7 @@ const ALANLAR = {
   muzik: {
     ad: "Müziksel-Ritmik", kisaAd: "Müziksel-Ritmik", renk: "#2E9E9E",
     kisa: "Ses, ritim, melodi, vurgu ve işitsel örüntülerden yararlanma eğilimidir.",
-    nasil: "Bilgileri şarkı, ritim ve tekerlemelere dönüştürdüğünde daha kolay hatırlayabilirsin.",
+    nasil: "Bilgileri şarkı, ritim ve tekerlemelere dönüştürdüğünde daha kolay hatırlayabilirsin.", nasilF: "Bilgileri şarkı, ritim ve tekerlemelere dönüştürdüğünüzde daha kolay hatırlayabilirsiniz.",
     yontemler: ["Şarkı ve melodiyle tekrar", "Ritim tutarak çalışma", "Tekerleme oluşturma", "Sesli kayıt dinleme", "Vurgulu okuma"],
     ders: ["Şarkıyla tekrar", "Ritim oluşturma", "Tekerleme", "Sesli kayıt", "Vurgulu okuma", "Bilgileri melodiye uyarlama", "Alkış veya tempo eşliğinde tekrar"],
     ogretmen: "Ritim, tekerleme ve şarkılardan yararlanın; bilgileri melodi ve vurguyla ilişkilendirin.",
@@ -353,7 +382,7 @@ const ALANLAR = {
   sosyal: {
     ad: "Sosyal", kisaAd: "Sosyal", renk: "#B24C86",
     kisa: "Başkalarını anlama, iletişim kurma, iş birliği yapma ve birlikte öğrenme eğilimidir.",
-    nasil: "Grup çalışması, akran öğretimi ve tartışma ile daha rahat öğrenebilirsin.",
+    nasil: "Grup çalışması, akran öğretimi ve tartışma ile daha rahat öğrenebilirsin.", nasilF: "Grup çalışması, akran öğretimi ve tartışma ile daha rahat öğrenebilirsiniz.",
     yontemler: ["Grup çalışması", "Akran öğretimi (arkadaşına anlatma)", "Tartışma ve soru-cevap", "Grup projesi", "İş birliğine dayalı oyunlar"],
     ders: ["Grup çalışması", "Akran öğretimi", "Tartışma", "Soru-cevap", "Grup projesi", "Sunum", "Arkadaşla tekrar", "İş birliğine dayalı oyunlar"],
     ogretmen: "Akran çalışmaları ve grup görevleri verin; iş birliğine dayalı etkinliklerden ve tartışmalardan yararlanın.",
@@ -362,7 +391,7 @@ const ALANLAR = {
   icsel: {
     ad: "İçsel", kisaAd: "İçsel", renk: "#4F7BA6",
     kisa: "Kendi duygu, düşünce, hedef ve güçlü yönlerini fark etme eğilimidir.",
-    nasil: "Kendi çalışma planını yaparak, hedef belirleyerek ve sessiz ortamda çalışarak daha verimli olabilirsin.",
+    nasil: "Kendi çalışma planını yaparak, hedef belirleyerek ve sessiz ortamda çalışarak daha verimli olabilirsin.", nasilF: "Kendi çalışma planınızı yaparak, hedef belirleyerek ve sessiz ortamda çalışarak daha verimli olabilirsiniz.",
     yontemler: ["Kişisel çalışma planı yapma", "Küçük hedefler belirleme", "Çalışma günlüğü tutma", "Öz değerlendirme", "Sessiz ve bireysel çalışma"],
     ders: ["Bireysel çalışma planı", "Kişisel hedef belirleme", "Çalışma günlüğü", "Öz değerlendirme", "Sessiz çalışma", "Kendi hızında ilerleme", "Öğrendiklerini düşünerek değerlendirme"],
     ogretmen: "Bireysel düşünme ve hedef belirleme zamanı tanıyın; öz değerlendirmeyi ve kendi hızında ilerlemeyi destekleyin.",
@@ -371,7 +400,7 @@ const ALANLAR = {
   doga: {
     ad: "Doğacı", kisaAd: "Doğacı", renk: "#5B9E5B",
     kisa: "Doğayı, canlıları, çevreyi ve doğal düzenleri gözlemleme ve anlamlandırma eğilimidir.",
-    nasil: "Doğadan örnekler, gözlem ve açık hava etkinlikleriyle daha rahat öğrenebilirsin.",
+    nasil: "Doğadan örnekler, gözlem ve açık hava etkinlikleriyle daha rahat öğrenebilirsin.", nasilF: "Doğadan örnekler, gözlem ve açık hava etkinlikleriyle daha rahat öğrenebilirsiniz.",
     yontemler: ["Doğadan örneklerle çalışma", "Gözlem yapma", "Canlıları sınıflandırma", "Açık hava etkinlikleri", "Koleksiyon ve inceleme"],
     ders: ["Açık hava etkinlikleri", "Doğadan örnekler", "Gözlem çalışmaları", "Canlıları sınıflandırma", "Bitki ve hayvan temalı etkinlikler", "Çevre projeleri", "Gerçek yaşam örnekleri", "Koleksiyon ve inceleme çalışmaları"],
     ogretmen: "Doğa, hayvan ve çevre örneklerinden yararlanın; gözlem ve sınıflandırma etkinlikleri sunun.",
@@ -505,27 +534,48 @@ const IS_ONERI = {
 };
 const IS_UYARI = "Bu örnekler bir meslek testi veya işe uygunluk değerlendirmesi değildir. Meslek ve çalışma alanı seçiminde eğitim, deneyim, beceriler, kişilik özellikleri, değerler ve yaşam koşulları birlikte değerlendirilmelidir.";
 
-/* Cevap seçenekleri (5'li derecelendirme) — puan = index+1 */
-const SECENEKLER = [
-  { metin: "Bana hiç uygun değil", emoji: "😟" },
-  { metin: "Bana biraz uygun",     emoji: "🙁" },
-  { metin: "Kararsızım",           emoji: "😐" },
-  { metin: "Bana uygun",           emoji: "🙂" },
-  { metin: "Bana tamamen uygun",   emoji: "😄" }
+/* Cevap seçenekleri (5'li sıklık ölçeği) — puan = index+1.
+   "Uygunluk" yerine gerçekleşme sıklığı sorulur; böylece kendini olumlu
+   gösterme eğilimi yerine gerçek davranış ölçülür.
+   İlkokulda aynı ölçeğin sadeleştirilmiş biçimi kullanılır.
+   Emojiler bilinçli olarak nötr doluluk halkalarıdır: gülen/üzgün yüz,
+   yüksek puanı "doğru cevap" gibi gösterirdi. */
+const SECENEKLER_GENEL = [
+  { metin: "Beni hiç anlatmıyor",        emoji: "○" },
+  { metin: "Beni pek anlatmıyor",        emoji: "◔" },
+  { metin: "Beni bazen anlatıyor",       emoji: "◑" },
+  { metin: "Beni çoğunlukla anlatıyor",  emoji: "◕" },
+  { metin: "Beni tamamen anlatıyor",     emoji: "●" }
 ];
+const SECENEKLER_ILKOKUL = [
+  { metin: "Hiç böyle değilim",       emoji: "○" },
+  { metin: "Pek böyle değilim",       emoji: "◔" },
+  { metin: "Bazen böyleyim",          emoji: "◑" },
+  { metin: "Çoğu zaman böyleyim",     emoji: "◕" },
+  { metin: "Neredeyse hep böyleyim",  emoji: "●" }
+];
+function secenekListesi(seviye) {
+  return SEVIYELER[seviye].cocuk ? SECENEKLER_ILKOKUL : SECENEKLER_GENEL;
+}
 
 /* Zorunlu bilimsel bilgilendirme metinleri */
 const UYARI_UZUN = "Bu çalışma, Howard Gardner’ın Çoklu Zekâ Kuramı temel alınarak hazırlanmış bir öğrenme eğilimleri ve güçlü yönler envanteridir. Bir zekâ testi, psikolojik test, tanı veya bilimsel ölçüm aracı değildir. Sonuçlar, kişinin farklı öğrenme yöntemlerine yönelik eğilimlerini fark etmesine yardımcı olmak amacıyla sunulur. Sonuçlar yaşa, deneyimlere, ilgi alanlarına ve içinde bulunulan koşullara göre değişebilir.";
 const UYARI_OGRENCI = "Bu envanter, Howard Gardner’ın Çoklu Zekâ Kuramı temel alınarak hazırlanmıştır. Kesin bir zekâ testi, psikolojik değerlendirme, tanı veya akademik başarı ölçümü değildir. Sonuçlar yalnızca kişinin öğrenme eğilimlerini, ilgi alanlarını ve güçlü yönlerini fark etmesine yardımcı olmak amacıyla sunulur. Sonuçlar zaman içinde, deneyimlere ve koşullara bağlı olarak değişebilir.";
 /* Sonuç ekranı "Bu Sonuç Ne Anlama Geliyor?" için sabit metin */
-const UYARI_SONUC = "Bu envanter, Howard Gardner’ın Çoklu Zekâ Kuramı temel alınarak hazırlanmış eğitsel bir farkındalık çalışmasıdır. Kesin bir zekâ testi, psikolojik değerlendirme, tanı veya akademik başarı ölçümü değildir. Sonuçlar kişinin farklı öğrenme yöntemlerine yönelik eğilimlerini fark etmesine yardımcı olmak amacıyla sunulur.";
+const UYARI_SONUC = "Bu envanter, Howard Gardner’ın Çoklu Zekâ Kuramı temel alınarak hazırlanmış eğitsel bir farkındalık çalışmasıdır. Kesin bir zekâ testi, psikolojik değerlendirme, tanı veya yetenek ölçümü değildir. Gösterilen yüzdeler zekâ seviyesini değil, verdiğiniz cevaplarda ilgili öğrenme eğiliminin ne kadar belirgin olduğunu göstermektedir.";
+/* Yüzdelerin ne anlama geldiği — sonuç ekranında yüzdelerin yanında gösterilir */
+const YUZDE_NOTU = "Gösterilen yüzdeler zekâ seviyesini değil, verdiğiniz cevaplarda ilgili öğrenme eğiliminin ne kadar belirgin olduğunu göstermektedir.";
+
+/* Teste başlamadan önce zorunlu olarak gösterilen yönerge */
+const YONERGE_GENEL = "Bu testte doğru veya yanlış cevap yoktur. Olmak istediğiniz kişiyi değil, günlük yaşamda gerçekten nasıl davrandığınızı düşünerek cevap verin. Her soruya yüksek puan vermek daha iyi bir sonuç oluşturmaz.";
+const YONERGE_ILKOKUL = "Doğru veya yanlış cevap yok. Yapmak istediğini değil, çoğu zaman gerçekten nasıl davrandığını düşünerek cevap ver.";
 
 /* Teste başlamadan önce gösterilen, yaş grubuna uygun kısa açıklama */
 const TANITIM = {
-  ilkokul: "Bu test sana hangi yollarla öğrenmeyi daha çok sevdiğini göstermeye yardımcı olur. Doğru veya yanlış cevap yoktur. Sana en uygun cevabı seçmelisin.",
-  ortaokul: "Bu test, hangi yollarla daha rahat öğrendiğini ve hangi alanlara daha fazla ilgi duyduğunu fark etmene yardımcı olur. Doğru veya yanlış cevap yoktur. Her soruda seni en iyi anlatan seçeneği işaretle.",
-  lise: "Bu envanter, bilgiyi hangi yollarla daha rahat öğrendiğini, hangi çalışma yöntemlerine daha yatkın olduğunu ve güçlü yönlerini fark etmene yardımcı olmak için hazırlanmıştır. Doğru veya yanlış cevap yoktur. İdeal olduğunu düşündüğün cevabı değil, seni gerçekten en iyi anlatan seçeneği işaretle.",
-  yetiskin: "Bu envanter, bilgiyi nasıl işlediğinizi, hangi yöntemlerle daha rahat öğrendiğinizi ve günlük yaşamda hangi güçlü yönleri daha sık kullandığınızı fark etmenize yardımcı olmak amacıyla hazırlanmıştır. Doğru veya yanlış cevap yoktur. Olmak istediğiniz kişiyi değil, sizi günlük yaşamda gerçekten en iyi anlatan seçeneği işaretleyin."
+  ilkokul: "Bu test, hangi yollarla daha kolay öğrendiğini fark etmene yardımcı olur. " + YONERGE_ILKOKUL,
+  ortaokul: "Bu envanter, yeni bilgiyi hangi yollarla daha rahat öğrendiğinizi ve öğrendiklerinizi nasıl hatırladığınızı fark etmenize yardımcı olur. " + YONERGE_GENEL,
+  lise: "Bu envanter, bilgiyi hangi yollarla işlediğinizi ve hangi çalışma yöntemlerine daha yatkın olduğunuzu fark etmenize yardımcı olmak için hazırlanmıştır. " + YONERGE_GENEL,
+  yetiskin: "Bu envanter, bilgiyi nasıl işlediğinizi ve günlük yaşamda hangi öğrenme yollarını daha sık kullandığınızı fark etmenize yardımcı olmak amacıyla hazırlanmıştır. " + YONERGE_GENEL
 };
 
 /* Seviyeler. formal: "siz" dili · is: iş/çalışma önerileri (yetişkin) */
@@ -536,111 +586,117 @@ const SEVIYELER = {
   yetiskin: { ad: "Yetişkin", emoji: "💼", yas: "18 yaş ve üzeri", aciklama: "Günlük yaşam, çalışma biçimi, iletişim ve problem çözme alışkanlıkları üzerinden öğrenme eğilimlerini fark etmeye yardımcı olur.", cocuk: false, veli: false, combo: true, akademik: false, is: true, formal: true, aktif: true, tanitim: TANITIM.yetiskin, uyari: UYARI_OGRENCI }
 };
 
-/* İlkokul soruları — kullanıcıya sunulan karışık sırada (alan gruplaması gizli). */
+/* Sorular — alan gruplaması kullanıcıya gösterilmez; sunum sırası sekiz alanı
+   sırayla dolaşır, böylece aynı alanın soruları arka arkaya gelmez.
+   Her alan tam olarak üç soruyla ölçülür ve bu üç soru üç ayrı boyuta bakar:
+     1. tur (1–8)   → öğrenme biçimi (yeni bilgiyi hangi yolla alıyor)
+     2. tur (9–16)  → doğal davranış (özellik kendiliğinden ortaya çıkıyor mu)
+     3. tur (17–24) → hatırlama ve uygulama (bilgiyi nasıl saklıyor/kullanıyor)
+   Sorular "severim" türü genel beğeni yerine somut alışkanlık sorar. */
 const SORULAR = {
   ilkokul: [
-    { t: "Hikâye dinlemeyi severim.", a: "sozel" },
-    { t: "Bulmaca çözmeyi severim.", a: "mantik" },
-    { t: "Resim çizmeyi severim.", a: "gorsel" },
-    { t: "Bir şeyi yaparak öğrenmek bana kolay gelir.", a: "beden" },
-    { t: "Şarkı söylemeyi severim.", a: "muzik" },
-    { t: "Arkadaşlarımla birlikte çalışmayı severim.", a: "sosyal" },
-    { t: "Tek başıma düşünüp karar vermeyi severim.", a: "icsel" },
-    { t: "Hayvanlarla ilgilenmeyi severim.", a: "doga" },
-    { t: "Yeni kelimeler öğrenmek hoşuma gider.", a: "sozel" },
-    { t: "Sayılarla işlem yapmak hoşuma gider.", a: "mantik" },
-    { t: "Renkli anlatımlarla daha kolay öğrenirim.", a: "gorsel" },
-    { t: "Öğrenirken hareket etmeyi severim.", a: "beden" },
-    { t: "Ritim tutmaktan hoşlanırım.", a: "muzik" },
-    { t: "Arkadaşlarımın duygularını anlamaya çalışırım.", a: "sosyal" },
-    { t: "Neleri iyi yaptığımı bilirim.", a: "icsel" },
-    { t: "Doğada zaman geçirmek hoşuma gider.", a: "doga" },
-    { t: "Bir şeyi başkasına anlatmayı severim.", a: "sozel" },
-    { t: "Bir sorunun cevabını adım adım bulmayı severim.", a: "mantik" },
-    { t: "Şekillere, haritalara ve resimlere bakmayı severim.", a: "gorsel" },
-    { t: "Elimle bir şeyler hazırlamaktan hoşlanırım.", a: "beden" },
-    { t: "Şarkı hâline getirilen bilgileri kolay hatırlarım.", a: "muzik" },
-    { t: "Bir arkadaşım zorlandığında ona yardım etmek isterim.", a: "sosyal" },
-    { t: "Kendime küçük hedefler koymaktan hoşlanırım.", a: "icsel" },
-    { t: "Bitkileri ve doğadaki değişiklikleri incelemeyi severim.", a: "doga" }
+    { t: "Dinlediğim bir hikâyeyi kendi sözlerimle anlatabilirim.", a: "sozel" },
+    { t: "Bir oyunun kuralının neden öyle olduğunu anlamak isterim.", a: "mantik" },
+    { t: "Bir konuyu resim veya şekil gördüğümde daha kolay anlarım.", a: "gorsel" },
+    { t: "Bir şeyi kendim deneyince daha iyi öğrenirim.", a: "beden" },
+    { t: "Bir şarkının ritmi değiştiğinde bunu fark ederim.", a: "muzik" },
+    { t: "Bir konuyu arkadaşlarımla konuşmak öğrenmeme yardımcı olur.", a: "sosyal" },
+    { t: "Bir işi bitirdikten sonra neyi iyi yaptığımı düşünürüm.", a: "icsel" },
+    { t: "Doğadaki canlıları benzer özelliklerine göre ayırmayı severim.", a: "doga" },
+    { t: "Yeni öğrendiğim bir kelimeyi cümle içinde kullanmak isterim.", a: "sozel" },
+    { t: "Bir soruyu çözerken önce hangi adımları izleyeceğimi düşünürüm.", a: "mantik" },
+    { t: "Bir yapboz parçasının nereye geleceğini gözümde canlandırabilirim.", a: "gorsel" },
+    { t: "Ellerimle bir şey hazırladığımda konuyu daha iyi anlarım.", a: "beden" },
+    { t: "Duyduğum kısa bir melodiyi daha sonra hatırlayabilirim.", a: "muzik" },
+    { t: "Grup çalışmasında arkadaşlarımın fikirlerini dinleyerek ilerleyebilirim.", a: "sosyal" },
+    { t: "Çalışmaya başlamadan önce neyi bitirmek istediğimi belirlerim.", a: "icsel" },
+    { t: "Mevsim değişirken çevredeki farklılıkları fark ederim.", a: "doga" },
+    { t: "Bir bilgiyi kendi cümlelerimle söylemek hatırlamama yardımcı olur.", a: "sozel" },
+    { t: "Nesneler arasındaki benzerlikleri ve farklılıkları bulmak hoşuma gider.", a: "mantik" },
+    { t: "Bir yeri tarif ederken onu zihnimde görebilirim.", a: "gorsel" },
+    { t: "Öğrenirken hareketli bir etkinlik yapmak dikkatimi toplamama yardım eder.", a: "beden" },
+    { t: "Kelimeleri ritim tutarak tekrar ettiğimde daha kolay hatırlarım.", a: "muzik" },
+    { t: "Birlikte çalışırken görevleri paylaşmak bana kolay gelir.", a: "sosyal" },
+    { t: "Bir konuda zorlandığımda neden zorlandığımı düşünürüm.", a: "icsel" },
+    { t: "Bitkiler, hayvanlar ve doğa olaylarındaki ayrıntıları merak ederim.", a: "doga" }
   ],
   ortaokul: [
-    { t: "Okuduğum bir metni kendi cümlelerimle anlatabilirim.", a: "sozel" },
-    { t: "Bir problemin çözümünü adım adım bulmaktan hoşlanırım.", a: "mantik" },
-    { t: "Şema, resim ve grafiklerle anlatılan konuları daha kolay anlarım.", a: "gorsel" },
-    { t: "Deneyerek ve uygulama yaparak daha iyi öğrenirim.", a: "beden" },
-    { t: "Şarkıların ritmini ve melodisini kolay fark ederim.", a: "muzik" },
-    { t: "Grup çalışmalarında görev almayı severim.", a: "sosyal" },
-    { t: "Güçlü ve geliştirmem gereken yönlerimi düşünürüm.", a: "icsel" },
-    { t: "Hayvanlar, bitkiler ve doğa olayları ilgimi çeker.", a: "doga" },
-    { t: "Yeni kelimeler öğrenmek ve onları kullanmak hoşuma gider.", a: "sozel" },
-    { t: "Sayılar, kurallar ve örüntüler ilgimi çeker.", a: "mantik" },
-    { t: "Bir yeri tarif ederken veya bulurken haritalardan yararlanabilirim.", a: "gorsel" },
-    { t: "Uzun süre oturmak yerine hareketli etkinlikleri tercih ederim.", a: "beden" },
-    { t: "Bir bilgiyi ritim veya melodiyle tekrar ettiğimde daha kolay hatırlarım.", a: "muzik" },
-    { t: "Arkadaşlarımın ne hissettiğini anlamaya çalışırım.", a: "sosyal" },
-    { t: "Kendi hedeflerimi belirlemek beni motive eder.", a: "icsel" },
-    { t: "Çevremdeki canlıları ve doğal değişiklikleri gözlemlemeyi severim.", a: "doga" },
-    { t: "Düşüncelerimi konuşarak veya yazarak anlatmayı severim.", a: "sozel" },
-    { t: "Bir olayın nedenini ve sonucunu araştırmayı severim.", a: "mantik" },
-    { t: "Bir şeyi zihnimde canlandırmak öğrenmeme yardımcı olur.", a: "gorsel" },
-    { t: "Maket, model veya el işi hazırlamaktan hoşlanırım.", a: "beden" },
-    { t: "Ses tonları ve vurgular dikkatimi çeker.", a: "muzik" },
-    { t: "Bir konuyu arkadaşlarımla konuştuğumda daha iyi öğrenirim.", a: "sosyal" },
-    { t: "Tek başıma çalışırken kendi çalışma düzenimi oluşturabilirim.", a: "icsel" },
-    { t: "Bir konuyu doğadan örneklerle öğrendiğimde daha çok ilgimi çeker.", a: "doga" }
+    { t: "Yeni öğrendiğim bir konuyu kendi cümlelerimle açıklamak anlamamı kolaylaştırır.", a: "sozel" },
+    { t: "Bir problemde sonuca geçmeden önce bilgiler arasındaki ilişkiyi araştırırım.", a: "mantik" },
+    { t: "Bir konunun şemasını gördüğümde ayrıntıları daha kolay birleştiririm.", a: "gorsel" },
+    { t: "Uygulama yaptığım konuları daha uzun süre hatırlarım.", a: "beden" },
+    { t: "Bir müzikteki ritim veya tempo değişikliğini kolay fark ederim.", a: "muzik" },
+    { t: "Bir konuyu karşılıklı konuşarak incelemek düşüncelerimi geliştirmeme yardımcı olur.", a: "sosyal" },
+    { t: "Hangi çalışma yönteminin benim için işe yaradığını değerlendirebilirim.", a: "icsel" },
+    { t: "Canlıları ve doğal olayları özelliklerine göre sınıflandırmak ilgimi çeker.", a: "doga" },
+    { t: "Okuduğum bir metnin ana düşüncesini kendi ifadelerimle anlatabilirim.", a: "sozel" },
+    { t: "Bir kuralın yalnızca sonucunu değil, neden geçerli olduğunu da anlamak isterim.", a: "mantik" },
+    { t: "Bir nesnenin başka bir yönden nasıl görüneceğini zihnimde canlandırabilirim.", a: "gorsel" },
+    { t: "Deney, model veya canlandırma kullanılan derslerde daha kolay odaklanırım.", a: "beden" },
+    { t: "Duyduğum melodi veya ses örüntülerini daha sonra hatırlayabilirim.", a: "muzik" },
+    { t: "Grup çalışmasında farklı fikirlerin ortak bir sonuca dönüşmesine katkı sağlayabilirim.", a: "sosyal" },
+    { t: "Bir hedefime ulaşamadığımda çalışma biçimimi gözden geçiririm.", a: "icsel" },
+    { t: "Çevremdeki mevsimsel ve doğal değişiklikleri gözlemlemek ilgimi çeker.", a: "doga" },
+    { t: "Kelime anlamları ve anlatım biçimleri arasındaki farkları fark ederim.", a: "sozel" },
+    { t: "Verilen bilgilerden mantıklı sonuçlar çıkarmayı severim.", a: "mantik" },
+    { t: "Notlarımı tablo, şekil veya zihin haritasına dönüştürmek anlamamı kolaylaştırır.", a: "gorsel" },
+    { t: "Bir beceriyi okuyarak değil, kendim yaparak daha kolay öğrenirim.", a: "beden" },
+    { t: "Ezberlemem gereken bilgileri ritim veya vurgu kullanarak tekrar edebilirim.", a: "muzik" },
+    { t: "Başka bir kişinin bakış açısını dinlemek konuyu farklı yönden görmemi sağlar.", a: "sosyal" },
+    { t: "Çalışırken dikkatimin ne zaman dağıldığını fark edebilirim.", a: "icsel" },
+    { t: "Bir konuyu doğadaki gerçek örneklerle ilişkilendirmek ilgimi artırır.", a: "doga" }
   ],
   lise: [
-    { t: "Düşüncelerimi konuşarak veya yazarak açık biçimde ifade edebilirim.", a: "sozel" },
-    { t: "Karmaşık bir problemi parçalara ayırarak çözmeyi tercih ederim.", a: "mantik" },
-    { t: "Grafik, şema, harita ve görsel notlarla daha rahat öğrenirim.", a: "gorsel" },
-    { t: "Uygulama, deney veya proje yaptığımda konuyu daha iyi kavrarım.", a: "beden" },
-    { t: "Seslerdeki ritim, ton ve vurgu farklılıklarını kolay fark ederim.", a: "muzik" },
-    { t: "Başkalarının bakış açılarını anlamaya çalışırım.", a: "sosyal" },
-    { t: "Kendi güçlü yönlerimi ve geliştirmem gereken alanları değerlendirebilirim.", a: "icsel" },
-    { t: "Doğa, canlılar ve çevresel sorunlarla ilgili konular ilgimi çeker.", a: "doga" },
-    { t: "Okuduğum bir konuyu özetlemek ve yeniden anlatmak öğrenmeme yardımcı olur.", a: "sozel" },
-    { t: "Bir bilginin dayandığı kuralı veya mantığı anlamak isterim.", a: "mantik" },
-    { t: "Bir konuyu anlamaya çalışırken onu zihnimde canlandırırım.", a: "gorsel" },
-    { t: "Uzun süre yalnızca dinlemek yerine aktif olarak bir şeyler yapmayı tercih ederim.", a: "beden" },
-    { t: "Bir bilgiyi sesli, ritmik veya melodik biçimde tekrar etmek hatırlamamı kolaylaştırır.", a: "muzik" },
-    { t: "Grup çalışmalarında iletişim kurma ve görev paylaşımı konusunda aktif olurum.", a: "sosyal" },
-    { t: "Kendi hedeflerimi belirlediğimde daha düzenli çalışırım.", a: "icsel" },
-    { t: "Çevremdeki doğal değişimleri ve canlılar arasındaki farklılıkları gözlemlemeyi severim.", a: "doga" },
-    { t: "Kelimelerin anlamları, anlatım biçimleri ve dil kullanımı dikkatimi çeker.", a: "sozel" },
-    { t: "Veriler arasında bağlantı kurmak ve sonuç çıkarmak hoşuma gider.", a: "mantik" },
-    { t: "Tasarım, düzen, renk ve görsel ayrıntılar dikkatimi çeker.", a: "gorsel" },
-    { t: "El becerisi, spor, drama veya üretime dayalı etkinliklerde rahat hissederim.", a: "beden" },
-    { t: "Melodileri veya şarkı sözlerini kolay hatırlarım.", a: "muzik" },
-    { t: "Bir konuyu tartışarak veya başkasına anlatarak daha iyi öğrenirim.", a: "sosyal" },
-    { t: "Bir konuda karar verirken kendi düşüncelerimi ve duygularımı gözden geçiririm.", a: "icsel" },
-    { t: "Öğrendiğim bilgileri doğa ve gerçek yaşam örnekleriyle ilişkilendirmek hoşuma gider.", a: "doga" }
+    { t: "Karmaşık bir düşünceyi uygun kelimelerle açık biçimde ifade edebilirim.", a: "sozel" },
+    { t: "Bir sonuca ulaşmadan önce varsayımları ve kanıtları ayrı ayrı incelerim.", a: "mantik" },
+    { t: "Bilgiyi şema, grafik veya görsel düzen içinde gördüğümde daha rahat kavrarım.", a: "gorsel" },
+    { t: "Bir konuyu uygulamaya dönüştürdüğümde daha kalıcı öğrenirim.", a: "beden" },
+    { t: "Seslerdeki ritim, tonlama ve vurgu değişikliklerini kolay fark ederim.", a: "muzik" },
+    { t: "Bir konuyu başkalarıyla tartışmak fark etmediğim noktaları görmeme yardımcı olur.", a: "sosyal" },
+    { t: "Başarılı veya başarısız olduğum bir çalışmanın nedenlerini değerlendirebilirim.", a: "icsel" },
+    { t: "Doğadaki sistemler ve canlılar arasındaki ilişkiler ilgimi çeker.", a: "doga" },
+    { t: "Okuduğum bilgiyi kendi anlatım biçimimle yeniden yazmak öğrenmemi kolaylaştırır.", a: "sozel" },
+    { t: "Bir sorunun farklı çözüm yollarını karşılaştırmaktan hoşlanırım.", a: "mantik" },
+    { t: "Bir nesnenin veya planın farklı açılardan nasıl görüneceğini zihnimde canlandırabilirim.", a: "gorsel" },
+    { t: "Deney, saha çalışması veya üretim içeren görevlerde daha rahat öğrenirim.", a: "beden" },
+    { t: "Duyduğum bir melodinin veya ses dizisinin yapısını daha sonra hatırlayabilirim.", a: "muzik" },
+    { t: "Grup çalışmasında insanların nasıl birlikte ilerlediğini takip ederim.", a: "sosyal" },
+    { t: "Kendi belirlediğim hedefler çalışma motivasyonumu artırır.", a: "icsel" },
+    { t: "Bilgileri canlı türleri, çevresel özellikler veya doğal süreçlere göre sınıflandırmak ilgimi çeker.", a: "doga" },
+    { t: "Bir anlatımdaki kelime seçimi ve ifade biçimi dikkatimi çeker.", a: "sozel" },
+    { t: "Veriler arasında örüntü veya tutarsızlık aramak ilgimi çeker.", a: "mantik" },
+    { t: "Bir konunun tamamını anlamak için önce görsel bir taslak oluşturmak işime yarar.", a: "gorsel" },
+    { t: "Uzun süre pasif dinlemek yerine sürece aktif biçimde katılmayı tercih ederim.", a: "beden" },
+    { t: "Bilginin ritim, vurgu veya ses düzeniyle sunulması hatırlamamı etkiler.", a: "muzik" },
+    { t: "Bir görüşe katılmasam bile o kişinin bakış açısını anlamaya çalışabilirim.", a: "sosyal" },
+    { t: "Çalışma biçimimin verimli ve verimsiz yönlerini ayırt edebilirim.", a: "icsel" },
+    { t: "Bir teorinin doğada veya gerçek çevrede nasıl karşılık bulduğunu araştırmak hoşuma gider.", a: "doga" }
   ],
   yetiskin: [
-    { t: "Düşüncelerimi konuşarak veya yazarak açık biçimde ifade edebilirim.", a: "sozel" },
-    { t: "Bir sorunla karşılaştığımda onu küçük parçalara ayırarak çözmeyi tercih ederim.", a: "mantik" },
-    { t: "Grafik, şema, harita ve görsellerle sunulan bilgileri daha kolay anlarım.", a: "gorsel" },
-    { t: "Bir işi uygulayarak veya deneyerek öğrenmek bana daha kolay gelir.", a: "beden" },
-    { t: "Seslerdeki ritim, vurgu ve ton farklılıklarını kolay fark ederim.", a: "muzik" },
-    { t: "İnsanların duygu ve ihtiyaçlarını anlamaya çalışırım.", a: "sosyal" },
-    { t: "Güçlü yönlerimi, sınırlarımı ve geliştirmem gereken alanları değerlendirebilirim.", a: "icsel" },
-    { t: "Doğa, canlılar, çevre ve ekolojik konular ilgimi çeker.", a: "doga" },
-    { t: "Yeni bir bilgiyi kendi cümlelerimle özetlediğimde daha iyi öğrenirim.", a: "sozel" },
-    { t: "Karar verirken nedenleri, sonuçları ve olası seçenekleri karşılaştırırım.", a: "mantik" },
-    { t: "Bir işi planlarken sonucu veya aşamaları zihnimde canlandırırım.", a: "gorsel" },
-    { t: "Uzun süre hareketsiz kalmak yerine hareket içeren çalışmaları tercih ederim.", a: "beden" },
-    { t: "Bir bilgiyi sesli veya ritmik biçimde tekrar etmek hatırlamamı kolaylaştırır.", a: "muzik" },
-    { t: "Bir ekip içinde iletişim kurma ve görev paylaşımı konusunda aktif olurum.", a: "sosyal" },
-    { t: "Kendi hedeflerimi belirlediğimde daha düzenli ve motive çalışırım.", a: "icsel" },
-    { t: "Çevremdeki doğal değişimleri ve canlılar arasındaki farklılıkları gözlemlemeyi severim.", a: "doga" },
-    { t: "Kelimelerin kullanımı, anlatım biçimleri ve dildeki ayrıntılar dikkatimi çeker.", a: "sozel" },
-    { t: "Veriler, sayılar, düzenler ve sistemler arasındaki bağlantıları fark etmek hoşuma gider.", a: "mantik" },
-    { t: "Tasarım, renk, düzen ve görsel ayrıntılar dikkatimi çeker.", a: "gorsel" },
-    { t: "El becerisi, spor, üretim veya uygulama gerektiren etkinliklerde rahat hissederim.", a: "beden" },
-    { t: "Melodileri, şarkı sözlerini veya işitsel ayrıntıları kolay hatırlarım.", a: "muzik" },
-    { t: "Bir konuyu başkalarıyla konuştuğumda veya tartıştığımda daha iyi kavrarım.", a: "sosyal" },
-    { t: "Karar verirken kendi düşüncelerimi, duygularımı ve değerlerimi gözden geçiririm.", a: "icsel" },
-    { t: "Yeni bir bilgiyi gerçek yaşam, doğa veya çevre örnekleriyle ilişkilendirmek hoşuma gider.", a: "doga" }
+    { t: "Karmaşık bir düşünceyi sözlü veya yazılı olarak yapılandırmak benim için doğal bir süreçtir.", a: "sozel" },
+    { t: "Bir sorunla karşılaştığımda önce parçalarını ve aralarındaki ilişkileri belirlerim.", a: "mantik" },
+    { t: "Bir planı uygulamadan önce aşamalarını zihnimde görselleştiririm.", a: "gorsel" },
+    { t: "Yeni bir beceriyi uygulayarak öğrenmeyi tercih ederim.", a: "beden" },
+    { t: "Konuşmalardaki ton, vurgu ve ritim farklılıklarını kolay fark ederim.", a: "muzik" },
+    { t: "Başkalarıyla fikir alışverişi yapmak düşüncelerimi netleştirmeme yardımcı olur.", a: "sosyal" },
+    { t: "Kararlarımın arkasındaki nedenleri düzenli olarak düşünürüm.", a: "icsel" },
+    { t: "Çevredeki doğal değişimleri ve ekolojik ilişkileri gözlemlemek ilgimi çeker.", a: "doga" },
+    { t: "Yeni öğrendiğim bilgiyi kendi ifadelerimle açıklamak onu daha kalıcı hâle getirir.", a: "sozel" },
+    { t: "Karar verirken seçenekleri belirli ölçütlere göre karşılaştırırım.", a: "mantik" },
+    { t: "Karmaşık bilgileri grafik, tablo veya görsel bir düzene dönüştürdüğümde daha rahat anlarım.", a: "gorsel" },
+    { t: "Uygulamalı veya üretime dayalı görevlerde dikkatimi daha kolay korurum.", a: "beden" },
+    { t: "Duyduğum bir melodiyi veya ses örüntüsünü daha sonra zihnimde canlandırabilirim.", a: "muzik" },
+    { t: "Bir ekipte insanların farklı çalışma biçimlerine göre iletişimimi düzenleyebilirim.", a: "sosyal" },
+    { t: "Bir hedefe ulaşamadığımda kullandığım yöntemi ve motivasyonumu gözden geçiririm.", a: "icsel" },
+    { t: "Canlıları, nesneleri veya doğal olayları özelliklerine göre sınıflandırmak ilgimi çeker.", a: "doga" },
+    { t: "Kelimelerin anlam farkları ve anlatım biçimleri dikkatimi çeker.", a: "sozel" },
+    { t: "Bir iddianın kanıtlarını ve olası tutarsızlıklarını incelemek hoşuma gider.", a: "mantik" },
+    { t: "Bir mekânın veya tasarımın farklı biçimlerde nasıl düzenlenebileceğini zihnimde canlandırabilirim.", a: "gorsel" },
+    { t: "Bir işi öğrenirken fiziksel olarak deneme yapabilmek benim için önemlidir.", a: "beden" },
+    { t: "Bilgiyi sesli, ritmik veya vurgulu biçimde tekrar etmek hatırlamamı kolaylaştırır.", a: "muzik" },
+    { t: "Bir görüş ayrılığında karşımdaki kişinin bakış açısını anlayarak ortak yol ararım.", a: "sosyal" },
+    { t: "Hangi koşullarda daha verimli veya daha dağınık çalıştığımı bilirim.", a: "icsel" },
+    { t: "Yeni bilgileri doğa, çevre veya gerçek yaşam sistemleriyle ilişkilendirmek hoşuma gider.", a: "doga" }
   ]
 };
 
@@ -658,13 +714,36 @@ function yuzdeHesapla(cevaplar, seviye) {
     puan: toplam[k], yuzde: Math.round(((toplam[k] - 3) / 12) * 100)
   }));
 }
+/* Yüzdenin anlamı — alanlar birbirine göre yeniden ölçeklenmez, her alan
+   yalnızca kendi üç cevabına göre yorumlanır. */
 function yorumAralik(y) {
-  if (y <= 24) return "Bu eğilim şu anda diğer eğilimlerine göre daha az belirgin görünüyor.";
-  if (y <= 49) return "Bu eğilim bazı durumlarda sana yardımcı olabilir.";
-  if (y <= 69) return "Bu alanda belirgin bir öğrenme eğilimin bulunuyor.";
-  if (y <= 84) return "Bu alan güçlü öğrenme eğilimlerinden biri.";
-  return "Bu alan en belirgin güçlü yönlerinden biri olabilir.";
+  if (y <= 24) return "Bu eğilim cevaplarda çok az görülüyor.";
+  if (y <= 44) return "Bu eğilim bazı durumlarda ortaya çıkıyor.";
+  if (y <= 59) return "Bu eğilim orta düzeyde görülüyor.";
+  if (y <= 74) return "Bu alan belirgin öğrenme eğilimlerinden biri.";
+  if (y <= 89) return "Bu alan güçlü öğrenme eğilimlerinden biri.";
+  // %90+ ancak üç sorunun tamamına çok yüksek ve tutarlı cevap verilirse oluşur
+  // (14 puan = 5+5+4 → %92). Ayrıca bir eşik uygulanmasına gerek yoktur.
+  return "Bu alan cevaplarda çok güçlü ve tutarlı biçimde görülüyor.";
 }
+
+/* Profilin biçimi. Bir basamak = 1 ham puan ≈ %8,3.
+   dengeli  : sekiz alanın tamamı iki basamaktan yakın → dengeli profil metni
+   belirgin : en yüksek alan, ikinciden en az iki basamak yukarıda */
+function profilBicimi(sonuclar) {
+  const yuzdeler = sonuclar.map(r => r.yuzde);
+  const yayilim = Math.max(...yuzdeler) - Math.min(...yuzdeler);
+  const sirali = [...yuzdeler].sort((a, b) => b - a);
+  return { dengeli: yayilim <= 17, belirgin: (sirali[0] - sirali[1]) >= 17 };
+}
+const DENGELI_METIN = {
+  formal: "Sonuçlarınız, farklı öğrenme yöntemlerini benzer sıklıkta kullandığınızı gösteriyor. Tek bir baskın alan yerine birden fazla yöntemi duruma göre birlikte kullanıyor olabilirsiniz.",
+  informal: "Sonuçların, farklı öğrenme yöntemlerini benzer sıklıkta kullandığını gösteriyor. Tek bir baskın alan yerine birden fazla yöntemi duruma göre birlikte kullanıyor olabilirsin."
+};
+const BELIRGIN_METIN = {
+  formal: "Bu alan, cevaplarınızda diğer öğrenme eğilimlerine göre daha belirgin görünüyor.",
+  informal: "Bu alan, cevaplarında diğer öğrenme eğilimlerine göre daha belirgin görünüyor."
+};
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 function benzersiz(arr) { return [...new Set(arr)]; }
 
@@ -772,7 +851,7 @@ function ekranIntro() {
         <span class="lvl-emoji">${s.emoji}</span>
         <div><span class="lvl-yas">${s.yas}</span><h2 style="margin-top:6px;">${s.ad} Testi</h2></div>
       </div>
-      <p class="intro-desc">${s.tanitim} Bu testte <strong>${soruSay} soru</strong> bulunuyor ve cevaplarını istediğin zaman değiştirebilirsin.</p>
+      <p class="intro-desc">${s.tanitim} Bu testte <strong>${soruSay} soru</strong> bulunuyor ve ${s.cocuk ? "cevaplarını istediğin zaman değiştirebilirsin" : "cevaplarınızı istediğiniz zaman değiştirebilirsiniz"}.</p>
       <div class="info-box">${s.uyari}</div>
       <div class="btn-row">
         <button class="btn btn-primary" id="basla">Teste Başla →</button>
@@ -793,13 +872,12 @@ function ekranTest() {
   const sorular = SORULAR[durum.seviye];
   const i = durum.indeks, toplam = sorular.length;
   const soru = sorular[i];
-  const cocuk = SEVIYELER[durum.seviye].cocuk;
   const yuzde = Math.round(((i) / toplam) * 100);
 
-  const secenekler = SECENEKLER.map((o, idx) => {
+  const secenekler = secenekListesi(durum.seviye).map((o, idx) => {
     const puan = idx + 1, secili = durum.cevaplar[i] === puan;
     return `<button type="button" class="opt ${secili ? "secili" : ""}" data-puan="${puan}" aria-pressed="${secili}" aria-label="${esc(o.metin)}">
-      ${cocuk ? `<span class="opt-emoji" aria-hidden="true">${o.emoji}</span>` : ""}
+      <span class="opt-emoji" aria-hidden="true">${o.emoji}</span>
       <span>${o.metin}</span>
       <span class="opt-mark" aria-hidden="true"></span>
     </button>`;
@@ -863,24 +941,57 @@ function ekranKontrol() {
   }
 }
 
+/* Sekiz alanın tamamı için ayrıntı bloğu: yüzde, kısa açıklama, uygun
+   öğrenme yöntemleri, günlük hayat önerileri ve ders/çalışma önerileri.
+   İlk üç alan açık gelir; yazdırırken hepsi açılır (aşağıdaki beforeprint). */
+function alanDetaylari(sonuclar, seviye) {
+  const s = SEVIYELER[seviye], formal = !!s.formal;
+  return sonuclar.map((r, i) => {
+    const A = ALANLAR[r.key];
+    const dersler = (DERS_ONERI[seviye] && DERS_ONERI[seviye][r.key]) || A.ders;
+    const gunluk = formal ? GUNLUK_YETISKIN[r.key].join(", ") + "." : A.gunluk;
+    return `<details class="alan-det" ${i < 3 ? "open" : ""}>
+      <summary>
+        <span class="alan-nokta" style="background:${A.renk};" aria-hidden="true"></span>
+        <span class="alan-ad">${A.ad}</span>
+        <span class="alan-pct" style="color:${A.renk};">%${r.yuzde}</span>
+      </summary>
+      <div class="alan-govde">
+        <p class="alan-yorum">${yorumAralik(r.yuzde)}</p>
+        <p>${A.kisa}</p>
+        <h5>Uygun öğrenme yöntemleri</h5>
+        <ul class="dots">${A.yontemler.map(y => `<li>${y}</li>`).join("")}</ul>
+        <h5>${formal ? "Günlük hayatta uygulayabilecekleriniz" : "Günlük hayatta uygulayabileceklerin"}</h5>
+        <p>${gunluk}</p>
+        <h5>${formal ? "Öğrenme ve çalışma önerileri" : "Ders çalışma önerileri"}</h5>
+        <ul class="dots">${dersler.map(d => `<li>${d}</li>`).join("")}</ul>
+      </div>
+    </details>`;
+  }).join("");
+}
+
 function ekranSonuc() {
   const seviye = durum.seviye, s = SEVIYELER[seviye];
   const formal = !!s.formal;
   const sonuclar = yuzdeHesapla(durum.cevaplar, seviye).sort((a, b) => b.yuzde - a.yuzde);
   const top3 = sonuclar.slice(0, 3);
-  const dengeli = (top3[0].yuzde - top3[2].yuzde) < 5;
+  const { dengeli, belirgin } = profilBicimi(sonuclar);
 
   const topCards = top3.map((r, idx) => {
     const A = ALANLAR[r.key];
     // Eşit yüzdeli alanlar için kesin sıralama yerine "birlikte öne çıkan" ifadesi
     const esitli = top3.some((o, j) => j !== idx && o.yuzde === r.yuzde);
     const etiket = esitli ? "Birlikte Öne Çıkan Alan" : `${idx + 1}. Öne Çıkan Alan`;
+    // Yalnızca gerçekten sıyrılan tek bir alan varsa "daha belirgin" notu düşülür
+    const belirginNot = (belirgin && idx === 0)
+      ? `<div class="top-flag">${formal ? BELIRGIN_METIN.formal : BELIRGIN_METIN.informal}</div>` : "";
     return `<div class="top-card" style="border-top:4px solid ${A.renk};">
       <span class="top-rank">${etiket}</span>
       <div class="top-name">${A.ad}</div>
       <div class="top-pct" style="color:${A.renk};">%${r.yuzde}</div>
+      ${belirginNot}
       <div class="top-desc">${A.kisa}</div>
-      <div class="top-use"><b>${formal ? "Nasıl kullanabilirsiniz?" : "Nasıl kullanabilirsin?"}</b> ${A.nasil}</div>
+      <div class="top-use"><b>${formal ? "Nasıl kullanabilirsiniz?" : "Nasıl kullanabilirsin?"}</b> ${formal ? A.nasilF : A.nasil}</div>
     </div>`;
   }).join("");
 
@@ -896,6 +1007,8 @@ function ekranSonuc() {
     </div>`;
   }).join("");
 
+  const alanKartlari = alanDetaylari(sonuclar, seviye);
+
   $("app").innerHTML = `
     <div class="no-print" style="margin-bottom:18px;"><button type="button" class="btn btn-ghost" id="tekrar">← Başka Bir Seviye Seç</button></div>
 
@@ -906,12 +1019,12 @@ function ekranSonuc() {
       <div class="section-h">🌟 Öne Çıkan Öğrenme Eğilimlerin</div>
       <div class="section-note">${formal ? "En belirgin görünen üç alan. Bu, yalnızca bu alanlara sahip olduğunuz anlamına gelmez." : "En belirgin görünen üç alan. Bu, yalnızca bu alanlara sahip olduğun anlamına gelmez."}</div>
       <div class="top-grid">${topCards}</div>
-      ${dengeli ? `<div class="balanced-box">${formal ? "Sonuçlarınız, birden fazla öğrenme alanını birlikte kullandığınızı gösteriyor. Bu nedenle tek bir yöntem yerine farklı çalışma tekniklerini bir arada kullanmanız daha yararlı olabilir." : "Sonuçların, birden fazla öğrenme alanını birlikte kullandığını gösteriyor. Bu nedenle tek bir yöntem yerine farklı çalışma tekniklerini bir arada kullanman daha yararlı olabilir."}</div>` : ""}
+      ${dengeli ? `<div class="balanced-box">${formal ? DENGELI_METIN.formal : DENGELI_METIN.informal}</div>` : ""}
     </div>
 
     <div class="card">
       <div class="section-h">📊 Tüm Alanlardaki Sonuçların</div>
-      <div class="section-note">Sekiz alan yüksekten düşüğe sıralanmıştır.</div>
+      <div class="section-note">Sekiz alan yüksekten düşüğe sıralanmıştır. ${YUZDE_NOTU}</div>
       ${barlar}
     </div>
 
@@ -919,6 +1032,12 @@ function ekranSonuc() {
       <div class="section-h">🕸️ Öğrenme Eğilimleri Haritan</div>
       <div class="section-note">Sekiz alan tek grafikte. Altındaki liste tüm yüzdeleri ayrıca gösterir.</div>
       <div class="radar-wrap">${radarSVG(sonuclar)}</div>
+    </div>
+
+    <div class="card" id="alanDetay">
+      <div class="section-h">🔍 Alan Alan Ayrıntılı Sonuçlar</div>
+      <div class="section-note">Sekiz alanın her biri için yüzde, kısa açıklama, uygun öğrenme yöntemleri, günlük hayat ve çalışma önerileri. Başlığa dokunarak açıp kapatabilirsiniz.</div>
+      ${alanKartlari}
     </div>
 
     <div class="card rapor" id="rapor">${raporUret(sonuclar, seviye)}</div>
@@ -947,31 +1066,44 @@ function raporUret(sonuclar, seviye) {
   const f = (inf, frm) => formal ? frm : inf; // dile göre metin seç
   const top3 = sonuclar.slice(0, 3);
   const dusuk = sonuclar.filter(r => r.yuzde < 25);
-  const guclu = sonuclar.filter(r => r.yuzde >= 50);
+  // %60 ve üzeri = "belirgin"/"güçlü" bantları; alanlar birbirine göre
+  // ölçeklenmediği için kaç alanın güçlü çıktığı serbesttir.
+  const guclu = sonuclar.filter(r => r.yuzde >= 60);
   const A0 = ALANLAR[top3[0].key];
 
   // Eşitlik durumu: en yüksek yüzdeyi paylaşan alanlar
   const maxP = sonuclar[0].yuzde;
   const esitUst = sonuclar.filter(r => r.yuzde === maxP);
-  const dengeli = (top3[0].yuzde - top3[2].yuzde) < 5;
+  const { dengeli, belirgin } = profilBicimi(sonuclar);
 
   // Bölümleri sırayla topla; numaralandırma otomatik.
   const bolumler = [];
   const ekle = (baslik, icerik) => bolumler.push({ baslik, icerik });
 
-  // 1. Genel profil
+  // 1. Genel profil — sonuçlar yapay olarak yükseltilmez/düşürülmez; metin
+  // yalnızca puanların dağılımını (dengeli / tek alan belirgin / arada) tarif eder.
   let genel = "";
-  if (esitUst.length >= 2) {
+  if (esitUst.length >= 2 && !dengeli) {
     const adlar = esitUst.map(r => ALANLAR[r.key].ad).join(", ");
     genel += f(`${adlar} öğrenme eğilimlerin aynı oranda öne çıkıyor. `,
                `${adlar} öğrenme eğilimleriniz aynı oranda öne çıkıyor. `);
   }
-  if (dengeli || esitUst.length >= 2) {
-    genel += f("Sonuçların, tek bir baskın eğilim yerine birden fazla öğrenme yöntemini birlikte kullandığını gösteriyor. Bu nedenle tek bir yöntem yerine farklı çalışma tekniklerini bir arada kullanman daha yararlı olabilir.",
-               "Sonuçlarınız, tek bir baskın eğilim yerine birden fazla öğrenme yöntemini dengeli biçimde kullandığınızı gösteriyor. Bu nedenle tek bir yöntem yerine farklı çalışma tekniklerini bir arada kullanmanız daha yararlı olabilir.");
+  if (dengeli) {
+    genel += f(DENGELI_METIN.informal, DENGELI_METIN.formal);
+  } else if (belirgin) {
+    genel += f(`${A0.ad} alanı, cevaplarında diğer öğrenme eğilimlerine göre daha belirgin görünüyor. Bu, yalnızca tek bir öğrenme yönün olduğu anlamına gelmez; birden fazla alanı birlikte kullanıyor olabilirsin ve sonuçların zamanla, deneyimlerinle değişebilir.`,
+               `${A0.ad} alanı, cevaplarınızda diğer öğrenme eğilimlerine göre daha belirgin görünüyor. Bu, yalnızca tek bir öğrenme yönünüz olduğu anlamına gelmez; birden fazla alanı birlikte kullanıyor olabilirsiniz ve sonuçlar zamanla, deneyimlerinizle değişebilir.`);
+  } else if (esitUst.length >= 2) {
+    genel += f("Bu alanların hiçbiri diğerinin belirgin biçimde önünde değil; duruma göre birini ya da diğerini kullanıyor olabilirsin.",
+               "Bu alanların hiçbiri diğerinin belirgin biçimde önünde değil; duruma göre birini ya da diğerini kullanıyor olabilirsiniz.");
   } else {
-    genel += f(`Cevaplarına göre ${A0.ad} eğilimin şu anda diğer alanlara göre daha belirgin görünüyor. Ancak bu, yalnızca tek bir öğrenme yönün olduğu anlamına gelmez; birden fazla alanı birlikte kullanıyor olabilirsin ve sonuçların zamanla, deneyimlerinle değişebilir.`,
-               `Sonuçlarınıza göre ${A0.ad} eğiliminiz şu anda diğer alanlara göre daha belirgin görünüyor. Ancak bu, yalnızca tek bir öğrenme yönünüz olduğu anlamına gelmez; birden fazla alanı birlikte kullanıyor olabilirsiniz ve sonuçlar zamanla, deneyimlerinizle değişebilir.`);
+    genel += f(`Cevaplarında birkaç alan öne çıkıyor; tek bir alan diğerlerinin belirgin biçimde önünde değil. En yüksek görünen alan ${A0.ad}, ancak onu yakından izleyen başka alanlar da var.`,
+               `Cevaplarınızda birkaç alan öne çıkıyor; tek bir alan diğerlerinin belirgin biçimde önünde değil. En yüksek görünen alan ${A0.ad}, ancak onu yakından izleyen başka alanlar da var.`);
+  }
+  // Birden fazla alanın gerçekten yüksek çıkması olağan kabul edilir.
+  if (guclu.length >= 3) {
+    genel += f(` Birden fazla alanın yüksek çıkması olağan bir sonuçtur; bu alanların hepsi cevaplarında tutarlı biçimde görüldüğü için birlikte yüksek görünüyor.`,
+               ` Birden fazla alanın yüksek çıkması olağan bir sonuçtur; bu alanların hepsi cevaplarınızda tutarlı biçimde görüldüğü için birlikte yüksek görünüyor.`);
   }
   ekle("Genel Profil", `<p>${genel}</p>`);
 
@@ -1062,6 +1194,12 @@ function raporUret(sonuclar, seviye) {
 
 /* ═════════════ BAŞLAT ═════════════ */
 render();
+
+/* Yazdırma/PDF: kapalı alan ayrıntıları çıktıda görünmez, önce hepsini aç.
+   (CSS ile details açılamadığı için beforeprint gerekiyor; Ctrl+P de tetikler.) */
+window.addEventListener("beforeprint", () => {
+  document.querySelectorAll("#alanDetay details").forEach(d => d.open = true);
+});
 
 /* Mobil menü davranışı assets/site-header.js içinde */
 </script>

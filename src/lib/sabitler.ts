@@ -129,6 +129,43 @@ export const BLOG_DURUM_ETIKETLERI: Record<BlogDurum, string> = {
 /** Bir yazıya eklenebilecek azami etiket sayısı */
 export const BLOG_MAX_ETIKET = 10;
 
+/* ── Ödemeler ─────────────────────────────────────────────────
+   Ödeme kaleminin iki bacağı ayrı durum yürütür:
+     · öğrenci bacağı  → "bekliyor" (tahsil edilmedi) | "odendi" | "iptal"
+     · öğretmen bacağı → "bekliyor" | "hazirlaniyor" (ödeme hazırlanıyor) | "odendi"
+   Durumları yalnız yönetici değiştirir; öğrenci/öğretmen kendi bacağını
+   yalnız okur (bkz. lib/odeme.ts, actions/odeme.ts). */
+export const OGRENCI_ODEME_DURUMLARI = ["bekliyor", "odendi", "iptal"] as const;
+export const KOC_ODEME_DURUMLARI = ["bekliyor", "hazirlaniyor", "odendi"] as const;
+/** Tahsilat yöntemi — "" (belirtilmedi) dahil */
+export const ODEME_YONTEMLERI = ["", "havale", "kart", "nakit", "diger"] as const;
+/** Tek kalemde girilebilecek azami tutar (TL) — hatalı girişe karşı üst sınır */
+export const ODEME_MAX_TUTAR = 1_000_000;
+
+export type OgrenciOdemeDurum = (typeof OGRENCI_ODEME_DURUMLARI)[number];
+export type KocOdemeDurum = (typeof KOC_ODEME_DURUMLARI)[number];
+export type OdemeYontem = (typeof ODEME_YONTEMLERI)[number];
+
+export const OGRENCI_ODEME_ETIKETLERI: Record<OgrenciOdemeDurum, string> = {
+  bekliyor: "Bekliyor",
+  odendi: "Ödendi",
+  iptal: "İptal",
+};
+
+export const KOC_ODEME_ETIKETLERI: Record<KocOdemeDurum, string> = {
+  bekliyor: "Bekliyor",
+  hazirlaniyor: "Hazırlanıyor",
+  odendi: "Ödendi",
+};
+
+export const ODEME_YONTEM_ETIKETLERI: Record<OdemeYontem, string> = {
+  "": "Belirtilmedi",
+  havale: "Havale / EFT",
+  kart: "Kredi kartı",
+  nakit: "Nakit",
+  diger: "Diğer",
+};
+
 /* ── Ön mülakat / başvuru sistemi ─────────────────────────────
    Teknik değerler İngilizce/ascii; kullanıcıya *_ETIKETLERI ile gösterilir. */
 

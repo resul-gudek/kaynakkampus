@@ -70,6 +70,8 @@ model Kullanici {
   videoDersleri   VideoDers[]        @relation("VideoDersOgretmen")
   videoAtamalari  VideoAtama[]       @relation("VideoAtamaOgrenci")
   videoIzlemeleri VideoIzleme[]      @relation("VideoIzlemeOgrenci")
+  odemelerOgrenci Odeme[]            @relation("OdemeOgrenci")
+  odemelerKoc     Odeme[]            @relation("OdemeKoc")
 }
 
 // ── Web Push abonelikleri ────────────────────────────────────
@@ -753,4 +755,52 @@ model BlogYazi {
 
   @@index([durum, yayinTarihi])
   @@index([kategori, durum])
+}
+
+/* ── Ödemeler ─────────────────────────────────────────────────
+   Bir satır = bir ödeme kalemi. İKİ bacağı vardır ve bacaklar birbirinden
+   bağımsız yürür:
+     · öğrenci bacağı  → ogrenciTutar / ogrenciDurum / ogrenciOdemeTarihi
+     · öğretmen bacağı → kocTutar / kocDurum / kocOdemeTarihi
+   Platformda kalan tutar SAKLANMAZ, ogrenciTutar - kocTutar olarak
+   hesaplanır (bkz. lib/odeme.ts platformPayi).
+
+   GİZLİLİK — modülün varlık nedeni: hiçbir rol karşı bacağın FİNANSAL
+   alanlarını görmez.
+     · öğrenci  yalnız kendi satırlarının öğrenci bacağını,
+     · öğretmen yalnız kendi satırlarının öğretmen bacağını (+ ödemenin
+       hangi öğrenci için olduğunu gösteren ad),
+     · yönetici tümünü görür.
+   Bu ayrım tek yerden, lib/odeme.ts içindeki alan listeleriyle (select)
+   uygulanır; sorgular kolonu hiç çekmez — sayfa/istemcide filtreleme YOK.
+
+   Tutarlar tam TL'dir (Int); OzelDers.ucret ile aynı birim.
+   Kullanici'ye FK'ler NoAction (SQL Server çoklu-cascade tuzağı); silme
+   app tarafında $transaction ile yapılır (bkz. actions/admin.ts). */
+model Odeme {
+  id        String     @id @default(cuid())
+  ogrenciId String
+  ogrenci   Kullanici  @relation("OdemeOgrenci", fields: [ogrenciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  kocId     String? // öğretmen payı olmayan kalemde (örn. platform paketi) boş
+  koc       Kullanici? @relation("OdemeKoc", fields: [kocId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  aciklama String   @default("") @db.NVarChar(1000) // her iki tarafın gördüğü kalem açıklaması
+  tarih    DateTime @db.Date // ödeme / vade tarihi
+
+  ogrenciTutar       Int       @default(0) // öğrencinin platforma ödediği (öğretmene GÖSTERİLMEZ)
+  ogrenciDurum       String    @default("bekliyor") // "bekliyor" | "odendi" | "iptal"
+  ogrenciOdemeTarihi DateTime? @db.Date // tahsil edildiği gün
+  yontem             String    @default("") // "" | "havale" | "kart" | "nakit" | "diger"
+
+  kocTutar       Int       @default(0) // öğretmene ödenecek (öğrenciye GÖSTERİLMEZ)
+  kocDurum       String    @default("bekliyor") // "bekliyor" | "hazirlaniyor" | "odendi"
+  kocOdemeTarihi DateTime? @db.Date // öğretmene ödendiği gün
+
+  yoneticiNotu String   @default("") @db.NVarChar(Max) // YALNIZ yönetici görür
+  olusturma    DateTime  @default(now())
+  guncelleme   DateTime  @default(now()) @updatedAt
+
+  @@index([ogrenciId, tarih])
+  @@index([kocId, kocDurum])
+  @@index([ogrenciDurum, tarih])
 }

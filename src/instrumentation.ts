@@ -11,6 +11,11 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const { mailIsleyiciBaslat } = await import("@/lib/mail-isleyici");
     mailIsleyiciBaslat();
+
+    // Sınav takvimini ÖSYM/MEB'den ısıt ve periyodik tazele; böylece hiçbir
+    // ziyaretçi dış kaynak isteklerini beklemez
+    const { takvimIsitmaBaslat } = await import("@/lib/takvim-onbellek");
+    takvimIsitmaBaslat();
   }
 }
 

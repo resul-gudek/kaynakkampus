@@ -19,6 +19,7 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
 | `/canli-ders/[id]` | Zaman ve sınıf üyeliği kontrollü canlı ders hazırlık/katılım ekranı |
 | `/bildirimler` | Bildirim kutusu (koç + öğrenci), kayda deep-link |
 | `/admin` | Yönetici: kullanıcı/koç hesapları (ekle / pasifleştir / şifre sıfırla / sil), mail, aktivite |
+| `/sinav-takvimi.html` | Güncel sınav takvimi: ÖSYM + MEB sınavları, filtre ve sınav detayları |
 | `/odev-olustur.html`, `/bep-olustur.html`, `/ders-programi.html`, `/etkinlikler.html`, `/haberler.html` | Bağımsız statik araçlar (`public/`) |
 
 `legacy/` klasörü eski localStorage tabanlı demo sayfalarını port referansı olarak saklar; sunulmaz.
@@ -76,6 +77,18 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
   `Mesaj` satırları iki kullanıcı arasında tarih sırasına göre gruplanır. Yetki
   `src/actions/mesaj.ts`'te doğrulanır (koç yalnız kendi öğrencisine, öğrenci yalnız
   kendi koçuna). Okunmamış rozeti sidebar'da menü kaleminde gösterilir.
+- **Sınav takvimi:** ÖSYM'nin resmî takvim tablosu (`osym.gov.tr/Sayfa/SinavTakvimi`)
+  sunucu tarafında ayrıştırılır (`src/lib/sinav-takvimi.ts`); duyurular ÖSYM ana sayfası
+  ile ODSGM'den süzülür. Veri `src/lib/takvim-onbellek.ts`'te 6 saatlik önbellekte
+  tutulur, açılışta ısıtılır ve periyodik tazelenir — istek asla dış kaynağı beklemez.
+  Ağ yoksa çekirdek dosya (`public/assets/sinav-takvimi.json`) döner; MEB sınavları
+  (LGS, İOKBS, açık öğretim) ÖSYM tablosunda olmadığı için bu dosyada elle tutulur.
+  ÖSYM yeni yılın takvimini yayımladığında satırlar kendiliğinden eklenir; çekirdekteki
+  "takvim bekleniyor" yer tutucuları `yerineDesen`'e uyan gerçek satır çıkınca düşer.
+  Durum etiketleri (Başvurular Açık, Geç Başvuru, Yaklaşıyor, Sonuç Açıklandı…) veride
+  tutulmaz, istemcide tarihlerden hesaplanır (`public/assets/sinav-takvimi.js`).
+  **Not:** `instrumentation.ts` ile API rotası ayrı paketlere derlenir; bu yüzden
+  önbellek durumu `globalThis` üzerinde tutulur (prisma tekiliyle aynı desen).
 - **Kullanıcı adları** her yerde `toLocaleLowerCase("tr-TR")` ile normalize edilir
   (İ/ı tuzağı — bkz. `kullaniciAdiNormalize`).
 - Gün bazlı tarihler (`@db.Date`) UTC gece yarısı `Date` nesnesidir; karşılaştırma

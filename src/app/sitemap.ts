@@ -16,6 +16,8 @@ function tam(yol: string): string {
 const SABIT_SAYFALAR: { yol: string; oncelik: number; siklik: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
   { yol: "/", oncelik: 1, siklik: "weekly" },
   { yol: "/blog", oncelik: 0.9, siklik: "daily" },
+  // Sınav takvimi ÖSYM/MEB duyurularıyla sık değişir
+  { yol: "/sinav-takvimi.html", oncelik: 0.9, siklik: "daily" },
   { yol: "/haberler.html", oncelik: 0.7, siklik: "daily" },
   { yol: "/hakkimizda.html", oncelik: 0.7, siklik: "monthly" },
   { yol: "/etkinlikler.html", oncelik: 0.7, siklik: "weekly" },

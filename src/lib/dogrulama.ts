@@ -6,7 +6,11 @@ import {
   BLOG_MAX_ETIKET,
   DENEME_TURLERI,
   GUNLER,
+  KOC_ODEME_DURUMLARI,
+  ODEME_MAX_TUTAR,
+  ODEME_YONTEMLERI,
   ODEV_DURUMLARI,
+  OGRENCI_ODEME_DURUMLARI,
   OZEL_DERS_DURUMLARI,
   SEVIYELER,
   TEST_MAX_SORU,
@@ -282,6 +286,35 @@ export const OgrenciKocDegerlendirmeSemasi = z.object({
   gorus: z.string().trim().default(""), // eklemek istediğiniz görüş
   puan: puan5, // genel öğretmen puanı
 });
+
+/* ── Ödemeler ──────────────────────────────────────────────────
+   Yalnız yönetici yazar (bkz. actions/odeme.ts). Öğretmen payı öğrenci
+   tutarını aşamaz; aşarsa platform payı eksiye düşerdi. Payı olan kalemde
+   öğretmen zorunludur — aksi halde kimseye ödenmeyecek bir borç doğar. */
+export const OdemeSemasi = z
+  .object({
+    ogrenciId: z.string().min(1, "Öğrenci seçin"),
+    kocId: z.string().trim().default(""), // "" → öğretmen payı olmayan kalem
+    aciklama: z.string().trim().max(500).default(""),
+    tarih: isoTarih,
+    ogrenciTutar: z.coerce.number().int().min(0).max(ODEME_MAX_TUTAR),
+    ogrenciDurum: z.enum(OGRENCI_ODEME_DURUMLARI).default("bekliyor"),
+    yontem: z.enum(ODEME_YONTEMLERI).default(""),
+    kocTutar: z.coerce.number().int().min(0).max(ODEME_MAX_TUTAR),
+    kocDurum: z.enum(KOC_ODEME_DURUMLARI).default("bekliyor"),
+    yoneticiNotu: z.string().trim().default(""),
+  })
+  .refine((v) => v.kocTutar <= v.ogrenciTutar, {
+    message: "Öğretmen payı, öğrencinin ödediği tutardan büyük olamaz.",
+    path: ["kocTutar"],
+  })
+  .refine((v) => v.kocTutar === 0 || v.kocId !== "", {
+    message: "Öğretmen payı girdiyseniz öğretmen seçmelisiniz.",
+    path: ["kocId"],
+  });
+
+export const OgrenciOdemeDurumSemasi = z.enum(OGRENCI_ODEME_DURUMLARI);
+export const KocOdemeDurumSemasi = z.enum(KOC_ODEME_DURUMLARI);
 
 export const ProfilSemasi = z.object({
   sinav: z.enum(["YKS", "LGS"]),
