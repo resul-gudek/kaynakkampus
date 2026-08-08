@@ -766,65 +766,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ BLOG, HABERLER & SINAV TAKVİMİ
-     Tek bölüm: üstte güncel sınav takvimi şeridi, altta ÖSYM/MEB duyuruları.
-     Kartlar assets/sinav-takvimi.js tarafından doldurulur; veri
-     /api/sinav-takvimi (ÖSYM + MEB) → assets/sinav-takvimi.json sırasıyla alınır.
-     Sınavlar takvim şeridinde zaten öne çıktığı için duyuru kartlarında
-     tekrarlanmaz (data-one-cikan="0"); duyuru alınamazsa yerini onlar doldurur. -->
-<section class="haberler-duyurular st-scope" id="haberler">
-  <div class="container">
-
-    <div class="st-bolum-bas fade-up">
-      <div>
-        <div class="section-label">📰 Blog, Haberler &amp; Sınav Takvimi</div>
-        <h2 class="section-title">Yaklaşan Sınavlar ve <span>Önemli Duyurular</span></h2>
-        <p class="section-sub">
-          Sırada hangi sınav var, hangi başvuru açıldı, hangi sonuç açıklandı?
-          ÖSYM ve MEB'in güncel takvimi ile son duyuruları tek tıklama uzağında.
-        </p>
-      </div>
-      <div class="bolum-sag">
-        <span data-kk-sinav="canli" class="st-canli"><span class="st-canli-nokta"></span>Takvim yükleniyor…</span>
-        <a href="sinav-takvimi.html" class="btn btn-outline">Tüm Sınav Takvimi →</a>
-      </div>
-    </div>
-
-    <!-- ── Güncel sınav takvimi ─────────────────────────────────────── -->
-    <div class="alt-baslik fade-up" id="sinav-takvimi">
-      <h3>🗓️ Güncel Sınav Takvimi</h3>
-      <p>
-        YKS, LGS, AGS, KPSS, ALES, YDS, YÖKDİL, TUS, DUS, MSÜ, DGS ve bursluluk sınavı için
-        başvuru, geç başvuru, sınav ve sonuç tarihleri — durumu her gün kendiliğinden güncellenir.
-      </p>
-    </div>
-
-    <div class="st-serit" data-kk-sinav="serit" data-adet="6" data-mod="baglanti"
-         aria-label="Yaklaşan sınavlar"></div>
-
-    <p class="takvim-ipucu fade-up">
-      Tarihler <a href="https://www.osym.gov.tr/Sayfa/SinavTakvimi" target="_blank" rel="noopener noreferrer">ÖSYM Sınav Takvimi</a>
-      ve <a href="https://www.meb.gov.tr/" target="_blank" rel="noopener noreferrer">MEB duyurularından</a>
-      düzenli olarak alınır. Bir sınavın tüm ayrıntıları ve resmî kılavuz bağlantısı için karta dokun.
-    </p>
-
-    <!-- ── ÖSYM / MEB duyuruları ────────────────────────────────────── -->
-    <div class="alt-baslik fade-up">
-      <h3>📢 ÖSYM &amp; MEB Duyuruları</h3>
-      <p>Kılavuz, başvuru, giriş belgesi ve sonuç duyuruları doğrudan resmî kaynaklardan.</p>
-    </div>
-
-    <div class="st-duyurular" data-kk-sinav="duyurular" data-adet="6" data-one-cikan="0"
-         aria-label="ÖSYM ve MEB duyuruları"></div>
-
-    <div class="bolum-eylemler fade-up">
-      <a href="haberler.html" class="btn btn-outline">Tüm Haberler →</a>
-      <a href="/blog" class="btn btn-outline">Blog Yazıları →</a>
-    </div>
-
-  </div>
-</section>
-
 <!-- ═══════════════════════════════════════════════════════ SUBJECTS (gizli) -->
 <section class="subjects" id="subjects" hidden>
   <div class="container">
@@ -1132,6 +1073,70 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ BLOG, HABERLER & SINAV TAKVİMİ
+     Sayfanın SONUNA yakın durur (kullanıcı kararı): üstteki bölümler önce
+     platformun ne sunduğunu anlatır, güncel takvim/duyurular kapanıştan
+     hemen önce gelir. Menüdeki "Sınav Takvimi" ve footer bağlantıları
+     #sinav-takvimi / #haberler çapalarını kullanır — id'ler korunmalıdır.
+
+     Tek bölüm: üstte güncel sınav takvimi şeridi, altta ÖSYM/MEB duyuruları.
+     Kartlar assets/sinav-takvimi.js tarafından doldurulur; veri
+     /api/sinav-takvimi (ÖSYM + MEB) → assets/sinav-takvimi.json sırasıyla alınır.
+     Sınavlar takvim şeridinde zaten öne çıktığı için duyuru kartlarında
+     tekrarlanmaz (data-one-cikan="0"); duyuru alınamazsa yerini onlar doldurur. -->
+<section class="haberler-duyurular st-scope" id="haberler">
+  <div class="container">
+
+    <div class="st-bolum-bas fade-up">
+      <div>
+        <div class="section-label">📰 Blog, Haberler &amp; Sınav Takvimi</div>
+        <h2 class="section-title">Yaklaşan Sınavlar ve <span>Önemli Duyurular</span></h2>
+        <p class="section-sub">
+          Sırada hangi sınav var, hangi başvuru açıldı, hangi sonuç açıklandı?
+          ÖSYM ve MEB'in güncel takvimi ile son duyuruları tek tıklama uzağında.
+        </p>
+      </div>
+      <div class="bolum-sag">
+        <span data-kk-sinav="canli" class="st-canli"><span class="st-canli-nokta"></span>Takvim yükleniyor…</span>
+        <a href="sinav-takvimi.html" class="btn btn-outline">Tüm Sınav Takvimi →</a>
+      </div>
+    </div>
+
+    <!-- ── Güncel sınav takvimi ─────────────────────────────────────── -->
+    <div class="alt-baslik fade-up" id="sinav-takvimi">
+      <h3>🗓️ Güncel Sınav Takvimi</h3>
+      <p>
+        YKS, LGS, AGS, KPSS, ALES, YDS, YÖKDİL, TUS, DUS, MSÜ, DGS ve bursluluk sınavı için
+        başvuru, geç başvuru, sınav ve sonuç tarihleri — durumu her gün kendiliğinden güncellenir.
+      </p>
+    </div>
+
+    <div class="st-serit" data-kk-sinav="serit" data-adet="6" data-mod="baglanti"
+         aria-label="Yaklaşan sınavlar"></div>
+
+    <p class="takvim-ipucu fade-up">
+      Tarihler <a href="https://www.osym.gov.tr/Sayfa/SinavTakvimi" target="_blank" rel="noopener noreferrer">ÖSYM Sınav Takvimi</a>
+      ve <a href="https://www.meb.gov.tr/" target="_blank" rel="noopener noreferrer">MEB duyurularından</a>
+      düzenli olarak alınır. Bir sınavın tüm ayrıntıları ve resmî kılavuz bağlantısı için karta dokun.
+    </p>
+
+    <!-- ── ÖSYM / MEB duyuruları ────────────────────────────────────── -->
+    <div class="alt-baslik fade-up">
+      <h3>📢 ÖSYM &amp; MEB Duyuruları</h3>
+      <p>Kılavuz, başvuru, giriş belgesi ve sonuç duyuruları doğrudan resmî kaynaklardan.</p>
+    </div>
+
+    <div class="st-duyurular" data-kk-sinav="duyurular" data-adet="6" data-one-cikan="0"
+         aria-label="ÖSYM ve MEB duyuruları"></div>
+
+    <div class="bolum-eylemler fade-up">
+      <a href="haberler.html" class="btn btn-outline">Tüm Haberler →</a>
+      <a href="/blog" class="btn btn-outline">Blog Yazıları →</a>
+    </div>
+
   </div>
 </section>
 
