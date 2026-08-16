@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { yetkiVar } from "@/lib/yetki";
 import { dosyaMutlakYol } from "@/lib/dosya-saklama";
 import { logcu } from "@/lib/log";
-import type { Rol } from "@/lib/sabitler";
+import { egitmenMi, type Rol } from "@/lib/sabitler";
 
 const log = logcu("odev-kanit");
 
@@ -45,7 +45,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 
   const erisim =
     (rol === "ogrenci" && kanit.odev.ogrenciId === kullaniciId) ||
-    (rol === "koc" && kanit.odev.kocId === kullaniciId) ||
+    (egitmenMi(rol) && kanit.odev.kocId === kullaniciId) ||
     (rol === "veli" && kanit.odev.ogrenci.veliId === kullaniciId) ||
     yetkiVar(rol, "panel:admin");
   if (!erisim) {

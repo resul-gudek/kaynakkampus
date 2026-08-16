@@ -26,6 +26,16 @@ export const authConfig = {
 export const ROL_ANASAYFA: Record<string, string> = {
   admin: "/admin",
   koc: "/koc",
+  // Öğretmen ayrı bir roldür; eğitimci panelini koç ile paylaşır (bkz. lib/yetki.ts)
+  ogretmen: "/koc",
   ogrenci: "/ogrenci",
   veli: "/veli",
+};
+
+/** Giriş ekranındaki hesap türünün açılış sayfası. Tür rol değil rol kümesidir:
+    "egitimci" (koç + öğretmen) tek bir eğitimci paneline düşer. */
+export const GIRIS_TURU_ANASAYFA: Record<string, string> = {
+  egitimci: "/koc",
+  ogrenci: "/ogrenci",
+  admin: "/admin",
 };

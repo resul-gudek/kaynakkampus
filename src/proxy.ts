@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import { authConfig, ROL_ANASAYFA } from "@/lib/auth.config";
+import { egitmenMi } from "@/lib/sabitler";
 
 const { auth } = NextAuth(authConfig);
 
@@ -17,7 +18,8 @@ export default auth((req) => {
   const rol = oturum.user.rol ?? "";
   const anasayfa = ROL_ANASAYFA[rol] ?? "/giris";
 
-  if (yol.startsWith("/koc") && rol !== "koc") {
+  // Öğretim paneli: eğitim koçu + öğretmen (iki ayrı rol, ortak panel)
+  if (yol.startsWith("/koc") && !egitmenMi(rol)) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
   if (yol.startsWith("/ogrenci") && rol !== "ogrenci") {
@@ -29,19 +31,19 @@ export default auth((req) => {
   if (yol.startsWith("/veli") && rol !== "veli") {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  if ((yol.startsWith("/siniflar") || yol.startsWith("/canli-ders")) && !["koc", "ogrenci"].includes(rol)) {
+  if ((yol.startsWith("/siniflar") || yol.startsWith("/canli-ders")) && !(egitmenMi(rol) || rol === "ogrenci")) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  // Mesajlar: koç ve öğrenci arası; admin/veli dışarıda
-  if (yol.startsWith("/mesajlar") && !["koc", "ogrenci"].includes(rol)) {
+  // Mesajlar: eğitmen (koç/öğretmen) ve öğrenci arası; admin/veli dışarıda
+  if (yol.startsWith("/mesajlar") && !(egitmenMi(rol) || rol === "ogrenci")) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  // Bildirimler: koç, öğrenci ve yönetici (değerlendirme bildirimleri); veli dışarıda
-  if (yol.startsWith("/bildirimler") && !["koc", "ogrenci", "admin"].includes(rol)) {
+  // Bildirimler: eğitmen, öğrenci ve yönetici (değerlendirme bildirimleri); veli dışarıda
+  if (yol.startsWith("/bildirimler") && !(egitmenMi(rol) || rol === "ogrenci" || rol === "admin")) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  // Video ders yönetimi: öğretmen ve yönetici (yetki "video:yonet")
-  if (yol.startsWith("/video-dersler") && !["koc", "admin"].includes(rol)) {
+  // Video ders yönetimi: eğitmen ve yönetici (yetki "video:yonet")
+  if (yol.startsWith("/video-dersler") && !(egitmenMi(rol) || rol === "admin")) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
   return NextResponse.next();

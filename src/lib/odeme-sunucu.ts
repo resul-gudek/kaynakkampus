@@ -13,6 +13,8 @@
 
 import { prisma } from "./prisma";
 import { isoTarih } from "./hesap";
+import { EGITMEN_ROLLERI, type Rol } from "./sabitler";
+import { ROL_ETIKETLERI } from "./navigasyon";
 import {
   KOC_ODEME_ALANLARI,
   OGRENCI_ODEME_ALANLARI,
@@ -111,14 +113,20 @@ export async function odemeTaraflari() {
       orderBy: { ad: "asc" },
       select: { id: true, ad: true, sinif: true },
     }),
+    // Öğretmen bacağı: koç ve öğretmen ayrı roller, ikisi de ödeme alabilir
     prisma.kullanici.findMany({
-      where: { rol: "koc", aktif: true },
-      orderBy: { ad: "asc" },
-      select: { id: true, ad: true, brans: true },
+      where: { rol: { in: [...EGITMEN_ROLLERI] }, aktif: true },
+      orderBy: [{ rol: "asc" }, { ad: "asc" }],
+      select: { id: true, ad: true, rol: true, brans: true },
     }),
   ]);
   return {
     ogrenciler: ogrenciler.map((o) => ({ id: o.id, ad: o.ad, alt: o.sinif ?? "" })),
-    koclar: koclar.map((k) => ({ id: k.id, ad: k.ad, alt: k.brans ?? "" })),
+    // Alt bilgide rol açıkça yazılır ki koç ile öğretmen seçicide karışmasın
+    koclar: koclar.map((k) => ({
+      id: k.id,
+      ad: k.ad,
+      alt: [ROL_ETIKETLERI[k.rol as Rol] ?? k.rol, k.brans].filter(Boolean).join(" · "),
+    })),
   };
 }

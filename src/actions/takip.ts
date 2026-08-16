@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { TakipSemasi } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
 export async function takipEkle(girdi: unknown): Promise<EylemSonuc> {
@@ -36,7 +37,7 @@ export async function takipDurum(id: string, tamamlandi: boolean): Promise<Eylem
     const kim = await oturumGerekli("koc", "ogrenci");
     const t = await prisma.takip.findUnique({ where: { id } });
     if (!t) return { hata: "Kayıt bulunamadı." };
-    const sahibi = kim.rol === "koc" ? t.kocId === kim.id : t.ogrenciId === kim.id;
+    const sahibi = egitmenMi(kim.rol) ? t.kocId === kim.id : t.ogrenciId === kim.id;
     if (!sahibi) return { hata: "Bu kayıt üzerinde yetkiniz yok." };
     await prisma.takip.update({ where: { id }, data: { tamamlandi: !!tamamlandi } });
     panelleriTazele();

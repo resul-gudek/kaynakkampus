@@ -2,7 +2,14 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { kocEkle, kocAktifDegistir, kocSifreSifirla, kocSil } from "@/actions/admin";
+import {
+  kocEkle,
+  kocAktifDegistir,
+  kocSifreSifirla,
+  kocSil,
+  egitmenRolDegistir,
+} from "@/actions/admin";
+import type { EgitmenRol } from "@/lib/sabitler";
 import stil from "./admin.module.css";
 
 export interface KocGorunum {
@@ -14,10 +21,41 @@ export interface KocGorunum {
   ogrenciSayisi: number;
 }
 
-export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
+/* Koç ve öğretmen AYRI rollerdir; yönetim ekranı ortaktır ama her sayfa
+   yalnız kendi rolünü listeler ve eylemleri o rolle sınırlar (bkz. actions/admin.ts). */
+const METIN: Record<
+  EgitmenRol,
+  { tekil: string; yonelme: string; cogul: string; ikon: string; brans: string }
+> = {
+  koc: {
+    tekil: "Koç",
+    yonelme: "Koça", // "…rolüne taşı" ifadesindeki ek (ünlü uyumu)
+    cogul: "Koçlar",
+    ikon: "🧭",
+    brans: "örn. Rehberlik / Sınav Koçluğu",
+  },
+  ogretmen: {
+    tekil: "Öğretmen",
+    yonelme: "Öğretmene",
+    cogul: "Öğretmenler",
+    ikon: "👩‍🏫",
+    brans: "örn. Matematik / Fizik",
+  },
+};
+
+export default function KocYonetimi({
+  koclar,
+  rol = "koc",
+}: {
+  koclar: KocGorunum[];
+  rol?: EgitmenRol;
+}) {
   const [mesaj, setMesaj] = useState<{ hata?: string; tamam?: string }>({});
   const [bekliyor, baslat] = useTransition();
   const router = useRouter();
+  const m = METIN[rol];
+  const karsiRol: EgitmenRol = rol === "koc" ? "ogretmen" : "koc";
+  const karsi = METIN[karsiRol];
 
   function calistir(islem: () => Promise<{ hata?: string }>, basari: string) {
     baslat(async () => {
@@ -31,7 +69,7 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
     <>
       <div className={stil.bolum}>
         <h2>
-          ➕ <span>Yeni Koç Ekle</span>
+          ➕ <span>Yeni {m.tekil} Ekle</span>
         </h2>
         <form
           className={stil.form}
@@ -42,13 +80,14 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
             calistir(
               () =>
                 kocEkle({
+                  rol,
                   ad: f.get("ad"),
                   kullanici: f.get("kullanici"),
                   sifre: f.get("sifre"),
                   brans: f.get("brans"),
                   eposta: f.get("eposta"),
                 }),
-              "Koç eklendi."
+              `${m.tekil} eklendi.`
             );
             form.reset();
           }}
@@ -67,7 +106,7 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
           </div>
           <div className={stil.formGrup}>
             <label htmlFor="brans">Branş</label>
-            <input id="brans" name="brans" placeholder="örn. Matematik / Rehberlik" />
+            <input id="brans" name="brans" placeholder={m.brans} />
           </div>
           <div className={stil.formGrup}>
             <label htmlFor="eposta">E-posta (hoş geldin maili için)</label>
@@ -83,7 +122,7 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
 
       <div className={stil.bolum}>
         <h2>
-          👩‍🏫 <span>Koçlar</span> ({koclar.length})
+          {m.ikon} <span>{m.cogul}</span> ({koclar.length})
         </h2>
         <div className={stil.tabloSarici}>
           <table className={stil.tablo}>
@@ -118,8 +157,10 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
                         disabled={bekliyor}
                         onClick={() =>
                           calistir(
-                            () => kocAktifDegistir(k.id, !k.aktif),
-                            k.aktif ? "Koç pasifleştirildi (giriş yapamaz)." : "Koç aktifleştirildi."
+                            () => kocAktifDegistir(k.id, !k.aktif, rol),
+                            k.aktif
+                              ? `${m.tekil} pasifleştirildi (giriş yapamaz).`
+                              : `${m.tekil} aktifleştirildi.`
                           )
                         }
                       >
@@ -131,10 +172,28 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
                         onClick={() => {
                           const yeni = prompt(`${k.ad} için yeni şifre (en az 4 karakter):`);
                           if (!yeni) return;
-                          calistir(() => kocSifreSifirla(k.id, yeni), "Şifre güncellendi.");
+                          calistir(() => kocSifreSifirla(k.id, yeni, rol), "Şifre güncellendi.");
                         }}
                       >
                         Şifre Sıfırla
+                      </button>
+                      <button
+                        className="btn btn-outline btn-kucuk"
+                        disabled={bekliyor}
+                        onClick={() => {
+                          if (
+                            !confirm(
+                              `${k.ad} hesabı "${karsi.tekil}" rolüne taşınsın mı?\n\nÖğrencileri, dersleri ve ödeme kayıtları korunur; yalnız rolü değişir. Bundan sonra giriş ekranında "${karsi.tekil}" sekmesini seçmelidir.`
+                            )
+                          )
+                            return;
+                          calistir(
+                            () => egitmenRolDegistir(k.id, karsiRol),
+                            `${k.ad} artık ${karsi.tekil} rolünde.`
+                          );
+                        }}
+                      >
+                        {karsi.yonelme} Taşı
                       </button>
                       <button
                         className="btn btn-outline btn-kucuk"
@@ -143,11 +202,11 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
                         onClick={() => {
                           if (
                             !confirm(
-                              `${k.ad} silinsin mi?\n\nKoça ait ödev/takip/yol/özel ders kayıtları silinir; öğrencileri "atanmamış" duruma geçer. Bu işlem geri alınamaz.`
+                              `${k.ad} silinsin mi?\n\nHesaba ait ödev/takip/yol/özel ders kayıtları silinir; öğrencileri "atanmamış" duruma geçer. Bu işlem geri alınamaz.`
                             )
                           )
                             return;
-                          calistir(() => kocSil(k.id), "Koç silindi.");
+                          calistir(() => kocSil(k.id, rol), `${m.tekil} silindi.`);
                         }}
                       >
                         Sil
@@ -159,7 +218,7 @@ export default function KocYonetimi({ koclar }: { koclar: KocGorunum[] }) {
               {koclar.length === 0 && (
                 <tr>
                   <td colSpan={6} style={{ textAlign: "center", color: "var(--muted)" }}>
-                    Henüz koç yok. Yukarıdaki formdan ekleyin.
+                    Henüz {m.tekil.toLocaleLowerCase("tr-TR")} yok. Yukarıdaki formdan ekleyin.
                   </td>
                 </tr>
               )}

@@ -18,6 +18,15 @@ import stil from "../basvurular.module.css";
 
 export const metadata: Metadata = { title: "Başvuru Detayı – Kaynak Kampüs" };
 
+/* Olumlu sonuçlanan başvuruda hesabın DOĞRU rolle açılması için yöneticiyi
+   ilgili ekrana yollar. Başvuru türü "koc" = eğitim koçu, "ogretmen" = öğretmen;
+   iki tür ayrı kullanıcı rolüne karşılık gelir (bkz. lib/sabitler.ts ROLLER). */
+const HESAP_EKRANI: Record<BasvuruTur, string> = {
+  ogretmen: "/admin/ogretmenler",
+  koc: "/admin/koclar",
+  ogrenci: "/admin/kullanicilar?rol=ogrenci",
+};
+
 type Parametreler = Promise<{ id: string }>;
 
 const fmtTamTarih = new Intl.DateTimeFormat("tr-TR", {
@@ -220,6 +229,14 @@ export default async function BasvuruDetaySayfasi({ params }: { params: Parametr
           <section className={stil.panel}>
             <h2 className={stil.panelBaslik}>🏷️ Durum</h2>
             <DurumSecici id={basvuru.id} durum={basvuru.durum} />
+            {basvuru.durum === "olumlu" && (
+              <p style={{ marginTop: 12, fontSize: ".85rem", color: "var(--muted)" }}>
+                Hesabı <b style={{ color: "var(--text)" }}>{turEtiket}</b> rolüyle açmak için{" "}
+                <Link href={HESAP_EKRANI[basvuru.tur as BasvuruTur] ?? "/admin/kullanicilar"}>
+                  ilgili ekranı aç →
+                </Link>
+              </p>
+            )}
           </section>
 
           <section className={stil.panel}>

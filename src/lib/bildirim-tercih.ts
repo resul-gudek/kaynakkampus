@@ -12,6 +12,8 @@
      bildirimler "genel" sayılır.
    ═══════════════════════════════════════════════════════════════ */
 
+import { EGITMEN_ROLLERI, egitmenMi } from "./sabitler";
+
 /** Kullanıcının yönetebildiği bildirim türleri (Bildirim.hedefTur + "genel"). */
 export const BILDIRIM_TURLERI = [
   "oturum",
@@ -41,21 +43,21 @@ export const TUR_TANIMLARI: TurTanim[] = [
     ad: "Canlı ders hatırlatması",
     aciklama: "Online dersin başlamasına kısa süre kaldığında.",
     ikon: "⏰",
-    roller: ["koc", "ogrenci"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci"],
   },
   {
     tur: "odev",
     ad: "Ödevler",
     aciklama: "Yeni ödev verildiğinde, teslim edildiğinde ve geri bildirim geldiğinde.",
     ikon: "📘",
-    roller: ["koc", "ogrenci"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci"],
   },
   {
     tur: "test",
     ad: "Süreli testler",
     aciklama: "Yeni test atandığında ve test sonucu hazır olduğunda.",
     ikon: "🧪",
-    roller: ["koc", "ogrenci"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci"],
   },
   {
     tur: "video",
@@ -69,21 +71,21 @@ export const TUR_TANIMLARI: TurTanim[] = [
     ad: "Özel dersler",
     aciklama: "Ders talebi, onay, plan değişikliği ve ödeme kayıtlarında.",
     ikon: "🎓",
-    roller: ["koc", "ogrenci"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci"],
   },
   {
     tur: "sinif",
     ad: "Online sınıf",
     aciklama: "Sınıfa eklendiğinde ve ders programı değiştiğinde.",
     ikon: "🏫",
-    roller: ["koc", "ogrenci"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci"],
   },
   {
     tur: "genel",
     ad: "Diğer bildirimler",
     aciklama: "Değerlendirme sonuçları ve yukarıdaki başlıklara girmeyen duyurular.",
     ikon: "🔔",
-    roller: ["koc", "ogrenci", "admin"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci", "admin"],
   },
 ];
 
@@ -153,13 +155,13 @@ export function bildirimYolu(
   if (hedefTur === "oturum") return `/canli-ders/${kayit}`;
   if (hedefTur === "sinif") return `/siniflar?sinif=${kayit}`;
   if (hedefTur === "test") {
-    return rol === "koc" ? `/koc/testler?kayit=${kayit}` : `/ogrenci/testler?kayit=${kayit}`;
+    return egitmenMi(rol) ? `/koc/testler?kayit=${kayit}` : `/ogrenci/testler?kayit=${kayit}`;
   }
   if (hedefTur === "video") return `/ogrenci/videolar/${kayit}`;
 
-  // odev | ozel — koç öğrenci detayında ilgili sekmeye, öğrenci kendi sayfasına
+  // odev | ozel — eğitmen öğrenci detayında ilgili sekmeye, öğrenci kendi sayfasına
   const sekme = hedefTur === "odev" ? "odevler" : "ozel";
-  if (rol === "koc") {
+  if (egitmenMi(rol)) {
     const ogr = encodeURIComponent(hedefOgrenciId ?? "");
     return `/koc/ogrenciler?ogrenci=${ogr}&sekme=${sekme}&kayit=${kayit}`;
   }

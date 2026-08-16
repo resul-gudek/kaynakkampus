@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { YolAdimiSemasi } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
@@ -49,7 +50,7 @@ export async function yolTamamla(id: string, tamamlandi: boolean): Promise<Eylem
     const kim = await oturumGerekli("koc", "ogrenci");
     const a = await prisma.yolAdimi.findUnique({ where: { id } });
     if (!a) return { hata: "Adım bulunamadı." };
-    const sahibi = kim.rol === "koc" ? a.kocId === kim.id : a.ogrenciId === kim.id;
+    const sahibi = egitmenMi(kim.rol) ? a.kocId === kim.id : a.ogrenciId === kim.id;
     if (!sahibi) return { hata: "Bu adım üzerinde yetkiniz yok." };
 
     const adimlar = await prisma.yolAdimi.findMany({

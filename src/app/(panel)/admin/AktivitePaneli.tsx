@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ROL_ETIKETLERI } from "@/lib/navigasyon";
 import stil from "./admin.module.css";
 
 export interface Aktivite {
@@ -29,12 +30,16 @@ export interface Aktivite {
   };
 }
 
+/* Koç ve öğretmen ayrı rollerdir; aktivite listesinde de ayrı etiketlenir
+   (etiketler tek kaynaktan: lib/navigasyon.ts ROL_ETIKETLERI). */
 const ROL_SINIF: Record<string, string> = {
   koc: "rolKoc",
+  ogretmen: "rolOgretmen",
   ogrenci: "rolOgrenci",
   admin: "rolAdmin",
+  veli: "rolVeli",
 };
-const ROL_AD: Record<string, string> = { koc: "Öğretmen", ogrenci: "Öğrenci", admin: "Yönetici" };
+const ROL_AD: Record<string, string> = ROL_ETIKETLERI;
 
 export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
   const router = useRouter();

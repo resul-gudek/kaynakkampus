@@ -92,9 +92,10 @@
 .formHata { color: #b91c1c; border-color: #fecaca; background: #fef2f2; }
 .formBasari { color: var(--yesil); border-color: #bbf7d0; background: #f0fdf4; }
 
+/* Rol sayısı arttıkça kart sayısı da arttığı için sabit sütun yerine auto-fit */
 .ozetGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 14px;
   margin: 22px 0;
 }
@@ -126,6 +127,7 @@
 .yesil { color: var(--yesil); background: rgba(22, 163, 74, .1); }
 .turkuaz { color: var(--teal); background: rgba(14, 165, 201, .11); }
 .turuncu { color: var(--orange); background: rgba(249, 115, 22, .11); }
+.gul { color: var(--gul); background: rgba(201, 135, 146, .18); }
 .ozetKart small { display: block; color: var(--muted); font-size: .72rem; font-weight: 700; }
 .ozetKart b { display: block; margin-top: 2px; color: var(--text); font-size: 1.55rem; line-height: 1; }
 
@@ -262,6 +264,7 @@
 }
 .rol_admin { color: var(--orange); background: rgba(249, 115, 22, .11); }
 .rol_koc { color: var(--blue); background: var(--tint); }
+.rol_ogretmen { color: var(--gul); background: rgba(201, 135, 146, .18); }
 .rol_ogrenci { color: var(--teal); background: rgba(14, 165, 201, .11); }
 .rol_veli { color: var(--yesil); background: rgba(22, 163, 74, .11); }
 .uyari { color: var(--orange); font-weight: 700; }

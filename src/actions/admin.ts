@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { kullaniciAdiNormalize, telefonDuzelt } from "@/lib/hesap";
 import { KocEkleSemasi, KullaniciEkleSemasi } from "@/lib/dogrulama";
+import { egitmenMi, type EgitmenRol } from "@/lib/sabitler";
+import { ROL_ETIKETLERI } from "@/lib/navigasyon";
 import { hosgeldinMailiKuyrukla } from "@/lib/mail";
 import { denetim } from "@/lib/log";
 import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
@@ -12,10 +14,20 @@ import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
 function adminSayfalariniYenile() {
   revalidatePath("/admin");
   revalidatePath("/admin/koclar");
+  revalidatePath("/admin/ogretmenler");
   revalidatePath("/admin/kullanicilar");
 }
 
-/** Admin kullanıcı listesinden yönetici, koç veya öğrenci hesabı oluşturur. */
+/** Hedef eğitmeni doğrular — koç eylemi öğretmeni, öğretmen eylemi koçu etkileyemez.
+    beklenen verilmezse iki eğitmen rolünden biri olması yeterlidir. */
+async function egitmenGetir(id: string, beklenen?: EgitmenRol) {
+  const k = await prisma.kullanici.findUnique({ where: { id } });
+  if (!k || !egitmenMi(k.rol)) return null;
+  if (beklenen && k.rol !== beklenen) return null;
+  return k;
+}
+
+/** Admin kullanıcı listesinden yönetici, koç, öğretmen, öğrenci veya veli hesabı oluşturur. */
 export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
   try {
     const admin = await oturumGerekli("admin");
@@ -25,13 +37,14 @@ export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
     const mevcut = await prisma.kullanici.findUnique({ where: { kullanici } });
     if (mevcut) return { hata: "Bu kullanıcı adı zaten kayıtlı." };
 
+    // Öğrencinin atandığı eğitmen koç ya da öğretmen olabilir (ayrı roller, ortak bağ)
     if (veri.rol === "ogrenci" && veri.kocId) {
       const koc = await prisma.kullanici.findUnique({
         where: { id: veri.kocId },
         select: { rol: true, aktif: true },
       });
-      if (!koc || koc.rol !== "koc") return { hata: "Seçilen koç bulunamadı." };
-      if (!koc.aktif) return { hata: "Pasif bir koça öğrenci atanamaz." };
+      if (!koc || !egitmenMi(koc.rol)) return { hata: "Seçilen koç/öğretmen bulunamadı." };
+      if (!koc.aktif) return { hata: "Pasif bir koça/öğretmene öğrenci atanamaz." };
     }
 
     if (veri.rol === "ogrenci" && veri.veliId) {
@@ -50,7 +63,7 @@ export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
         kullanici,
         sifreHash: bcrypt.hashSync(veri.sifre, 10),
         eposta: veri.eposta,
-        ...(veri.rol === "koc" && { brans: veri.brans }),
+        ...(egitmenMi(veri.rol) && { brans: veri.brans }),
         ...(veri.rol === "ogrenci" && {
           sinif: veri.sinif,
           hedef: veri.hedef,
@@ -77,6 +90,7 @@ export async function kullaniciEkle(girdi: unknown): Promise<EylemSonuc> {
   }
 }
 
+/** Koç ya da öğretmen hesabı oluşturur (girdi.rol ile belirlenir; varsayılan "koc") */
 export async function kocEkle(girdi: unknown): Promise<EylemSonuc> {
   try {
     const admin = await oturumGerekli("admin");
@@ -86,7 +100,7 @@ export async function kocEkle(girdi: unknown): Promise<EylemSonuc> {
     if (mevcut) return { hata: "Bu kullanıcı adı zaten kayıtlı." };
     const yeni = await prisma.kullanici.create({
       data: {
-        rol: "koc",
+        rol: veri.rol,
         ad: veri.ad,
         kullanici,
         sifreHash: bcrypt.hashSync(veri.sifre, 10),
@@ -95,7 +109,7 @@ export async function kocEkle(girdi: unknown): Promise<EylemSonuc> {
       },
     });
     await hosgeldinMailiKuyrukla(yeni); // e-posta girildiyse hoş geldin maili kuyruklanır
-    denetim("admin.kocEkle", admin, { kocId: yeni.id, kullanici });
+    denetim("admin.kocEkle", admin, { kocId: yeni.id, kullanici, rol: veri.rol });
     adminSayfalariniYenile();
     return { tamam: true };
   } catch (e) {
@@ -103,14 +117,19 @@ export async function kocEkle(girdi: unknown): Promise<EylemSonuc> {
   }
 }
 
-/** Koçu pasifleştir/aktifleştir — pasif koç giriş yapamaz */
-export async function kocAktifDegistir(kocId: string, aktif: boolean): Promise<EylemSonuc> {
+/** Koçu/öğretmeni pasifleştir/aktifleştir — pasif hesap giriş yapamaz.
+    beklenenRol verilirse yalnız o roldeki hesap değiştirilebilir (rol karışmasın). */
+export async function kocAktifDegistir(
+  kocId: string,
+  aktif: boolean,
+  beklenenRol?: EgitmenRol
+): Promise<EylemSonuc> {
   try {
     const admin = await oturumGerekli("admin");
-    const k = await prisma.kullanici.findUnique({ where: { id: kocId } });
-    if (!k || k.rol !== "koc") return { hata: "Koç bulunamadı." };
+    const k = await egitmenGetir(kocId, beklenenRol);
+    if (!k) return { hata: `${ROL_ETIKETLERI[beklenenRol ?? "koc"]} bulunamadı.` };
     await prisma.kullanici.update({ where: { id: kocId }, data: { aktif } });
-    denetim("admin.kocAktif", admin, { kocId, kullanici: k.kullanici, aktif });
+    denetim("admin.kocAktif", admin, { kocId, kullanici: k.kullanici, rol: k.rol, aktif });
     adminSayfalariniYenile();
     return { tamam: true };
   } catch (e) {
@@ -118,17 +137,21 @@ export async function kocAktifDegistir(kocId: string, aktif: boolean): Promise<E
   }
 }
 
-export async function kocSifreSifirla(kocId: string, yeniSifre: string): Promise<EylemSonuc> {
+export async function kocSifreSifirla(
+  kocId: string,
+  yeniSifre: string,
+  beklenenRol?: EgitmenRol
+): Promise<EylemSonuc> {
   try {
     const admin = await oturumGerekli("admin");
     if (!yeniSifre || yeniSifre.length < 4) return { hata: "Şifre en az 4 karakter olmalı." };
-    const k = await prisma.kullanici.findUnique({ where: { id: kocId } });
-    if (!k || k.rol !== "koc") return { hata: "Koç bulunamadı." };
+    const k = await egitmenGetir(kocId, beklenenRol);
+    if (!k) return { hata: `${ROL_ETIKETLERI[beklenenRol ?? "koc"]} bulunamadı.` };
     await prisma.kullanici.update({
       where: { id: kocId },
       data: { sifreHash: bcrypt.hashSync(yeniSifre, 10) },
     });
-    denetim("admin.kocSifreSifirla", admin, { kocId, kullanici: k.kullanici });
+    denetim("admin.kocSifreSifirla", admin, { kocId, kullanici: k.kullanici, rol: k.rol });
     adminSayfalariniYenile();
     return { tamam: true };
   } catch (e) {
@@ -136,13 +159,43 @@ export async function kocSifreSifirla(kocId: string, yeniSifre: string): Promise
   }
 }
 
-/** Koçu ve ona ait kayıtları siler; öğrencileri atanmamış duruma çevirir.
-    (MSSQL çoklu cascade yolu kabul etmediği için bağımlılar açıkça silinir.) */
-export async function kocSil(kocId: string): Promise<EylemSonuc> {
+/** Hesabı koç ↔ öğretmen rolleri arasında taşır.
+
+    Sistemde başlangıçta yalnız "koc" rolü olduğundan bazı öğretmen hesapları
+    koç olarak kayıtlı olabilir; bu eylem onları doğru role çeker. İki rol aynı
+    alanları (brans) ve aynı ilişkileri (ogrenciler, odev, ozelDers, odeme…)
+    kullandığı için VERİ TAŞINMAZ, yalnız rol alanı değişir. */
+export async function egitmenRolDegistir(
+  kullaniciId: string,
+  yeniRol: EgitmenRol
+): Promise<EylemSonuc> {
   try {
     const admin = await oturumGerekli("admin");
-    const k = await prisma.kullanici.findUnique({ where: { id: kocId } });
-    if (!k || k.rol !== "koc") return { hata: "Koç bulunamadı." };
+    if (!egitmenMi(yeniRol)) return { hata: "Geçersiz rol." };
+    const k = await egitmenGetir(kullaniciId);
+    if (!k) return { hata: "Koç/öğretmen bulunamadı." };
+    if (k.rol === yeniRol) return { hata: `Hesap zaten ${ROL_ETIKETLERI[yeniRol]} rolünde.` };
+    await prisma.kullanici.update({ where: { id: kullaniciId }, data: { rol: yeniRol } });
+    denetim("admin.egitmenRolDegistir", admin, {
+      kullaniciId,
+      kullanici: k.kullanici,
+      eskiRol: k.rol,
+      yeniRol,
+    });
+    adminSayfalariniYenile();
+    return { tamam: true };
+  } catch (e) {
+    return { hata: hataMetni(e, "admin.egitmenRolDegistir") };
+  }
+}
+
+/** Koçu/öğretmeni ve ona ait kayıtları siler; öğrencileri atanmamış duruma çevirir.
+    (MSSQL çoklu cascade yolu kabul etmediği için bağımlılar açıkça silinir.) */
+export async function kocSil(kocId: string, beklenenRol?: EgitmenRol): Promise<EylemSonuc> {
+  try {
+    const admin = await oturumGerekli("admin");
+    const k = await egitmenGetir(kocId, beklenenRol);
+    if (!k) return { hata: `${ROL_ETIKETLERI[beklenenRol ?? "koc"]} bulunamadı.` };
 
     await prisma.$transaction(async (tx) => {
       await tx.odev.deleteMany({ where: { kocId } });
@@ -156,7 +209,7 @@ export async function kocSil(kocId: string): Promise<EylemSonuc> {
       await tx.kullanici.updateMany({ where: { kocId }, data: { kocId: null } });
       await tx.kullanici.delete({ where: { id: kocId } });
     });
-    denetim("admin.kocSil", admin, { kocId, kullanici: k.kullanici, ad: k.ad });
+    denetim("admin.kocSil", admin, { kocId, kullanici: k.kullanici, ad: k.ad, rol: k.rol });
     adminSayfalariniYenile();
     return { tamam: true };
   } catch (e) {

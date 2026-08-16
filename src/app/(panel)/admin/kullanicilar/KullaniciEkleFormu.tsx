@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { kullaniciEkle } from "@/actions/admin";
+import { egitmenMi, type Rol } from "@/lib/sabitler";
 import stil from "./kullanicilar.module.css";
 
 interface KullaniciSecenegi {
@@ -10,15 +11,22 @@ interface KullaniciSecenegi {
   ad: string;
 }
 
+/** Öğrenci ataması seçeneği — koç ve öğretmen ayrı gruplarda gösterilir */
+interface EgitmenSecenegi extends KullaniciSecenegi {
+  rol: string;
+}
+
 export default function KullaniciEkleFormu({
   koclar,
   veliler,
 }: {
-  koclar: KullaniciSecenegi[];
+  koclar: EgitmenSecenegi[];
   veliler: KullaniciSecenegi[];
 }) {
   const [acik, setAcik] = useState(false);
-  const [rol, setRol] = useState<"admin" | "koc" | "ogrenci" | "veli">("ogrenci");
+  const [rol, setRol] = useState<Rol>("ogrenci");
+  const kocSecenekleri = koclar.filter((k) => k.rol === "koc");
+  const ogretmenSecenekleri = koclar.filter((k) => k.rol === "ogretmen");
   const [mesaj, setMesaj] = useState<{ hata?: string; tamam?: string }>({});
   const [bekliyor, baslat] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
@@ -61,7 +69,7 @@ export default function KullaniciEkleFormu({
           <span className={stil.eklemeIkon}>＋</span>
           <div>
             <h2>Yeni kullanıcı ekle</h2>
-            <p>Yönetici, koç, öğrenci veya veli hesabı oluşturun.</p>
+            <p>Yönetici, koç, öğretmen, öğrenci veya veli hesabı oluşturun.</p>
           </div>
         </div>
         <button
@@ -95,6 +103,7 @@ export default function KullaniciEkleFormu({
                 required
               >
                 <option value="ogrenci">Öğrenci</option>
+                <option value="ogretmen">Öğretmen</option>
                 <option value="koc">Koç</option>
                 <option value="veli">Veli</option>
                 <option value="admin">Yönetici</option>
@@ -134,10 +143,15 @@ export default function KullaniciEkleFormu({
               <input name="eposta" type="email" autoComplete="email" placeholder="ornek@eposta.com" />
             </label>
 
-            {rol === "koc" && (
+            {egitmenMi(rol) && (
               <label className={stil.formGrup}>
                 <span>Branş</span>
-                <input name="brans" placeholder="Örn. Matematik / Rehberlik" />
+                <input
+                  name="brans"
+                  placeholder={
+                    rol === "ogretmen" ? "Örn. Matematik / Fizik" : "Örn. Rehberlik / Sınav Koçluğu"
+                  }
+                />
               </label>
             )}
 
@@ -151,13 +165,25 @@ export default function KullaniciEkleFormu({
                   <span>Hedef</span>
                   <input name="hedef" placeholder="Örn. YKS 2027" />
                 </label>
+                {/* Koç ve öğretmen ayrı rollerdir; seçici de ayrı gruplar hâlinde sunulur */}
                 <label className={stil.formGrup}>
-                  <span>Koç Ataması</span>
+                  <span>Koç / Öğretmen Ataması</span>
                   <select name="kocId" defaultValue="">
                     <option value="">Şimdilik atama</option>
-                    {koclar.map((koc) => (
-                      <option key={koc.id} value={koc.id}>{koc.ad}</option>
-                    ))}
+                    {kocSecenekleri.length > 0 && (
+                      <optgroup label="Eğitim Koçları">
+                        {kocSecenekleri.map((koc) => (
+                          <option key={koc.id} value={koc.id}>{koc.ad}</option>
+                        ))}
+                      </optgroup>
+                    )}
+                    {ogretmenSecenekleri.length > 0 && (
+                      <optgroup label="Öğretmenler">
+                        {ogretmenSecenekleri.map((ogretmen) => (
+                          <option key={ogretmen.id} value={ogretmen.id}>{ogretmen.ad}</option>
+                        ))}
+                      </optgroup>
+                    )}
                   </select>
                 </label>
                 <label className={stil.formGrup}>

@@ -25,7 +25,13 @@ export const PROFIL_DERSLERI: Record<string, string[]> = {
   LGS: ["Türkçe", "Matematik", "Fen Bilimleri", "İnkılap Tarihi", "Din Kültürü", "İngilizce"],
 };
 
-export const ROLLER = ["admin", "koc", "ogrenci", "veli"] as const;
+/* Roller — "koc" (eğitim koçu) ile "ogretmen" AYRI rollerdir ve yönetici
+   ekranlarında ayrı listelenir/sayılır/filtrelenir. İkisi de öğretim
+   panelini (yetki: panel:koc) kullandığı için ders/ödev/özel ders/ödeme
+   akışlarında EGITMEN_ROLLERI altında birlikte anılır. */
+export const ROLLER = ["admin", "koc", "ogretmen", "ogrenci", "veli"] as const;
+/** Öğretim kadrosu: eğitim koçu + öğretmen (öğrenciye ders/ödev veren roller) */
+export const EGITMEN_ROLLERI = ["koc", "ogretmen"] as const;
 export const ODEV_DURUMLARI = ["bekliyor", "tamamlandi"] as const;
 export const DENEME_TURLERI = ["TYT", "AYT", "LGS", "Branş"] as const;
 export const OZEL_DERS_DURUMLARI = ["talep", "planlandi", "yapildi", "reddedildi", "iptal"] as const;
@@ -58,6 +64,41 @@ export const VIDEO_MAX_SURE = 600; // dakika
 export const VIDEO_MAX_GOREV = 20;
 
 export type Rol = (typeof ROLLER)[number];
+export type EgitmenRol = (typeof EGITMEN_ROLLERI)[number];
+
+/** Rol öğretim kadrosundan mı? (koç ya da öğretmen) */
+export function egitmenMi(rol: string): rol is EgitmenRol {
+  return (EGITMEN_ROLLERI as readonly string[]).includes(rol);
+}
+
+/* ── Giriş türleri ─────────────────────────────────────────────
+   Giriş ekranındaki sekme bir ROL DEĞİL, rol kümesidir. "Eğitimci"
+   sekmesinden hem eğitim koçu hem öğretmen hesapları girer ve ikisi de
+   aynı eğitimci panelini kullanır. Roller yönetici panelinde ayrı
+   yönetilmeye devam eder (liste, filtre, sayım, koçlar/öğretmenler). */
+export const GIRIS_TURLERI = ["egitimci", "ogrenci", "admin"] as const;
+export type GirisTuru = (typeof GIRIS_TURLERI)[number];
+
+export const GIRIS_TURU_ROLLERI: Record<GirisTuru, readonly Rol[]> = {
+  egitimci: EGITMEN_ROLLERI,
+  ogrenci: ["ogrenci"],
+  admin: ["admin"],
+};
+
+export const GIRIS_TURU_ETIKETLERI: Record<GirisTuru, string> = {
+  egitimci: "Eğitimci",
+  ogrenci: "Öğrenci",
+  admin: "Yönetici",
+};
+
+/** Seçilen giriş türü bu rolü kapsıyor mu?
+    Tür tanınmıyorsa rolün kendisi tür olarak kabul edilir (birebir eşleşme);
+    böylece doğrudan rol adıyla yapılan eski çağrılar da geçerli kalır ve
+    hiçbir durumda kullanıcı kendi rolünden fazlasına erişemez. */
+export function girisTuruUygun(tur: string, rol: string): boolean {
+  const izinli = GIRIS_TURU_ROLLERI[tur as GirisTuru] ?? (ROLLER.includes(tur as Rol) ? [tur as Rol] : []);
+  return (izinli as readonly string[]).includes(rol);
+}
 export type OdevDurum = (typeof ODEV_DURUMLARI)[number];
 export type DenemeTur = (typeof DENEME_TURLERI)[number];
 export type OzelDersDurum = (typeof OZEL_DERS_DURUMLARI)[number];

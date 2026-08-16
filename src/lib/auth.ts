@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
 import { authConfig } from "./auth.config";
 import { kullaniciAdiNormalize } from "./hesap";
+import { girisTuruUygun } from "./sabitler";
 import { logcu } from "./log";
 
 const log = logcu("auth");
@@ -15,26 +16,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         kullanici: { label: "Kullanıcı Adı" },
         sifre: { label: "Şifre", type: "password" },
-        rol: { label: "Rol" },
+        tur: { label: "Hesap Türü" },
       },
       async authorize(creds, istek) {
         const kullanici = kullaniciAdiNormalize(String(creds?.kullanici ?? ""));
         const sifre = String(creds?.sifre ?? "");
-        const rol = String(creds?.rol ?? "");
-        if (!kullanici || !sifre || !rol) return null;
+        const tur = String(creds?.tur ?? "");
+        if (!kullanici || !sifre || !tur) return null;
 
         const u = await prisma.kullanici.findUnique({ where: { kullanici } });
-        // Rol de kimlik bilgisinin parçası (legacy davranışı) + pasif hesap giremez
-        if (!u || u.rol !== rol || !u.aktif) {
+        /* Hesap türü de kimlik bilgisinin parçası (legacy davranışı) + pasif
+           hesap giremez. Tür bir rol değil rol kümesidir: "egitimci" hem koç
+           hem öğretmen hesaplarını kapsar (bkz. lib/sabitler.ts). */
+        if (!u || !u.aktif || !girisTuruUygun(tur, u.rol)) {
           log.warn(
-            { kullanici, rol, neden: !u ? "kullanici-yok" : !u.aktif ? "pasif" : "rol-uyusmaz" },
+            { kullanici, tur, neden: !u ? "kullanici-yok" : !u.aktif ? "pasif" : "tur-uyusmaz" },
             "giriş reddedildi"
           );
           return null;
         }
         const dogru = await bcrypt.compare(sifre, u.sifreHash);
         if (!dogru) {
-          log.warn({ kullanici, rol, neden: "sifre-yanlis" }, "giriş reddedildi");
+          log.warn({ kullanici, tur, neden: "sifre-yanlis" }, "giriş reddedildi");
           return null;
         }
 
@@ -47,7 +50,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           prisma.kullanici.update({ where: { id: u.id }, data: { sonGorulme: new Date() } }),
         ]);
 
-        log.info({ kullaniciId: u.id, kullanici, rol, ip }, "giriş başarılı");
+        // Oturuma yazılan rol daima hesabın GERÇEK rolüdür (koc / ogretmen / …),
+        // seçilen giriş türü değil — yetkiler role göre çözülür.
+        log.info({ kullaniciId: u.id, kullanici, tur, rol: u.rol, ip }, "giriş başarılı");
         return { id: u.id, name: u.ad, rol: u.rol };
       },
     }),

@@ -5,6 +5,7 @@ import {
   BLOG_KATEGORILERI,
   BLOG_MAX_ETIKET,
   DENEME_TURLERI,
+  EGITMEN_ROLLERI,
   GUNLER,
   KOC_ODEME_DURUMLARI,
   ODEME_MAX_TUTAR,
@@ -12,6 +13,7 @@ import {
   ODEV_DURUMLARI,
   OGRENCI_ODEME_DURUMLARI,
   OZEL_DERS_DURUMLARI,
+  ROLLER,
   SEVIYELER,
   TEST_MAX_SORU,
   TEST_MAX_SURE,
@@ -342,7 +344,10 @@ export const OgrenciEkleSemasi = z.object({
   eposta: epostaOpsiyonel,
 });
 
+/* Koç/öğretmen ekleme — iki ayrı roldür, aynı alanları taşır.
+   rol verilmezse geriye dönük uyumluluk için "koc" varsayılır. */
 export const KocEkleSemasi = z.object({
+  rol: z.enum(EGITMEN_ROLLERI, "Geçerli bir rol seçin").default("koc"),
   ad: z.string().trim().min(1, "Ad Soyad gerekli"),
   kullanici: z.string().trim().min(3, "Kullanıcı adı en az 3 karakter"),
   sifre: z.string().min(4, "Şifre en az 4 karakter"),
@@ -351,7 +356,7 @@ export const KocEkleSemasi = z.object({
 });
 
 export const KullaniciEkleSemasi = z.object({
-  rol: z.enum(["admin", "koc", "ogrenci", "veli"], "Geçerli bir rol seçin"),
+  rol: z.enum(ROLLER, "Geçerli bir rol seçin"),
   ad: z.string().trim().min(1, "Ad Soyad gerekli"),
   kullanici: z.string().trim().min(3, "Kullanıcı adı en az 3 karakter"),
   sifre: z.string().min(4, "Şifre en az 4 karakter"),

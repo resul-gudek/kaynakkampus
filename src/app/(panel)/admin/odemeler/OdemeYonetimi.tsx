@@ -209,7 +209,7 @@ export default function OdemeYonetimi({
           </div>
 
           <div className={stil.alan}>
-            <label htmlFor="kocId">Öğretmen (payı varsa)</label>
+            <label htmlFor="kocId">Koç / Öğretmen (payı varsa)</label>
             <select
               id="kocId"
               value={form.kocId}

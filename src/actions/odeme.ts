@@ -20,7 +20,7 @@ import {
   OdemeSemasi,
   OgrenciOdemeDurumSemasi,
 } from "@/lib/dogrulama";
-import type { KocOdemeDurum, OgrenciOdemeDurum } from "@/lib/sabitler";
+import { egitmenMi, type KocOdemeDurum, type OgrenciOdemeDurum } from "@/lib/sabitler";
 import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
 
 function odemeleriTazele() {
@@ -53,7 +53,8 @@ async function taraflariDogrula(ogrenciId: string, kocId: string): Promise<strin
       where: { id: kocId },
       select: { rol: true },
     });
-    if (!koc || koc.rol !== "koc") return "Geçerli bir öğretmen seçin.";
+    // Ödemenin öğretmen bacağı hem koça hem öğretmene bağlanabilir (iki ayrı rol)
+    if (!koc || !egitmenMi(koc.rol)) return "Geçerli bir koç/öğretmen seçin.";
   }
   return null;
 }

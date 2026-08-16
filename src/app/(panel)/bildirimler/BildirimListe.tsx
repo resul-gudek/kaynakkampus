@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { bildirimOkundu, bildirimSil, bildirimTumunuOkundu, bildirimTemizle } from "@/actions/bildirim";
+import { egitmenMi } from "@/lib/sabitler";
 import BosDurum from "@/components/maskot/BosDurum";
 import stil from "./bildirimler.module.css";
 
@@ -45,10 +46,10 @@ export default function BildirimListe({
         });
         return;
       }
-      // Süreli test: koç sonuç tablosundaki oturuma, öğrenci test listesindeki karta gider
+      // Süreli test: eğitmen sonuç tablosundaki oturuma, öğrenci test listesindeki karta gider
       if (b.hedefTur === "test") {
         const url =
-          rol === "koc"
+          egitmenMi(rol)
             ? `/koc/testler?kayit=${encodeURIComponent(b.hedefKayitId)}`
             : `/ogrenci/testler?kayit=${encodeURIComponent(b.hedefKayitId)}`;
         baslat(async () => {
@@ -68,7 +69,7 @@ export default function BildirimListe({
       const sekme = b.hedefTur === "odev" ? "odevler" : "ozel";
       const ogrenciSayfa = b.hedefTur === "odev" ? "/ogrenci/odevler" : "/ogrenci/ozel-dersler";
       const url =
-        rol === "koc"
+        egitmenMi(rol)
           ? `/koc/ogrenciler?ogrenci=${encodeURIComponent(b.hedefOgrenciId ?? "")}&sekme=${sekme}&kayit=${encodeURIComponent(b.hedefKayitId)}`
           : `${ogrenciSayfa}?kayit=${encodeURIComponent(b.hedefKayitId)}`;
       baslat(async () => {

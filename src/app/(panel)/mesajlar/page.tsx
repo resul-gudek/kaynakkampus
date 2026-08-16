@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
+import { egitmenMi } from "@/lib/sabitler";
 import MesajPaneli, { type Konusma, type MesajGorunum } from "./MesajPaneli";
 
 export const metadata: Metadata = { title: "Mesajlar – Kaynak Kampüs" };
@@ -23,9 +24,10 @@ export default async function MesajlarSayfasi({
   const kim = await aktifKullanici();
   const sp = await searchParams;
 
-  /* Muhataplar: koç için kendi öğrencileri, öğrenci için kendi koçu. */
+  /* Muhataplar: eğitmen (koç/öğretmen) için kendi öğrencileri,
+     öğrenci için kendisine atanmış eğitmen. */
   let muhataplar: { id: string; ad: string; altBilgi: string }[] = [];
-  if (kim.rol === "koc") {
+  if (egitmenMi(kim.rol)) {
     const ogrenciler = await prisma.kullanici.findMany({
       where: { rol: "ogrenci", kocId: kim.id, aktif: true },
       orderBy: { ad: "asc" },

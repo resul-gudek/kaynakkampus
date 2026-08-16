@@ -19,6 +19,7 @@ import {
   VideoIlerlemeSemasi,
   VideoNotSemasi,
 } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { dosyaSakla, dosyaSil, klasorSil, type SaklananDosya } from "@/lib/dosya-saklama";
 import {
   EK_GRUPLARI,
@@ -81,7 +82,7 @@ async function hedefleriDogrula(
       select: { id: true, kocId: true },
     });
     if (ogrenciler.length !== ogrenciIdler.length) return "Seçilen öğrencilerden biri bulunamadı.";
-    if (kim.rol === "koc" && ogrenciler.some((o) => o.kocId !== kim.id)) {
+    if (egitmenMi(kim.rol) && ogrenciler.some((o) => o.kocId !== kim.id)) {
       return "Yalnız kendi öğrencilerinize video atayabilirsiniz.";
     }
   }
@@ -91,17 +92,17 @@ async function hedefleriDogrula(
       select: { id: true, ogretmenId: true },
     });
     if (siniflar.length !== sinifIdler.length) return "Seçilen sınıflardan biri bulunamadı.";
-    if (kim.rol === "koc" && siniflar.some((s) => s.ogretmenId !== kim.id)) {
+    if (egitmenMi(kim.rol) && siniflar.some((s) => s.ogretmenId !== kim.id)) {
       return "Yalnız kendi sınıflarınıza video atayabilirsiniz.";
     }
   }
-  // Yönetici başka bir öğretmen adına yükleyebilir; kimlik gerçekten öğretmen mi?
-  if (kim.rol !== "koc") {
+  // Yönetici başka bir eğitmen adına yükleyebilir; kimlik gerçekten eğitmen mi?
+  if (!egitmenMi(kim.rol)) {
     const ogretmen = await prisma.kullanici.findUnique({
       where: { id: ogretmenId },
       select: { rol: true, aktif: true },
     });
-    if (!ogretmen || ogretmen.rol !== "koc") return "Geçerli bir öğretmen seçin.";
+    if (!ogretmen || !egitmenMi(ogretmen.rol)) return "Geçerli bir öğretmen seçin.";
   }
   return null;
 }
@@ -113,8 +114,8 @@ export async function videoDersEkle(formData: FormData): Promise<VideoSonuc> {
   try {
     const kim = await oturumGerekli("koc", "admin");
     const veri = VideoDersSemasi.parse(formVerisi(formData));
-    // Koç daima kendi adına yükler; öğretmen seçimi yalnız yöneticide vardır.
-    const ogretmenId = kim.rol === "koc" ? kim.id : veri.ogretmenId;
+    // Eğitmen daima kendi adına yükler; öğretmen seçimi yalnız yöneticide vardır.
+    const ogretmenId = egitmenMi(kim.rol) ? kim.id : veri.ogretmenId;
     if (!ogretmenId) return { hata: "Öğretmen seçin." };
 
     const hata = await hedefleriDogrula(kim, ogretmenId, veri.ogrenciIdler, veri.sinifIdler);
@@ -208,7 +209,7 @@ export async function videoDersGuncelle(formData: FormData): Promise<VideoSonuc>
     if (!yonetebilir(mevcut, kim)) return { hata: "Bu video üzerinde yetkiniz yok." };
 
     const veri = VideoDersSemasi.parse(formVerisi(formData));
-    const ogretmenId = kim.rol === "koc" ? kim.id : veri.ogretmenId || mevcut.ogretmenId;
+    const ogretmenId = egitmenMi(kim.rol) ? kim.id : veri.ogretmenId || mevcut.ogretmenId;
     const hata = await hedefleriDogrula(kim, ogretmenId, veri.ogrenciIdler, veri.sinifIdler);
     if (hata) return { hata };
 

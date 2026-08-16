@@ -2,17 +2,18 @@ import { prisma } from "@/lib/prisma";
 import { signOut } from "@/lib/auth";
 import { aktifKullanici } from "@/lib/oturum";
 import { rolNavigasyonu, ROL_ETIKETLERI } from "@/lib/navigasyon";
-import type { Rol } from "@/lib/sabitler";
+import { egitmenMi, type Rol } from "@/lib/sabitler";
 import PanelKabuk from "@/components/panel/PanelKabuk";
 import PushKur from "@/components/panel/PushKur";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const kullanici = await aktifKullanici();
   const rol = kullanici.rol as Rol;
-  /* Bildirim: koç, öğrenci ve yönetici (yöneticiye ders değerlendirmeleri düşer).
-     Cihaz push'u bildirim alan her rolde açıktır; mesajlaşma yalnız koç/öğrenci. */
-  const bildirimliRol = rol === "koc" || rol === "ogrenci" || rol === "admin";
-  const dersRolu = rol === "koc" || rol === "ogrenci";
+  /* Bildirim: eğitmen (koç/öğretmen), öğrenci ve yönetici (yöneticiye ders
+     değerlendirmeleri düşer). Cihaz push'u bildirim alan her rolde açıktır;
+     mesajlaşma yalnız eğitmen/öğrenci. */
+  const bildirimliRol = egitmenMi(rol) || rol === "ogrenci" || rol === "admin";
+  const dersRolu = egitmenMi(rol) || rol === "ogrenci";
   const [okunmamis, okunmamisMesaj] = await Promise.all([
     bildirimliRol
       ? prisma.bildirim.count({ where: { aliciId: kullanici.id, okundu: false } })

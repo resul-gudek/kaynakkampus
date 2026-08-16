@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { bildirimEkle } from "@/lib/bildirim";
 import { tarihNesnesi, tarihStr } from "@/lib/hesap";
 import { OdevSemasi, OdevDurumSemasi } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { dosyaSakla, dosyaSil, klasorSil, type SaklananDosya } from "@/lib/dosya-saklama";
 import { KANIT_GRUPLARI, MAX_KANIT, kanitKlasoru } from "@/lib/odev-kanit";
 import { denetim } from "@/lib/log";
@@ -72,7 +73,7 @@ export async function odevDurum(id: string, durum: string): Promise<EylemSonuc> 
     const yeniDurum = OdevDurumSemasi.parse(durum);
     const o = await prisma.odev.findUnique({ where: { id } });
     if (!o) return { hata: "Ödev bulunamadı." };
-    const sahibi = kim.rol === "koc" ? o.kocId === kim.id : o.ogrenciId === kim.id;
+    const sahibi = egitmenMi(kim.rol) ? o.kocId === kim.id : o.ogrenciId === kim.id;
     if (!sahibi) return { hata: "Bu ödev üzerinde yetkiniz yok." };
 
     // Öğrenci tamamlandı diyorsa kanıt fotoğrafı şart (koç serbestçe işaretleyebilir).

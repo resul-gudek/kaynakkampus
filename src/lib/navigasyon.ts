@@ -35,7 +35,8 @@ export const NAVIGASYON: NavKalemi[] = [
   { grup: "Velilik", ad: "Panelim", href: "/veli", ikon: "👪", yetki: "panel:veli" },
   { grup: "Yönetim", ad: "Dashboard", href: "/admin", ikon: "📊", yetki: "panel:admin" },
   { grup: "Yönetim", ad: "Kullanıcı Listesi", href: "/admin/kullanicilar", ikon: "👥", yetki: "panel:admin" },
-  { grup: "Yönetim", ad: "Koçlar Listesi", href: "/admin/koclar", ikon: "👩‍🏫", yetki: "panel:admin" },
+  { grup: "Yönetim", ad: "Koçlar", href: "/admin/koclar", ikon: "🧭", yetki: "panel:admin" },
+  { grup: "Yönetim", ad: "Öğretmenler", href: "/admin/ogretmenler", ikon: "👩‍🏫", yetki: "panel:admin" },
   { grup: "Yönetim", ad: "Değerlendirmeler", href: "/admin/degerlendirmeler", ikon: "⭐", yetki: "panel:admin" },
   { grup: "Yönetim", ad: "Başvurular", href: "/admin/basvurular", ikon: "📥", yetki: "basvuru:yonet" },
   { grup: "Yönetim", ad: "Ödemeler", href: "/admin/odemeler", ikon: "💳", yetki: "odeme:yonet" },
@@ -53,6 +54,7 @@ export const NAVIGASYON: NavKalemi[] = [
 export const ROL_ETIKETLERI: Record<Rol, string> = {
   admin: "Yönetici",
   koc: "Koç",
+  ogretmen: "Öğretmen",
   ogrenci: "Öğrenci",
   veli: "Veli",
 };

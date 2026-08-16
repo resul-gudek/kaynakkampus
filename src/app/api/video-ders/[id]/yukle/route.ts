@@ -10,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { adTemizle, dosyaMutlakYol, dosyaSil } from "@/lib/dosya-saklama";
 import { IZINLI_TURLER, IZINLI_UZANTILAR, MAX_VIDEO_BOYUT } from "@/lib/dosya-tanim";
 import { videoKlasoru } from "@/lib/video-ders";
+import { egitmenMi } from "@/lib/sabitler";
 import { videoYayinBildirimi, yonetebilir } from "@/lib/video-ders-sunucu";
 import { denetim, logcu } from "@/lib/log";
 
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ hata: "Oturum gerekli." }, { status: 401 });
   }
   const kim = { id: oturum.user.id, rol: oturum.user.rol };
-  if (kim.rol !== "koc" && kim.rol !== "admin") {
+  if (!egitmenMi(kim.rol) && kim.rol !== "admin") {
     return NextResponse.json({ hata: "Bu işlem için yetkiniz yok." }, { status: 403 });
   }
 

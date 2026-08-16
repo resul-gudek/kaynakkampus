@@ -5,7 +5,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import { yetkiVar } from "@/lib/yetki";
 import { yonetimFiltresi } from "@/lib/video-ders-sunucu";
 import { ROL_ANASAYFA } from "@/lib/auth.config";
-import type { Rol } from "@/lib/sabitler";
+import { EGITMEN_ROLLERI, type Rol } from "@/lib/sabitler";
 import VideoYonetim, { type VideoSatir, type Secenekler } from "./VideoYonetim";
 
 export const metadata: Metadata = { title: "Video Dersler – Kaynak Kampüs" };
@@ -61,7 +61,8 @@ export default async function VideoDerslerSayfasi() {
     }),
     yonetici
       ? prisma.kullanici.findMany({
-          where: { rol: "koc", aktif: true },
+          // Yönetici video'yu koç ya da öğretmen adına yükleyebilir
+          where: { rol: { in: [...EGITMEN_ROLLERI] }, aktif: true },
           orderBy: { ad: "asc" },
           select: { id: true, ad: true, brans: true },
         })

@@ -42,7 +42,7 @@ export default async function GirisPage() {
           <div className={stil.demoKutu}>
             <strong>Demo hesaplar:</strong>
             <br />
-            Öğretmen → <code>koc1</code> / <code>1234</code>
+            Eğitimci → <code>koc1</code> / <code>1234</code>
             <br />
             Öğrenci → <code>ogrenci1</code> / <code>1234</code>
           </div>

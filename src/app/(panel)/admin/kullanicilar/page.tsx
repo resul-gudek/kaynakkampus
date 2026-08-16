@@ -4,14 +4,13 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
 import { ROL_ETIKETLERI } from "@/lib/navigasyon";
-import type { Rol } from "@/lib/sabitler";
+import { EGITMEN_ROLLERI, ROLLER, egitmenMi, type Rol } from "@/lib/sabitler";
 import KullaniciEkleFormu from "./KullaniciEkleFormu";
 import stil from "./kullanicilar.module.css";
 
 export const metadata: Metadata = { title: "Kullanıcı Listesi – Kaynak Kampüs" };
 
 const SAYFA_BOYUTU = 20;
-const ROLLER = ["admin", "koc", "ogrenci", "veli"] as const;
 
 type AramaParametreleri = Promise<Record<string, string | string[] | undefined>>;
 
@@ -55,7 +54,7 @@ export default async function KullanicilarSayfasi({
   const arama = tekDeger(params.arama).trim().slice(0, 80);
   const rolParam = tekDeger(params.rol);
   const durumParam = tekDeger(params.durum);
-  const rol = ROLLER.includes(rolParam as (typeof ROLLER)[number]) ? rolParam : "";
+  const rol = ROLLER.includes(rolParam as Rol) ? rolParam : "";
   const durum = durumParam === "aktif" || durumParam === "pasif" ? durumParam : "";
   const istenenSayfa = Math.max(1, Number.parseInt(tekDeger(params.sayfa), 10) || 1);
 
@@ -79,10 +78,11 @@ export default async function KullanicilarSayfasi({
       prisma.kullanici.count({ where: { aktif: true } }),
       prisma.kullanici.groupBy({ by: ["rol"], _count: { _all: true } }),
       prisma.kullanici.count({ where }),
+      // Öğrenci ataması: koç ve öğretmen ayrı roller, formda ayrı gruplarda listelenir
       prisma.kullanici.findMany({
-        where: { rol: "koc", aktif: true },
+        where: { rol: { in: [...EGITMEN_ROLLERI] }, aktif: true },
         orderBy: { ad: "asc" },
-        select: { id: true, ad: true },
+        select: { id: true, ad: true, rol: true },
       }),
       prisma.kullanici.findMany({
         where: { rol: "veli", aktif: true },
@@ -129,7 +129,7 @@ export default async function KullanicilarSayfasi({
         <h1>
           Kullanıcı <span>Listesi</span>
         </h1>
-        <p>Tüm yönetici, koç ve öğrenci hesaplarını tek ekrandan görüntüleyin.</p>
+        <p>Tüm yönetici, koç, öğretmen, öğrenci ve veli hesaplarını tek ekrandan görüntüleyin.</p>
       </div>
 
       <KullaniciEkleFormu koclar={kocSecenekleri} veliler={veliSecenekleri} />
@@ -148,8 +148,12 @@ export default async function KullanicilarSayfasi({
           <div><small>Öğrenci</small><b>{rolToplamlari.ogrenci ?? 0}</b></div>
         </div>
         <div className={stil.ozetKart}>
-          <span className={`${stil.ozetIkon} ${stil.turuncu}`}>👩‍🏫</span>
+          <span className={`${stil.ozetIkon} ${stil.turuncu}`}>🧭</span>
           <div><small>Koç</small><b>{rolToplamlari.koc ?? 0}</b></div>
+        </div>
+        <div className={stil.ozetKart}>
+          <span className={`${stil.ozetIkon} ${stil.gul}`}>👩‍🏫</span>
+          <div><small>Öğretmen</small><b>{rolToplamlari.ogretmen ?? 0}</b></div>
         </div>
       </section>
 
@@ -169,10 +173,9 @@ export default async function KullanicilarSayfasi({
             <span className={stil.gizliEtiket}>Role göre filtrele</span>
             <select name="rol" defaultValue={rol}>
               <option value="">Tüm roller</option>
-              <option value="admin">Yönetici</option>
-              <option value="koc">Koç</option>
-              <option value="ogrenci">Öğrenci</option>
-              <option value="veli">Veli</option>
+              {ROLLER.map((r) => (
+                <option key={r} value={r}>{ROL_ETIKETLERI[r]}</option>
+              ))}
             </select>
           </label>
           <label>
@@ -213,16 +216,16 @@ export default async function KullanicilarSayfasi({
               {kullanicilar.map((kullanici) => {
                 const kullaniciRol = kullanici.rol as Rol;
                 const baglanti =
-                  kullanici.rol === "koc"
+                  egitmenMi(kullanici.rol)
                     ? `${kullanici._count.ogrenciler} öğrenci`
                     : kullanici.rol === "veli"
                       ? `${kullanici._count.cocuklar} çocuk`
                       : kullanici.rol === "ogrenci"
-                        ? kullanici.koc?.ad ?? "Koç atanmamış"
+                        ? kullanici.koc?.ad ?? "Atanmamış"
                         : "Yönetim erişimi";
                 const detay =
                   kullanici.eposta ||
-                  (kullanici.rol === "koc"
+                  (egitmenMi(kullanici.rol)
                     ? kullanici.brans
                     : kullanici.rol === "ogrenci"
                       ? [kullanici.sinif, kullanici.telefon].filter(Boolean).join(" · ")

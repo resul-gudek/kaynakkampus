@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { MesajSemasi } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { denetim } from "@/lib/log";
 import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
 
@@ -18,13 +19,14 @@ async function karsiTarafGecerli(
     select: { rol: true, kocId: true, aktif: true },
   });
   if (!alici || !alici.aktif) return false;
-  if (gonderen.rol === "koc") return alici.rol === "ogrenci" && alici.kocId === gonderen.id;
+  // Eğitmen (koç ya da öğretmen) ↔ kendisine atanmış öğrenci
+  if (egitmenMi(gonderen.rol)) return alici.rol === "ogrenci" && alici.kocId === gonderen.id;
   if (gonderen.rol === "ogrenci") {
     const ben = await prisma.kullanici.findUnique({
       where: { id: gonderen.id },
       select: { kocId: true },
     });
-    return alici.rol === "koc" && ben?.kocId === aliciId;
+    return egitmenMi(alici.rol) && ben?.kocId === aliciId;
   }
   return false;
 }

@@ -59,9 +59,10 @@
 }
 .heroIsaret span { font-size: 2.1rem; font-weight: 900; letter-spacing: -.08em; transform: rotate(-7deg); }
 
+/* Kart sayısı role göre değişebildiği için sabit 4 sütun yerine auto-fit */
 .statGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 16px;
   margin: 22px 0;
 }
@@ -99,6 +100,7 @@ a.statKart:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); bo
 .turkuaz { --vurgu: var(--teal); --vurgu-zemin: rgba(201,135,146,.11); }
 .turuncu { --vurgu: var(--orange); --vurgu-zemin: rgba(201,135,146,.11); }
 .yesil { --vurgu: var(--yesil); --vurgu-zemin: rgba(22,163,74,.11); }
+.gul { --vurgu: var(--gul); --vurgu-zemin: rgba(201,135,146,.18); }
 
 .anaGrid {
   display: grid;
@@ -208,7 +210,7 @@ a.statKart:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); bo
 .miniIlerleme span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--teal)); }
 .bosDurum { padding: 30px 12px; color: var(--muted); text-align: center; font-size: .84rem; }
 
-.hizliGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.hizliGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
 .hizliKart {
   display: grid;
   grid-template-columns: 38px 1fr auto;

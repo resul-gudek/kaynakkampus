@@ -6,12 +6,18 @@ const log = logcu("eylem");
 
 export type EylemSonuc = { hata?: string; tamam?: boolean };
 
-/** Server action'larda oturum + rol zorunluluğu (middleware'e ek savunma katmanı). */
+/** Server action'larda oturum + rol zorunluluğu (middleware'e ek savunma katmanı).
+
+    "koc", öğretim akışlarının geçmişten gelen rol anahtarıdır. Öğretmen ayrı
+    bir roldür ama aynı öğretim panelini kullandığı için "koc" beklenen her
+    yerde öğretmen de kabul edilir; yalnız koça özgü bir eylem gerekiyorsa
+    dönen kim.rol açıkça kontrol edilmelidir (bkz. lib/yetki.ts). */
 export async function oturumGerekli(...roller: string[]) {
   const oturum = await auth();
   const u = oturum?.user;
   if (!u?.id || !u.rol) throw new Error("Oturum bulunamadı.");
-  if (roller.length && !roller.includes(u.rol)) throw new Error("Bu işlem için yetkiniz yok.");
+  const izinli = roller.includes("koc") ? [...roller, "ogretmen"] : roller;
+  if (izinli.length && !izinli.includes(u.rol)) throw new Error("Bu işlem için yetkiniz yok.");
   return { id: u.id, rol: u.rol };
 }
 

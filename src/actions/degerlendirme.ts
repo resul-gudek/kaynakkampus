@@ -8,6 +8,7 @@ import {
   KocOgrenciDegerlendirmeSemasi,
   OgrenciKocDegerlendirmeSemasi,
 } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
@@ -37,7 +38,7 @@ export async function degerlendirmeKaydet(
     let hedefId: string;
     let veri: Record<string, unknown>;
 
-    if (kim.rol === "koc") {
+    if (egitmenMi(kim.rol)) {
       if (ders.kocId !== kim.id) return { hata: "Bu ders size atanmış değil." };
       yon = "kocOgrenci";
       hedefId = ders.ogrenciId;
@@ -75,10 +76,10 @@ export async function degerlendirmeKaydet(
         const m = ozelDersMetni(ders);
         const yazar = await tx.kullanici.findUnique({ where: { id: kim.id } });
         const hedefKisi = await tx.kullanici.findUnique({ where: { id: hedefId } });
-        const yazarAd = yazar?.ad ?? (kim.rol === "koc" ? "Öğretmen" : "Öğrenci");
+        const yazarAd = yazar?.ad ?? (egitmenMi(kim.rol) ? "Öğretmen" : "Öğrenci");
         const hedefAd = hedefKisi?.ad ?? "—";
         const metin =
-          kim.rol === "koc"
+          egitmenMi(kim.rol)
             ? `Yeni ders değerlendirmesi — ${yazarAd} → ${hedefAd}: ${m}`
             : `Yeni ders değerlendirmesi — ${yazarAd} → öğretmeni ${hedefAd}: ${m}`;
         const yoneticiler = await tx.kullanici.findMany({

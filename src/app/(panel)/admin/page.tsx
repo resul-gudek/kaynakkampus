@@ -16,8 +16,17 @@ export default async function AdminDashboard() {
   const bugunBasi = new Date();
   bugunBasi.setHours(0, 0, 0, 0);
 
-  const [koclar, ogrenciToplam, atanmamis, bekleyenOdev, yaklasanDers, bugunGirisler] =
-    await Promise.all([
+  /* Koç ve öğretmen AYRI rollerdir; sayımlar da ayrı yapılır. */
+  const [
+    koclar,
+    ogretmenToplam,
+    ogretmenAktif,
+    ogrenciToplam,
+    atanmamis,
+    bekleyenOdev,
+    yaklasanDers,
+    bugunGirisler,
+  ] = await Promise.all([
       prisma.kullanici.findMany({
         where: { rol: "koc" },
         select: {
@@ -27,6 +36,8 @@ export default async function AdminDashboard() {
           _count: { select: { ogrenciler: true } },
         },
       }),
+      prisma.kullanici.count({ where: { rol: "ogretmen" } }),
+      prisma.kullanici.count({ where: { rol: "ogretmen", aktif: true } }),
       prisma.kullanici.count({ where: { rol: "ogrenci" } }),
       prisma.kullanici.count({ where: { rol: "ogrenci", kocId: null } }),
       prisma.odev.count({ where: { durum: "bekliyor" } }),
@@ -68,21 +79,32 @@ export default async function AdminDashboard() {
 
       <section className={stil.statGrid} aria-label="Genel istatistikler">
         <Link href="/admin/koclar" className={`${stil.statKart} ${stil.mavi}`}>
-          <span className={stil.statIkon}>👩‍🏫</span>
+          <span className={stil.statIkon}>🧭</span>
           <span>
             <small>Toplam koç</small>
             <b>{koclar.length}</b>
             <em>{aktifKoc} aktif koç</em>
           </span>
         </Link>
-        <div className={`${stil.statKart} ${stil.turkuaz}`}>
+        <Link href="/admin/ogretmenler" className={`${stil.statKart} ${stil.gul}`}>
+          <span className={stil.statIkon}>👩‍🏫</span>
+          <span>
+            <small>Toplam öğretmen</small>
+            <b>{ogretmenToplam}</b>
+            <em>{ogretmenAktif} aktif öğretmen</em>
+          </span>
+        </Link>
+        <Link
+          href="/admin/kullanicilar?rol=ogrenci"
+          className={`${stil.statKart} ${stil.turkuaz}`}
+        >
           <span className={stil.statIkon}>🎓</span>
           <span>
             <small>Toplam öğrenci</small>
             <b>{ogrenciToplam}</b>
-            <em>{atanmis} öğrenci atanmış</em>
+            <em>{atanmis} öğrenci atanmış · listeyi aç</em>
           </span>
-        </div>
+        </Link>
         <div className={`${stil.statKart} ${stil.turuncu}`}>
           <span className={stil.statIkon}>📚</span>
           <span>
@@ -113,7 +135,7 @@ export default async function AdminDashboard() {
 
           <div className={stil.buyukMetrik}>
             <b>{atanmis}</b>
-            <span>/ {ogrenciToplam} öğrenci bir koça atanmış</span>
+            <span>/ {ogrenciToplam} öğrenci bir koça ya da öğretmene atanmış</span>
           </div>
           <div className={stil.ilerleme}>
             <span style={{ width: `${yuzde(atanmis, ogrenciToplam)}%` }} />
@@ -126,8 +148,8 @@ export default async function AdminDashboard() {
           {atanmamis > 0 && (
             <div className={stil.uyari}>
               <span>!</span>
-              <p><b>{atanmamis} öğrenci</b> henüz bir koça atanmamış.</p>
-              <Link href="/admin/koclar">Koçları yönet →</Link>
+              <p><b>{atanmamis} öğrenci</b> henüz bir koça/öğretmene atanmamış.</p>
+              <Link href="/admin/kullanicilar?rol=ogrenci">Öğrencileri görüntüle →</Link>
             </div>
           )}
         </div>
@@ -172,7 +194,13 @@ export default async function AdminDashboard() {
           </div>
           <div className={stil.hizliGrid}>
             <Link href="/admin/koclar" className={stil.hizliKart}>
-              <span>👩‍🏫</span><div><b>Koç yönetimi</b><small>Listele, ekle ve düzenle</small></div><i>→</i>
+              <span>🧭</span><div><b>Koç yönetimi</b><small>Eğitim koçlarını listele ve düzenle</small></div><i>→</i>
+            </Link>
+            <Link href="/admin/ogretmenler" className={stil.hizliKart}>
+              <span>👩‍🏫</span><div><b>Öğretmen yönetimi</b><small>Öğretmenleri listele ve düzenle</small></div><i>→</i>
+            </Link>
+            <Link href="/admin/kullanicilar?rol=ogrenci" className={stil.hizliKart}>
+              <span>🎓</span><div><b>Öğrenci listesi</b><small>Öğrenci filtresiyle kullanıcılar</small></div><i>→</i>
             </Link>
             <Link href="/admin/aktivite" className={stil.hizliKart}>
               <span>📡</span><div><b>Aktivite merkezi</b><small>Anlık durum ve girişler</small></div><i>→</i>

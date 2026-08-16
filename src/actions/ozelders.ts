@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { bildirimEkle } from "@/lib/bildirim";
 import { ozelDersMetni, tarihNesnesi } from "@/lib/hesap";
 import { OzelDersSemasi, OzelDersGuncelleSemasi } from "@/lib/dogrulama";
+import { egitmenMi } from "@/lib/sabitler";
 import { denetim } from "@/lib/log";
 import { oturumGerekli, panelleriTazele, hataMetni, type EylemSonuc } from "./yardimci";
 
@@ -20,7 +21,7 @@ export async function ozelDersEkle(girdi: unknown): Promise<EylemSonuc> {
     }
 
     let kocId: string;
-    if (kim.rol === "koc") {
+    if (egitmenMi(kim.rol)) {
       if (ogrenci.kocId !== kim.id) return { hata: "Bu öğrenci size atanmış değil." };
       kocId = kim.id;
       veri.olusturan = "koc";
@@ -83,7 +84,7 @@ export async function ozelDersSil(id: string): Promise<EylemSonuc> {
     if (!x) return { hata: "Kayıt bulunamadı." };
     // Koç kendi kaydını; öğrenci yalnız kendi açtığı bekleyen talebi silebilir
     const yetkili =
-      kim.rol === "koc"
+      egitmenMi(kim.rol)
         ? x.kocId === kim.id
         : x.ogrenciId === kim.id && x.olusturan === "ogrenci" && x.durum === "talep";
     if (!yetkili) return { hata: "Bu kayıt üzerinde yetkiniz yok." };
@@ -104,7 +105,7 @@ export async function ozelDersGuncelle(id: string, girdi: unknown): Promise<Eyle
     const x = await prisma.ozelDers.findUnique({ where: { id } });
     if (!x) return { hata: "Kayıt bulunamadı." };
 
-    if (kim.rol === "koc") {
+    if (egitmenMi(kim.rol)) {
       if (x.kocId !== kim.id) return { hata: "Bu kayıt üzerinde yetkiniz yok." };
     } else {
       // Öğrenci yalnızca koçun önerisini yanıtlayabilir (onay/red)

@@ -4,14 +4,18 @@ import { useActionState, useState } from "react";
 import { girisYapAction, type GirisSonuc } from "./actions";
 import stil from "./giris.module.css";
 
-const ROLLER = [
-  { rol: "koc", etiket: "🎓 Öğretmen" },
-  { rol: "ogrenci", etiket: "📚 Öğrenci" },
-  { rol: "admin", etiket: "🛠️ Yönetici" },
+/* Hesap türü giriş bilgisinin parçasıdır (bkz. lib/auth.ts): seçilen sekme
+   hesabın türüyle eşleşmeli. Tür bir ROL DEĞİL, rol kümesidir — "Eğitimci"
+   sekmesinden hem eğitim koçu hem öğretmen girer ve ikisi de aynı eğitimci
+   paneline düşer. Roller yönetici panelinde ayrı yönetilmeye devam eder. */
+const TURLER = [
+  { tur: "egitimci", etiket: "🎓 Eğitimci" },
+  { tur: "ogrenci", etiket: "📚 Öğrenci" },
+  { tur: "admin", etiket: "🛠️ Yönetici" },
 ];
 
 export default function GirisForm() {
-  const [rol, setRol] = useState("koc");
+  const [tur, setTur] = useState("egitimci");
   const [sonuc, eylem, bekliyor] = useActionState<GirisSonuc | undefined, FormData>(
     girisYapAction,
     undefined
@@ -20,16 +24,16 @@ export default function GirisForm() {
   return (
     <>
       <div className={stil.rolSecim} role="tablist">
-        {ROLLER.map((r) => (
+        {TURLER.map((t) => (
           <button
-            key={r.rol}
+            key={t.tur}
             type="button"
             role="tab"
-            aria-selected={rol === r.rol}
-            className={rol === r.rol ? stil.rolBtnAktif : stil.rolBtn}
-            onClick={() => setRol(r.rol)}
+            aria-selected={tur === t.tur}
+            className={tur === t.tur ? stil.rolBtnAktif : stil.rolBtn}
+            onClick={() => setTur(t.tur)}
           >
-            {r.etiket}
+            {t.etiket}
           </button>
         ))}
       </div>
@@ -37,7 +41,7 @@ export default function GirisForm() {
       {sonuc?.hata && <div className={stil.hataKutu}>{sonuc.hata}</div>}
 
       <form action={eylem} autoComplete="off">
-        <input type="hidden" name="rol" value={rol} />
+        <input type="hidden" name="tur" value={tur} />
         <div className={stil.formGrup}>
           <label htmlFor="kullanici">Kullanıcı Adı</label>
           <input type="text" id="kullanici" name="kullanici" placeholder="kullanıcı adınız" required />

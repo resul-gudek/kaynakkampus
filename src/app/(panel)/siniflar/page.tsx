@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { aktifKullanici } from "@/lib/oturum";
 import { prisma } from "@/lib/prisma";
+import { egitmenMi } from "@/lib/sabitler";
 import SiniflarPaneli, { type SinifGorunum } from "./SiniflarPaneli";
 
 export const metadata: Metadata = { title: "Online Sınıflar – Kaynak Kampüs" };
@@ -72,9 +73,10 @@ function ogrenciSiniflariniGetir(ogrenciId: string) {
 
 export default async function SiniflarSayfasi() {
   const kullanici = await aktifKullanici();
-  if (!["koc", "ogrenci"].includes(kullanici.rol)) redirect("/admin");
+  // Eğitmen (koç/öğretmen) sınıf açar; öğrenci üyesi olduğu sınıfları görür
+  if (!egitmenMi(kullanici.rol) && kullanici.rol !== "ogrenci") redirect("/admin");
 
-  if (kullanici.rol === "koc") {
+  if (egitmenMi(kullanici.rol)) {
     const [siniflar, ogrenciler] = await Promise.all([
       kocSiniflariniGetir(kullanici.id),
       prisma.kullanici.findMany({

@@ -17,13 +17,13 @@ datasource db {
 
 model Kullanici {
   id        String  @id @default(cuid())
-  rol       String // "admin" | "koc" | "ogrenci" | "veli"
+  rol       String // "admin" | "koc" | "ogretmen" | "ogrenci" | "veli" (CK_Kullanici_rol)
   ad        String
   kullanici String  @unique // tr-TR küçük harfe normalize edilmiş kullanıcı adı
   sifreHash String
   aktif     Boolean @default(true)
 
-  // koç alanı
+  // koç / öğretmen alanı
   brans String?
 
   // öğrenci alanları

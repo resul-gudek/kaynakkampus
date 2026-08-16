@@ -2,6 +2,7 @@ import "server-only";
 
 import { AccessToken } from "livekit-server-sdk";
 import { prisma } from "@/lib/prisma";
+import { egitmenMi } from "@/lib/sabitler";
 
 export const KATILIM_ONCESI_OGRENCI_DK = 10;
 export const KATILIM_ONCESI_OGRETMEN_DK = 30;
@@ -40,7 +41,7 @@ export async function dersOturumuErisimi(oturumId: string, kullaniciId: string, 
   if (!oturum) return null;
 
   const moderator =
-    rol === "koc" &&
+    egitmenMi(rol) &&
     (oturum.sinif?.ogretmenId === kullaniciId || oturum.ozelDers?.kocId === kullaniciId);
   const katilimci =
     rol === "ogrenci" &&
