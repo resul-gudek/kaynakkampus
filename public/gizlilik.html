@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gizlilik ve Çerez Politikası – Kaynak Kampüs</title>
+  <meta name="description" content="Kaynak Kampüs gizlilik ve çerez politikası: hangi verileri topluyoruz, çerezleri nasıl kullanıyoruz ve KVKK kapsamındaki haklarınız." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: #2F343D; background: #fff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    :root {
+      --blue: #7A2035; --blue-dk: #5E1728; --teal: #C98792; --orange: #C98792;
+      --amber: #C98792; --bg-soft: #FAF7F5; --text: #2F343D; --muted: #7C7883;
+      --radius: 14px; --shadow: 0 4px 24px rgba(122,32,53,.10); --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
+    }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+    /* SAYFA BAŞLIĞI */
+    .page-hero {
+      background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%);
+      padding: 56px 0 48px; position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: -140px; right: -110px;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,135,146,.14) 0%, transparent 70%);
+    }
+    .page-hero .container { position: relative; z-index: 1; }
+    .page-hero h1 { font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 800; line-height: 1.2; }
+    .page-hero h1 span { color: var(--orange); }
+    .hero-rule {
+      width: 64px; height: 4px; border-radius: 10px; margin-top: 18px;
+      background: linear-gradient(90deg, var(--blue), var(--orange));
+    }
+    .hero-tarih { margin-top: 14px; font-size: .85rem; color: var(--muted); }
+
+    /* İÇERİK */
+    .politika { padding: 56px 0 88px; }
+    .politika-body { max-width: 780px; }
+    .politika-body h2 {
+      font-size: 1.3rem; font-weight: 800; color: var(--blue);
+      margin: 42px 0 14px; scroll-margin-top: 90px;
+    }
+    .politika-body h2:first-child { margin-top: 0; }
+    .politika-body h3 { font-size: 1.02rem; font-weight: 700; margin: 24px 0 8px; }
+    .politika-body p { font-size: .98rem; line-height: 1.9; color: #4A4550; }
+    .politika-body p + p { margin-top: 14px; }
+    .politika-body ul { list-style: disc; padding-left: 22px; margin: 10px 0 14px; }
+    .politika-body li { font-size: .98rem; line-height: 1.85; color: #4A4550; margin-bottom: 6px; }
+    .politika-body strong { color: var(--blue); font-weight: 600; }
+    .politika-body a { color: var(--blue); font-weight: 600; text-decoration: underline; }
+    .politika-body table {
+      width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: .92rem;
+    }
+    .politika-body th, .politika-body td {
+      border: 1px solid #EADDE0; padding: 10px 12px; text-align: left;
+      vertical-align: top; line-height: 1.7;
+    }
+    .politika-body th { background: var(--bg-soft); color: var(--blue); font-weight: 700; }
+    .tablo-kaydir { overflow-x: auto; }
+    .tercih-btn {
+      display: inline-block; margin-top: 6px; cursor: pointer;
+      background: var(--blue); color: #fff; border: none; border-radius: 10px;
+      padding: 11px 22px; font: 600 .9rem/1 'Figtree', 'Poppins', sans-serif;
+      transition: opacity .15s;
+    }
+    .tercih-btn:hover { opacity: .85; }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 40px 0 34px; }
+      .politika { padding: 38px 0 60px; }
+      .politika-body h2 { margin-top: 34px; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/site-tema.css" />
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
+  <script src="assets/cerez-onay.js" defer></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
+
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
+        </div>
+      </div>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Blog &amp; Haberler</button>
+        <div class="sh-drop-menu">
+          <a href="/blog">Blog</a>
+          <a href="haberler.html">Haberler</a>
+          <a href="sinav-takvimi.html">Sınav Takvimi</a>
+        </div>
+      </div>
+      <a href="hakkimizda.html">Hakkımızda</a>
+    </nav>
+
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
+    </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="sh-drawer" id="shMobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
+    <div class="sh-drawer-label">Blog &amp; Haberler</div>
+    <a href="/blog">Blog</a>
+    <a href="haberler.html">Haberler</a>
+    <a href="sinav-takvimi.html">Sınav Takvimi</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Gizlilik ve <span>Çerez Politikası</span></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-tarih">Son güncelleme: 28 Ağustos 2026</p>
+  </div>
+</section>
+
+<section class="politika">
+  <div class="container">
+    <div class="politika-body">
+
+      <h2 id="kapsam">1. Bu politika neyi kapsar?</h2>
+      <p>Bu metin, <strong>Kaynak Kampüs</strong> web sitesini (bundan sonra "site") ziyaret ettiğinizde veya sitedeki araçları kullandığınızda hangi kişisel verilerin işlendiğini, çerezlerin ve benzeri teknolojilerin nasıl kullanıldığını ve 6698 sayılı <strong>Kişisel Verilerin Korunması Kanunu (KVKK)</strong> kapsamındaki haklarınızı açıklar. Siteyi kullanarak bu politikayı okuduğunuzu kabul etmiş olursunuz.</p>
+
+      <h2 id="veriler">2. Hangi verileri işliyoruz?</h2>
+      <h3>Sizin sağladığınız veriler</h3>
+      <ul>
+        <li><strong>Hesap ve giriş bilgileri:</strong> Platforma üye olan öğrenci, veli, öğretmen ve eğitim koçlarının ad-soyad, e-posta gibi hesap bilgileri.</li>
+        <li><strong>Başvuru formu bilgileri:</strong> "Aramıza Katıl" başvurusunda ilettiğiniz iletişim ve eğitim bilgileri.</li>
+      </ul>
+      <h3>Otomatik toplanan veriler</h3>
+      <ul>
+        <li><strong>Sunucu kayıtları:</strong> IP adresi, tarayıcı türü, ziyaret edilen sayfa ve zaman bilgisi gibi teknik kayıtlar; güvenlik ve hata ayıklama amacıyla sınırlı süre tutulur.</li>
+        <li><strong>Çerezler ve benzeri teknolojiler:</strong> Aşağıdaki bölümde ayrıntılı açıklanmıştır.</li>
+      </ul>
+      <h3>Cihazınızda kalan veriler</h3>
+      <p>Eğitim oyunları, çoklu zekâ testi, ödev/BEP/ders programı oluşturucular gibi ücretsiz araçlardaki ilerleme ve cevaplarınız <strong>yalnızca kendi cihazınızın tarayıcısında</strong> (localStorage) saklanır; sunucularımıza gönderilmez. Tarayıcı verilerini temizlediğinizde bu bilgiler silinir.</p>
+
+      <h2 id="cerezler">3. Çerezler ve kullanım amaçları</h2>
+      <p>Çerezler, siteyi ziyaret ettiğinizde tarayıcınıza kaydedilen küçük metin dosyalarıdır. Sitemizde kullanılan çerez kategorileri şunlardır:</p>
+      <div class="tablo-kaydir">
+        <table>
+          <thead>
+            <tr><th>Kategori</th><th>Amaç</th><th>Onay gerekir mi?</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Zorunlu çerezler</strong></td>
+              <td>Oturum açma, güvenlik ve sitenin temel işlevleri. Bunlar olmadan üyelik alanı çalışmaz.</td>
+              <td>Hayır — sitenin çalışması için gereklidir.</td>
+            </tr>
+            <tr>
+              <td><strong>Tercih kayıtları</strong></td>
+              <td>Oyun ilerlemesi, test cevapları, duyuru şeridi ve çerez tercihi gibi bilgilerin cihazınızda hatırlanması (localStorage).</td>
+              <td>Hayır — veriler cihazınızda kalır, tarafımıza iletilmez.</td>
+            </tr>
+            <tr>
+              <td><strong>Reklam ve analitik çerezleri</strong></td>
+              <td>Üçüncü taraf (Google) reklam gösterimi ve site kullanım istatistikleri.</td>
+              <td><strong>Evet</strong> — yalnızca çerez bandından izin verirseniz kullanılır.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="reklam">4. Üçüncü taraf reklamlar (Google)</h2>
+      <p>Sitemizde reklam gösterilmesi durumunda reklamlar <strong>Google AdSense</strong> aracılığıyla sunulur. Google ve iş ortakları, size ilgi alanlarınıza uygun reklamlar gösterebilmek için çerez kullanabilir. Kişiselleştirilmiş reklam çerezleri yalnızca çerez bandında <strong>"Tümünü Kabul Et"</strong> seçeneğini işaretlemeniz hâlinde etkinleşir; aksi hâlde en fazla kişiselleştirilmemiş (içeriğe dayalı) reklam gösterilir.</p>
+      <ul>
+        <li>Google'ın reklam çerezlerini nasıl kullandığını <a href="https://policies.google.com/technologies/ads?hl=tr" target="_blank" rel="noopener noreferrer">Google Reklam Teknolojileri</a> sayfasından inceleyebilirsiniz.</li>
+        <li>Kişiselleştirilmiş reklamları <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">Google Reklam Ayarları</a> üzerinden dilediğiniz zaman kapatabilirsiniz.</li>
+      </ul>
+      <p>Sitemizin çocuklara yönelik bölümlerinde (ör. eğitim oyunları) reklam gösterilirse, bu bölümler ilgili mevzuata ve Google politikalarına uygun olarak işaretlenir ve bu sayfalarda <strong>kişiselleştirilmiş reklam gösterilmez</strong>.</p>
+
+      <h2 id="tercih">5. Çerez tercihlerinizi yönetme</h2>
+      <p>İlk ziyaretinizde ekranın altında çıkan çerez bandından tercihinizi yapabilirsiniz. Kararınızı daha sonra değiştirmek isterseniz aşağıdaki düğmeyi kullanın:</p>
+      <button type="button" class="tercih-btn" onclick="if(window.KKCerez)KKCerez.tercihAc()">Çerez tercihlerini değiştir</button>
+      <p style="margin-top:14px">Ayrıca tarayıcınızın ayarlarından çerezleri tamamen engelleyebilir veya silebilirsiniz; bu durumda oturum açma gibi bazı özellikler çalışmayabilir.</p>
+
+      <h2 id="cocuk">6. Çocukların gizliliği</h2>
+      <p>Sitedeki ücretsiz oyun ve testler üyelik gerektirmez ve çocuklardan kişisel veri toplamaz; ilerleme bilgileri yalnızca kullanılan cihazda kalır. Platform üyeliği (öğrenci hesabı) veli veya kurum bilgisi dahilinde açılır. Çocuğunuza ait bir verinin yanlışlıkla işlendiğini düşünüyorsanız bizimle iletişime geçin; kayıtları derhâl sileriz.</p>
+
+      <h2 id="haklar">7. KVKK kapsamındaki haklarınız</h2>
+      <p>KVKK'nın 11. maddesi uyarınca veri sorumlusuna başvurarak;</p>
+      <ul>
+        <li>kişisel verilerinizin işlenip işlenmediğini öğrenme,</li>
+        <li>işlenmişse buna ilişkin bilgi talep etme,</li>
+        <li>işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+        <li>yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,</li>
+        <li>eksik veya yanlış işlenmişse düzeltilmesini isteme,</li>
+        <li>silinmesini veya yok edilmesini isteme,</li>
+        <li>otomatik sistemlerle analiz sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme,</li>
+        <li>kanuna aykırı işleme nedeniyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>
+      </ul>
+      <p>haklarına sahipsiniz.</p>
+
+      <h2 id="iletisim">8. İletişim</h2>
+      <!-- TODO: Resmî iletişim e-postası ve (varsa) tüzel kişilik unvanı netleşince buraya eklenecek. -->
+      <p>Bu politika veya kişisel verilerinizle ilgili sorularınız için sosyal medya hesaplarımız (<a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer">Instagram</a>, <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer">Facebook</a>) üzerinden bize ulaşabilirsiniz.</p>
+
+      <h2 id="degisiklik">9. Değişiklikler</h2>
+      <p>Bu politika gerektiğinde güncellenebilir. Önemli değişikliklerde sayfanın başındaki "Son güncelleme" tarihi yenilenir ve gerekiyorsa çerez tercihiniz yeniden sorulur. Siteyi kullanmaya devam etmeniz güncel politikayı kabul ettiğiniz anlamına gelir.</p>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
+        <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
+        <ul>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
+          <li><a href="gizlilik.html">Gizlilik ve Çerezler</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
