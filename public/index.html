@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kaynak Kampüs – Güçlü Kaynak, Sağlam Gelecek</title>
   <meta name="description" content="Ücretsiz eğitim araçları, eğitici oyunlar, çoklu zekâ testi ve güncel sınav takvimi — öğrenci, öğretmen ve veli için tek çatı." />
+  <!-- Arama motoru ve sosyal paylaşım etiketleri -->
+  <link rel="canonical" href="https://kaynakkampus.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kaynak Kampüs" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:title" content="Kaynak Kampüs – Güçlü Kaynak, Sağlam Gelecek" />
+  <meta property="og:description" content="Ücretsiz eğitim araçları, eğitici oyunlar, çoklu zekâ testi ve güncel sınav takvimi — öğrenci, öğretmen ve veli için tek çatı." />
+  <meta property="og:url" content="https://kaynakkampus.com/" />
+  <meta property="og:image" content="https://kaynakkampus.com/assets/kaynak-kampus-logo.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta name="twitter:card" content="summary" />
   <meta name="theme-color" content="#7A2035" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -199,6 +211,31 @@
     .kurs-govde { padding: 20px; }
     @media (max-width: 900px) { .kurs-izgara { grid-template-columns: 1fr; } }
   </style>
+  <!-- Yapısal veri: kuruluş ve site tanımı (arama motorları + yapay zekâ aramaları) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://kaynakkampus.com/#kurulus",
+        "name": "Kaynak Kampüs",
+        "url": "https://kaynakkampus.com/",
+        "logo": "https://kaynakkampus.com/assets/kaynak-kampus-logo.png",
+        "slogan": "Güçlü Kaynak, Sağlam Gelecek"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://kaynakkampus.com/#site",
+        "url": "https://kaynakkampus.com/",
+        "name": "Kaynak Kampüs",
+        "description": "Ücretsiz eğitim araçları, eğitici oyunlar, çoklu zekâ testi ve güncel sınav takvimi — öğrenci, öğretmen ve veli için tek çatı.",
+        "inLanguage": "tr-TR",
+        "publisher": { "@id": "https://kaynakkampus.com/#kurulus" }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 

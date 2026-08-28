@@ -2,15 +2,11 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { blogYaziUrl } from "@/lib/blog";
 import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
+import { mutlakAdres as tam } from "@/lib/site";
 
 /* Site haritası — herkese açık sayfalar ve yayındaki blog yazıları.
-   SITE_ADRESI (örn. https://kaynakkampus.com) tanımlı değilse göreli
-   adresler üretilir; arama motorları için ortam değişkeni önerilir. */
-const KOK = (process.env.SITE_ADRESI ?? "").trim().replace(/\/+$/, "");
-
-function tam(yol: string): string {
-  return KOK ? `${KOK}${yol}` : yol;
-}
+   Mutlak adresler src/lib/site.ts'ten gelir (SITE_ADRESI ya da canlı
+   alan adı); arama motorları göreli adres kabul etmez. */
 
 /** Statik public sayfalar — public/*.html ve React public rotaları */
 const SABIT_SAYFALAR: { yol: string; oncelik: number; siklik: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [

@@ -13,6 +13,7 @@ import {
   yayinTarihiMetni,
 } from "@/lib/blog";
 import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
+import { mutlakAdres } from "@/lib/site";
 import Icerik from "../Icerik";
 import YaziKarti from "../YaziKarti";
 import type { YaziKarti as YaziKartiVerisi } from "../tipler";
@@ -130,6 +131,7 @@ export default async function BlogYaziSayfasi({
   const yapisalVeri = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    mainEntityOfPage: mutlakAdres(blogYaziUrl(yazi.slug)),
     headline: yazi.baslik,
     description: yazi.seoAciklama || yazi.ozet,
     articleSection: kategoriEtiketi(yazi.kategori),

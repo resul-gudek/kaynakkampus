@@ -1,0 +1,23 @@
+# Kaynak Kampüs
+
+> Öğrenci, öğretmen ve veliler için ücretsiz Türkçe eğitim platformu: eğitici oyunlar, çoklu zekâ testi, güncel sınav takvimi, ödev/BEP/ders programı oluşturma araçları ve eğitim blogu. Tüm araçlar kayıt gerektirmeden, ücretsiz kullanılır.
+
+## Araçlar
+
+- [Eğitim Oyunları](https://kaynakkampus.com/oyunlar.html): İlkokuldan liseye Türkçe, matematik, hayat bilgisi ve İngilizce oyunları; akıllı tahta ve Öğretmen Modu desteği
+- [Güncel Sınav Takvimi](https://kaynakkampus.com/sinav-takvimi.html): YKS, LGS, KPSS, ALES dâhil tüm ÖSYM ve MEB sınavlarının başvuru, sınav ve sonuç tarihleri
+- [Çoklu Zekâ Testi](https://kaynakkampus.com/coklu-zeka-testi.html): Gardner'ın kuramına dayalı öğrenme eğilimleri envanteri, dört yaş düzeyi
+- [Ödev Oluştur](https://kaynakkampus.com/odev-olustur.html): MEB öğretim programlarına uygun sorularla ödev ve çalışma kâğıdı üretici
+- [BEP Oluştur](https://kaynakkampus.com/bep-olustur.html): Bireyselleştirilmiş Eğitim Programı taslağı hazırlama aracı
+- [Ders Programı Oluştur](https://kaynakkampus.com/ders-programi.html): Zil saatlerini otomatik hesaplayan haftalık program oluşturucu
+- [Etkinlikler](https://kaynakkampus.com/etkinlikler.html): İlkokul, ortaokul ve lise için etkinlik ve çalışma kâğıtları
+
+## İçerik
+
+- [Blog](https://kaynakkampus.com/blog): Eğitim üzerine güncel yazılar
+- [Eğitim Haberleri](https://kaynakkampus.com/haberler.html): Eğitim gündeminden haber başlıkları
+
+## Kurumsal
+
+- [Hakkımızda](https://kaynakkampus.com/hakkimizda.html): Platformun amacı ve kapsamı
+- [Gizlilik ve Çerez Politikası](https://kaynakkampus.com/gizlilik.html): KVKK kapsamındaki haklar ve çerez kullanımı

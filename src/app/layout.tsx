@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Figtree } from "next/font/google";
 import TemaSaglayici from "@/components/TemaSaglayici";
+import { SITE_KOKU } from "@/lib/site";
 import "./globals.css";
 
 /* DESIGN.md: başlıklar için Platform'un yerini Manrope (iri, sıkı, yüksek
@@ -20,6 +21,8 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
+  /* Göreli openGraph/canonical adresleri bu köke göre mutlaklaşır */
+  metadataBase: new URL(SITE_KOKU),
   title: "Kaynak Kampüs",
   description: "Güçlü Kaynak, Sağlam Gelecek — koçluk ve takip sistemi",
   icons: {

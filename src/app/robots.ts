@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
+import { SITE_KOKU } from "@/lib/site";
 
 /* Arama motoru kuralları. Blog ve tanıtım sayfaları taranabilir; panel,
    oturum ve API adresleri dışarıda bırakılır. */
-const KOK = (process.env.SITE_ADRESI ?? "").trim().replace(/\/+$/, "");
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -25,6 +25,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: KOK ? `${KOK}/sitemap.xml` : "/sitemap.xml",
+    sitemap: `${SITE_KOKU}/sitemap.xml`,
   };
 }
