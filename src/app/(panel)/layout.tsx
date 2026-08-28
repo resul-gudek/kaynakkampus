@@ -4,6 +4,7 @@ import { aktifKullanici } from "@/lib/oturum";
 import { rolNavigasyonu, ROL_ETIKETLERI } from "@/lib/navigasyon";
 import { egitmenMi, type Rol } from "@/lib/sabitler";
 import PanelKabuk from "@/components/panel/PanelKabuk";
+import { zamanStr } from "@/lib/tarih";
 import PushKur from "@/components/panel/PushKur";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
@@ -14,13 +15,21 @@ export default async function PanelLayout({ children }: { children: React.ReactN
      mesajlaşma yalnız eğitmen/öğrenci. */
   const bildirimliRol = egitmenMi(rol) || rol === "ogrenci" || rol === "admin";
   const dersRolu = egitmenMi(rol) || rol === "ogrenci";
-  const [okunmamis, okunmamisMesaj] = await Promise.all([
+  const [okunmamis, okunmamisMesaj, sonBildirimler] = await Promise.all([
     bildirimliRol
       ? prisma.bildirim.count({ where: { aliciId: kullanici.id, okundu: false } })
       : Promise.resolve(0),
     dersRolu
       ? prisma.mesaj.count({ where: { aliciId: kullanici.id, okundu: false } })
       : Promise.resolve(0),
+    bildirimliRol
+      ? prisma.bildirim.findMany({
+          where: { aliciId: kullanici.id },
+          orderBy: { tarih: "desc" },
+          take: 7,
+          select: { id: true, ikon: true, metin: true, tarih: true, okundu: true },
+        })
+      : Promise.resolve([]),
   ]);
 
   async function cikisYap() {
@@ -34,6 +43,13 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       kalemler={rolNavigasyonu(rol)}
       okunmamis={okunmamis}
       okunmamisMesaj={okunmamisMesaj}
+      sonBildirimler={sonBildirimler.map((b) => ({
+        id: b.id,
+        ikon: b.ikon,
+        metin: b.metin,
+        zaman: zamanStr(b.tarih),
+        okundu: b.okundu,
+      }))}
       cikisAction={cikisYap}
     >
       {children}

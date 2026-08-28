@@ -6,8 +6,10 @@
   <title>Eğitim Oyunları – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -74,20 +76,22 @@
 
     main { padding: 30px 0 80px; min-height: 55vh; }
 
-    .blok-baslik { font-size: 1.3rem; font-weight: 800; margin: 6px 0 4px; }
-    .konu-bas { font-size: 1.05rem; font-weight: 800; color: var(--blue); margin: 22px 0 12px; }
+    .blok-baslik { font-family: var(--font-baslik); font-size: 1.5rem; font-weight: 700; letter-spacing: -.3px; margin: 6px 0 4px; }
+    .konu-bas { font-family: var(--font-baslik); font-size: 1.05rem; font-weight: 700; color: var(--murekkep); margin: 22px 0 12px; }
     .konu-blok + .konu-blok { margin-top: 8px; }
 
     /* ÖZET ŞERİT */
     .ozet-serit {
       display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-      background: linear-gradient(120deg, var(--blue), #9A3550); color: #fff;
-      border-radius: 18px; padding: 20px 24px; box-shadow: var(--shadow-lg); margin-bottom: 26px;
+      background: var(--murekkep); color: #fff;
+      border-radius: 8px; padding: 20px 24px; margin-bottom: 26px;
     }
     .ozet-ana { display: flex; flex-direction: column; }
     .ozet-etiket { font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; opacity: .85; }
     .ozet-puan { font-size: 2.4rem; font-weight: 800; line-height: 1; }
-    .ozet-mini { text-align: center; background: rgba(255,255,255,.14); border-radius: 12px; padding: 8px 16px; }
+    .ozet-mini { text-align: center; background: rgba(255,255,255,.12); border-radius: 4px; padding: 8px 16px; }
+    .ozet-serit .btn { border-color: rgba(255,255,255,.5); color: #fff; background: transparent; }
+    .ozet-serit .btn:hover { background: #fff; color: var(--murekkep); border-color: #fff; }
     .ozet-mini b { display: block; font-size: 1.4rem; font-weight: 800; }
     .ozet-mini span { font-size: .72rem; opacity: .85; }
     .ozet-btn { margin-left: auto; }
@@ -97,17 +101,17 @@
     .secim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 18px; }
     .secim-kart {
       display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
-      background: #fff; border: 2px solid #EEE3E6; border-radius: 18px; padding: 22px 16px;
-      cursor: pointer; transition: all .2s; font-family: inherit; color: var(--text);
+      background: #fff; border: 1px solid var(--duman); border-radius: 8px; padding: 22px 16px;
+      cursor: pointer; transition: background .2s, border-color .2s; font-family: inherit; color: var(--text);
     }
-    .secim-kart:hover { border-color: var(--blue); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .secim-kart:hover { border-color: var(--kursun); background: var(--sis); }
     .secim-emoji { font-size: 2rem; line-height: 1; }
-    .secim-ad { font-size: 1.02rem; font-weight: 800; }
+    .secim-ad { font-family: var(--font-baslik); font-size: 1.02rem; font-weight: 700; }
     .secim-alt { font-size: .78rem; color: var(--muted); font-weight: 600; }
 
     /* KIRINTI */
     .kirinti { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: .85rem; margin-bottom: 14px; }
-    .kirinti .kb { background: none; border: none; cursor: pointer; font-family: inherit; font-size: .85rem; font-weight: 600; color: var(--blue); padding: 4px 6px; border-radius: 6px; }
+    .kirinti .kb { background: none; border: none; cursor: pointer; font-family: inherit; font-size: .85rem; font-weight: 600; color: var(--murekkep); padding: 4px 6px; border-radius: 4px; text-decoration: underline; text-underline-offset: 3px; }
     .kirinti .kb:hover { background: var(--bg-soft); }
     .kirinti .kx { font-weight: 700; color: var(--text); padding: 4px 6px; }
     .kirinti .kok { color: var(--muted); }
@@ -116,13 +120,13 @@
     .oyun-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
     .oyun-kart {
       display: flex; flex-direction: column; gap: 8px; text-align: left;
-      background: #fff; border: 1px solid #EEE3E6; border-radius: 16px; padding: 18px;
-      cursor: pointer; transition: all .2s; font-family: inherit; color: var(--text); box-shadow: var(--shadow);
+      background: #fff; border: 1px solid var(--duman); border-radius: 8px; padding: 18px;
+      cursor: pointer; transition: background .2s, border-color .2s; font-family: inherit; color: var(--text);
     }
-    .oyun-kart:hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .oyun-kart:hover { border-color: var(--kursun); background: var(--sis); }
     .ok-ust { display: flex; align-items: center; justify-content: space-between; }
     .ok-ikon { font-size: 1.7rem; }
-    .ok-ad { font-size: 1.05rem; font-weight: 800; line-height: 1.25; }
+    .ok-ad { font-family: var(--font-baslik); font-size: 1.05rem; font-weight: 700; line-height: 1.25; }
     .ok-tur { font-size: .78rem; color: var(--muted); font-weight: 600; }
     .ok-skor { font-size: .8rem; color: var(--text); margin-top: 2px; }
     .ok-skor b { color: var(--blue); }
@@ -7581,10 +7585,10 @@
        tam genişliğe yayılır. Oyun kodlarına dokunmadan tüm oyunlara uygulanır. */
     .tahta-ac {
       position: fixed; right: 16px; bottom: 16px; z-index: 90; display: inline-flex; align-items: center; gap: 8px;
-      background: var(--blue); color: #fff; border: none; border-radius: 50px; padding: 12px 20px;
-      font-family: inherit; font-size: .88rem; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-lg);
+      background: var(--murekkep); color: #fff; border: none; border-radius: 4px; padding: 12px 20px;
+      font-family: inherit; font-size: .88rem; font-weight: 600; cursor: pointer; box-shadow: var(--golge-katman);
     }
-    .tahta-ac:hover { background: #9A3550; }
+    .tahta-ac:hover { background: #322028; }
     body.tahta .tahta-ac { display: none; }
 
     /* ═══ TAKILMA YARDIMI (tüm oyunlar için ortak) ═══
@@ -8367,12 +8371,12 @@
 
     /* Giriş düğmesi (akıllı tahta düğmesinin üstünde) */
     .ogr-ac {
-      position: fixed; right: 18px; bottom: 74px; z-index: 92; background: #2E7D46; color: #fff;
-      border: none; border-radius: 50px; padding: 12px 20px; font-family: inherit; font-size: .9rem;
-      font-weight: 700; cursor: pointer; box-shadow: 0 8px 26px rgba(0,0,0,.22);
+      position: fixed; right: 18px; bottom: 74px; z-index: 92; background: #fff; color: var(--murekkep);
+      border: 1px solid var(--murekkep); border-radius: 4px; padding: 11px 20px; font-family: inherit; font-size: .9rem;
+      font-weight: 600; cursor: pointer; box-shadow: var(--golge-katman);
     }
-    .ogr-ac:hover { background: #24693A; }
-    .ogr-ac.oturumda { background: #B23A4E; }
+    .ogr-ac:hover { background: var(--murekkep); color: #fff; }
+    .ogr-ac.oturumda { background: var(--bordo); border-color: var(--bordo); color: #fff; }
     /* Zaten öğretmen ekranındayken düğme gereksiz ve alttaki içeriği kapatıyor */
     body.tahta .ogr-ac, body.ogr-ekranda .ogr-ac { display: none; }
 
@@ -8860,10 +8864,23 @@
       .btn-row .btn { flex: 1; }
     }
   </style>
+  <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ
+     Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
+     assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
+     günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="sh-inner">
@@ -8880,7 +8897,7 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html">Etkinlikler</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -8893,7 +8910,6 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="index.html#how">Nasıl Çalışır</a>
       <a href="hakkimizda.html">Hakkımızda</a>
     </nav>
 
@@ -8911,13 +8927,12 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="index.html#how">Nasıl Çalışır</a>
     <a href="hakkimizda.html">Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -8941,8 +8956,74 @@
   <div class="container" id="app"><!-- JS ile doldurulur --></div>
 </main>
 
-<footer>
-  <div class="container">© 2026 Kaynak Kampüs · Eğitim oyunları öğrenmeyi desteklemek amacıyla hazırlanmış eğlenceli alıştırmalardır. Kazanılan puanlar ve ilerleme yalnızca bu tarayıcıda (cihazda) saklanır.</div>
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
+        <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
+        <ul>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="site-alt-not">Eğitim oyunları öğrenmeyi desteklemek amacıyla hazırlanmış eğlenceli alıştırmalardır. Kazanılan puanlar ve ilerleme yalnızca bu tarayıcıda (cihazda) saklanır.</p>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
+    </div>
+  </div>
 </footer>
 
 <script>

@@ -6,8 +6,10 @@
   <title>Çoklu Zekâ Testi – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -25,13 +27,13 @@
     .container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px;
-      border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
+      border-radius: 10px; font-size: .95rem; font-weight: 600; cursor: pointer;
       transition: all .25s; border: none; font-family: inherit;
     }
     .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
     .btn-primary { background: var(--blue); color: #fff; }
     .btn-primary:hover:not(:disabled) { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
-    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--blue); }
     .btn-outline:hover:not(:disabled) { background: var(--blue); color: #fff; transform: translateY(-2px); }
     .btn-ghost { background: var(--bg-soft); color: var(--blue); }
     .btn-ghost:hover:not(:disabled) { background: #F0E4E7; }
@@ -46,7 +48,7 @@
     .logo-icon { width: 48px; height: 48px; object-fit: contain; }
     .logo span { color: var(--orange); }
     nav { display: flex; align-items: center; gap: 6px; }
-    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a { padding: 8px 14px; border-radius: 14px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
     nav a:hover { background: var(--bg-soft); color: var(--blue); }
     nav a.active { color: var(--blue); font-weight: 700; }
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
@@ -57,7 +59,7 @@
       padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 14px; font-size: 1rem; font-weight: 600; }
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
 
     /* PAGE HERO */
@@ -67,7 +69,7 @@
     .page-hero p { color: var(--muted); margin-top: 8px; max-width: 760px; font-size: .95rem; }
     .kk-badge {
       display: inline-flex; align-items: center; gap: 8px; background: #fff;
-      padding: 7px 16px; border-radius: 50px; font-size: .78rem; font-weight: 700;
+      padding: 7px 16px; border-radius: 10px; font-size: .78rem; font-weight: 700;
       color: var(--blue); box-shadow: var(--shadow); margin-bottom: 14px;
     }
 
@@ -83,7 +85,7 @@
     /* LEVEL SELECT */
     .lvl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin-top: 24px; }
     .lvl-card {
-      background: #fff; border: 2px solid #EEE3E6; border-radius: 18px; padding: 24px 22px;
+      background: #fff; border: 1px solid #EEE3E6; border-radius: 14px; padding: 24px 22px;
       display: flex; flex-direction: column; gap: 10px; transition: all .2s; position: relative; overflow: hidden;
     }
     .lvl-card.aktif { cursor: pointer; }
@@ -92,14 +94,14 @@
     .lvl-emoji { font-size: 2.1rem; line-height: 1; }
     .lvl-card h3 { font-size: 1.15rem; font-weight: 800; color: var(--text); }
     .lvl-card p { font-size: .85rem; color: var(--muted); line-height: 1.5; flex: 1; }
-    .lvl-yas { font-size: .76rem; font-weight: 700; color: var(--blue); background: rgba(122,32,53,.07); padding: 4px 12px; border-radius: 50px; align-self: flex-start; }
+    .lvl-yas { font-size: .76rem; font-weight: 700; color: var(--blue); background: rgba(122,32,53,.07); padding: 4px 12px; border-radius: 10px; align-self: flex-start; }
     .lvl-cta { font-weight: 700; font-size: .9rem; color: var(--blue); display: inline-flex; align-items: center; gap: 6px; }
     .yakinda { position: absolute; top: 14px; right: 14px; font-size: .68rem; font-weight: 800; letter-spacing: .04em;
-      background: #EDE4E6; color: #8A7B80; padding: 4px 10px; border-radius: 50px; text-transform: uppercase; }
+      background: #EDE4E6; color: #8A7B80; padding: 4px 10px; border-radius: 10px; text-transform: uppercase; }
 
     /* INTRO */
     .card {
-      background: #fff; border: 1px solid #EEE3E6; border-radius: 18px; padding: 28px; box-shadow: var(--shadow);
+      background: #fff; border: 1px solid #EEE3E6; border-radius: 14px; padding: 28px; box-shadow: var(--shadow);
     }
     .card + .card { margin-top: 20px; }
     .intro-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
@@ -112,17 +114,17 @@
     .progress-wrap { margin-bottom: 22px; }
     .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: .82rem; font-weight: 600; color: var(--muted); }
     .progress-count { color: var(--blue); font-weight: 800; }
-    .progress-bar { height: 10px; background: #EEE3E6; border-radius: 50px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #C98792); border-radius: 50px; transition: width .3s ease; }
+    .progress-bar { height: 10px; background: #EEE3E6; border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #C98792); border-radius: 10px; transition: width .3s ease; }
 
     /* QUESTION */
-    .q-card { background: #fff; border: 1px solid #EEE3E6; border-radius: 18px; padding: 30px 28px; box-shadow: var(--shadow); }
+    .q-card { background: #fff; border: 1px solid #EEE3E6; border-radius: 14px; padding: 30px 28px; box-shadow: var(--shadow); }
     .q-index { font-size: .8rem; font-weight: 700; color: var(--blue); letter-spacing: .04em; text-transform: uppercase; }
     .q-text { font-size: clamp(1.2rem, 2.6vw, 1.6rem); font-weight: 700; line-height: 1.4; margin: 10px 0 24px; }
     .options { display: flex; flex-direction: column; gap: 10px; }
     .opt {
       display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 14px;
-      border: 2px solid #E7DDE0; background: #fff; cursor: pointer; transition: all .15s; text-align: left; width: 100%;
+      border: 1px solid #E7DDE0; background: #fff; cursor: pointer; transition: all .15s; text-align: left; width: 100%;
       font-family: inherit; font-size: .98rem; color: var(--text);
     }
     .opt:hover { border-color: #C98792; background: #FCF7F8; }
@@ -130,8 +132,8 @@
     /* Sıklık halkası (○ ◔ ◑ ◕ ●) — nötr doluluk göstergesi */
     .opt-emoji { font-size: 1.4rem; line-height: 1; width: 30px; text-align: center; flex-shrink: 0; color: #C0A3AA; }
     .opt.secili .opt-emoji { color: var(--blue); }
-    .opt-mark { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #CBBDC1; flex-shrink: 0; display: grid; place-items: center; }
-    .opt.secili .opt-mark { border-color: var(--blue); background: var(--blue); }
+    .opt-mark { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #CBBDC1; flex-shrink: 0; display: grid; place-items: center; }
+    .opt.secili .opt-mark { border-color: var(--murekkep); background: var(--murekkep); }
     .opt.secili .opt-mark::after { content: "✓"; color: #fff; font-size: .72rem; font-weight: 800; }
 
     .nav-row { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; }
@@ -139,7 +141,7 @@
     /* REVIEW */
     .review-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 10px; margin: 18px 0; }
     .review-chip {
-      border: 2px solid #E7DDE0; border-radius: 12px; padding: 10px 0; text-align: center; font-weight: 700;
+      border: 1px solid #E7DDE0; border-radius: 14px; padding: 10px 0; text-align: center; font-weight: 700;
       font-size: .9rem; cursor: pointer; background: #fff; transition: all .15s; color: var(--text);
     }
     .review-chip:hover { border-color: var(--blue); }
@@ -155,20 +157,20 @@
     .section-note { color: var(--muted); font-size: .85rem; margin-bottom: 16px; }
 
     .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
-    .top-card { border: 1px solid #EEE3E6; border-radius: 16px; padding: 20px; background: var(--bg-soft); }
+    .top-card { border: 1px solid #EEE3E6; border-radius: 14px; padding: 20px; background: var(--bg-soft); }
     .top-rank { font-size: .72rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--blue); }
     .top-name { font-size: 1.12rem; font-weight: 800; margin: 4px 0 2px; }
     .top-pct { font-size: 1.9rem; font-weight: 800; }
     .top-desc { font-size: .85rem; color: #55505A; line-height: 1.55; margin-top: 8px; }
-    .top-use { font-size: .84rem; color: var(--text); line-height: 1.55; margin-top: 10px; background: #fff; border-radius: 10px; padding: 10px 12px; }
+    .top-use { font-size: .84rem; color: var(--text); line-height: 1.55; margin-top: 10px; background: #fff; border-radius: 14px; padding: 10px 12px; }
     .top-use b { color: var(--blue); }
 
     /* BAR LIST */
     .bar-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
     .bar-name { width: 150px; min-width: 150px; font-size: .85rem; font-weight: 600; }
-    .bar-track { flex: 1; min-width: 0; height: 14px; background: #EFE7E9; border-radius: 50px; overflow: hidden; }
+    .bar-track { flex: 1; min-width: 0; height: 14px; background: #EFE7E9; border-radius: 10px; overflow: hidden; }
     /* span olduğu için display verilmeli; aksi hâlde width/height uygulanmaz */
-    .bar-fill { display: block; height: 100%; border-radius: 50px; }
+    .bar-fill { display: block; height: 100%; border-radius: 10px; }
     .bar-pct { width: 46px; text-align: right; font-weight: 800; font-size: .9rem; }
     .bar-interp { font-size: .8rem; color: var(--muted); margin-top: 2px; margin-left: 162px; }
 
@@ -177,7 +179,7 @@
     /* overflow:visible → etiket birkaç piksel taşarsa kırpılmasın */
     .radar-wrap svg { width: 100%; max-width: 460px; height: auto; overflow: visible; }
 
-    .top-flag { font-size: .8rem; font-weight: 600; color: #55505A; background: #fff; border-radius: 8px; padding: 8px 10px; margin-top: 8px; line-height: 1.5; }
+    .top-flag { font-size: .8rem; font-weight: 600; color: #55505A; background: #fff; border-radius: 14px; padding: 8px 10px; margin-top: 8px; line-height: 1.5; }
 
     /* ALAN ALAN AYRINTI */
     .alan-det { border: 1px solid #EEE3E6; border-radius: 14px; margin-top: 10px; background: #fff; }
@@ -242,10 +244,23 @@
       .alan-det > summary::after { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ
+     Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
+     assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
+     günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="sh-inner">
@@ -262,7 +277,7 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html">Etkinlikler</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -275,7 +290,6 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="index.html#how">Nasıl Çalışır</a>
       <a href="hakkimizda.html">Hakkımızda</a>
     </nav>
 
@@ -293,13 +307,12 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="index.html#how">Nasıl Çalışır</a>
     <a href="hakkimizda.html">Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -323,8 +336,74 @@
   <div class="container" id="app"><!-- JS ile doldurulur --></div>
 </main>
 
-<footer>
-  <div class="container">© 2026 Kaynak Kampüs · Çoklu Zekâ Testi, Howard Gardner’ın Çoklu Zekâ Kuramı temel alınarak hazırlanmış bir öğrenme eğilimleri ve güçlü yönler envanteridir. Bir zekâ testi, psikolojik test veya tanı aracı değildir.</div>
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
+        <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
+        <ul>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="site-alt-not">Çoklu Zekâ Testi, Howard Gardner’ın Çoklu Zekâ Kuramı temel alınarak hazırlanmış bir öğrenme eğilimleri ve güçlü yönler envanteridir. Bir zekâ testi, psikolojik test veya tanı aracı değildir.</p>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -595,56 +674,56 @@ const SEVIYELER = {
    Sorular "severim" türü genel beğeni yerine somut alışkanlık sorar. */
 const SORULAR = {
   ilkokul: [
-    { t: "Dinlediğim bir hikâyeyi kendi sözlerimle anlatabilirim.", a: "sozel" },
-    { t: "Bir oyunun kuralının neden öyle olduğunu anlamak isterim.", a: "mantik" },
-    { t: "Bir konuyu resim veya şekil gördüğümde daha kolay anlarım.", a: "gorsel" },
+    { t: "Dinlediğim bir hikâyeyi kendi cümlelerimle anlatabilirim. 📖", a: "sozel" },
+    { t: "Bir oyunun kuralı neden öyle diye merak ederim. 🎲", a: "mantik" },
+    { t: "Bir konuyu resim ya da şekil görünce daha kolay anlarım.", a: "gorsel" },
     { t: "Bir şeyi kendim deneyince daha iyi öğrenirim.", a: "beden" },
-    { t: "Bir şarkının ritmi değiştiğinde bunu fark ederim.", a: "muzik" },
-    { t: "Bir konuyu arkadaşlarımla konuşmak öğrenmeme yardımcı olur.", a: "sosyal" },
-    { t: "Bir işi bitirdikten sonra neyi iyi yaptığımı düşünürüm.", a: "icsel" },
-    { t: "Doğadaki canlıları benzer özelliklerine göre ayırmayı severim.", a: "doga" },
+    { t: "Bir şarkının ritmi değişince bunu hemen fark ederim. 🎵", a: "muzik" },
+    { t: "Bir konuyu arkadaşlarımla konuşmak daha iyi öğrenmemi sağlar.", a: "sosyal" },
+    { t: "Bir işi bitirince neyi iyi yaptığımı düşünürüm.", a: "icsel" },
+    { t: "Doğadaki canlıları birbirine benzeyenlerine göre ayırmayı severim. 🌿", a: "doga" },
     { t: "Yeni öğrendiğim bir kelimeyi cümle içinde kullanmak isterim.", a: "sozel" },
-    { t: "Bir soruyu çözerken önce hangi adımları izleyeceğimi düşünürüm.", a: "mantik" },
-    { t: "Bir yapboz parçasının nereye geleceğini gözümde canlandırabilirim.", a: "gorsel" },
-    { t: "Ellerimle bir şey hazırladığımda konuyu daha iyi anlarım.", a: "beden" },
+    { t: "Bir soruyu çözerken önce hangi adımları yapacağımı düşünürüm.", a: "mantik" },
+    { t: "Yapboz yaparken parçanın nereye geleceğini gözümde canlandırabilirim. 🧩", a: "gorsel" },
+    { t: "Ellerimle bir şey yapınca konuyu daha iyi anlarım.", a: "beden" },
     { t: "Duyduğum kısa bir melodiyi daha sonra hatırlayabilirim.", a: "muzik" },
-    { t: "Grup çalışmasında arkadaşlarımın fikirlerini dinleyerek ilerleyebilirim.", a: "sosyal" },
-    { t: "Çalışmaya başlamadan önce neyi bitirmek istediğimi belirlerim.", a: "icsel" },
-    { t: "Mevsim değişirken çevredeki farklılıkları fark ederim.", a: "doga" },
-    { t: "Bir bilgiyi kendi cümlelerimle söylemek hatırlamama yardımcı olur.", a: "sozel" },
-    { t: "Nesneler arasındaki benzerlikleri ve farklılıkları bulmak hoşuma gider.", a: "mantik" },
-    { t: "Bir yeri tarif ederken onu zihnimde görebilirim.", a: "gorsel" },
-    { t: "Öğrenirken hareketli bir etkinlik yapmak dikkatimi toplamama yardım eder.", a: "beden" },
-    { t: "Kelimeleri ritim tutarak tekrar ettiğimde daha kolay hatırlarım.", a: "muzik" },
-    { t: "Birlikte çalışırken görevleri paylaşmak bana kolay gelir.", a: "sosyal" },
-    { t: "Bir konuda zorlandığımda neden zorlandığımı düşünürüm.", a: "icsel" },
-    { t: "Bitkiler, hayvanlar ve doğa olaylarındaki ayrıntıları merak ederim.", a: "doga" }
+    { t: "Grupla çalışırken arkadaşlarımın fikirlerini dinleyerek ilerleyebilirim.", a: "sosyal" },
+    { t: "Çalışmaya başlamadan önce neyi bitirmek istediğime karar veririm.", a: "icsel" },
+    { t: "Mevsimler değişince çevremdeki değişiklikleri fark ederim. 🍂", a: "doga" },
+    { t: "Bir bilgiyi kendi cümlelerimle söyleyince daha kolay hatırlarım.", a: "sozel" },
+    { t: "Nesnelerin birbirine benzeyen ve benzemeyen yönlerini bulmak hoşuma gider.", a: "mantik" },
+    { t: "Bir yeri anlatırken orayı gözümün önüne getirebilirim.", a: "gorsel" },
+    { t: "Öğrenirken hareketli bir şeyler yapmak dikkatimi toplamama yardım eder. 🤸", a: "beden" },
+    { t: "Kelimeleri ritim tutarak tekrar edince daha kolay hatırlarım. 🥁", a: "muzik" },
+    { t: "Arkadaşlarımla birlikte çalışırken işleri paylaşmak bana kolay gelir.", a: "sosyal" },
+    { t: "Bir konuda zorlanınca neden zorlandığımı düşünürüm.", a: "icsel" },
+    { t: "Bitkilerin, hayvanların ve doğa olaylarının ayrıntılarını merak ederim. 🌱", a: "doga" }
   ],
   ortaokul: [
-    { t: "Yeni öğrendiğim bir konuyu kendi cümlelerimle açıklamak anlamamı kolaylaştırır.", a: "sozel" },
-    { t: "Bir problemde sonuca geçmeden önce bilgiler arasındaki ilişkiyi araştırırım.", a: "mantik" },
-    { t: "Bir konunun şemasını gördüğümde ayrıntıları daha kolay birleştiririm.", a: "gorsel" },
-    { t: "Uygulama yaptığım konuları daha uzun süre hatırlarım.", a: "beden" },
-    { t: "Bir müzikteki ritim veya tempo değişikliğini kolay fark ederim.", a: "muzik" },
-    { t: "Bir konuyu karşılıklı konuşarak incelemek düşüncelerimi geliştirmeme yardımcı olur.", a: "sosyal" },
-    { t: "Hangi çalışma yönteminin benim için işe yaradığını değerlendirebilirim.", a: "icsel" },
-    { t: "Canlıları ve doğal olayları özelliklerine göre sınıflandırmak ilgimi çeker.", a: "doga" },
-    { t: "Okuduğum bir metnin ana düşüncesini kendi ifadelerimle anlatabilirim.", a: "sozel" },
-    { t: "Bir kuralın yalnızca sonucunu değil, neden geçerli olduğunu da anlamak isterim.", a: "mantik" },
-    { t: "Bir nesnenin başka bir yönden nasıl görüneceğini zihnimde canlandırabilirim.", a: "gorsel" },
-    { t: "Deney, model veya canlandırma kullanılan derslerde daha kolay odaklanırım.", a: "beden" },
-    { t: "Duyduğum melodi veya ses örüntülerini daha sonra hatırlayabilirim.", a: "muzik" },
-    { t: "Grup çalışmasında farklı fikirlerin ortak bir sonuca dönüşmesine katkı sağlayabilirim.", a: "sosyal" },
-    { t: "Bir hedefime ulaşamadığımda çalışma biçimimi gözden geçiririm.", a: "icsel" },
-    { t: "Çevremdeki mevsimsel ve doğal değişiklikleri gözlemlemek ilgimi çeker.", a: "doga" },
-    { t: "Kelime anlamları ve anlatım biçimleri arasındaki farkları fark ederim.", a: "sozel" },
-    { t: "Verilen bilgilerden mantıklı sonuçlar çıkarmayı severim.", a: "mantik" },
-    { t: "Notlarımı tablo, şekil veya zihin haritasına dönüştürmek anlamamı kolaylaştırır.", a: "gorsel" },
-    { t: "Bir beceriyi okuyarak değil, kendim yaparak daha kolay öğrenirim.", a: "beden" },
-    { t: "Ezberlemem gereken bilgileri ritim veya vurgu kullanarak tekrar edebilirim.", a: "muzik" },
-    { t: "Başka bir kişinin bakış açısını dinlemek konuyu farklı yönden görmemi sağlar.", a: "sosyal" },
-    { t: "Çalışırken dikkatimin ne zaman dağıldığını fark edebilirim.", a: "icsel" },
-    { t: "Bir konuyu doğadaki gerçek örneklerle ilişkilendirmek ilgimi artırır.", a: "doga" }
+    { t: "Yeni öğrendiğim bir konuyu kendi cümlelerimle anlatmak, onu daha iyi anlamamı sağlar.", a: "sozel" },
+    { t: "Bir problemi çözmeye başlamadan önce verilen bilgilerin birbiriyle nasıl bağlantılı olduğuna bakarım.", a: "mantik" },
+    { t: "Bir konunun şemasını görünce ayrıntıları kafamda daha kolay birleştiririm.", a: "gorsel" },
+    { t: "Uygulayarak çalıştığım konuları daha uzun süre hatırlarım.", a: "beden" },
+    { t: "Bir müzikte ritim ya da tempo değişince bunu kolayca fark ederim.", a: "muzik" },
+    { t: "Bir konuyu biriyle karşılıklı konuşmak, düşüncelerimi geliştirmeme yardımcı olur.", a: "sosyal" },
+    { t: "Hangi çalışma yönteminin benim için işe yaradığını fark edebilirim.", a: "icsel" },
+    { t: "Canlıları ve doğa olaylarını özelliklerine göre gruplamak ilgimi çeker.", a: "doga" },
+    { t: "Okuduğum bir yazının ana fikrini kendi cümlelerimle anlatabilirim.", a: "sozel" },
+    { t: "Bir kuralın sadece ne olduğunu değil, neden öyle olduğunu da anlamak isterim.", a: "mantik" },
+    { t: "Bir nesnenin farklı bir açıdan nasıl görüneceğini kafamda canlandırabilirim.", a: "gorsel" },
+    { t: "İçinde deney, maket ya da canlandırma olan derslerde daha kolay odaklanırım.", a: "beden" },
+    { t: "Duyduğum melodileri ya da tekrar eden ses kalıplarını daha sonra hatırlayabilirim.", a: "muzik" },
+    { t: "Grup çalışmasında farklı fikirlerin birleşip ortak bir sonuca ulaşmasına yardım edebilirim.", a: "sosyal" },
+    { t: "Bir hedefime ulaşamadığımda nasıl çalıştığımı gözden geçiririm.", a: "icsel" },
+    { t: "Çevremdeki mevsim ve doğa değişikliklerini gözlemlemek ilgimi çeker.", a: "doga" },
+    { t: "Kelimelerin anlamlarındaki ve kullanılış biçimlerindeki farkları fark ederim.", a: "sozel" },
+    { t: "Elimdeki bilgilerden mantıklı sonuçlar çıkarmayı severim.", a: "mantik" },
+    { t: "Notlarımı tabloya, şekle ya da zihin haritasına dönüştürmek konuyu anlamamı kolaylaştırır.", a: "gorsel" },
+    { t: "Yeni bir beceriyi okuyarak değil, kendim yaparak daha kolay öğrenirim.", a: "beden" },
+    { t: "Ezberlemem gereken bilgileri ritim tutarak ya da vurgulayarak tekrar edebilirim.", a: "muzik" },
+    { t: "Başkasının görüşünü dinlemek, konuya farklı bir açıdan bakmamı sağlar.", a: "sosyal" },
+    { t: "Ders çalışırken dikkatimin ne zaman dağıldığını fark edebilirim.", a: "icsel" },
+    { t: "Bir konuyu doğadan gerçek örneklerle bağlantı kurarak öğrenmek ilgimi artırır.", a: "doga" }
   ],
   lise: [
     { t: "Karmaşık bir düşünceyi uygun kelimelerle açık biçimde ifade edebilirim.", a: "sozel" },
@@ -659,10 +738,10 @@ const SORULAR = {
     { t: "Bir sorunun farklı çözüm yollarını karşılaştırmaktan hoşlanırım.", a: "mantik" },
     { t: "Bir nesnenin veya planın farklı açılardan nasıl görüneceğini zihnimde canlandırabilirim.", a: "gorsel" },
     { t: "Deney, saha çalışması veya üretim içeren görevlerde daha rahat öğrenirim.", a: "beden" },
-    { t: "Duyduğum bir melodinin veya ses dizisinin yapısını daha sonra hatırlayabilirim.", a: "muzik" },
+    { t: "Duyduğum bir melodinin veya ses dizisinin nasıl ilerlediğini daha sonra hatırlayabilirim.", a: "muzik" },
     { t: "Grup çalışmasında insanların nasıl birlikte ilerlediğini takip ederim.", a: "sosyal" },
     { t: "Kendi belirlediğim hedefler çalışma motivasyonumu artırır.", a: "icsel" },
-    { t: "Bilgileri canlı türleri, çevresel özellikler veya doğal süreçlere göre sınıflandırmak ilgimi çeker.", a: "doga" },
+    { t: "Bilgileri canlı türlerine, çevre özelliklerine veya doğal süreçlere göre sınıflandırmak ilgimi çeker.", a: "doga" },
     { t: "Bir anlatımdaki kelime seçimi ve ifade biçimi dikkatimi çeker.", a: "sozel" },
     { t: "Veriler arasında örüntü veya tutarsızlık aramak ilgimi çeker.", a: "mantik" },
     { t: "Bir konunun tamamını anlamak için önce görsel bir taslak oluşturmak işime yarar.", a: "gorsel" },
@@ -670,23 +749,23 @@ const SORULAR = {
     { t: "Bilginin ritim, vurgu veya ses düzeniyle sunulması hatırlamamı etkiler.", a: "muzik" },
     { t: "Bir görüşe katılmasam bile o kişinin bakış açısını anlamaya çalışabilirim.", a: "sosyal" },
     { t: "Çalışma biçimimin verimli ve verimsiz yönlerini ayırt edebilirim.", a: "icsel" },
-    { t: "Bir teorinin doğada veya gerçek çevrede nasıl karşılık bulduğunu araştırmak hoşuma gider.", a: "doga" }
+    { t: "Bir teorinin doğada veya gerçek yaşamda nasıl işlediğini araştırmak hoşuma gider.", a: "doga" }
   ],
   yetiskin: [
-    { t: "Karmaşık bir düşünceyi sözlü veya yazılı olarak yapılandırmak benim için doğal bir süreçtir.", a: "sozel" },
-    { t: "Bir sorunla karşılaştığımda önce parçalarını ve aralarındaki ilişkileri belirlerim.", a: "mantik" },
+    { t: "Karmaşık bir düşünceyi sözlü veya yazılı olarak düzenli biçimde ifade etmek bana doğal gelir.", a: "sozel" },
+    { t: "Bir sorunla karşılaştığımda önce onu parçalarına ayırır, aralarındaki ilişkilere bakarım.", a: "mantik" },
     { t: "Bir planı uygulamadan önce aşamalarını zihnimde görselleştiririm.", a: "gorsel" },
     { t: "Yeni bir beceriyi uygulayarak öğrenmeyi tercih ederim.", a: "beden" },
     { t: "Konuşmalardaki ton, vurgu ve ritim farklılıklarını kolay fark ederim.", a: "muzik" },
     { t: "Başkalarıyla fikir alışverişi yapmak düşüncelerimi netleştirmeme yardımcı olur.", a: "sosyal" },
     { t: "Kararlarımın arkasındaki nedenleri düzenli olarak düşünürüm.", a: "icsel" },
-    { t: "Çevredeki doğal değişimleri ve ekolojik ilişkileri gözlemlemek ilgimi çeker.", a: "doga" },
+    { t: "Çevremdeki doğal değişimleri ve canlılarla çevre arasındaki ilişkileri gözlemlemek ilgimi çeker.", a: "doga" },
     { t: "Yeni öğrendiğim bilgiyi kendi ifadelerimle açıklamak onu daha kalıcı hâle getirir.", a: "sozel" },
     { t: "Karar verirken seçenekleri belirli ölçütlere göre karşılaştırırım.", a: "mantik" },
     { t: "Karmaşık bilgileri grafik, tablo veya görsel bir düzene dönüştürdüğümde daha rahat anlarım.", a: "gorsel" },
-    { t: "Uygulamalı veya üretime dayalı görevlerde dikkatimi daha kolay korurum.", a: "beden" },
-    { t: "Duyduğum bir melodiyi veya ses örüntüsünü daha sonra zihnimde canlandırabilirim.", a: "muzik" },
-    { t: "Bir ekipte insanların farklı çalışma biçimlerine göre iletişimimi düzenleyebilirim.", a: "sosyal" },
+    { t: "Uygulama veya üretim gerektiren işlerde dikkatimi daha kolay korurum.", a: "beden" },
+    { t: "Duyduğum bir melodiyi veya tekrar eden bir ses düzenini daha sonra zihnimde canlandırabilirim.", a: "muzik" },
+    { t: "Bir ekipte, insanların farklı çalışma tarzlarına göre iletişim biçimimi ayarlayabilirim.", a: "sosyal" },
     { t: "Bir hedefe ulaşamadığımda kullandığım yöntemi ve motivasyonumu gözden geçiririm.", a: "icsel" },
     { t: "Canlıları, nesneleri veya doğal olayları özelliklerine göre sınıflandırmak ilgimi çeker.", a: "doga" },
     { t: "Kelimelerin anlam farkları ve anlatım biçimleri dikkatimi çeker.", a: "sozel" },
@@ -696,7 +775,7 @@ const SORULAR = {
     { t: "Bilgiyi sesli, ritmik veya vurgulu biçimde tekrar etmek hatırlamamı kolaylaştırır.", a: "muzik" },
     { t: "Bir görüş ayrılığında karşımdaki kişinin bakış açısını anlayarak ortak yol ararım.", a: "sosyal" },
     { t: "Hangi koşullarda daha verimli veya daha dağınık çalıştığımı bilirim.", a: "icsel" },
-    { t: "Yeni bilgileri doğa, çevre veya gerçek yaşam sistemleriyle ilişkilendirmek hoşuma gider.", a: "doga" }
+    { t: "Yeni bilgileri doğayla, çevreyle veya gerçek yaşamın işleyişiyle ilişkilendirmek hoşuma gider.", a: "doga" }
   ]
 };
 

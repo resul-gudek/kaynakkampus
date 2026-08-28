@@ -28,7 +28,9 @@ export const SITE_MENU: SiteMenuOgesi[] = [
       { ad: "Ödev Oluştur", href: "/odev-olustur.html" },
       { ad: "BEP Oluştur", href: "/bep-olustur.html" },
       { ad: "Ders Programı", href: "/ders-programi.html" },
-      { ad: "Etkinlikler", href: "/etkinlikler.html" },
+      // Etkinlikler menüden gizlendi (kullanıcı kararı) — sayfa ve kod
+      // duruyor; geri açmak için yorumu kaldırmak yeterli.
+      // { ad: "Etkinlikler", href: "/etkinlikler.html" },
     ],
   },
   { ad: "Çoklu Zekâ Testi", href: "/coklu-zeka-testi.html" },
@@ -41,7 +43,6 @@ export const SITE_MENU: SiteMenuOgesi[] = [
       { ad: "Sınav Takvimi", href: "/sinav-takvimi.html" },
     ],
   },
-  { ad: "Nasıl Çalışır", href: "/#how" },
   { ad: "Hakkımızda", href: "/hakkimizda.html" },
 ];
 

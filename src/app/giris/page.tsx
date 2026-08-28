@@ -38,14 +38,6 @@ export default async function GirisPage() {
           <p className={stil.alt}>Hesap türünü seç, bilgilerinle giriş yap.</p>
 
           <GirisForm />
-
-          <div className={stil.demoKutu}>
-            <strong>Demo hesaplar:</strong>
-            <br />
-            Eğitimci → <code>koc1</code> / <code>1234</code>
-            <br />
-            Öğrenci → <code>ogrenci1</code> / <code>1234</code>
-          </div>
         </div>
       </main>
     </>

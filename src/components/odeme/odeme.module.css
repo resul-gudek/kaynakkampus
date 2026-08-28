@@ -30,7 +30,7 @@
 .tablo { width: 100%; border-collapse: collapse; font-size: .88rem; }
 .tablo th {
   text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em;
-  color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--bg-soft);
+  color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--bg-soft);
   white-space: nowrap;
 }
 .tablo td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -43,7 +43,7 @@
 /* ── Durum rozetleri ── */
 .rozet {
   display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
-  padding: 3px 12px; border-radius: 50px; font-size: .74rem; font-weight: 700;
+  padding: 3px 12px; border-radius: 10px; font-size: .74rem; font-weight: 700;
 }
 .olumlu { background: rgba(22,163,74,.12); color: var(--yesil); }
 .bekleyen { background: rgba(201,135,146,.16); color: var(--bordo); }
@@ -56,7 +56,7 @@
 .islemler { display: flex; gap: 6px; flex-wrap: wrap; }
 .durumSecim {
   border: 1px solid var(--border); background: var(--bg-soft); color: var(--text);
-  border-radius: 9px; padding: 6px 8px; font-size: .78rem; font-family: inherit;
+  border-radius: 14px; padding: 6px 8px; font-size: .78rem; font-family: inherit;
   min-height: 34px;
 }
 
@@ -65,7 +65,7 @@
 .alan { display: flex; flex-direction: column; gap: 5px; }
 .alan > label { font-size: .76rem; font-weight: 700; }
 .alan input, .alan select, .alan textarea {
-  width: 100%; padding: 9px 12px; border: 2px solid var(--border); border-radius: 10px;
+  width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 14px;
   font-family: inherit; font-size: .87rem; background: var(--surface); color: var(--text);
 }
 .alan textarea { min-height: 62px; resize: vertical; }
@@ -76,7 +76,7 @@
 .hesap b { color: var(--bordo); }
 
 .hata, .tamam {
-  border-radius: 10px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
+  border-radius: 14px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
   border: 1px solid;
 }
 .hata { background: rgba(220,38,38,.08); color: var(--kirmizi); border-color: rgba(220,38,38,.3); }

@@ -93,56 +93,57 @@
   /* ── Stil ──────────────────────────────────────────────────── */
   var CSS = [
     ".kv-kok{position:fixed;right:20px;bottom:20px;z-index:90;",
-    "font-family:'Poppins',system-ui,sans-serif;display:flex;flex-direction:column;",
+    "font-family:'Figtree',system-ui,sans-serif;display:flex;flex-direction:column;",
     "align-items:flex-end;gap:12px;pointer-events:none}",
     ".kv-kok>*{pointer-events:auto}",
 
-    /* kart */
+    /* kart — düz yüzey, yumuşak 16px köşe; yüzen katman olduğu için gölgeye izin var */
     ".kv-kart{width:360px;max-width:calc(100vw - 40px);background:#fff;",
-    "border:1px solid #E2D6D5;border-radius:14px;box-shadow:0 12px 40px rgba(122,32,53,.16);",
+    "border:1px solid #E4DBD9;border-radius:16px;box-shadow:0 8px 28px rgba(31,20,26,.12);",
     "padding:16px;display:flex;gap:12px;position:relative;",
     "opacity:0;transform:translateY(10px);transition:opacity .26s ease,transform .26s ease}",
     ".kv-kart[data-acik='1']{opacity:1;transform:none}",
     ".kv-kart[hidden]{display:none}",
 
     /* maskot yuvası */
-    ".kv-yuva{width:52px;height:52px;flex:none;border-radius:50%;background:#FAF7F5;",
+    ".kv-yuva{width:52px;height:52px;flex:none;border-radius:50%;background:#F6EDEF;",
     "display:grid;place-items:center;overflow:hidden}",
     ".kv-yuva svg{width:52px;height:52px;display:block;margin-bottom:-6px}",
 
     /* metin */
     ".kv-govde{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}",
-    ".kv-ad{font-family:'Cormorant Garamond',Georgia,serif;font-size:.72rem;",
-    "letter-spacing:.14em;text-transform:uppercase;color:#C98792;font-weight:600}",
-    ".kv-baslik{font-size:.95rem;font-weight:600;color:#2F343D;line-height:1.35;margin:0}",
-    ".kv-metin{font-size:.85rem;color:#574E52;line-height:1.5;margin:0}",
+    ".kv-ad{font-size:11px;letter-spacing:.12em;text-transform:uppercase;",
+    "color:#7C6F73;font-weight:600}",
+    ".kv-baslik{font-family:'Manrope',system-ui,sans-serif;font-size:15px;font-weight:700;",
+    "color:#1F141A;line-height:1.3;letter-spacing:-.2px;margin:0}",
+    ".kv-metin{font-size:14px;color:#55474C;line-height:1.5;margin:0}",
 
     /* eylemler */
     ".kv-eylemler{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}",
     ".kv-btn{display:inline-flex;align-items:center;justify-content:center;",
-    "font:600 .8rem/1 inherit;padding:9px 12px;border-radius:50px;cursor:pointer;white-space:nowrap;",
+    "font:600 13px/1 inherit;padding:9px 14px;border-radius:12px;cursor:pointer;white-space:nowrap;",
     "border:1px solid transparent;text-decoration:none;transition:background .2s,color .2s}",
-    ".kv-btn-bir{background:#7A2035;color:#fff}",
-    ".kv-btn-bir:hover{background:#5E1728}",
-    ".kv-btn-iki{background:transparent;color:#7A2035;border-color:#E2D6D5}",
-    ".kv-btn-iki:hover{background:#FAF7F5}",
+    ".kv-btn-bir{background:#1F141A;color:#fff}",
+    ".kv-btn-bir:hover{background:#322028}",
+    ".kv-btn-iki{background:transparent;color:#1F141A;border-color:#1F141A}",
+    ".kv-btn-iki:hover{background:#1F141A;color:#fff}",
 
     /* kapat */
     ".kv-kapat{position:absolute;top:8px;right:8px;width:28px;height:28px;",
-    "border:0;background:transparent;border-radius:50%;cursor:pointer;color:#857A7E;",
+    "border:0;background:transparent;border-radius:10px;cursor:pointer;color:#7C6F73;",
     "display:grid;place-items:center;font:400 18px/1 inherit;transition:background .2s,color .2s}",
-    ".kv-kapat:hover{background:#FAF7F5;color:#2F343D}",
+    ".kv-kapat:hover{background:#F6F1F0;color:#1F141A}",
 
-    /* başlatıcı — tam renkli maskot, krem yuva, bordo halka */
+    /* başlatıcı — maskot rozeti; yuvarlak kalır (avatar), halka mürekkep */
     ".kv-baslatici{width:58px;height:58px;border-radius:50%;cursor:pointer;",
-    "background:#FAF7F5;border:2px solid #7A2035;box-shadow:0 6px 22px rgba(122,32,53,.22);",
+    "background:#F6EDEF;border:1px solid #1F141A;box-shadow:0 8px 28px rgba(31,20,26,.12);",
     "display:grid;place-items:center;overflow:hidden;padding:0;",
-    "transition:background .2s,transform .2s,box-shadow .2s}",
-    ".kv-baslatici:hover{background:#fff;transform:translateY(-2px);box-shadow:0 10px 26px rgba(122,32,53,.3)}",
+    "transition:background .2s,transform .2s}",
+    ".kv-baslatici:hover{background:#fff;transform:translateY(-2px)}",
     ".kv-baslatici svg{width:48px;height:48px;display:block;margin-bottom:-6px}",
 
     /* odak */
-    ".kv-kok :focus-visible{outline:2px solid #7A2035;outline-offset:2px}",
+    ".kv-kok :focus-visible{outline:2px solid #1F141A;outline-offset:2px}",
 
     /* mobil — telefonda ekranın üçte birini kaplamaması için sıkışır:
        küçük yuva, dar iç boşluk, butonlar tek satırda paylaşır. */

@@ -6,8 +6,10 @@
   <title>Ders Programı Oluştur – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -24,14 +26,14 @@
     .container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
-      border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
+      border-radius: 10px; font-size: .95rem; font-weight: 600; cursor: pointer;
       transition: all .25s; border: none; font-family: inherit;
     }
     .btn-primary { background: var(--blue); color: #fff; }
     .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
-    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--blue); }
     .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
-    .btn-ghost { background: #fff; color: var(--muted); border: 2px solid #e2e8f0; }
+    .btn-ghost { background: #fff; color: var(--muted); border: 1px solid #e2e8f0; }
     .btn-ghost:hover { border-color: #dc2626; color: #dc2626; }
 
     /* HEADER */
@@ -46,7 +48,7 @@
     }
     .logo span { color: var(--orange); }
     nav { display: flex; align-items: center; gap: 6px; }
-    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a { padding: 8px 14px; border-radius: 14px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
     nav a:hover { background: var(--bg-soft); color: var(--blue); }
     nav a.active { color: var(--blue); font-weight: 700; }
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
@@ -57,7 +59,7 @@
       padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 14px; font-size: 1rem; font-weight: 600; }
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
 
     /* PAGE HERO */
@@ -67,7 +69,7 @@
     .page-hero p { color: var(--muted); margin-top: 8px; max-width: 720px; font-size: .95rem; }
     .hero-badge2 {
       display: inline-flex; align-items: center; gap: 8px; background: #fff;
-      padding: 7px 16px; border-radius: 50px; font-size: .78rem; font-weight: 700;
+      padding: 7px 16px; border-radius: 10px; font-size: .78rem; font-weight: 700;
       color: var(--blue); box-shadow: var(--shadow); margin-bottom: 14px;
     }
 
@@ -87,18 +89,18 @@
     .step-title { font-size: .9rem; font-weight: 800; }
     .pills { display: flex; flex-wrap: wrap; gap: 7px; }
     .pill {
-      background: #fff; border: 2px solid transparent; border-radius: 50px;
+      background: #fff; border: 1px solid transparent; border-radius: 10px;
       padding: 7px 14px; font-size: .8rem; font-weight: 700; cursor: pointer;
       transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(122,32,53,.06);
     }
     .pill:hover { border-color: var(--blue); color: var(--blue); }
-    .pill.active { background: var(--blue); color: #fff; }
+    .pill.active { background: var(--murekkep); border-color: var(--murekkep); color: #fff; }
 
     .opt-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
     .opt-row label { font-size: .78rem; font-weight: 600; }
     .opt-row select, .opt-row input {
       font-family: inherit; font-size: .78rem; font-weight: 600; padding: 6px 10px;
-      border-radius: 8px; border: 1px solid rgba(122,32,53,.2); background: #fff; color: var(--text); outline: none;
+      border-radius: 14px; border: 1px solid rgba(122,32,53,.2); background: #fff; color: var(--text); outline: none;
     }
     .opt-row input[type="text"] { width: 58%; }
     .opt-row input[type="time"] { width: 100px; }
@@ -109,7 +111,7 @@
     .palette { display: flex; flex-wrap: wrap; gap: 7px; }
     .swatch {
       display: inline-flex; align-items: center; gap: 6px;
-      border: 2px solid transparent; border-radius: 10px; padding: 6px 11px;
+      border: 1px solid transparent; border-radius: 14px; padding: 6px 11px;
       font-size: .75rem; font-weight: 700; cursor: pointer; transition: all .15s;
       font-family: inherit; color: #2F343D;
     }
@@ -120,10 +122,10 @@
     .add-lesson { display: flex; gap: 7px; margin-top: 10px; }
     .add-lesson input {
       flex: 1; font-family: inherit; font-size: .78rem; font-weight: 600; padding: 7px 11px;
-      border-radius: 8px; border: 1px solid rgba(122,32,53,.2); outline: none;
+      border-radius: 14px; border: 1px solid rgba(122,32,53,.2); outline: none;
     }
     .add-lesson button {
-      border: none; background: var(--blue); color: #fff; border-radius: 8px;
+      border: none; background: var(--blue); color: #fff; border-radius: 14px;
       padding: 7px 13px; font-family: inherit; font-weight: 700; font-size: .78rem; cursor: pointer;
     }
 
@@ -131,7 +133,7 @@
     .theme-pills { display: flex; flex-wrap: wrap; gap: 7px; }
     .theme-pill {
       display: inline-flex; align-items: center; gap: 7px; background: #fff;
-      border: 2px solid transparent; border-radius: 50px; padding: 6px 13px;
+      border: 1px solid transparent; border-radius: 10px; padding: 6px 13px;
       font-size: .75rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .2s;
       box-shadow: 0 2px 8px rgba(122,32,53,.06);
     }
@@ -151,7 +153,7 @@
     .builder-grid > main { min-width: 0; }
     .sheet-wrap { overflow-x: auto; min-width: 0; -webkit-overflow-scrolling: touch; }
     .sheet {
-      background: #fff; border-radius: 8px; box-shadow: var(--shadow-lg);
+      background: #fff; border-radius: 14px; box-shadow: var(--shadow-lg);
       padding: 30px 34px; min-width: 720px;
     }
     .sheet-head { text-align: center; margin-bottom: 6px; }
@@ -169,16 +171,16 @@
     table.schedule { width: 100%; border-collapse: separate; border-spacing: 4px; }
     .schedule th {
       background: var(--sheet-accent, var(--blue)); color: #fff; font-size: .78rem;
-      font-weight: 700; padding: 10px 6px; border-radius: 8px; letter-spacing: .02em;
+      font-weight: 700; padding: 10px 6px; border-radius: 14px; letter-spacing: .02em;
     }
     .schedule th.time-h { width: 96px; }
     .schedule td.time-cell {
       background: var(--bg-soft); font-size: .68rem; font-weight: 700; color: var(--muted);
-      text-align: center; border-radius: 8px; padding: 6px 4px; line-height: 1.35; white-space: nowrap;
+      text-align: center; border-radius: 14px; padding: 6px 4px; line-height: 1.35; white-space: nowrap;
     }
     .schedule td.time-cell b { display: block; font-size: .78rem; color: var(--text); }
     .schedule td.slot {
-      background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 8px;
+      background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 14px;
       height: 46px; text-align: center; font-size: .78rem; font-weight: 700;
       cursor: pointer; transition: all .12s; user-select: none; padding: 4px 6px;
     }
@@ -187,16 +189,16 @@
     .schedule tr.lunch-row td {
       background: repeating-linear-gradient(45deg, #FBF1F3, #FBF1F3 10px, #F5E6E9 10px, #F5E6E9 20px);
       color: #7A2035; font-weight: 800; font-size: .78rem; text-align: center;
-      padding: 8px; border-radius: 8px; letter-spacing: .08em;
+      padding: 8px; border-radius: 14px; letter-spacing: .08em;
     }
     .sheet.bw .schedule th { background: #1e293b; }
-    .sheet.bw td.slot.filled { background: #fff !important; border: 2px solid #1e293b !important; }
+    .sheet.bw td.slot.filled { background: #fff !important; border: 1px solid #1e293b !important; }
     .sheet.bw .sheet-title { color: #1e293b; }
 
     .legend { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; justify-content: center; }
     .legend span {
       display: inline-flex; align-items: center; gap: 5px; font-size: .68rem; font-weight: 700;
-      padding: 3px 10px; border-radius: 50px;
+      padding: 3px 10px; border-radius: 10px;
     }
     .sheet-footer { margin-top: 18px; text-align: center; font-size: .68rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
 
@@ -204,7 +206,7 @@
     .toolbar-float .btn { padding: 11px 20px; font-size: .83rem; }
     .paint-info {
       text-align: center; font-size: .78rem; color: var(--muted); font-weight: 600;
-      background: var(--bg-soft); border-radius: 10px; padding: 9px 14px; margin-bottom: 14px;
+      background: var(--bg-soft); border-radius: 14px; padding: 9px 14px; margin-bottom: 14px;
     }
     .paint-info b { color: var(--blue); }
 
@@ -216,14 +218,14 @@
       width: 17px; height: 17px; flex-shrink: 0; padding: 0; cursor: pointer;
       display: inline-flex; align-items: center; justify-content: center;
       border: 1px solid rgba(122,32,53,.25); background: #fff; color: var(--blue);
-      border-radius: 5px; font-family: inherit; font-size: .72rem; font-weight: 800; line-height: 1;
+      border-radius: 10px; font-family: inherit; font-size: .72rem; font-weight: 800; line-height: 1;
       transition: all .15s;
     }
     .step-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
     .step-btn.rst { font-size: .62rem; }
     .dur-in {
       width: 34px; padding: 1px 2px; text-align: center; background: #fff; outline: none;
-      border: 1px solid rgba(122,32,53,.2); border-radius: 5px;
+      border: 1px solid rgba(122,32,53,.2); border-radius: 10px;
       font-family: inherit; font-size: .68rem; font-weight: 800; color: var(--text);
       -moz-appearance: textfield;
     }
@@ -234,7 +236,7 @@
     tr.break-row td { background: transparent; padding: 1px 0; text-align: center; }
     .brk-box {
       display: inline-flex; align-items: center; gap: 6px; padding: 3px 11px;
-      background: var(--bg-soft); border: 1px dashed rgba(122,32,53,.22); border-radius: 50px;
+      background: var(--bg-soft); border: 1px dashed rgba(122,32,53,.22); border-radius: 10px;
       font-size: .66rem; font-weight: 700; color: var(--muted); line-height: 1.2;
     }
     .brk-box.block { background: #F0E3E6; border-style: solid; border-color: rgba(122,32,53,.3); color: var(--blue); }
@@ -248,7 +250,7 @@
     .lunch-ctl { margin-left: 8px; }
     .mini-btn {
       width: 100%; margin-top: 9px; padding: 7px; cursor: pointer;
-      background: #fff; border: 1px dashed rgba(122,32,53,.3); border-radius: 8px;
+      background: #fff; border: 1px dashed rgba(122,32,53,.3); border-radius: 14px;
       font-family: inherit; font-size: .72rem; font-weight: 700; color: var(--blue); transition: all .2s;
     }
     .mini-btn:hover { background: var(--blue); color: #fff; border-style: solid; }
@@ -259,7 +261,7 @@
 
     /* ── DOKUNMATİK: küçük kontrolleri parmakla kullanılabilir yap ──── */
     @media (hover: none) and (pointer: coarse) {
-      .step-btn { width: 30px; height: 30px; font-size: .85rem; border-radius: 7px; }
+      .step-btn { width: 30px; height: 30px; font-size: .85rem; border-radius: 12px; }
       .step-btn.rst { font-size: .72rem; }
       .dur-in { width: 46px; padding: 5px 3px; font-size: .78rem; }
       .dur-ctl { gap: 6px; }
@@ -269,7 +271,7 @@
     }
     .sheet-hint {
       display: none; text-align: center; font-size: .72rem; font-weight: 600;
-      color: var(--muted); background: var(--bg-soft); border-radius: 8px;
+      color: var(--muted); background: var(--bg-soft); border-radius: 14px;
       padding: 7px 12px; margin-bottom: 10px;
     }
     /* tabloyu yatay kaydırabileceğini belli et; saat sütunu sabit kalsın */
@@ -294,11 +296,23 @@
       body { background: #fff; }
     }
   </style>
-  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ
+     Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
+     assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
+     günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="sh-inner">
@@ -315,7 +329,7 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html">Etkinlikler</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -328,7 +342,6 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="index.html#how">Nasıl Çalışır</a>
       <a href="hakkimizda.html">Hakkımızda</a>
     </nav>
 
@@ -346,13 +359,12 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="index.html#how">Nasıl Çalışır</a>
     <a href="hakkimizda.html">Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -364,7 +376,7 @@
   </div>
 </header>
 
-<section class="page-hero">
+<section class="page-hero ince">
   <div class="container">
     <div class="hero-badge2">📅 İlkokul · Ortaokul · Lise — her kademeye uygun</div>
     <h1>Profesyonel <span>Ders Programı</span> Oluşturucu</h1>
@@ -461,8 +473,74 @@
   </div>
 </section>
 
-<footer style="background:#241018;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
-  <div class="container">© 2026 Kaynak Kampüs · Profesyonel Ders Programı Oluşturucu</div>
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
+        <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
+        <ul>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="site-alt-not">Zil saatleri seçtiğin ders ve teneffüs sürelerine göre hesaplanır; okulunun resmî saatleriyle karşılaştırmayı unutma.</p>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
+    </div>
+  </div>
 </footer>
 
 <script>

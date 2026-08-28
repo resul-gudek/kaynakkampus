@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
+import { Moon, Sun, SunMoon } from "lucide-react";
 
 /* Tema ancak client'ta bilinebilir; hydration bitene dek nötr ikon gösterilir */
 const bosAbone = () => () => {};
@@ -25,7 +26,7 @@ export default function TemaDugmesi() {
       title={koyu ? "Açık tema" : "Koyu tema"}
       aria-label={koyu ? "Açık temaya geç" : "Koyu temaya geç"}
     >
-      {hazir ? (koyu ? "☀️" : "🌙") : "🌗"}
+      {hazir ? (koyu ? <Sun size={18} /> : <Moon size={18} />) : <SunMoon size={18} />}
     </button>
   );
 }

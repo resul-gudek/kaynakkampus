@@ -8,7 +8,7 @@
 .tablo { width: 100%; border-collapse: collapse; font-size: .88rem; }
 .tablo th {
   text-align: left; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em;
-  color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--bg-soft);
+  color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--bg-soft);
 }
 .tablo td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .tablo tr:last-child td { border-bottom: none; }
@@ -17,28 +17,28 @@
 .pasif { opacity: .55; }
 .durumAktif {
   display: inline-flex; background: rgba(22,163,74,.1); color: var(--yesil);
-  padding: 3px 12px; border-radius: 50px; font-size: .74rem; font-weight: 700;
+  padding: 3px 12px; border-radius: 10px; font-size: .74rem; font-weight: 700;
 }
 .durumPasif {
   display: inline-flex; background: rgba(220,38,38,.1); color: var(--kirmizi);
-  padding: 3px 12px; border-radius: 50px; font-size: .74rem; font-weight: 700;
+  padding: 3px 12px; border-radius: 10px; font-size: .74rem; font-weight: 700;
 }
 .islemler { display: flex; gap: 6px; flex-wrap: wrap; }
 
 .form { display: grid; grid-template-columns: repeat(5, 1fr) auto; gap: 12px; align-items: end; }
 .formGrup label { display: block; font-size: .78rem; font-weight: 600; margin-bottom: 5px; }
 .formGrup input {
-  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
-  border-radius: 10px; font-family: inherit; font-size: .9rem;
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: 14px; font-family: inherit; font-size: .9rem;
 }
 .formGrup input:focus { outline: none; border-color: var(--teal); }
 .hata {
   background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;
-  border-radius: 10px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
+  border-radius: 14px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
 }
 .tamam {
   background: #f0fdf4; color: var(--yesil); border: 1px solid #bbf7d0;
-  border-radius: 10px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
+  border-radius: 14px; padding: 9px 13px; font-size: .84rem; margin-top: 12px;
 }
 @media (max-width: 860px) { .form { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .form { grid-template-columns: 1fr; } }
@@ -46,7 +46,7 @@
 /* ── Aktivite modülü ─────────────────────────────────── */
 .statSatir { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 4px; }
 .statKutu {
-  background: var(--bg-soft); border-radius: 12px; padding: 14px 16px;
+  background: var(--bg-soft); border-radius: 14px; padding: 14px 16px;
 }
 .statKutu b { font-size: 1.35rem; display: block; }
 .statKutu small { color: var(--muted); font-size: .76rem; }
@@ -63,7 +63,7 @@
 }
 .noktaBos { composes: nokta; background: #cbd5e1; box-shadow: none; }
 .rolEtiket {
-  display: inline-flex; padding: 2px 10px; border-radius: 50px;
+  display: inline-flex; padding: 2px 10px; border-radius: 10px;
   font-size: .7rem; font-weight: 700;
 }
 .rolKoc { composes: rolEtiket; background: var(--tint); color: var(--blue); }

@@ -1,42 +1,68 @@
-/* Public sayfaların alt bilgisi — statik sayfaların koyu bordo footer'ıyla
-   aynı dili konuşan sade sürüm. */
+/* Public sayfaların alt bilgisi — statik sayfaların .site-alt bloğuyla
+   aynı dili konuşan sade sürüm (DESIGN.md: koyu, düz, 4 sütun,
+   büyük harf sütun başlığı + hairline üst çizgili telif satırı). */
 
 .alt {
-  margin-top: 64px;
-  background: var(--bordo-dk);
-  color: rgba(255, 255, 255, .78);
-  padding: 44px 0 28px;
+  margin-top: var(--bosluk-64);
+  background: #1F141A;
+  color: #D8CFD2;
+  padding: var(--bosluk-64) 0 0;
 }
-[data-theme="dark"] .alt { background: #1F1017; }
 
 .izgara {
-  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px;
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr;
+  gap: var(--bosluk-32); padding-bottom: var(--bosluk-48);
 }
 
-.marka { display: flex; flex-direction: column; gap: 12px; }
+.marka { display: flex; flex-direction: column; }
 .markaAd {
   display: flex; align-items: center; gap: 10px;
-  font-family: var(--font-poppins), "Poppins", sans-serif;
-  font-weight: 800; font-size: 1.15rem; color: #fff;
+  font-family: var(--font-baslik);
+  font-weight: 700; font-size: var(--text-subheading);
+  letter-spacing: -.3px; color: #fff;
 }
-.markaAd img { width: 46px; height: 46px; object-fit: contain; }
-.markaAd span { color: var(--gul); }
-.marka p { font-size: .84rem; line-height: 1.65; max-width: 44ch; }
+.markaAd img { width: 44px; height: 44px; object-fit: contain; }
+.markaAd span { color: #C98792; }
+.marka p {
+  margin-top: var(--bosluk-16);
+  font-size: var(--text-small); line-height: 1.7; max-width: 44ch;
+}
+
+/* "Bizi takip edin" — statik sayfalardaki .sosyal-blok ile aynı */
+.sosyalBlok { margin-top: var(--bosluk-24); }
+.sosyalBaslik {
+  display: block; margin-bottom: var(--bosluk-12);
+  font-size: var(--text-small); font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase; color: #fff;
+}
+.sosyal { display: flex; gap: var(--bosluk-8); }
+.sosyal a {
+  width: 38px; height: 38px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, .24);
+  display: grid; place-items: center; color: #D8CFD2;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.sosyal a:hover { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .5); color: #fff; }
+.sosyal svg { width: 18px; height: 18px; display: block; }
 
 .kolon h4 {
-  color: #fff; font-size: .95rem; margin-bottom: 12px;
-  font-family: var(--font-poppins), "Poppins", sans-serif; font-weight: 700;
+  color: #fff; font-family: var(--font-govde);
+  font-size: var(--text-small); font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  margin-bottom: var(--bosluk-32);
 }
-.kolon ul { display: grid; gap: 8px; }
-.kolon a { font-size: .84rem; transition: color .2s; }
+.kolon ul { display: grid; gap: var(--bosluk-8); }
+.kolon a { font-size: var(--text-small); color: #D8CFD2; transition: color .2s; }
 .kolon a:hover { color: #fff; }
 
 .telif {
-  margin-top: 32px; padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, .12);
-  font-size: .78rem; text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, .14);
+  padding: var(--bosluk-24) 0;
+  font-size: 13px; text-align: center; color: rgba(255, 255, 255, .55);
 }
 
 @media (max-width: 760px) {
-  .izgara { grid-template-columns: 1fr; gap: 26px; }
+  .izgara { grid-template-columns: 1fr; gap: var(--bosluk-32); }
+  .kolon h4 { margin-bottom: var(--bosluk-16); }
+  .kolon a { display: inline-block; padding: 5px 0; }
 }

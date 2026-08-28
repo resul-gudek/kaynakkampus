@@ -6,8 +6,10 @@
   <title>Etkinlikler – İlkokul · Ortaokul · Lise – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     /* ── RESET & BASE ────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,18 +44,18 @@
     .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border-radius: 50px; font-size: .95rem;
+      padding: 14px 28px; border-radius: 10px; font-size: .95rem;
       font-weight: 600; cursor: pointer; transition: all .25s;
       border: none; font-family: inherit;
     }
     .btn-primary { background: var(--blue); color: #fff; }
     .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
-    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--blue); }
     .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
     .tag {
       display: inline-flex; align-items: center;
       background: rgba(122,32,53,.07); color: var(--blue);
-      padding: 4px 12px; border-radius: 50px; font-size: .75rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 10px; font-size: .75rem; font-weight: 600;
     }
 
     /* ── HEADER ──────────────────────────────────────────── */
@@ -68,10 +70,10 @@
     .logo-icon {
       width: 48px; height: 48px; object-fit: contain;
     }
-    footer .logo-icon { background: #fff; border-radius: 10px; padding: 3px; }
+    footer .logo-icon { background: #fff; border-radius: 14px; padding: 3px; }
     .logo span { color: var(--orange); }
     nav { display: flex; align-items: center; gap: 6px; }
-    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a { padding: 8px 14px; border-radius: 14px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
     nav a:hover { background: var(--bg-soft); color: var(--blue); }
     nav a.active { color: var(--blue); font-weight: 700; }
     .nav-actions { display: flex; align-items: center; gap: 10px; }
@@ -85,7 +87,7 @@
       border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; color: var(--text); transition: .2s; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 14px; font-size: 1rem; font-weight: 600; color: var(--text); transition: .2s; }
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
     .mobile-nav .btn { margin-top: 8px; text-align: center; justify-content: center; }
 
@@ -119,12 +121,12 @@
       display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; position: relative;
     }
     .class-tab {
-      background: #fff; border: 2px solid transparent; border-radius: 50px;
+      background: #fff; border: 1px solid transparent; border-radius: 10px;
       padding: 10px 22px; font-size: .88rem; font-weight: 700; color: var(--text);
       cursor: pointer; transition: all .25s; box-shadow: var(--shadow); font-family: inherit;
     }
     .class-tab:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
-    .class-tab.active { background: var(--blue); color: #fff; }
+    .class-tab.active { background: var(--murekkep); border-color: var(--murekkep); color: #fff; }
 
     /* ── LAYOUT ─────────────────────────────────────────── */
     .listing { padding: 56px 0 80px; background: #fff; }
@@ -143,14 +145,14 @@
     .side-list button {
       width: 100%; display: flex; align-items: center; justify-content: space-between;
       background: none; border: none; font-family: inherit; cursor: pointer;
-      padding: 9px 12px; border-radius: 10px; font-size: .85rem; font-weight: 600;
+      padding: 9px 12px; border-radius: 14px; font-size: .85rem; font-weight: 600;
       color: var(--text); transition: all .2s; text-align: left;
     }
     .side-list button:hover { background: #fff; color: var(--blue); }
-    .side-list button.active { background: var(--blue); color: #fff; }
+    .side-list button.active { background: var(--murekkep); color: #fff; }
     .side-count {
       background: rgba(122,32,53,.10); color: var(--blue);
-      font-size: .72rem; font-weight: 700; padding: 2px 9px; border-radius: 50px;
+      font-size: .72rem; font-weight: 700; padding: 2px 9px; border-radius: 10px;
     }
     .side-list button.active .side-count { background: rgba(255,255,255,.2); color: #fff; }
 
@@ -160,7 +162,7 @@
     }
     .recent-item:last-child { border-bottom: none; }
     .recent-thumb {
-      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      width: 42px; height: 42px; border-radius: 14px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
       background: #fff;
     }
@@ -174,7 +176,7 @@
     }
     .stats-box h3 { font-size: .95rem; font-weight: 800; margin-bottom: 14px; display: flex; gap: 8px; align-items: center; }
     .visitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .visitor-item { background: rgba(255,255,255,.08); border-radius: 10px; padding: 10px 12px; }
+    .visitor-item { background: rgba(255,255,255,.08); border-radius: 14px; padding: 10px 12px; }
     .visitor-num { font-size: 1.05rem; font-weight: 800; }
     .visitor-num.online { color: #4ade80; }
     .visitor-label { font-size: .68rem; opacity: .7; margin-top: 2px; font-weight: 500; }
@@ -200,8 +202,8 @@
     }
     .search-box {
       flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px;
-      background: var(--bg-soft); border-radius: 50px; padding: 12px 20px;
-      border: 2px solid transparent; transition: all .2s;
+      background: var(--bg-soft); border-radius: 10px; padding: 12px 20px;
+      border: 1px solid transparent; transition: all .2s;
     }
     .search-box:focus-within { border-color: var(--blue); background: #fff; box-shadow: var(--shadow); }
     .search-box input {
@@ -215,11 +217,11 @@
     .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
     .chip {
       background: var(--bg-soft); border: none; font-family: inherit; cursor: pointer;
-      padding: 8px 16px; border-radius: 50px; font-size: .8rem; font-weight: 600;
+      padding: 8px 16px; border-radius: 10px; font-size: .8rem; font-weight: 600;
       color: var(--text); transition: all .2s;
     }
     .chip:hover { background: rgba(122,32,53,.12); color: var(--blue); }
-    .chip.active { background: var(--blue); color: #fff; }
+    .chip.active { background: var(--murekkep); border-color: var(--murekkep); color: #fff; }
 
     /* ── ACTIVITY CARDS ─────────────────────────────────── */
     .activity-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
@@ -236,7 +238,7 @@
     .activity-badge {
       position: absolute; top: 12px; left: 12px;
       background: var(--blue); color: #fff;
-      padding: 3px 11px; border-radius: 50px; font-size: .68rem; font-weight: 700;
+      padding: 3px 11px; border-radius: 10px; font-size: .68rem; font-weight: 700;
     }
     .activity-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
     .activity-meta { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -246,7 +248,7 @@
       font-size: .74rem; color: var(--muted); margin-bottom: 14px;
     }
     .activity-actions { display: flex; gap: 8px; }
-    .activity-actions .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: .8rem; border-radius: 10px; }
+    .activity-actions .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: .8rem; border-radius: 14px; }
 
     .empty-state {
       grid-column: 1 / -1; text-align: center; padding: 60px 20px;
@@ -258,13 +260,13 @@
     /* ── PAGINATION ─────────────────────────────────────── */
     .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; flex-wrap: wrap; }
     .page-btn {
-      min-width: 42px; height: 42px; border-radius: 12px; border: none;
+      min-width: 42px; height: 42px; border-radius: 14px; border: none;
       background: var(--bg-soft); color: var(--text); font-family: inherit;
       font-size: .88rem; font-weight: 700; cursor: pointer; transition: all .2s;
       display: flex; align-items: center; justify-content: center; padding: 0 12px;
     }
     .page-btn:hover:not(:disabled) { background: var(--blue); color: #fff; transform: translateY(-2px); }
-    .page-btn.active { background: var(--blue); color: #fff; }
+    .page-btn.active { background: var(--murekkep); border-color: var(--murekkep); color: #fff; }
     .page-btn:disabled { opacity: .4; cursor: default; }
 
     /* ── FOOTER ─────────────────────────────────────────── */
@@ -306,13 +308,25 @@
     .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
     .fade-up.visible { opacity: 1; transform: translateY(0); }
   </style>
-  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
 </head>
 <body>
 
 <!-- ═══════════════════════════════════════════════════════ HEADER -->
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ
+     Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
+     assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
+     günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
+
 <header class="site-header">
   <div class="sh-inner">
     <a href="index.html" class="sh-logo">
@@ -328,7 +342,7 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html">Etkinlikler</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -341,7 +355,6 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="index.html#how">Nasıl Çalışır</a>
       <a href="hakkimizda.html">Hakkımızda</a>
     </nav>
 
@@ -359,13 +372,12 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="index.html#how">Nasıl Çalışır</a>
     <a href="hakkimizda.html">Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -382,7 +394,7 @@
   <div class="container">
     <div class="breadcrumb">
       <a href="index.html">Ana Sayfa</a> <span>›</span>
-      <a href="etkinlikler.html">Etkinlikler</a> <span>›</span>
+      <a href="etkinlikler.html" hidden>Etkinlikler</a> <span>›</span>
       <span id="crumbNow">1. Sınıf Etkinlikleri</span>
     </div>
     <h1 id="pageTitle">1. Sınıf <span>Etkinlikleri</span></h1>
@@ -472,45 +484,72 @@
 </section>
 
 <!-- ═══════════════════════════════════════════════════════ FOOTER -->
-<footer>
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo">
-          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" class="logo-icon" />
-          Kaynak <span style="color:var(--amber)">Kampüs</span>
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
         </div>
-        <p>Türkiye'nin en kapsamlı online eğitim platformu. Uzman eğitmenler, kaliteli materyaller ve kişiselleştirilmiş öğrenme deneyimi.</p>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>Platform</h4>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
         <ul>
-          <li><a href="etkinlikler.html">Etkinlikler</a></li>
-          <li><a href="#">Testler</a></li>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h4>Sınıflar</h4>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
         <ul>
-          <li><a href="etkinlikler.html">1. Sınıf Etkinlikleri</a></li>
-          <li><a href="#">2. Sınıf Etkinlikleri</a></li>
-          <li><a href="#">3. Sınıf Etkinlikleri</a></li>
-          <li><a href="#">4. Sınıf Etkinlikleri</a></li>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h4>Şirket</h4>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
         <ul>
-          <li><a href="#">Hakkımızda</a></li>
-          <li><a href="#">İletişim</a></li>
-          <li><a href="#">Gizlilik Politikası</a></li>
-          <li><a href="#">Çerez Politikası</a></li>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
         </ul>
       </div>
+
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Kaynak Kampüs. Tüm hakları saklıdır.</span>
-      <span>Türkiye'de 🇹🇷 ile Tasarlandı</span>
+    <p class="site-alt-not">Etkinlik ve çalışma kâğıtları MEB güncel öğretim programları esas alınarak hazırlanmıştır.</p>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
     </div>
   </div>
 </footer>
@@ -528,26 +567,26 @@
   };
 
   const SUBJECTS = {
-    turkce:    { n: "Türkçe",                       i: "📖", bg: "linear-gradient(135deg,#fef3c7,#fde68a)" },
-    tde:       { n: "Türk Dili ve Edebiyatı",       i: "📜", bg: "linear-gradient(135deg,#fef3c7,#fde68a)" },
-    matematik: { n: "Matematik",                    i: "🔢", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)" },
-    geometri:  { n: "Geometri",                     i: "📐", bg: "linear-gradient(135deg,#F0E3E6,#E4C4CB)" },
-    hayat:     { n: "Hayat Bilgisi",                i: "🌱", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)" },
-    fen:       { n: "Fen Bilimleri",                i: "⚗️", bg: "linear-gradient(135deg,#d1fae5,#a7f3d0)" },
-    fizik:     { n: "Fizik",                        i: "🧲", bg: "linear-gradient(135deg,#F0E3E6,#E4C4CB)" },
-    kimya:     { n: "Kimya",                        i: "🧪", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)" },
-    biyoloji:  { n: "Biyoloji",                     i: "🧬", bg: "linear-gradient(135deg,#d1fae5,#a7f3d0)" },
-    sosyal:    { n: "Sosyal Bilgiler",              i: "🌍", bg: "linear-gradient(135deg,#F5E6E9,#EAD3D8)" },
-    tarih:     { n: "Tarih",                        i: "🏛️", bg: "linear-gradient(135deg,#F5E6E9,#EAD3D8)" },
-    cografya:  { n: "Coğrafya",                     i: "🗺️", bg: "linear-gradient(135deg,#ecfccb,#d9f99d)" },
-    felsefe:   { n: "Felsefe",                      i: "🤔", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)" },
-    din:       { n: "Din Kültürü ve Ahlak Bilgisi", i: "🕌", bg: "linear-gradient(135deg,#cffafe,#a5f3fc)" },
-    ingilizce: { n: "İngilizce",                    i: "🇬🇧", bg: "linear-gradient(135deg,#F0E3E6,#E4C4CB)" },
-    almanca:   { n: "Almanca",                      i: "🇩🇪", bg: "linear-gradient(135deg,#fee2e2,#fecaca)" },
-    bilisim:   { n: "Bilişim Teknolojileri",        i: "💻", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)" },
-    teknoloji: { n: "Teknoloji ve Tasarım",         i: "🛠️", bg: "linear-gradient(135deg,#f1f5f9,#e2e8f0)" },
-    defter:    { n: "Defter Etkinlikleri",          i: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)" },
-    dikte:     { n: "Görsel Dikte",                 i: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)" },
+    turkce:    { n: "Türkçe",                       i: "📖", bg: "#F6F1F0" },
+    tde:       { n: "Türk Dili ve Edebiyatı",       i: "📜", bg: "#F6F1F0" },
+    matematik: { n: "Matematik",                    i: "🔢", bg: "#F6F1F0" },
+    geometri:  { n: "Geometri",                     i: "📐", bg: "#F6F1F0" },
+    hayat:     { n: "Hayat Bilgisi",                i: "🌱", bg: "#F6F1F0" },
+    fen:       { n: "Fen Bilimleri",                i: "⚗️", bg: "#F6F1F0" },
+    fizik:     { n: "Fizik",                        i: "🧲", bg: "#F6F1F0" },
+    kimya:     { n: "Kimya",                        i: "🧪", bg: "#F6F1F0" },
+    biyoloji:  { n: "Biyoloji",                     i: "🧬", bg: "#F6F1F0" },
+    sosyal:    { n: "Sosyal Bilgiler",              i: "🌍", bg: "#F6F1F0" },
+    tarih:     { n: "Tarih",                        i: "🏛️", bg: "#F6F1F0" },
+    cografya:  { n: "Coğrafya",                     i: "🗺️", bg: "#F6F1F0" },
+    felsefe:   { n: "Felsefe",                      i: "🤔", bg: "#F6F1F0" },
+    din:       { n: "Din Kültürü ve Ahlak Bilgisi", i: "🕌", bg: "#F6F1F0" },
+    ingilizce: { n: "İngilizce",                    i: "🇬🇧", bg: "#F6F1F0" },
+    almanca:   { n: "Almanca",                      i: "🇩🇪", bg: "#F6F1F0" },
+    bilisim:   { n: "Bilişim Teknolojileri",        i: "💻", bg: "#F6F1F0" },
+    teknoloji: { n: "Teknoloji ve Tasarım",         i: "🛠️", bg: "#F6F1F0" },
+    defter:    { n: "Defter Etkinlikleri",          i: "📓", bg: "#F6F1F0" },
+    dikte:     { n: "Görsel Dikte",                 i: "✍️", bg: "#F6F1F0" },
   };
 
   const LEVEL_SUBJECTS = {
@@ -701,34 +740,34 @@
   // ── 1. sınıfa özel, elle hazırlanmış etkinlikler ─────────
   // cat: ders anahtarı | ses: elakin | omutuy | oridsb | zcgscp | hvgfj | null
   const ACTIVITIES = [
-    { title: "e-l-a-k-i-n Grubu Hece Okuma Çalışması", cat: "turkce", ses: "elakin", icon: "📖", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", date: "12 Temmuz 2026", pages: 6, badge: "Yeni" },
-    { title: "e Sesi Yazma ve Boyama Etkinliği", cat: "turkce", ses: "elakin", icon: "✏️", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", date: "10 Temmuz 2026", pages: 4 },
-    { title: "l Sesi Hece ve Kelime Oluşturma", cat: "turkce", ses: "elakin", icon: "🔤", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", date: "8 Temmuz 2026", pages: 5 },
-    { title: "o-m-u-t-ü-y Grubu Kelime Türetme Etkinliği", cat: "turkce", ses: "omutuy", icon: "📝", bg: "linear-gradient(135deg,#F0E3E6,#E4C4CB)", date: "5 Temmuz 2026", pages: 8, badge: "Popüler" },
-    { title: "m Sesi Görsel Okuma Kartları", cat: "turkce", ses: "omutuy", icon: "🃏", bg: "linear-gradient(135deg,#F0E3E6,#E4C4CB)", date: "3 Temmuz 2026", pages: 12 },
-    { title: "ö-r-ı-d-s-b Grubu Cümle Kurma Çalışması", cat: "turkce", ses: "oridsb", icon: "💬", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "1 Temmuz 2026", pages: 6 },
-    { title: "r Sesi Okuma Anlama Metni", cat: "turkce", ses: "oridsb", icon: "📚", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "28 Haziran 2026", pages: 3 },
-    { title: "z-ç-g-ş-c-p Grubu Hece Tablosu", cat: "turkce", ses: "zcgscp", icon: "🧩", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)", date: "25 Haziran 2026", pages: 7 },
-    { title: "ç Sesi Eğlenceli Bulmaca Etkinliği", cat: "turkce", ses: "zcgscp", icon: "🧠", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)", date: "22 Haziran 2026", pages: 4 },
-    { title: "h-v-ğ-f-j Grubu Serbest Okuma Metinleri", cat: "turkce", ses: "hvgfj", icon: "📕", bg: "linear-gradient(135deg,#F5E6E9,#EAD3D8)", date: "20 Haziran 2026", pages: 10, badge: "Popüler" },
-    { title: "f Sesi Kelime Avı Etkinliği", cat: "turkce", ses: "hvgfj", icon: "🔎", bg: "linear-gradient(135deg,#F5E6E9,#EAD3D8)", date: "18 Haziran 2026", pages: 5 },
-    { title: "1'den 20'ye Kadar Ritmik Sayma", cat: "matematik", ses: null, icon: "🔢", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "15 Haziran 2026", pages: 6, badge: "Yeni" },
-    { title: "Toplama İşlemi Boyamalı Alıştırmalar", cat: "matematik", ses: null, icon: "➕", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "12 Haziran 2026", pages: 8 },
-    { title: "Çıkarma İşlemi Problem Kartları", cat: "matematik", ses: null, icon: "➖", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "10 Haziran 2026", pages: 6 },
-    { title: "Geometrik Şekiller Eşleştirme Oyunu", cat: "matematik", ses: null, icon: "🔷", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "8 Haziran 2026", pages: 4 },
-    { title: "Onluk ve Birlik Kavrama Etkinliği", cat: "matematik", ses: null, icon: "🧮", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", date: "5 Haziran 2026", pages: 7 },
-    { title: "Okulumuzu Tanıyalım Etkinlik Sayfası", cat: "hayat", ses: null, icon: "🏫", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "2 Haziran 2026", pages: 5 },
-    { title: "Sağlıklı Beslenme Tabağım", cat: "hayat", ses: null, icon: "🥗", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "30 Mayıs 2026", pages: 3 },
-    { title: "Trafik Kuralları Boyama ve Eşleştirme", cat: "hayat", ses: null, icon: "🚦", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "28 Mayıs 2026", pages: 6 },
-    { title: "Mevsimler ve Hava Durumu Etkinliği", cat: "hayat", ses: null, icon: "🌦️", bg: "linear-gradient(135deg,#dcfce7,#bbf7d0)", date: "25 Mayıs 2026", pages: 4 },
-    { title: "Defter Etkinliği: e-l-a-k-i-n Güzel Yazı", cat: "defter", ses: "elakin", icon: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", date: "22 Mayıs 2026", pages: 9, badge: "Yöntem" },
-    { title: "Defter Etkinliği: o-m-u-t-ü-y Satır Çalışması", cat: "defter", ses: "omutuy", icon: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", date: "20 Mayıs 2026", pages: 8, badge: "Yöntem" },
-    { title: "Defter Etkinliği: ö-r-ı-d-s-b Hece Defteri", cat: "defter", ses: "oridsb", icon: "📓", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", date: "18 Mayıs 2026", pages: 10 },
-    { title: "Görsel Dikte Sınavı: 1. Grup Sesler", cat: "dikte", ses: "elakin", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "15 Mayıs 2026", pages: 2, badge: "Sınav" },
-    { title: "Görsel Dikte Sınavı: 2. Grup Sesler", cat: "dikte", ses: "omutuy", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "12 Mayıs 2026", pages: 2, badge: "Sınav" },
-    { title: "Görsel Dikte Sınavı: 3. Grup Sesler", cat: "dikte", ses: "oridsb", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "10 Mayıs 2026", pages: 2, badge: "Sınav" },
-    { title: "Görsel Dikte Sınavı: 4. Grup Sesler", cat: "dikte", ses: "zcgscp", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "8 Mayıs 2026", pages: 2 },
-    { title: "Görsel Dikte Sınavı: 5. Grup Sesler", cat: "dikte", ses: "hvgfj", icon: "✍️", bg: "linear-gradient(135deg,#fee2e2,#fecaca)", date: "5 Mayıs 2026", pages: 2 },
+    { title: "e-l-a-k-i-n Grubu Hece Okuma Çalışması", cat: "turkce", ses: "elakin", icon: "📖", bg: "#F6F1F0", date: "12 Temmuz 2026", pages: 6, badge: "Yeni" },
+    { title: "e Sesi Yazma ve Boyama Etkinliği", cat: "turkce", ses: "elakin", icon: "✏️", bg: "#F6F1F0", date: "10 Temmuz 2026", pages: 4 },
+    { title: "l Sesi Hece ve Kelime Oluşturma", cat: "turkce", ses: "elakin", icon: "🔤", bg: "#F6F1F0", date: "8 Temmuz 2026", pages: 5 },
+    { title: "o-m-u-t-ü-y Grubu Kelime Türetme Etkinliği", cat: "turkce", ses: "omutuy", icon: "📝", bg: "#F6F1F0", date: "5 Temmuz 2026", pages: 8, badge: "Popüler" },
+    { title: "m Sesi Görsel Okuma Kartları", cat: "turkce", ses: "omutuy", icon: "🃏", bg: "#F6F1F0", date: "3 Temmuz 2026", pages: 12 },
+    { title: "ö-r-ı-d-s-b Grubu Cümle Kurma Çalışması", cat: "turkce", ses: "oridsb", icon: "💬", bg: "#F6F1F0", date: "1 Temmuz 2026", pages: 6 },
+    { title: "r Sesi Okuma Anlama Metni", cat: "turkce", ses: "oridsb", icon: "📚", bg: "#F6F1F0", date: "28 Haziran 2026", pages: 3 },
+    { title: "z-ç-g-ş-c-p Grubu Hece Tablosu", cat: "turkce", ses: "zcgscp", icon: "🧩", bg: "#F6F1F0", date: "25 Haziran 2026", pages: 7 },
+    { title: "ç Sesi Eğlenceli Bulmaca Etkinliği", cat: "turkce", ses: "zcgscp", icon: "🧠", bg: "#F6F1F0", date: "22 Haziran 2026", pages: 4 },
+    { title: "h-v-ğ-f-j Grubu Serbest Okuma Metinleri", cat: "turkce", ses: "hvgfj", icon: "📕", bg: "#F6F1F0", date: "20 Haziran 2026", pages: 10, badge: "Popüler" },
+    { title: "f Sesi Kelime Avı Etkinliği", cat: "turkce", ses: "hvgfj", icon: "🔎", bg: "#F6F1F0", date: "18 Haziran 2026", pages: 5 },
+    { title: "1'den 20'ye Kadar Ritmik Sayma", cat: "matematik", ses: null, icon: "🔢", bg: "#F6F1F0", date: "15 Haziran 2026", pages: 6, badge: "Yeni" },
+    { title: "Toplama İşlemi Boyamalı Alıştırmalar", cat: "matematik", ses: null, icon: "➕", bg: "#F6F1F0", date: "12 Haziran 2026", pages: 8 },
+    { title: "Çıkarma İşlemi Problem Kartları", cat: "matematik", ses: null, icon: "➖", bg: "#F6F1F0", date: "10 Haziran 2026", pages: 6 },
+    { title: "Geometrik Şekiller Eşleştirme Oyunu", cat: "matematik", ses: null, icon: "🔷", bg: "#F6F1F0", date: "8 Haziran 2026", pages: 4 },
+    { title: "Onluk ve Birlik Kavrama Etkinliği", cat: "matematik", ses: null, icon: "🧮", bg: "#F6F1F0", date: "5 Haziran 2026", pages: 7 },
+    { title: "Okulumuzu Tanıyalım Etkinlik Sayfası", cat: "hayat", ses: null, icon: "🏫", bg: "#F6F1F0", date: "2 Haziran 2026", pages: 5 },
+    { title: "Sağlıklı Beslenme Tabağım", cat: "hayat", ses: null, icon: "🥗", bg: "#F6F1F0", date: "30 Mayıs 2026", pages: 3 },
+    { title: "Trafik Kuralları Boyama ve Eşleştirme", cat: "hayat", ses: null, icon: "🚦", bg: "#F6F1F0", date: "28 Mayıs 2026", pages: 6 },
+    { title: "Mevsimler ve Hava Durumu Etkinliği", cat: "hayat", ses: null, icon: "🌦️", bg: "#F6F1F0", date: "25 Mayıs 2026", pages: 4 },
+    { title: "Defter Etkinliği: e-l-a-k-i-n Güzel Yazı", cat: "defter", ses: "elakin", icon: "📓", bg: "#F6F1F0", date: "22 Mayıs 2026", pages: 9, badge: "Yöntem" },
+    { title: "Defter Etkinliği: o-m-u-t-ü-y Satır Çalışması", cat: "defter", ses: "omutuy", icon: "📓", bg: "#F6F1F0", date: "20 Mayıs 2026", pages: 8, badge: "Yöntem" },
+    { title: "Defter Etkinliği: ö-r-ı-d-s-b Hece Defteri", cat: "defter", ses: "oridsb", icon: "📓", bg: "#F6F1F0", date: "18 Mayıs 2026", pages: 10 },
+    { title: "Görsel Dikte Sınavı: 1. Grup Sesler", cat: "dikte", ses: "elakin", icon: "✍️", bg: "#F6F1F0", date: "15 Mayıs 2026", pages: 2, badge: "Sınav" },
+    { title: "Görsel Dikte Sınavı: 2. Grup Sesler", cat: "dikte", ses: "omutuy", icon: "✍️", bg: "#F6F1F0", date: "12 Mayıs 2026", pages: 2, badge: "Sınav" },
+    { title: "Görsel Dikte Sınavı: 3. Grup Sesler", cat: "dikte", ses: "oridsb", icon: "✍️", bg: "#F6F1F0", date: "10 Mayıs 2026", pages: 2, badge: "Sınav" },
+    { title: "Görsel Dikte Sınavı: 4. Grup Sesler", cat: "dikte", ses: "zcgscp", icon: "✍️", bg: "#F6F1F0", date: "8 Mayıs 2026", pages: 2 },
+    { title: "Görsel Dikte Sınavı: 5. Grup Sesler", cat: "dikte", ses: "hvgfj", icon: "✍️", bg: "#F6F1F0", date: "5 Mayıs 2026", pages: 2 },
   ];
 
   const SES_LABELS = { elakin: "e-l-a-k-i-n", omutuy: "o-m-u-t-ü-y", oridsb: "ö-r-ı-d-s-b", zcgscp: "z-ç-g-ş-c-p", hvgfj: "h-v-ğ-f-j" };

@@ -19,20 +19,20 @@
 
 .kart {
   position: relative; z-index: 1;
-  background: var(--surface); border-radius: 20px; box-shadow: var(--shadow-lg);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
   width: 100%; max-width: 440px; padding: 40px 36px;
 }
-.kart h1 { font-size: 1.5rem; font-weight: 800; text-align: center; }
-.kart h1 span { color: var(--orange); }
+.kart h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -.4px; text-align: center; }
+.kart h1 span { color: var(--bordo); }
 .alt { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 6px; }
 
 .rolSecim {
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
-  background: var(--bg-soft); border-radius: 50px; padding: 6px; margin: 24px 0;
+  background: var(--bg-soft); border-radius: 10px; padding: 6px; margin: 24px 0;
 }
 .rolBtn {
   border: none; background: transparent; font-family: inherit;
-  padding: 10px 8px; border-radius: 50px; font-size: .85rem; font-weight: 600;
+  padding: 10px 8px; border-radius: 10px; font-size: .85rem; font-weight: 600;
   color: var(--muted); cursor: pointer; transition: all .25s;
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
 }
@@ -44,25 +44,15 @@
 .formGrup { margin-bottom: 16px; }
 .formGrup label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
 .formGrup input {
-  width: 100%; padding: 12px 16px; border: 2px solid var(--border);
-  border-radius: 12px; font-family: inherit; font-size: .95rem; color: var(--text);
+  width: 100%; padding: 12px 16px; border: 1px solid var(--border);
+  border-radius: 14px; font-family: inherit; font-size: .95rem; color: var(--text);
   transition: border-color .2s; background: var(--surface);
 }
 .formGrup input:focus { outline: none; border-color: var(--teal); }
 
 .hataKutu {
   background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;
-  border-radius: 12px; padding: 10px 14px; font-size: .85rem; margin-bottom: 16px;
-}
-
-.demoKutu {
-  margin-top: 22px; background: var(--bg-soft); border-radius: 12px;
-  padding: 14px 16px; font-size: .8rem; color: var(--muted); line-height: 1.7;
-}
-.demoKutu strong { color: var(--blue); }
-.demoKutu code {
-  background: var(--surface); border-radius: 6px; padding: 1px 7px;
-  font-family: inherit; font-weight: 600; color: var(--text);
+  border-radius: 14px; padding: 10px 14px; font-size: .85rem; margin-bottom: 16px;
 }
 
 .ustBar {
@@ -75,7 +65,7 @@
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
 .logoIkon { width: 48px; height: 48px; object-fit: contain; }
 .logo span { color: var(--orange); }
-.geriLink { font-size: .9rem; font-weight: 600; color: var(--blue); padding: 8px 14px; border-radius: 8px; transition: all .2s; }
+.geriLink { font-size: .9rem; font-weight: 600; color: var(--blue); padding: 8px 14px; border-radius: 14px; transition: all .2s; }
 .geriLink:hover { background: var(--bg-soft); }
 
 @media (max-width: 520px) {

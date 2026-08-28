@@ -10,12 +10,16 @@
 [data-theme="dark"] .sahneBas {
   background: linear-gradient(140deg, #241A20 0%, #16131A 55%, #2A1A22 100%);
 }
-.sahneBas h1 { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 700; }
+/* Preply tarzı bilboard tipografi: iri, sıkı, siyah ağırlık */
+.sahneBas h1 {
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); font-weight: 800;
+}
 .sahneBas h1 span { color: var(--gul); }
 .sahneBas p { color: var(--muted); margin-top: 10px; max-width: 68ch; font-size: .95rem; line-height: 1.7; }
 .rozet {
   display: inline-flex; align-items: center; gap: 8px;
-  background: var(--surface); padding: 7px 16px; border-radius: 50px;
+  background: var(--surface); padding: 7px 16px; border-radius: 10px;
   font-size: .78rem; font-weight: 700; color: var(--bordo);
   box-shadow: var(--shadow); margin-bottom: 14px;
 }
@@ -29,8 +33,8 @@
 .arama {
   flex: 1 1 260px; max-width: 400px;
   display: flex; align-items: center; gap: 10px;
-  background: var(--surface); border: 2px solid var(--border);
-  border-radius: 50px; padding: 10px 18px; transition: all .2s;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 18px; transition: all .2s;
 }
 .arama:focus-within { border-color: var(--bordo); box-shadow: var(--shadow); }
 .arama input {
@@ -49,7 +53,7 @@
 .cipler { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
 .cip {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 15px; border-radius: 50px; cursor: pointer;
+  padding: 8px 15px; border-radius: 10px; cursor: pointer;
   background: var(--surface); border: 1.5px solid var(--border);
   color: var(--text); font-family: inherit; font-size: .8rem; font-weight: 600;
   transition: all .2s;
@@ -83,7 +87,7 @@
   position: absolute; top: 12px; left: 12px;
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(255, 255, 255, .94); color: var(--bordo-dk);
-  padding: 5px 12px; border-radius: 50px;
+  padding: 5px 12px; border-radius: 10px;
   font-size: .7rem; font-weight: 800;
 }
 
@@ -100,7 +104,7 @@
 /* Gerçek bir bağlantı — dokunma hedefi yazı yüksekliğinde kalmasın */
 .devam {
   display: inline-flex; align-items: center; min-height: 32px;
-  padding: 6px 10px; margin: -6px -10px; border-radius: 8px;
+  padding: 6px 10px; margin: -6px -10px; border-radius: 14px;
   color: var(--bordo); font-weight: 700;
 }
 .kart:hover .devam { text-decoration: underline; }
@@ -123,21 +127,27 @@
 }
 
 /* ── Detay sayfası ─────────────────────────────────────────────────── */
-.yaziSahne { padding: 30px 0 10px; }
+.yaziSahne { padding: 14px 0 10px; }
 .izYolu {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  font-size: .78rem; color: var(--muted); margin-bottom: 18px;
+  font-size: .78rem; color: var(--muted); margin-bottom: 12px;
 }
 /* İz yolu bağlantıları dar ekranda parmakla ayırt edilebilsin */
 .izYolu a {
   display: inline-flex; align-items: center; min-height: 30px;
-  padding: 4px 2px; border-radius: 6px;
+  padding: 4px 2px; border-radius: 10px;
 }
 .izYolu a:hover { color: var(--bordo); text-decoration: underline; }
 .izYolu span { opacity: .5; }
 
-.yaziBas { max-width: 760px; }
-.yaziBas h1 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.2; }
+/* Yazı sütunu: ~740px genişlikte, sayfada ortalı — uzun satır oluşmaz */
+.izYolu { max-width: 740px; margin-left: auto; margin-right: auto; }
+.yaziBas { max-width: 740px; margin-left: auto; margin-right: auto; }
+.yaziBas h1 {
+  font-size: clamp(2.2rem, 4.5vw, 3.25rem);
+  line-height: 1.08; font-weight: 800; letter-spacing: -1.2px;
+  color: var(--murekkep);
+}
 .yaziMeta {
   display: flex; align-items: center; gap: 8px 14px; flex-wrap: wrap;
   margin: 16px 0 6px; font-size: .8rem; color: var(--muted); font-weight: 600;
@@ -145,44 +155,66 @@
 .yaziMeta .kategoriCip {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--tint); color: var(--bordo);
-  padding: 7px 14px; border-radius: 50px; font-size: .76rem; font-weight: 700;
+  padding: 7px 14px; border-radius: 10px; font-size: .76rem; font-weight: 700;
   min-height: 32px; /* tıklanabilir çip — dokunma hedefi */
 }
 .yaziMeta .kategoriCip:hover { background: var(--bordo); color: #fff; }
+/* Giriş/özet: normal paragraftan bir kademe büyük ve ferah */
 .yaziOzet {
-  color: var(--muted); font-size: 1rem; line-height: 1.75;
-  max-width: 70ch; margin-top: 10px;
+  color: var(--muted); font-size: 1.25rem; line-height: 1.65;
+  max-width: 66ch; margin-top: 14px;
 }
 
 .yaziKapak {
-  margin: 26px 0 8px; border-radius: var(--radius); overflow: hidden;
+  max-width: 860px; margin: 26px auto 8px;
+  border-radius: var(--radius); overflow: hidden;
   aspect-ratio: 16 / 7; background: linear-gradient(135deg, var(--bordo), var(--gul));
   box-shadow: var(--shadow);
 }
 .yaziKapak img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ── İçerik tipografisi ────────────────────────────────────────────── */
-.icerik { max-width: 720px; padding: 12px 0 40px; }
-.icerik p { font-size: 1rem; line-height: 1.85; margin: 0 0 18px; }
-.icerik h2 { font-size: 1.5rem; margin: 34px 0 12px; }
-.icerik h3 { font-size: 1.2rem; margin: 26px 0 10px; }
-.icerik a { color: var(--bordo); font-weight: 600; text-decoration: underline; }
-.icerik ul, .icerik ol { margin: 0 0 18px; padding-left: 22px; }
+/* ── İçerik tipografisi ──────────────────────────────────────────────
+   Okuma sütunu ortalıdır; gövde 17px'tir. Başlık hiyerarşisi belirgindir:
+   h2 ana ara başlık, h3 alt başlık — ikisi de paragraftan net ayrışır. */
+.icerik {
+  max-width: 740px; margin: 0 auto; padding: 12px 0 48px;
+  overflow-wrap: break-word;
+}
+.icerik p { font-size: 1.1875rem; line-height: 1.8; margin: 0 0 24px; }
+.icerik h2 {
+  font-size: 1.75rem; line-height: 1.3; font-weight: 800;
+  letter-spacing: -.3px; color: var(--murekkep);
+  margin: 44px 0 16px;
+}
+.icerik h3 {
+  font-size: 1.4rem; line-height: 1.35; font-weight: 700;
+  color: var(--murekkep);
+  margin: 34px 0 12px;
+}
+/* Yazı başlıkla açılıyorsa üstte gereksiz boşluk kalmasın */
+.icerik h2:first-child, .icerik h3:first-child { margin-top: 0; }
+.icerik strong { font-weight: 700; color: var(--murekkep); }
+.icerik a { color: var(--bordo); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.icerik ul, .icerik ol { margin: 0 0 22px; padding-left: 26px; }
 .icerik ul { list-style: disc; }
 .icerik ol { list-style: decimal; }
-.icerik li { font-size: 1rem; line-height: 1.8; margin-bottom: 7px; }
+.icerik li { font-size: 1.1875rem; line-height: 1.75; margin-bottom: 10px; }
+.icerik li::marker { color: var(--bordo); }
 .icerik blockquote {
-  margin: 0 0 20px; padding: 14px 20px;
+  margin: 28px 0; padding: 16px 22px;
   border-left: 3px solid var(--gul); background: var(--tint);
-  border-radius: 0 12px 12px 0;
-  font-size: 1rem; line-height: 1.75; color: var(--text);
+  border-radius: 0 16px 16px 0;
+  font-size: 1.125rem; line-height: 1.75; color: var(--text);
 }
-.icerik hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.icerik hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
 
-.etiketler { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 40px; }
+.etiketler {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  max-width: 740px; margin: 4px auto 40px;
+}
 .etiketler b { font-size: .76rem; color: var(--muted); }
 .etiket {
-  display: inline-flex; padding: 5px 13px; border-radius: 50px;
+  display: inline-flex; padding: 5px 13px; border-radius: 10px;
   background: var(--tint); color: var(--bordo);
   font-size: .74rem; font-weight: 600;
 }

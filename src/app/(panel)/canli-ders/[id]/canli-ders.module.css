@@ -2,18 +2,18 @@
 /* Dokunma hedefi: yazı yüksekliğinde kalmasın */
 .geri a {
   display:inline-flex; align-items:center; min-height:32px;
-  padding:6px 10px; margin-left:-10px; border-radius:8px;
+  padding:6px 10px; margin-left:-10px; border-radius:14px;
   color:var(--blue); font-size:.82rem; font-weight:700;
 }
 .geri a:hover { background:var(--tint); }
-.hata { padding:11px 14px; margin-top:14px; border:1px solid rgba(220,38,38,.25); border-radius:10px; color:var(--kirmizi); background:rgba(220,38,38,.08); font-size:.8rem; font-weight:600; }
+.hata { padding:11px 14px; margin-top:14px; border:1px solid rgba(220,38,38,.25); border-radius: 14px; color:var(--kirmizi); background:rgba(220,38,38,.08); font-size:.8rem; font-weight:600; }
 .hero {
   display:flex; align-items:center; gap:20px; padding:26px; margin:18px 0;
-  border-radius:20px; color:#fff;
+  border-radius: 14px; color:#fff;
   background:linear-gradient(135deg,#5E1728,#7A2035 55%,#C98792);
   box-shadow:var(--shadow-lg);
 }
-.heroIkon { width:72px; height:72px; display:grid; place-items:center; flex:none; border-radius:18px; background:rgba(255,255,255,.14); font-size:2rem; }
+.heroIkon { width:72px; height:72px; display:grid; place-items:center; flex:none; border-radius: 14px; background:rgba(255,255,255,.14); font-size:2rem; }
 .heroGovde { flex:1; }
 .hero h1 { font-size:clamp(1.4rem,3vw,2rem); margin:8px 0 3px; }
 .hero p { opacity:.82; font-size:.9rem; }
@@ -30,17 +30,17 @@
 .kontrolKart { padding:22px; }
 .kontrolKart h2 { font-size:1rem; margin-bottom:14px; }
 .kontrolKart ul { display:grid; gap:8px; }
-.kontrolKart li { display:flex; align-items:center; gap:10px; padding:10px; border-radius:10px; background:var(--bg-soft); }
+.kontrolKart li { display:flex; align-items:center; gap:10px; padding:10px; border-radius: 14px; background:var(--bg-soft); }
 .kontrolKart li > span { width:30px; text-align:center; font-size:1.1rem; }
 .kontrolKart li div { display:flex; flex-direction:column; }
 .kontrolKart li b { font-size:.76rem; }
 .kontrolKart li small { color:var(--muted); font-size:.67rem; }
-.guvenlik { padding:13px; margin-top:14px; border-radius:10px; background:rgba(22,163,74,.09); color:var(--yesil); }
+.guvenlik { padding:13px; margin-top:14px; border-radius: 14px; background:rgba(22,163,74,.09); color:var(--yesil); }
 .guvenlik b { font-size:.76rem; }
 .guvenlik p { color:var(--muted); font-size:.67rem; margin-top:3px; }
 @media(max-width:760px) {
   .hero { align-items:flex-start; }
-  .heroIkon { width:52px; height:52px; border-radius:13px; font-size:1.4rem; }
+  .heroIkon { width:52px; height:52px; border-radius: 14px; font-size:1.4rem; }
   .icerik { grid-template-columns:1fr; }
 }
 @media(max-width:520px) {

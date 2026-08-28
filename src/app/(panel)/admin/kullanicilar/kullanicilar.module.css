@@ -7,7 +7,7 @@
   margin: 22px 0;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow);
 }
@@ -29,7 +29,7 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border-radius: 13px;
+  border-radius: 14px;
   color: var(--blue);
   background: var(--tint);
   font-size: 1.35rem;
@@ -59,7 +59,7 @@
   height: 42px;
   padding: 0 12px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   outline: 0;
   color: var(--text);
   background: var(--surface);
@@ -85,7 +85,7 @@
   margin-top: 14px;
   padding: 10px 13px;
   border: 1px solid;
-  border-radius: 10px;
+  border-radius: 14px;
   font-size: .78rem;
   font-weight: 600;
 }
@@ -107,7 +107,7 @@
   min-height: 96px;
   padding: 18px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow);
 }
@@ -118,7 +118,7 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border-radius: 13px;
+  border-radius: 14px;
   font-size: 1.15rem;
   font-weight: 800;
 }
@@ -134,7 +134,7 @@
 .listeKart {
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow);
 }
@@ -157,7 +157,7 @@
   gap: 8px;
   padding: 0 12px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   background: var(--surface);
 }
 
@@ -178,7 +178,7 @@
   min-width: 130px;
   padding: 0 34px 0 12px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   color: var(--text);
   background: var(--surface);
   font: inherit;
@@ -245,7 +245,7 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border-radius: 12px;
+  border-radius: 14px;
   color: var(--blue);
   background: var(--tint);
   font-weight: 800;
@@ -257,7 +257,7 @@
 .rol {
   display: inline-flex;
   padding: 4px 9px;
-  border-radius: 999px;
+  border-radius: 10px;
   font-size: .68rem;
   font-weight: 800;
   white-space: nowrap;
@@ -278,7 +278,7 @@
   align-items: center;
   gap: 5px;
   padding: 4px 9px;
-  border-radius: 999px;
+  border-radius: 10px;
   font-size: .68rem;
   font-weight: 800;
   white-space: nowrap;

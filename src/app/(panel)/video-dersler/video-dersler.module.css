@@ -21,13 +21,13 @@
 .form label > small { color:var(--muted); font-size:.7rem; }
 .form input, .form select, .form textarea {
   width:100%; border:1px solid var(--border); background:var(--bg-soft); color:var(--text);
-  border-radius:10px; padding:10px 12px; outline:none; font-size:.86rem; font-family:inherit;
+  border-radius: 14px; padding:10px 12px; outline:none; font-size:.86rem; font-family:inherit;
 }
 .form textarea { resize:vertical; line-height:1.55; }
 .form input[type="file"] { padding:8px 10px; font-size:.78rem; }
 .secilen { color:var(--blue) !important; font-weight:600; }
 
-.kaynak { border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:14px; }
+.kaynak { border:1px solid var(--border); border-radius: 14px; padding:16px; margin-top:14px; }
 .kaynak legend { padding:0 8px; font-size:.76rem; font-weight:800; color:var(--muted); }
 .secimSatir { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:12px; }
 .radyo { flex-direction:row !important; align-items:center; gap:7px !important; cursor:pointer; }
@@ -37,7 +37,7 @@
 .ekliDosyalar { margin-top:14px; }
 .ekliDosyalar > b { font-size:.74rem; font-weight:800; color:var(--muted); }
 .ekListe { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.ekEtiket { display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border-radius:50px; background:var(--bg-soft); border:1px solid var(--border); font-size:.76rem; }
+.ekEtiket { display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border-radius: 10px; background:var(--bg-soft); border:1px solid var(--border); font-size:.76rem; }
 .ekEtiket a:hover { text-decoration:underline; }
 .ekEtiket button { border:0; background:none; color:var(--kirmizi); cursor:pointer; font-size:.85rem; line-height:1; }
 
@@ -46,8 +46,8 @@
 .atamaBas b { font-size:.8rem; }
 .atamaBas span { color:var(--muted); font-size:.72rem; }
 .aramaKutu { margin-bottom:8px; }
-.secimListe { display:grid; gap:2px; max-height:210px; overflow-y:auto; padding:8px; border:1px solid var(--border); border-radius:10px; background:var(--bg-soft); }
-.onay { flex-direction:row !important; align-items:center; gap:8px !important; padding:6px 8px; border-radius:8px; cursor:pointer; }
+.secimListe { display:grid; gap:2px; max-height:210px; overflow-y:auto; padding:8px; border:1px solid var(--border); border-radius: 14px; background:var(--bg-soft); }
+.onay { flex-direction:row !important; align-items:center; gap:8px !important; padding:6px 8px; border-radius:14px; cursor:pointer; }
 .onay:hover { background:var(--tint); }
 .onay input { width:auto !important; }
 .onay span { font-size:.79rem; font-weight:500; }
@@ -55,43 +55,43 @@
 .miniBos { color:var(--muted); font-size:.76rem; padding:10px 4px; }
 
 .yuklemeSatir { display:flex; align-items:center; gap:12px; margin-top:16px; }
-.yuklemeCubuk { flex:1; height:8px; border-radius:50px; background:var(--tint); overflow:hidden; }
+.yuklemeCubuk { flex:1; height:8px; border-radius: 10px; background:var(--tint); overflow:hidden; }
 .yuklemeCubuk i { display:block; height:100%; background:var(--bordo); transition:width .2s; }
 .yuklemeSatir span { color:var(--blue); font-size:.76rem; font-weight:700; white-space:nowrap; }
-.hata { margin-top:14px; padding:10px 13px; border-radius:10px; background:rgba(220,38,38,.08); color:var(--kirmizi); font-size:.8rem; line-height:1.5; }
+.hata { margin-top:14px; padding:10px 13px; border-radius: 14px; background:rgba(220,38,38,.08); color:var(--kirmizi); font-size:.8rem; line-height:1.5; }
 .formAlt { display:flex; gap:10px; margin-top:18px; }
 
 /* ── Liste ── */
 .liste { display:grid; gap:16px; margin:18px 0 50px; }
 .kart { display:grid; grid-template-columns:150px minmax(0,1fr) auto; gap:18px; padding:18px; align-items:start; }
-.kapak { width:150px; aspect-ratio:16/9; border-radius:12px; overflow:hidden; background:linear-gradient(135deg,var(--bordo),var(--gul)); display:grid; place-items:center; font-size:1.6rem; }
+.kapak { width:150px; aspect-ratio:16/9; border-radius: 14px; overflow:hidden; background:linear-gradient(135deg,var(--bordo),var(--gul)); display:grid; place-items:center; font-size:1.6rem; }
 .kapak img { width:100%; height:100%; object-fit:cover; }
 
 .govde { display:flex; flex-direction:column; gap:7px; min-width:0; }
 .baslikSatir { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .baslikSatir h3 { font-size:1.02rem; }
-.durum { padding:3px 10px; border-radius:50px; font-size:.65rem; font-weight:800; background:var(--tint); color:var(--muted); }
+.durum { padding:3px 10px; border-radius: 10px; font-size:.65rem; font-weight:800; background:var(--tint); color:var(--muted); }
 .durum.yayinda { color:var(--yesil); }
 .durum.taslak { color:#b45309; }
 .durum.gizli { color:var(--muted); }
 .dersSatir { color:var(--blue); font-size:.78rem; font-weight:700; }
 .meta { display:flex; flex-wrap:wrap; gap:6px; }
 .meta .tag { font-size:.68rem; padding:3px 9px; }
-.uyari { margin-top:2px; padding:8px 11px; border-radius:9px; background:rgba(180,83,9,.09); color:#b45309; font-size:.74rem; }
+.uyari { margin-top:2px; padding:8px 11px; border-radius: 14px; background:rgba(180,83,9,.09); color:#b45309; font-size:.74rem; }
 
 .eylem { display:flex; flex-direction:column; align-items:stretch; gap:8px; min-width:168px; }
 .durumSecim { display:flex; flex-direction:column; gap:4px; }
 .durumSecim span { font-size:.68rem; font-weight:800; color:var(--muted); }
 .durumSecim select {
   border:1px solid var(--border); background:var(--bg-soft); color:var(--text);
-  border-radius:9px; padding:7px 10px; outline:none; font-size:.78rem; font-family:inherit;
+  border-radius: 14px; padding:7px 10px; outline:none; font-size:.78rem; font-family:inherit;
 }
 /* Metin görünümlü buton — "Sil" gibi kısa etiketlerde dokunma hedefi
    yazının kendi genişliğine düşmesin diye kendi dolgusunu taşır */
 .metinButon {
   border:0; background:none; color:var(--blue); font-size:.74rem; font-weight:600;
   cursor:pointer; text-decoration:underline; text-align:center; font-family:inherit;
-  padding:7px 10px; border-radius:8px; min-height:32px;
+  padding:7px 10px; border-radius:14px; min-height:32px;
 }
 .metinButon:hover { background:var(--tint); }
 .metinButon.tehlike { color:var(--kirmizi); }

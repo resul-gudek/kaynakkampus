@@ -1,3 +1,4 @@
+import PanelIkon from "@/components/panel/Ikon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
@@ -146,7 +147,7 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
       {/* ── İstatistik kartları ── */}
       <section className={d.statGrid} aria-label={`${cocuk.ad} istatistikleri`}>
         <div className={`${d.statKart} ${d.yesil}`}>
-          <span className={d.statIkon}>✅</span>
+          <span className={d.statIkon}><PanelIkon ad="takip" boyut={20} /></span>
           <span>
             <small>Ödev tamamlama</small>
             <b>%{oz.odevYuzde}</b>
@@ -154,7 +155,7 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
           </span>
         </div>
         <div className={`${d.statKart} ${d.turkuaz}`}>
-          <span className={d.statIkon}>📊</span>
+          <span className={d.statIkon}><PanelIkon ad="grafik" boyut={20} /></span>
           <span>
             <small>Haftalık takip</small>
             <b>%{oz.takipYuzde}</b>
@@ -162,7 +163,7 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
           </span>
         </div>
         <div className={`${d.statKart} ${d.mavi}`}>
-          <span className={d.statIkon}>🎯</span>
+          <span className={d.statIkon}><PanelIkon ad="hedef" boyut={20} /></span>
           <span>
             <small>Son deneme neti</small>
             <b>
@@ -181,7 +182,7 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
           </span>
         </div>
         <div className={`${d.statKart} ${d.turuncu}`}>
-          <span className={d.statIkon}>⭐</span>
+          <span className={d.statIkon}><PanelIkon ad="yildiz" boyut={20} /></span>
           <span>
             <small>Yol haritası</small>
             <b>Seviye {yolOz.seviye}</b>
@@ -245,21 +246,21 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
       {/* ── Yol haritası + sıradaki ders özet şeridi ── */}
       <section className={d.ozetGrid} aria-label="Özet">
         <div className={d.ozetKart}>
-          <span>👩‍🏫</span>
+          <span><PanelIkon ad="ogretmen" boyut={18} /></span>
           <div>
             <b>{cocuk.koc ? cocuk.koc.ad : "Koç atanmamış"}</b>
             <small>{cocuk.koc?.brans || "Öğrencinin koçu"}</small>
           </div>
         </div>
         <div className={d.ozetKart}>
-          <span>🗺️</span>
+          <span><PanelIkon ad="harita" boyut={18} /></span>
           <div>
             <b>{aktifAdim ? `Sıradaki: ${aktifAdim.ders} – ${aktifAdim.konu}` : "Yol haritası güncel"}</b>
             <small>{aktifAdim?.hedef || `${yolOz.tamamlanan}/${yolOz.toplam} adım tamamlandı`}</small>
           </div>
         </div>
         <div className={d.ozetKart}>
-          <span>🎓</span>
+          <span><PanelIkon ad="mezuniyet" boyut={18} /></span>
           <div>
             <b>
               {ozelOz.sonraki
@@ -291,7 +292,7 @@ function CocukDetay({ cocuk }: { cocuk: Cocuk }) {
               .slice(0, 8)
               .map((o) => (
                 <li key={o.id}>
-                  <span className={s.rozet}>📘</span>
+                  <span className={s.rozet}><PanelIkon ad="odev" boyut={14} /></span>
                   <div>
                     <b>{o.ders}{o.konu ? " – " + o.konu : ""}</b>
                     <small>

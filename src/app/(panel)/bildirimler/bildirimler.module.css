@@ -8,7 +8,7 @@
 .filtreler { display: flex; gap: 8px; flex-wrap: wrap; }
 .filtre {
   border: none; background: var(--bg-soft); font-family: inherit; cursor: pointer;
-  padding: 8px 18px; border-radius: 50px; font-size: .82rem; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px; font-size: .82rem; font-weight: 600;
   color: var(--muted); transition: all .2s;
 }
 .filtreAktif { composes: filtre; background: var(--nav-aktif-bg); color: var(--nav-aktif-renk); }
@@ -16,14 +16,14 @@
 
 .bildirim {
   display: flex; align-items: flex-start; gap: 14px;
-  border: 1px solid var(--border); border-radius: 12px;
+  border: 1px solid var(--border); border-radius: 14px;
   padding: 14px 16px; margin-bottom: 10px; background: var(--surface);
   cursor: pointer; transition: all .15s; position: relative;
 }
 .bildirim:hover { border-color: var(--teal); }
 .yeni { composes: bildirim; background: var(--tint); border-left: 4px solid var(--blue); }
 .ikon {
-  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 14px; flex-shrink: 0;
   background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
 }
 .govde { flex: 1; min-width: 0; }
@@ -36,7 +36,7 @@
 }
 .silBtn {
   border: none; background: #fef2f2; color: #b91c1c; cursor: pointer;
-  width: 30px; height: 30px; border-radius: 8px; font-size: .85rem; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 14px; font-size: .85rem; flex-shrink: 0;
   transition: all .2s; font-family: inherit;
 }
 .silBtn:hover { background: #b91c1c; color: #fff; }
@@ -58,7 +58,7 @@
 .ayarGovde { padding: 4px 20px 20px; border-top: 1px solid var(--border); }
 .ayarNot { font-size: .8rem; color: var(--muted); line-height: 1.55; margin: 14px 0; }
 .ayarHata {
-  font-size: .8rem; color: #b91c1c; background: #fef2f2; border-radius: 10px;
+  font-size: .8rem; color: #b91c1c; background: #fef2f2; border-radius: 14px;
   padding: 10px 12px; margin: 10px 0;
 }
 .ayarAltBaslik { font-size: .86rem; font-weight: 700; margin: 22px 0 6px; }
@@ -75,7 +75,7 @@
 
 /* Anahtar (switch) — role="switch" düğmesi */
 .anahtar {
-  flex-shrink: 0; width: 46px; height: 26px; border-radius: 50px; cursor: pointer;
+  flex-shrink: 0; width: 46px; height: 26px; border-radius: 10px; cursor: pointer;
   border: 1px solid var(--border); background: var(--bg-soft); padding: 2px;
   display: flex; align-items: center; transition: background .18s, border-color .18s;
 }

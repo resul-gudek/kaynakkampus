@@ -6,8 +6,10 @@
   <title>Ödev Oluştur – Kaynak Kampüs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -24,12 +26,12 @@
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
-      border-radius: 50px; font-size: .95rem; font-weight: 600; cursor: pointer;
+      border-radius: 10px; font-size: .95rem; font-weight: 600; cursor: pointer;
       transition: all .25s; border: none; font-family: inherit;
     }
     .btn-primary { background: var(--blue); color: #fff; }
     .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
-    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1px solid var(--blue); }
     .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
 
     /* HEADER */
@@ -44,7 +46,7 @@
     }
     .logo span { color: var(--orange); }
     nav { display: flex; align-items: center; gap: 6px; }
-    nav a { padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
+    nav a { padding: 8px 14px; border-radius: 14px; font-size: .9rem; font-weight: 500; color: var(--text); transition: all .2s; }
     nav a:hover { background: var(--bg-soft); color: var(--blue); }
     nav a.active { color: var(--blue); font-weight: 700; }
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
@@ -55,7 +57,7 @@
       padding: 24px; flex-direction: column; gap: 8px; border-top: 1px solid rgba(122,32,53,.08);
     }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a { padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600; }
+    .mobile-nav a { padding: 14px 16px; border-radius: 14px; font-size: 1rem; font-weight: 600; }
     .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
 
     /* PAGE HERO */
@@ -68,7 +70,7 @@
     .page-hero p { color: var(--muted); margin-top: 8px; max-width: 720px; font-size: .95rem; }
     .meb-badge {
       display: inline-flex; align-items: center; gap: 8px; background: #fff;
-      padding: 7px 16px; border-radius: 50px; font-size: .78rem; font-weight: 700;
+      padding: 7px 16px; border-radius: 10px; font-size: .78rem; font-weight: 700;
       color: var(--blue); box-shadow: var(--shadow); margin-bottom: 14px;
     }
 
@@ -90,12 +92,12 @@
 
     .pills { display: flex; flex-wrap: wrap; gap: 8px; }
     .pill {
-      background: #fff; border: 2px solid transparent; border-radius: 50px;
+      background: #fff; border: 1px solid transparent; border-radius: 10px;
       padding: 8px 16px; font-size: .82rem; font-weight: 700; cursor: pointer;
       transition: all .2s; font-family: inherit; color: var(--text); box-shadow: 0 2px 8px rgba(122,32,53,.06);
     }
     .pill:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
-    .pill.active { background: var(--blue); color: #fff; }
+    .pill.active { background: var(--murekkep); border-color: var(--murekkep); color: #fff; }
     .pill:disabled { opacity: .35; cursor: not-allowed; }
 
     .subject-pills .pill { display: inline-flex; align-items: center; gap: 6px; }
@@ -104,7 +106,7 @@
     .unit-list { display: flex; flex-direction: column; gap: 6px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
     .unit-item {
       display: flex; align-items: center; gap: 10px; background: #fff;
-      border-radius: 10px; padding: 9px 12px; font-size: .8rem; font-weight: 600; cursor: pointer;
+      border-radius: 14px; padding: 9px 12px; font-size: .8rem; font-weight: 600; cursor: pointer;
       transition: background .15s;
     }
     .unit-item:hover { background: #e5ecff; }
@@ -119,7 +121,7 @@
     .opt-row label { font-size: .8rem; font-weight: 600; }
     .opt-row select, .opt-row input[type="number"], .opt-row input[type="text"] {
       font-family: inherit; font-size: .8rem; font-weight: 600; padding: 7px 12px;
-      border-radius: 8px; border: 1px solid rgba(122,32,53,.2); background: #fff; color: var(--text); outline: none;
+      border-radius: 14px; border: 1px solid rgba(122,32,53,.2); background: #fff; color: var(--text); outline: none;
     }
     .opt-row input[type="text"] { width: 60%; }
     .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; }
@@ -142,7 +144,7 @@
     .preview-empty p { color: var(--muted); font-size: .95rem; }
 
     .sheet {
-      background: #fff; border-radius: 6px; box-shadow: var(--shadow-lg);
+      background: #fff; border-radius: 12px; box-shadow: var(--shadow-lg);
       padding: 40px 44px; max-width: 850px; margin: 0 auto;
       font-size: var(--sheet-fs, .92rem); line-height: 1.6;
     }
@@ -215,11 +217,23 @@
       body { background: #fff; }
     }
   </style>
-  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ
+     Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
+     assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
+     günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="sh-inner">
@@ -236,7 +250,7 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html">Etkinlikler</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -249,7 +263,6 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="index.html#how">Nasıl Çalışır</a>
       <a href="hakkimizda.html">Hakkımızda</a>
     </nav>
 
@@ -267,13 +280,12 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="index.html#how">Nasıl Çalışır</a>
     <a href="hakkimizda.html">Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -285,7 +297,7 @@
   </div>
 </header>
 
-<section class="page-hero">
+<section class="page-hero ince">
   <div class="container">
     <div class="meb-badge">🇹🇷 MEB Güncel Müfredatı (Türkiye Yüzyılı Maarif Modeli) ile uyumlu</div>
     <h1>Akıllı <span>Ödev Oluşturucu</span></h1>
@@ -397,8 +409,74 @@
   </div>
 </section>
 
-<footer style="background:#241018;color:rgba(255,255,255,.6);padding:24px 0;text-align:center;font-size:.78rem;">
-  <div class="container">© 2026 Kaynak Kampüs · Sorular MEB güncel öğretim programları (mufredat.meb.gov.tr) esas alınarak hazırlanmıştır.</div>
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
+        <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
+        <ul>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="site-alt-not">Sorular MEB güncel öğretim programları (<a href="https://mufredat.meb.gov.tr/" target="_blank" rel="noopener noreferrer">mufredat.meb.gov.tr</a>) esas alınarak hazırlanmıştır.</p>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
+    </div>
+  </div>
 </footer>
 
 <script>

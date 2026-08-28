@@ -44,7 +44,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     konu: "Kaynak Kampüs'ye Hoş Geldin, {{ad}}! 🎉",
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Hoş Geldin, {{ad}}! 🎉</h2>
   <p>Kaynak Kampüs koçluk sistemine <b>{{rol}}</b> olarak kaydın oluşturuldu.</p>
-  <p style="background:#f3f4f6;border-radius:8px;padding:12px 16px;margin:16px 0">
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
     <b>Kullanıcı adın:</b> {{kullanici}}<br/>
     <b>Giriş adresi:</b> {{panelAdresi}}/giris
   </p>
@@ -69,7 +69,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Ders Hatırlatması ⏰</h2>
   <p>Merhaba {{ad}},</p>
   <p>Yaklaşan özel dersini hatırlatmak isteriz:</p>
-  <p style="background:#f3f4f6;border-radius:8px;padding:12px 16px;margin:16px 0">
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
     <b>Ders:</b> {{ders}}<br/>
     <b>Konu:</b> {{konu}}<br/>
     <b>Tarih:</b> {{tarih}}<br/>
@@ -101,7 +101,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Haftalık İlerleme Raporu 📊</h2>
   <p>Sayın {{veliAd}},</p>
   <p><b>{{ogrenciAd}}</b> için {{donem}} gelişim özeti aşağıdadır:</p>
-  <table style="width:100%;border-collapse:collapse;background:#f3f4f6;border-radius:8px;margin:16px 0">
+  <table style="width:100%;border-collapse:collapse;background:#f3f4f6;border-radius:14px;margin:16px 0">
     <tr><td style="padding:8px 14px;color:#6b7280">Ödev tamamlama</td><td style="padding:8px 14px;text-align:right"><b>{{odev}}</b></td></tr>
     <tr><td style="padding:8px 14px;color:#6b7280">Haftalık takip</td><td style="padding:8px 14px;text-align:right"><b>{{takip}}</b></td></tr>
     <tr><td style="padding:8px 14px;color:#6b7280">Son deneme neti</td><td style="padding:8px 14px;text-align:right"><b>{{sonNet}}</b></td></tr>
@@ -126,7 +126,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Başvurunuz Alındı ✅</h2>
   <p>Merhaba {{ad}},</p>
   <p><b>{{tur}}</b> ön mülakat başvurunuz bize ulaştı. En kısa sürede değerlendirip sizinle iletişime geçeceğiz.</p>
-  <p style="background:#f3f4f6;border-radius:8px;padding:12px 16px;margin:16px 0">
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
     Başvurunuzun durumunu ve mülakat bilgilerini aşağıdaki bağlantıdan takip edebilirsiniz:<br/>
     <a href="{{takipAdresi}}" style="color:#7A2035">{{takipAdresi}}</a>
   </p>
@@ -149,7 +149,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Mülakat Randevunuz 📅</h2>
   <p>Merhaba {{ad}},</p>
   <p>Başvurunuz için mülakat randevunuz oluşturuldu:</p>
-  <p style="background:#f3f4f6;border-radius:8px;padding:12px 16px;margin:16px 0">
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
     <b>Tarih:</b> {{tarih}}<br/>
     <b>Saat:</b> {{saat}}<br/>
     <b>Görüşme türü:</b> {{tur}}<br/>
@@ -175,7 +175,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Mülakat Hatırlatması ⏰</h2>
   <p>Merhaba {{ad}},</p>
   <p>Mülakatınız <b>{{neKadarKala}}</b>. Bilgileri hatırlatmak isteriz:</p>
-  <p style="background:#f3f4f6;border-radius:8px;padding:12px 16px;margin:16px 0">
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
     <b>Tarih:</b> {{tarih}}<br/>
     <b>Saat:</b> {{saat}}<br/>
     <b>Görüşme türü:</b> {{tur}}<br/>

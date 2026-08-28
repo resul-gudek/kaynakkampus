@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { ChevronDown, LogOut, Menu, X } from "lucide-react";
 import TemaDugmesi from "./TemaDugmesi";
+import BildirimZili, { type ZilBildirim } from "./BildirimZili";
 
 interface Props {
   kullanici: { ad: string; etiket: string };
   okunmamis: number;
   bildirimHref: string | null;
+  bildirimler: ZilBildirim[];
   cikisAction: () => Promise<void>;
+  mobilAcik: boolean;
   onMenuAc: () => void;
 }
 
-export default function UstBar({ kullanici, okunmamis, bildirimHref, cikisAction, onMenuAc }: Props) {
+export default function UstBar({ kullanici, okunmamis, bildirimHref, bildirimler, cikisAction, mobilAcik, onMenuAc }: Props) {
   const [menuAcik, setMenuAcik] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -36,19 +40,25 @@ export default function UstBar({ kullanici, okunmamis, bildirimHref, cikisAction
   return (
     <header className="ustbar">
       <button type="button" className="ustbar-buton hamburger" onClick={onMenuAc} aria-label="Menüyü aç">
-        ☰
+        {mobilAcik ? <X size={20} /> : <Menu size={20} />}
       </button>
+
+      <Link href="/" className="ustbar-logo">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" className="logo-icon" />
+        <span className="ustbar-logo-yazi">
+          <b>
+            Kaynak <span>Kampüs</span>
+          </b>
+          <small>{kullanici.etiket} Paneli</small>
+        </span>
+      </Link>
 
       <div className="ustbar-bosluk" />
 
       <TemaDugmesi />
 
-      {bildirimHref && (
-        <Link href={bildirimHref} className="ustbar-buton ustbar-zil" title="Bildirimler" aria-label="Bildirimler">
-          🔔
-          {okunmamis > 0 && <span className="menu-rozet zil-rozet">{okunmamis > 99 ? "99+" : okunmamis}</span>}
-        </Link>
-      )}
+      {bildirimHref && <BildirimZili sayi={okunmamis} bildirimler={bildirimler} />}
 
       <div className="kullanici-menu" ref={menuRef}>
         <button
@@ -62,7 +72,7 @@ export default function UstBar({ kullanici, okunmamis, bildirimHref, cikisAction
             {kullanici.ad}
             <small>{kullanici.etiket}</small>
           </span>
-          <span className="kullanici-ok">▾</span>
+          <ChevronDown size={14} className="kullanici-ok" aria-hidden="true" />
         </button>
 
         {menuAcik && (
@@ -73,7 +83,7 @@ export default function UstBar({ kullanici, okunmamis, bildirimHref, cikisAction
             </div>
             <form action={cikisAction}>
               <button type="submit" className="kullanici-acilir-kalem cikis">
-                🚪 Çıkış Yap
+                <LogOut size={15} /> Çıkış Yap
               </button>
             </form>
           </div>

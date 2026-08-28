@@ -16,7 +16,7 @@
 /* ── ÖĞRENCİ KARTLARI ────────────────────────────────── */
 .ogrenciGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
 .ogrenciKart {
-  border: 2px solid var(--border); border-radius: var(--radius);
+  border: 1px solid var(--border); border-radius: var(--radius);
   padding: 16px; cursor: pointer; transition: all .2s; background: var(--surface);
   display: block; color: inherit;
 }
@@ -27,27 +27,27 @@
 .ogrenciKartBas small { color: var(--muted); font-size: .75rem; }
 .miniSatir { display: flex; justify-content: space-between; font-size: .76rem; color: var(--muted); margin-top: 6px; }
 .miniSatir b { color: var(--text); }
-.ilerleme { height: 6px; background: var(--bg-soft); border-radius: 6px; overflow: hidden; margin-top: 4px; }
-.ilerleme i { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--blue)); border-radius: 6px; }
+.ilerleme { height: 6px; background: var(--bg-soft); border-radius: 10px; overflow: hidden; margin-top: 4px; }
+.ilerleme i { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--blue)); border-radius: 10px; }
 .ilerleme i.turuncu { background: linear-gradient(90deg, var(--orange), var(--amber)); }
 
 /* ── SEKMELER ────────────────────────────────────────── */
 .sekmeler { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 .sekme {
   border: none; background: var(--bg-soft); font-family: inherit; cursor: pointer;
-  padding: 10px 20px; border-radius: 50px; font-size: .85rem; font-weight: 600;
+  padding: 10px 20px; border-radius: 10px; font-size: .85rem; font-weight: 600;
   color: var(--muted); transition: all .2s; display: inline-flex; align-items: center; gap: 6px;
 }
 .sekme:hover { color: var(--blue); }
 .sekme.aktif { background: var(--nav-aktif-bg); color: var(--nav-aktif-renk); }
 
 /* ── FORMLAR ─────────────────────────────────────────── */
-.kutuForm { background: var(--bg-soft); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+.kutuForm { background: var(--bg-soft); border-radius: 14px; padding: 18px; margin-bottom: 18px; }
 .formIzgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
 .formGrup label { display: block; font-size: .78rem; font-weight: 600; margin-bottom: 5px; }
 .formGrup input, .formGrup select, .formGrup textarea {
-  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
-  border-radius: 10px; font-family: inherit; font-size: .88rem; color: var(--text);
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: 14px; font-family: inherit; font-size: .88rem; color: var(--text);
   transition: border-color .2s; background: var(--surface);
 }
 .formGrup input:focus, .formGrup select:focus, .formGrup textarea:focus { outline: none; border-color: var(--teal); }
@@ -60,7 +60,7 @@
 /* ── LİSTELER ────────────────────────────────────────── */
 .listeSatir {
   display: flex; align-items: flex-start; gap: 14px;
-  border: 1px solid var(--border); border-radius: 12px;
+  border: 1px solid var(--border); border-radius: 14px;
   padding: 14px 16px; margin-bottom: 10px; background: var(--surface);
 }
 .listeSatir.tamam { background: rgba(22,163,74,.08); border-color: rgba(22,163,74,.25); }
@@ -75,10 +75,10 @@
 .kanitSerit { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
 .kanitKart {
   width: 74px; height: 74px; display: block; overflow: hidden;
-  border: 1px solid var(--border); border-radius: 10px; background: var(--bg-soft);
+  border: 1px solid var(--border); border-radius: 14px; background: var(--bg-soft);
 }
 .kanitKart img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.durumRozet { padding: 3px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700; }
+.durumRozet { padding: 3px 12px; border-radius: 10px; font-size: .72rem; font-weight: 700; }
 .durumBekliyor { background: #FBF1F3; color: var(--orange); }
 .durumTamam { background: #f0fdf4; color: var(--yesil); }
 .durumRed { background: #fef2f2; color: #b91c1c; }
@@ -94,7 +94,7 @@
 
 .silBtn {
   border: none; background: #fef2f2; color: #b91c1c; cursor: pointer;
-  width: 32px; height: 32px; border-radius: 8px; font-size: .9rem; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 14px; font-size: .9rem; flex-shrink: 0;
   transition: all .2s; font-family: inherit;
 }
 .silBtn:hover { background: #b91c1c; color: #fff; }
@@ -110,21 +110,21 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .netDusus { color: var(--kirmizi); font-weight: 700; }
 
 /* ── BAŞLANGIÇ PROFİLİ & DENEME DETAYI ───────────────── */
-.seviyeCip { padding: 3px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700; }
+.seviyeCip { padding: 3px 12px; border-radius: 10px; font-size: .72rem; font-weight: 700; }
 .seviyeIyi { background: #f0fdf4; color: var(--yesil); }
 .seviyeOrta { background: #FBF1F3; color: var(--orange); }
 .seviyeZayif { background: #fef2f2; color: #b91c1c; }
 .konuCip {
   display: inline-flex; align-items: center; gap: 5px;
   background: var(--bg-soft); color: var(--blue);
-  padding: 4px 12px; border-radius: 50px; font-size: .74rem; font-weight: 600;
+  padding: 4px 12px; border-radius: 10px; font-size: .74rem; font-weight: 600;
   margin: 3px 4px 3px 0;
 }
 .konuCip.eksik { background: #fef2f2; color: #b91c1c; }
 .konuCip b { font-weight: 800; }
 .konuCip button {
   border: none; background: var(--orange); color: #fff; cursor: pointer;
-  border-radius: 50px; padding: 2px 8px; font-size: .66rem; font-weight: 700; font-family: inherit;
+  border-radius: 10px; padding: 2px 8px; font-size: .66rem; font-weight: 700; font-family: inherit;
 }
 .konuCip button:hover { background: #C98792; }
 .profilDersTablo { width: 100%; border-collapse: collapse; font-size: .84rem; margin-bottom: 12px; }
@@ -140,8 +140,8 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   gap: 8px; align-items: center; margin-bottom: 8px;
 }
 .profilSatir input, .profilSatir select {
-  width: 100%; padding: 8px 10px; border: 2px solid var(--border);
-  border-radius: 8px; font-family: inherit; font-size: .84rem; color: var(--text); background: var(--surface);
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border);
+  border-radius: 14px; font-family: inherit; font-size: .84rem; color: var(--text); background: var(--surface);
 }
 .profilSatir input:focus { outline: none; border-color: var(--teal); }
 .profilSatirDers { font-size: .82rem; font-weight: 600; }
@@ -163,7 +163,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   table.profilDersTablo thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   table.profilDersTablo tr {
     margin-bottom: 10px; padding: 4px 0;
-    border: 1px solid var(--border); border-radius: 12px;
+    border: 1px solid var(--border); border-radius: 14px;
   }
   table.profilDersTablo td { padding: 8px 14px; border-bottom: 1px solid var(--border); }
   table.profilDersTablo tr td:last-child { border-bottom: none; }
@@ -184,10 +184,10 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .dnToplam {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 8px 16px; font-size: .9rem; font-weight: 700; color: var(--blue);
+  border-radius: 14px; padding: 8px 16px; font-size: .9rem; font-weight: 700; color: var(--blue);
 }
 .denemeKart {
-  border: 1px solid var(--border); border-radius: 12px;
+  border: 1px solid var(--border); border-radius: 14px;
   padding: 16px; margin-bottom: 12px; background: var(--surface);
 }
 .denemeKartBas { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
@@ -199,7 +199,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .denemeDetay[open] summary { margin-bottom: 6px; }
 .oneriKutu {
   background: linear-gradient(120deg, rgba(201,135,146,.10) 0%, rgba(201,135,146,.05) 100%);
-  border: 1px solid rgba(201,135,146,.25); border-radius: 12px;
+  border: 1px solid rgba(201,135,146,.25); border-radius: 14px;
   padding: 16px 18px; margin-bottom: 18px;
 }
 .oneriKutu h3 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; }
@@ -208,14 +208,14 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 /* ── NET GELİŞİM GRAFİĞİ ─────────────────────────────── */
 .grafikKutu {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 16px 18px; margin-bottom: 18px;
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 18px;
 }
 .grafikBas { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
 .grafikBas h3 { font-size: .95rem; font-weight: 700; }
 .grafikCipler { display: flex; gap: 6px; flex-wrap: wrap; }
 .gCip {
   border: none; background: var(--bg-soft); color: var(--muted); font-family: inherit;
-  cursor: pointer; padding: 6px 14px; border-radius: 50px; font-size: .76rem; font-weight: 700;
+  cursor: pointer; padding: 6px 14px; border-radius: 10px; font-size: .76rem; font-weight: 700;
   transition: all .2s;
 }
 .gCip.aktif { background: var(--nav-aktif-bg); color: var(--nav-aktif-renk); }
@@ -223,7 +223,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .gIpucu {
   position: absolute; transform: translate(-50%, -100%);
   background: #2F343D; color: #fff; font-size: .75rem; line-height: 1.55;
-  padding: 8px 12px; border-radius: 8px; pointer-events: none; white-space: nowrap;
+  padding: 8px 12px; border-radius: 14px; pointer-events: none; white-space: nowrap;
   box-shadow: var(--shadow-lg); z-index: 5;
 }
 
@@ -236,12 +236,12 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   transition: all .2s;
 }
 .tkNav button:hover { background: var(--nav-aktif-bg); color: var(--nav-aktif-renk); }
-.tkNav .tkBugunBtn { width: auto; border-radius: 50px; padding: 0 16px; font-size: .78rem; }
+.tkNav .tkBugunBtn { width: auto; border-radius: 10px; padding: 0 16px; font-size: .78rem; }
 .takvimAy { font-size: 1.02rem; font-weight: 800; color: var(--blue); min-width: 130px; text-align: center; }
 .tkLejant { display: flex; gap: 6px; flex-wrap: wrap; }
 .tkLejant label {
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
-  background: var(--bg-soft); padding: 5px 12px; border-radius: 50px;
+  background: var(--bg-soft); padding: 5px 12px; border-radius: 10px;
   font-size: .73rem; font-weight: 700; color: var(--muted);
   border: 1px solid transparent; transition: all .2s; opacity: .55;
 }
@@ -254,7 +254,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   letter-spacing: .05em; color: var(--muted); padding: 4px 0;
 }
 .takvimHucre {
-  min-height: 88px; border: 1px solid var(--border); border-radius: 10px;
+  min-height: 88px; border: 1px solid var(--border); border-radius: 14px;
   padding: 6px; background: var(--surface); cursor: pointer; transition: all .15s;
   display: flex; flex-direction: column; gap: 3px; overflow: hidden;
   text-align: left; font-family: inherit;
@@ -263,11 +263,11 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
 .takvimHucre.disari { opacity: .35; background: transparent; cursor: default; }
 .takvimHucre.disari:hover { border-color: var(--border); box-shadow: none; }
 .takvimHucre.bugun { border-color: var(--orange); background: rgba(201,135,146,.08); }
-.takvimHucre.seciliGun { border: 2px solid var(--blue); }
+.takvimHucre.seciliGun { border: 1px solid var(--blue); }
 .takvimNo { font-size: .72rem; font-weight: 700; color: var(--muted); }
 .takvimHucre.bugun .takvimNo { color: var(--orange); }
 .tkOlay {
-  font-size: .62rem; font-weight: 600; line-height: 1.35; padding: 2px 7px; border-radius: 6px;
+  font-size: .62rem; font-weight: 600; line-height: 1.35; padding: 2px 7px; border-radius: 10px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .tkOlay.olayTamam { text-decoration: line-through; opacity: .6; }
@@ -289,7 +289,7 @@ table.denemeTablo td { padding: 10px 12px; border-bottom: 1px solid var(--border
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
   background: linear-gradient(120deg, rgba(201,135,146,.10) 0%, rgba(201,135,146,.05) 100%);
   border: 1px solid rgba(201,135,146,.25);
-  border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;
+  border-radius: 14px; padding: 14px 18px; margin-bottom: 16px;
   font-size: .85rem; font-weight: 600;
 }
 .yolOzet b { color: var(--orange); }

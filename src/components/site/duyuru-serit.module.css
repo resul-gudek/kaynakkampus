@@ -1,0 +1,48 @@
+/* Üst duyuru şeridi — geometri public/assets/site-tema.css'teki
+   .duyuru-serit ile birebir aynıdır; farkı renklerin globals.css
+   token'larından gelmesidir (koyu tema desteği). */
+
+.serit {
+  background: var(--murekkep); color: var(--beyaz);
+  font-size: 13px; font-weight: 400;
+  min-height: 40px; display: flex; align-items: center;
+}
+[data-theme="dark"] .serit { background: #100D13; color: #F3EBEE; }
+
+.serit :global(.container) {
+  display: flex; align-items: center; gap: var(--bosluk-12);
+  padding-block: 8px;
+}
+
+/* Akış esner, kapatma düğmesi sağda sabit kalır */
+.akis {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--bosluk-8); flex-wrap: wrap; text-align: center;
+  transition: opacity .35s ease;
+}
+.gecis { opacity: 0; }
+.akis a { text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+
+/* Şerit içindeki sosyal bağlantılar — altı çizili değil, kutulu */
+.sosyal { display: inline-flex; align-items: center; gap: 6px; }
+.sosyal a {
+  display: grid; place-items: center; width: 26px; height: 26px;
+  border: 1px solid rgba(255, 255, 255, .3); border-radius: var(--radius-sm);
+  text-decoration: none; transition: background .2s, border-color .2s;
+}
+.sosyal a:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .65); }
+.sosyal svg { width: 14px; height: 14px; display: block; }
+
+.kapat {
+  flex: 0 0 auto;
+  background: none; border: none; color: inherit; cursor: pointer;
+  font-size: 15px; line-height: 1; padding: 6px; border-radius: var(--radius-sm);
+  opacity: .7; transition: opacity .2s, background .2s;
+}
+.kapat:hover { opacity: 1; background: rgba(255, 255, 255, .12); }
+
+@media (max-width: 640px) {
+  .serit { font-size: 12px; }
+  .serit :global(.container) { gap: var(--bosluk-8); }
+}

@@ -4,12 +4,14 @@ import { useState, useSyncExternalStore } from "react";
 import type { NavKalemi } from "@/lib/navigasyon";
 import Sidebar from "./Sidebar";
 import UstBar from "./UstBar";
+import type { ZilBildirim } from "./BildirimZili";
 
 interface Props {
   kullanici: { ad: string; etiket: string };
   kalemler: NavKalemi[];
   okunmamis: number;
   okunmamisMesaj: number;
+  sonBildirimler: ZilBildirim[];
   cikisAction: () => Promise<void>;
   children: React.ReactNode;
 }
@@ -23,7 +25,7 @@ const darAbone = (cb: () => void) => {
 };
 const darOku = () => localStorage.getItem("sidebar-dar") === "1";
 
-export default function PanelKabuk({ kullanici, kalemler, okunmamis, okunmamisMesaj, cikisAction, children }: Props) {
+export default function PanelKabuk({ kullanici, kalemler, okunmamis, okunmamisMesaj, sonBildirimler, cikisAction, children }: Props) {
   const [mobilAcik, setMobilAcik] = useState(false);
   const dar = useSyncExternalStore(darAbone, darOku, () => false);
 
@@ -34,13 +36,25 @@ export default function PanelKabuk({ kullanici, kalemler, okunmamis, okunmamisMe
 
   const bildirimKalemi = kalemler.find((k) => k.bildirim) ?? null;
 
+  /* hatem-crm düzeni: üst bar tam genişlikte en üstte, sidebar onun altında */
   return (
     <div className={`panel-kabuk${dar ? " dar" : ""}`}>
+      <UstBar
+        kullanici={kullanici}
+        okunmamis={okunmamis}
+        bildirimHref={bildirimKalemi?.href ?? null}
+        bildirimler={sonBildirimler}
+        cikisAction={cikisAction}
+        mobilAcik={mobilAcik}
+        onMenuAc={() => setMobilAcik((a) => !a)}
+      />
+
+      {/* Mobil çekmece her zaman tam menü gösterir; daraltma masaüstü tercihi */}
       <Sidebar
         kalemler={kalemler}
         okunmamis={okunmamis}
         okunmamisMesaj={okunmamisMesaj}
-        dar={dar}
+        dar={mobilAcik ? false : dar}
         mobilAcik={mobilAcik}
         onKapat={() => setMobilAcik(false)}
         onDarDegistir={darDegistir}
@@ -48,13 +62,6 @@ export default function PanelKabuk({ kullanici, kalemler, okunmamis, okunmamisMe
       {mobilAcik && <div className="sidebar-perde" onClick={() => setMobilAcik(false)} />}
 
       <div className="panel-icerik">
-        <UstBar
-          kullanici={kullanici}
-          okunmamis={okunmamis}
-          bildirimHref={bildirimKalemi?.href ?? null}
-          cikisAction={cikisAction}
-          onMenuAc={() => setMobilAcik((a) => !a)}
-        />
         <main>{children}</main>
       </div>
     </div>

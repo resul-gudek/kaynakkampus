@@ -1,3 +1,4 @@
+import PanelIkon from "@/components/panel/Ikon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -79,7 +80,7 @@ export default async function AdminDashboard() {
 
       <section className={stil.statGrid} aria-label="Genel istatistikler">
         <Link href="/admin/koclar" className={`${stil.statKart} ${stil.mavi}`}>
-          <span className={stil.statIkon}>🧭</span>
+          <span className={stil.statIkon}><PanelIkon ad="pusula" boyut={20} /></span>
           <span>
             <small>Toplam koç</small>
             <b>{koclar.length}</b>
@@ -87,7 +88,7 @@ export default async function AdminDashboard() {
           </span>
         </Link>
         <Link href="/admin/ogretmenler" className={`${stil.statKart} ${stil.gul}`}>
-          <span className={stil.statIkon}>👩‍🏫</span>
+          <span className={stil.statIkon}><PanelIkon ad="ogretmen" boyut={20} /></span>
           <span>
             <small>Toplam öğretmen</small>
             <b>{ogretmenToplam}</b>
@@ -98,7 +99,7 @@ export default async function AdminDashboard() {
           href="/admin/kullanicilar?rol=ogrenci"
           className={`${stil.statKart} ${stil.turkuaz}`}
         >
-          <span className={stil.statIkon}>🎓</span>
+          <span className={stil.statIkon}><PanelIkon ad="mezuniyet" boyut={20} /></span>
           <span>
             <small>Toplam öğrenci</small>
             <b>{ogrenciToplam}</b>
@@ -106,7 +107,7 @@ export default async function AdminDashboard() {
           </span>
         </Link>
         <div className={`${stil.statKart} ${stil.turuncu}`}>
-          <span className={stil.statIkon}>📚</span>
+          <span className={stil.statIkon}><PanelIkon ad="odev" boyut={20} /></span>
           <span>
             <small>Bekleyen ödev</small>
             <b>{bekleyenOdev}</b>
@@ -114,7 +115,7 @@ export default async function AdminDashboard() {
           </span>
         </div>
         <Link href="/admin/aktivite" className={`${stil.statKart} ${stil.yesil}`}>
-          <span className={stil.statIkon}>↗</span>
+          <span className={stil.statIkon}><PanelIkon ad="artis" boyut={20} /></span>
           <span>
             <small>Bugün giriş yapan</small>
             <b>{bugunGirisler.length}</b>

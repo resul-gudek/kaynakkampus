@@ -1,34 +1,52 @@
-/* ── KAYNAK AKADEMİ · ORTAK SİTE MENÜSÜ ──────────────────────────────
+/* ── KAYNAK KAMPÜS · ORTAK SİTE MENÜSÜ ───────────────────────────────
    Tüm public sayfalarda aynı başlık kullanılır. Sınıf adları "sh-" ön
    ekiyle yazıldı; sayfaların kendi eski nav stilleriyle çakışmaz.
+   Davranış: assets/site-header.js
+
+   DESIGN.md'ye göre yeniden yazıldı: düz beyaz çubuk, tek 1px hairline
+   alt çizgi, gölge ve blur yok; düğmeler 4px köşeli (dolgu = mürekkep,
+   ikincil = çizgili). Renkler site-tema.css token'larından okunur, o
+   dosyayı almayan sayfalarda ikinci değer (yedek) devreye girer.
    ------------------------------------------------------------------ */
 
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
+
 .site-header {
+  --sh-yukseklik: 72px;
+  --sh-murekkep:  var(--murekkep, #1F141A);
+  --sh-duman:     var(--duman, #E4DBD9);
+  --sh-sis:       var(--sis, #F6F1F0);
+  --sh-kursun:    var(--kursun, #7C6F73);
+  --sh-gul:       var(--gul, #C98792);
+  --sh-govde:     var(--font-govde, 'Figtree', ui-sans-serif, system-ui, sans-serif);
+  --sh-baslik:    var(--font-baslik, 'Manrope', ui-sans-serif, system-ui, sans-serif);
+
   position: sticky; top: 0; z-index: 200;
-  background: rgba(255, 255, 255, .94);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(122, 32, 53, .08);
+  background: #fff;
+  border-bottom: 1px solid var(--sh-duman);
 }
 
 .sh-inner {
-  max-width: 1280px; margin: 0 auto; padding: 0 20px;
-  display: flex; align-items: center; gap: 14px;
-  height: 68px;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 16px;
+  height: var(--sh-yukseklik);
 }
+@media (max-width: 640px) { .sh-inner { padding: 0 16px; } }
 
 /* ── Logo ─────────────────────────────────────────────────────────── */
 .sh-logo {
   display: flex; align-items: center; gap: 9px;
   flex: 0 0 auto; white-space: nowrap;
-  font-weight: 800; font-size: 1.1rem; color: #7A2035;
-  text-decoration: none;
+  font-family: var(--sh-baslik);
+  font-weight: 800; font-size: 22px; letter-spacing: -.4px;
+  color: var(--sh-murekkep); text-decoration: none;
 }
-.sh-logo img { width: 52px; height: 52px; object-fit: contain; display: block; }
-.sh-logo span { color: #C98792; }
+.sh-logo img { width: 54px; height: 54px; object-fit: contain; display: block; }
+.sh-logo span { color: var(--sh-gul); }
 
 /* ── Masaüstü menü ────────────────────────────────────────────────── */
 .sh-nav {
-  display: flex; align-items: center; gap: 1px;
+  display: flex; align-items: center; gap: 2px;
   flex: 1 1 auto; min-width: 0; justify-content: center;
 }
 /* Menü dokuz kalem taşır; yatay sığması için ölçüler ölçülerek daraltıldı
@@ -38,15 +56,16 @@
 .sh-nav > a,
 .sh-drop > button {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 8px 8px; border-radius: 8px;
-  font-family: inherit; font-size: .83rem; font-weight: 500;
-  color: #2F343D; white-space: nowrap; text-decoration: none;
+  padding: 8px 10px; border-radius: var(--radius-sm, 10px);
+  font-family: var(--sh-govde); font-size: 15px; font-weight: 500;
+  letter-spacing: .1px;
+  color: var(--sh-murekkep); white-space: nowrap; text-decoration: none;
   background: none; border: none; cursor: pointer;
-  transition: background .2s, color .2s;
+  transition: background .18s, color .18s;
 }
 .sh-nav > a:hover,
-.sh-drop > button:hover { background: #FAF7F5; color: #7A2035; }
-.sh-nav > a.sh-active { color: #7A2035; font-weight: 700; }
+.sh-drop > button:hover { background: var(--sh-sis); }
+.sh-nav > a.sh-active { font-weight: 600; box-shadow: inset 0 -2px 0 var(--sh-murekkep); }
 
 /* ── "Araçlar" açılır menüsü ──────────────────────────────────────── */
 .sh-drop { position: relative; }
@@ -56,50 +75,51 @@
   transform: rotate(45deg) translateY(-1px);
   transition: transform .2s;
 }
-.sh-drop.sh-open > button { background: #FAF7F5; color: #7A2035; }
+.sh-drop.sh-open > button { background: var(--sh-sis); }
 .sh-drop.sh-open > button::after { transform: rotate(-135deg) translateY(-1px); }
-.sh-drop.sh-has-active > button { color: #7A2035; font-weight: 700; }
+.sh-drop.sh-has-active > button { font-weight: 600; }
 
+/* Açılır katman, düz sistemde gölgeye izin verilen tek yerdir */
 .sh-drop-menu {
   display: none;
   position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-  min-width: 218px; padding: 8px;
-  background: #fff; border: 1px solid rgba(122, 32, 53, .10);
-  border-radius: 14px; box-shadow: 0 12px 40px rgba(122, 32, 53, .16);
+  min-width: 218px; padding: 6px;
+  background: #fff; border: 1px solid var(--sh-duman);
+  border-radius: var(--radius-md, 16px); box-shadow: 0 8px 28px rgba(31, 20, 26, .12);
 }
 .sh-drop.sh-open .sh-drop-menu { display: block; }
 .sh-drop-menu a {
-  display: block; padding: 10px 12px; border-radius: 9px;
-  font-size: .87rem; font-weight: 500; color: #2F343D;
-  white-space: nowrap; text-decoration: none;
-  transition: background .2s, color .2s;
+  display: block; padding: 9px 12px; border-radius: var(--radius-sm, 10px);
+  font-family: var(--sh-govde); font-size: 15px; font-weight: 500;
+  color: var(--sh-murekkep); white-space: nowrap; text-decoration: none;
+  transition: background .18s;
 }
-.sh-drop-menu a:hover { background: #FAF7F5; color: #7A2035; }
-.sh-drop-menu a.sh-active { color: #7A2035; font-weight: 700; background: #FAF7F5; }
+.sh-drop-menu a:hover { background: var(--sh-sis); }
+.sh-drop-menu a.sh-active { background: var(--sh-sis); font-weight: 600; }
 
 /* ── Sağdaki aksiyon butonları ────────────────────────────────────── */
-.sh-actions { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }
+.sh-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
 .sh-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 9px 15px; border-radius: 50px;
-  font-family: inherit; font-size: .82rem; font-weight: 600;
+  padding: 8px 16px; border-radius: var(--radius-sm, 12px);
+  font-family: var(--sh-govde); font-size: 15px; font-weight: 600;
   white-space: nowrap; text-decoration: none; cursor: pointer;
-  border: 2px solid transparent; transition: all .22s;
+  border: 1px solid transparent; transition: background .18s, color .18s, border-color .18s;
 }
-.sh-btn-outline { color: #7A2035; border-color: #7A2035; background: transparent; }
-.sh-btn-outline:hover { background: #7A2035; color: #fff; }
-.sh-btn-primary { background: #7A2035; color: #fff; }
-.sh-btn-primary:hover { background: #C98792; }
+.sh-btn-outline { color: var(--sh-murekkep); border-color: var(--sh-murekkep); background: transparent; }
+.sh-btn-outline:hover { background: var(--sh-murekkep); color: #fff; }
+.sh-btn-primary { background: var(--sh-murekkep); color: #fff; }
+.sh-btn-primary:hover { background: #322028; }
 
 /* ── Hamburger ────────────────────────────────────────────────────── */
 .sh-burger {
   display: none; flex: 0 0 auto;
   background: none; border: none; cursor: pointer;
-  padding: 8px; margin-left: auto; border-radius: 8px;
+  padding: 8px; margin-left: auto; border-radius: var(--radius-sm, 10px);
 }
 .sh-burger span {
-  display: block; width: 24px; height: 2px; background: #7A2035;
-  border-radius: 2px; transition: transform .28s, opacity .2s;
+  display: block; width: 22px; height: 2px; background: var(--sh-murekkep);
+  border-radius: 1px; transition: transform .28s, opacity .2s;
 }
 .sh-burger span + span { margin-top: 5px; }
 .sh-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -107,38 +127,38 @@
 .sh-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ── Mobil çekmece ────────────────────────────────────────────────── */
-/* NOT: .site-header'da backdrop-filter var; bu, sabit (fixed) konumlu
-   çocuklar için içeren blok oluşturur. Bu yüzden çekmece absolute. */
 .sh-drawer {
   display: none;
   position: absolute; top: 100%; left: 0; right: 0; z-index: 199;
   background: #fff;
-  border-top: 1px solid rgba(122, 32, 53, .08);
-  box-shadow: 0 18px 40px rgba(122, 32, 53, .14);
-  padding: 18px 20px calc(28px + env(safe-area-inset-bottom, 0px));
-  max-height: calc(100vh - 68px);
-  max-height: calc(100dvh - 68px);
+  border-top: 1px solid var(--sh-duman);
+  border-bottom: 1px solid var(--sh-duman);
+  padding: 16px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+  max-height: calc(100vh - var(--sh-yukseklik));
+  max-height: calc(100dvh - var(--sh-yukseklik));
   overflow-y: auto; -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  flex-direction: column; gap: 4px;
+  flex-direction: column; gap: 2px;
 }
 .sh-drawer.sh-open { display: flex; }
 .sh-drawer a {
-  padding: 13px 14px; border-radius: 11px;
-  font-size: 1rem; font-weight: 600; color: #2F343D; text-decoration: none;
+  padding: 12px 12px; border-radius: var(--radius-sm, 10px);
+  font-family: var(--sh-govde); font-size: 16px; font-weight: 500;
+  color: var(--sh-murekkep); text-decoration: none;
 }
-.sh-drawer a:active { background: #FAF7F5; }
-.sh-drawer a.sh-active { color: #7A2035; background: #FAF7F5; }
+.sh-drawer a:active { background: var(--sh-sis); }
+.sh-drawer a.sh-active { background: var(--sh-sis); font-weight: 600; }
 .sh-drawer-label {
-  padding: 16px 14px 6px; font-size: .72rem; font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase; color: #7C7883;
+  padding: 18px 12px 6px; font-family: var(--sh-govde);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--sh-kursun);
 }
 .sh-drawer-actions {
-  display: flex; flex-direction: column; gap: 10px;
+  display: flex; flex-direction: column; gap: 8px;
   margin-top: 18px; padding-top: 18px;
-  border-top: 1px solid rgba(122, 32, 53, .10);
+  border-top: 1px solid var(--sh-duman);
 }
-.sh-drawer-actions .sh-btn { padding: 13px 20px; font-size: .92rem; }
+.sh-drawer-actions .sh-btn { padding: 13px 20px; font-size: 15px; }
 body.sh-lock { overflow: hidden; }
 
 /* ── Kırılma noktaları ────────────────────────────────────────────── */
@@ -150,7 +170,7 @@ body.sh-lock { overflow: hidden; }
   .sh-drawer { display: none !important; }
 }
 @media (max-width: 400px) {
-  .sh-logo { font-size: 1rem; }
+  .sh-logo { font-size: 18px; }
   .sh-logo img { width: 44px; height: 44px; }
 }
 

@@ -49,7 +49,7 @@
   gap: 12px;
   padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--bg-soft);
 }
 .liste b { display: block; font-size: .84rem; }
@@ -62,7 +62,7 @@
   display: grid;
   place-items: center;
   padding: 0 8px;
-  border-radius: 10px;
+  border-radius: 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   font-size: .8rem;
@@ -81,7 +81,7 @@
 .kanitSerit { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .kanitKart {
   width: 88px; height: 88px; display: block; overflow: hidden;
-  border: 1px solid var(--border); border-radius: 12px; background: var(--bg-soft);
+  border: 1px solid var(--border); border-radius: 14px; background: var(--bg-soft);
   transition: transform .2s, border-color .2s;
 }
 .kanitKart:hover { transform: translateY(-2px); border-color: rgba(122,32,53,.22); }

@@ -31,7 +31,7 @@
 /* ── Rozetler ───────────────────────────────────────────────────────── */
 .st-rozet {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 11px; border-radius: 50px;
+  padding: 4px 12px; border-radius: var(--radius-hap, 999px);
   font-size: .7rem; font-weight: 700; letter-spacing: .02em;
   white-space: nowrap; line-height: 1.5;
 }
@@ -63,7 +63,7 @@
 }
 .st-canli {
   display: inline-flex; align-items: center; gap: 7px;
-  background: #fff; padding: 6px 14px; border-radius: 50px;
+  background: #fff; padding: 6px 14px; border-radius: var(--radius-hap, 999px);
   font-size: .72rem; font-weight: 700; color: var(--st-blue);
   box-shadow: var(--st-shadow);
 }
@@ -87,12 +87,12 @@
   font-family: inherit; color: inherit; cursor: pointer;
 }
 .st-kart:hover, .st-kart:focus-visible {
-  transform: translateY(-4px); box-shadow: var(--st-shadow-lg);
+  box-shadow: none;
   border-color: var(--st-rose); outline: none;
 }
 .st-kart-ust { display: flex; align-items: flex-start; gap: 12px; }
 .st-kart-ikon {
-  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: var(--radius-sm, 12px); flex-shrink: 0;
   display: flex; align-items: center; justify-content: center; font-size: 1.35rem;
   background: var(--st-soft);
 }
@@ -111,9 +111,9 @@
 /* Geri sayım */
 .st-sayac {
   display: flex; align-items: baseline; gap: 7px;
-  background: var(--st-soft); border-radius: 10px; padding: 9px 13px;
+  background: var(--st-soft); border-radius: var(--radius-sm, 12px); padding: 9px 13px;
 }
-.st-sayac-sayi { font-size: 1.25rem; font-weight: 800; color: var(--st-blue); line-height: 1; }
+.st-sayac-sayi { font-size: 1.25rem; font-weight: 700; color: var(--st-blue); line-height: 1; }
 .st-sayac-not { font-size: .72rem; color: var(--st-muted); font-weight: 600; }
 
 /* Tarih satırları */
@@ -150,21 +150,21 @@
 /* ── Filtre çipleri ─────────────────────────────────────────────────── */
 .st-filtreler { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .st-cip {
-  background: var(--st-soft); border: 1px solid transparent; font-family: inherit;
-  cursor: pointer; padding: 9px 16px; border-radius: 50px;
+  background: #fff; border: 1px solid var(--st-line); font-family: inherit;
+  cursor: pointer; padding: 9px 18px; border-radius: var(--radius-hap, 999px);
   font-size: .8rem; font-weight: 600; color: var(--st-text); transition: all .2s;
   min-height: 38px;
 }
-.st-cip:hover { background: rgba(122,32,53,.10); color: var(--st-blue); }
-.st-cip[aria-pressed="true"] { background: var(--st-blue); color: #fff; }
+.st-cip:hover { background: var(--st-soft); border-color: var(--st-muted); }
+.st-cip[aria-pressed="true"] { background: var(--murekkep, #1F141A); border-color: var(--murekkep, #1F141A); color: #fff; }
 .st-cip small { opacity: .7; font-weight: 700; margin-left: 3px; }
 
 .st-arama {
   display: flex; align-items: center; gap: 10px; flex: 1; min-width: 200px; max-width: 360px;
-  background: var(--st-soft); border-radius: 50px; padding: 11px 18px;
-  border: 2px solid transparent; transition: all .2s;
+  background: #fff; border-radius: var(--radius-sm, 12px); padding: 10px 14px;
+  border: 1px solid var(--st-line); transition: border-color .2s;
 }
-.st-arama:focus-within { border-color: var(--st-blue); background: #fff; box-shadow: var(--st-shadow); }
+.st-arama:focus-within { border-color: var(--murekkep, #1F141A); }
 .st-arama input {
   flex: 1; border: none; background: none; outline: none;
   font-family: inherit; font-size: .85rem; color: var(--st-text); min-width: 0;
@@ -176,7 +176,7 @@
   background: #fff; border: 1px solid var(--st-line); border-radius: var(--st-radius);
   padding: 16px 18px; box-shadow: var(--st-shadow);
 }
-.st-ozet-sayi { font-size: 1.7rem; font-weight: 800; color: var(--st-blue); line-height: 1; }
+.st-ozet-sayi { font-size: 1.7rem; font-weight: 700; color: var(--st-blue); line-height: 1; }
 .st-ozet-ad { font-size: .76rem; color: var(--st-muted); font-weight: 600; margin-top: 5px; }
 
 /* ── Duyuru / haber kartları (ana sayfa) ────────────────────────────── */
@@ -186,13 +186,13 @@
   background: #fff; border: 1px solid var(--st-line); border-radius: var(--st-radius);
   overflow: hidden; box-shadow: var(--st-shadow); transition: transform .25s, box-shadow .25s;
 }
-.st-duyuru:hover { transform: translateY(-5px); box-shadow: var(--st-shadow-lg); }
+.st-duyuru:hover { border-color: var(--st-muted); }
 .st-duyuru-ust {
   padding: 16px 18px 0; display: flex; align-items: center; justify-content: space-between; gap: 10px;
 }
 .st-duyuru-tur {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
   color: var(--st-rose);
 }
 .st-duyuru-govde { padding: 12px 18px 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
@@ -204,10 +204,10 @@
   font-size: .72rem; color: var(--st-muted); font-weight: 600;
 }
 .st-duyuru-ayak a, .st-duyuru-ayak .st-detay { color: var(--st-rose); font-weight: 700; }
-.st-duyuru.st-one-cikan { border-color: var(--st-rose); box-shadow: 0 6px 28px rgba(201,135,146,.22); }
+.st-duyuru.st-one-cikan { border-color: var(--st-rose); box-shadow: none; }
 .st-one-cikan-etiket {
-  background: var(--st-blue); color: #fff; padding: 3px 10px; border-radius: 50px;
-  font-size: .64rem; font-weight: 800; letter-spacing: .05em;
+  background: var(--st-blue); color: #fff; padding: 3px 11px; border-radius: var(--radius-hap, 999px);
+  font-size: .64rem; font-weight: 700; letter-spacing: .05em;
 }
 
 /* ── Bilgi bandı ────────────────────────────────────────────────────── */
@@ -227,7 +227,7 @@
 .st-bos-ikon { font-size: 2.6rem; margin-bottom: 10px; }
 .st-iskelet { pointer-events: none; }
 .st-iskelet-satir {
-  height: 12px; border-radius: 6px; margin-bottom: 9px;
+  height: 12px; border-radius: var(--radius-hap, 999px); margin-bottom: 9px;
   background: linear-gradient(90deg, var(--st-soft) 25%, #ece2e5 50%, var(--st-soft) 75%);
   background-size: 200% 100%; animation: st-parla 1.2s linear infinite;
 }
@@ -244,7 +244,7 @@
 }
 .st-pencere::backdrop { background: rgba(36,16,24,.55); backdrop-filter: blur(3px); }
 .st-pencere-ic {
-  background: #fff; border-radius: 18px; box-shadow: var(--st-shadow-lg);
+  background: #fff; border-radius: var(--radius-lg, 20px); box-shadow: var(--st-shadow-lg);
   max-height: calc(100vh - 48px); overflow-y: auto;
   padding: 26px 26px 22px; text-align: left;
 }
@@ -259,7 +259,7 @@
 .st-pencere-kurum { font-size: .78rem; color: var(--st-muted); font-weight: 600; margin-top: 4px; }
 .st-pencere-not {
   font-size: .82rem; color: var(--st-muted); line-height: 1.7;
-  background: var(--st-soft); border-radius: 10px; padding: 12px 14px;
+  background: var(--st-soft); border-radius: var(--radius-sm, 12px); padding: 12px 14px;
 }
 .st-pencere-eylemler { display: flex; gap: 10px; flex-wrap: wrap; }
 

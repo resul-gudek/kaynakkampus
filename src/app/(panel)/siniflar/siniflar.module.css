@@ -13,7 +13,7 @@
 .form label > span { font-size:.75rem; font-weight:700; color:var(--muted); }
 .form input, .form textarea, .form select, .dersForm input, .dersForm select, .ekleSatir select {
   width:100%; border:1px solid var(--border); background:var(--bg-soft); color:var(--text);
-  border-radius:10px; padding:10px 12px; outline:none;
+  border-radius: 14px; padding:10px 12px; outline:none;
 }
 .form textarea { resize:vertical; margin-bottom:12px; }
 .sinifListe { display:grid; gap:18px; margin:22px 0 50px; }
@@ -22,43 +22,43 @@
 .sinifBas > div:nth-child(2) { flex:1; }
 .sinifBas h2 { font-size:1.12rem; }
 .sinifBas p { color:var(--muted); font-size:.78rem; }
-.sinifIkon { width:46px; height:46px; display:grid; place-items:center; border-radius:12px; background:var(--tint); font-size:1.25rem; }
-.aciklama { padding:12px 14px; margin:15px 0; border-radius:10px; background:var(--bg-soft); }
+.sinifIkon { width:46px; height:46px; display:grid; place-items:center; border-radius: 14px; background:var(--tint); font-size:1.25rem; }
+.aciklama { padding:12px 14px; margin:15px 0; border-radius: 14px; background:var(--bg-soft); }
 .ikiKolon { display:grid; grid-template-columns:minmax(240px,.75fr) minmax(360px,1.25fr); gap:24px; margin-top:18px; }
 .ikiKolon > div + div { border-left:1px solid var(--border); padding-left:24px; }
 .altBaslik { min-height:34px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
 .altBaslik h3 { font-size:.86rem; }
 .altBaslik > span { color:var(--muted); font-size:.75rem; }
 .uyeListe, .oturumListe { display:grid; gap:8px; }
-.uye { display:flex; align-items:center; gap:9px; padding:8px; border-radius:10px; background:var(--bg-soft); }
+.uye { display:flex; align-items:center; gap:9px; padding:8px; border-radius: 14px; background:var(--bg-soft); }
 .uye > div { display:flex; flex-direction:column; flex:1; min-width:0; }
 .uye b { font-size:.78rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .uye small { color:var(--muted); font-size:.68rem; }
 /* Sınıftan çıkarma: yıkıcı işlem, dokunulabilir bir kare hedefi hak eder */
 .uye button {
   border:0; background:none; color:var(--kirmizi); cursor:pointer; font-size:1.15rem;
-  flex:none; width:32px; height:32px; border-radius:8px;
+  flex:none; width:32px; height:32px; border-radius:14px;
   display:grid; place-items:center; line-height:1; transition:background .2s;
 }
 .uye button:hover { background:#fef2f2; }
 .ekleSatir { display:flex; gap:8px; margin-top:10px; }
-.dersForm { display:grid; grid-template-columns:1fr 1fr 1.15fr .75fr auto; gap:8px; padding:12px; border-radius:10px; background:var(--bg-soft); margin-bottom:10px; }
-.oturum { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--border); border-radius:11px; }
+.dersForm { display:grid; grid-template-columns:1fr 1fr 1.15fr .75fr auto; gap:8px; padding:12px; border-radius: 14px; background:var(--bg-soft); margin-bottom:10px; }
+.oturum { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--border); border-radius: 14px; }
 .oturum.iptal { opacity:.55; }
-.tarihKutusu { width:46px; height:46px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:10px; color:var(--blue); background:var(--tint); flex:none; }
+.tarihKutusu { width:46px; height:46px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius: 14px; color:var(--blue); background:var(--tint); flex:none; }
 .tarihKutusu b { line-height:1; }
 .tarihKutusu small { font-size:.65rem; text-transform:uppercase; }
 .oturumGovde { display:flex; flex-direction:column; flex:1; min-width:0; }
 .oturumGovde b { font-size:.81rem; }
 .oturumGovde small { color:var(--muted); font-size:.68rem; }
 .oturumEylem { display:flex; align-items:center; justify-content:flex-end; gap:7px; flex-wrap:wrap; }
-.durum { padding:3px 8px; border-radius:50px; font-size:.65rem; font-weight:700; background:var(--tint); }
+.durum { padding:3px 8px; border-radius: 10px; font-size:.65rem; font-weight:700; background:var(--tint); }
 .planlandi { color:var(--blue); }
 .iptal { color:var(--kirmizi); }
 /* Metin görünümlü buton — dokunma hedefi için kendi dolgusunu taşır */
 .metinButon {
   border:0; background:none; color:var(--kirmizi); font-size:.7rem; cursor:pointer;
-  padding:7px 10px; border-radius:8px; min-height:32px;
+  padding:7px 10px; border-radius:14px; min-height:32px;
   display:inline-flex; align-items:center; font-family:inherit;
 }
 .metinButon:hover { background:#fef2f2; }

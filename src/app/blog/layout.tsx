@@ -1,3 +1,4 @@
+import DuyuruSerit from "@/components/site/DuyuruSerit";
 import SiteBaslik from "@/components/site/SiteBaslik";
 import SiteAltBilgi from "@/components/site/SiteAltBilgi";
 
@@ -7,6 +8,7 @@ import SiteAltBilgi from "@/components/site/SiteAltBilgi";
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <DuyuruSerit />
       <SiteBaslik aktif="/blog" />
       {children}
       <SiteAltBilgi />

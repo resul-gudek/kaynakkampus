@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { BLOG_KATEGORILERI, BLOG_KATEGORI_ETIKETLERI } from "@/lib/sabitler";
 import { SITE_MENU, grupMu } from "@/lib/site-menu";
+import SosyalIkonlar from "./SosyalIkonlar";
 import s from "./site-alt.module.css";
 
 /** İlk dört kategori alt bilgide kısayol olarak listelenir */
@@ -22,6 +23,10 @@ export default function SiteAltBilgi() {
               Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik rehber
               yazılar, çalışma yöntemleri ve etkinlik önerileri.
             </p>
+            <div className={s.sosyalBlok}>
+              <span className={s.sosyalBaslik}>Bizi takip edin</span>
+              <SosyalIkonlar className={s.sosyal} />
+            </div>
           </div>
 
           <div className={s.kolon}>

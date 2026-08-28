@@ -20,30 +20,30 @@
 .kucukNot { color: var(--muted); font-size: .78rem; margin: 6px 0; }
 
 .sablonKutu {
-  border: 1px solid var(--border); border-radius: 12px;
+  border: 1px solid var(--border); border-radius: 14px;
   padding: 16px; margin: 14px 0;
 }
 .sablonBas { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .sablonBas h3 { font-size: .95rem; font-weight: 700; }
 
 .metinAlani {
-  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border);
   background: var(--surface); color: var(--text);
-  border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  border-radius: 14px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: .8rem; line-height: 1.5; resize: vertical;
 }
 .metinAlani:focus { outline: none; border-color: var(--teal); }
 
 .degisken {
   display: inline-block; background: var(--tint); color: var(--blue, #7A2035);
-  border-radius: 6px; padding: 2px 8px; margin: 2px 4px 2px 0;
+  border-radius: 10px; padding: 2px 8px; margin: 2px 4px 2px 0;
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .74rem;
   cursor: help;
 }
 
 .durumBekliyor {
   display: inline-flex; background: rgba(217,119,6,.12); color: #b45309;
-  padding: 3px 12px; border-radius: 50px; font-size: .74rem; font-weight: 700;
+  padding: 3px 12px; border-radius: 10px; font-size: .74rem; font-weight: 700;
 }
 
 .konuHucre { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

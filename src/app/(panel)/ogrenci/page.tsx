@@ -1,3 +1,4 @@
+import PanelIkon from "@/components/panel/Ikon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -11,14 +12,14 @@ export const metadata: Metadata = { title: "Öğrenci Paneli – Kaynak Kampüs"
 /* Bölüm sayfaları — hızlı erişim kartları ve legacy ?sekme= yönlendirmesi
    aynı eşlemeden beslenir */
 const BOLUMLER = [
-  { href: "/ogrenci/takvim", ikon: "📅", ad: "Takvimim", tanim: "Ödev, ders ve deneme günlerin" },
-  { href: "/ogrenci/odevler", ikon: "📘", ad: "Ödevlerim", tanim: "Verilen ödevleri gör, tamamla" },
-  { href: "/ogrenci/testler", ikon: "⏱️", ad: "Süreli Testlerim", tanim: "Süre içinde çöz, sonucunu gör" },
-  { href: "/ogrenci/takip", ikon: "✅", ad: "Haftalık Takip Listem", tanim: "Haftalık görevlerini işaretle" },
-  { href: "/ogrenci/yol-haritasi", ikon: "🗺️", ad: "Yol Haritam", tanim: "Adımları tamamla, XP kazan" },
-  { href: "/ogrenci/denemeler", ikon: "📈", ad: "Deneme Sonuçlarım", tanim: "Net gelişimini takip et" },
-  { href: "/ogrenci/ozel-dersler", ikon: "🎓", ad: "Özel Derslerim", tanim: "Ders planla ve talep et" },
-  { href: "/ogrenci/profil", ikon: "🎯", ad: "Seviye Formum", tanim: "Başlangıç seviyeni güncelle" },
+  { href: "/ogrenci/takvim", ikon: "ajanda", ad: "Takvimim", tanim: "Ödev, ders ve deneme günlerin" },
+  { href: "/ogrenci/odevler", ikon: "odev", ad: "Ödevlerim", tanim: "Verilen ödevleri gör, tamamla" },
+  { href: "/ogrenci/testler", ikon: "sure", ad: "Süreli Testlerim", tanim: "Süre içinde çöz, sonucunu gör" },
+  { href: "/ogrenci/takip", ikon: "takip", ad: "Haftalık Takip Listem", tanim: "Haftalık görevlerini işaretle" },
+  { href: "/ogrenci/yol-haritasi", ikon: "harita", ad: "Yol Haritam", tanim: "Adımları tamamla, XP kazan" },
+  { href: "/ogrenci/denemeler", ikon: "artis", ad: "Deneme Sonuçlarım", tanim: "Net gelişimini takip et" },
+  { href: "/ogrenci/ozel-dersler", ikon: "mezuniyet", ad: "Özel Derslerim", tanim: "Ders planla ve talep et" },
+  { href: "/ogrenci/profil", ikon: "hedef", ad: "Seviye Formum", tanim: "Başlangıç seviyeni güncelle" },
 ];
 
 /* Eski derin bağlantı sözleşmesi (?sekme=<bolum>&kayit=<id>) yeni sayfalara taşındı */
@@ -137,7 +138,7 @@ export default async function OgrenciPanel({
       {/* ── İstatistikler ── */}
       <section className={d.statGrid} aria-label="Genel istatistikler">
         <Link href="/ogrenci/odevler" className={`${d.statKart} ${d.yesil}`}>
-          <span className={d.statIkon}>✅</span>
+          <span className={d.statIkon}><PanelIkon ad="takip" boyut={20} /></span>
           <span>
             <small>Ödev tamamlama</small>
             <b>%{oz.odevYuzde}</b>
@@ -145,7 +146,7 @@ export default async function OgrenciPanel({
           </span>
         </Link>
         <Link href="/ogrenci/takip" className={`${d.statKart} ${d.turkuaz}`}>
-          <span className={d.statIkon}>📊</span>
+          <span className={d.statIkon}><PanelIkon ad="grafik" boyut={20} /></span>
           <span>
             <small>Takip listesi</small>
             <b>%{oz.takipYuzde}</b>
@@ -153,7 +154,7 @@ export default async function OgrenciPanel({
           </span>
         </Link>
         <Link href="/ogrenci/denemeler" className={`${d.statKart} ${d.mavi}`}>
-          <span className={d.statIkon}>🎯</span>
+          <span className={d.statIkon}><PanelIkon ad="hedef" boyut={20} /></span>
           <span>
             <small>Son deneme neti</small>
             <b>
@@ -172,7 +173,7 @@ export default async function OgrenciPanel({
           </span>
         </Link>
         <Link href="/ogrenci/yol-haritasi" className={`${d.statKart} ${d.turuncu}`}>
-          <span className={d.statIkon}>⭐</span>
+          <span className={d.statIkon}><PanelIkon ad="yildiz" boyut={20} /></span>
           <span>
             <small>Seviye</small>
             <b>Seviye {oz.seviye}</b>
@@ -184,7 +185,7 @@ export default async function OgrenciPanel({
       {/* ── Günün özeti ── */}
       <section className={d.ozetGrid} aria-label="Günün özeti">
         <Link href="/ogrenci/odevler" className={d.ozetKart}>
-          <span>📘</span>
+          <span><PanelIkon ad="odev" boyut={18} /></span>
           <div>
             <b>{bekleyenOdevler.length ? `${bekleyenOdevler.length} bekleyen ödev` : "Bekleyen ödevin yok"}</b>
             <small>
@@ -193,7 +194,7 @@ export default async function OgrenciPanel({
           </div>
         </Link>
         <Link href="/ogrenci/ozel-dersler" className={d.ozetKart}>
-          <span>🎓</span>
+          <span><PanelIkon ad="mezuniyet" boyut={18} /></span>
           <div>
             <b>
               {ozelOz.sonraki
@@ -208,7 +209,7 @@ export default async function OgrenciPanel({
           </div>
         </Link>
         <Link href="/ogrenci/testler" className={d.ozetKart}>
-          <span>⏱️</span>
+          <span><PanelIkon ad="sure" boyut={18} /></span>
           <div>
             <b>
               {bekleyenTestler.length
@@ -223,7 +224,7 @@ export default async function OgrenciPanel({
           </div>
         </Link>
         <Link href="/ogrenci/ozel-dersler" className={d.ozetKart}>
-          <span>🙋</span>
+          <span><PanelIkon ad="el" boyut={18} /></span>
           <div>
             <b>
               {ozelOz.onayBekleyenOgr
@@ -250,7 +251,7 @@ export default async function OgrenciPanel({
         <div className={d.hizliGrid}>
           {BOLUMLER.map((b) => (
             <Link key={b.href} href={b.href} className={d.hizliKart}>
-              <span>{b.ikon}</span>
+              <span><PanelIkon ad={b.ikon} boyut={18} /></span>
               <div>
                 <b>{b.ad}</b>
                 <small>{b.tanim}</small>

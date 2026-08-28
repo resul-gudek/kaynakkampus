@@ -1,3 +1,4 @@
+import PanelIkon from "@/components/panel/Ikon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -10,12 +11,12 @@ export const metadata: Metadata = { title: "Öğretmen Paneli – Kaynak Kampüs
 
 /* Bölüm sayfaları — hızlı erişim kartları buradan beslenir */
 const BOLUMLER = [
-  { href: "/koc/ajanda", ikon: "📅", ad: "Ajanda", tanim: "Tüm öğrencilerin ders ve ödev takvimi" },
-  { href: "/koc/ogrenciler", ikon: "👥", ad: "Öğrencilerim", tanim: "Ödev ver, takip ve gelişimi yönet" },
-  { href: "/siniflar", ikon: "💻", ad: "Online Sınıflar", tanim: "Canlı ders sınıflarını yönet" },
-  { href: "/bildirimler", ikon: "🔔", ad: "Bildirimler", tanim: "Talep ve gelişmeleri gör" },
-  { href: "/odev-olustur.html", ikon: "📝", ad: "Ödev Oluştur", tanim: "Yazdırılabilir ödev föyü hazırla" },
-  { href: "/bep-olustur.html", ikon: "📋", ad: "BEP Oluştur", tanim: "Bireysel eğitim planı hazırla" },
+  { href: "/koc/ajanda", ikon: "ajanda", ad: "Ajanda", tanim: "Tüm öğrencilerin ders ve ödev takvimi" },
+  { href: "/koc/ogrenciler", ikon: "ogrenciler", ad: "Öğrencilerim", tanim: "Ödev ver, takip ve gelişimi yönet" },
+  { href: "/siniflar", ikon: "ogretmen", ad: "Online Sınıflar", tanim: "Canlı ders sınıflarını yönet" },
+  { href: "/bildirimler", ikon: "zil", ad: "Bildirimler", tanim: "Talep ve gelişmeleri gör" },
+  { href: "/odev-olustur.html", ikon: "odevOlustur", ad: "Ödev Oluştur", tanim: "Yazdırılabilir ödev föyü hazırla" },
+  { href: "/bep-olustur.html", ikon: "bep", ad: "BEP Oluştur", tanim: "Bireysel eğitim planı hazırla" },
 ];
 
 function basHarfler(ad: string) {
@@ -113,7 +114,7 @@ export default async function KocPanel({
       {/* ── İstatistik kartları ── */}
       <section className={d.statGrid} aria-label="Genel istatistikler">
         <Link href="/koc/ogrenciler" className={`${d.statKart} ${d.mavi}`}>
-          <span className={d.statIkon}>👥</span>
+          <span className={d.statIkon}><PanelIkon ad="ogrenciler" boyut={20} /></span>
           <span>
             <small>Öğrencim</small>
             <b>{ogrenciSayisi}</b>
@@ -125,7 +126,7 @@ export default async function KocPanel({
           </span>
         </Link>
         <Link href="/koc/ogrenciler" className={`${d.statKart} ${d.turuncu}`}>
-          <span className={d.statIkon}>📘</span>
+          <span className={d.statIkon}><PanelIkon ad="odev" boyut={20} /></span>
           <span>
             <small>Bekleyen ödev</small>
             <b>{bekleyenOdev}</b>
@@ -133,7 +134,7 @@ export default async function KocPanel({
           </span>
         </Link>
         <Link href="/koc/ogrenciler" className={`${d.statKart} ${d.yesil}`}>
-          <span className={d.statIkon}>✅</span>
+          <span className={d.statIkon}><PanelIkon ad="takip" boyut={20} /></span>
           <span>
             <small>Takip görevi</small>
             <b>{takipToplam}</b>
@@ -141,7 +142,7 @@ export default async function KocPanel({
           </span>
         </Link>
         <Link href="/koc/ogrenciler" className={`${d.statKart} ${d.turkuaz}`}>
-          <span className={d.statIkon}>🙋</span>
+          <span className={d.statIkon}><PanelIkon ad="veli" boyut={20} /></span>
           <span>
             <small>Onay bekleyen talep</small>
             <b>{onayBekleyen}</b>
@@ -153,7 +154,7 @@ export default async function KocPanel({
       {/* ── Günün özeti ── */}
       <section className={d.ozetGrid} aria-label="Günün özeti">
         <Link href="/koc/ajanda" className={d.ozetKart}>
-          <span>🗓️</span>
+          <span><PanelIkon ad="ajanda" boyut={18} /></span>
           <div>
             <b>
               {sonrakiDers
@@ -168,7 +169,7 @@ export default async function KocPanel({
           </div>
         </Link>
         <Link href="/koc/ogrenciler" className={d.ozetKart}>
-          <span>⏰</span>
+          <span><PanelIkon ad="alarm" boyut={18} /></span>
           <div>
             <b>
               {gecikenPlan
@@ -183,7 +184,7 @@ export default async function KocPanel({
           </div>
         </Link>
         <Link href="/koc/ogrenciler" className={d.ozetKart}>
-          <span>🙋</span>
+          <span><PanelIkon ad="el" boyut={18} /></span>
           <div>
             <b>
               {onayBekleyen
@@ -210,7 +211,7 @@ export default async function KocPanel({
         <div className={d.hizliGrid}>
           {BOLUMLER.map((b) => (
             <Link key={b.href} href={b.href} className={d.hizliKart}>
-              <span>{b.ikon}</span>
+              <span><PanelIkon ad={b.ikon} boyut={18} /></span>
               <div>
                 <b>{b.ad}</b>
                 <small>{b.tanim}</small>

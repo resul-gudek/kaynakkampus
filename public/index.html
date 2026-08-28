@@ -4,561 +4,216 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kaynak Kampüs – Güçlü Kaynak, Sağlam Gelecek</title>
+  <meta name="description" content="Ücretsiz eğitim araçları, eğitici oyunlar, çoklu zekâ testi ve güncel sınav takvimi — öğrenci, öğretmen ve veli için tek çatı." />
+  <meta name="theme-color" content="#7A2035" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="assets/kaynak-kampus-logo-64.png" />
-  <style>
-    /* ── RESET & BASE ────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      color: #2F343D;
-      background: #fff;
-      overflow-x: hidden;
-    }
-    a { text-decoration: none; color: inherit; }
-    img { display: block; max-width: 100%; }
-    ul { list-style: none; }
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    /* ── TOKENS ──────────────────────────────────────────── */
-    :root {
-      --blue:    #7A2035;
-      --blue-dk: #5E1728;
-      --teal:    #C98792;
-      --orange:  #C98792;
-      --amber:   #C98792;
-      --bg-soft: #FAF7F5;
-      --text:    #2F343D;
-      --muted:   #7C7883;
-      --white:   #ffffff;
-      --radius:  14px;
-      --shadow:  0 4px 24px rgba(122,32,53,.10);
-      --shadow-lg: 0 12px 40px rgba(122,32,53,.16);
-    }
-
-    /* ── UTILITIES ───────────────────────────────────────── */
-    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border-radius: 50px; font-size: .95rem;
-      font-weight: 600; cursor: pointer; transition: all .25s;
-      border: none; font-family: inherit;
-    }
-    .btn-primary {
-      background: var(--blue); color: #fff;
-    }
-    .btn-primary:hover { background: #C98792; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,135,146,.35); }
-    .btn-outline {
-      background: transparent; color: var(--blue);
-      border: 2px solid var(--blue);
-    }
-    .btn-outline:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
-    .btn-white {
-      background: #fff; color: var(--blue);
-    }
-    .btn-white:hover { background: #F3ECEE; transform: translateY(-2px); }
-    .section-label {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(122,32,53,.08); color: var(--blue);
-      padding: 6px 16px; border-radius: 50px; font-size: .8rem;
-      font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px;
-    }
-    .section-title {
-      font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800;
-      line-height: 1.25; color: var(--text);
-    }
-    .section-title span { color: var(--orange); }
-    .section-sub {
-      font-size: 1.05rem; color: var(--muted); margin-top: 12px; max-width: 540px;
-    }
-    .tag {
-      display: inline-flex; align-items: center;
-      background: rgba(122,32,53,.07); color: var(--blue);
-      padding: 4px 12px; border-radius: 50px; font-size: .75rem; font-weight: 600;
-    }
-
-    /* ── HEADER ──────────────────────────────────────────── */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(122,32,53,.08);
-    }
-    .nav-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 72px;
-    }
-    .logo {
-      display: flex; align-items: center; gap: 10px; font-weight: 800;
-      font-size: 1.25rem; color: var(--blue);
-    }
-    .logo-icon {
-      width: 48px; height: 48px; object-fit: contain;
-    }
-    footer .logo-icon { background: #fff; border-radius: 10px; padding: 3px; }
-    .logo span { color: var(--orange); }
-    nav { display: flex; align-items: center; gap: 6px; }
-    nav a {
-      padding: 8px 14px; border-radius: 8px; font-size: .9rem; font-weight: 500;
-      color: var(--text); transition: all .2s;
-    }
-    nav a:hover { background: var(--bg-soft); color: var(--blue); }
-    nav a.active { color: var(--blue); font-weight: 700; }
-    .nav-actions { display: flex; align-items: center; gap: 10px; }
-    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
-    .hamburger span {
-      display: block; width: 24px; height: 2px; background: var(--blue);
-      margin: 5px 0; border-radius: 2px; transition: .3s;
-    }
-
-    /* ── HERO ────────────────────────────────────────────── */
-    .hero {
-      background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%);
-      padding: 80px 0 60px;
-      position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: ''; position: absolute; top: -120px; right: -120px;
-      width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,135,146,.12) 0%, transparent 70%);
-    }
-    .hero::after {
-      content: ''; position: absolute; bottom: -80px; left: -80px;
-      width: 380px; height: 380px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,135,146,.10) 0%, transparent 70%);
-    }
-    .hero-inner {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; align-items: center; position: relative; z-index: 1;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #fff; padding: 8px 16px; border-radius: 50px;
-      font-size: .82rem; font-weight: 600; color: var(--blue);
-      box-shadow: var(--shadow); margin-bottom: 20px;
-    }
-    .hero-badge-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: #22c55e;
-      box-shadow: 0 0 0 3px rgba(34,197,94,.2); flex-shrink: 0;
-    }
-    .hero-title {
-      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.18;
-    }
-    .hero-title span { color: var(--orange); position: relative; }
-    .hero-title span::after {
-      content: ''; position: absolute; left: 0; bottom: -4px;
-      width: 100%; height: 4px; border-radius: 2px;
-      background: linear-gradient(90deg, var(--orange), var(--amber));
-    }
-    .hero-desc {
-      font-size: 1.05rem; color: var(--muted); margin: 20px 0 32px; line-height: 1.75;
-    }
-    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 36px; }
-    .hero-stats {
-      display: flex; gap: 28px; flex-wrap: wrap;
-    }
-    .hero-stat-item { text-align: left; }
-    .hero-stat-num {
-      font-size: 1.6rem; font-weight: 800; color: var(--blue); line-height: 1;
-    }
-    .hero-stat-num span { color: var(--orange); }
-    .hero-stat-label { font-size: .78rem; color: var(--muted); margin-top: 3px; font-weight: 500; }
-    .hero-visual {
-      position: relative; display: flex; justify-content: center; align-items: center;
-    }
-    .hero-card-main {
-      width: 100%; max-width: 400px; background: #fff; border-radius: 24px;
-      box-shadow: var(--shadow-lg); padding: 28px; position: relative; z-index: 2;
-    }
-    .hero-card-top {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-    }
-    .hc-avatar {
-      width: 48px; height: 48px; border-radius: 12px;
-      background: linear-gradient(135deg, var(--blue), var(--teal));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; flex-shrink: 0;
-    }
-    .hc-name { font-weight: 700; font-size: .95rem; }
-    .hc-sub { font-size: .78rem; color: var(--muted); }
-    .hc-progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; }
-    .hc-progress-label span { font-size: .78rem; font-weight: 600; }
-    .progress-bar {
-      width: 100%; height: 8px; background: #e2e8f0; border-radius: 50px; overflow: hidden; margin-bottom: 14px;
-    }
-    .progress-fill {
-      height: 100%; border-radius: 50px;
-      background: linear-gradient(90deg, var(--blue), var(--teal));
-    }
-    .hc-lessons {
-      display: flex; flex-direction: column; gap: 10px;
-    }
-    .hc-lesson {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--bg-soft); border-radius: 10px; padding: 10px 12px;
-    }
-    .hc-lesson-icon {
-      width: 32px; height: 32px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; font-size: .95rem; flex-shrink: 0;
-    }
-    .hc-lesson-info { flex: 1; }
-    .hc-lesson-name { font-size: .82rem; font-weight: 600; }
-    .hc-lesson-dur { font-size: .72rem; color: var(--muted); }
-    .hc-lesson-check { font-size: 1rem; }
-    .hero-float {
-      position: absolute; background: #fff; border-radius: 14px;
-      padding: 12px 16px; box-shadow: var(--shadow-lg); z-index: 3;
-    }
-    .hero-float-1 { top: -16px; left: -24px; }
-    .hero-float-2 { bottom: 20px; right: -28px; }
-    .hf-label { font-size: .72rem; color: var(--muted); font-weight: 500; }
-    .hf-val { font-size: 1.1rem; font-weight: 800; color: var(--blue); margin-top: 2px; }
-    .hf-row { display: flex; align-items: center; gap: 8px; }
-    .hf-stars { color: #E4C4CB; font-size: .85rem; letter-spacing: -1px; }
-
-    /* ── MARQUEE STRIP ───────────────────────────────────── */
-    .marquee-strip {
-      background: var(--blue); color: #fff; padding: 14px 0;
-      overflow: hidden; white-space: nowrap;
-    }
-    .marquee-track {
-      display: inline-flex; animation: marquee 22s linear infinite;
-    }
-    .marquee-track span {
-      padding: 0 28px; font-size: .9rem; font-weight: 500; opacity: .9;
-    }
-    .marquee-track span.dot { color: var(--amber); font-size: 1.1rem; }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-    /* ── SUBJECTS ────────────────────────────────────────── */
-    .subjects { padding: 80px 0; background: #fff; }
-    .section-head { text-align: center; margin-bottom: 48px; }
-    .section-head .section-sub { margin: 12px auto 0; }
-    .subjects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 18px;
-    }
-    .subject-card {
-      background: var(--bg-soft); border-radius: var(--radius);
-      padding: 24px 16px; text-align: center; cursor: pointer;
-      transition: all .3s; border: 2px solid transparent;
-    }
-    .subject-card:hover {
-      border-color: var(--blue); background: #fff;
-      transform: translateY(-4px); box-shadow: var(--shadow);
-    }
-    .subject-icon {
-      width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 14px;
-      display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
-    }
-    .subject-name { font-size: .9rem; font-weight: 700; }
-    .subject-count { font-size: .75rem; color: var(--muted); margin-top: 4px; }
-    .si-math { background: rgba(99,102,241,.12); }
-    .si-science { background: rgba(16,185,129,.12); }
-    .si-turkish { background: rgba(201,135,146,.12); }
-    .si-english { background: rgba(201,135,146,.12); }
-    .si-history { background: rgba(245,158,11,.12); }
-    .si-art { background: rgba(236,72,153,.12); }
-    .si-coding { background: rgba(59,130,246,.12); }
-    .si-geo { background: rgba(34,197,94,.12); }
-
-    /* ── COURSES ─────────────────────────────────────────── */
-    .courses { padding: 80px 0; background: var(--bg-soft); }
-    .courses-header {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 40px; flex-wrap: wrap; gap: 16px;
-    }
-    .courses-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-    }
-    .course-card {
-      background: #fff; border-radius: var(--radius); overflow: hidden;
-      box-shadow: var(--shadow); transition: all .3s;
-    }
-    .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-    .course-thumb {
-      height: 180px; display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; position: relative;
-    }
-    .course-badge {
-      position: absolute; top: 14px; left: 14px;
-      background: var(--blue); color: #fff;
-      padding: 4px 12px; border-radius: 50px; font-size: .72rem; font-weight: 700;
-    }
-    .course-body { padding: 20px; }
-    .course-meta {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-    }
-    .course-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
-    .course-desc { font-size: .83rem; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
-    .course-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 14px; border-top: 1px solid #f1f5f9;
-    }
-    .course-instructor {
-      display: flex; align-items: center; gap: 8px;
-    }
-    .ci-avatar {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue), var(--teal));
-      display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; font-weight: 700; color: #fff;
-    }
-    .ci-name { font-size: .78rem; font-weight: 600; }
-    .course-price { font-size: 1rem; font-weight: 800; color: var(--orange); }
-    .course-price small { font-size: .72rem; color: var(--muted); font-weight: 400; }
-    .course-stars {
-      display: flex; align-items: center; gap: 4px; font-size: .78rem; font-weight: 600; color: #E4C4CB;
-    }
-    .course-lessons { font-size: .78rem; color: var(--muted); }
-
-    /* ── HOW IT WORKS ────────────────────────────────────── */
-    .how { padding: 80px 0; background: #fff; }
-    .how-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px;
-    }
-    .how-card {
-      text-align: center; padding: 28px 20px; border-radius: var(--radius);
-      background: var(--bg-soft); position: relative;
-    }
-    .how-card::after {
-      content: '→'; position: absolute; right: -16px; top: 50%;
-      transform: translateY(-50%); font-size: 1.2rem; color: var(--blue); opacity: .35;
-    }
-    .how-card:last-child::after { display: none; }
-    .how-num {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--blue); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: .95rem; margin: 0 auto 16px;
-    }
-    .how-icon { font-size: 2rem; margin-bottom: 12px; }
-    .how-title { font-size: .95rem; font-weight: 700; margin-bottom: 8px; }
-    .how-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; }
-
-    /* ── STATS BANNER ────────────────────────────────────── */
-    .stats-banner {
-      background: linear-gradient(135deg, var(--blue), var(--blue-dk));
-      padding: 60px 0;
-    }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .stat-item { text-align: center; }
-    .stat-num {
-      font-size: 2.6rem; font-weight: 800; color: #fff; line-height: 1;
-    }
-    .stat-num span { color: var(--amber); }
-    .stat-label { font-size: .85rem; color: rgba(255,255,255,.7); margin-top: 6px; font-weight: 500; }
-    .stat-divider { width: 1px; background: rgba(255,255,255,.15); height: auto; }
-
-    /* ── TESTIMONIALS ────────────────────────────────────── */
-    .testimonials { padding: 80px 0; background: var(--bg-soft); }
-    .testimonials-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
-    }
-    .testi-card {
-      background: #fff; border-radius: var(--radius); padding: 28px;
-      box-shadow: var(--shadow); transition: all .3s;
-    }
-    .testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-    .testi-stars { color: #E4C4CB; font-size: 1rem; letter-spacing: 2px; margin-bottom: 14px; }
-    .testi-text {
-      font-size: .9rem; color: var(--text); line-height: 1.75; margin-bottom: 20px;
-      font-style: italic; opacity: .85;
-    }
-    .testi-author { display: flex; align-items: center; gap: 12px; }
-    .ta-avatar {
-      width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
-      background: linear-gradient(135deg, var(--blue), var(--teal));
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; color: #fff; font-size: .9rem; flex-shrink: 0;
-    }
-    .ta-name { font-weight: 700; font-size: .9rem; }
-    .ta-role { font-size: .75rem; color: var(--muted); margin-top: 2px; }
-    .testi-quote-icon { font-size: 2rem; color: var(--blue); opacity: .12; float: right; line-height: 1; }
-
-    /* ── CTA BANNER ──────────────────────────────────────── */
-    .cta-banner {
-      background: linear-gradient(135deg, #7A2035, var(--orange));
-      padding: 72px 0; text-align: center; position: relative; overflow: hidden;
-    }
-    .cta-banner::before {
-      content: ''; position: absolute; top: -60px; left: 50%;
-      transform: translateX(-50%); width: 500px; height: 500px; border-radius: 50%;
-      background: rgba(255,255,255,.06);
-    }
-    .cta-banner h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; color: #fff;
-      margin-bottom: 14px; position: relative;
-    }
-    .cta-banner p { font-size: 1.05rem; color: rgba(255,255,255,.85); margin-bottom: 32px; position: relative; }
-    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
-
-    /* ── FOOTER ──────────────────────────────────────────── */
-    footer { background: #241018; color: rgba(255,255,255,.75); padding: 60px 0 0; }
-    .footer-grid {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px;
-    }
-    .footer-brand .logo { color: #fff; margin-bottom: 14px; }
-    .footer-brand p { font-size: .85rem; line-height: 1.75; opacity: .7; }
-    .footer-socials { display: flex; gap: 10px; margin-top: 20px; }
-    .social-btn {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: rgba(255,255,255,.08); display: flex; align-items: center;
-      justify-content: center; font-size: .9rem; transition: all .2s; cursor: pointer;
-    }
-    .social-btn:hover { background: var(--orange); transform: translateY(-2px); }
-    .footer-col h4 { color: #fff; font-size: .9rem; font-weight: 700; margin-bottom: 16px; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col ul a { font-size: .83rem; transition: color .2s; }
-    .footer-col ul a:hover { color: var(--amber); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,.08);
-      padding: 20px 0; display: flex; justify-content: space-between;
-      align-items: center; font-size: .78rem; opacity: .55; flex-wrap: wrap; gap: 10px;
-    }
-    .newsletter-form {
-      display: flex; gap: 8px; margin-top: 16px;
-    }
-    .newsletter-form input {
-      flex: 1; padding: 10px 16px; border-radius: 8px; border: none;
-      background: rgba(255,255,255,.1); color: #fff; font-size: .83rem;
-      font-family: inherit; outline: none;
-    }
-    .newsletter-form input::placeholder { color: rgba(255,255,255,.4); }
-    .newsletter-form button {
-      padding: 10px 16px; border-radius: 8px; border: none;
-      background: var(--blue); color: #fff; font-weight: 600;
-      cursor: pointer; font-size: .83rem; font-family: inherit; transition: .2s;
-    }
-    .newsletter-form button:hover { background: #C98792; }
-
-    /* ── MOBILE NAV ──────────────────────────────────────── */
-    .mobile-nav {
-      display: none; position: fixed; inset: 72px 0 0 0; z-index: 99;
-      background: rgba(255,255,255,.97); backdrop-filter: blur(12px);
-      padding: 24px; flex-direction: column; gap: 8px;
-      border-top: 1px solid rgba(122,32,53,.08);
-    }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav a {
-      padding: 14px 16px; border-radius: 10px; font-size: 1rem; font-weight: 600;
-      color: var(--text); transition: .2s;
-    }
-    .mobile-nav a:hover { background: var(--bg-soft); color: var(--blue); }
-    .mobile-nav .btn { margin-top: 8px; text-align: center; justify-content: center; }
-
-    /* ── BLOG, HABERLER & SINAV TAKVİMİ ──────────────────────
-       Tek bölüm iki alt bloktan oluşur (takvim şeridi + duyuru kartları).
-       Kart ve rozet stilleri assets/sinav-takvimi.css içinde; burada
-       yalnız bölüm çerçevesi ve alt başlıklar tanımlanır. */
-    .haberler-duyurular {
-      padding: 74px 0;
-      background: linear-gradient(140deg, #FBF1F3 0%, #FAF7F5 55%, #F3ECEE 100%);
-    }
-    .bolum-sag {
-      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
-    }
-    /* Alt blok başlığı — bölüm başlığından bir kademe küçük, ince çizgiyle ayrılır */
-    .alt-baslik {
-      margin: 34px 0 20px; padding-top: 22px;
-      border-top: 1px solid rgba(122,32,53,.12);
-    }
-    .alt-baslik h3 { font-size: 1.3rem; font-weight: 700; color: var(--blue); }
-    .alt-baslik p {
-      margin-top: 6px; font-size: .88rem; color: var(--muted);
-      line-height: 1.7; max-width: 680px;
-    }
-    .takvim-ipucu {
-      margin-top: 18px; font-size: .82rem; color: var(--muted); line-height: 1.7;
-    }
-    .takvim-ipucu a { color: var(--blue); font-weight: 600; text-decoration: underline; }
-    .bolum-eylemler {
-      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 30px;
-    }
-    @media (max-width: 768px) {
-      .haberler-duyurular { padding: 56px 0 48px; }
-      .bolum-sag { align-items: flex-start; width: 100%; }
-      .bolum-sag .btn { width: 100%; justify-content: center; }
-      .alt-baslik { margin: 28px 0 16px; }
-      .alt-baslik h3 { font-size: 1.15rem; }
-      .bolum-eylemler .btn { width: 100%; justify-content: center; }
-    }
-
-    /* ── ÇOKLU ZEKÂ / OYUNLAR TANITIM IZGARASI ───────────────
-       NOT: Sütun sayısı burada tanımlı; işaretlemede inline style
-       kullanılmaz — inline stil medya sorgularını ezerdi. */
-    .czt-grid {
-      display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: center;
-    }
-    .czt-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .czt-card {
-      background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
-    }
-    .czt-card-emoji { font-size: 1.8rem; }
-    .czt-card-ad { font-weight: 800; margin-top: 8px; }
-    .czt-card-not { font-size: .8rem; color: var(--muted); }
-    .czt-list { margin: 20px 0 26px; display: grid; gap: 10px; }
-    .czt-list li { display: flex; align-items: center; gap: 10px; font-size: .95rem; color: var(--text); }
-    .czt-list li::before { content: "✓"; color: var(--blue); font-weight: 800; }
-
-    /* ── RESPONSIVE ──────────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .courses-grid { grid-template-columns: repeat(2, 1fr); }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 900px) {
-      .czt-grid { grid-template-columns: 1fr; gap: 30px; }
-    }
-    @media (max-width: 768px) {
-      nav, .nav-actions { display: none; }
-      .hamburger { display: block; }
-      .hero-inner { grid-template-columns: 1fr; text-align: center; }
-      .hero-visual { display: none; }
-      .hero-actions { justify-content: center; }
-      .hero-stats { justify-content: center; }
-      .courses-grid { grid-template-columns: 1fr; }
-      .how-grid { grid-template-columns: repeat(2, 1fr); }
-      .how-card::after { display: none; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
-      .stat-divider { display: none; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      .subjects-grid { grid-template-columns: repeat(2, 1fr); }
-      .czt-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
-      .czt-grid ul { text-align: left; }
-      /* dokunma hedefleri: bağlantı satırları en az ~32px yüksek olsun */
-      .footer-col ul li { margin-bottom: 2px; }
-      .footer-col ul a { display: inline-block; padding: 7px 0; }
-      .footer-bottom a { display: inline-block; padding: 6px 0; }
-    }
-    @media (max-width: 480px) {
-      .how-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .czt-grid { gap: 24px; }
-      .czt-cards { gap: 10px; }
-      .czt-card { padding: 16px; }
-    }
-
-    /* ── ANIMATIONS ──────────────────────────────────────── */
-    .fade-up {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .65s ease, transform .65s ease;
-    }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
-  </style>
-  <style>h1,h2,h3,h4,h5,h6,.section-title,.hero-title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.2px;}</style>
+  <!-- Tasarım şablonu: token'lar, tipografi, düğme/kart/bölüm ilkelleri -->
+  <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
   <link rel="stylesheet" href="assets/sinav-takvimi.css" />
-  <script src="assets/site-header.js" defer></script>
-  <script src="assets/sinav-takvimi.js" defer></script>
+
+  <style>
+    /* ── YALNIZ ANA SAYFAYA ÖZGÜ YERLEŞİM ──────────────────────────
+       Ortak ilkeller assets/site-tema.css içinde; burada sadece hero
+       kolajı, şerit ve bu sayfaya özel ızgaralar tanımlanır. */
+
+    /* ── HERO: tam kanvas gül kurusu bilboard ─────────────────────── */
+    .hero { background: var(--gul); padding: 96px 0 80px; overflow: hidden; }
+    .hero-ic {
+      display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 48px; align-items: center;
+    }
+    .hero-metin { max-width: 640px; }
+    /* Preply tarzı bilboard tipografi: iri, sıkı, siyah ağırlık */
+    .hero h1 {
+      color: var(--murekkep);
+      font-size: var(--text-display-xl);
+      line-height: var(--leading-display-xl);
+      letter-spacing: var(--tracking-display-xl);
+      font-weight: var(--agirlik-siyah);
+    }
+    /* Kanvas üstünde etiket dolgusuz durur; çerçeve mürekkep rengidir */
+    .hero .bolum-etiket { background: transparent; border-color: var(--murekkep); color: var(--murekkep); }
+    .hero-alt {
+      margin-top: var(--bosluk-24); font-size: var(--text-subheading);
+      line-height: var(--leading-lead); color: var(--murekkep); max-width: 46ch;
+    }
+    .hero-eylemler { display: flex; flex-wrap: wrap; gap: var(--bosluk-12); margin-top: var(--bosluk-32); }
+    .hero-guven {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--bosluk-8) var(--bosluk-16);
+      margin-top: var(--bosluk-24); font-size: var(--text-small); color: var(--murekkep);
+    }
+    .hero-guven span { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Kolaj: iki bindirilmiş döşeme + arada döndürülmüş slogan bandı */
+    .hero-gorsel { position: relative; display: grid; place-items: center; min-height: 470px; }
+    .hero-gorsel > * { grid-area: 1 / 1; }
+
+    .hero-doseme {
+      position: relative; background: var(--beyaz);
+      border: 1px solid rgba(31, 20, 26, .16); border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .hero-doseme-panel { justify-self: start; align-self: start; width: min(330px, 100%); transform: rotate(-3deg); }
+    .hero-doseme-anka {
+      justify-self: end; align-self: end; width: 236px; transform: rotate(3deg);
+      background: var(--gul-sis); display: grid; place-items: center; padding: 18px;
+    }
+    .hero-doseme-anka img { width: 150px; height: auto; }
+    .hero-cikartma { position: absolute; bottom: -13px; left: 16px; z-index: 4; }
+    .hero-doseme-anka .hero-cikartma { left: auto; right: 16px; }
+
+    .hero-slogan {
+      z-index: 3; justify-self: center; align-self: center;
+      background: var(--murekkep); color: var(--beyaz);
+      font-family: var(--font-baslik); font-weight: 800;
+      font-size: 22px; line-height: 1.1; letter-spacing: -.4px;
+      padding: 10px 18px; border-radius: var(--radius-sm);
+      /* İki döşemenin arasındaki boşluğa iner; kart içeriğini örtmemeli */
+      transform: rotate(-5deg) translate(-14%, 74px); text-align: center;
+    }
+
+    /* Kolajın içindeki ürün önizlemesi — düz, hairline */
+    .onizleme-bas { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .onizleme-rozet {
+      width: 40px; height: 40px; flex-shrink: 0; border-radius: var(--radius-sm);
+      background: var(--sis); display: grid; place-items: center; font-size: 20px;
+    }
+    .onizleme-ad { font-family: var(--font-baslik); font-weight: 700; font-size: 15px; color: var(--murekkep); }
+    .onizleme-not { font-size: 12px; color: var(--kursun); }
+    .onizleme-satir { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--murekkep); margin-bottom: 6px; }
+    .onizleme-cubuk { height: 6px; background: var(--sis); border-radius: var(--radius-hap); overflow: hidden; margin-bottom: 16px; }
+    .onizleme-cubuk i { display: block; height: 100%; background: var(--bordo); border-radius: var(--radius-hap); }
+    .onizleme-ders { display: grid; gap: 8px; }
+    .onizleme-ders div {
+      display: flex; align-items: center; gap: 10px;
+      border: 1px solid var(--duman); border-radius: var(--radius-sm); padding: 8px 10px;
+      font-size: 13px; color: var(--murekkep);
+    }
+    .onizleme-ders b { flex: 1; font-weight: 600; font-size: 13px; }
+    .onizleme-ders small { color: var(--kursun); font-size: 11px; }
+
+    @media (max-width: 1024px) {
+      .hero { padding: 64px 0 56px; }
+      .hero-ic { grid-template-columns: 1fr; gap: 40px; }
+      .hero-metin { max-width: none; }
+      .hero-gorsel { min-height: 420px; }
+    }
+    @media (max-width: 640px) {
+      .hero { padding: 48px 0 40px; }
+      .hero-gorsel { display: flex; flex-direction: column; align-items: stretch; gap: 26px; min-height: 0; }
+      .hero-doseme-panel, .hero-doseme-anka { width: 100%; transform: none; }
+      .hero-slogan { display: none; }
+      .hero-eylemler .btn { flex: 1 1 100%; }
+    }
+
+    /* ── ŞERİT: kayan ders adları ─────────────────────────────────── */
+    .serit { background: var(--murekkep); color: var(--beyaz); padding: 14px 0; overflow: hidden; white-space: nowrap; }
+    .serit-yol { display: inline-flex; animation: serit-kay 26s linear infinite; }
+    .serit-yol span { padding: 0 24px; font-size: var(--text-small); font-weight: 500; }
+    .serit-yol span.nokta { color: var(--gul); }
+    @keyframes serit-kay { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── İSTATİSTİK ŞERİDİ ────────────────────────────────────────── */
+    .istatistik-serit { border-bottom: 1px solid var(--duman); }
+
+    /* İstatistik şeridi gizlenince araç kataloğu ilk ekrana fazla
+       yaklaştı; hero ile arasında dengeli bir nefes payı bırakılır. */
+    #araclar { padding-top: 128px; }
+    @media (max-width: 768px) { #araclar { padding-top: 72px; } }
+
+    /* ── İKİ SÜTUNLU TANITIM (çoklu zekâ / oyunlar) ───────────────── */
+    .tanitim { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+    .tanitim-liste { margin: var(--bosluk-24) 0 var(--bosluk-32); display: grid; gap: 10px; }
+    .tanitim-liste li { display: flex; gap: 10px; font-size: var(--text-body); color: var(--grafit); }
+    .tanitim-liste li::before { content: "→"; color: var(--murekkep); font-weight: 600; }
+    .tanitim-kartlar { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--bosluk-16); }
+    .tanitim-kartlar .kart-ikon { font-size: 28px; }
+    @media (max-width: 900px) { .tanitim { grid-template-columns: 1fr; gap: 32px; } }
+
+    /* ── NASIL ÇALIŞIR ────────────────────────────────────────────── */
+    .adim-izgara { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--bosluk-16); }
+    .adim { border: 1px solid var(--duman); border-radius: var(--radius-md); padding: var(--kart-ic); background: var(--beyaz); }
+    .adim-no {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      background: var(--murekkep); color: var(--beyaz);
+      font-family: var(--font-baslik); font-weight: 700; font-size: 14px;
+      margin-bottom: var(--bosluk-16);
+    }
+    @media (max-width: 860px) { .adim-izgara { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .adim-izgara { grid-template-columns: 1fr; } }
+
+    /* ── GÖRÜŞLER ─────────────────────────────────────────────────── */
+    .gorus-izgara { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bosluk-16); }
+    .gorus p { font-size: var(--text-body); line-height: 1.6; color: var(--murekkep); margin: var(--bosluk-12) 0 var(--bosluk-24); }
+    .gorus-yildiz { color: var(--bordo); letter-spacing: 2px; font-size: 14px; }
+    .gorus-kisi { display: flex; align-items: center; gap: 10px; padding-top: var(--bosluk-16); border-top: 1px solid var(--duman); }
+    .gorus-bas {
+      width: 36px; height: 36px; flex-shrink: 0; border-radius: var(--radius-sm);
+      background: var(--murekkep); color: var(--beyaz);
+      display: grid; place-items: center; font-size: 13px; font-weight: 600;
+    }
+    .gorus-ad { display: block; font-size: var(--text-small); font-weight: 600; color: var(--murekkep); }
+    .gorus-rol { display: block; font-size: 12px; color: var(--kursun); }
+    @media (max-width: 900px) { .gorus-izgara { grid-template-columns: 1fr; } }
+
+    /* ── HABERLER & SINAV TAKVİMİ ─────────────────────────────────── */
+    .alt-baslik { margin: var(--bosluk-48) 0 var(--bosluk-24); padding-top: var(--bosluk-24); border-top: 1px solid var(--duman); }
+    .alt-baslik h3 { font-size: var(--text-heading-sm); line-height: var(--leading-heading-sm); }
+    .alt-baslik p { margin-top: 8px; font-size: var(--text-small); line-height: 1.7; color: var(--kursun); max-width: 72ch; }
+    .takvim-ipucu { margin-top: var(--bosluk-16); font-size: 13px; line-height: 1.7; color: var(--kursun); }
+    .takvim-ipucu a { color: var(--murekkep); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    .bolum-eylemler { display: flex; flex-wrap: wrap; gap: var(--bosluk-12); margin-top: var(--bosluk-32); }
+    .bolum-sag { display: flex; flex-direction: column; align-items: flex-end; gap: var(--bosluk-12); }
+    @media (max-width: 768px) {
+      .bolum-sag { align-items: flex-start; width: 100%; }
+      .bolum-sag .btn, .bolum-eylemler .btn { width: 100%; }
+    }
+
+    /* ── KAPANIŞ ÇAĞRISI ──────────────────────────────────────────── */
+    .kapanis { text-align: center; padding: 112px 0; }
+    .kapanis h2 {
+      max-width: 16ch; margin: 0 auto;
+      font-size: var(--text-display-xl);
+      line-height: var(--leading-display-xl);
+      letter-spacing: var(--tracking-display-xl);
+      font-weight: var(--agirlik-siyah);
+    }
+    .kapanis p { margin: var(--bosluk-16) auto 0; max-width: 52ch; font-size: var(--text-lead); color: rgba(255,255,255,.8); }
+    .kapanis .bolum-eylemler { justify-content: center; }
+    @media (max-width: 640px) { .kapanis { padding: 64px 0; } }
+
+    /* Alt bilgi (bülten + sosyal) artık assets/site-tema.css'te —
+       markup tüm sayfalarda birebir aynı olduğu için stil de ortak. */
+
+    /* ── Gizli bölümler (kurslar) yeniden açılırsa tutarlı görünsün ── */
+    .kurs-izgara { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bosluk-16); }
+    .kurs-gorsel { height: 150px; display: grid; place-items: center; font-size: 44px; background: var(--sis); border-bottom: 1px solid var(--duman); }
+    .kurs-govde { padding: 20px; }
+    @media (max-width: 900px) { .kurs-izgara { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ
+     Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
+     assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
+     günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ BAŞLIK -->
 <header class="site-header">
   <div class="sh-inner">
     <a href="index.html" class="sh-logo">
@@ -574,7 +229,7 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html">Etkinlikler</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -587,7 +242,6 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="#how">Nasıl Çalışır</a>
       <a href="hakkimizda.html">Hakkımızda</a>
     </nav>
 
@@ -605,132 +259,77 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="#how">Nasıl Çalışır</a>
     <a href="hakkimizda.html">Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html">Etkinlikler</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
     <a href="sinav-takvimi.html">Sınav Takvimi</a>
     <div class="sh-drawer-actions">
       <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
-      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
     </div>
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════════ HERO -->
+<!-- ═══════════════════════════════════════════════════════ HERO
+     Tam kanvas gül kurusu bilboard: solda iri ve sıkı başlık bloğu,
+     sağda hafif döndürülmüş iki döşemeden oluşan kolaj. -->
 <section class="hero">
   <div class="container">
-    <div class="hero-inner">
+    <div class="hero-ic">
 
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span class="hero-badge-dot"></span>
-          Güçlü Kaynak, Sağlam Gelecek
-        </div>
-
-        <h1 class="hero-title">
-          Öğrencini<br>
-          <span>Zirveye</span> Taşıyacak<br>
-          Eğitim Kaynakları
-        </h1>
-
-        <p class="hero-desc">
-          Uzman eğitmenler eşliğinde hazırlanan özgün ders materyalleri,
-          interaktif testler ve kişiselleştirilmiş öğrenme yollarıyla
-          akademik başarıya ulaş.
+      <div class="hero-metin">
+        <div class="bolum-etiket">Güçlü Kaynak, Sağlam Gelecek</div>
+        <h1>Öğrenmenin<br />sağlam kaynağı.</h1>
+        <p class="hero-alt">
+          Öğrenci, öğretmen ve veli için ihtiyaç duyulan eğitim araçları,
+          içerikler ve çalışmalar tek çatı altında.
         </p>
 
-        <div class="hero-actions">
-          <a href="/basvuru" class="btn btn-primary">
-            ✨ Aramıza Katıl
-          </a>
-          <a href="#how" class="btn btn-outline">
-            Nasıl Çalışır?
-          </a>
+        <div class="hero-eylemler">
+          <a href="/basvuru" class="btn btn-dolu">Aramıza katıl <span class="ok">→</span></a>
+          <a href="#how" class="btn btn-cizgili">Nasıl çalışır</a>
         </div>
 
-        <div class="hero-stats">
-          <div class="hero-stat-item">
-            <div class="hero-stat-num">12<span>B+</span></div>
-            <div class="hero-stat-label">Aktif Öğrenci</div>
-          </div>
-          <div class="hero-stat-item">
-            <div class="hero-stat-num">850<span>+</span></div>
-            <div class="hero-stat-label">Ders Materyali</div>
-          </div>
-          <div class="hero-stat-item">
-            <div class="hero-stat-num">4.9<span>★</span></div>
-            <div class="hero-stat-label">Ortalama Puan</div>
-          </div>
+        <div class="hero-guven">
+          <span>✓ Üyelik gerektirmeyen ücretsiz araçlar</span>
+          <span>✓ Her seviyeye uygun içerikler</span>
         </div>
       </div>
 
-      <div class="hero-visual">
-        <div class="hero-float hero-float-1">
-          <div class="hf-label">Bu Haftaki Başarı</div>
-          <div class="hf-val">+%24 İlerleme</div>
-          <div style="font-size:.7rem;color:#22c55e;font-weight:600;margin-top:2px;">▲ Harika gidiyorsun!</div>
+      <div class="hero-gorsel" aria-hidden="true">
+        <div class="hero-doseme hero-doseme-panel">
+          <div class="onizleme-bas">
+            <div class="onizleme-rozet">📚</div>
+            <div>
+              <div class="onizleme-ad">Eğitici oyunlar</div>
+              <div class="onizleme-not">Öğrenmeyi daha eğlenceli hale getiren oyunlar.</div>
+            </div>
+          </div>
+          <div class="onizleme-satir"><span>İlerleme</span><span>%68</span></div>
+          <div class="onizleme-cubuk"><i style="width:68%"></i></div>
+          <div class="onizleme-ders">
+            <!-- Eski satırlar gizlendi (kullanıcı kararı) — hidden kaldırılarak geri açılır -->
+            <div hidden><span>🔢</span><b>Kesirler ve İşlemler</b><small>18 dk</small></div>
+            <div hidden><span>⚗️</span><b>Fen Bilimleri Testi</b><small>16:00</small></div>
+            <div hidden><span>📖</span><b>Yazım Kuralları</b><small>12 dk</small></div>
+            <div><span>🔤</span><b>Kelime Avı</b></div>
+            <div><span>🔢</span><b>Sayı Ustası</b></div>
+            <div><span>🏁</span><b>World School Race</b></div>
+          </div>
+          <span class="cikartma hero-cikartma" hidden>Zeynep · 5. Sınıf</span>
         </div>
 
-        <div class="hero-card-main">
-          <div class="hero-card-top">
-            <div class="hc-avatar">📚</div>
-            <div>
-              <div class="hc-name">Matematik Kursu</div>
-              <div class="hc-sub">5. Sınıf · 24 Ders</div>
-            </div>
-          </div>
+        <div class="hero-slogan">Güçlü kaynak,<br />sağlam gelecek</div>
 
-          <div class="hc-progress-label">
-            <span>İlerleme</span>
-            <span style="color:var(--blue)">%68</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:68%"></div>
-          </div>
-
-          <div class="hc-lessons">
-            <div class="hc-lesson">
-              <div class="hc-lesson-icon si-math">🔢</div>
-              <div class="hc-lesson-info">
-                <div class="hc-lesson-name">Kesirler ve İşlemler</div>
-                <div class="hc-lesson-dur">18 dakika</div>
-              </div>
-              <span class="hc-lesson-check">✅</span>
-            </div>
-            <div class="hc-lesson">
-              <div class="hc-lesson-icon si-science">⚗️</div>
-              <div class="hc-lesson-info">
-                <div class="hc-lesson-name">Fen Bilimleri Testi</div>
-                <div class="hc-lesson-dur">Bugün saat 16:00</div>
-              </div>
-              <span class="hc-lesson-check">🔔</span>
-            </div>
-            <div class="hc-lesson">
-              <div class="hc-lesson-icon si-turkish">📖</div>
-              <div class="hc-lesson-info">
-                <div class="hc-lesson-name">Türkçe Yazım Kuralları</div>
-                <div class="hc-lesson-dur">12 dakika</div>
-              </div>
-              <span class="hc-lesson-check">▶️</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-float hero-float-2">
-          <div class="hf-row">
-            <span style="font-size:1.1rem">🏆</span>
-            <div>
-              <div class="hf-label">Öğrenci Puanı</div>
-              <div class="hf-stars">★★★★★</div>
-            </div>
-          </div>
+        <div class="hero-doseme hero-doseme-anka">
+          <img src="assets/maskot/kivilcim.svg" alt="" />
+          <span class="cikartma cikartma-sag hero-cikartma">Kıvılcım · Rehber</span>
         </div>
       </div>
 
@@ -738,340 +337,272 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════ MARQUEE -->
-<div class="marquee-strip">
-  <div class="marquee-track" id="marquee">
-    <span>Matematik</span><span class="dot">✦</span>
-    <span>Fen Bilimleri</span><span class="dot">✦</span>
-    <span>Türkçe</span><span class="dot">✦</span>
-    <span>İngilizce</span><span class="dot">✦</span>
-    <span>Sosyal Bilgiler</span><span class="dot">✦</span>
-    <span>Kodlama</span><span class="dot">✦</span>
-    <span>Geometri</span><span class="dot">✦</span>
-    <span>Tarih</span><span class="dot">✦</span>
-    <span>Coğrafya</span><span class="dot">✦</span>
-    <span>Din Kültürü ve Ahlak Bilgisi</span><span class="dot">✦</span>
-    <span>Müzik</span><span class="dot">✦</span>
-    <span>Matematik</span><span class="dot">✦</span>
-    <span>Fen Bilimleri</span><span class="dot">✦</span>
-    <span>Türkçe</span><span class="dot">✦</span>
-    <span>İngilizce</span><span class="dot">✦</span>
-    <span>Sosyal Bilgiler</span><span class="dot">✦</span>
-    <span>Kodlama</span><span class="dot">✦</span>
-    <span>Geometri</span><span class="dot">✦</span>
-    <span>Tarih</span><span class="dot">✦</span>
-    <span>Coğrafya</span><span class="dot">✦</span>
-    <span>Müzik</span><span class="dot">✦</span>
-    <span>Din Kültürü ve Ahlak Bilgisi</span><span class="dot">✦</span>
+<!-- ═══════════════════════════════════════════════════════ İSTATİSTİK ŞERİDİ
+     (kullanıcı kararıyla gizlendi — hidden kaldırılarak geri açılır) -->
+<section class="container" hidden>
+  <div class="istatistik-serit" id="istatistikSerit">
+    <div class="istatistik"><b data-sayac="12" data-sonek="B+">12B+</b><small>Aktif öğrenci</small></div>
+    <div class="istatistik"><b data-sayac="850" data-sonek="+">850+</b><small>Ders materyali</small></div>
+    <div class="istatistik"><b data-sayac="48" data-sonek="+">48+</b><small>Uzman eğitmen</small></div>
+    <div class="istatistik"><b data-sayac="9" data-sonek="">9</b><small>Ücretsiz araç</small></div>
+    <div class="istatistik"><b data-sayac="4.9" data-sonek="★" data-ondalik="1">4.9★</b><small>Ortalama memnuniyet</small></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ ŞERİT -->
+<!-- Kesintisiz akış için iki yarı BİREBİR aynı olmalı: animasyon -%50 kaydırır. -->
+<div class="serit" aria-hidden="true">
+  <div class="serit-yol">
+    <span>Matematik</span><span class="nokta">✦</span>
+    <span>Fen Bilimleri</span><span class="nokta">✦</span>
+    <span>Türkçe</span><span class="nokta">✦</span>
+    <span>İngilizce</span><span class="nokta">✦</span>
+    <span>Sosyal Bilgiler</span><span class="nokta">✦</span>
+    <span>Kodlama</span><span class="nokta">✦</span>
+    <span>Geometri</span><span class="nokta">✦</span>
+    <span>Tarih</span><span class="nokta">✦</span>
+    <span>Coğrafya</span><span class="nokta">✦</span>
+    <span>Müzik</span><span class="nokta">✦</span>
+    <span>Din Kültürü ve Ahlak Bilgisi</span><span class="nokta">✦</span>
+    <span>Matematik</span><span class="nokta">✦</span>
+    <span>Fen Bilimleri</span><span class="nokta">✦</span>
+    <span>Türkçe</span><span class="nokta">✦</span>
+    <span>İngilizce</span><span class="nokta">✦</span>
+    <span>Sosyal Bilgiler</span><span class="nokta">✦</span>
+    <span>Kodlama</span><span class="nokta">✦</span>
+    <span>Geometri</span><span class="nokta">✦</span>
+    <span>Tarih</span><span class="nokta">✦</span>
+    <span>Coğrafya</span><span class="nokta">✦</span>
+    <span>Müzik</span><span class="nokta">✦</span>
+    <span>Din Kültürü ve Ahlak Bilgisi</span><span class="nokta">✦</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ SUBJECTS (gizli) -->
-<section class="subjects" id="subjects" hidden>
+<!-- ═══════════════════════════════════════════════════════ ARAÇ KATALOĞU
+     DESIGN.md'deki 3×3 hairline katalog ızgarasının karşılığı. -->
+<section class="bolum" id="araclar">
   <div class="container">
-    <div class="section-head fade-up">
-      <div class="section-label">📚 Ders Kategorileri</div>
-      <h2 class="section-title">Her Derse Ait <span>Kapsamlı İçerik</span></h2>
-      <p class="section-sub">İlkokuldan liseye, her sınıf ve derse özel hazırlanmış materyaller.</p>
+    <div class="bolum-bas fade-up">
+      <h2 class="bolum-baslik">Her ihtiyaca bir araç</h2>
+      <p class="bolum-alt">Dokuz ücretsiz araç: hazırlık, planlama, ölçme ve takip. Hepsi üyeliksiz, tarayıcıda çalışır.</p>
     </div>
 
-    <div class="subjects-grid">
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-math">🔢</div>
-        <div class="subject-name">Matematik</div>
-        <div class="subject-count">240+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-science">⚗️</div>
-        <div class="subject-name">Fen Bilimleri</div>
-        <div class="subject-count">185+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-turkish">📖</div>
-        <div class="subject-name">Türkçe</div>
-        <div class="subject-count">210+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-english">🌍</div>
-        <div class="subject-name">İngilizce</div>
-        <div class="subject-count">160+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-history">🏛️</div>
-        <div class="subject-name">Tarih</div>
-        <div class="subject-count">120+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-art">🎨</div>
-        <div class="subject-name">Görsel Sanatlar</div>
-        <div class="subject-count">80+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-coding">💻</div>
-        <div class="subject-name">Kodlama</div>
-        <div class="subject-count">95+ materyal</div>
-      </div>
-      <div class="subject-card fade-up">
-        <div class="subject-icon si-geo">🗺️</div>
-        <div class="subject-name">Coğrafya</div>
-        <div class="subject-count">110+ materyal</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════ COURSES (gizli) -->
-<section class="courses" id="courses" hidden>
-  <div class="container">
-    <div class="courses-header fade-up">
-      <div>
-        <div class="section-label">🔥 Öne Çıkan Kurslar</div>
-        <h2 class="section-title">En Çok Tercih Edilen <span>Kurslar</span></h2>
-      </div>
-      <a href="#" class="btn btn-outline">Tüm Kursları Gör →</a>
-    </div>
-
-    <div class="courses-grid">
-
-      <div class="course-card fade-up">
-        <div class="course-thumb" style="background:linear-gradient(135deg,#F0E3E6,#E4C4CB)">
-          🔢
-          <span class="course-badge">En Popüler</span>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="tag">Matematik</span>
-            <span class="tag">5. Sınıf</span>
-          </div>
-          <div class="course-title">İleri Matematik: Kesirler, Ondalıklar ve Problem Çözme</div>
-          <div class="course-desc">Karmaşık matematik konularını basit ve eğlenceli anlatımlarla öğren. 24 ders, 80+ alıştırma.</div>
-          <div class="course-footer">
-            <div class="course-instructor">
-              <div class="ci-avatar">AY</div>
-              <span class="ci-name">Ahmet Yılmaz</span>
-            </div>
-            <div>
-              <div class="course-stars">★★★★★ <span style="color:var(--muted);font-weight:400">(428)</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="course-card fade-up">
-        <div class="course-thumb" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0)">
-          ⚗️
-          <span class="course-badge" style="background:var(--teal)">Yeni</span>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="tag">Fen Bilimleri</span>
-            <span class="tag">6. Sınıf</span>
-          </div>
-          <div class="course-title">Fen Bilimleri Seti: Madde, Canlılar ve Kuvvet</div>
-          <div class="course-desc">Deney videoları ve görsel materyallerle fen bilimlerini keşfet. 32 ders, interaktif testler.</div>
-          <div class="course-footer">
-            <div class="course-instructor">
-              <div class="ci-avatar" style="background:linear-gradient(135deg,#10b981,#059669)">ZK</div>
-              <span class="ci-name">Zeynep Kaya</span>
-            </div>
-            <div>
-              <div class="course-stars">★★★★★ <span style="color:var(--muted);font-weight:400">(312)</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="course-card fade-up">
-        <div class="course-thumb" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
-          📖
-          <span class="course-badge" style="background:#7c3aed">Trend</span>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="tag">Türkçe</span>
-            <span class="tag">4. Sınıf</span>
-          </div>
-          <div class="course-title">Türkçe Dil Becerisi: Okuma, Yazma ve Anlama</div>
-          <div class="course-desc">Türkçe dil bilgisi kuralları, hikâye yazma teknikleri ve anlama çalışmaları. 28 ders.</div>
-          <div class="course-footer">
-            <div class="course-instructor">
-              <div class="ci-avatar" style="background:linear-gradient(135deg,#E4C4CB,#A85462)">ME</div>
-              <span class="ci-name">Merve Erdoğan</span>
-            </div>
-            <div>
-              <div class="course-stars">★★★★★ <span style="color:var(--muted);font-weight:400">(561)</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div class="katalog-izgara">
+      <a class="katalog-kart fade-up" href="coklu-zeka-testi.html">
+        <span class="katalog-ikon">🧭</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Çoklu Zekâ Testi</span>
+          <span class="kart-not">4 düzey · kişiye özel rapor</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="oyunlar.html">
+        <span class="katalog-ikon">🎮</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Eğitim Oyunları</span>
+          <span class="kart-not">Sınıf ve konuya göre onlarca oyun</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="odev-olustur.html">
+        <span class="katalog-ikon">📝</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Ödev Oluştur</span>
+          <span class="kart-not">Yazdırılabilir ödev kâğıdı</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="bep-olustur.html">
+        <span class="katalog-ikon">🧩</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">BEP Oluştur</span>
+          <span class="kart-not">Bireyselleştirilmiş eğitim planı</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="ders-programi.html">
+        <span class="katalog-ikon">🗓️</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Ders Programı</span>
+          <span class="kart-not">Haftalık program tasarla</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="etkinlikler.html" hidden>
+        <span class="katalog-ikon">🎨</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Etkinlikler</span>
+          <span class="kart-not">Sınıf içi etkinlik önerileri</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="sinav-takvimi.html">
+        <span class="katalog-ikon">⏳</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Sınav Takvimi</span>
+          <span class="kart-not">YKS, LGS, KPSS ve fazlası</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="haberler.html">
+        <span class="katalog-ikon">📰</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Haberler</span>
+          <span class="kart-not">ÖSYM &amp; MEB duyuruları</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
+      <a class="katalog-kart fade-up" href="/blog">
+        <span class="katalog-ikon">✍️</span>
+        <span class="katalog-govde">
+          <span class="kart-baslik">Blog</span>
+          <span class="kart-not">Çalışma yöntemleri ve rehber yazılar</span>
+        </span>
+        <span class="katalog-sevron">›</span>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════ ÇOKLU ZEKÂ TESTİ -->
-<section id="coklu-zeka" style="padding:70px 0;background:linear-gradient(140deg,#FBF1F3 0%,#FAF7F5 55%,#F3ECEE 100%);">
+<section class="bolum bolum-sis" id="coklu-zeka">
   <div class="container">
-    <div class="czt-grid">
+    <div class="tanitim">
       <div class="fade-up">
-        <div class="section-label">🧭 Öğrenme Eğilimleri Envanteri</div>
-        <h2 class="section-title">Çoklu Zekâ <span>Testi</span></h2>
-        <p class="section-sub" style="max-width:none;">Howard Gardner’ın Çoklu Zekâ Kuramı’ndan esinlenen bu ücretsiz test, öğrencinin (veya senin) hangi yöntemlerle daha rahat öğrendiğini keşfetmesine yardımcı olur. Sekiz öğrenme alanı için ayrı ayrı yüzde, radar grafiği ve kişiye özel öğrenme raporu sunar.</p>
-        <ul class="czt-list">
+        <div class="bolum-etiket">Öğrenme Eğilimleri Envanteri</div>
+        <h2 class="bolum-baslik">Çoklu Zekâ Testi</h2>
+        <p class="bolum-alt">
+          Howard Gardner'ın Çoklu Zekâ Kuramı'ndan esinlenen bu ücretsiz test, öğrencinin
+          hangi yöntemlerle daha rahat öğrendiğini keşfetmesine yardımcı olur. Sekiz öğrenme
+          alanı için ayrı yüzde, radar grafiği ve kişiye özel öğrenme raporu sunar.
+        </p>
+        <ul class="tanitim-liste">
           <li>Dört düzey: İlkokul, Ortaokul, Lise, Yetişkin</li>
           <li>Sonuçta radar grafiği ve tüm alanların yüzdeleri</li>
           <li>Kişiye özel öğrenme, çalışma, öğretmen ve veli önerileri</li>
           <li>Üyelik gerektirmez, ücretsizdir</li>
         </ul>
-        <a href="coklu-zeka-testi.html" class="btn btn-primary">Testi Başlat →</a>
+        <a href="coklu-zeka-testi.html" class="btn btn-dolu">Testi başlat <span class="ok">→</span></a>
       </div>
-      <div class="fade-up czt-cards">
-        <div class="czt-card"><div class="czt-card-emoji">🎈</div><div class="czt-card-ad">İlkokul</div><div class="czt-card-not">7–10 yaş · sade sorular</div></div>
-        <div class="czt-card"><div class="czt-card-emoji">🧩</div><div class="czt-card-ad">Ortaokul</div><div class="czt-card-not">11–14 yaş · hazır</div></div>
-        <div class="czt-card"><div class="czt-card-emoji">🎓</div><div class="czt-card-ad">Lise</div><div class="czt-card-not">15–18 yaş · hazır</div></div>
-        <div class="czt-card"><div class="czt-card-emoji">💼</div><div class="czt-card-ad">Yetişkin</div><div class="czt-card-not">18+ · hazır</div></div>
+
+      <div class="tanitim-kartlar fade-up">
+        <div class="kart"><div class="kart-ikon">🎈</div><div class="kart-baslik">İlkokul</div><div class="kart-not">7–10 yaş · sade sorular</div></div>
+        <div class="kart"><div class="kart-ikon">🧩</div><div class="kart-baslik">Ortaokul</div><div class="kart-not">11–14 yaş · hazır</div></div>
+        <div class="kart"><div class="kart-ikon">🎓</div><div class="kart-baslik">Lise</div><div class="kart-not">15–18 yaş · hazır</div></div>
+        <div class="kart"><div class="kart-ikon">💼</div><div class="kart-baslik">Yetişkin</div><div class="kart-not">18+ · hazır</div></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════ EĞİTİM OYUNLARI -->
-<section id="oyunlar" style="padding:70px 0;background:linear-gradient(140deg,#F3ECEE 0%,#FAF7F5 55%,#FBF1F3 100%);">
+<section class="bolum" id="oyunlar">
   <div class="container">
-    <div class="czt-grid">
+    <div class="tanitim">
+      <div class="tanitim-kartlar fade-up">
+        <div class="kart"><div class="kart-ikon">🧩</div><div class="kart-baslik">Eşleştirme</div><div class="kart-not">Kelime &amp; kavram eşleştir</div></div>
+        <div class="kart"><div class="kart-ikon">🃏</div><div class="kart-baslik">Hafıza</div><div class="kart-not">Eş çiftleri bul</div></div>
+        <div class="kart"><div class="kart-ikon">🖐️</div><div class="kart-baslik">Sürükle-Bırak</div><div class="kart-not">Doğru gruba yerleştir</div></div>
+        <div class="kart"><div class="kart-ikon">➗</div><div class="kart-baslik">Matematik</div><div class="kart-not">İşlemleri hızlı çöz</div></div>
+      </div>
+
       <div class="fade-up">
-        <div class="section-label">🎮 Eğitim Oyunları</div>
-        <h2 class="section-title">Oyna, Öğren, <span>Puan Kazan</span></h2>
-        <p class="section-sub" style="max-width:none;">Kademe, sınıf, ders ve konuya göre düzenlenmiş eğitici oyunlarla öğrenmeyi eğlenceye dönüştür. Her oyun sonunda doğru sayına, hızına ve zorluk seviyesine göre puan kazan; toplam puanını, en yüksek skorlarını ve son oynadığın oyunları takip et.</p>
-        <ul class="czt-list">
+        <div class="bolum-etiket">Eğitim Oyunları</div>
+        <h2 class="bolum-baslik">Oyna, öğren, puan kazan</h2>
+        <p class="bolum-alt">
+          Kademe, sınıf, ders ve konuya göre düzenlenmiş eğitici oyunlarla öğrenmeyi eğlenceye
+          dönüştür. Her oyun sonunda doğru sayına, hızına ve zorluk seviyesine göre puan kazan;
+          toplam puanını, en yüksek skorlarını ve son oynadığın oyunları takip et.
+        </p>
+        <ul class="tanitim-liste">
           <li>İlkokul, Ortaokul ve Lise için konu konu oyunlar</li>
           <li>Eşleştirme, hafıza, sürükle-bırak ve matematik oyunları</li>
           <li>Kazanılan puanlar, en yüksek skorlar ve oyun geçmişi</li>
           <li>Üyelik gerektirmez, ücretsizdir</li>
         </ul>
-        <a href="oyunlar.html" class="btn btn-primary">Oyunlara Başla →</a>
-      </div>
-      <div class="fade-up czt-cards">
-        <div class="czt-card"><div class="czt-card-emoji">🧩</div><div class="czt-card-ad">Eşleştirme</div><div class="czt-card-not">Kelime &amp; kavram eşleştir</div></div>
-        <div class="czt-card"><div class="czt-card-emoji">🃏</div><div class="czt-card-ad">Hafıza Kartları</div><div class="czt-card-not">Eş çiftleri bul</div></div>
-        <div class="czt-card"><div class="czt-card-emoji">🖐️</div><div class="czt-card-ad">Sürükle-Bırak</div><div class="czt-card-not">Doğru gruba yerleştir</div></div>
-        <div class="czt-card"><div class="czt-card-emoji">➗</div><div class="czt-card-ad">Matematik</div><div class="czt-card-not">İşlemleri hızlı çöz</div></div>
+        <a href="oyunlar.html" class="btn btn-dolu">Oyunlara başla <span class="ok">→</span></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════ HOW IT WORKS -->
-<section class="how" id="how">
+<!-- ═══════════════════════════════════════════════════════ NASIL ÇALIŞIR -->
+<section class="bolum bolum-sis" id="how">
   <div class="container">
-    <div class="section-head fade-up">
-      <div class="section-label">⚡ Nasıl Çalışır?</div>
-      <h2 class="section-title">4 Adımda Öğrenmeye <span>Başla</span></h2>
-      <p class="section-sub">Kaynak Kampüs ile öğrenmek hiç bu kadar kolay olmamıştı.</p>
+    <div class="bolum-bas fade-up">
+      <h2 class="bolum-baslik">4 adımda başla</h2>
+      <p class="bolum-alt">Kayıttan ilk ilerleme raporuna kadar yol dört adımdan ibaret.</p>
     </div>
 
-    <div class="how-grid">
-      <div class="how-card fade-up">
-        <div class="how-num">1</div>
-        <div class="how-icon">👤</div>
-        <div class="how-title">Ücretsiz Kayıt Ol</div>
-        <div class="how-desc">Dakikalar içinde hesabını oluştur, kişisel öğrenme profilini belirle.</div>
+    <div class="adim-izgara">
+      <div class="adim fade-up">
+        <div class="adim-no">1</div>
+        <div class="kart-baslik">Kayıt ol</div>
+        <p class="kart-metin">Dakikalar içinde hesabını oluştur, kişisel öğrenme profilini belirle.</p>
       </div>
-      <div class="how-card fade-up">
-        <div class="how-num">2</div>
-        <div class="how-icon">🎯</div>
-        <div class="how-title">Sınıfını Seç</div>
-        <div class="how-desc">Sınıf seviyene ve hedeflerine uygun kurs ile materyalleri keşfet.</div>
+      <div class="adim fade-up">
+        <div class="adim-no">2</div>
+        <div class="kart-baslik">Sınıfını seç</div>
+        <p class="kart-metin">Sınıf seviyene ve hedeflerine uygun kurs ile materyalleri keşfet.</p>
       </div>
-      <div class="how-card fade-up">
-        <div class="how-num">3</div>
-        <div class="how-icon">📱</div>
-        <div class="how-title">Her Yerden Öğren</div>
-        <div class="how-desc">Bilgisayar, tablet veya telefonundan, istediğin zaman, istediğin yerde ders al.</div>
+      <div class="adim fade-up">
+        <div class="adim-no">3</div>
+        <div class="kart-baslik">Her yerden öğren</div>
+        <p class="kart-metin">Bilgisayar, tablet ya da telefondan, istediğin zaman ders al.</p>
       </div>
-      <div class="how-card fade-up">
-        <div class="how-num">4</div>
-        <div class="how-icon">🏆</div>
-        <div class="how-title">Başarını Ölç</div>
-        <div class="how-desc">Testler, rozetler ve ilerleme raporlarıyla gelişimini takip et.</div>
+      <div class="adim fade-up">
+        <div class="adim-no">4</div>
+        <div class="kart-baslik">Başarını ölç</div>
+        <p class="kart-metin">Testler, rozetler ve ilerleme raporlarıyla gelişimini takip et.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════ STATS -->
-<section class="stats-banner">
+<!-- ═══════════════════════════════════════════════════════ GÖRÜŞLER
+     (kullanıcı kararıyla ana sayfadan gizlendi — hidden kaldırılarak geri açılır) -->
+<section class="bolum" hidden>
   <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item fade-up">
-        <div class="stat-num">12<span>B</span>+</div>
-        <div class="stat-label">Aktif Öğrenci</div>
-      </div>
-      <div class="stat-item fade-up">
-        <div class="stat-num">850<span>+</span></div>
-        <div class="stat-label">Ders Materyali</div>
-      </div>
-      <div class="stat-item fade-up">
-        <div class="stat-num">48<span>+</span></div>
-        <div class="stat-label">Uzman Eğitmen</div>
-      </div>
-      <div class="stat-item fade-up">
-        <div class="stat-num">4.9<span>★</span></div>
-        <div class="stat-label">Ortalama Memnuniyet</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════ TESTIMONIALS -->
-<section class="testimonials">
-  <div class="container">
-    <div class="section-head fade-up">
-      <div class="section-label">💬 Yorumlar</div>
-      <h2 class="section-title">Öğrenciler ve Veliler <span>Ne Diyor?</span></h2>
+    <div class="bolum-bas fade-up">
+      <h2 class="bolum-baslik">Öğrenciler ve veliler ne diyor?</h2>
     </div>
 
-    <div class="testimonials-grid">
-
-      <div class="testi-card fade-up">
-        <span class="testi-quote-icon">"</span>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Kızım matematik sınavından hep düşük not alıyordu. Kaynak Kampüs'yi keşfettikten sonra 3 ayda notları 50'den 90'a çıktı. Anlatım tarzı çok başarılı!"</p>
-        <div class="testi-author">
-          <div class="ta-avatar">SA</div>
-          <div>
-            <div class="ta-name">Selin Arslan</div>
-            <div class="ta-role">Veli · 5. Sınıf Öğrencisi</div>
-          </div>
+    <div class="gorus-izgara">
+      <div class="kart gorus fade-up">
+        <div class="gorus-yildiz">★★★★★</div>
+        <p>"Kızım matematik sınavından hep düşük not alıyordu. Kaynak Kampüs'ü keşfettikten sonra 3 ayda notları 50'den 90'a çıktı. Anlatım tarzı çok başarılı."</p>
+        <div class="gorus-kisi">
+          <span class="gorus-bas">SA</span>
+          <span>
+            <span class="gorus-ad">Selin Arslan</span>
+            <span class="gorus-rol">Veli · 5. sınıf öğrencisi</span>
+          </span>
         </div>
       </div>
 
-      <div class="testi-card fade-up">
-        <span class="testi-quote-icon">"</span>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Fen bilimleri dersini anlamakta zorlanıyordum. Buradaki deney videoları ve görsel anlatımlar sayesinde konuları çok daha iyi kavramaya başladım."</p>
-        <div class="testi-author">
-          <div class="ta-avatar" style="background:linear-gradient(135deg,#10b981,#059669)">BK</div>
-          <div>
-            <div class="ta-name">Berk Koçak</div>
-            <div class="ta-role">Öğrenci · 6. Sınıf</div>
-          </div>
+      <div class="kart gorus fade-up">
+        <div class="gorus-yildiz">★★★★★</div>
+        <p>"Fen bilimleri dersini anlamakta zorlanıyordum. Buradaki deney videoları ve görsel anlatımlar sayesinde konuları çok daha iyi kavramaya başladım."</p>
+        <div class="gorus-kisi">
+          <span class="gorus-bas">BK</span>
+          <span>
+            <span class="gorus-ad">Berk Koçak</span>
+            <span class="gorus-rol">Öğrenci · 6. sınıf</span>
+          </span>
         </div>
       </div>
 
-      <div class="testi-card fade-up">
-        <span class="testi-quote-icon">"</span>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Okul öğretmeni olarak materyallerin kalitesine hayran kaldım. Sınıfımda ek kaynak olarak kullanıyorum. Çocuklar çok seviyor ve motive oluyorlar."</p>
-        <div class="testi-author">
-          <div class="ta-avatar" style="background:linear-gradient(135deg,#E4C4CB,#A85462)">NÖ</div>
-          <div>
-            <div class="ta-name">Neslihan Öztürk</div>
-            <div class="ta-role">İlkokul Öğretmeni</div>
-          </div>
+      <div class="kart gorus fade-up">
+        <div class="gorus-yildiz">★★★★★</div>
+        <p>"Okul öğretmeni olarak materyallerin kalitesine hayran kaldım. Sınıfımda ek kaynak olarak kullanıyorum. Çocuklar çok seviyor ve motive oluyorlar."</p>
+        <div class="gorus-kisi">
+          <span class="gorus-bas">NÖ</span>
+          <span>
+            <span class="gorus-ad">Neslihan Öztürk</span>
+            <span class="gorus-rol">İlkokul öğretmeni</span>
+          </span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -1082,32 +613,32 @@
      hemen önce gelir. Menüdeki "Sınav Takvimi" ve footer bağlantıları
      #sinav-takvimi / #haberler çapalarını kullanır — id'ler korunmalıdır.
 
-     Tek bölüm: üstte güncel sınav takvimi şeridi, altta ÖSYM/MEB duyuruları.
      Kartlar assets/sinav-takvimi.js tarafından doldurulur; veri
      /api/sinav-takvimi (ÖSYM + MEB) → assets/sinav-takvimi.json sırasıyla alınır.
      Sınavlar takvim şeridinde zaten öne çıktığı için duyuru kartlarında
      tekrarlanmaz (data-one-cikan="0"); duyuru alınamazsa yerini onlar doldurur. -->
-<section class="haberler-duyurular st-scope" id="haberler">
+<!-- (kullanıcı kararıyla ana sayfadan gizlendi — hidden kaldırılarak geri açılır) -->
+<section class="bolum bolum-sis st-scope" id="haberler" hidden>
   <div class="container">
 
-    <div class="st-bolum-bas fade-up">
+    <div class="bolum-bas-satir fade-up">
       <div>
-        <div class="section-label">📰 Blog, Haberler &amp; Sınav Takvimi</div>
-        <h2 class="section-title">Yaklaşan Sınavlar ve <span>Önemli Duyurular</span></h2>
-        <p class="section-sub">
+        <div class="bolum-etiket">Blog, Haberler &amp; Sınav Takvimi</div>
+        <h2 class="bolum-baslik">Yaklaşan sınavlar ve önemli duyurular</h2>
+        <p class="bolum-alt">
           Sırada hangi sınav var, hangi başvuru açıldı, hangi sonuç açıklandı?
           ÖSYM ve MEB'in güncel takvimi ile son duyuruları tek tıklama uzağında.
         </p>
       </div>
       <div class="bolum-sag">
         <span data-kk-sinav="canli" class="st-canli"><span class="st-canli-nokta"></span>Takvim yükleniyor…</span>
-        <a href="sinav-takvimi.html" class="btn btn-outline">Tüm Sınav Takvimi →</a>
+        <a href="sinav-takvimi.html" class="btn btn-cizgili">Tüm sınav takvimi <span class="ok">→</span></a>
       </div>
     </div>
 
     <!-- ── Güncel sınav takvimi ─────────────────────────────────────── -->
     <div class="alt-baslik fade-up" id="sinav-takvimi">
-      <h3>🗓️ Güncel Sınav Takvimi</h3>
+      <h3>Güncel sınav takvimi</h3>
       <p>
         YKS, LGS, AGS, KPSS, ALES, YDS, YÖKDİL, TUS, DUS, MSÜ, DGS ve bursluluk sınavı için
         başvuru, geç başvuru, sınav ve sonuç tarihleri — durumu her gün kendiliğinden güncellenir.
@@ -1125,7 +656,7 @@
 
     <!-- ── ÖSYM / MEB duyuruları ────────────────────────────────────── -->
     <div class="alt-baslik fade-up">
-      <h3>📢 ÖSYM &amp; MEB Duyuruları</h3>
+      <h3>ÖSYM &amp; MEB duyuruları</h3>
       <p>Kılavuz, başvuru, giriş belgesi ve sonuç duyuruları doğrudan resmî kaynaklardan.</p>
     </div>
 
@@ -1133,148 +664,188 @@
          aria-label="ÖSYM ve MEB duyuruları"></div>
 
     <div class="bolum-eylemler fade-up">
-      <a href="haberler.html" class="btn btn-outline">Tüm Haberler →</a>
-      <a href="/blog" class="btn btn-outline">Blog Yazıları →</a>
+      <a href="haberler.html" class="btn btn-cizgili">Tüm haberler <span class="ok">→</span></a>
+      <a href="/blog" class="btn btn-cizgili">Blog yazıları <span class="ok">→</span></a>
     </div>
 
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════ CTA -->
-<section class="cta-banner">
+<!-- ═══════════════════════════════════════════════════════ KAPANIŞ ÇAĞRISI -->
+<section class="bolum bolum-bordo kapanis">
   <div class="container">
-    <h2>Öğrenme Yolculuğuna Bugün Başla!</h2>
-    <p>Binlerce öğrencinin tercih ettiği platforma katıl. İlk 7 gün tamamen ücretsiz.</p>
-    <div class="cta-actions">
-      <a href="#" class="btn btn-white" style="font-size:1rem; padding:16px 32px;">
-        🚀 Ücretsiz Başla
-      </a>
-      <!-- Kurslar bölümü gizli olduğu için bu buton da gizli -->
-      <a href="#courses" hidden class="btn" style="display:none; font-size:1rem; padding:16px 32px; background:rgba(255,255,255,.15); color:#fff; border:2px solid rgba(255,255,255,.4);">
-        Kurslara Bak →
-      </a>
+    <h2>Öğrenme yolculuğuna bugün başla</h2>
+    <p hidden>Binlerce öğrencinin tercih ettiği platforma katıl. Araçların tamamı ücretsiz.</p>
+    <div class="bolum-eylemler">
+      <a href="/basvuru" class="btn btn-beyaz">Aramıza katıl <span class="ok">→</span></a>
+      <a href="oyunlar.html" class="btn btn-cizgili">Oyunlara göz at</a>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════ FOOTER -->
-<footer>
+<!-- ═══════════════════════════════════════════════════════ GİZLİ: KURSLAR
+     Kurs kataloğu henüz yayında değil; markup yeni sisteme çevrildi ki
+     görünür yapıldığında sayfanın geri kalanıyla tutarlı olsun. -->
+<section class="bolum" id="courses" hidden>
   <div class="container">
-    <div class="footer-grid">
+    <div class="bolum-bas-satir fade-up">
+      <div>
+        <div class="bolum-etiket">Öne Çıkan Kurslar</div>
+        <h2 class="bolum-baslik">En çok tercih edilen kurslar</h2>
+      </div>
+      <a href="#" class="btn btn-cizgili">Tüm kurslar <span class="ok">→</span></a>
+    </div>
 
-      <div class="footer-brand">
-        <div class="logo">
-          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" class="logo-icon" />
-          Kaynak <span style="color:var(--amber)">Kampüs</span>
+    <div class="kurs-izgara">
+      <article class="kart fade-up" style="padding:0;overflow:hidden">
+        <div class="kurs-gorsel">🔢</div>
+        <div class="kurs-govde">
+          <span class="tag">Matematik</span> <span class="tag">5. Sınıf</span>
+          <div class="kart-baslik" style="margin-top:12px">İleri Matematik: Kesirler, Ondalıklar ve Problem Çözme</div>
+          <p class="kart-metin">Karmaşık matematik konularını basit ve eğlenceli anlatımlarla öğren. 24 ders, 80+ alıştırma.</p>
         </div>
-        <p>Türkiye'nin en kapsamlı online eğitim platformu. Uzman eğitmenler, kaliteli materyaller ve kişiselleştirilmiş öğrenme deneyimi.</p>
-        <div class="footer-socials">
-          <div class="social-btn">📘</div>
-          <div class="social-btn">📸</div>
-          <div class="social-btn">🐦</div>
-          <div class="social-btn">▶️</div>
+      </article>
+      <article class="kart fade-up" style="padding:0;overflow:hidden">
+        <div class="kurs-gorsel">⚗️</div>
+        <div class="kurs-govde">
+          <span class="tag">Fen Bilimleri</span> <span class="tag">6. Sınıf</span>
+          <div class="kart-baslik" style="margin-top:12px">Fen Bilimleri Seti: Madde, Canlılar ve Kuvvet</div>
+          <p class="kart-metin">Deney videoları ve görsel materyallerle fen bilimlerini keşfet. 32 ders, interaktif testler.</p>
         </div>
-        <div style="margin-top:20px">
-          <div style="font-size:.82rem;font-weight:600;color:rgba(255,255,255,.6);margin-bottom:8px">Bültene Abone Ol</div>
-          <form class="newsletter-form" onsubmit="return false">
-            <input type="email" placeholder="E-posta adresin" />
-            <button type="submit">Abone Ol</button>
-          </form>
+      </article>
+      <article class="kart fade-up" style="padding:0;overflow:hidden">
+        <div class="kurs-gorsel">📖</div>
+        <div class="kurs-govde">
+          <span class="tag">Türkçe</span> <span class="tag">4. Sınıf</span>
+          <div class="kart-baslik" style="margin-top:12px">Türkçe Dil Becerisi: Okuma, Yazma ve Anlama</div>
+          <p class="kart-metin">Türkçe dil bilgisi kuralları, hikâye yazma teknikleri ve anlama çalışmaları. 28 ders.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ
+     Tüm sayfalarda birebir aynıdır; yalnız sayfaya özgü kaynak/uyarı
+     notu (.site-alt-not) değişir. Stiller: assets/site-tema.css -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="footer-col">
-        <h4>Platform</h4>
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
         <ul>
           <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
-          <li><a href="#">Kurslar</a></li>
-          <li><a href="#">Dersler</a></li>
-          <li><a href="#">Testler</a></li>
-          <li><a href="#">Çalışma Planı</a></li>
-          <li><a href="#">Canlı Dersler</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Sınıflar</h4>
-        <ul>
-          <li><a href="etkinlikler.html">1-4. Sınıf</a></li>
-          <li><a href="#">5-8. Sınıf</a></li>
-          <li><a href="#">Lise</a></li>
           <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
           <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
         </ul>
       </div>
 
-      <div class="footer-col">
-        <h4>Şirket</h4>
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
         <ul>
           <li><a href="hakkimizda.html">Hakkımızda</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">İletişim</a></li>
-          <li><a href="#">Kariyer</a></li>
-          <li><a href="#">Gizlilik Politikası</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/basvuru">Aramıza Katıl</a></li>
+          <li><a href="/giris">Giriş Yap</a></li>
         </ul>
       </div>
 
     </div>
-
-    <div class="footer-bottom">
-      <span>© 2025 Kaynak Kampüs. Tüm hakları saklıdır.</span>
-      <span>Türkiye'de 🇹🇷 ile Tasarlandı</span>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
     </div>
   </div>
 </footer>
 
 <!-- ═══════════════════════════════════════════════════════ SCRIPTS -->
+<script src="assets/site-header.js" defer></script>
+<script src="assets/duyuru-serit.js" defer></script>
+<script src="assets/sinav-takvimi.js" defer></script>
 <script>
-  // ── Mobil menü davranışı assets/site-header.js içinde
+  // ── Üst duyuru şeridi artık assets/duyuru-serit.js'te (tüm sayfalarda ortak)
 
-  // ── Scroll fade-up
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  // ── Görünür olunca yukarı süzülme
+  (function () {
+    var ogeler = document.querySelectorAll('.fade-up');
+    if (!('IntersectionObserver' in window)) {
+      ogeler.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+    var gozcu = new IntersectionObserver(function (girisler) {
+      girisler.forEach(function (g) {
+        if (g.isIntersecting) { g.target.classList.add('visible'); gozcu.unobserve(g.target); }
+      });
+    }, { threshold: 0.12 });
+    ogeler.forEach(function (el) { gozcu.observe(el); });
+  })();
 
-  // ── Header shadow on scroll
-  const header = document.querySelector('header');
-  window.addEventListener('scroll', () => {
-    header.style.boxShadow = window.scrollY > 10 ? '0 4px 24px rgba(122,32,53,.12)' : 'none';
-  });
+  // ── İstatistik şeridi: sayılar bir kez saydırılır
+  (function () {
+    var serit = document.getElementById('istatistikSerit');
+    if (!serit || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // ── Smooth counter animation for stats
-  function animateCounter(el, target, suffix = '') {
-    let start = 0;
-    const duration = 1800;
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target) + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-
-  const statsObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        statsObserver.unobserve(e.target);
-        const nums = e.target.querySelectorAll('.stat-num');
-        const data = [
-          { val: 12, suffix: 'B+' },
-          { val: 850, suffix: '+' },
-          { val: 48, suffix: '+' },
-          { val: 4.9, suffix: '★' },
-        ];
-        nums.forEach((el, i) => {
-          if (data[i]) animateCounter(el, data[i].val, data[i].suffix);
-        });
+    function saydir(el) {
+      var hedef = parseFloat(el.dataset.sayac);
+      var sonek = el.dataset.sonek || '';
+      var basamak = parseInt(el.dataset.ondalik || '0', 10);
+      var sure = 1400, baslangic = null;
+      function adim(t) {
+        if (baslangic === null) baslangic = t;
+        var oran = Math.min((t - baslangic) / sure, 1);
+        var yumusak = 1 - Math.pow(1 - oran, 3);
+        el.textContent = (hedef * yumusak).toFixed(basamak) + sonek;
+        if (oran < 1) requestAnimationFrame(adim);
       }
-    });
-  }, { threshold: 0.4 });
-  const statsBanner = document.querySelector('.stats-banner');
-  if (statsBanner) statsObserver.observe(statsBanner);
+      requestAnimationFrame(adim);
+    }
+
+    var gozcu = new IntersectionObserver(function (girisler) {
+      girisler.forEach(function (g) {
+        if (!g.isIntersecting) return;
+        gozcu.unobserve(g.target);
+        g.target.querySelectorAll('[data-sayac]').forEach(saydir);
+      });
+    }, { threshold: 0.4 });
+    gozcu.observe(serit);
+  })();
 </script>
 
 <!-- Kıvılcım — siteye ilk gelen ziyaretçiyi karşılar. Kapatınca hatırlar. -->
