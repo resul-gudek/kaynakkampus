@@ -64,7 +64,10 @@ export async function generateMetadata({
 
   const aciklama = yazi.seoAciklama || yazi.ozet || ozetUret(yazi.icerik, 155);
   const adres = blogYaziUrl(yazi.slug);
-  const kapak = yazi.kapakYol ? [{ url: blogKapakUrl(yazi.id) }] : undefined;
+  /* Kapaksız yazı sosyal paylaşımda marka kartıyla çıkar (1200×630) */
+  const kapak = yazi.kapakYol
+    ? [{ url: blogKapakUrl(yazi.id) }]
+    : [{ url: "/assets/sosyal-kart.png", width: 1200, height: 630 }];
 
   return {
     title: `${yazi.baslik} – Kaynak Kampüs Blog`,
@@ -83,10 +86,10 @@ export async function generateMetadata({
       images: kapak,
     },
     twitter: {
-      card: kapak ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: yazi.baslik,
       description: aciklama,
-      images: kapak?.map((k) => k.url),
+      images: kapak.map((k) => k.url),
     },
   };
 }

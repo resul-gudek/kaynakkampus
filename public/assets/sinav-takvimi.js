@@ -657,6 +657,48 @@
   }
 
   /* ══════════ BAŞLATMA ══════════ */
+  /* ══════════ YAPISAL VERİ (JSON-LD) ══════════
+     Takvim sayfasında yaklaşan sınavları schema.org Event olarak head'e
+     yazar; arama motorları ve yapay zekâ aramaları dinamik eklenen
+     JSON-LD'yi okur. Tek sefer çalışır. */
+  function yapisalVeriEkle(veri) {
+    if (document.getElementById("kk-sinav-jsonld")) return;
+    var T = bugun();
+    var olaylar = veri.sinavlar
+      .filter(function (s) {
+        var d = tarih(s.sinavTarihi);
+        return d && gunFark(T, d) >= 0;
+      })
+      .slice(0, 30)
+      .map(function (s) {
+        var o = {
+          "@type": "Event",
+          name: s.ad,
+          startDate: s.sinavSaati
+            ? s.sinavTarihi + "T" + s.sinavSaati + ":00+03:00"
+            : s.sinavTarihi,
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          eventStatus: "https://schema.org/EventScheduled",
+          location: {
+            "@type": "Place",
+            name: "Türkiye geneli sınav merkezleri",
+            address: { "@type": "PostalAddress", addressCountry: "TR" },
+          },
+          organizer: { "@type": "Organization", name: s.kurum },
+        };
+        if (s.sinavBitis) o.endDate = s.sinavBitis;
+        if (s.kaynakUrl) o.organizer.url = s.kaynakUrl;
+        return o;
+      });
+    if (!olaylar.length) return;
+    var b = document.createElement("script");
+    b.type = "application/ld+json";
+    b.id = "kk-sinav-jsonld";
+    b.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": olaylar })
+      .replace(/</g, "\\u003c");
+    document.head.appendChild(b);
+  }
+
   var CIZICILER = {
     serit: seritCiz,
     duyurular: duyuruKartlariCiz,
@@ -695,6 +737,10 @@
           k.innerHTML = '<div class="st-bos"><p>Bu bölüm görüntülenemedi.</p></div>';
         }
       });
+      // Yalnız tam takvim sayfası (liste bloğu) yapısal veri taşır
+      if (document.querySelector('[data-kk-sinav="liste"]')) {
+        try { yapisalVeriEkle(veri); } catch { /* zorunlu değil */ }
+      }
     });
   }
 

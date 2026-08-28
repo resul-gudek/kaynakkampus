@@ -25,6 +25,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_KOKU),
   title: "Kaynak Kampüs",
   description: "Güçlü Kaynak, Sağlam Gelecek — koçluk ve takip sistemi",
+  /* Kendi openGraph'ını tanımlamayan rotalar (blog listesi, giriş,
+     başvuru) sosyal paylaşımda marka kartıyla çıkar */
+  openGraph: {
+    siteName: "Kaynak Kampüs",
+    locale: "tr_TR",
+    images: [{ url: "/assets/sosyal-kart.png", width: 1200, height: 630 }],
+  },
+  twitter: { card: "summary_large_image" },
   icons: {
     icon: [
       { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
