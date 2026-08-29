@@ -115,7 +115,9 @@
 <header class="site-header">
   <div class="sh-inner">
     <a href="index.html" class="sh-logo">
-      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      <img src="assets/kaynak-kampus-logo-64.png"
+           srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+           width="64" height="64" alt="Kaynak Kampüs Logosu" />
       Kaynak <span>Kampüs</span>
     </a>
 
@@ -140,7 +142,7 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="hakkimizda.html" hidden>Hakkımızda</a>
     </nav>
 
     <div class="sh-actions">
@@ -157,7 +159,7 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="hakkimizda.html" hidden>Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
@@ -261,8 +263,8 @@
       <p>haklarına sahipsiniz.</p>
 
       <h2 id="iletisim">8. İletişim</h2>
-      <!-- TODO: Resmî iletişim e-postası ve (varsa) tüzel kişilik unvanı netleşince buraya eklenecek. -->
-      <p>Bu politika veya kişisel verilerinizle ilgili sorularınız için sosyal medya hesaplarımız (<a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer">Instagram</a>, <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer">Facebook</a>) üzerinden bize ulaşabilirsiniz.</p>
+      <!-- TODO: Tüzel kişilik unvanı netleşince buraya eklenecek. -->
+      <p>Bu politika veya kişisel verilerinizle ilgili sorularınız için <a href="mailto:kaynakkampus@gmail.com">kaynakkampus@gmail.com</a> adresine yazabilir ya da <a href="/iletisim">iletişim formunu</a> kullanabilirsiniz. Ayrıca sosyal medya hesaplarımız (<a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer">Instagram</a>, <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer">Facebook</a>) üzerinden de bize ulaşabilirsiniz.</p>
 
       <h2 id="degisiklik">9. Değişiklikler</h2>
       <p>Bu politika gerektiğinde güncellenebilir. Önemli değişikliklerde sayfanın başındaki "Son güncelleme" tarihi yenilenir ve gerekiyorsa çerez tercihiniz yeniden sorulur. Siteyi kullanmaya devam etmeniz güncel politikayı kabul ettiğiniz anlamına gelir.</p>
@@ -280,10 +282,17 @@
 
       <div class="site-alt-marka">
         <div class="site-alt-ad">
-          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          <img src="assets/kaynak-kampus-logo-64.png"
+               srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+               width="64" height="64" loading="lazy" alt="Kaynak Kampüs Logosu" />
           Kaynak <span>Kampüs</span>
         </div>
         <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="site-alt-iletisim">
+          <span>Bize ulaşın</span>
+          <a class="site-alt-eposta" href="mailto:kaynakkampus@gmail.com">kaynakkampus@gmail.com</a>
+          <a class="site-alt-mesaj" href="/iletisim">Formdan mesaj gönder →</a>
+        </div>
         <div class="sosyal-blok">
           <span class="sosyal-baslik">Bizi takip edin</span>
           <div class="sosyal">

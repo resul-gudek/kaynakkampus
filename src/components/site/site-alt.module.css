@@ -10,7 +10,7 @@
 }
 
 .izgara {
-  display: grid; grid-template-columns: 1.6fr 1fr 1fr;
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: var(--bosluk-32); padding-bottom: var(--bosluk-48);
 }
 
@@ -27,6 +27,15 @@
   margin-top: var(--bosluk-16);
   font-size: var(--text-small); line-height: 1.7; max-width: 44ch;
 }
+.iletisim {
+  display: grid; gap: 5px; margin-top: var(--bosluk-20, 20px); padding: 14px 16px;
+  max-width: 360px; border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: var(--radius-md); background: rgba(255, 255, 255, .08);
+}
+.iletisim span { color: #C98792; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.iletisim .eposta { color: #fff; font-size: var(--text-body); font-weight: 700; overflow-wrap: anywhere; }
+.iletisim .mesajGonder { margin-top: 3px; color: #D8CFD2; font-size: var(--text-small); text-decoration: underline; text-underline-offset: 3px; }
+.iletisim a:hover { color: #C98792; }
 
 /* "Bizi takip edin" — statik sayfalardaki .sosyal-blok ile aynı */
 .sosyalBlok { margin-top: var(--bosluk-24); }
@@ -57,12 +66,18 @@
 
 .telif {
   border-top: 1px solid rgba(255, 255, 255, .14);
-  padding: var(--bosluk-24) 0;
-  font-size: 13px; text-align: center; color: rgba(255, 255, 255, .55);
+  padding: var(--bosluk-24) 0; display: flex; flex-wrap: wrap; gap: var(--bosluk-12);
+  align-items: center; justify-content: space-between;
+  font-size: 13px; color: rgba(255, 255, 255, .55);
+}
+
+@media (max-width: 1024px) {
+  .izgara { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 760px) {
   .izgara { grid-template-columns: 1fr; gap: var(--bosluk-32); }
   .kolon h4 { margin-bottom: var(--bosluk-16); }
   .kolon a { display: inline-block; padding: 5px 0; }
+  .telif { flex-direction: column; text-align: center; }
 }

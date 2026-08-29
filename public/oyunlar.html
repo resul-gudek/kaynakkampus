@@ -8876,6 +8876,87 @@
       .sonuc-detay { grid-template-columns: repeat(2, 1fr); }
       .btn-row .btn { flex: 1; }
     }
+
+    /* ═════════ ORYANTASYON OYUNLARI ═════════
+       Tanışma etkinlikleri: puan/skor/süre yoktur. Tüm kurallar ory- önekiyle
+       bu bloğa sınırlıdır; global stiller ve mevcut oyunlar etkilenmez. */
+    .ory-kart-aciklama { font-size: .8rem; color: var(--muted); line-height: 1.45; margin-top: 2px; text-align: left; }
+    .ory-sahne { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+    .ory-baslik { font-family: var(--font-baslik); font-size: clamp(1.3rem, 2.6vw, 1.9rem); font-weight: 800; letter-spacing: -.3px; }
+    .ory-alt-yazi { color: var(--muted); font-size: clamp(.9rem, 1.6vmin, 1.05rem); line-height: 1.55; max-width: 680px; }
+    .ory-btn { min-height: 60px; padding: 16px 34px; font-size: 1.08rem; touch-action: manipulation; }
+    .ory-btn:active:not(:disabled) { transform: scale(.97); }
+    .ory-btn-satir { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+    /* — Tanışma Çarkı — */
+    .ory-cark-kap { position: relative; width: clamp(260px, 46vmin, 460px); height: clamp(260px, 46vmin, 460px); }
+    .ory-cark-svg { width: 100%; height: 100%; display: block; transition: transform 3.2s cubic-bezier(.15,.65,.08,1); will-change: transform; }
+    .ory-cark-ibre { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 26px solid var(--blue); z-index: 2; filter: drop-shadow(0 2px 2px rgba(31,20,26,.25)); }
+    .ory-cark-merkez { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .ory-cevir {
+      width: clamp(96px, 16vmin, 148px); height: clamp(96px, 16vmin, 148px); border-radius: 50%;
+      border: 4px solid #fff; background: var(--blue); color: #fff; font-family: var(--font-baslik);
+      font-weight: 800; font-size: clamp(1rem, 2.2vmin, 1.3rem); letter-spacing: .04em; cursor: pointer;
+      box-shadow: var(--shadow); touch-action: manipulation; transition: background .2s, transform .15s;
+    }
+    .ory-cevir:hover:not(:disabled) { background: var(--blue-dk); }
+    .ory-cevir:active:not(:disabled) { transform: scale(.94); }
+    .ory-cevir:disabled { opacity: .75; cursor: wait; }
+    .ory-soru-kart { background: #fff; border: 1px solid var(--duman); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(28px, 6vmin, 56px) clamp(22px, 5vw, 60px); max-width: 860px; width: 100%; }
+    .ory-soru-etiket { font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .ory-soru-metin { font-family: var(--font-baslik); font-size: clamp(1.5rem, 4vmin, 2.6rem); font-weight: 800; line-height: 1.3; color: var(--murekkep); }
+
+    /* — Birini Seç! — */
+    .ory-soru-ust { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+    .ory-bolge { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; align-items: stretch; }
+    .ory-taraf { border-radius: var(--radius); border: 1px solid var(--duman); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-height: 300px; }
+    .ory-taraf.t1 { background: var(--p1-bg); }
+    .ory-taraf.t2 { background: var(--p2-bg); }
+    .ory-taraf-ad { font-family: var(--font-baslik); font-weight: 800; font-size: .95rem; }
+    .ory-taraf.t1 .ory-taraf-ad { color: var(--p1); }
+    .ory-taraf.t2 .ory-taraf-ad { color: var(--p2); }
+    .ory-secenek {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      background: #fff; border: 2px solid var(--duman); border-radius: var(--radius); padding: 18px 12px;
+      cursor: pointer; font-family: inherit; color: var(--text); font-weight: 700;
+      font-size: clamp(1.05rem, 2.4vmin, 1.5rem); min-height: 110px; touch-action: manipulation;
+      transition: border-color .15s, transform .1s; user-select: none; -webkit-user-select: none;
+    }
+    .ory-secenek .ory-emoji { font-size: clamp(1.8rem, 4.5vmin, 3rem); line-height: 1; }
+    .ory-taraf.t1 .ory-secenek:hover { border-color: var(--p1); }
+    .ory-taraf.t2 .ory-secenek:hover { border-color: var(--p2); }
+    .ory-secenek:active { transform: scale(.98); }
+    .ory-secenek.secili { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(122,32,53,.14); cursor: default; }
+    .ory-kapak { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-weight: 700; font-size: 1.02rem; }
+    .ory-kapak b { font-size: 2.2rem; color: var(--blue); }
+    .ory-kapak span { font-size: .85rem; font-weight: 600; }
+    .ory-sonuc-banner { font-family: var(--font-baslik); font-size: clamp(1.35rem, 3.4vmin, 2.2rem); font-weight: 800; padding: 14px 30px; border-radius: 50px; }
+    .ory-sonuc-banner.ayni { background: #E6F3EA; color: #2E7D46; }
+    .ory-sonuc-banner.farkli { background: #FBF0E1; color: #A8701B; }
+
+    /* — Ortak Noktamız Ne? — */
+    .ory-konu-emoji { font-size: clamp(3rem, 9vmin, 5rem); line-height: 1; margin-bottom: 10px; }
+    .ory-konu-yonerge { color: var(--muted); font-size: clamp(1rem, 2.2vmin, 1.3rem); margin-top: 12px; font-weight: 600; }
+    .ory-kutlama { position: relative; overflow: hidden; }
+    .ory-konfeti { position: absolute; inset: 0; pointer-events: none; }
+    .ory-konfeti span { position: absolute; top: -34px; font-size: 1.5rem; animation: oryDus 1.8s ease-in forwards; }
+    @keyframes oryDus {
+      from { transform: translateY(0) rotate(0); opacity: 1; }
+      to { transform: translateY(440px) rotate(320deg); opacity: 0; }
+    }
+
+    body.tahta .ory-secenek { min-height: 150px; }
+    body.tahta .ory-btn { font-size: 1.25rem; min-height: 74px; }
+    @media (max-width: 640px) {
+      .ory-bolge { grid-template-columns: 1fr; }
+      .ory-taraf { min-height: 0; }
+      .ory-btn-satir .ory-btn { flex: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ory-cark-svg { transition-duration: .6s; }
+      .ory-konfeti span { animation-duration: .5s; }
+      .ory-btn:active:not(:disabled), .ory-secenek:active, .ory-cevir:active:not(:disabled) { transform: none; }
+    }
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
@@ -8899,7 +8980,9 @@
 <header class="site-header">
   <div class="sh-inner">
     <a href="index.html" class="sh-logo">
-      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      <img src="assets/kaynak-kampus-logo-64.png"
+           srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+           width="64" height="64" alt="Kaynak Kampüs Logosu" />
       Kaynak <span>Kampüs</span>
     </a>
 
@@ -8924,7 +9007,7 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="hakkimizda.html" hidden>Hakkımızda</a>
     </nav>
 
     <div class="sh-actions">
@@ -8941,7 +9024,7 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="hakkimizda.html" hidden>Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
@@ -8979,10 +9062,17 @@
 
       <div class="site-alt-marka">
         <div class="site-alt-ad">
-          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          <img src="assets/kaynak-kampus-logo-64.png"
+               srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+               width="64" height="64" loading="lazy" alt="Kaynak Kampüs Logosu" />
           Kaynak <span>Kampüs</span>
         </div>
         <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="site-alt-iletisim">
+          <span>Bize ulaşın</span>
+          <a class="site-alt-eposta" href="mailto:kaynakkampus@gmail.com">kaynakkampus@gmail.com</a>
+          <a class="site-alt-mesaj" href="/iletisim">Formdan mesaj gönder →</a>
+        </div>
         <div class="sosyal-blok">
           <span class="sosyal-baslik">Bizi takip edin</span>
           <div class="sosyal">
@@ -9064,6 +9154,153 @@ const KADEMELER = [
   { id: "ortaokul", ad: "Ortaokul", emoji: "📚", siniflar: ["5", "6", "7", "8"] },
   { id: "lise",     ad: "Lise",     emoji: "🎓", siniflar: ["9", "10", "11", "12"] },
 ];
+
+/* ═════════════ ORYANTASYON (tanışma etkinlikleri) ═════════════
+   Kademelerden bağımsız dördüncü kategori: okulun ilk haftasında sınıfın
+   birbirini tanıması için. Puan, skor, süre ve kazanan yoktur; ekran yalnızca
+   öğrenciler arasındaki konuşmayı başlatan araçtır. Yeni soru/konu eklemek
+   için yalnızca aşağıdaki dizileri düzenlemek yeterlidir. */
+const ORY_OYUNLAR = [
+  { id: "ory-tanisma-carki", tur: "oryCark", baslik: "Tanışma Çarkı",
+    aciklama: "Çarkı çevir, gelen soruyu cevapla ve sınıf arkadaşların seni biraz daha yakından tanısın." },
+  { id: "ory-birini-sec", tur: "orySecim", baslik: "Birini Seç!",
+    aciklama: "İki seçenek, iki öğrenci! Tercihini yap ve arkadaşının seçimini keşfet." },
+  { id: "ory-ortak-nokta", tur: "oryOrtak", baslik: "Ortak Noktamız Ne?",
+    aciklama: "Konuyu seç, arkadaşınla konuş ve ortak noktanızı birlikte bulun." },
+];
+
+/* Tanışma Çarkı soru havuzu — utandırıcı/hassas konu içermez (aile yapısı,
+   maddi durum, not, görünüş, sağlık ve özel hayat sorulmaz). */
+const ORY_CARK_SORULARI = [
+  "En sevdiğin ders hangisi?",
+  "En sevdiğin yemek nedir?",
+  "Boş zamanlarında ne yapmayı seversin?",
+  "En sevdiğin mevsim hangisi?",
+  "En sevdiğin renk nedir?",
+  "En sevdiğin hayvan hangisi?",
+  "Bir hobin var mı? Varsa ne?",
+  "En sevdiğin spor hangisi?",
+  "En sevdiğin film veya dizi türü nedir?",
+  "En sevdiğin kitap veya kitap türü nedir?",
+  "En çok hangi müzik türünü dinlersin?",
+  "Gitmek istediğin bir şehir veya ülke var mı?",
+  "Tatilde en çok ne yapmayı seversin?",
+  "Yaz mı, kış mı?",
+  "Deniz mi, havuz mu?",
+  "Kitap mı, film mi?",
+  "Sabah mı, akşam mı?",
+  "Tatlı mı, tuzlu mu?",
+  "Kedi mi, köpek mi?",
+  "Şehir hayatı mı, doğa mı?",
+  "En sevdiğin içecek nedir?",
+  "En sevdiğin meyve hangisi?",
+  "Hafta sonları en çok ne yaparsın?",
+  "Okulda en çok hangi etkinliği seviyorsun?",
+  "İyi olduğunu düşündüğün bir şey nedir?",
+  "Öğrenmek istediğin bir şey var mı?",
+  "Yeni bir yeteneğin olsa ne olsun isterdin?",
+  "Bir süper gücün olsa hangisini isterdin?",
+  "Dünyada istediğin bir yere gidebilseydin nereye giderdin?",
+  "Bir gün boyunca istediğin mesleği yapabilsen hangisini seçerdin?",
+  "Seni en çok ne güldürür?",
+  "Seni mutlu eden küçük bir şey nedir?",
+  "Arkadaşlarınla en çok ne yapmayı seversin?",
+  "En sevdiğin oyun nedir?",
+  "Okulda teneffüslerde ne yapmayı seversin?",
+  "Bu yıl öğrenmek istediğin bir şey nedir?",
+  "Daha önce yaptığın ve tekrar yapmak istediğin bir şey nedir?",
+  "Bir hayvan olsaydın hangisi olmak isterdin?",
+  "Bir günlüğüne istediğin yere gidebilseydin nereye giderdin?",
+  "Kendini üç kelimeyle anlatabilir misin?",
+];
+
+/* Birini Seç! ikilem havuzu — [metin, emoji] çiftleri */
+const ORY_SECIMLER = [
+  { a: ["Yaz", "☀️"], b: ["Kış", "❄️"] },
+  { a: ["Deniz", "🌊"], b: ["Dağ", "⛰️"] },
+  { a: ["Kitap", "📚"], b: ["Film", "🎬"] },
+  { a: ["Kedi", "🐱"], b: ["Köpek", "🐶"] },
+  { a: ["Tatlı", "🍰"], b: ["Tuzlu", "🥨"] },
+  { a: ["Sabah", "🌅"], b: ["Gece", "🌙"] },
+  { a: ["Futbol", "⚽"], b: ["Basketbol", "🏀"] },
+  { a: ["Evde vakit geçirmek", "🏠"], b: ["Dışarı çıkmak", "🚶"] },
+  { a: ["Film", "🎬"], b: ["Dizi", "📺"] },
+  { a: ["Müzik", "🎵"], b: ["Film", "🎥"] },
+  { a: ["Şehir", "🏙️"], b: ["Doğa", "🌳"] },
+  { a: ["Bisiklet", "🚲"], b: ["Yürüyüş", "🚶"] },
+  { a: ["Resim", "🎨"], b: ["Müzik", "🎵"] },
+  { a: ["Oyun", "🎮"], b: ["Film", "🎬"] },
+  { a: ["Meyve", "🍎"], b: ["Tatlı", "🍩"] },
+  { a: ["Sıcak hava", "🌞"], b: ["Soğuk hava", "🌨️"] },
+  { a: ["Macera filmi", "🗺️"], b: ["Komedi filmi", "😂"] },
+  { a: ["Telefon", "📱"], b: ["Bilgisayar", "💻"] },
+  { a: ["Takım sporu", "🤝"], b: ["Bireysel spor", "🏃"] },
+  { a: ["Erken kalkmak", "🌄"], b: ["Geç yatmak", "🌃"] },
+  { a: ["Seyahat", "✈️"], b: ["Evde dinlenmek", "🛋️"] },
+  { a: ["Konser", "🎤"], b: ["Sinema", "🍿"] },
+  { a: ["Yaz tatili", "🏖️"], b: ["Kış tatili", "⛷️"] },
+  { a: ["Kalabalık ortam", "🎉"], b: ["Sakin ortam", "🌿"] },
+  { a: ["Planlı olmak", "📋"], b: ["Anlık karar vermek", "⚡"] },
+  { a: ["Sabah kahvaltısı", "🍳"], b: ["Akşam yemeği", "🍽️"] },
+  { a: ["Sahil", "🏖️"], b: ["Orman", "🌲"] },
+  { a: ["Spor yapmak", "🏅"], b: ["Oyun oynamak", "🎲"] },
+  { a: ["Fotoğraf çekmek", "📷"], b: ["Video çekmek", "🎥"] },
+  { a: ["Arkadaşlarla dışarı çıkmak", "👫"], b: ["Evde dinlenmek", "🛋️"] },
+];
+
+/* Ortak Noktamız Ne? konu havuzu — ekran cevap vermez, yalnızca konuyu verir */
+const ORY_KONULAR = [
+  { emoji: "🍕", ad: "YEMEK", yonerge: "İkinizin de sevdiği bir yemek bulun." },
+  { emoji: "🎵", ad: "MÜZİK", yonerge: "İkinizin de sevdiği bir müzik türü veya sanatçı bulun." },
+  { emoji: "🎬", ad: "FİLM / DİZİ", yonerge: "İkinizin de sevdiği bir film, dizi veya tür bulun." },
+  { emoji: "⚽", ad: "SPOR", yonerge: "İkinizin de sevdiği bir spor bulun." },
+  { emoji: "🎮", ad: "OYUN", yonerge: "İkinizin de sevdiği bir oyun veya oyun türü bulun." },
+  { emoji: "📖", ad: "DERS", yonerge: "İkinizin de sevdiği bir ders bulun." },
+  { emoji: "🎨", ad: "HOBİ", yonerge: "İkinizin de sevdiği bir etkinlik bulun." },
+  { emoji: "✈️", ad: "SEYAHAT", yonerge: "İkinizin de gitmek istediği bir yer bulun." },
+  { emoji: "🐾", ad: "HAYVAN", yonerge: "İkinizin de sevdiği bir hayvan bulun." },
+  { emoji: "🍎", ad: "MEYVE", yonerge: "İkinizin de sevdiği bir meyve bulun." },
+  { emoji: "🏖️", ad: "TATİL", yonerge: "İkinizin de sevdiği bir tatil türü bulun." },
+  { emoji: "🍂", ad: "MEVSİM", yonerge: "İkinizin de sevdiği bir mevsim var mı?" },
+  { emoji: "🕰️", ad: "BOŞ ZAMAN", yonerge: "Boş zamanlarda ikinizin de yapmayı sevdiği bir şey bulun." },
+  { emoji: "🌈", ad: "RENK", yonerge: "İkinizin de sevdiği bir renk bulun." },
+  { emoji: "💻", ad: "TEKNOLOJİ", yonerge: "İkinizin de kullanmayı veya ilgilenmeyi sevdiği bir teknoloji bulun." },
+  { emoji: "📚", ad: "KİTAP", yonerge: "İkinizin de ilgisini çeken bir kitap veya kitap türü bulun." },
+  { emoji: "🥤", ad: "İÇECEK", yonerge: "İkinizin de sevdiği bir içecek bulun." },
+  { emoji: "🏫", ad: "OKUL", yonerge: "Okulda ikinizin de sevdiği bir şey bulun." },
+  { emoji: "🌿", ad: "DOĞA", yonerge: "Doğada ikinizin de yapmayı sevdiği bir şey bulun." },
+  { emoji: "😄", ad: "EĞLENCE", yonerge: "İkinizi de güldüren bir şey bulun." },
+  { emoji: "📅", ad: "HAFTA SONU", yonerge: "Hafta sonunda ikinizin de yapmayı sevdiği bir şey bulun." },
+  { emoji: "🏆", ad: "SPOR TAKIMI", yonerge: "İkinizin de takip ettiği veya sevdiği bir takım/spor var mı?" },
+  { emoji: "📺", ad: "DİJİTAL İÇERİK", yonerge: "İkinizin de izlemeyi sevdiği bir içerik türü bulun." },
+  { emoji: "🍰", ad: "TATLI", yonerge: "İkinizin de sevdiği bir tatlı bulun." },
+  { emoji: "🏙️", ad: "ŞEHİR", yonerge: "İkinizin de görmek istediği bir şehir bulun." },
+];
+
+/* Oturum içi tekrarsız havuz: karıştırılmış sırayla verir; havuz bitince
+   yeniden karıştırır (art arda aynı öğe gelmesin diye ilk öğe denetlenir). */
+function oryHavuzYap(liste){
+  let sira = karistir(liste), ix = 0;
+  return { cek(){
+    if (ix >= sira.length){
+      const son = sira[sira.length - 1];
+      sira = karistir(liste); ix = 0;
+      if (liste.length > 1 && sira[0] === son) sira.push(sira.shift());
+    }
+    return sira[ix++];
+  } };
+}
+const ORY_HAVUZ = {};
+function oryHavuz(ad, liste){ return ORY_HAVUZ[ad] || (ORY_HAVUZ[ad] = oryHavuzYap(liste)); }
+
+/* Oryantasyon oyunlarının üst barı — ders/konu/zorluk yerine kategori etiketi */
+function oryBaslik(oyun){
+  const isl = TUR_ISLEYICI[oyun.tur];
+  return `<div class="oyun-ust">
+    <button class="btn btn-ghost oyun-cik" data-eylem="liste">← Oyunlardan Çık</button>
+    <div class="oyun-etiket">${isl.ikon} <span>${kacis(oyun.baslik)}</span> · Oryantasyon${isl.kisi === 2 ? " " + kisiEtiket() : ""}</div>
+  </div>`;
+}
 
 /* ═════════════ ÜNİTE BİLGİSİ (liste ekranında başlık + açıklama) ═════════════ */
 const UNITE_BILGI = {
@@ -76273,6 +76510,214 @@ const TUR_ISLEYICI = {
       goster();
     }
   },
+
+  /* ── ORYANTASYON: TANIŞMA ÇARKI ────────────────────────────────────────
+     Tek öğrenci çarkı çevirir, çıkan soruyu SÖZLÜ cevaplar; puan/kayıt yok.
+     Çark dilimleri numaralıdır, asıl soru çark durunca büyük kartta açılır.
+     Sorular oturum boyunca tekrarsız gelir (havuz bitince yeniden karışır). */
+  oryCark: {
+    ad: "Tanışma Etkinliği", ikon: "🎡",
+    baslat(oyun){
+      const havuz = oryHavuz("cark", ORY_CARK_SORULARI);
+      const DILIM = 10, DONME_MS = 3400;
+      const RENKLER = ["#F7E1E6", "#DDEDF1", "#FBF0E1", "#E6F3EA", "#EFE7F4"];
+      let aci = 0, donuyor = false, canli = true, zamanlar = [];
+      const bekle = (f, ms) => zamanlar.push(setTimeout(() => { if (canli) f(); }, ms));
+      temizleyici.push(() => { canli = false; zamanlar.forEach(clearTimeout); zamanlar = []; });
+
+      function dilimYol(i){
+        const r = 100, a1 = (i * 360 / DILIM - 90) * Math.PI / 180, a2 = ((i + 1) * 360 / DILIM - 90) * Math.PI / 180;
+        return `M0 0 L${(r * Math.cos(a1)).toFixed(2)} ${(r * Math.sin(a1)).toFixed(2)} A${r} ${r} 0 0 1 ${(r * Math.cos(a2)).toFixed(2)} ${(r * Math.sin(a2)).toFixed(2)} Z`;
+      }
+      function carkSvg(){
+        const parca = [];
+        for (let i = 0; i < DILIM; i++){
+          const orta = ((i + .5) * 360 / DILIM - 90) * Math.PI / 180;
+          parca.push(`<path d="${dilimYol(i)}" fill="${RENKLER[i % RENKLER.length]}" stroke="#fff" stroke-width="1.5"></path>
+            <text x="${(74 * Math.cos(orta)).toFixed(1)}" y="${(74 * Math.sin(orta)).toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="800" fill="#7C6F73">${i + 1}</text>`);
+        }
+        return `<svg id="oryCarkSvg" class="ory-cark-svg" viewBox="-104 -104 208 208" aria-hidden="true">
+          <circle r="102" fill="#fff"></circle>${parca.join("")}<circle r="100" fill="none" stroke="#E4DBD9" stroke-width="2"></circle>
+        </svg>`;
+      }
+      function carkEkran(){
+        donuyor = false;
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <h2 class="ory-baslik">🎡 Tanışma Çarkı</h2>
+            <p class="ory-alt-yazi">Sıradaki öğrenci tahtaya gelsin ve ortadaki <b>ÇEVİR</b> düğmesine dokunsun. Çark durunca çıkan soruyu sesli cevaplayarak kendini sınıfa tanıt. Sorular bu oturumda tekrar etmez.</p>
+            <div class="ory-cark-kap">
+              <div class="ory-cark-ibre"></div>
+              ${carkSvg()}
+              <div class="ory-cark-merkez"><button type="button" class="ory-cevir" id="oryCevir">ÇEVİR</button></div>
+            </div>
+          </div>`;
+        $("oryCevir").addEventListener("click", cevir);
+      }
+      function cevir(){
+        if (donuyor || !canli) return;
+        donuyor = true;
+        const dugme = $("oryCevir"); if (dugme) dugme.disabled = true;
+        const soru = havuz.cek();
+        const hedefDilim = Math.floor(Math.random() * DILIM);
+        const hedefMod = (360 - (hedefDilim + .5) * 360 / DILIM + 360) % 360;
+        aci += 4 * 360 + ((hedefMod - (aci % 360)) + 360) % 360 + 360;
+        const svg = $("oryCarkSvg");
+        if (svg) svg.style.transform = `rotate(${aci}deg)`;
+        bekle(() => { donuyor = false; soruEkran(soru); }, DONME_MS);
+      }
+      function soruEkran(soru){
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <div class="ory-soru-kart">
+              <div class="ory-soru-etiket">🎤 Sıra sende — sesli cevapla</div>
+              <div class="ory-soru-metin">${kacis(soru)}</div>
+            </div>
+            <div class="ory-btn-satir"><button type="button" class="btn btn-primary ory-btn" id="oryYeni">🔄 YENİ ÖĞRENCİ</button></div>
+          </div>`;
+        $("oryYeni").addEventListener("click", carkEkran);
+      }
+      carkEkran();
+    }
+  },
+
+  /* ── ORYANTASYON: BİRİNİ SEÇ! ──────────────────────────────────────────
+     İki öğrenci aynı ikileme kendi tarafından GİZLİCE cevap verir; ilk dokunuş
+     seçimi kilitler, iki seçim de yapılınca sonuç aynı anda açılır. Aynı seçim →
+     "ORTAK NOKTA!", farklı seçim → "NEDEN ONU SEÇTİN?". Rekabet/puan yok. */
+  orySecim: {
+    ad: "Tanışma Etkinliği", ikon: "🌗", kisi: 2,
+    baslat(oyun){
+      const havuz = oryHavuz("secim", ORY_SECIMLER);
+      let cift = null, secim = [null, null], kilit = [false, false];
+      const AD = ["🙋 1. Oyuncu (Sol)", "🙋 2. Oyuncu (Sağ)"];
+
+      function girisEkran(){
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <h2 class="ory-baslik">🌗 Birini Seç!</h2>
+            <p class="ory-alt-yazi">İki öğrenci tahtaya gelsin: biri sol, biri sağ tarafa geçsin. Ekranda iki seçenek görünecek; herkes <b>kendi tarafındaki</b> kartlardan tercihine dokunsun. İlk dokunuş seçimi kilitler ve iki seçim de yapılınca sonuç aynı anda açılır. Bu bir yarışma değil — amaç birbirinizi tanımak!</p>
+            <div class="ory-btn-satir"><button type="button" class="btn btn-primary ory-btn" id="oryBasla">▶ BAŞLA</button></div>
+          </div>`;
+        $("oryBasla").addEventListener("click", yeniSoru);
+      }
+      function taraf(p){
+        return `<div class="ory-taraf t${p + 1}" id="oryTaraf${p}">
+          <div class="ory-taraf-ad">${AD[p]}</div>
+          ${[cift.a, cift.b].map((s, i) => `<button type="button" class="ory-secenek" data-taraf="${p}" data-secenek="${i}">
+            <span class="ory-emoji">${s[1]}</span>${kacis(s[0])}</button>`).join("")}
+        </div>`;
+      }
+      function yeniSoru(){
+        cift = havuz.cek(); secim = [null, null]; kilit = [false, false];
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <div class="ory-soru-ust">
+              <h2 class="ory-baslik">🤔 HANGİSİNİ SEÇERSİN?</h2>
+              <p class="ory-alt-yazi">Tercihine dokun — arkadaşın, sonuç açılana kadar seçimini göremez.</p>
+            </div>
+            <div class="ory-bolge">${taraf(0)}${taraf(1)}</div>
+          </div>`;
+        /* pointerdown: akıllı tahtada iki oyuncunun aynı anda dokunabilmesi için
+           (multi-touch); click yedeği kilit bayrağıyla çift tetiklemeye kapalı */
+        document.querySelectorAll("#oryTaraf0 .ory-secenek, #oryTaraf1 .ory-secenek").forEach(b => {
+          const isle = e => { if (e.cancelable) e.preventDefault(); sec(+b.dataset.taraf, +b.dataset.secenek); };
+          b.addEventListener("pointerdown", isle);
+          b.addEventListener("click", () => sec(+b.dataset.taraf, +b.dataset.secenek));
+        });
+      }
+      function sec(p, i){
+        if (kilit[p] || !cift) return;
+        kilit[p] = true; secim[p] = i;
+        const t = $("oryTaraf" + p);
+        if (t) t.innerHTML = `<div class="ory-taraf-ad">${AD[p]}</div>
+          <div class="ory-kapak"><b>✔</b>Seçimin kilitlendi${kilit[1 - p] ? "" : "<span>Arkadaşını bekle…</span>"}</div>`;
+        if (kilit[0] && kilit[1]) sonucEkran();
+      }
+      function sonucEkran(){
+        const ayni = secim[0] === secim[1];
+        const kartlar = [0, 1].map(p => {
+          const s = secim[p] === 0 ? cift.a : cift.b;
+          return `<div class="ory-taraf t${p + 1}">
+            <div class="ory-taraf-ad">${AD[p]}</div>
+            <div class="ory-secenek secili"><span class="ory-emoji">${s[1]}</span>${kacis(s[0])}</div>
+          </div>`;
+        }).join("");
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <div class="ory-sonuc-banner ${ayni ? "ayni" : "farkli"}">${ayni ? "🤝 ORTAK NOKTA!" : "💬 NEDEN ONU SEÇTİN?"}</div>
+            <p class="ory-alt-yazi">${ayni ? "İkiniz de aynı seçimi yaptınız! Peki bunu neden sevdiğinizi birbirinize anlattınız mı?" : "Farklı seçtiniz — sırayla birbirinize nedenini kısaca anlatın."}</p>
+            <div class="ory-bolge">${kartlar}</div>
+            <div class="ory-btn-satir">
+              <button type="button" class="btn btn-primary ory-btn" id="oryYeniSecim">🔁 YENİ SEÇİM</button>
+              <button type="button" class="btn btn-outline ory-btn" id="oryYeniIkili">👥 YENİ İKİLİ</button>
+            </div>
+          </div>`;
+        $("oryYeniSecim").addEventListener("click", yeniSoru);
+        $("oryYeniIkili").addEventListener("click", girisEkran);
+      }
+      girisEkran();
+    }
+  },
+
+  /* ── ORYANTASYON: ORTAK NOKTAMIZ NE? ───────────────────────────────────
+     Ekran yalnızca konuyu verir; cevap yazdırmaz, seçtirmez, doğrulamaz.
+     İki öğrenci konuşarak ortak cevabı bulur ve butonla birlikte kutlar. */
+  oryOrtak: {
+    ad: "Tanışma Etkinliği", ikon: "🧩", kisi: 2,
+    baslat(oyun){
+      const havuz = oryHavuz("ortak", ORY_KONULAR);
+      function girisEkran(){
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <h2 class="ory-baslik">🧩 ORTAK NOKTANIZI BULUN!</h2>
+            <p class="ory-alt-yazi">İki öğrenci tahtaya gelsin. <b>KONU SEÇ</b> düğmesine basınca ekrana bir konu gelecek. Konu hakkında birbirinizle konuşun ve ikinizin de sevdiği ortak bir cevap bulun. Ekrana yazı yazmak yok — cevabı konuşarak bulacaksınız!</p>
+            <div class="ory-btn-satir"><button type="button" class="btn btn-primary ory-btn" id="oryKonuSec">🎲 KONU SEÇ</button></div>
+          </div>`;
+        $("oryKonuSec").addEventListener("click", konuEkran);
+      }
+      function konuEkran(){
+        const k = havuz.cek();
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <div class="ory-soru-kart">
+              <div class="ory-konu-emoji">${k.emoji}</div>
+              <div class="ory-soru-metin">${kacis(k.ad)}</div>
+              <div class="ory-konu-yonerge">${kacis(k.yonerge)}</div>
+            </div>
+            <p class="ory-alt-yazi">Birbirinizle konuşun; ortak cevabınızı bulunca aşağıdaki düğmeye birlikte basın.</p>
+            <div class="ory-btn-satir">
+              <button type="button" class="btn btn-primary ory-btn" id="oryBulduk">🤝 ORTAK NOKTAMIZI BULDUK!</button>
+              <button type="button" class="btn btn-ghost ory-btn" id="oryDegistir">↻ Konuyu Değiştir</button>
+            </div>
+          </div>`;
+        $("oryBulduk").addEventListener("click", kutlamaEkran);
+        $("oryDegistir").addEventListener("click", konuEkran);
+      }
+      function kutlamaEkran(){
+        const konfeti = Array.from({ length: 14 }, () => {
+          const e = ["🎉", "✨", "🎊", "⭐"][Math.floor(Math.random() * 4)];
+          return `<span style="left:${(Math.random() * 92 + 4).toFixed(0)}%;animation-delay:${(Math.random() * .5).toFixed(2)}s">${e}</span>`;
+        }).join("");
+        $("app").innerHTML = `${oryBaslik(oyun)}
+          <div class="ory-sahne">
+            <div class="ory-soru-kart ory-kutlama">
+              <div class="ory-konfeti" aria-hidden="true">${konfeti}</div>
+              <div class="ory-konu-emoji">🤝</div>
+              <div class="ory-soru-metin">ORTAK NOKTA!</div>
+              <div class="ory-konu-yonerge">Harika — birbirinizi biraz daha tanıdınız.</div>
+            </div>
+            <div class="ory-btn-satir">
+              <button type="button" class="btn btn-primary ory-btn" id="oryYeniKonu">🎲 YENİ KONU</button>
+              <button type="button" class="btn btn-outline ory-btn" id="oryYeniIkili">👥 YENİ İKİLİ</button>
+            </div>
+          </div>`;
+        $("oryYeniKonu").addEventListener("click", konuEkran);
+        $("oryYeniIkili").addEventListener("click", girisEkran);
+      }
+      girisEkran();
+    }
+  },
 };
 
 /* ═════════════ EKRANLAR ═════════════ */
@@ -76308,6 +76753,26 @@ function ekranIkili(){
     </div>`;
 }
 
+function ekranOryantasyon(){
+  return `<div class="kirinti"><button class="kb" data-eylem="panel">🎮 Oyunlar</button><span class="kok">›</span><span class="kx">Oryantasyon</span></div>
+    <h2 class="blok-baslik">🤝 Oryantasyon Oyunları</h2>
+    <p class="ders-aciklama">Okulun ilk haftası için tanışma etkinlikleri: amaç puan toplamak değil, sınıf arkadaşlarını tanımak ve sohbeti başlatmak. Bu oyunlarda puan, süre ve kazanan yoktur; tüm kademelerde kullanılabilir ve akıllı tahtaya uygundur.</p>
+    <div class="oyun-grid">
+      ${ORY_OYUNLAR.map(o => {
+        const isl = TUR_ISLEYICI[o.tur];
+        return `<button class="oyun-kart" data-eylem="oyun:${o.id}">
+          <span class="ok-ust"><span class="ok-ikon">${isl.ikon}</span><span class="ok-etiketler">${isl.kisi === 2 ? kisiEtiket() : `<span class="kisi-et">🎤 Tek Öğrenci</span>`}</span></span>
+          <span class="ok-ad">${kacis(o.baslik)}</span>
+          <span class="ok-tur">${isl.ad} · Puan yok</span>
+          <span class="ory-kart-aciklama">${kacis(o.aciklama)}</span>
+        </button>`;
+      }).join("")}
+    </div>
+    <div class="btn-row" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px;">
+      <button class="btn btn-outline" data-eylem="panel">← Tüm Oyunlar</button>
+    </div>`;
+}
+
 function kirinti(){
   const parts = [{ ad: "🎮 Oyunlar", eylem: "panel" }];
   if (durum.kademe){ const k = KADEMELER.find(x => x.id === durum.kademe); parts.push({ ad: k.ad, eylem: "kademe:" + durum.kademe }); }
@@ -76330,6 +76795,11 @@ function ekranPanel(){
           <span class="secim-ad">${k.ad}</span>
           <span class="secim-alt">${sayiOyun({ kademe: k.id })} oyun</span>
         </button>`).join("")}
+      <button class="secim-kart" data-eylem="oryantasyon">
+        <span class="secim-emoji">🤝</span>
+        <span class="secim-ad">Oryantasyon</span>
+        <span class="secim-alt">${ORY_OYUNLAR.length} oyun</span>
+      </button>
     </div>`;
 }
 
@@ -77008,6 +77478,7 @@ function render(){
     case "ders": app.innerHTML = ekranDers(); break;
     case "liste": app.innerHTML = ekranListe(); break;
     case "ikili": app.innerHTML = ekranIkili(); break;
+    case "oryantasyon": app.innerHTML = ekranOryantasyon(); break;
     case "istatistik": app.innerHTML = ekranIstatistik(); break;
     case "sonuc": app.innerHTML = ekranSonuc(); break;
     case "ogretmen": app.innerHTML = ekranOgretmen(); ogretmenBagla(); break;
@@ -77039,7 +77510,8 @@ $("app").addEventListener("click", e => {
     case "ders": durum.ders = arg; durum.unite = null; durum.ekran = "liste"; render(); break;
     case "unite": durum.unite = arg || null; durum.ekran = "liste"; render(); break;
     case "ikili": durum.ekran = "ikili"; render(); break;
-    case "liste": durum.ekran = durum.oyunKaynak === "ikili" ? "ikili" : "liste"; render(); break;
+    case "oryantasyon": durum.ekran = "oryantasyon"; render(); break;
+    case "liste": durum.ekran = durum.oyunKaynak === "ikili" ? "ikili" : durum.oyunKaynak === "oryantasyon" ? "oryantasyon" : "liste"; render(); break;
     case "oyun":
       aktifOyun = OYUNLAR.find(o => o.id === arg);
       if (aktifOyun){
@@ -77048,6 +77520,10 @@ $("app").addEventListener("click", e => {
         durum.kademe = aktifOyun.kademe; durum.sinif = aktifOyun.sinif; durum.ders = aktifOyun.ders;
         // Ünite süzgeci açıkken başka üniteden bir oyuna geçilirse süzgeç o üniteye taşınır
         if (durum.unite && aktifOyun.unite !== durum.unite) durum.unite = aktifOyun.unite || null;
+      } else {
+        // Oryantasyon oyunları kademe/sınıf/ders hiyerarşisinin dışındadır
+        aktifOyun = ORY_OYUNLAR.find(o => o.id === arg) || null;
+        if (aktifOyun) durum.oyunKaynak = "oryantasyon";
       }
       durum.ekran = "oyun"; render(); break;
     case "tekrar": if (aktifOyun){ durum.ekran = "oyun"; render(); } break;

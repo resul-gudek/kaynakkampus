@@ -18,9 +18,18 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#7A2035" />
+  <script>
+    try {
+      if (localStorage.getItem('kk-duyuru-kapali') === '1')
+        document.documentElement.classList.add('duyuru-kapali');
+    } catch (e) { /* depolama kapalıysa duyuru görünür kalır */ }
+  </script>
+  <style>.duyuru-kapali #duyuruSerit { display: none !important; }</style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" /></noscript>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -28,7 +37,6 @@
   <!-- Tasarım şablonu: token'lar, tipografi, düğme/kart/bölüm ilkelleri -->
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
-  <link rel="stylesheet" href="assets/sinav-takvimi.css" />
 
   <style>
     /* ── YALNIZ ANA SAYFAYA ÖZGÜ YERLEŞİM ──────────────────────────
@@ -77,7 +85,7 @@
       justify-self: end; align-self: end; width: 236px; transform: rotate(3deg);
       background: var(--gul-sis); display: grid; place-items: center; padding: 18px;
     }
-    .hero-doseme-anka img { width: 150px; height: auto; }
+    .hero-doseme-anka img { width: 150px; height: 150px; }
     .hero-cikartma { position: absolute; bottom: -13px; left: 16px; z-index: 4; }
     .hero-doseme-anka .hero-cikartma { left: auto; right: 16px; }
 
@@ -243,7 +251,7 @@
      Duyurular belli aralıklarla kendiliğinden değişir; liste ve döndürme
      assets/duyuru-serit.js içinde — tek dosyayı değiştirmek tüm sayfaları
      günceller. Buradaki ilk duyuru, betik çalışana kadarki başlangıçtır. -->
-<div class="duyuru-serit" id="duyuruSerit" hidden>
+<div class="duyuru-serit" id="duyuruSerit">
   <div class="container">
     <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
     <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
@@ -254,7 +262,9 @@
 <header class="site-header">
   <div class="sh-inner">
     <a href="index.html" class="sh-logo">
-      <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+      <img src="assets/kaynak-kampus-logo-64.png"
+           srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+           width="64" height="64" alt="Kaynak Kampüs Logosu" />
       Kaynak <span>Kampüs</span>
     </a>
 
@@ -279,7 +289,7 @@
           <a href="sinav-takvimi.html">Sınav Takvimi</a>
         </div>
       </div>
-      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="hakkimizda.html" hidden>Hakkımızda</a>
     </nav>
 
     <div class="sh-actions">
@@ -296,7 +306,7 @@
     <a href="index.html">Ana Sayfa</a>
     <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
     <a href="oyunlar.html">Oyunlar</a>
-    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="hakkimizda.html" hidden>Hakkımızda</a>
     <div class="sh-drawer-label">Araçlar</div>
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
@@ -365,7 +375,7 @@
         <div class="hero-slogan">Güçlü kaynak,<br />sağlam gelecek</div>
 
         <div class="hero-doseme hero-doseme-anka">
-          <img src="assets/maskot/kivilcim.svg" alt="" />
+          <img src="assets/maskot/kivilcim.svg" width="150" height="150" alt="" />
           <span class="cikartma cikartma-sag hero-cikartma">Kıvılcım · Rehber</span>
         </div>
       </div>
@@ -771,10 +781,17 @@
 
       <div class="site-alt-marka">
         <div class="site-alt-ad">
-          <img src="assets/kaynak-kampus-logo.png" alt="Kaynak Kampüs Logosu" />
+          <img src="assets/kaynak-kampus-logo-64.png"
+               srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+               width="64" height="64" loading="lazy" alt="Kaynak Kampüs Logosu" />
           Kaynak <span>Kampüs</span>
         </div>
         <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="site-alt-iletisim">
+          <span>Bize ulaşın</span>
+          <a class="site-alt-eposta" href="mailto:kaynakkampus@gmail.com">kaynakkampus@gmail.com</a>
+          <a class="site-alt-mesaj" href="/iletisim">Formdan mesaj gönder →</a>
+        </div>
         <div class="sosyal-blok">
           <span class="sosyal-baslik">Bizi takip edin</span>
           <div class="sosyal">
@@ -836,7 +853,6 @@
 <script src="assets/site-header.js" defer></script>
 <script src="assets/duyuru-serit.js" defer></script>
 <script src="assets/cerez-onay.js" defer></script>
-<script src="assets/sinav-takvimi.js" defer></script>
 <script>
   // ── Üst duyuru şeridi artık assets/duyuru-serit.js'te (tüm sayfalarda ortak)
 
@@ -893,7 +909,7 @@
         data-metin="Nasıl çalıştığımıza göz atabilir ya da hemen ön kayıt bırakabilirsiniz."
         data-eylem="Aramıza katıl"
         data-eylem-href="/basvuru"
-        data-ikincil="Nasıl çalışır"
-        data-ikincil-href="#how"></script>
+        data-ikincil="Bize ulaşın"
+        data-ikincil-href="/iletisim"></script>
 </body>
 </html>

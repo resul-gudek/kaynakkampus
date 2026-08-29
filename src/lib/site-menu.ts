@@ -43,6 +43,7 @@ export const SITE_MENU: SiteMenuOgesi[] = [
       { ad: "Sınav Takvimi", href: "/sinav-takvimi.html" },
     ],
   },
-  { ad: "Hakkımızda", href: "/hakkimizda.html" },
+  // Hakkımızda üst menüden kaldırıldı (kullanıcı kararı) — sadece alt bilgideki
+  // "Kurum" kolonunda duruyor (statik sayfalar ve SiteAltBilgi aynı listeyi taşır).
+  // { ad: "Hakkımızda", href: "/hakkimizda.html" },
 ];
-

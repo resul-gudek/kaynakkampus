@@ -28,8 +28,8 @@
     metin: d.metin || "Programları inceleyebilir ya da hemen ön kayıt bırakabilirsiniz.",
     eylem: d.eylem || "Aramıza katıl",
     eylemHref: d.eylemHref || "/basvuru",
-    ikincil: d.ikincil || "",
-    ikincilHref: d.ikincilHref || "",
+    ikincil: d.ikincil || "Bize ulaşın",
+    ikincilHref: d.ikincilHref || "/iletisim",
     gecikme: parseInt(d.gecikme || "1400", 10),
     anahtar: d.anahtar || "kk-kivilcim-karsilama",
   };
@@ -100,7 +100,7 @@
     /* kart — düz yüzey, yumuşak 16px köşe; yüzen katman olduğu için gölgeye izin var */
     ".kv-kart{width:360px;max-width:calc(100vw - 40px);background:#fff;",
     "border:1px solid #E4DBD9;border-radius:16px;box-shadow:0 8px 28px rgba(31,20,26,.12);",
-    "padding:16px;display:flex;gap:12px;position:relative;",
+    "padding:16px;display:flex;gap:12px;position:absolute;right:0;bottom:70px;",
     "opacity:0;transform:translateY(10px);transition:opacity .26s ease,transform .26s ease}",
     ".kv-kart[data-acik='1']{opacity:1;transform:none}",
     ".kv-kart[hidden]{display:none}",
@@ -148,7 +148,7 @@
     /* mobil — telefonda ekranın üçte birini kaplamaması için sıkışır:
        küçük yuva, dar iç boşluk, butonlar tek satırda paylaşır. */
     "@media (max-width:520px){.kv-kok{right:12px;left:12px;bottom:12px;align-items:stretch;gap:10px}",
-    ".kv-kart{width:auto;padding:13px;gap:10px}",
+    ".kv-kart{width:auto;padding:13px;gap:10px;left:0;right:0;bottom:62px}",
     ".kv-yuva,.kv-yuva svg{width:42px;height:42px}",
     ".kv-baslik{font-size:.92rem}.kv-metin{font-size:.8rem;line-height:1.45}",
     ".kv-govde{gap:3px}.kv-eylemler{margin-top:9px;gap:7px}",
@@ -270,9 +270,14 @@
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", kur);
-  } else {
-    kur();
+  function bostaKur() {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(kur, { timeout: 3000 });
+    } else {
+      window.setTimeout(kur, 1500);
+    }
   }
+
+  if (document.readyState === "complete") bostaKur();
+  else window.addEventListener("load", bostaKur, { once: true });
 })();

@@ -11,6 +11,8 @@ export const MAIL_SABLON_ANAHTARLARI = [
   "mulakat-planlandi",
   "mulakat-hatirlatma",
   "basvuru-sonuc",
+  "iletisim-mesaji",
+  "iletisim-onay",
 ] as const;
 export type MailSablonAnahtar = (typeof MAIL_SABLON_ANAHTARLARI)[number];
 
@@ -31,6 +33,43 @@ const gomlek = (icerik: string) => `<div style="font-family:Arial,Helvetica,sans
 </div>`;
 
 export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
+  {
+    anahtar: "iletisim-mesaji",
+    ad: "Site İletişim Mesajı",
+    aciklama: "Sitedeki iletişim formundan yeni bir mesaj gönderildiğinde kurum adresine iletilir.",
+    degiskenler: [
+      { ad: "ad", aciklama: "Mesajı gönderen kişinin ad soyadı" },
+      { ad: "eposta", aciklama: "Yanıt verilecek e-posta adresi" },
+      { ad: "konu", aciklama: "Mesajın konusu" },
+      { ad: "mesaj", aciklama: "Ziyaretçinin mesajı" },
+    ],
+    konu: "Site iletişim mesajı: {{konu}} — {{ad}}",
+    govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Yeni iletişim mesajı</h2>
+  <p><b>{{ad}}</b> iletişim formundan bir mesaj gönderdi.</p>
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
+    <b>E-posta:</b> <a href="mailto:{{eposta}}" style="color:#7A2035">{{eposta}}</a><br/>
+    <b>Konu:</b> {{konu}}
+  </p>
+  <p style="white-space:pre-wrap">{{mesaj}}</p>`),
+  },
+  {
+    anahtar: "iletisim-onay",
+    ad: "İletişim Mesajı Onayı",
+    aciklama: "İletişim formundan mesaj gönderen ziyaretçiye, mesajının bize ulaştığını bildirir.",
+    degiskenler: [
+      { ad: "ad", aciklama: "Mesajı gönderen kişinin ad soyadı" },
+      { ad: "konu", aciklama: "Mesajın konusu" },
+      { ad: "mesaj", aciklama: "Ziyaretçinin gönderdiği mesaj" },
+    ],
+    konu: "Mesajınız bize ulaştı — Kaynak Kampüs",
+    govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Merhaba {{ad}},</h2>
+  <p>Mesajınız bize ulaştı. En kısa sürede size dönüş yapacağız.</p>
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
+    <b>Konu:</b> {{konu}}
+  </p>
+  <p style="white-space:pre-wrap;color:#6b7280;border-left:3px solid #E4DBD9;padding-left:12px">{{mesaj}}</p>
+  <p>İlginiz için teşekkür ederiz. 🌸</p>`),
+  },
   {
     anahtar: "hosgeldin",
     ad: "Hoş Geldin Maili",

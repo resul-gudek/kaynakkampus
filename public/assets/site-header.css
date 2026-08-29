@@ -9,8 +9,6 @@
    dosyayı almayan sayfalarda ikinci değer (yedek) devreye girer.
    ------------------------------------------------------------------ */
 
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
-
 .site-header {
   --sh-yukseklik: 72px;
   --sh-murekkep:  var(--murekkep, #1F141A);

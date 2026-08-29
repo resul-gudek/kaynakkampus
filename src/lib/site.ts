@@ -5,6 +5,9 @@ export const SITE_KOKU = (process.env.SITE_ADRESI ?? "https://kaynakkampus.com")
   .trim()
   .replace(/\/+$/, "");
 
+/** Ziyaretçilerin doğrudan ulaşabileceği kurumsal e-posta adresi. */
+export const ILETISIM_EPOSTA = "kaynakkampus@gmail.com";
+
 /** Siteye göreli bir yolu mutlak adrese çevirir */
 export function mutlakAdres(yol: string): string {
   return `${SITE_KOKU}${yol}`;

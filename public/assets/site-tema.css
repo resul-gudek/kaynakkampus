@@ -14,9 +14,28 @@
      Mist Gray    #f4f4f8 → Sis        #F6F1F0
      Smoke        #dcdce5 → Duman      #E4DBD9
 
-   Fontlar sayfanın kendi <link>'i ya da site-header.css'teki @import ile gelir.
+   Fontlar sayfanın kendi <link>'inden gelir.
    Next tarafındaki ikizi: src/app/globals.css
    ------------------------------------------------------------------ */
+
+/* Web font gelene kadar aynı ölçülere yakın Arial kullanılır. Böylece asenkron
+   font yüklemesi başlık ve hero yüksekliğini değiştirip CLS üretmez. */
+@font-face {
+  font-family: 'Figtree Fallback';
+  src: local('Arial');
+  ascent-override: 94.32%;
+  descent-override: 24.82%;
+  line-gap-override: 0%;
+  size-adjust: 100.72%;
+}
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial');
+  ascent-override: 103.31%;
+  descent-override: 29.07%;
+  line-gap-override: 0%;
+  size-adjust: 103.19%;
+}
 
 /* ═══ TOKEN'LAR ═══════════════════════════════════════════════════ */
 :root {
@@ -43,8 +62,8 @@
   --kirmizi:    #C0392B;
 
   /* Tipografi */
-  --font-baslik: 'Manrope', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-govde:  'Figtree', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-baslik: 'Manrope', 'Manrope Fallback', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-govde:  'Figtree', 'Figtree Fallback', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   /* Ölçek — DESIGN.md'deki sabit boyutlar, mobilde taşmasın diye clamp'li */
   --text-caption:   12px;   --leading-caption:   1.5;  --tracking-caption:  -0.06px;
@@ -388,6 +407,15 @@ strong, b { font-weight: var(--agirlik-orta); }
 .site-alt-marka .site-alt-ad img { width: 44px; height: 44px; object-fit: contain; }
 .site-alt-marka .site-alt-ad span { color: var(--gul); }
 .site-alt-marka p { margin-top: var(--bosluk-16); font-size: var(--text-small); line-height: 1.7; max-width: 44ch; }
+.site-alt-iletisim {
+  display: grid; gap: 5px; margin-top: 20px; padding: 14px 16px; max-width: 360px;
+  border: 1px solid rgba(255, 255, 255, .28); border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .08);
+}
+.site-alt-iletisim span { color: var(--gul); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.site-alt-iletisim .site-alt-eposta { color: var(--beyaz); font-size: var(--text-body); font-weight: 700; overflow-wrap: anywhere; }
+.site-alt-iletisim .site-alt-mesaj { margin-top: 3px; color: #D8CFD2; font-size: var(--text-small); text-decoration: underline; text-underline-offset: 3px; }
+.site-alt-iletisim a:hover { color: var(--gul); }
 .site-alt-kolon h4 {
   color: var(--beyaz); font-family: var(--font-govde);
   font-size: var(--text-small); font-weight: var(--agirlik-orta);
