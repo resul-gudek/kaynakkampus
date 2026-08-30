@@ -67,8 +67,11 @@ export default function SiteAltBilgi() {
             <ul>
               <li><a href="/hakkimizda.html">Hakkımızda</a></li>
               <li><Link href="/blog">Blog</Link></li>
+              {/* Şimdilik gizlendi (kullanıcı kararı); statik sayfalarda aynı
+                  satırlar <li hidden> ile gizli. Geri açmak için yorumu kaldırın.
               <li><Link href="/basvuru">Aramıza Katıl</Link></li>
               <li><Link href="/giris">Giriş Yap</Link></li>
+              */}
               <li><a href="/gizlilik.html">Gizlilik ve Çerezler</a></li>
             </ul>
           </div>

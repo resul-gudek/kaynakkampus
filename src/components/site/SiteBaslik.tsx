@@ -111,6 +111,10 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
           )}
         </nav>
 
+        {/* Giriş Yap / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) —
+            sayfalar duruyor, doğrudan adresle açılabiliyor. Geri almak için
+            bu bloğun yorumunu kaldırmak yeterli. Statik public/*.html
+            sayfalarında aynı düğmeler .sh-actions üzerinde hidden ile gizli.
         <div className={s.eylemler}>
           <Link href="/giris" className={`${s.dugme} ${s.cizgili}`}>
             Giriş Yap
@@ -119,6 +123,7 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
             Aramıza Katıl
           </Link>
         </div>
+        */}
 
         <button
           className={s.hamburger}
@@ -154,6 +159,7 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
             </Link>
           ),
         )}
+        {/* Mobil çekmecedeki aynı düğmeler de gizli — yukarıdaki nota bakın.
         <div className={s.cekmeceEylemler}>
           <Link href="/giris" className={`${s.dugme} ${s.cizgili}`}>
             Giriş Yap
@@ -162,6 +168,7 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
             Aramıza Katıl ✨
           </Link>
         </div>
+        */}
       </div>
     </header>
   );

@@ -292,7 +292,8 @@
       <a href="hakkimizda.html" hidden>Hakkımızda</a>
     </nav>
 
-    <div class="sh-actions">
+    <!-- Giriş / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) — hidden kaldırılınca geri gelir. -->
+    <div class="sh-actions" hidden>
       <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
       <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
     </div>
@@ -316,7 +317,8 @@
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
     <a href="sinav-takvimi.html">Sınav Takvimi</a>
-    <div class="sh-drawer-actions">
+    <!-- Giriş / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) — hidden kaldırılınca geri gelir. -->
+    <div class="sh-drawer-actions" hidden>
       <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
       <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
     </div>
@@ -338,9 +340,12 @@
           içerikler ve çalışmalar tek çatı altında.
         </p>
 
+        <!-- "Aramıza katıl" şimdilik gizlendi (kullanıcı kararı). Hero'nun birincil
+             düğmesiz kalmaması için "Nasıl çalışır" geçici olarak dolu stile alındı;
+             geri açarken hidden'ı kaldırıp bu düğmeyi btn-cizgili'ye döndürün. -->
         <div class="hero-eylemler">
-          <a href="/basvuru" class="btn btn-dolu">Aramıza katıl <span class="ok">→</span></a>
-          <a href="#how" class="btn btn-cizgili">Nasıl çalışır</a>
+          <a href="/basvuru" class="btn btn-dolu" hidden>Aramıza katıl <span class="ok">→</span></a>
+          <a href="#how" class="btn btn-dolu">Nasıl çalışır</a>
         </div>
 
         <div class="hero-guven">
@@ -723,9 +728,11 @@
   <div class="container">
     <h2>Öğrenme yolculuğuna bugün başla</h2>
     <p hidden>Binlerce öğrencinin tercih ettiği platforma katıl. Araçların tamamı ücretsiz.</p>
+    <!-- "Aramıza katıl" şimdilik gizlendi (kullanıcı kararı); bölüm birincil
+         düğmesiz kalmasın diye "Oyunlara göz at" geçici olarak btn-beyaz. -->
     <div class="bolum-eylemler">
-      <a href="/basvuru" class="btn btn-beyaz">Aramıza katıl <span class="ok">→</span></a>
-      <a href="oyunlar.html" class="btn btn-cizgili">Oyunlara göz at</a>
+      <a href="/basvuru" class="btn btn-beyaz" hidden>Aramıza katıl <span class="ok">→</span></a>
+      <a href="oyunlar.html" class="btn btn-beyaz">Oyunlara göz at</a>
     </div>
   </div>
 </section>
@@ -835,8 +842,8 @@
         <ul>
           <li><a href="hakkimizda.html">Hakkımızda</a></li>
           <li><a href="/blog">Blog</a></li>
-          <li><a href="/basvuru">Aramıza Katıl</a></li>
-          <li><a href="/giris">Giriş Yap</a></li>
+          <li hidden><a href="/basvuru">Aramıza Katıl</a></li>
+          <li hidden><a href="/giris">Giriş Yap</a></li>
           <li><a href="gizlilik.html">Gizlilik ve Çerezler</a></li>
         </ul>
       </div>
@@ -906,12 +913,15 @@
 </script>
 
 <!-- Kıvılcım — siteye ilk gelen ziyaretçiyi karşılar. Kapatınca hatırlar. -->
+<!-- Başvuru şimdilik gizli olduğu için karşılama düğmeleri iletişim/oyunlara
+     yönlendiriyor. DİKKAT: data-eylem* öznitelikleri silinirse betik varsayılan
+     olarak yine "Aramıza katıl → /basvuru" çizer; geri açarken oraya döndürün. -->
 <script src="assets/kivilcim-karsilama.js" defer
         data-baslik="Kaynak Kampüs'e hoş geldiniz."
-        data-metin="Nasıl çalıştığımıza göz atabilir ya da hemen ön kayıt bırakabilirsiniz."
-        data-eylem="Aramıza katıl"
-        data-eylem-href="/basvuru"
-        data-ikincil="Bize ulaşın"
-        data-ikincil-href="/iletisim"></script>
+        data-metin="Nasıl çalıştığımıza göz atabilir ya da bize ulaşabilirsiniz."
+        data-eylem="Bize ulaşın"
+        data-eylem-href="/iletisim"
+        data-ikincil="Oyunlara göz at"
+        data-ikincil-href="/oyunlar.html"></script>
 </body>
 </html>

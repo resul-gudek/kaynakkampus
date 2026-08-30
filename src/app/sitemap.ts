@@ -22,7 +22,9 @@ const SABIT_SAYFALAR: { yol: string; oncelik: number; siklik: MetadataRoute.Site
   { yol: "/odev-olustur.html", oncelik: 0.5, siklik: "monthly" },
   { yol: "/bep-olustur.html", oncelik: 0.5, siklik: "monthly" },
   { yol: "/ders-programi.html", oncelik: 0.5, siklik: "monthly" },
-  { yol: "/basvuru", oncelik: 0.6, siklik: "monthly" },
+  // Başvuru sayfası siteden gizlendi (kullanıcı kararı); arama sonuçlarında
+  // çıkmaması için haritadan da çıkarıldı. Geri açarken bu satırı geri alın.
+  // { yol: "/basvuru", oncelik: 0.6, siklik: "monthly" },
   { yol: "/iletisim", oncelik: 0.6, siklik: "yearly" },
   { yol: "/gizlilik.html", oncelik: 0.3, siklik: "yearly" },
 ];

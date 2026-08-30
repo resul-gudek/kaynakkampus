@@ -22,6 +22,8 @@ export default function robots(): MetadataRoute.Robots {
           "/bildirimler",
           "/video-dersler",
           "/giris",
+          // Başvuru siteden gizlendiği sürece taranmasın (kullanıcı kararı).
+          "/basvuru",
         ],
       },
     ],
