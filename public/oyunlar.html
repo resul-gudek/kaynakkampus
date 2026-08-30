@@ -3340,8 +3340,10 @@
     .fen-kaydirac-ad { font-size: .82rem; font-weight: 800; color: #1F4B5A; }
 
     /* ── Elektrikli ev / oda ── */
-    .fen-oda { position: relative; margin-top: 12px; }
-    .fen-oda svg { width: 100%; max-width: 460px; height: auto; display: block; margin: 0 auto; }
+    /* Kapsayıcı çizimle aynı genişlikte olmalı: denetim noktaları yüzdeyle
+       konumlandığı için kapsayıcı daha genişse noktalar odanın dışına düşer. */
+    .fen-oda { position: relative; margin: 12px auto 0; max-width: 460px; }
+    .fen-oda svg { width: 100%; height: auto; display: block; }
     .fen-nokta {
       position: absolute; width: 42px; height: 42px; margin: -21px 0 0 -21px; border-radius: 50%;
       border: 3px dashed rgba(46,134,171,.75); background: rgba(255,255,255,.35); cursor: pointer;
@@ -18749,7 +18751,2012 @@ function fenOyun(oyun, bitir, T){
   return S;
 }
 
+/* ── FEN OYUNLARI: ORTAK GÖREV KURUCULARI VE SAHNE PARÇALARI ────────────── */
+/* Çoktan seçmeli görev: doğru cevap ile çeldiriciler tek biçimli kartlara
+   dönüşür, sıra karışır ve doğru şık art arda aynı konuma düşmez. */
+function fenCoktan(S, soru, dogru, celdiriciler, kac, ipucu, aciklama){
+  const n = Math.max(2, kac || 4);
+  const secilen = karistir(celdiriciler.slice()).slice(0, n - 1);
+  const d = fenSecenekDiz(S, [dogru].concat(secilen), dogru);
+  return { tip: "secim", soru, secenekler: d.liste.map(m => ({ metin: m })), dogruIx: d.ix,
+    ipucu, aciklama };
+}
+/* Eşleme görevi: jetonlar karışık gelir, hedef kutuların sırası da karışır. */
+function fenEsleme(S, soru, jetonlar, hedefler, ipucu, aciklama){
+  return { tip: "esle", soru, jetonlar: karistir(jetonlar), hedefler: karistir(hedefler),
+    ipucu, aciklama };
+}
+/* Sıralama görevi: kartlar karışık verilir, üzerlerinde sıra numarası YOKTUR. */
+function fenSiralama(S, soru, adimlar, ipucu, aciklama){
+  return { tip: "sira", soru, kartlar: karistir(adimlar.map((a, i) => ({ ad: a, sira: i + 1 }))),
+    ipucu, aciklama };
+}
+
+/* ── BÜYÜTEÇ / MİKROSKOP MERCEĞİ ───────────────────────────────────────────
+   Perde tüm alanı karartır; mercek yalnızca imlecin çevresini açar. Bir bulgu
+   ancak merceğin içindeyken tıklanabilir — böylece «hepsine sırayla bas»
+   çözümü işe yaramaz, gerçekten aramak gerekir.
+   Klavye ile gezinenler için: bulgu odaklanınca mercek oraya taşınır. */
+function fenMercekKur(kap, yaricap, bulunca){
+  const perde = kap.querySelector(".fen-mercek-perde");
+  const kapali = "rgba(24,42,52,.96)";
+  let mx = -999, my = -999;
+  function tasi(x, y){
+    const r = kap.getBoundingClientRect();
+    mx = x - r.left; my = y - r.top;
+    yansit();
+  }
+  function yansit(){
+    if (!perde) return;
+    if (mx < -500){ perde.style.background = kapali; return; }
+    perde.style.background = `radial-gradient(circle ${yaricap}px at ${Math.round(mx)}px ${Math.round(my)}px,`
+      + ` rgba(28,48,58,0) 0 ${yaricap - 10}px, ${kapali} ${yaricap}px)`;
+  }
+  kap.addEventListener("pointerdown", e => { tasi(e.clientX, e.clientY); });
+  kap.addEventListener("pointermove", e => { if (e.pressure !== undefined) e.preventDefault(); tasi(e.clientX, e.clientY); });
+  kap.addEventListener("pointerleave", () => { mx = -999; my = -999; yansit(); });
+  kap.querySelectorAll(".fen-bulgu").forEach(b => {
+    const merkez = () => ({ x: b.offsetLeft + b.offsetWidth / 2, y: b.offsetTop + b.offsetHeight / 2 });
+    b.addEventListener("focus", () => { const m = merkez(); mx = m.x; my = m.y; yansit(); });
+    b.addEventListener("click", e => {
+      e.stopPropagation();
+      const m = merkez();
+      if (Math.abs(m.x - mx) > yaricap || Math.abs(m.y - my) > yaricap) return;  /* mercek dışında görünmez */
+      bulunca(b);
+    });
+  });
+  yansit();
+  return { tasi };
+}
+
 const TUR_ISLEYICI = {
+  /* ── OYUN 7: MİNİ ÇİFTLİK ──────────────────────────────────────────────
+     Boş bir sanal bahçe geliştirilir: toprağı büyüteçle inceleme, toprağın
+     oluşum sırası, tohum-fide ayrımı, bitkinin ihtiyaçları, ekim, ölçülü
+     sulama, uygun ışık ortamı, gün gün gelişim ve bitki güncesi.
+     Sulama süslü bir animasyon değildir: miktar seçilir, yanlış miktarda
+     «Bu miktarı yeniden düşün.» denir ve bitki asla aniden ölmez. */
+  miniCiftlik: {
+    ad: "Mini Çiftlik", ikon: "🌱",
+    baslat(oyun, bitir){
+      const YERLER = [[28, 32], [66, 28], [30, 68], [70, 66], [48, 48], [50, 20]];
+
+      function toprakSvg(bulgular){
+        return `<svg viewBox="0 0 100 100" role="img" aria-label="Büyüteç altındaki toprak örneği">
+          <rect width="100" height="100" fill="#6E4E32" />
+          <g opacity=".5" fill="#8A6A44">
+            <circle cx="18" cy="22" r="7" /><circle cx="78" cy="58" r="9" /><circle cx="44" cy="80" r="6" />
+            <circle cx="86" cy="24" r="5" /><circle cx="12" cy="72" r="8" />
+          </g>
+          ${bulgular.map(b => `<g transform="translate(${b.x} ${b.y})">
+            <circle r="7" fill="#3B2A1A" opacity=".5" /><circle r="3.5" fill="#D9C7A8" /></g>`).join("")}
+        </svg>`;
+      }
+      /* Bitki gelişimi: evre 0 (boş toprak) → 4 (çiçekli bitki) */
+      function bahceSvg(evre, sulu){
+        const boy = [0, 14, 34, 58, 78][Math.max(0, Math.min(4, evre))];
+        const yesil = sulu === false ? "#B9C79A" : "#3F8F63";
+        return `<svg viewBox="0 0 200 140" role="img" aria-label="Bahçedeki bitki">
+          <rect width="200" height="140" fill="#DFF1FB" />
+          <rect y="86" width="200" height="54" fill="#6E4E32" />
+          <path d="M0,86 q20,-6 40,0 q20,-6 40,0 q20,-6 40,0 q20,-6 40,0 q20,-6 40,0 v54 H0 z" fill="#7A5738" />
+          ${evre === 0 ? `<ellipse cx="100" cy="96" rx="14" ry="6" fill="#5A3F27" />` : ""}
+          ${evre >= 1 ? `<rect x="97" y="${86 - boy}" width="6" height="${boy}" rx="3" fill="${yesil}" />` : ""}
+          ${evre >= 2 ? `<ellipse cx="82" cy="${86 - boy * 0.6}" rx="16" ry="7" fill="${yesil}" transform="rotate(-18 82 ${86 - boy * 0.6})" />
+            <ellipse cx="118" cy="${86 - boy * 0.8}" rx="16" ry="7" fill="${yesil}" transform="rotate(18 118 ${86 - boy * 0.8})" />` : ""}
+          ${evre >= 3 ? `<ellipse cx="100" cy="${86 - boy - 4}" rx="12" ry="6" fill="${yesil}" />` : ""}
+          ${evre >= 4 ? `<circle cx="100" cy="${86 - boy - 14}" r="9" fill="#F2C14E" />
+            <circle cx="100" cy="${86 - boy - 14}" r="4" fill="#C9862B" />` : ""}
+          <circle cx="168" cy="24" r="14" fill="#F7DE8C" />
+        </svg>`;
+      }
+
+      const T = {
+        on: "mc", rozet: "Genç Çiftçi rozeti",
+        bolumSira: ["toprak", "olusum", "tohum", "ihtiyac", "yetistir", "gunce"],
+        bolumAd: { toprak: "Toprağı İncele", olusum: "Toprak Nasıl Oluşur?",
+          tohum: "Tohum mu, Fide mi?", ihtiyac: "Bitkinin İhtiyaçları",
+          yetistir: "Ek, Sula, Yetiştir", gunce: "Bitki Güncesi" },
+        bolumIkon: { toprak: "🔎", olusum: "🪨", tohum: "🌰", ihtiyac: "💧", yetistir: "🌱", gunce: "📔" },
+        yonerge: {
+          toprak: "Büyüteci toprağın üzerinde gezdir; gördüğün maddeye dokunarak kaydet.",
+          olusum: "Toprak, kayaların uzun yıllar boyunca ufalanmasıyla oluşur.",
+          tohum: "Tohumun sert kabuğu vardır; fidenin kökü, gövdesi ve yaprakları vardır.",
+          ihtiyac: "Bitkiler su, ışık, hava, uygun sıcaklık ve besinli toprakla yaşar.",
+          yetistir: "Önce ek, sonra ölçülü sula, uygun ışığı seç ve günleri izle.",
+          gunce: "Bitki güncesi, her gün yapılan gözlemin kaydıdır.",
+        },
+        tanit: { bas: "Bahçen hazır, tohumlar seni bekliyor! 🌱",
+          metin: "Toprağı büyüteçle incele, toprağın oluşumunu sırala, tohumu ek, ölçülü su ver, uygun ışığı seç ve bitkini gün gün yetiştir." },
+        seviyeAd: { 1: "Kolay · az kart", 2: "Orta", 3: "Zor · çok kart" },
+
+        uret(S, b){
+          if (b === "toprak"){
+            const n = S.A.zorluk === 1 ? 3 : S.A.zorluk === 2 ? 4 : 5;
+            const adlar = karistir(FEN3_TOPRAK_BULGU.slice()).slice(0, n);
+            const yer = karistir(YERLER.slice()).slice(0, n);
+            return { tip: "mercek", soru: "Toprak örneğini büyüteçle incele ve içindekileri kaydet.",
+              bulgular: adlar.map((ad, i) => ({ ad, x: yer[i][0], y: yer[i][1] })),
+              ipucu: "Büyüteci yavaşça gezdir; kapalı alanda hiçbir şey görünmez.",
+              aciklama: "Toprak yalnız kumdan oluşmaz; kil, çürümüş bitki-hayvan kalıntıları, küçük taşlar, hava, su ve canlılar da içinde bulunur." };
+          }
+          if (b === "olusum"){
+            const t = fenSiralama(S, "Toprağın oluşum aşamalarını sıraya koy.", FEN3_TOPRAK_SIRA,
+              "Her şey hangi büyük yapıyla başlar?",
+              "Toprak, kayaların yağmur, rüzgâr ve sıcaklıkla ufalanması ve canlı kalıntılarının karışmasıyla çok uzun sürede oluşur.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🪨 TOPRAK OLUŞUM ÇİZELGESİ</span>
+              <div class="fen-not">Kartlarda sıra numarası yok.</div></div>`;
+            return t;
+          }
+          if (b === "tohum"){
+            const secilen = S.A.zorluk === 1 ? karistir(FEN3_TOHUM_FIDE.slice()).slice(0, 2) : FEN3_TOHUM_FIDE.slice();
+            const t = fenEsleme(S, "Açıklamaları doğru kutuya taşı.",
+              secilen.map(x => ({ ad: x.metin, hedef: x.dogru, ipucu: "Açıklamada kök ve yapraktan söz ediliyor mu?" })),
+              [{ id: "Tohum", ad: "Tohum", not: "Sert kabuklu, henüz çimlenmemiş" },
+               { id: "Fide", ad: "Fide", not: "Kökü, gövdesi ve yaprağı olan küçük bitki" }],
+              "Kök ve yaprak varsa hangisidir?",
+              "Tohum bitkinin çimlenmemiş hâlidir; fide ise çimlenmiş, kökü ve yaprakları çıkmış küçük bitkidir.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🌰 EKİM MASASI</span></div>`;
+            return t;
+          }
+          if (b === "ihtiyac"){
+            const n1 = S.A.zorluk === 1 ? 3 : 4;
+            const d = karistir(FEN3_IHTIYAC.filter(x => x[1])).slice(0, n1);
+            const y = karistir(FEN3_IHTIYAC.filter(x => !x[1])).slice(0, S.A.zorluk === 3 ? 3 : 2);
+            const hepsi = karistir(d.concat(y));
+            return { tip: "coklu", soru: "Bir bitkinin yaşaması için gereken bütün kartları seç.",
+              secenekler: hepsi.map(x => ({ metin: x[0] })),
+              dogrular: hepsi.map((x, i) => x[1] ? i : -1).filter(i => i >= 0),
+              sahne: `<div class="fen-sahne"><span class="fen-etiket">💧 İHTİYAÇ LİSTESİ</span></div>`,
+              ipucu: "Bitkinin eğlenmeye değil, yaşamaya ihtiyacı var.",
+              aciklama: "Bitkiler yaşamak için su, ışık, hava, uygun sıcaklık ve besinli toprağa ihtiyaç duyar." };
+          }
+          if (b === "yetistir"){
+            return { tip: "yetistir", evre: "ek", gun: 0, evreNo: 0,
+              su: karistir(FEN3_SU_SECENEK.slice()), isik: karistir(FEN3_ISIK_SECENEK.slice()),
+              soru: "Tohumu toprağa ek.",
+              ipucu: "Tohum kartını çukura sürükle ya da önce karta, sonra çukura dokun.",
+              aciklama: "Bitki ölçülü su, uygun ışık ve sabırla büyür; her gün gözlem yapılıp kaydedilir." };
+          }
+          const t = fenSiralama(S, "Bitki güncesindeki aşamaları sıraya koy.", FEN3_GUNCE,
+            "Hangi aşamada bitki henüz toprağın altındaydı?",
+            "Bitki güncesi gelişimi sırayla kaydeder: ekim, çimlenme, filiz, yapraklanma, çiçeklenme.");
+          t.sahne = `<div class="fen-sahne"><span class="fen-etiket">📔 BİTKİ GÜNCESİ</span>
+            <div class="fen-not">Kartlarda sıra numarası yok.</div></div>`;
+          return t;
+        },
+
+        ekran(S, g){
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "sira") return fenEkranSira(S, g);
+          if (g.tip === "coklu") return fenEkranCoklu(S, g);
+          if (g.tip === "mercek") return mercekEkran(S, g);
+          yetistirEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "mercek"){
+            const el = document.querySelector(".fen-bulgu:not(.bulundu)");
+            if (el) el.classList.add("bulundu");
+            return;
+          }
+          if (g.tip === "yetistir"){
+            if (g.evre === "ek"){
+              const j = document.querySelector(".fen-jeton"), h = document.querySelector(".fen-hedef");
+              if (j) j.classList.add("secili");
+              if (h) h.classList.add("uzerinde");
+              return;
+            }
+            const liste = g.evre === "su" ? g.su : g.isik;
+            if (!liste) return;
+            const ix = liste.findIndex(x => x.dogru);
+            const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${ix}"]`);
+            if (el) el.classList.add("dogru");
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      function mercekEkran(S, g){
+        g.bulunan = g.bulunan || {};
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🔎 TOPRAK İNCELEME MASASI</span>
+            <div class="fen-mercek" id="fenMercek">
+              ${toprakSvg(g.bulgular)}
+              <div class="fen-mercek-perde"></div>
+              ${g.bulgular.map((b, i) => `<button type="button" class="fen-bulgu${g.bulunan[i] ? " bulundu" : ""}"
+                data-i="${i}" style="left:${b.x}%;top:${b.y}%" aria-label="İncelenecek nokta ${i + 1}"></button>`).join("")}
+            </div>
+            <p class="fen-not">Kaydedilen: <b id="fenBulunan">${Object.keys(g.bulunan).length}</b> / ${g.bulgular.length}</p>
+            <div class="fen-havuz" id="fenDefter">${g.bulgular.map((b, i) =>
+              g.bulunan[i] ? `<span class="fen-konan">${kacis(b.ad)}</span>` : "").join("")}</div>
+          </div>`, "");
+        fenMercekKur($("fenMercek"), 62, el => {
+          if (S.kilit) return;
+          const i = +el.dataset.i;
+          if (g.bulunan[i]) return;
+          g.bulunan[i] = true;
+          el.classList.add("bulundu");
+          const say = $("fenBulunan"); if (say) say.textContent = Object.keys(g.bulunan).length;
+          const d = $("fenDefter");
+          if (d) d.insertAdjacentHTML("beforeend", `<span class="fen-konan">${kacis(g.bulgular[i].ad)}</span>`);
+          fenAdim(S);
+          maskotSoyle("fen", "konusan", "🔎 Toprakta buldum: <b>" + kacis(g.bulgular[i].ad) + "</b>");
+          if (Object.keys(g.bulunan).length === g.bulgular.length)
+            fenDogru(S, "Toprağın içindekileri eksiksiz kaydettin.");
+        });
+      }
+
+      /* Ekim → sulama → ışık → günler: her adım kendi ekranını çizer */
+      function yetistirEkran(S, g){
+        const gunceMetin = ["Tohum toprağa ekildi.", "Tohum çimlendi.", "Filiz toprağın üstüne çıktı.",
+          "İlk yapraklar açıldı.", "Bitki çiçek verdi."];
+        S.sonOkunan = null;
+        if (g.evre === "ek") return ekEkran();
+        if (g.evre === "su") return secimEkran(g.su, "💧 SULAMA", "Bitkiye ne kadar su vereceksin?",
+          () => { g.evre = "isik"; yetistirEkran(S, g); });
+        if (g.evre === "isik") return secimEkran(g.isik, "☀️ IŞIK ORTAMI", "Saksıyı nereye koyacaksın?",
+          () => { g.evre = "gunler"; yetistirEkran(S, g); });
+        return gunEkran();
+
+        function sahne(){
+          return `<div class="fen-sahne">
+            <span class="fen-etiket">🌱 MİNİ ÇİFTLİK · ${g.evre === "gunler" ? (g.gun + ". gün") : "hazırlık"}</span>
+            <div class="fen-bahce">${bahceSvg(g.evreNo, true)}</div>
+            <div class="fen-gunce" id="fenGunce">${gunceMetin.slice(0, g.evreNo + (g.evre === "gunler" ? 1 : 0))
+              .map((m, i) => `<span class="fen-gun">${i + 1}. ${kacis(m)}</span>`).join("")}</div>
+          </div>`;
+        }
+        function ekEkran(){
+          g.soru = "Tohumu toprağa ek: tohum kartını çukura taşı.";
+          fenIskelet(S, g, sahne(),
+            `<div class="fen-havuz" id="fenHavuz"><button type="button" class="fen-jeton" data-jeton="0">Tohum</button></div>
+             <div class="fen-kutular" id="fenKutular"><div class="fen-hedef" data-hedef="cukur">
+               <span class="fen-hedef-bas">Topraktaki çukur</span>
+               <span class="fen-not">Tohumu buraya bırak</span>
+               <span class="fen-hedef-icerik"></span></div></div>`);
+          const alan = $("fenAlan");
+          deSurukleBirak(alan, ".fen-jeton", ".fen-hedef", () => {
+            if (S.kilit) return;
+            const j = alan.querySelector(".fen-jeton"); if (j) j.classList.add("kullanildi");
+            const h = alan.querySelector(".fen-hedef");
+            if (h){ h.classList.add("dogru"); const ic = h.querySelector(".fen-hedef-icerik");
+              if (ic) ic.innerHTML = `<span class="fen-konan">Tohum ekildi</span>`; }
+            fenAdim(S);
+            g.evreNo = 1;
+            maskotSoyle("fen", "kutlama", "🌱 Tohum toprakta. Şimdi su verme zamanı.", "dogru");
+            S.kilit = true;
+            S.bekle(() => { S.kilit = false; g.evre = "su"; yetistirEkran(S, g); }, 1200);
+          }, sec => alan.classList.toggle("secim-var", sec != null));
+        }
+        function secimEkran(liste, etiket, soru, sonra){
+          g.soru = soru;
+          fenIskelet(S, g, sahne().replace(/🌱 MİNİ ÇİFTLİK[^<]*/, etiket),
+            `<div class="fen-secenekler dikey" id="fenSecenek">${liste.map((x, i) =>
+              `<button type="button" class="fen-sec" data-i="${i}">${kacis(x.metin)}</button>`).join("")}</div>`);
+          $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+            if (S.kilit) return;
+            const s = liste[+b.dataset.i];
+            if (!s.dogru){
+              b.classList.add("hata");
+              fenYanlis(S, s.geri || "Bu seçimi yeniden düşün.", g.aciklama);
+              if (S.can <= 0) return;
+              return S.bekle(() => { b.classList.remove("hata"); b.disabled = true; }, 700);
+            }
+            b.classList.add("dogru");
+            $("fenSecenek").querySelectorAll(".fen-sec").forEach(x => { x.disabled = true; });
+            fenAdim(S);
+            sesEfekt("adim");
+            maskotSoyle("fen", "kutlama", "Tam ölçüsünde. Bitkin iyi durumda.", "dogru");
+            S.kilit = true;
+            S.bekle(() => { S.kilit = false; sonra(); }, 1200);
+          }));
+        }
+        function gunEkran(){
+          g.soru = g.evreNo >= 4 ? "Bitkin çiçek açtı! Günceyi tamamla."
+            : "Bitkini her gün gözle: bir gün ilerlet ve gördüğünü günceye yaz.";
+          fenIskelet(S, g, sahne(),
+            `<div class="fen-dugmeler">
+              <button class="fen-dugme" id="fenIlerleBtn"${g.evreNo >= 4 ? " disabled" : ""}>Bir Gün İlerlet</button>
+              ${g.evreNo >= 4 ? `<button class="fen-dugme" id="fenUygula">Günceyi Tamamla</button>` : ""}
+            </div>`);
+          const btn = $("fenIlerleBtn");
+          if (btn) btn.addEventListener("click", () => {
+            if (S.kilit || g.evreNo >= 4) return;
+            S.kilit = true;
+            g.gun++; g.evreNo++;
+            sesEfekt("adim");
+            fenAdim(S);
+            maskotSoyle("fen", "konusan", "📔 " + kacis(gunceMetin[g.evreNo] || ""));
+            S.bekle(() => { S.kilit = false; yetistirEkran(S, g); }, 900);
+          });
+          const bit = $("fenUygula");
+          if (bit) bit.addEventListener("click", () => {
+            if (S.kilit) return;
+            fenDogru(S, "Bitkini başarıyla yetiştirdin!");
+          });
+        }
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 8: YAŞAM ALANI KORUYUCULARI ──────────────────────────────────
+     Doğa koruma ekibi görevi: canlıları yaşam alanlarıyla ilişkilendirme,
+     alanı büyüteçle keşfetme, gözlemi veri defterine kaydetme, iki alanı
+     karşılaştırma, veriye dayalı çıkarım, çevre sorunlarını belirleme,
+     koruma yöntemi seçme ve alanı yeniden düzenleme.
+     Alan toparlandığında sahne görünür biçimde iyileşir. */
+  yasamAlani: {
+    ad: "Yaşam Alanı Koruyucuları", ikon: "🏞️",
+    baslat(oyun, bitir){
+      const YERLER = [[26, 30], [64, 26], [30, 66], [70, 64], [48, 46]];
+      const ALAN_RENK = {
+        orman: ["#DDEFD9", "#3F8F63", "#6E4E32"], deniz: ["#D6ECF5", "#2E86AB", "#C9B18B"],
+        gol: ["#E1F0F0", "#4FA3A5", "#8A9A63"], col: ["#FBEFD6", "#D9A441", "#C9A56B"],
+        kutup: ["#EAF3FA", "#9DC5DE", "#F2F7FB"],
+      };
+      function alanSvg(id, temiz, bulgular){
+        const r = ALAN_RENK[id] || ALAN_RENK.orman;
+        return `<svg viewBox="0 0 100 100" role="img" aria-label="Yaşam alanı">
+          <rect width="100" height="100" fill="${r[0]}" />
+          <rect y="62" width="100" height="38" fill="${r[2]}" />
+          <path d="M0,62 q14,-10 26,0 q14,-10 26,0 q14,-10 26,0 q10,-8 22,0 v38 H0 z" fill="${r[1]}" opacity=".55" />
+          <circle cx="82" cy="18" r="9" fill="#F7DE8C" />
+          ${temiz
+            ? `<g fill="${r[1]}"><ellipse cx="20" cy="52" rx="11" ry="14" /><ellipse cx="46" cy="48" rx="9" ry="12" />
+                <ellipse cx="74" cy="54" rx="10" ry="13" /></g>`
+            : `<g><rect x="14" y="56" width="8" height="10" fill="#8A6A44" /><rect x="42" y="58" width="7" height="8" fill="#8A6A44" />
+                <g fill="#B0555F" opacity=".85"><rect x="60" y="76" width="9" height="6" rx="2" />
+                <rect x="26" y="82" width="11" height="5" rx="2" /><rect x="78" y="70" width="8" height="6" rx="2" /></g></g>`}
+          ${(bulgular || []).map(b => `<g transform="translate(${b.x} ${b.y})">
+            <circle r="6.5" fill="#2F4A3C" opacity=".5" /><circle r="3" fill="#F4F0E4" /></g>`).join("")}
+        </svg>`;
+      }
+
+      const T = {
+        on: "ya", rozet: "Yaşam Alanı Koruyucusu rozeti",
+        bolumSira: ["alan", "kesif", "defter", "karsilastir", "cikarim", "sorun", "koruma", "final"],
+        bolumAd: { alan: "Canlı ve Yaşam Alanı", kesif: "Alanı Keşfet", defter: "Veri Defteri",
+          karsilastir: "İki Alanı Karşılaştır", cikarim: "Veriden Çıkarım", sorun: "Çevre Sorunları",
+          koruma: "Koruma Yöntemi", final: "Alanı Yeniden Düzenle" },
+        bolumIkon: { alan: "🗺️", kesif: "🔎", defter: "📔", karsilastir: "📊", cikarim: "🧠",
+          sorun: "⚠️", koruma: "🛠️", final: "🌤️" },
+        yonerge: {
+          alan: "Her canlı, ihtiyaçlarını karşılayabildiği yaşam alanında yaşar.",
+          kesif: "Büyüteci alanın üzerinde gezdir; gördüğün canlıya dokunarak kaydet.",
+          defter: "Gözlemler deftere doğru ve eksiksiz yazılmalıdır.",
+          karsilastir: "Tabloya bakarak alanlardaki canlı çeşidini karşılaştır.",
+          cikarim: "Çıkarım, verilere dayanarak söylediğimiz sonuçtur.",
+          sorun: "Çevre sorunları canlıların yaşamını zorlaştırır.",
+          koruma: "Her sorunun kendine uygun bir koruma yöntemi vardır.",
+          final: "Sorunları çözdükçe yaşam alanı yeniden canlanır.",
+        },
+        tanit: { bas: "Doğa koruma ekibine hoş geldin! 🏞️",
+          metin: "Canlıları yaşam alanlarıyla eşleştir, alanı büyüteçle keşfet, verileri kaydet, iki alanı karşılaştır, sorunları bul ve alanı yeniden canlandır." },
+        seviyeAd: { 1: "Kolay · 3 alan", 2: "Orta · 4 alan", 3: "Zor · 5 alan" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          const alanSay = S.A.zorluk === 1 ? 3 : S.A.zorluk === 2 ? 4 : 5;
+          if (b === "alan"){
+            const alanlar = karistir(FEN3_YASAM_ALANI.slice()).slice(0, alanSay);
+            const per = S.A.zorluk === 3 ? 2 : 1;
+            let jet = [];
+            alanlar.forEach(a => karistir(a.canlilar.slice()).slice(0, per).forEach(c =>
+              jet.push({ ad: c, hedef: a.id, ipucu: "Bu canlı suda mı, karada mı, sıcakta mı, soğukta mı yaşar?" })));
+            const t = fenEsleme(S, "Canlıları yaşadıkları alana taşı.", jet,
+              alanlar.map(a => ({ id: a.id, ad: a.ad })),
+              "Canlının besin ve barınak bulabileceği yeri düşün.",
+              "Canlılar, su, besin, sıcaklık ve barınak ihtiyaçlarını karşılayabildikleri yaşam alanlarında yaşar.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🗺️ SAHA HARİTASI</span></div>`;
+            return t;
+          }
+          if (b === "kesif"){
+            const a = fenTazeSec(S, "kesif", FEN3_YASAM_ALANI);
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const canlilar = karistir(a.canlilar.slice()).slice(0, n);
+            const yer = karistir(YERLER.slice()).slice(0, n);
+            return { tip: "mercek", alan: a,
+              soru: a.ad + " alanını büyüteçle keşfet ve gördüğün canlıları kaydet.",
+              bulgular: canlilar.map((ad, i) => ({ ad, x: yer[i][0], y: yer[i][1] })),
+              ipucu: "Büyüteci yavaşça gezdir; kapalı alanda canlı görünmez.",
+              aciklama: "Bir yaşam alanında gözlem yapmak, orada hangi canlıların yaşadığını ortaya çıkarır." };
+          }
+          if (b === "defter"){
+            const a = fenTazeSec(S, "defter", FEN3_YASAM_ALANI);
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const gozlenen = karistir(a.canlilar.slice()).slice(0, n);
+            const baska = fenSec(FEN3_YASAM_ALANI.filter(x => x.id !== a.id));
+            const dogru = `${a.ad}: ${gozlenen.join(", ")} — ${n} çeşit`;
+            const yanlis = [
+              `${a.ad}: ${gozlenen.join(", ")} — ${n + 1} çeşit`,
+              `${a.ad}: ${gozlenen.slice(0, n - 1).concat([baska.canlilar[0]]).join(", ")} — ${n} çeşit`,
+              `${baska.ad}: ${gozlenen.join(", ")} — ${n} çeşit`,
+            ];
+            const t = fenCoktan(S, "Bu gözlem için veri defterine hangi kayıt doğru yazılmıştır?",
+              dogru, yanlis, kac,
+              "Alan adı, canlı adları ve sayı; üçü de doğru olmalı.",
+              "Veri kaydı eksiksiz ve doğru olmalıdır: nerede gözlem yapıldığı, hangi canlıların görüldüğü ve kaç çeşit olduğu birlikte yazılır.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">📔 VERİ DEFTERİ</span>
+              <div class="fen-bilgi">Gözlem yeri: ${kacis(a.ad)}<br />Görülen canlılar: ${kacis(gozlenen.join(", "))}</div></div>`;
+            return t;
+          }
+          if (b === "karsilastir"){
+            const iki = karistir(FEN3_YASAM_ALANI.slice()).slice(0, 2);
+            const s1 = fenRast(3, 5), s2 = s1 === 3 ? fenRast(4, 5) : fenRast(1, s1 - 1);
+            const cok = s1 > s2 ? iki[0] : iki[1];
+            const az = s1 > s2 ? iki[1] : iki[0];
+            const t = fenCoktan(S, "Tabloya göre hangi alanda daha çok canlı çeşidi gözlenmiştir?",
+              cok.ad, [az.ad].concat(karistir(FEN3_YASAM_ALANI.filter(x => x.id !== cok.id && x.id !== az.id)).map(x => x.ad)), 3,
+              "Tablodaki iki sayıyı karşılaştır.",
+              "Canlı çeşitliliği, bir alanda kaç FARKLI canlı türü bulunduğudur; sayıları karşılaştırarak buluruz.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">📊 ÇEŞİTLİLİK TABLOSU</span>
+              <table class="fen-tablo"><tr><th>Yaşam alanı</th><th>Gözlenen canlı çeşidi</th></tr>
+              <tr><td>${kacis(iki[0].ad)}</td><td class="sayi">${s1}</td></tr>
+              <tr><td>${kacis(iki[1].ad)}</td><td class="sayi">${s2}</td></tr></table></div>`;
+            return t;
+          }
+          if (b === "cikarim"){
+            const c = fenTazeSec(S, "cikarim", FEN3_CIKARIM);
+            const t = fenCoktan(S, c.soru, c.dogru, c.celdirici, kac, c.ipucu, c.aciklama);
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧠 ÇIKARIM MASASI</span></div>`;
+            return t;
+          }
+          if (b === "sorun"){
+            const n1 = S.A.zorluk === 1 ? 2 : 3;
+            const sorunlar = karistir(FEN3_CEVRE_SORUN.slice()).slice(0, n1);
+            const iyiler = ["Bakımı yapılan yürüyüş yolu", "Yeni dikilmiş fidanlar",
+              "Kurulmuş geri dönüşüm kutusu", "Koruma altına alınmış kuş yuvası"];
+            const iyi = karistir(iyiler).slice(0, 2);
+            const hepsi = karistir(sorunlar.map(x => ({ metin: x.ad, sorun: true }))
+              .concat(iyi.map(x => ({ metin: x, sorun: false }))));
+            return { tip: "coklu", soru: "Bu yaşam alanındaki bütün çevre sorunlarını seç.",
+              secenekler: hepsi.map(x => ({ metin: x.metin })),
+              dogrular: hepsi.map((x, i) => x.sorun ? i : -1).filter(i => i >= 0),
+              sahne: `<div class="fen-sahne"><span class="fen-etiket">⚠️ SAHA RAPORU</span>
+                <div class="fen-bahce">${alanSvg("orman", false)}</div></div>`,
+              ipucu: "Canlıların yaşamını zorlaştıran durumları ara.",
+              aciklama: "Çöp, ağaç kesimi, su kirliliği ve aşırı avlanma yaşam alanlarını bozar; bakım ve koruma çalışmaları ise iyileştirir." };
+          }
+          if (b === "koruma"){
+            const n1 = S.A.zorluk === 1 ? 3 : 4;
+            const secilen = karistir(FEN3_CEVRE_SORUN.slice()).slice(0, n1);
+            const t = fenEsleme(S, "Koruma yöntemlerini uygun soruna taşı.",
+              secilen.map(x => ({ ad: x.cozum, hedef: x.ad, ipucu: "Bu çözüm hangi sorunu ortadan kaldırır?" })),
+              secilen.map(x => ({ id: x.ad, ad: x.ad })),
+              "Çözüm, sorunun nedenini ortadan kaldırmalı.",
+              "Her çevre sorununun kendine uygun bir koruma yöntemi vardır; çözüm sorunun nedenine yönelir.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🛠️ KORUMA PLANI</span></div>`;
+            return t;
+          }
+          const a = fenSec(FEN3_YASAM_ALANI);
+          const adimlar = karistir(FEN3_CEVRE_SORUN.slice()).slice(0, S.A.zorluk === 1 ? 3 : 4).map(k => {
+            const cel = FEN3_CEVRE_SORUN.filter(x => x.ad !== k.ad).map(x => x.cozum);
+            const d = fenSecenekDiz(S, [k.cozum].concat(karistir(cel).slice(0, kac - 1)), k.cozum);
+            return { sorun: k.ad, secenekler: d.liste.map(m => ({ metin: m })), dogruIx: d.ix,
+              aciklama: k.aciklama };
+          });
+          return { tip: "final", ix: 0, alan: a, adimlar,
+            soru: "Alanı yeniden düzenle: her sorun için doğru çözümü uygula.",
+            ipucu: "Çözüm, sorunun nedenini ortadan kaldırmalı.",
+            aciklama: "Sorunlar çözüldükçe yaşam alanı iyileşir ve canlılar geri döner." };
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "coklu") return fenEkranCoklu(S, g);
+          if (g.tip === "mercek") return kesifEkran(S, g);
+          finalEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "mercek"){
+            const el = document.querySelector(".fen-bulgu:not(.bulundu)");
+            if (el) el.classList.add("bulundu");
+            return;
+          }
+          if (g.tip === "final"){
+            const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${g.adimlar[g.ix].dogruIx}"]`);
+            if (el) el.classList.add("dogru");
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      function kesifEkran(S, g){
+        g.bulunan = g.bulunan || {};
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🔎 SAHA KEŞFİ · ${kacis(g.alan.ad.toLocaleUpperCase("tr"))}</span>
+            <div class="fen-mercek" id="fenMercek">
+              ${alanSvg(g.alan.id, true, g.bulgular)}
+              <div class="fen-mercek-perde"></div>
+              ${g.bulgular.map((b, i) => `<button type="button" class="fen-bulgu${g.bulunan[i] ? " bulundu" : ""}"
+                data-i="${i}" style="left:${b.x}%;top:${b.y}%" aria-label="Gözlem noktası ${i + 1}"></button>`).join("")}
+            </div>
+            <p class="fen-not">Deftere kaydedilen canlı: <b id="fenBulunan">${Object.keys(g.bulunan).length}</b> / ${g.bulgular.length}</p>
+            <div class="fen-havuz" id="fenDefter">${g.bulgular.map((b, i) =>
+              g.bulunan[i] ? `<span class="fen-konan">${kacis(b.ad)}</span>` : "").join("")}</div>
+          </div>`, "");
+        fenMercekKur($("fenMercek"), 62, el => {
+          if (S.kilit) return;
+          const i = +el.dataset.i;
+          if (g.bulunan[i]) return;
+          g.bulunan[i] = true;
+          el.classList.add("bulundu");
+          const say = $("fenBulunan"); if (say) say.textContent = Object.keys(g.bulunan).length;
+          const d = $("fenDefter");
+          if (d) d.insertAdjacentHTML("beforeend", `<span class="fen-konan">${kacis(g.bulgular[i].ad)}</span>`);
+          fenAdim(S);
+          maskotSoyle("fen", "konusan", "📔 Deftere yazdım: <b>" + kacis(g.bulgular[i].ad) + "</b>");
+          if (Object.keys(g.bulunan).length === g.bulgular.length)
+            fenDogru(S, "Alandaki canlıları eksiksiz kaydettin.");
+        });
+      }
+
+      /* Final: her doğru çözümden sonra sahne bir adım daha iyileşir */
+      function finalEkran(S, g){
+        const adim = g.adimlar[g.ix];
+        const oran = g.ix / g.adimlar.length;
+        g.soru = `Sorun: ${adim.sorun}. Hangi koruma yöntemini uygularsın?`;
+        S.sonOkunan = null;
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🌤️ ALANI YENİDEN DÜZENLE · ${g.ix + 1} / ${g.adimlar.length}</span>
+            <div class="fen-bahce" style="opacity:${(0.55 + oran * 0.45).toFixed(2)}">${alanSvg(g.alan.id, oran >= 0.5, null)}</div>
+            <div class="fen-bilgi">Çözülen sorun: <b>${g.ix}</b> / ${g.adimlar.length}</div>
+            <div class="fen-adimlar">${g.adimlar.map((a, i) =>
+              `<span class="fen-adim${i < g.ix ? " tamam" : i === g.ix ? " simdi" : ""}">${kacis(a.sorun)}</span>`).join("")}</div>
+          </div>`,
+          `<div class="fen-secenekler dikey" id="fenSecenek">${adim.secenekler.map((x, i) =>
+            `<button type="button" class="fen-sec" data-i="${i}">${kacis(x.metin)}</button>`).join("")}</div>`);
+        $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+          if (S.kilit) return;
+          if (+b.dataset.i !== adim.dogruIx){
+            b.classList.add("hata");
+            fenYanlis(S, "Bu çözüm başka bir sorun için uygun.", adim.aciklama);
+            if (S.can <= 0) return;
+            return S.bekle(() => { b.classList.remove("hata"); b.disabled = true; }, 700);
+          }
+          b.classList.add("dogru");
+          $("fenSecenek").querySelectorAll(".fen-sec").forEach(x => { x.disabled = true; });
+          if (g.ix < g.adimlar.length - 1){
+            S.kilit = true;
+            fenAdim(S);
+            maskotSoyle("fen", "kutlama", "🌤️ " + kacis(adim.aciklama), "dogru");
+            S.bekle(() => { g.ix++; S.kilit = false; finalEkran(S, g); }, 1400);
+          } else {
+            fenDogru(S, "Yaşam alanı yeniden canlandı!");
+          }
+        }));
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 5: KUVVET VE HAREKET PARKURU ─────────────────────────────────
+     Oyuncak araç ve nesnelerle fizik parkuru: hareket türünü belirleme,
+     itme-çekme ayrımı, sonucu tahmin edip deneyle sınama, kuvvet miktarını
+     değiştirme, yön değiştirme, güvenli durdurma ve şekil değişimi.
+     Uygulanan kuvvet arttıkça araç görünür biçimde daha uzağa gider. */
+  kuvvetParkuru: {
+    ad: "Kuvvet ve Hareket Parkuru", ikon: "🛝",
+    baslat(oyun, bitir){
+      const aracSvg = `<svg viewBox="0 0 90 56" role="img" aria-label="Oyuncak araç">
+        <rect x="6" y="18" width="78" height="20" rx="7" fill="#4A7FA5" />
+        <path d="M22,18 l10,-12 h26 l10,12 z" fill="#6BA3C6" />
+        <circle cx="26" cy="42" r="10" fill="#3B4A55" /><circle cx="26" cy="42" r="4" fill="#C9D6DE" />
+        <circle cx="64" cy="42" r="10" fill="#3B4A55" /><circle cx="64" cy="42" r="4" fill="#C9D6DE" />
+      </svg>`;
+      const topSvg = `<svg viewBox="0 0 60 60" role="img" aria-label="Top">
+        <circle cx="30" cy="30" r="26" fill="#E4924E" stroke="#B56F35" stroke-width="3" />
+        <path d="M4,30 h52 M30,4 v52" stroke="#B56F35" stroke-width="3" fill="none" />
+      </svg>`;
+
+      const T = {
+        on: "kp", rozet: "Kuvvet Ustası rozeti",
+        bolumSira: ["hareket", "itme", "tahmin", "kuvvet", "yon", "durdur", "sekil"],
+        bolumAd: { hareket: "Hareket Türünü Belirle", itme: "İtme mi, Çekme mi?",
+          tahmin: "Sonucu Tahmin Et", kuvvet: "Kuvveti Ayarla", yon: "Yönü Değiştir",
+          durdur: "Güvenle Durdur", sekil: "Şekil Değişir mi?" },
+        bolumIkon: { hareket: "🎡", itme: "🤲", tahmin: "🔭", kuvvet: "💪", yon: "↔️",
+          durdur: "🛑", sekil: "🧽" },
+        yonerge: {
+          hareket: "Hareket türleri: hızlanma, yavaşlama, dönme, sallanma ve yön değiştirme.",
+          itme: "İtmede cismi kendimizden uzağa, çekmede kendimize doğru hareket ettiririz.",
+          tahmin: "Önce ne olacağını tahmin et, sonra kuvveti uygulayıp karşılaştır.",
+          kuvvet: "Uygulanan kuvvet arttıkça cisim daha uzağa gider.",
+          yon: "Hareket eden bir cismin yönünü, ona uygulanan kuvvet değiştirir.",
+          durdur: "Durdurmak için harekete ters yönde kuvvet gerekir; bu güvenle yapılmalıdır.",
+          sekil: "Kuvvet bazı cisimlerin şeklini değiştirir, bazılarınınkini değiştirmez.",
+        },
+        tanit: { bas: "Fizik parkuru kuruldu! 🛝",
+          metin: "Hareketleri tanı, itme ile çekmeyi ayır, kuvveti ayarlayarak aracı hedefe gönder, yönü değiştir ve şekil değişimini gözle." },
+        seviyeAd: { 1: "Kolay · geniş hedef", 2: "Orta", 3: "Zor · dar hedef" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          if (b === "hareket"){
+            const h = fenTazeSec(S, "hareket", FEN3_HAREKET);
+            const hepsi = Object.keys(FEN3_HAREKET_AD).map(k => FEN3_HAREKET_AD[k]);
+            const t = fenCoktan(S, "Bu olayda hangi hareket görülür?", FEN3_HAREKET_AD[h.tur],
+              hepsi.filter(x => x !== FEN3_HAREKET_AD[h.tur]), kac,
+              "Cisim hızlanıyor mu, yavaşlıyor mu, dönüyor mu, gidip geliyor mu?",
+              "Hızlanma hızın artması, yavaşlama azalmasıdır. Dönmede cisim kendi çevresinde döner, sallanmada gidip gelir, yön değiştirmede gittiği yol değişir.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🎡 PARKUR GÖZLEMİ</span>
+              <div class="fen-bilgi">${kacis(h.olay)}</div></div>`;
+            return t;
+          }
+          if (b === "itme"){
+            const n = S.A.zorluk === 1 ? 2 : 3;
+            const i1 = karistir(FEN3_ITME_CEKME.filter(x => x.tur === "itme")).slice(0, n);
+            const i2 = karistir(FEN3_ITME_CEKME.filter(x => x.tur === "cekme")).slice(0, n);
+            const t = fenEsleme(S, "Olayları doğru kuvvet kutusuna taşı.",
+              i1.concat(i2).map(x => ({ ad: x.olay, hedef: x.tur,
+                ipucu: "Cisim senden uzaklaşıyor mu, sana yaklaşıyor mu?" })),
+              [{ id: "itme", ad: "İtme", not: "Cismi kendimizden uzağa hareket ettiririz" },
+               { id: "cekme", ad: "Çekme", not: "Cismi kendimize doğru hareket ettiririz" }],
+              "Hareketin yönü sana göre nereye?",
+              "İtme kuvveti cismi bizden uzaklaştırır, çekme kuvveti bize yaklaştırır.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🤲 KUVVET MASASI</span></div>`;
+            return t;
+          }
+          if (b === "tahmin"){
+            const secenek = ["Araç daha uzağa gider.", "Araç daha yakına gider.", "Araç hiç hareket etmez."];
+            const d = fenSecenekDiz(S, secenek, secenek[0]);
+            return { tip: "deney", yontemKod: "kuvvet",
+              soru: "Araca daha büyük bir kuvvet uygulanırsa ne olur? Önce tahmin et.",
+              deneySoru: "Deneyi başlat: aynı araca önce küçük, sonra büyük kuvvet uygulanacak.",
+              secenekler: d.liste.map(m => ({ metin: m })), dogruIx: d.ix,
+              sahne: () => `<div class="fen-sahne"><span class="fen-etiket">🔭 KUVVET DENEYİ</span>
+                <div class="fen-parkur" id="fenParkur">
+                  <div class="fen-hedef-cizgi" style="left:82%"></div>
+                  <div class="fen-cisim" id="fenCisim">${aracSvg}</div>
+                </div>
+                <p class="fen-not">Kırmızı çizgi, büyük kuvvetle ulaşılan noktadır.</p></div>`,
+              ipucu: "Kuvvet büyüdükçe hareket nasıl değişir?",
+              aciklama: "Bir cisme uygulanan kuvvet büyüdükçe cisim daha hızlı hareket eder ve daha uzağa gider.",
+              animasyon: (S2, g2, bit) => {
+                const c = document.getElementById("fenCisim");
+                if (!c) return bit();
+                S2.bekle(() => { c.style.left = "28%"; }, 250);
+                S2.bekle(() => { c.style.left = "4%"; }, 1400);
+                S2.bekle(() => { c.style.left = "78%"; sesEfekt("adim"); }, 2100);
+                S2.bekle(bit, 3400);
+              } };
+          }
+          if (b === "kuvvet"){
+            const hedefler = S.A.zorluk === 1 ? [2, 3, 4] : S.A.zorluk === 2 ? [1, 2, 3, 4, 5] : [1, 2, 3, 4, 5];
+            const hedef = fenSec(hedefler);
+            return { tip: "kuvvet", hedefKuvvet: hedef, secili: 1, denendi: false,
+              soru: "Aracı tam hedef çizgisine ulaştıracak kuvveti bul ve uygula.",
+              ipucu: "Araç çizgiyi geçtiyse kuvveti azalt, ulaşamadıysa artır.",
+              aciklama: "Uygulanan kuvvetin büyüklüğü, cismin ne kadar uzağa gideceğini belirler." };
+          }
+          if (b === "yon"){
+            const yonler = [{ id: "sag", ad: "Sağa doğru it" }, { id: "sol", ad: "Sola doğru it" },
+              { id: "yukari", ad: "Yukarı doğru kaldır" }, { id: "asagi", ad: "Aşağı doğru bastır" }];
+            const hedef = fenSec(["sag", "sol"]);
+            const liste = karistir(yonler).slice(0, kac);
+            if (!liste.some(x => x.id === hedef)) liste[0] = yonler.find(x => x.id === hedef);
+            return { tip: "yon", hedefYon: hedef, secenekler: karistir(liste),
+              soru: "Topu bayrağa ulaştırmak için hangi kuvveti uygulamalısın?",
+              ipucu: "Bayrak topun hangi tarafında duruyor?",
+              aciklama: "Hareket eden bir cismin yönü, ona uygulanan kuvvetin yönüne göre değişir." };
+          }
+          if (b === "durdur"){
+            const d = fenTazeSec(S, "durdur", FEN3_DURDURMA);
+            const t = fenCoktan(S, d.soru, d.dogru, d.celdirici, kac, d.ipucu, d.aciklama);
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🛑 GÜVENLİ DURDURMA</span></div>`;
+            return t;
+          }
+          const n = S.A.zorluk === 1 ? 2 : 3;
+          const d1 = karistir(FEN3_SEKIL.filter(x => x.degisir)).slice(0, n);
+          const d2 = karistir(FEN3_SEKIL.filter(x => !x.degisir)).slice(0, n);
+          const t = fenEsleme(S, "Nesneleri doğru kutuya taşı.",
+            d1.concat(d2).map(x => ({ ad: x.ad, hedef: x.degisir ? "degisir" : "degismez",
+              ipucu: "Elinle sıkıştırınca ya da bükünce ne olur?" })),
+            [{ id: "degisir", ad: "Kuvvetle şekli değişir", not: "Sıkışır, esner ya da bükülür" },
+             { id: "degismez", ad: "Kuvvetle şekli değişmez", not: "Sert ve sağlamdır" }],
+            "Nesne esneyip biçim alıyor mu?",
+            "Kuvvet, sünger ve oyun hamuru gibi cisimlerin şeklini değiştirir; taş ve tuğla gibi sert cisimlerin şeklini değiştirmez.");
+          t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧽 ŞEKİL DENEY MASASI</span></div>`;
+          return t;
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "deney") return fenEkranDeney(S, g);
+          if (g.tip === "kuvvet") return kuvvetEkran(S, g);
+          yonEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "kuvvet"){
+            const sl = document.getElementById("fenKuvvetKay");
+            if (sl){ sl.value = g.hedefKuvvet; sl.dispatchEvent(new Event("input")); }
+            return;
+          }
+          if (g.tip === "yon"){
+            const ix = g.secenekler.findIndex(x => x.id === g.hedefYon);
+            const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${ix}"]`);
+            if (el) el.classList.add("dogru");
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      /* Kuvvet kaydıracı: seviye değiştikçe önizleme oku uzar, uygulanınca araç gider */
+      function kuvvetEkran(S, g){
+        const yuzde = k => 4 + k * 15;
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">💪 KUVVET PARKURU</span>
+            <div class="fen-parkur" id="fenParkur">
+              <div class="fen-hedef-cizgi" style="left:${yuzde(g.hedefKuvvet)}%"></div>
+              <div class="fen-cisim" id="fenCisim" style="left:4%">${aracSvg}</div>
+            </div>
+            <div class="fen-kaydirac">
+              <span class="fen-kaydirac-ad">Kuvvet: <b id="fenKuvvetYazi">1</b> / 5</span>
+              <input type="range" id="fenKuvvetKay" min="1" max="5" step="1" value="1"
+                aria-label="Uygulanacak kuvvet" />
+              <span class="fen-not" id="fenOnizleme">Kaydıracı oynatınca aracın gideceği yer değişir.</span>
+            </div>
+          </div>`,
+          `<div class="fen-dugmeler"><button class="fen-dugme" id="fenUygula">Kuvveti Uygula</button></div>`);
+        const kay = $("fenKuvvetKay"), cisim = $("fenCisim");
+        const guncelle = () => {
+          const k = +kay.value;
+          $("fenKuvvetYazi").textContent = k;
+          $("fenOnizleme").textContent = "Bu kuvvetle araç yaklaşık " + (k * 15) + " birim ilerler.";
+        };
+        kay.addEventListener("input", guncelle);
+        guncelle();
+        $("fenUygula").addEventListener("click", () => {
+          if (S.kilit) return;
+          const k = +kay.value;
+          S.kilit = true;
+          cisim.style.left = yuzde(k) + "%";
+          sesEfekt("adim");
+          S.bekle(() => {
+            S.kilit = false;
+            if (k === g.hedefKuvvet) return fenDogru(S, "Araç tam hedef çizgisinde durdu.");
+            fenYanlis(S, k > g.hedefKuvvet ? "Araç çizgiyi geçti; kuvveti azalt."
+              : "Araç çizgiye ulaşamadı; kuvveti artır.", g.aciklama);
+            if (S.can <= 0) return;
+            S.bekle(() => { if (cisim) cisim.style.left = "4%"; }, 700);   /* araç başlangıca döner */
+          }, 1250);
+        });
+      }
+
+      /* Yön değiştirme: doğru kuvvet topu bayrağa götürür, yanlış kuvvet geri döndürür */
+      function yonEkran(S, g){
+        const sag = g.hedefYon === "sag";
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">↔️ YÖN PARKURU</span>
+            <div class="fen-parkur" id="fenParkur">
+              <div class="fen-hedef-cizgi" style="left:${sag ? 88 : 6}%"></div>
+              <div class="fen-cisim" id="fenCisim" style="left:46%;width:clamp(42px,13vw,58px)">${topSvg}</div>
+              <div style="position:absolute;bottom:6px;left:${sag ? 84 : 2}%;font-size:.72rem;font-weight:800;color:#8A3B58">BAYRAK</div>
+            </div>
+          </div>`,
+          `<div class="fen-secenekler dikey" id="fenSecenek">${g.secenekler.map((x, i) =>
+            `<button type="button" class="fen-sec" data-i="${i}">${kacis(x.ad)}</button>`).join("")}</div>`);
+        const cisim = $("fenCisim");
+        $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+          if (S.kilit) return;
+          const s = g.secenekler[+b.dataset.i];
+          S.kilit = true;
+          if (s.id === "sag") cisim.style.left = "86%";
+          else if (s.id === "sol") cisim.style.left = "4%";
+          else cisim.style.transform = s.id === "yukari" ? "translateY(-26px)" : "translateY(10px)";
+          sesEfekt("adim");
+          S.bekle(() => {
+            S.kilit = false;
+            if (s.id === g.hedefYon){
+              b.classList.add("dogru");
+              $("fenSecenek").querySelectorAll(".fen-sec").forEach(x => { x.disabled = true; });
+              return fenDogru(S, "Topu doğru kuvvetle bayrağa ulaştırdın.");
+            }
+            b.classList.add("hata");
+            fenYanlis(S, g.ipucu, g.aciklama);
+            if (S.can <= 0) return;
+            cisim.style.left = "46%"; cisim.style.transform = "";
+            S.bekle(() => { b.classList.remove("hata"); b.disabled = true; }, 700);
+          }, 1200);
+        }));
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 6: ELEKTRİK GÜVENLİK MERKEZİ ─────────────────────────────────
+     Bir evin elektrik güvenliği denetlenir: elektrikli araçları ayırma,
+     işlevleriyle eşleme, güvenli-tehlikeli davranış ayrımı, odadaki
+     tehlikeleri bulma, gereksiz çalışan cihazlar, kullanım verisi
+     karşılaştırma ve evi güvenli-tasarruflu hâle getirme.
+     ÖNEMLİ: tehlikeli davranışlar öğrenciye YAPTIRILMAZ; yalnızca senaryo
+     olarak gösterilip «güvenli mi?» diye sorulur. */
+  elektrikMerkezi: {
+    ad: "Elektrik Güvenlik Merkezi", ikon: "🔌",
+    baslat(oyun, bitir){
+      /* Oda sahnesindeki denetim noktaları (veri tablosu) */
+      const ODA = [
+        { x: 16, y: 62, ad: "Prizden kablosuyla sarkan fiş", tehlike: true,
+          not: "Fiş kablodan asılı duruyor; kablo yıpranır." },
+        { x: 37, y: 30, ad: "Duvardaki yıpranmış, içi görünen kablo", tehlike: true,
+          not: "Yıpranmış kablo kullanılmamalı, yetişkine haber verilmeli." },
+        { x: 62, y: 68, ad: "Lavabonun kenarına konmuş elektrikli araç", tehlike: true,
+          not: "Su ile elektrik bir arada bulunmamalı." },
+        { x: 84, y: 40, ad: "Aynı prize takılı çok sayıda çoklu priz", tehlike: true,
+          not: "Aşırı yüklenen priz ısınır." },
+        { x: 50, y: 52, ad: "Koruyucu kapağı takılı boş priz", tehlike: false,
+          not: "Bu güvenli bir düzenlemedir." },
+        { x: 26, y: 22, ad: "Duvara düzgün sabitlenmiş lamba", tehlike: false,
+          not: "Bu güvenli bir düzenlemedir." },
+        { x: 72, y: 22, ad: "Kapalı duran televizyon", tehlike: false,
+          not: "Kullanılmayan araç kapalı: hem güvenli hem tasarruflu." },
+      ];
+      const FINAL_KARAR = [
+        { durum: "Odadan çıkıyorsun ama lamba hâlâ yanıyor.",
+          dogru: "Lambayı kapat.", celdirici: ["Lambayı açık bırak, yine gelirsin.", "Bir lamba daha aç."],
+          aciklama: "Kullanılmayan araçlar kapatılır; bu elektrik tasarrufu sağlar." },
+        { durum: "Bir prize takılı çoklu prize altı araç birden bağlanmış.",
+          dogru: "Araçların bir bölümünü çıkarıp yükü azalt.", celdirici: ["Bir çoklu priz daha ekle.", "Hepsini birden çalıştır."],
+          aciklama: "Aşırı yüklenen priz ısınır ve yangına yol açabilir." },
+        { durum: "Televizyonun kablosunun dış kılıfı yırtılmış.",
+          dogru: "Kullanmayı bırak ve bir yetişkine haber ver.", celdirici: ["Bandaj yapıp kullanmaya devam et.", "Kabloyu kendin değiştir."],
+          aciklama: "Arızalı elektrikli araç kullanılmaz; onarımı yetişkin ve uzman yapar." },
+        { durum: "Şarjı dolan telefon hâlâ prizde duruyor.",
+          dogru: "Şarj aletini fişten tutarak çek.", celdirici: ["Kablosundan asılarak çek.", "Prizde takılı bırak."],
+          aciklama: "Fiş gövdesinden tutularak çekilir; boşta duran şarj aleti gereksiz enerji harcar." },
+      ];
+
+      function odaSvg(){
+        return `<svg viewBox="0 0 200 120" role="img" aria-label="Evin bir odası">
+          <rect width="200" height="120" fill="#F3F0E8" />
+          <rect y="86" width="200" height="34" fill="#D9CDBA" />
+          <rect x="8" y="30" width="34" height="26" rx="3" fill="#E3E8EC" stroke="#9AA9B4" stroke-width="2" />
+          <rect x="120" y="16" width="52" height="34" rx="4" fill="#5C6B76" />
+          <rect x="126" y="22" width="40" height="22" rx="2" fill="#8FA3B0" />
+          <rect x="112" y="70" width="56" height="18" rx="4" fill="#BFD4DE" stroke="#7E9AA8" stroke-width="2" />
+          <rect x="20" y="66" width="26" height="20" rx="3" fill="#E8E2D4" stroke="#A79B85" stroke-width="2" />
+          <circle cx="52" cy="24" r="9" fill="#F2D98A" stroke="#C7A94E" stroke-width="2" />
+          <rect x="160" y="60" width="16" height="24" rx="3" fill="#E8E2D4" stroke="#A79B85" stroke-width="2" />
+        </svg>`;
+      }
+
+      const T = {
+        on: "em", rozet: "Elektrik Koruyucusu rozeti",
+        bolumSira: ["ayir", "gorev", "guvenli", "oda", "gereksiz", "veri", "final"],
+        bolumAd: { ayir: "Elektrikli mi, Değil mi?", gorev: "Araç ve İşlevi",
+          guvenli: "Güvenli mi, Tehlikeli mi?", oda: "Odadaki Tehlikeleri Bul",
+          gereksiz: "Gereksiz Çalışanlar", veri: "Kullanım Verisi", final: "Evi Güvenli Hâle Getir" },
+        bolumIkon: { ayir: "🔌", gorev: "⚙️", guvenli: "🛡️", oda: "🏠", gereksiz: "💡",
+          veri: "📊", final: "✅" },
+        yonerge: {
+          ayir: "Elektrikli araçlar çalışmak için elektriğe ihtiyaç duyar.",
+          gorev: "Her elektrikli aracın bir işi vardır.",
+          guvenli: "Elektrikle çalışırken kurallara uymak kazaları önler.",
+          oda: "Odadaki denetim noktalarına dokun ve tehlikeli olanları işaretle.",
+          gereksiz: "Kullanılmayan araçların çalışması boşa enerji harcar.",
+          veri: "Sayılara bakarak en az enerji harcayanı seçebiliriz.",
+          final: "Evdeki durumları güvenli ve tasarruflu biçimde çöz.",
+        },
+        tanit: { bas: "Elektrik güvenlik denetimi başlıyor! 🔌",
+          metin: "Araçları tanı, güvenli davranışları ayırt et, odadaki tehlikeleri bul ve evi hem güvenli hem tasarruflu hâle getir. Tehlikeli davranışları yalnızca inceleyeceksin, asla denemeyeceksin." },
+        seviyeAd: { 1: "Kolay · az kart", 2: "Orta", 3: "Zor · çok kart" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          if (b === "ayir"){
+            const n = S.A.zorluk === 1 ? 2 : 3;
+            const e1 = karistir(FEN3_ELEKTRIKLI.filter(x => x.elektrikli)).slice(0, n);
+            const e2 = karistir(FEN3_ELEKTRIKLI.filter(x => !x.elektrikli)).slice(0, n);
+            const t = fenEsleme(S, "Araçları doğru kutuya taşı.",
+              e1.concat(e2).map(x => ({ ad: x.ad, hedef: x.elektrikli ? "var" : "yok",
+                ipucu: "Bu araç çalışmak için prize ya da pile ihtiyaç duyar mı?" })),
+              [{ id: "var", ad: "Elektrikle çalışır", not: "Prize ya da pile ihtiyaç duyar" },
+               { id: "yok", ad: "Elektrikle çalışmaz", not: "Elle kullanılır" }],
+              "Fişi ya da pili var mı?",
+              "Elektrikli araçlar çalışmak için elektrik enerjisine ihtiyaç duyar; diğerleri elle kullanılır.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🔌 DENETİM MASASI</span></div>`;
+            return t;
+          }
+          if (b === "gorev"){
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const secilen = karistir(FEN3_ELEKTRIKLI.filter(x => x.elektrikli)).slice(0, n);
+            const t = fenEsleme(S, "İşleri doğru araca taşı.",
+              secilen.map(x => ({ ad: x.gorev, hedef: x.ad, ipucu: "Bu işi evde hangi araç yapar?" })),
+              secilen.map(x => ({ id: x.ad, ad: x.ad })),
+              "Aracın evde ne işe yaradığını düşün.",
+              "Her elektrikli araç belirli bir işi kolaylaştırmak için üretilmiştir.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">⚙️ ARAÇ VE İŞLEVİ</span></div>`;
+            return t;
+          }
+          if (b === "guvenli"){
+            const n = S.A.zorluk === 1 ? 2 : 3;
+            const d1 = karistir(FEN3_DAVRANIS.filter(x => x.guvenli)).slice(0, n);
+            const d2 = karistir(FEN3_DAVRANIS.filter(x => !x.guvenli)).slice(0, n);
+            const t = fenEsleme(S, "Davranışları doğru kutuya taşı. (Bu davranışları yalnızca inceliyoruz.)",
+              d1.concat(d2).map(x => ({ ad: x.metin, hedef: x.guvenli ? "guvenli" : "tehlikeli",
+                ipucu: "Bu davranış bir kazaya yol açabilir mi?" })),
+              [{ id: "guvenli", ad: "Güvenli davranış" }, { id: "tehlikeli", ad: "Tehlikeli davranış" }],
+              "Su, yıpranmış kablo ve aşırı yük tehlike işaretidir.",
+              "Elektrikte güvenlik: kuru elle dokun, fişi gövdesinden çek, arızalı araç kullanma, prizi aşırı yükleme.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🛡️ GÜVENLİK KARTLARI</span></div>`;
+            return t;
+          }
+          if (b === "oda"){
+            const n = S.A.zorluk === 1 ? 5 : S.A.zorluk === 2 ? 6 : 7;
+            const noktalar = karistir(ODA.slice()).slice(0, n);
+            if (!noktalar.some(x => x.tehlike)) noktalar[0] = ODA[0];
+            return { tip: "oda", noktalar, bulunan: {},
+              soru: "Odadaki denetim noktalarına dokun ve TEHLİKELİ olanları işaretle.",
+              ipucu: "Su, yıpranmış kablo, asılı fiş ve aşırı yüklenmiş priz tehlikelidir.",
+              aciklama: "Evdeki elektrik tehlikeleri çoğunlukla suya yakınlık, yıpranmış kablo ve aşırı yüklenmiş prizdir." };
+          }
+          if (b === "gereksiz"){
+            const n1 = S.A.zorluk === 1 ? 2 : 3;
+            const g1 = karistir(FEN3_TASARRUF.filter(x => x.gereksiz)).slice(0, n1);
+            const g2 = karistir(FEN3_TASARRUF.filter(x => !x.gereksiz)).slice(0, 2);
+            const hepsi = karistir(g1.concat(g2));
+            return { tip: "coklu", soru: "Gereksiz yere enerji harcayan bütün durumları seç.",
+              secenekler: hepsi.map(x => ({ metin: x.metin })),
+              dogrular: hepsi.map((x, i) => x.gereksiz ? i : -1).filter(i => i >= 0),
+              sahne: `<div class="fen-sahne"><span class="fen-etiket">💡 TASARRUF DENETİMİ</span></div>`,
+              ipucu: "O anda gerçekten kullanılan araç gereksiz değildir.",
+              aciklama: "Kullanılmadığı hâlde çalışan araçlar boşa enerji harcar; ihtiyaç için çalışanlar gereksiz sayılmaz." };
+          }
+          if (b === "veri"){
+            const v = karistir(FEN3_ENERJI_VERI.slice());
+            const enAz = FEN3_ENERJI_VERI.slice().sort((a, b2) => parseInt(a.birim) - parseInt(b2.birim))[0];
+            const t = fenCoktan(S, "Tabloya göre aynı işi en az enerjiyle yapan hangisidir?",
+              enAz.ad, FEN3_ENERJI_VERI.filter(x => x.ad !== enAz.ad).map(x => x.ad), 3,
+              "Tablodaki sayıların küçüğüne bak.",
+              "Aynı aydınlatmayı daha az enerjiyle yapan ampul daha tasarrufludur.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">📊 ENERJİ KULLANIM TABLOSU</span>
+              <table class="fen-tablo"><tr><th>Aydınlatma aracı</th><th>Harcadığı enerji</th></tr>
+              ${v.map(x => `<tr><td>${kacis(x.ad)}</td><td class="sayi">${kacis(x.birim)}</td></tr>`).join("")}</table></div>`;
+            return t;
+          }
+          return { tip: "final", ix: 0,
+            adimlar: karistir(FINAL_KARAR.slice()).slice(0, S.A.zorluk === 1 ? 3 : 4).map(k => {
+              const d = fenSecenekDiz(S, [k.dogru].concat(k.celdirici), k.dogru);
+              return { durum: k.durum, secenekler: d.liste.map(m => ({ metin: m })), dogruIx: d.ix,
+                aciklama: k.aciklama };
+            }),
+            soru: "Evi güvenli ve tasarruflu hâle getir.",
+            ipucu: "Hem güvenliği hem tasarrufu birlikte düşün.",
+            aciklama: "Güvenli ve tasarruflu ev: arızalı araç kullanılmaz, priz aşırı yüklenmez, fiş gövdesinden çekilir ve kullanılmayan araçlar kapatılır." };
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "coklu") return fenEkranCoklu(S, g);
+          if (g.tip === "oda") return odaEkran(S, g);
+          finalEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "oda"){
+            const ix = g.noktalar.findIndex((n, i) => n.tehlike && !g.bulunan[i]);
+            if (ix >= 0){
+              const el = document.querySelector(`.fen-nokta[data-i="${ix}"]`);
+              if (el) el.classList.add("dogru");
+            }
+            return;
+          }
+          if (g.tip === "final"){
+            const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${g.adimlar[g.ix].dogruIx}"]`);
+            if (el) el.classList.add("dogru");
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      /* Oda denetimi: noktalar birbirinin aynıdır, tehlike ancak dokununca anlaşılır */
+      function odaEkran(S, g){
+        const tehlikeSayisi = g.noktalar.filter(x => x.tehlike).length;
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🏠 EV DENETİMİ</span>
+            <div class="fen-oda" id="fenOda">
+              ${odaSvg()}
+              ${g.noktalar.map((n, i) => `<button type="button" class="fen-nokta${g.bulunan[i] ? " dogru" : ""}"
+                data-i="${i}" style="left:${n.x}%;top:${n.y}%" aria-label="Denetim noktası ${i + 1}"></button>`).join("")}
+            </div>
+            <p class="fen-not">İşaretlenen tehlike: <b id="fenTehlike">${Object.keys(g.bulunan).length}</b> / ${tehlikeSayisi}</p>
+            <div class="fen-havuz" id="fenRapor">${g.noktalar.map((n, i) =>
+              g.bulunan[i] ? `<span class="fen-konan">${kacis(n.ad)}</span>` : "").join("")}</div>
+          </div>`, "");
+        $("fenOda").querySelectorAll(".fen-nokta").forEach(el => el.addEventListener("click", () => {
+          if (S.kilit) return;
+          const i = +el.dataset.i, n = g.noktalar[i];
+          if (g.bulunan[i]) return;
+          if (!n.tehlike){
+            el.classList.add("hata");
+            S.bekle(() => el.classList.remove("hata"), 620);
+            return fenYanlis(S, kacis(n.ad) + ": " + kacis(n.not), g.aciklama);
+          }
+          g.bulunan[i] = true;
+          el.classList.add("dogru");
+          const say = $("fenTehlike"); if (say) say.textContent = Object.keys(g.bulunan).length;
+          const r = $("fenRapor");
+          if (r) r.insertAdjacentHTML("beforeend", `<span class="fen-konan">${kacis(n.ad)}</span>`);
+          fenAdim(S);
+          maskotSoyle("fen", "konusan", "🏠 " + kacis(n.not));
+          if (Object.keys(g.bulunan).length === tehlikeSayisi)
+            fenDogru(S, "Odadaki bütün tehlikeleri buldun.");
+        }));
+      }
+
+      /* Final: evdeki durumlar tek tek güvenli ve tasarruflu biçimde çözülür */
+      function finalEkran(S, g){
+        const adim = g.adimlar[g.ix];
+        g.soru = adim.durum + " Ne yapmalısın?";
+        S.sonOkunan = null;
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">✅ EVİ GÜVENLİ HÂLE GETİR · ${g.ix + 1} / ${g.adimlar.length}</span>
+            <div class="fen-bilgi">${kacis(adim.durum)}</div>
+            <div class="fen-adimlar">${g.adimlar.map((a, i) =>
+              `<span class="fen-adim${i < g.ix ? " tamam" : i === g.ix ? " simdi" : ""}">${i + 1}. durum</span>`).join("")}</div>
+          </div>`,
+          `<div class="fen-secenekler dikey" id="fenSecenek">${adim.secenekler.map((x, i) =>
+            `<button type="button" class="fen-sec" data-i="${i}">${kacis(x.metin)}</button>`).join("")}</div>`);
+        $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+          if (S.kilit) return;
+          if (+b.dataset.i !== adim.dogruIx){
+            b.classList.add("hata");
+            fenYanlis(S, "Hem güvenli hem tasarruflu olanı seç.", adim.aciklama);
+            if (S.can <= 0) return;
+            return S.bekle(() => { b.classList.remove("hata"); b.disabled = true; }, 700);
+          }
+          b.classList.add("dogru");
+          $("fenSecenek").querySelectorAll(".fen-sec").forEach(x => { x.disabled = true; });
+          if (g.ix < g.adimlar.length - 1){
+            S.kilit = true;
+            fenAdim(S);
+            maskotSoyle("fen", "kutlama", "✅ " + kacis(adim.aciklama), "dogru");
+            S.bekle(() => { g.ix++; S.kilit = false; finalEkran(S, g); }, 1400);
+          } else {
+            fenDogru(S, "Evi güvenli ve tasarruflu hâle getirdin.");
+          }
+        }));
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 3: YER BİLİMCİLER İŞ BAŞINDA ─────────────────────────────────
+     Etkileşimli kazı alanı: doğal materyali büyüteçle inceleme, kayaç-mineral-
+     maden ayrımı, madenlerin kullanım alanları, fırçayla kazı, fosil
+     parçalarını birleştirme, fosil oluşum sırası ve paleontoloji.
+     Kazıda fosil tek dokunuşla açılmaz: fırça gerçekten pointer'ı izler ve
+     toprak ancak fırçanın geçtiği yerden kalkar. */
+  yerBilimciler: {
+    ad: "Yer Bilimciler İş Başında", ikon: "⛏️",
+    baslat(oyun, bitir){
+      /* Fosil çizimleri: kazıda ortaya çıkan ve parçaları birleştirilen desenler */
+      const FOSIL = [
+        { ad: "Amonit", ciz: `<g fill="none" stroke="#6B5335" stroke-width="4" stroke-linecap="round">
+            <path d="M150,100 m0,-52 a52,52 0 1,1 -0.5,0 a38,38 0 1,0 0.5,0 a24,24 0 1,1 -0.4,0" />
+            <path d="M150,48 v18 M198,86 l-16,7 M186,140 l-13,-11 M126,148 l6,-16 M104,104 l16,3" />
+          </g>` },
+        { ad: "Balık fosili", ciz: `<g fill="none" stroke="#6B5335" stroke-width="4" stroke-linecap="round">
+            <path d="M62,100 q52,-42 118,0 q-52,42 -118,0 z" />
+            <path d="M180,100 l32,-24 v48 z" />
+            <circle cx="92" cy="92" r="5" fill="#6B5335" />
+            <path d="M96,74 v52 M114,68 v64 M132,68 v64 M150,74 v52 M166,82 v36" stroke-width="3" />
+          </g>` },
+        { ad: "Yaprak fosili", ciz: `<g fill="none" stroke="#6B5335" stroke-width="4" stroke-linecap="round">
+            <path d="M78,150 q10,-92 76,-106 q28,58 -14,96 q-34,30 -62,10 z" />
+            <path d="M86,142 q40,-46 66,-96" />
+            <path d="M100,124 l30,-14 M110,104 l30,-16 M122,84 l26,-14 M92,140 l24,-6" stroke-width="3" />
+          </g>` },
+        { ad: "Trilobit", ciz: `<g fill="none" stroke="#6B5335" stroke-width="4" stroke-linecap="round">
+            <path d="M150,42 q40,10 40,56 q0,52 -40,62 q-40,-10 -40,-62 q0,-46 40,-56 z" />
+            <path d="M124,64 h52 M120,84 h60 M120,104 h60 M124,124 h52 M132,142 h36" stroke-width="3" />
+            <path d="M150,42 v118" stroke-width="3" />
+          </g>` },
+      ];
+      const ORNEK_BULGU = ["Parlak kristal taneleri", "İnce mineral damarı",
+        "Küçük gözenekler", "Yuvarlanmış kum taneleri", "Katmanlı çizgiler"];
+      const YERLER = [[32, 34], [70, 30], [30, 70], [68, 68], [50, 50]];
+
+      function ornekSvg(bulgular){
+        return `<svg viewBox="0 0 100 100" role="img" aria-label="Büyüteç altındaki kayaç örneği">
+          <rect width="100" height="100" fill="#DED3C2" />
+          <path d="M8,64 q18,-22 42,-12 q26,-16 44,8 q6,26 -14,34 q-30,10 -48,2 q-22,-6 -24,-32 z" fill="#B9AA92" />
+          <path d="M20,40 q16,-16 34,-8 q20,-12 32,6" fill="none" stroke="#9C8B72" stroke-width="2" />
+          ${bulgular.map(b => `<g transform="translate(${b.x} ${b.y})">
+            <circle r="6" fill="#8C7B62" opacity=".55" /><circle r="3" fill="#F0E7D6" /></g>`).join("")}
+        </svg>`;
+      }
+
+      const T = {
+        on: "yb", rozet: "Fosil Kâşifi rozeti",
+        bolumSira: ["incele", "esle", "kullanim", "kazi", "birlestir", "sira", "bilgi"],
+        bolumAd: { incele: "Doğal Materyali İncele", esle: "Kayaç, Mineral, Maden",
+          kullanim: "Madenler Nerede Kullanılır?", kazi: "Kazı Yap", birlestir: "Fosili Birleştir",
+          sira: "Fosil Nasıl Oluşur?", bilgi: "Bilim İnsanını Tanı" },
+        bolumIkon: { incele: "🔎", esle: "🗿", kullanim: "🏗️", kazi: "⛏️", birlestir: "🧩",
+          sira: "🕰️", bilgi: "🧑‍🔬" },
+        yonerge: {
+          incele: "Büyüteci örneğin üzerinde gezdir; gördüğün ayrıntıya dokunarak kaydet.",
+          esle: "Mineraller kayaçların yapı taşıdır; madenler yer altından çıkarılıp işlenir.",
+          kullanim: "Her madenin özelliği onu farklı bir işte kullanışlı kılar.",
+          kazi: "Fırçayı basılı tutup gezdir; toprağı azar azar kaldır, fosile zarar verme.",
+          birlestir: "Parçaları doğru bölmeye taşı; fosil ancak tamamlanınca anlaşılır.",
+          sira: "Fosil, uzun yıllar süren aşamalar sonunda oluşur.",
+          bilgi: "Fosilleri inceleyen bilim insanları geçmişteki canlıları böyle tanır.",
+        },
+        tanit: { bas: "Kazı alanı hazır, ekip seni bekliyor! ⛏️",
+          metin: "Örneği büyüteçle incele, kayaç-mineral-maden ayrımını yap, fırçayla kazı yaparak fosili ortaya çıkar ve parçaları birleştir." },
+        seviyeAd: { 1: "Kolay · az kart", 2: "Orta", 3: "Zor · çok kart" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          if (b === "incele"){
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const adlar = karistir(ORNEK_BULGU.slice()).slice(0, n);
+            const yer = karistir(YERLER.slice()).slice(0, n);
+            return { tip: "mercek", soru: "Kayaç örneğini büyüteçle incele ve gördüğün ayrıntıları kaydet.",
+              bulgular: adlar.map((ad, i) => ({ ad, x: yer[i][0], y: yer[i][1] })),
+              ipucu: "Büyüteci yavaşça gezdir; kapalı alanda ayrıntı görünmez.",
+              aciklama: "Doğal materyalleri incelerken renk, parlaklık, doku ve tanelerine bakarız. Bu gözlemler kayacı tanımamıza yardım eder." };
+          }
+          if (b === "esle"){
+            const per = S.A.zorluk === 3 ? 2 : 1;
+            let jet = [];
+            ["kayac", "mineral", "maden"].forEach(t => {
+              karistir(FEN3_YER_MADDE.filter(x => x.tur === t)).slice(0, per).forEach(x =>
+                jet.push({ ad: x.ad, hedef: x.tur, ipucu: "Bu madde bir bütün taş mı, taşın yapı taşı mı, yoksa işlenen bir kaynak mı?" }));
+            });
+            const t = fenEsleme(S, "Örnekleri doğru kutuya taşı.", jet,
+              ["kayac", "mineral", "maden"].map(x => ({ id: x, ad: FEN3_YER_AD[x], not: FEN3_YER_NOT[x] })),
+              "Kayaçlar minerallerden oluşur; madenler işlenerek kullanılır.",
+              "Mineral kayacın yapı taşıdır. Kayaç minerallerin bir araya gelmesiyle oluşur. Maden ise yer altından çıkarılıp işlenen değerli kaynaktır.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🗿 ÖRNEK MASASI</span></div>`;
+            return t;
+          }
+          if (b === "kullanim"){
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const secilen = karistir(FEN3_MADEN_KULLANIM.slice()).slice(0, n);
+            const t = fenEsleme(S, "Kullanım alanlarını doğru madene taşı.",
+              secilen.map(x => ({ ad: x.kullanim, hedef: x.maden, ipucu: "Bu iş için hangi özellik gerekli: iletkenlik mi, sağlamlık mı?" })),
+              secilen.map(x => ({ id: x.maden, ad: x.maden })),
+              "Elektrik ileten, sağlam olan ya da yanabilen hangisi?",
+              "Madenler özelliklerine göre kullanılır: bakır elektriği iyi iletir, demir sağlamdır, kömür yanarak enerji verir.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🏗️ MADEN KULLANIM PANOSU</span></div>`;
+            return t;
+          }
+          if (b === "kazi"){
+            return { tip: "kazi", fosil: fenTazeSec(S, "fosil", FOSIL), bitti: false,
+              soru: "Fırçayı gezdirerek fosilin üstündeki toprağı temizle.",
+              ipucu: "Fırçayı basılı tutup küçük hareketlerle gezdir.",
+              aciklama: "Kazıda toprak azar azar kaldırılır. Kazma yerine yumuşak fırça kullanılır ki fosil kırılmasın." };
+          }
+          if (b === "birlestir"){
+            return { tip: "yapboz", fosil: fenTazeSec(S, "yapboz", FOSIL),
+              soru: "Fosil parçalarını doğru bölmeye taşıyarak bütünü oluştur.",
+              ipucu: "Parçanın üzerindeki çizginin nereye uzandığına bak.",
+              aciklama: "Bulunan fosiller çoğu zaman parça parçadır; bilim insanları parçaları birleştirerek canlının bütününü ortaya çıkarır." };
+          }
+          if (b === "sira"){
+            const t = fenSiralama(S, "Fosilin oluşum aşamalarını sıraya koy.", FEN3_FOSIL_SIRA,
+              "Her şey hangi olayla başlar?",
+              "Fosil oluşumu uzun sürer: canlı ölür, üzeri örtülür, tabakalar birikir, sert kısımlar taşlaşır ve kazıyla bulunur.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🕰️ FOSİL OLUŞUM ÇİZELGESİ</span>
+              <div class="fen-not">Kartlarda sıra numarası yok.</div></div>`;
+            return t;
+          }
+          const f = fenTazeSec(S, "fbilgi", FEN3_FOSIL_BILGI);
+          const t = fenCoktan(S, f.soru, f.dogru, f.celdirici, kac, f.ipucu, f.aciklama);
+          t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧑‍🔬 ARAŞTIRMA NOTU</span></div>`;
+          return t;
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "sira") return fenEkranSira(S, g);
+          if (g.tip === "mercek") return mercekEkran(S, g);
+          if (g.tip === "kazi") return kaziEkran(S, g);
+          yapbozEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "mercek"){
+            const el = document.querySelector(".fen-bulgu:not(.bulundu)");
+            if (el) el.classList.add("bulundu");
+            return;
+          }
+          if (g.tip === "yapboz"){
+            const bos = document.querySelector(".fen-jeton:not(.kullanildi)");
+            if (bos){
+              bos.classList.add("secili");
+              const h = document.querySelector(`.fen-hedef[data-hedef="${bos.dataset.jeton}"]`);
+              if (h) h.classList.add("uzerinde");
+            }
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      /* Büyüteçle örnek inceleme */
+      function mercekEkran(S, g){
+        g.bulunan = g.bulunan || {};
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🔎 ÖRNEK İNCELEME MASASI</span>
+            <div class="fen-mercek" id="fenMercek">
+              ${ornekSvg(g.bulgular)}
+              <div class="fen-mercek-perde"></div>
+              ${g.bulgular.map((b, i) => `<button type="button" class="fen-bulgu${g.bulunan[i] ? " bulundu" : ""}"
+                data-i="${i}" style="left:${b.x}%;top:${b.y}%" aria-label="İncelenecek ayrıntı ${i + 1}"></button>`).join("")}
+            </div>
+            <p class="fen-not">Kaydedilen ayrıntı: <b id="fenBulunan">${Object.keys(g.bulunan).length}</b> / ${g.bulgular.length}</p>
+            <div class="fen-havuz" id="fenDefter">${g.bulgular.map((b, i) =>
+              g.bulunan[i] ? `<span class="fen-konan">${kacis(b.ad)}</span>` : "").join("")}</div>
+          </div>`, "");
+        fenMercekKur($("fenMercek"), 62, el => {
+          if (S.kilit) return;
+          const i = +el.dataset.i;
+          if (g.bulunan[i]) return;
+          g.bulunan[i] = true;
+          el.classList.add("bulundu");
+          const say = $("fenBulunan"); if (say) say.textContent = Object.keys(g.bulunan).length;
+          const d = $("fenDefter");
+          if (d) d.insertAdjacentHTML("beforeend", `<span class="fen-konan">${kacis(g.bulgular[i].ad)}</span>`);
+          fenAdim(S);
+          maskotSoyle("fen", "konusan", "🔎 Deftere yazdım: <b>" + kacis(g.bulgular[i].ad) + "</b>");
+          if (Object.keys(g.bulunan).length === g.bulgular.length)
+            fenDogru(S, "Örneği eksiksiz incelendi.");
+        });
+      }
+
+      /* Fırçayla kazı: toprak katmanı yalnızca fırçanın geçtiği yerden kalkar */
+      function kaziEkran(S, g){
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">⛏️ KAZI ALANI</span>
+            <div class="fen-kazi" id="fenKazi">
+              <svg viewBox="0 0 300 200" role="img" aria-label="Kazı alanındaki fosil">
+                <rect width="300" height="200" fill="#EDE2CE" />
+                ${g.fosil.ciz}
+              </svg>
+              <canvas id="fenKaziTuval" width="300" height="200" aria-hidden="true"></canvas>
+            </div>
+            <div class="fen-kazi-oran"><div class="fen-kazi-dolgu" id="fenKaziDolgu"></div></div>
+            <p class="fen-not">Temizlenen alan: <b id="fenKaziYuzde">0</b>%</p>
+          </div>`, "");
+        const tuval = $("fenKaziTuval"), ctx = tuval.getContext("2d");
+        ctx.fillStyle = "#8A6A44"; ctx.fillRect(0, 0, 300, 200);
+        for (let i = 0; i < 460; i++){
+          ctx.fillStyle = i % 2 ? "rgba(0,0,0,.12)" : "rgba(255,255,255,.09)";
+          ctx.beginPath();
+          ctx.arc(Math.random() * 300, Math.random() * 200, 1 + Math.random() * 4, 0, 6.29);
+          ctx.fill();
+        }
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        const kap = $("fenKazi");
+        let basili = false, vurus = 0, esik = 25;
+        function firca(x, y){
+          const r = kap.getBoundingClientRect();
+          if (!r.width) return;
+          const cx = (x - r.left) / r.width * 300, cy = (y - r.top) / r.height * 200;
+          ctx.beginPath(); ctx.arc(cx, cy, 18, 0, 6.29); ctx.fill();
+          if (++vurus % 5 === 0) olc();
+        }
+        function olc(){
+          let bos = 0, top = 0;
+          try {
+            const d = ctx.getImageData(0, 0, 300, 200).data;
+            for (let i = 3; i < d.length; i += 160){ top++; if (d[i] < 40) bos++; }
+          } catch (e) { return; }
+          const yuzde = Math.min(100, Math.round(bos / Math.max(1, top) * 100));
+          const y1 = $("fenKaziYuzde"); if (y1) y1.textContent = yuzde;
+          const d1 = $("fenKaziDolgu"); if (d1) d1.style.width = yuzde + "%";
+          if (yuzde >= esik && esik < 80){ esik += 25; fenAdim(S); sesEfekt("adim"); }
+          if (yuzde >= 78 && !g.bitti){
+            g.bitti = true;
+            maskotSoyle("fen", "kutlama", "⛏️ Fosil ortaya çıktı: <b>" + kacis(g.fosil.ad) + "</b>", "dogru");
+            fenDogru(S, g.fosil.ad + " fosilini ortaya çıkardın!");
+          }
+        }
+        kap.addEventListener("pointerdown", e => { basili = true; try { kap.setPointerCapture(e.pointerId); } catch (x) {} firca(e.clientX, e.clientY); });
+        kap.addEventListener("pointermove", e => { if (!basili && e.pointerType !== "mouse") return; e.preventDefault(); firca(e.clientX, e.clientY); });
+        kap.addEventListener("pointerup", () => { basili = false; olc(); });
+        kap.addEventListener("pointercancel", () => { basili = false; });
+        kap.addEventListener("pointerleave", () => { basili = false; });
+      }
+
+      /* Fosil yapbozu: dört parça, çizimin dört bölmesinden gelir */
+      function yapbozEkran(S, g){
+        g.yerlesen = g.yerlesen || {};
+        const kutu = [[0, 0], [150, 0], [0, 100], [150, 100]];
+        const parca = i => `<svg viewBox="${kutu[i][0]} ${kutu[i][1]} 150 100" width="112" height="75"
+          role="img" aria-label="Fosil parçası"><rect x="${kutu[i][0]}" y="${kutu[i][1]}" width="150" height="100" fill="#EDE2CE" />${g.fosil.ciz}</svg>`;
+        const sira = karistir([0, 1, 2, 3]);
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🧩 FOSİL BİRLEŞTİRME MASASI</span>
+            <div class="fen-kutular" id="fenKutular" style="max-width:300px;margin-left:auto;margin-right:auto">
+              ${[0, 1, 2, 3].map(i => `<div class="fen-hedef" data-hedef="${i}" style="flex:0 0 130px;min-width:130px;min-height:88px">
+                <span class="fen-hedef-icerik"></span></div>`).join("")}
+            </div>
+          </div>`,
+          `<div class="fen-havuz" id="fenHavuz">${sira.map(i =>
+            `<button type="button" class="fen-jeton" data-jeton="${i}" style="padding:4px">${parca(i)}</button>`).join("")}</div>`);
+        const alan = $("app");
+        deSurukleBirak(alan, "#fenHavuz .fen-jeton", "#fenKutular .fen-hedef", (jeton, hedef, el) => {
+          if (S.kilit) return;
+          const j = +jeton;
+          if (g.yerlesen[j]) return;
+          const jt = alan.querySelector(`.fen-jeton[data-jeton="${j}"]`);
+          if (String(j) !== String(hedef)){
+            if (el){ el.classList.add("hata"); S.bekle(() => el.classList.remove("hata"), 620); }
+            if (jt){ jt.classList.add("hata"); S.bekle(() => jt.classList.remove("hata"), 620); }
+            return fenYanlis(S, g.ipucu, g.aciklama);
+          }
+          g.yerlesen[j] = true;
+          if (jt) jt.classList.add("kullanildi");
+          const ic = el.querySelector(".fen-hedef-icerik");
+          if (ic) ic.innerHTML = parca(j);
+          el.classList.add("dogru");
+          fenAdim(S);
+          if (Object.keys(g.yerlesen).length === 4)
+            fenDogru(S, g.fosil.ad + " fosilini birleştirdin!");
+        }, sec => { const k = $("fenKutular"); if (k) k.parentNode.classList.toggle("secim-var", sec != null); });
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 4: MADDE LABORATUVARI ────────────────────────────────────────
+     Sanal laboratuvar: maddeleri hâllerine göre sınıflandırma, karışım
+     hazırlama, uygun ayırma yöntemini seçme, tahmin-deney-karşılaştırma,
+     yanlış yöntemi bulma ve atık ayrıştırma.
+     Deney animasyonu YALNIZCA «Deneyi Başlat» ile çalışır; sonuç önce görünmez. */
+  maddeLab: {
+    ad: "Madde Laboratuvarı", ikon: "⚗️",
+    baslat(oyun, bitir){
+      /* Deney düzeneği: üstte karışım kabı, altta toplama kabı, araç yönteme göre */
+      function duzenekSvg(yontem){
+        const arac = {
+          eleme: `<g id="fenArac" style="transition:transform .5s ease"><rect x="88" y="86" width="84" height="9" rx="4" fill="#7A6A56" />
+              <path d="M88,95 h84 l-10,20 h-64 z" fill="none" stroke="#7A6A56" stroke-width="3" />
+              <path d="M96,101 h68 M100,109 h60" stroke="#7A6A56" stroke-width="2" /></g>`,
+          suzme: `<g id="fenArac" style="transition:transform .5s ease"><path d="M92,84 h76 l-38,44 z" fill="#F6F2EA" stroke="#7A6A56" stroke-width="3" /></g>`,
+          miknatis: `<g id="fenArac" style="transition:transform .8s ease" transform="translate(0,-18)">
+              <path d="M186,50 v-22 a16,16 0 0,1 32,0 v22 h-11 v-22 a5,5 0 0,0 -10,0 v22 z" fill="#C43A6E" /></g>`,
+          dinlendirme: `<g id="fenArac" opacity="0"></g>`,
+          yuzdurme: `<g id="fenArac" opacity="0"></g>`,
+        };
+        return `<svg viewBox="0 0 260 200" role="img" aria-label="Deney düzeneği">
+          <rect x="70" y="20" width="120" height="76" rx="6" fill="none" stroke="#4C6470" stroke-width="4" />
+          <rect id="fenSivi" x="76" y="46" width="108" height="46" rx="4" fill="#BEDCEB"
+            style="transition:transform .9s ease" />
+          <g id="fenTanecik" style="transition:transform .9s ease">
+            ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<circle cx="${86 + (i % 4) * 28}" cy="${56 + Math.floor(i / 4) * 20}" r="5" fill="#8A6A44" />`).join("")}
+          </g>
+          ${arac[yontem] || ""}
+          <rect x="88" y="130" width="84" height="56" rx="6" fill="none" stroke="#4C6470" stroke-width="4" />
+        </svg>`;
+      }
+
+      const T = {
+        on: "ml", rozet: "Madde Bilimcisi rozeti",
+        bolumSira: ["hal", "karisim", "yontem", "deney", "hata", "atik"],
+        bolumAd: { hal: "Katı, Sıvı, Gaz", karisim: "Karışım Hazırla", yontem: "Ayırma Yöntemini Seç",
+          deney: "Tahmin Et ve Dene", hata: "Yanlış Yöntemi Bul", atik: "Atıkları Ayır" },
+        bolumIkon: { hal: "🧊", karisim: "🥣", yontem: "🧪", deney: "🔭", hata: "🚫", atik: "♻️" },
+        yonerge: {
+          hal: "Katının belirli şekli vardır, sıvı kabın şeklini alır, gaz her yere yayılır.",
+          karisim: "Karışım, iki ya da daha çok maddenin bir araya gelmesidir.",
+          yontem: "Ayırma yöntemi, karışımdaki maddelerin özelliğine göre seçilir.",
+          deney: "Önce tahmin et, sonra deneyi çalıştır ve ikisini karşılaştır.",
+          hata: "Yanlış seçilen yöntem karışımı ayıramaz; doğrusunu bulmalısın.",
+          atik: "Atıklar kâğıt, plastik, cam ve metal olarak ayrılırsa geri dönüşür.",
+        },
+        tanit: { bas: "Laboratuvar önlüğünü giy! ⚗️",
+          metin: "Maddeleri hâllerine göre ayır, karışım hazırla, doğru ayırma yöntemini seç, tahminini deneyle sına ve atıkları geri dönüşüme gönder." },
+        seviyeAd: { 1: "Kolay · az kart", 2: "Orta", 3: "Zor · çok kart" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          if (b === "hal"){
+            const per = S.A.zorluk === 1 ? 1 : S.A.zorluk === 2 ? 2 : 3;
+            let jet = [];
+            ["kati", "sivi", "gaz"].forEach(h => {
+              karistir(FEN3_MADDE.filter(m => m.hal === h)).slice(0, per).forEach(m =>
+                jet.push({ ad: m.ad, hedef: m.hal, ipucu: "Bu maddenin belirli bir şekli var mı, kabın şeklini mi alıyor?" }));
+            });
+            const t = fenEsleme(S, "Maddeleri doğru kutuya taşı.", jet,
+              ["kati", "sivi", "gaz"].map(h => ({ id: h, ad: FEN3_HAL_AD[h], not: FEN3_HAL_NOT[h] })),
+              "Elinde tutabiliyor musun, akıyor mu, yayılıyor mu?",
+              "Katıların belirli şekli vardır. Sıvılar bulundukları kabın şeklini alır. Gazlar bulundukları kabın her yerine yayılır.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧊 MADDE RAFI</span></div>`;
+            return t;
+          }
+          if (b === "karisim"){
+            const k = fenTazeSec(S, "karisim", FEN3_KARISIM);
+            const parca = k.ad.split(" ile ");
+            const havuz = karistir(["Su", "Kum", "Un", "Pirinç", "Zeytinyağı", "Demir tozu", "Çamur", "Tahta talaşı", "Çakıl"]
+              .filter(x => parca.indexOf(x) < 0)).slice(0, S.A.zorluk === 1 ? 2 : 4);
+            return { tip: "karisim", evre: "sec", karisim: k, gereken: parca, secili: {},
+              secenekler: karistir(parca.concat(havuz)),
+              soru: `«${k.ad}» karışımını hazırla: gereken iki maddeyi seç.`,
+              ipucu: "Karışımın adında geçen iki maddeyi seç.",
+              aciklama: k.aciklama };
+          }
+          if (b === "yontem"){
+            const k = fenTazeSec(S, "yontem", FEN3_KARISIM);
+            const hepsi = Object.keys(FEN3_YONTEM_AD).map(x => FEN3_YONTEM_AD[x]);
+            const t = fenCoktan(S, `«${k.ad}» karışımı hangi yöntemle ayrılır?`,
+              FEN3_YONTEM_AD[k.yontem], hepsi.filter(x => x !== FEN3_YONTEM_AD[k.yontem]),
+              kac, k.ipucu, k.aciklama);
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧪 AYIRMA MASASI</span>
+              <div class="fen-bilgi">Karışım: ${kacis(k.ad)}</div></div>`;
+            return t;
+          }
+          if (b === "deney"){
+            const k = fenTazeSec(S, "deney", FEN3_KARISIM);
+            const hepsi = Object.keys(FEN3_YONTEM_AD).map(x => FEN3_YONTEM_AD[x]);
+            const celdirici = karistir(hepsi.filter(x => x !== FEN3_YONTEM_AD[k.yontem])).slice(0, kac - 1);
+            const d = fenSecenekDiz(S, [FEN3_YONTEM_AD[k.yontem]].concat(celdirici), FEN3_YONTEM_AD[k.yontem]);
+            return { tip: "deney", karisim: k, yontemKod: k.yontem,
+              soru: `«${k.ad}» karışımı hangi yöntemle ayrılır? Önce tahmin et.`,
+              deneySoru: "Deneyi başlat ve düzeneği dikkatle izle.",
+              secenekler: d.liste.map(m => ({ metin: m })), dogruIx: d.ix,
+              sahne: () => `<div class="fen-sahne"><span class="fen-etiket">🔭 DENEY DÜZENEĞİ</span>
+                <div class="fen-bilgi">Karışım: ${kacis(k.ad)}</div>
+                ${duzenekSvg(k.yontem)}</div>`,
+              ipucu: k.ipucu, aciklama: k.aciklama,
+              animasyon: deneyAnim };
+          }
+          if (b === "hata"){
+            const h = fenTazeSec(S, "hata", FEN3_YANLIS_YONTEM);
+            const hepsi = Object.keys(FEN3_YONTEM_AD).map(x => FEN3_YONTEM_AD[x]);
+            const dogru = FEN3_YONTEM_AD[h.dogruYontem];
+            const t = fenCoktan(S, "Bu çalışmada yöntem yanlış seçilmiş. Doğrusu hangisi olmalıydı?",
+              dogru, hepsi.filter(x => x !== dogru), kac,
+              "Karışımdaki maddelerin özelliğine bak.", h.aciklama);
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🚫 HATALI ÇALIŞMA RAPORU</span>
+              <div class="fen-bilgi">${kacis(h.metin)}</div></div>`;
+            return t;
+          }
+          const kutular = S.A.zorluk === 1 ? ["kagit", "plastik", "cam"] : ["kagit", "plastik", "cam", "metal"];
+          const per = S.A.zorluk === 3 ? 2 : 1;
+          let jet = [];
+          kutular.forEach(k => {
+            karistir(FEN3_ATIK.filter(a => a.kutu === k)).slice(0, per).forEach(a =>
+              jet.push({ ad: a.ad, hedef: a.kutu, ipucu: "Bu atık hangi maddeden yapılmış?" }));
+          });
+          const t = fenEsleme(S, "Atıkları doğru geri dönüşüm kutusuna taşı.", jet,
+            kutular.map(k => ({ id: k, ad: FEN3_ATIK_AD[k] })),
+            "Nesnenin yapıldığı maddeye bak.",
+            "Atıklar yapıldıkları maddeye göre ayrılır. Doğru ayrılan atıklar geri dönüştürülerek yeniden kullanılır.");
+          t.sahne = `<div class="fen-sahne"><span class="fen-etiket">♻️ GERİ DÖNÜŞÜM İSTASYONU</span></div>`;
+          return t;
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "deney") return fenEkranDeney(S, g);
+          karisimEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "karisim"){
+            if (g.evre === "sec") g.gereken.forEach(ad => {
+              const ix = g.secenekler.indexOf(ad);
+              const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${ix}"]`);
+              if (el) el.classList.add("dogru");
+            });
+            if (g.evre === "yontem"){
+              const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${g.yontemIx}"]`);
+              if (el) el.classList.add("dogru");
+            }
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      /* Deney animasyonu: yönteme göre tanecikler ve sıvı hareket eder */
+      function deneyAnim(S, g, bitince){
+        const tan = document.getElementById("fenTanecik");
+        const sivi = document.getElementById("fenSivi");
+        const arac = document.getElementById("fenArac");
+        S.bekle(() => {
+          const y = g.yontemKod;
+          if (arac && (y === "eleme" || y === "suzme")) arac.style.transform = "translateY(0px)";
+          if (arac && y === "miknatis") arac.style.transform = "translate(-64px, 22px)";
+          if (y === "dinlendirme" && tan) tan.style.transform = "translateY(34px)";
+          else if (y === "yuzdurme" && tan) tan.style.transform = "translateY(-26px)";
+          else if (y === "miknatis" && tan) tan.style.transform = "translate(38px, -22px)";
+          else if (y === "suzme"){
+            if (sivi) sivi.style.transform = "translateY(88px) scaleY(.5)";
+            if (tan) tan.style.transform = "translateY(24px)";
+          } else if (y === "eleme" && tan) tan.style.transform = "translateY(74px)";
+          sesEfekt("adim");
+        }, 420);
+        S.bekle(bitince, 2400);
+      }
+
+      /* Karışım hazırlama: iki maddeyi seç → karıştır → yöntemi belirle */
+      function karisimEkran(S, g){
+        if (g.evre === "sec") return secEkran();
+        if (g.evre === "karistir") return karistirEkran();
+        return yontemEkran();
+
+        function secEkran(){
+          g.soru = `«${g.karisim.ad}» karışımını hazırla: gereken iki maddeyi seç.`;
+          fenIskelet(S, g, `<div class="fen-sahne"><span class="fen-etiket">🥣 KARIŞIM TEZGÂHI</span>
+              <div class="fen-bilgi">Hazırlanacak karışım: ${kacis(g.karisim.ad)}</div></div>`,
+            `<div class="fen-secenekler yatay" id="fenSecenek">${g.secenekler.map((m, i) =>
+              `<button type="button" class="fen-sec${g.secili[i] ? " secili" : ""}" data-i="${i}">${kacis(m)}</button>`).join("")}</div>
+            <div class="fen-dugmeler"><button class="fen-dugme" id="fenKaristir">Karıştır</button></div>`);
+          $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+            if (S.kilit) return;
+            const i = +b.dataset.i;
+            g.secili[i] = !g.secili[i];
+            b.classList.toggle("secili", !!g.secili[i]);
+            sesEfekt("adim");
+          }));
+          $("fenKaristir").addEventListener("click", () => {
+            if (S.kilit) return;
+            const secilen = Object.keys(g.secili).filter(k => g.secili[k]).map(i => g.secenekler[+i]);
+            if (secilen.length !== 2)
+              return fenYanlis(S, "Karışım için tam olarak iki madde seçilir.", null);
+            if (g.gereken.some(x => secilen.indexOf(x) < 0))
+              return fenYanlis(S, "Seçtiğin maddelerden biri bu karışımda yok.", g.aciklama);
+            fenAdim(S);
+            maskotSoyle("fen", "kutlama", "🥣 Karışım hazır.", "dogru");
+            S.kilit = true;
+            S.bekle(() => { S.kilit = false; g.evre = "karistir"; karisimEkran(S, g); }, 900);
+          });
+        }
+        function karistirEkran(){
+          g.soru = "Karışımı incele ve hazır olduğunda devam et.";
+          S.sonOkunan = null;
+          fenIskelet(S, g, `<div class="fen-sahne"><span class="fen-etiket">🥣 KARIŞIM HAZIR</span>
+              <div class="fen-bilgi">${kacis(g.karisim.ad)}</div>
+              ${duzenekSvg("dinlendirme")}</div>`,
+            `<div class="fen-dugmeler"><button class="fen-dugme" id="fenIlerleBtn">Devam Et</button></div>`);
+          const tan = document.getElementById("fenTanecik");
+          if (tan) S.bekle(() => { tan.style.transform = "translate(6px,8px)"; }, 300);
+          $("fenIlerleBtn").addEventListener("click", () => {
+            if (S.kilit) return;
+            g.evre = "yontem"; karisimEkran(S, g);
+          });
+        }
+        function yontemEkran(){
+          const hepsi = Object.keys(FEN3_YONTEM_AD).map(x => FEN3_YONTEM_AD[x]);
+          const dogru = FEN3_YONTEM_AD[g.karisim.yontem];
+          if (!g.yontemSec){
+            const kac = S.A.zorluk === 1 ? 3 : 4;
+            const cel = karistir(hepsi.filter(x => x !== dogru)).slice(0, kac - 1);
+            const d = fenSecenekDiz(S, [dogru].concat(cel), dogru);
+            g.yontemSec = d.liste; g.yontemIx = d.ix;
+          }
+          g.soru = "Hazırladığın karışımı hangi yöntemle ayırırsın?";
+          g.ipucu = g.karisim.ipucu;
+          S.sonOkunan = null;
+          fenIskelet(S, g, `<div class="fen-sahne"><span class="fen-etiket">🥣 KARIŞIMI AYIR</span>
+              <div class="fen-bilgi">${kacis(g.karisim.ad)}</div></div>`,
+            `<div class="fen-secenekler dikey" id="fenSecenek">${g.yontemSec.map((m, i) =>
+              `<button type="button" class="fen-sec" data-i="${i}">${kacis(m)}</button>`).join("")}</div>`);
+          $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+            if (S.kilit) return;
+            if (+b.dataset.i !== g.yontemIx){
+              b.classList.add("hata");
+              fenYanlis(S, g.karisim.ipucu, g.karisim.aciklama);
+              if (S.can <= 0) return;
+              return S.bekle(() => { b.classList.remove("hata"); b.disabled = true; }, 700);
+            }
+            b.classList.add("dogru");
+            $("fenSecenek").querySelectorAll(".fen-sec").forEach(x => { x.disabled = true; });
+            fenDogru(S, "Karışımı hazırladın ve doğru yöntemle ayırdın.");
+          }));
+        }
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 1: BİLİM DEDEKTİFİ ───────────────────────────────────────────
+     Yarım kalmış bilim dosyaları çözülür: araştırılabilir soruyu bulma,
+     gözlem-tahmin ayrımı, uygun bilgi toplama yolunu seçme, araştırma
+     basamaklarını sıralama, bilim insanının çalışma özellikleri ve son
+     bölümde baştan sona yürütülen küçük bir araştırma (ışık ve fasulye).
+     Seçenekler tek biçimlidir; hiçbir kart cevabı ele veren işaret taşımaz. */
+  bilimDedektifi: {
+    ad: "Bilim Dedektifi", ikon: "🔬",
+    baslat(oyun, bitir){
+      const dosya = ad => `<div class="fen-sahne">
+        <span class="fen-etiket">🔬 KAYNAK KAMPÜS BİLİM DOSYASI</span>
+        <div class="fen-bilgi">${kacis(ad)}</div></div>`;
+
+      /* Işık araştırmasının iki saksısı: büyüme yalnızca gözlem adımında görünür */
+      function bitkiSvg(isikli, buyudu){
+        const boy = buyudu ? (isikli ? 82 : 30) : 14;
+        const yaprak = isikli ? "#3F8F63" : "#C6CDA8";
+        const govde = isikli ? "#4C9B6E" : "#CFD5B6";
+        const y1 = 112 - boy * 0.55, y2 = 112 - boy * 0.8;
+        return `<svg viewBox="0 0 120 150" width="120" height="150" role="img" aria-label="Saksıdaki bitki">
+          <rect x="30" y="112" width="60" height="30" rx="6" fill="#B0724A" />
+          <rect x="26" y="104" width="68" height="12" rx="4" fill="#C98A5C" />
+          <rect x="57" y="${112 - boy}" width="6" height="${boy}" rx="3" fill="${govde}" />
+          ${boy > 26 ? `<ellipse cx="44" cy="${y1}" rx="15" ry="7" fill="${yaprak}" transform="rotate(-18 44 ${y1})" />
+            <ellipse cx="76" cy="${y2}" rx="15" ry="7" fill="${yaprak}" transform="rotate(18 76 ${y2})" />` : ""}
+          ${boy > 60 ? `<ellipse cx="60" cy="${112 - boy - 3}" rx="11" ry="6" fill="${yaprak}" />` : ""}
+        </svg>`;
+      }
+
+      /* Mini araştırmanın altı adımı: her adım kendi sorusu, ipucu ve açıklamasıyla */
+      function finalAdimlar(S){
+        const kur = (ad, soru, dogru, celdirici, ipucu, aciklama, onay) => {
+          const d = fenSecenekDiz(S, [dogru].concat(celdirici), dogru);
+          return { ad, soru, secenekler: d.liste.map(m => ({ metin: m })), dogruIx: d.ix,
+            ipucu, aciklama, onay };
+        };
+        return [
+          kur("Soru", "Araştırma sorunu seç.",
+            "Işık, fasulyenin büyümesini etkiler mi?",
+            ["Fasulye dünyanın en lezzetli sebzesi midir?", "Fasulyenin adı nereden gelir?"],
+            "Deneyle sınayabileceğin soruyu ara.",
+            "Araştırma sorusu deneyle sınanabilir olmalıdır.",
+            "Sorun hazır."),
+          kur("Tahmin", "Şimdi tahminini seç.",
+            "Işık alan fasulye, karanlıktakinden daha çok büyür.",
+            ["Fasulyeler çok güzel bitkilerdir.", "Fasulye kaç günde büyür?"],
+            "Tahmin bir görüş ya da soru değil, sınanabilir bir cümledir.",
+            "Tahmin, gözlemlerimize dayanarak sonucun ne olacağını söyleyen bir cümledir.",
+            "Tahminini kaydettim."),
+          kur("Deney kurulumu", "Adil bir deney için kurulumu seç.",
+            "İki saksıya da aynı toprak ve aynı su verilir; yalnız biri karanlıkta durur.",
+            ["Bir saksıya çok, diğerine az su verilir; biri karanlıkta durur.",
+              "İki saksı da pencere kenarında durur ve aynı sulanır."],
+            "Adil deneyde kaç şey değişmeli?",
+            "Adil deneyde yalnızca test edilen koşul değişir; diğer her şey aynı tutulur.",
+            "Kurulum adil."),
+          kur("Gözlem", "On gün sonra saksıları gözle ve doğru gözlemi seç.",
+            "Işık alan bitki daha uzun ve koyu yeşil; karanlıktaki kısa ve soluk.",
+            ["İki bitki de aynı boyda ve aynı renkte.", "Karanlıktaki bitki daha uzun ve yeşil."],
+            "Yukarıdaki iki saksıya dikkatle bak.",
+            "Gözlem, gördüğümüzü olduğu gibi yazmaktır; beklentimizi değil.",
+            "Gözlemini defterine yazdım."),
+          kur("Veri", "Ölçtüğün boyları veri tablosuna yaz.",
+            "Işık alan: 18 cm · Karanlıktaki: 7 cm",
+            ["Işık alan: 7 cm · Karanlıktaki: 18 cm", "Işık alan: 12 cm · Karanlıktaki: 12 cm"],
+            "Hangi bitki daha uzundu?",
+            "Veri, ölçümlerin sayı olarak kaydedilmiş hâlidir; sonucu veriye dayandırırız.",
+            "Veriler tabloda."),
+          kur("Sonuç", "Verilere bakarak sonucu yaz.",
+            "Işık, fasulyenin büyümesini etkiler; ışık alan bitki daha çok büyümüştür.",
+            ["Fasulye ışıksız da aynı büyür.", "Bu deneyden bir sonuç çıkarılamaz."],
+            "Tablodaki iki sayıyı karşılaştır.",
+            "Sonuç, toplanan veriye dayanarak yazılır.",
+            "Araştırma tamam."),
+        ];
+      }
+
+      const T = {
+        on: "bd", rozet: "Bilim Dedektifi rozeti",
+        bolumSira: ["soru", "gozlem", "yontem", "sira", "bilimci", "final"],
+        bolumAd: { soru: "Bilimsel Soruyu Bul", gozlem: "Gözlem mi, Tahmin mi?",
+          yontem: "Bilgi Toplama Yolu", sira: "Araştırma Basamakları",
+          bilimci: "Bilim İnsanı Nasıl Çalışır?", final: "Mini Araştırma" },
+        bolumIkon: { soru: "❓", gozlem: "👁️", yontem: "🧭", sira: "🪜", bilimci: "🧑‍🔬", final: "🌱" },
+        yonerge: {
+          soru: "Bilimsel araştırma sorusu; gözlem, ölçüm ya da deneyle yanıtlanabilen sorudur.",
+          gozlem: "Gözlem şu anda saptadığımızdır; tahmin ise sonrası için söylediğimizdir.",
+          yontem: "Her soru aynı yolla yanıtlanmaz: kimi deney, kimi gözlem, kimi kaynak tarama ister.",
+          sira: "Araştırma bir sırayla yürür: soru, tahmin, deney, veri, sonuç.",
+          bilimci: "Bilim insanı merak eder, dikkatle ölçer, kaydeder ve kanıta göre karar verir.",
+          final: "Şimdi bütün basamakları sen yürüteceksin: soru, tahmin, kurulum, gözlem, veri, sonuç.",
+        },
+        tanit: { bas: "Bilim dosyaları yarım kalmış! 🔬",
+          metin: "Kaynak Kampüs bilim laboratuvarında altı dosya seni bekliyor. Soruyu bul, gözlemi tahminden ayır, doğru yolu seç ve sonunda kendi araştırmanı baştan sona yürüt." },
+        seviyeAd: { 1: "Kolay · 3 seçenek", 2: "Orta · 4 seçenek", 3: "Zor · 4 seçenek, uzun eşleme" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          if (b === "soru"){
+            const iyi = fenTazeSec(S, "iyiSoru", FEN3_IYI_SORU);
+            const kotular = karistir(FEN3_KOTU_SORU.slice()).slice(0, kac - 1);
+            const d = fenSecenekDiz(S, [iyi].concat(kotular.map(x => x[0])), iyi);
+            return { tip: "secim", soru: "Hangisi araştırılabilir bir bilimsel sorudur?",
+              secenekler: d.liste.map(m => {
+                const k = FEN3_KOTU_SORU.find(x => x[0] === m);
+                return { metin: m, ipucu: k ? k[1] : null };
+              }),
+              dogruIx: d.ix, sahne: dosya("Dosya · Araştırma sorusunu bul"),
+              ipucu: "Yanıtı gözlem, ölçüm ya da deneyle bulunabilen soruyu ara.",
+              aciklama: "Bilimsel araştırma sorusu gözlem, deney ya da ölçümle yanıtlanabilir. Kişisel beğeni soran ya da hesapla bulunan sorular araştırma sorusu değildir." };
+          }
+          if (b === "gozlem"){
+            const n = S.A.zorluk === 1 ? 2 : 3;
+            const g1 = karistir(FEN3_GOZLEM_TAHMIN.filter(x => x[1] === "gozlem")).slice(0, n);
+            const g2 = karistir(FEN3_GOZLEM_TAHMIN.filter(x => x[1] === "tahmin")).slice(0, n);
+            const jet = g1.concat(g2).map(x => ({ ad: x[0], hedef: x[1],
+              ipucu: "Bu cümlede anlatılan şey olmuş bir durum mu, yoksa olacağı düşünülen bir durum mu?" }));
+            const t = fenEsleme(S, "Cümleleri doğru kutuya taşı.", jet,
+              [{ id: "gozlem", ad: "Gözlem", not: "Şu anda saptadığımız" },
+               { id: "tahmin", ad: "Tahmin", not: "Sonradan olacağını düşündüğümüz" }],
+              "Cümle olmuş bir durumu mu anlatıyor?",
+              "Gözlem duyularımızla ya da araçlarla ŞU AN saptadığımızdır. Tahmin ise gözlemlerimize dayanarak sonrası için söylediğimizdir.");
+            t.sahne = dosya("Dosya · Gözlem defteri karışmış");
+            return t;
+          }
+          if (b === "yontem"){
+            const y = fenTazeSec(S, "yontem", FEN3_YONTEM);
+            const t = fenCoktan(S, y.soru, y.dogru, y.celdirici, kac, y.ipucu, y.aciklama);
+            t.sahne = dosya("Dosya · Bilgiyi nasıl toplayacağız?");
+            return t;
+          }
+          if (b === "sira"){
+            const a = fenTazeSec(S, "arastirma", FEN3_ARASTIRMA_ADIM);
+            const t = fenSiralama(S, a.baslik + ": kartları doğru sıraya yerleştir.", a.adimlar,
+              "Bir araştırmaya hangi adımla başlanır?",
+              "Araştırma şu sırayla yürür: soru → tahmin → deney/gözlem → veri kaydı → sonuç.");
+            t.sahne = dosya("Dosya · " + a.baslik);
+            return t;
+          }
+          if (b === "bilimci"){
+            const dogruSayi = S.A.zorluk === 1 ? 3 : 4;
+            const yanlisSayi = S.A.zorluk === 3 ? 3 : 2;
+            const d = karistir(FEN3_BILIMCI.filter(x => x[1])).slice(0, dogruSayi);
+            const y = karistir(FEN3_BILIMCI.filter(x => !x[1])).slice(0, yanlisSayi);
+            const hepsi = karistir(d.concat(y));
+            return { tip: "coklu", soru: "Bir bilim insanının çalışma biçimine uyan bütün kartları seç.",
+              secenekler: hepsi.map(x => ({ metin: x[0] })),
+              dogrular: hepsi.map((x, i) => x[1] ? i : -1).filter(i => i >= 0),
+              sahne: dosya("Dosya · Bilim insanı nasıl çalışır?"),
+              ipucu: "Kanıta dayanmayan ve veriyi yok sayan davranışlar bilim insanına uymaz.",
+              aciklama: "Bilim insanı merak eder, dikkatle gözler, ölçümlerini kaydeder, deneyi tekrarlar ve kanıt gösterildiğinde fikrini değiştirebilir." };
+          }
+          return { tip: "final", ix: 0, adimlar: finalAdimlar(S),
+            soru: "Araştırma sorunu seç.",
+            aciklama: "Bir araştırmayı baştan sona yürüttün: soru sordun, tahmin ettin, adil bir deney kurdun, gözledin, veri topladın ve sonucu veriye dayandırdın." };
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "sira") return fenEkranSira(S, g);
+          if (g.tip === "coklu") return fenEkranCoklu(S, g);
+          finalEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "final"){
+            const el = $("fenSecenek") && $("fenSecenek").querySelector(`[data-i="${g.adimlar[g.ix].dogruIx}"]`);
+            if (el) el.classList.add("dogru");
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      /* Mini araştırma: altı adım tek ekranda ilerler, saksılar gözlem adımında büyür */
+      function finalEkran(S, g){
+        const adim = g.adimlar[g.ix];
+        const buyudu = g.ix >= 3;
+        g.soru = adim.soru;
+        g.ipucu = adim.ipucu;
+        S.sonOkunan = null;                       /* her adım kendi sorusuyla okunur */
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🌱 MİNİ ARAŞTIRMA · ${g.ix + 1} / ${g.adimlar.length}</span>
+            <div class="fen-duzenek">
+              <div class="fen-kap"><span class="fen-kap-ad">Işık alan saksı</span>${bitkiSvg(true, buyudu)}</div>
+              <div class="fen-kap"><span class="fen-kap-ad">Karanlıkta duran saksı</span>${bitkiSvg(false, buyudu)}</div>
+            </div>
+            <div class="fen-adimlar">${g.adimlar.map((a, i) =>
+              `<span class="fen-adim${i < g.ix ? " tamam" : i === g.ix ? " simdi" : ""}">${kacis(a.ad)}</span>`).join("")}</div>
+          </div>`,
+          `<div class="fen-secenekler dikey" id="fenSecenek">${adim.secenekler.map((x, i) =>
+            `<button type="button" class="fen-sec" data-i="${i}">${kacis(x.metin)}</button>`).join("")}</div>`);
+        $("fenSecenek").querySelectorAll(".fen-sec").forEach(b => b.addEventListener("click", () => {
+          if (S.kilit) return;
+          const i = +b.dataset.i;
+          if (i !== adim.dogruIx){
+            b.classList.add("hata");
+            fenYanlis(S, adim.ipucu, adim.aciklama);
+            if (S.can <= 0) return;
+            return S.bekle(() => { b.classList.remove("hata"); b.disabled = true; }, 700);
+          }
+          b.classList.add("dogru");
+          $("fenSecenek").querySelectorAll(".fen-sec").forEach(x => { x.disabled = true; });
+          if (g.ix < g.adimlar.length - 1){
+            S.kilit = true;
+            fenAdim(S);
+            maskotSoyle("fen", "kutlama", adim.onay || "Bu adım tamam.", "dogru");
+            S.bekle(() => { g.ix++; S.kilit = false; finalEkran(S, g); }, 1200);
+          } else {
+            fenDogru(S, "Araştırmanı baştan sona tamamladın!");
+          }
+        }));
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
+  /* ── OYUN 2: CANLILAR LABORATUVARI ─────────────────────────────────────
+     Sanal araştırma merkezi: canlıları gruplama, mikroskopla örnek inceleme,
+     canlılık özelliklerini davranışla eşleştirme, duyu organları, farklı
+     canlıların çevreyi algılaması ve yaşam döngüsü sıralaması.
+     Yaşam döngüsü kartlarında sıra numarası ya da ipucu YOKTUR. */
+  canlilarLab: {
+    ad: "Canlılar Laboratuvarı", ikon: "🧫",
+    baslat(oyun, bitir){
+      const MIKRO = {
+        "Bakteri": '<rect x="-11" y="-4" width="22" height="8" rx="4" fill="#8FB3C2" stroke="#4C7E92" stroke-width="1.6" />',
+        "Amip": '<path d="M-13,-2 q-2,-9 7,-9 q6,-4 11,3 q8,2 4,9 q1,8 -8,7 q-7,4 -11,-3 q-6,-2 -3,-7 z" fill="#A9C4A0" stroke="#5C8455" stroke-width="1.6" />',
+        "Terliksi hayvan": '<ellipse rx="13" ry="7" fill="#C2B0CE" stroke="#7A6193" stroke-width="1.6" />'
+          + '<g stroke="#7A6193" stroke-width="1.2">' + [0, 1, 2, 3, 4, 5].map(i => {
+            const a = -0.9 + i * 0.36;
+            const x1 = Math.round(Math.cos(a) * 12), y1 = Math.round(Math.sin(a) * 6);
+            return `<line x1="${x1}" y1="${y1}" x2="${Math.round(x1 * 1.35)}" y2="${Math.round(y1 * 1.9 - 4)}" />`;
+          }).join("") + '</g>',
+        "Öglena": '<ellipse rx="7" ry="12" fill="#B7CE9B" stroke="#5F8447" stroke-width="1.6" />'
+          + '<path d="M0,-12 q6,-8 2,-14" fill="none" stroke="#5F8447" stroke-width="1.6" />',
+      };
+      const YERLER = [[30, 28], [68, 34], [26, 66], [70, 70], [50, 48]];
+
+      function damlaSvg(bulgular){
+        return `<svg viewBox="0 0 100 100" role="img" aria-label="Mikroskop altındaki su damlası örneği">
+          <rect width="100" height="100" fill="#EAF4EE" />
+          <g opacity=".35" fill="none" stroke="#B9D3C4" stroke-width="1">
+            <circle cx="22" cy="80" r="9" /><circle cx="82" cy="18" r="7" /><circle cx="55" cy="86" r="5" />
+          </g>
+          ${bulgular.map(b => `<g transform="translate(${b.x} ${b.y}) scale(0.42) rotate(${b.aci})">${MIKRO[b.ad] || ""}</g>`).join("")}
+        </svg>`;
+      }
+
+      const T = {
+        on: "cl", rozet: "Canlılar Uzmanı rozeti",
+        bolumSira: ["grup", "mikroskop", "ozellik", "duyu", "algi", "dongu"],
+        bolumAd: { grup: "Canlıları Grupla", mikroskop: "Sanal Mikroskop",
+          ozellik: "Canlılık Özellikleri", duyu: "Duyu Organları",
+          algi: "Canlılar Çevreyi Nasıl Algılar?", dongu: "Yaşam Döngüsü" },
+        bolumIkon: { grup: "🗂️", mikroskop: "🔬", ozellik: "💠", duyu: "👂", algi: "🧭", dongu: "🔁" },
+        yonerge: {
+          grup: "Canlılar bitkiler, hayvanlar, mantarlar ve mikroskobik canlılar olarak gruplanır.",
+          mikroskop: "Merceği örneğin üzerinde gezdir; gördüğün canlıya dokunarak kaydet.",
+          ozellik: "Bütün canlılar beslenir, solunum yapar, büyür, hareket eder, ürer ve tepki verir.",
+          duyu: "Duyu organlarımız çevremizi tanımamızı sağlar.",
+          algi: "Her canlı çevresini kendi gelişmiş duyusuyla algılar.",
+          dongu: "Canlılar doğar, büyür ve çoğalır; bu sıraya yaşam döngüsü denir.",
+        },
+        tanit: { bas: "Canlılar araştırma merkezi açıldı! 🧫",
+          metin: "Örnekleri grupla, mikroskopla incele, canlılık özelliklerini davranışlarla eşleştir ve yaşam döngülerini doğru sıraya koy." },
+        seviyeAd: { 1: "Kolay · 3 grup", 2: "Orta · 4 grup", 3: "Zor · 4 grup, çok kart" },
+
+        uret(S, b){
+          const kac = S.A.zorluk === 1 ? 3 : 4;
+          if (b === "grup"){
+            const gruplar = S.A.zorluk === 1 ? ["bitki", "hayvan", "mantar"]
+              : ["bitki", "hayvan", "mantar", "mikroskobik"];
+            const perGrup = S.A.zorluk === 3 ? 2 : 1;
+            let jet = [];
+            gruplar.forEach(gr => {
+              karistir(FEN3_CANLI.filter(c => c.grup === gr)).slice(0, perGrup).forEach(c =>
+                jet.push({ ad: c.ad, hedef: c.grup, ipucu: "Bu canlı besinini nasıl sağlar, nasıl yaşar?" }));
+            });
+            const t = fenEsleme(S, "Örnekleri doğru gruba taşı.", jet,
+              gruplar.map(gr => ({ id: gr, ad: FEN3_GRUP_AD[gr], not: FEN3_GRUP_NOT[gr] })),
+              "Canlının besinini nasıl aldığına ve nerede yaşadığına bak.",
+              "Bitkiler kendi besinini üretir, hayvanlar yer değiştirerek hareket eder, mantarlar besinini hazır alır, mikroskobik canlılar çıplak gözle görülmez.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧫 CANLILAR ARAŞTIRMA MERKEZİ</span>
+              <div class="fen-not">Örnek kartlarını sürükleyerek ya da önce karta sonra kutuya dokunarak yerleştir.</div></div>`;
+            return t;
+          }
+          if (b === "mikroskop"){
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const adlar = karistir(Object.keys(MIKRO)).slice(0, n);
+            const yer = karistir(YERLER.slice()).slice(0, n);
+            return { tip: "mikroskop",
+              soru: "Damladaki mikroskobik canlıları bul ve her birine dokunarak kaydet.",
+              bulgular: adlar.map((ad, i) => ({ ad, x: yer[i][0], y: yer[i][1], aci: fenRast(0, 359) })),
+              ipucu: "Merceği yavaşça gezdir; karanlık alanda hiçbir şey görünmez.",
+              aciklama: "Bu canlılar çıplak gözle görülemez; ancak mikroskopla incelenebilir. Bir damla suda bile birçok mikroskobik canlı yaşar." };
+          }
+          if (b === "ozellik"){
+            const n = S.A.zorluk === 1 ? 3 : 4;
+            const secilen = karistir(FEN3_CANLILIK.slice()).slice(0, n);
+            const t = fenEsleme(S, "Davranış örneklerini ait oldukları canlılık özelliğine taşı.",
+              secilen.map(x => ({ ad: x.ornek, hedef: x.ozellik, ipucu: "Bu davranış canlının hangi temel işini gösteriyor?" })),
+              secilen.map(x => ({ id: x.ozellik, ad: x.ozellik })),
+              "Örnekteki canlı ne yapıyor: besleniyor mu, tepki mi veriyor?",
+              "Bütün canlılar beslenir, solunum yapar, büyür ve gelişir, hareket eder, ürer, boşaltım yapar ve uyarılara tepki verir.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">💠 CANLILIK ÖZELLİKLERİ</span></div>`;
+            return t;
+          }
+          if (b === "duyu"){
+            const n = S.A.zorluk === 1 ? 3 : S.A.zorluk === 2 ? 4 : 5;
+            const secilen = karistir(FEN3_DUYU.slice()).slice(0, n);
+            const t = fenEsleme(S, "Görevleri doğru duyu organına taşı.",
+              secilen.map(x => ({ ad: x.gorev + " · " + x.not, hedef: x.organ,
+                ipucu: "Bu işi vücudumuzun hangi bölümü yapar?" })),
+              secilen.map(x => ({ id: x.organ, ad: x.organ })),
+              "Bu görevi hangi organ üstlenir?",
+              "Göz görmeyi, kulak işitmeyi, burun koklamayı, dil tatmayı, deri dokunmayı sağlar.");
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">👂 DUYU ORGANLARI</span></div>`;
+            return t;
+          }
+          if (b === "algi"){
+            const a = fenTazeSec(S, "algi", FEN3_ALGI);
+            const t = fenCoktan(S, a.soru, a.dogru, a.celdirici, kac, a.ipucu, a.aciklama);
+            t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🧭 GÖZLEM KAYDI</span></div>`;
+            return t;
+          }
+          const d = fenTazeSec(S, "dongu", FEN3_DONGU);
+          const t = fenSiralama(S, d.ad + ": kartları doğru sıraya yerleştir.", d.adimlar,
+            "Canlının yaşamı hangi aşamayla başlar?",
+            "Yaşam döngüsü, canlının doğumundan yeniden çoğalabilecek hâle gelmesine kadar geçen sıralı aşamalardır.");
+          t.sahne = `<div class="fen-sahne"><span class="fen-etiket">🔁 ${kacis(d.ad.toLocaleUpperCase("tr"))}</span>
+            <div class="fen-not">Kartlarda sıra numarası yok; aşamaları kendin düşün.</div></div>`;
+          return t;
+        },
+
+        ekran(S, g){
+          if (g.tip === "secim") return fenEkranSecim(S, g);
+          if (g.tip === "esle") return fenEkranEsle(S, g);
+          if (g.tip === "sira") return fenEkranSira(S, g);
+          mikroskopEkran(S, g);
+        },
+        cevapGoster(S, g){
+          if (g.tip === "mikroskop"){
+            const el = document.querySelector(".fen-bulgu:not(.bulundu)");
+            if (el) el.classList.add("bulundu");
+            return;
+          }
+          fenCevapGoster(S, g);
+        },
+      };
+
+      function mikroskopEkran(S, g){
+        g.bulunan = g.bulunan || {};
+        fenIskelet(S, g, `<div class="fen-sahne">
+            <span class="fen-etiket">🔬 SANAL MİKROSKOP · SU DAMLASI ÖRNEĞİ</span>
+            <div class="fen-mercek" id="fenMercek">
+              ${damlaSvg(g.bulgular)}
+              <div class="fen-mercek-perde"></div>
+              ${g.bulgular.map((b, i) => `<button type="button" class="fen-bulgu${g.bulunan[i] ? " bulundu" : ""}"
+                data-i="${i}" style="left:${b.x}%;top:${b.y}%" aria-label="İncelenecek nokta ${i + 1}"></button>`).join("")}
+            </div>
+            <p class="fen-not">Kaydedilen canlı: <b id="fenBulunan">${Object.keys(g.bulunan).length}</b> / ${g.bulgular.length}</p>
+            <div class="fen-havuz" id="fenDefter">${g.bulgular.map((b, i) =>
+              g.bulunan[i] ? `<span class="fen-konan">${kacis(b.ad)}</span>` : "").join("")}</div>
+          </div>`, "");
+        fenMercekKur($("fenMercek"), 62, el => {
+          if (S.kilit) return;
+          const i = +el.dataset.i;
+          if (g.bulunan[i]) return;
+          g.bulunan[i] = true;
+          el.classList.add("bulundu");
+          const sayac = $("fenBulunan"); if (sayac) sayac.textContent = Object.keys(g.bulunan).length;
+          const defter = $("fenDefter");
+          if (defter) defter.insertAdjacentHTML("beforeend", `<span class="fen-konan">${kacis(g.bulgular[i].ad)}</span>`);
+          fenAdim(S);
+          maskotSoyle("fen", "konusan", "🔬 Deftere kaydettim: <b>" + kacis(g.bulgular[i].ad) + "</b>");
+          if (Object.keys(g.bulunan).length === g.bulgular.length)
+            fenDogru(S, "Örnekteki bütün canlıları buldun.");
+        });
+      }
+
+      fenOyun(oyun, bitir, T);
+    },
+  },
+
   /* ── WER BIN ICH? ─────────────────────────────────────────────────────────
      Sich vorstellen • W-Fragen. Dört-beş profil vardır ve özellikleri BİLEREK
      çakışır: en az iki kişi aynı yaşta, en az iki kişi aynı ülkedendir. Bu
