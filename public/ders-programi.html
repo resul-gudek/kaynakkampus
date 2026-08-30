@@ -314,6 +314,8 @@
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
+  <script src="assets/analitik.js" defer></script>
+  <script src="assets/kullanim-sayac.js" data-sayfa="ders-programi" defer></script>
 </head>
 <body>
 
@@ -921,9 +923,11 @@ $("resetBtn").onclick = () => {
   loadLessons(); renderLevels(); renderThemes(); renderPalette(); renderSheet();
 };
 $("resetDurBtn").onclick = () => { st.durs = {}; st.brks = {}; renderSheet(); };
-$("saveBtn").onclick = save;
-$("printBtn").onclick = () => window.print();
-$("printBtn2").onclick = () => window.print();
+/* Anonim kullanım sayacı (assets/kullanim-sayac.js) — yalnızca adet tutar */
+const sayac = (d) => { if (window.KKSayac) KKSayac.gonder("ders-programi", d); };
+$("saveBtn").onclick = () => { save(); sayac("kaydedildi"); };
+$("printBtn").onclick = () => { sayac("yazdirildi"); window.print(); };
+$("printBtn2").onclick = () => { sayac("yazdirildi"); window.print(); };
 
 /* Mobil menü davranışı assets/site-header.js içinde */
 

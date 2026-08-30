@@ -1,6 +1,7 @@
 import DuyuruSerit from "@/components/site/DuyuruSerit";
 import SiteBaslik from "@/components/site/SiteBaslik";
 import SiteAltBilgi from "@/components/site/SiteAltBilgi";
+import SayacBeacon from "@/components/site/SayacBeacon";
 
 /* Public blog kabuğu — oturum gerektirmez, ziyaretçi tüm yazıları okur.
    Rota koruması src/proxy.ts'teki açık liste ile yapılır; /blog o listede
@@ -10,6 +11,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
     <>
       <DuyuruSerit />
       <SiteBaslik aktif="/blog" />
+      <SayacBeacon />
       {children}
       <SiteAltBilgi />
     </>

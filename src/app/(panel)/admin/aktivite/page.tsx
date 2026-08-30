@@ -7,6 +7,14 @@ export const metadata: Metadata = { title: "Aktivite Merkezi – Kaynak Kampüs"
 
 const CEVRIMICI_PENCERE_DK = 5;
 
+/** GirisKaydi.neden kodlarının ekran karşılığı (kodlar lib/auth.ts'te üretilir) */
+const NEDEN_ETIKETLERI: Record<string, string> = {
+  "kullanici-yok": "hesap bulunamadı",
+  pasif: "hesap pasif",
+  "tur-uyusmaz": "hesap türü uyuşmadı",
+  "sifre-yanlis": "şifre hatalı",
+};
+
 function zamanStr(t: Date): string {
   const gunFmt = new Intl.DateTimeFormat("tr-TR", {
     timeZone: "Europe/Istanbul",
@@ -69,7 +77,7 @@ export default async function AktiviteSayfasi() {
   const bugunBasi = new Date(simdi);
   bugunBasi.setHours(0, 0, 0, 0);
 
-  const [cevrimici, girisler, son24sAktif, toplamKullanici, bugunGirisler] =
+  const [cevrimici, girisler, son24sAktif, toplamKullanici, bugunGirisler, bugunBasarisiz] =
     await Promise.all([
       prisma.kullanici.findMany({
         where: { sonGorulme: { gte: cevrimiciEsigi } },
@@ -84,10 +92,11 @@ export default async function AktiviteSayfasi() {
       prisma.kullanici.count({ where: { sonGorulme: { gte: son24s } } }),
       prisma.kullanici.count(),
       prisma.girisKaydi.findMany({
-        where: { zaman: { gte: bugunBasi } },
+        where: { zaman: { gte: bugunBasi }, basarili: true },
         select: { kullaniciId: true },
         distinct: ["kullaniciId"],
       }),
+      prisma.girisKaydi.count({ where: { zaman: { gte: bugunBasi }, basarili: false } }),
     ]);
 
   const aktivite: Aktivite = {
@@ -100,16 +109,20 @@ export default async function AktiviteSayfasi() {
     })),
     girisler: girisler.map((g) => ({
       id: g.id,
-      ad: g.kullanici.ad,
-      kullanici: g.kullanici.kullanici,
-      rol: g.kullanici.rol,
+      // Başarısız denemede hesap hiç olmayabilir → girilen ad gösterilir
+      ad: g.kullanici?.ad ?? "",
+      kullanici: g.kullanici?.kullanici ?? g.denenen,
+      rol: g.kullanici?.rol ?? "",
       zaman: zamanStr(g.zaman),
       ip: g.ip,
       tarayici: tarayiciKisalt(g.tarayici),
+      basarili: g.basarili,
+      neden: NEDEN_ETIKETLERI[g.neden] ?? g.neden,
     })),
     sayilar: {
       cevrimici: cevrimici.length,
       bugunGiris: bugunGirisler.length,
+      bugunBasarisiz,
       son24sAktif,
       toplamKullanici,
     },

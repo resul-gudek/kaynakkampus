@@ -3976,6 +3976,123 @@
     }
     .wr-oku.kucuk:hover { background: var(--bg-soft); }
 
+    /* CLUB CHALLENGE — karakter kartları, sürükle-bırak, combo ve final */
+    #ccSahne .dl-panel { position: relative; }
+    .cc-karakter { display: grid; justify-items: center; gap: 8px; margin-top: 4px; }
+    .cc-avatar {
+      width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center;
+      font-size: 1.5rem; font-weight: 800; color: #fff; line-height: 1;
+      background: linear-gradient(135deg, #8A56C9, #5B7BD5); box-shadow: 0 3px 10px rgba(0, 0, 0, .18);
+    }
+    .cc-avatar.r1 { background: linear-gradient(135deg, #C2402A, #E0761A); }
+    .cc-avatar.r2 { background: linear-gradient(135deg, #2E7D46, #6BAF3E); }
+    .cc-avatar.r3 { background: linear-gradient(135deg, #1F6E8C, #38A3A5); }
+    .cc-avatar.r4 { background: linear-gradient(135deg, #B23A6E, #D06AA0); }
+    .cc-avatar.r5 { background: linear-gradient(135deg, #7A5C2E, #C99B3F); }
+    .cc-ad-buyuk { font-size: 1.05rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .cc-cumleler { display: flex; flex-direction: column; gap: 5px; align-items: center; }
+    .cc-cumle {
+      background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .35);
+      padding: 5px 14px; border-radius: 50px; font-size: .95rem; font-weight: 700;
+    }
+    .cc-minis { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 8px; }
+    .cc-mini {
+      background: #fff; color: var(--text); border-radius: 14px; padding: 10px 14px; min-width: 150px;
+      display: grid; justify-items: center; gap: 4px; box-shadow: 0 3px 9px rgba(0, 0, 0, .16);
+    }
+    .cc-mini .cc-avatar { width: 40px; height: 40px; font-size: 1rem; }
+    .cc-mini-ad { font-weight: 800; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+    .cc-mini-cumle { font-size: .78rem; font-weight: 600; color: var(--muted); text-align: center; max-width: 210px; line-height: 1.4; }
+    .cc-ogr-kartlar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cc-ogr-kart {
+      position: relative; display: grid; justify-items: center; gap: 5px; padding: 12px 10px 10px;
+      border-radius: 14px; border: 2px solid #E7DDE0; background: #fff; cursor: grab;
+      font-family: inherit; text-align: center; touch-action: none; user-select: none; -webkit-user-select: none;
+      transition: transform .15s, box-shadow .15s, border-color .15s;
+    }
+    .cc-ogr-kart:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .dl-panel.p1 .cc-ogr-kart:hover:not(:disabled) { border-color: var(--p1); }
+    .dl-panel.p2 .cc-ogr-kart:hover:not(:disabled) { border-color: var(--p2); }
+    .cc-ogr-kart:disabled { cursor: default; transform: none; box-shadow: none; opacity: .85; }
+    .cc-ogr-kart.dogru { border-color: #7FBF97; background: #EAF6EE; }
+    .cc-ogr-kart.yanlis { border-color: #D98A9A; background: #FBEDF0; animation: sars .3s; }
+    .cc-ogr-kart.acik { border-color: #7FBF97; background: #F3FAF6; }
+    .cc-ogr-kart .cc-avatar { width: 44px; height: 44px; font-size: 1.05rem; }
+    .cc-ogr-ad { font-weight: 800; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; color: var(--text); }
+    .cc-ogr-soz { font-size: .76rem; font-weight: 600; color: var(--muted); line-height: 1.4; }
+    .cc-ogr-kart .dl-kart-tus { position: absolute; top: 6px; left: 6px; }
+    .cc-ghost { position: fixed; z-index: 80; width: 170px; pointer-events: none; opacity: .92; transform: translate(-50%, -50%) rotate(-3deg) scale(.95); }
+    .cc-drop {
+      margin-top: 10px; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 8px;
+      border: 2px dashed #C9BDC1; border-radius: 14px; font-weight: 800; font-size: .85rem;
+      color: var(--muted); background: rgba(255, 255, 255, .55); transition: border-color .15s, background .15s;
+    }
+    .dl-panel.p1 .cc-drop.uzerinde { border-color: var(--p1); background: #F3DFE4; color: var(--p1); }
+    .dl-panel.p2 .cc-drop.uzerinde { border-color: var(--p2); background: #DBEBEF; color: var(--p2); }
+    .cc-combo { display: none; font-size: .72rem; font-weight: 800; color: #8A5A10; background: #FFF7E6; border: 1px solid #E0A93F; border-radius: 50px; padding: 2px 9px; width: fit-content; }
+    .dl-skor-taraf.s2 .cc-combo { margin-left: auto; }
+    .cc-combo.acik { display: inline-block; }
+    .cc-pop {
+      position: absolute; z-index: 6; left: 50%; top: 12%; transform: translate(-50%, 0);
+      font-weight: 900; font-size: 1rem; padding: 8px 18px; border-radius: 50px; color: #fff; white-space: nowrap;
+      background: linear-gradient(120deg, #E0761A, #C2402A); box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+      animation: ccPop 1.15s ease forwards; pointer-events: none;
+    }
+    @keyframes ccPop {
+      0% { opacity: 0; transform: translate(-50%, 14px) scale(.6); }
+      18% { opacity: 1; transform: translate(-50%, 0) scale(1.12); }
+      30% { transform: translate(-50%, 0) scale(1); }
+      78% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -22px) scale(.94); }
+    }
+    .cc-final-kulup { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; font-size: 1rem; margin-bottom: 8px; }
+    .cc-uyeler { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; min-height: 26px; margin-bottom: 10px; }
+    .cc-uye { font-size: .72rem; font-weight: 800; padding: 3px 10px; border-radius: 50px; background: #F3FAF6; border: 1px solid #7FBF97; color: #2E7D46; }
+    .cc-uye.bos { background: var(--bg-soft); border-color: #D8CFD2; color: var(--muted); }
+    .cc-aday { cursor: default; }
+    .cc-aksiyon { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .cc-al, .cc-gec {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px;
+      border-radius: 14px; font-family: inherit; font-weight: 800; font-size: .95rem; cursor: pointer;
+      border: 2px solid; transition: transform .12s;
+    }
+    .cc-al { background: #EAF6EE; border-color: #7FBF97; color: #2E7D46; }
+    .cc-gec { background: #fff; border-color: #D8CFD2; color: var(--muted); }
+    .cc-al:hover:not(:disabled), .cc-gec:hover:not(:disabled) { transform: translateY(-2px); }
+    .cc-al:disabled, .cc-gec:disabled { cursor: default; transform: none; opacity: .6; }
+    .cc-istat { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .cc-istat-kart {
+      background: #fff; color: var(--text); border-radius: 14px; padding: 12px;
+      display: grid; justify-items: center; gap: 4px; font-size: .8rem; font-weight: 600;
+    }
+    .cc-istat-kart b { font-size: .9rem; }
+    .cc-istat-kart.kazanan { outline: 3px solid #E0A93F; }
+    .cc-istat-buyuk { font-size: 1.5rem; font-weight: 900; line-height: 1.1; }
+    @media (max-width: 640px) {
+      .cc-ogr-kartlar { grid-template-columns: 1fr; }
+      .cc-mini { min-width: 120px; }
+      .cc-istat { grid-template-columns: 1fr; }
+    }
+    /* büyük ekran / akıllı tahta */
+    .dl-sahne.buyuk .cc-avatar { width: 76px; height: 76px; font-size: 2rem; }
+    .dl-sahne.buyuk .cc-ad-buyuk { font-size: 1.5rem; }
+    .dl-sahne.buyuk .cc-cumle { font-size: 1.35rem; }
+    .dl-sahne.buyuk .cc-mini { min-width: 190px; }
+    .dl-sahne.buyuk .cc-mini .cc-avatar { width: 52px; height: 52px; font-size: 1.2rem; }
+    .dl-sahne.buyuk .cc-mini-ad { font-size: 1.05rem; }
+    .dl-sahne.buyuk .cc-mini-cumle { font-size: 1rem; max-width: 270px; }
+    .dl-sahne.buyuk .cc-ogr-kart .cc-avatar { width: 54px; height: 54px; font-size: 1.25rem; }
+    .dl-sahne.buyuk .cc-ogr-ad { font-size: 1.05rem; }
+    .dl-sahne.buyuk .cc-ogr-soz { font-size: .98rem; }
+    .dl-sahne.buyuk .cc-drop { min-height: 74px; font-size: 1.1rem; }
+    .dl-sahne.buyuk .cc-al, .dl-sahne.buyuk .cc-gec { min-height: 74px; font-size: 1.25rem; }
+    .dl-sahne.buyuk .cc-final-kulup { font-size: 1.3rem; }
+    .dl-sahne.buyuk .cc-uye { font-size: .95rem; }
+    .dl-sahne.buyuk .cc-combo { font-size: .9rem; }
+    .dl-sahne.buyuk .cc-pop { font-size: 1.3rem; }
+    .dl-sahne.buyuk .cc-istat-kart { font-size: 1rem; }
+    .dl-sahne.buyuk .cc-istat-buyuk { font-size: 2.1rem; }
+
     /* SÖZCÜK LABORATUVARI — bağlam kartı, eşleştirme sütunları, kelime haritası */
     .sl-sahne {
       margin-top: 12px; padding: clamp(12px, 3.5vw, 20px); border-radius: 22px;
@@ -7963,6 +8080,24 @@
     body.tahta .wr-panel-soru { font-size: 1.35rem; }
     body.tahta .wr-bekle, body.tahta .wr-bitti { font-size: 1.5rem; min-height: 120px; }
     body.tahta .wr-kart-bayrak { font-size: 2rem; }
+    body.tahta .cc-avatar { width: 76px; height: 76px; font-size: 2rem; }
+    body.tahta .cc-ad-buyuk { font-size: 1.5rem; }
+    body.tahta .cc-cumle { font-size: 1.35rem; }
+    body.tahta .cc-mini { min-width: 190px; }
+    body.tahta .cc-mini .cc-avatar { width: 52px; height: 52px; font-size: 1.2rem; }
+    body.tahta .cc-mini-ad { font-size: 1.05rem; }
+    body.tahta .cc-mini-cumle { font-size: 1rem; max-width: 270px; }
+    body.tahta .cc-ogr-kart .cc-avatar { width: 54px; height: 54px; font-size: 1.25rem; }
+    body.tahta .cc-ogr-ad { font-size: 1.05rem; }
+    body.tahta .cc-ogr-soz { font-size: .98rem; }
+    body.tahta .cc-drop { min-height: 74px; font-size: 1.1rem; }
+    body.tahta .cc-al, body.tahta .cc-gec { min-height: 74px; font-size: 1.25rem; }
+    body.tahta .cc-final-kulup { font-size: 1.3rem; }
+    body.tahta .cc-uye { font-size: .95rem; }
+    body.tahta .cc-combo { font-size: .9rem; }
+    body.tahta .cc-pop { font-size: 1.3rem; }
+    body.tahta .cc-istat-kart { font-size: 1rem; }
+    body.tahta .cc-istat-buyuk { font-size: 2.1rem; }
     body.tahta .sl-cumle { font-size: 2rem; }
     body.tahta .sl-kelime-buyuk { font-size: 2.8rem; padding: 14px 34px; }
     body.tahta .sl-kelime-alt { font-size: 1.2rem; }
@@ -8963,6 +9098,8 @@
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
+  <script src="assets/analitik.js" defer></script>
+  <script src="assets/kullanim-sayac.js" data-sayfa="oyunlar" defer></script>
 </head>
 <body>
 
@@ -9325,6 +9462,7 @@ const UNITE_BILGI = {
   "Classroom Life": { emoji: "🎒", aciklama: "İngilizce Theme 2: sınıf yönergeleri, sınıf eşyaları ve mobilyaları, teknolojik araçlar, renkler, 1-20 sayıları ve sınıf içi kibar izin ifadeleri." },
   "School Life": { emoji: "🏫", aciklama: "İngilizce Theme 1: selamlaşma ve tanışma, okuldaki kişiler, okul bölümleri ve haftanın günleri. Dinleme ve konuşma kalıpları İngilizce sesle çalışılır." },
   "Global School Life": { emoji: "🌍", aciklama: "İngilizce 9. sınıf Theme 1 – School Life: ülkeler, milliyetler, diller ve başkentler; turistik yerler, tarihî yapılar ve müzeler; gezide yapılabilecek etkinlikler. Gramerde «to be» (am/is/are) ve yetenek/olasılık bildiren «can» kalıpları cümle içinde çalışılır." },
+  "School Clubs": { emoji: "🎭", aciklama: "İngilizce 9. sınıf Theme 1 – School Life: okul kulüpleri, yetenekler ve günlük beceriler. «can / can't» ile yapabildiklerini ve yapamadıklarını söyleme, «Can he/she …?» sorusuna «Yes/No» kısa yanıtı verme, «Who can …?» ve «Find someone who can …» kalıplarıyla kulübe uygun kişiyi seçme." },
   "Yaşadığım Yer ve Ülkem": { emoji: "🗺️", aciklama: "Yaşadığım Yer ve Ülkem, Doğa ve Çevre ile Bilim, Teknoloji ve Sanat öğrenme alanları: tarihî ve doğal değerler, yönetim birimleri, özel günler, hava-mevsim ilişkisi, ana yönler, afetlere hazırlık, doğal kaynakları tasarruflu kullanma, bilim insanları ve teknolojinin değişimi." },
   "Günlük Yaşamım": { emoji: "📅", aciklama: "Ben ve Okulum ile Ailem ve Toplum öğrenme alanları: planlı olma ve zaman yönetimi, öğretmen ve arkadaşlarla etkili iletişim, arkadaşlık ilişkileri, sınıf içinde ortak karar alma, nezaket ve görgü kuralları, yaşa uygun görev ve sorumluluklar." },
   "Yer, Yön ve Simetri": { emoji: "🧭", aciklama: "Yer, yön ve konum bildirme; mesafe ve yön bilgisine göre hedefe giden uygun yolu seçme; simetrik şekilleri tanıma, yarım deseni tamamlama ve ayna görüntüsü." },
@@ -13883,6 +14021,40 @@ const OYUNLAR = [
       ],
       ozneler: ["I | am | ben", "You | are | sen / siz", "He | is | o (erkek)",
         "She | is | o (kadın)", "We | are | biz", "They | are | onlar"] } },
+  { id: "lise9-club-challenge", kademe: "lise", sinif: "9", ders: "İngilizce", unite: "School Clubs",
+    konu: "Abilities and School Clubs: can / can't", tur: "clubChallenge", zorluk: 2,
+    baslik: "Club Challenge",
+    kazanimlar: ["«I can / I can't» ile yeteneklerini ve yapamadıklarını söyler.",
+      "«He/She can / can't» ile başkasının yeteneğini aktarır.",
+      "«Can he/she …?» sorusuna «Yes, he can. / No, she can't.» kısa yanıtını verir.",
+      "«Who can …?» ve «Find someone who can …» kalıplarıyla doğru kişiyi bulur.",
+      "Yeteneklerine bakarak bir öğrenciyi uygun okul kulübüyle eşleştirir.",
+      "«can» ile «can't» arasındaki anlam farkını okuyarak ve dinleyerek ayırt eder."],
+    veri: {
+      kulupler: [
+        "🎵 | Music Club | sing;play the guitar;play the piano;play the drums | Müzik Kulübü",
+        "🎭 | Drama Club | act;dance | Drama Kulübü",
+        "🎨 | Art Club | draw;paint | Resim Kulübü",
+        "🏀 | Basketball Club | play basketball | Basketbol Kulübü",
+        "🏐 | Volleyball Club | play volleyball | Voleybol Kulübü",
+        "⚽ | Sports Club | play football;run fast | Spor Kulübü",
+        "🏊 | Swimming Club | swim;dive | Yüzme Kulübü",
+        "♟️ | Chess Club | play chess | Satranç Kulübü",
+        "📷 | Photography Club | take photos | Fotoğrafçılık Kulübü"],
+      beceriler: [
+        "sing | şarkı söylemek", "dance | dans etmek", "act | rol yapmak",
+        "draw | resim çizmek", "paint | boyama yapmak",
+        "play the guitar | gitar çalmak | instrument",
+        "play the piano | piyano çalmak | instrument",
+        "play the drums | bateri çalmak | instrument",
+        "play basketball | basketbol oynamak", "play volleyball | voleybol oynamak",
+        "play football | futbol oynamak", "swim | yüzmek", "dive | dalmak",
+        "run fast | hızlı koşmak", "take photos | fotoğraf çekmek", "play chess | satranç oynamak"],
+      isimler: [
+        "Emma | she", "Lisa | she", "Mia | she", "Sophie | she", "Olivia | she", "Emily | she",
+        "Zoe | she", "Ruby | she", "Lucy | she", "Ella | she", "Amy | she", "Sara | she",
+        "Jack | he", "Noah | he", "Alex | he", "Daniel | he", "Leo | he", "Lucas | he",
+        "Liam | he", "Ryan | he", "Tom | he", "Max | he", "Oscar | he", "Ben | he"] } },
   { id: "ort6-ingkelime-duello", kademe: "ortaokul", sinif: "6", ders: "İngilizce", konu: "Temel Kelimeler", tur: "duello", zorluk: 1,
     baslik: "Kelime Kapışması", veri: { turSayisi: 10, saniye: 12, sorular: [
       { soru: "library kelimesinin Türkçe karşılığı nedir?", secenekler: ["Kütüphane", "Kitapçı", "Sınıf", "Laboratuvar"], dogru: 0 },
@@ -46216,6 +46388,1122 @@ const TUR_ISLEYICI = {
       hazirEkran();
     }
   },
+  /* ── CLUB CHALLENGE (İngilizce 9. sınıf · Theme 1 School Life) ──────────────
+     Okul kulüpleri ve yetenekler: «can / can't». Aynı cihazda iki oyuncu dört
+     rekabet bölümünde (Find the Club, Grab the Student, Watch Out for CAN'T,
+     Club Battle) aynı göreve kendi panelinden yarışır; finalde herkes kendi
+     kulübüne süre dolmadan uygun üyeleri toplar. Karakterler her turda veriden
+     üretilir; bir beceri yalnızca tek kulübe ait olduğu için her turun tek
+     doğru cevabı vardır (öğretmen paneli bunu doğrular). Üst üste 3 doğru
+     puanı 2, 5 doğru 3 katına çıkarır; rakipten önce bilene hız bonusu. */
+  clubChallenge: {
+    ad: "Club Challenge", ikon: "🏆", kisi: 2,
+    baslat(oyun, bitir){
+      const v = oyun.veri || {};
+      const SEVIYE_AD = { 1: "Easy · 3 kart", 2: "Medium · 4 kart, can't tuzağı", 3: "Hard · 4 kart, yoğun tuzak" };
+      const BOLUM_SIRA = ["findClub", "grabStudent", "watchOut", "clubBattle"];
+      const BOLUM_AD = { findClub: "Find the Club", grabStudent: "Grab the Student",
+        watchOut: "Watch Out for CAN'T", clubBattle: "Club Battle" };
+      const BOLUM_IKON = { findClub: "🔎", grabStudent: "🧲", watchOut: "⚠️", clubBattle: "⚡" };
+      const YONERGE = {
+        findClub: "Öğrencinin söylediklerini oku; doğru kulübe rakibinden önce dokun.",
+        grabStudent: "Aranan öğrenciyi bul: kartı MY CLUB alanına sürükle ya da dokun.",
+        watchOut: "Dikkatli oku — «can't» gördüğün yerde tuzak olabilir!",
+        clubBattle: "Hızlı görevler! Soru tipi her turda değişir.",
+      };
+      const TUSLAR = [["1", "2", "3", "4"], ["7", "8", "9", "0"]];
+      const RENK = ["🔴", "🔵"];
+
+      const VARS = { zorluk: 2, bolumler: BOLUM_SIRA.join(","), bolumBasina: 3, kulupSayisi: 5,
+        turSure: 15, hizliSure: 10, finalSure: 60, kilitSaniye: 1,
+        dogruPuan: 10, hizBonusPuan: 5, yanlisPuan: 5,
+        sesOto: true, sesHiz: 88, trIpucu: true,
+        kulupler: (v.kulupler || []).join("\n"),
+        beceriler: (v.beceriler || []).join("\n"),
+        isimler: (v.isimler || []).join("\n") };
+
+      let A = oyunAyarVars(oyun.id, VARS);
+      const adlar = ["Oyuncu 1", "Oyuncu 2"];
+      const skor = [0, 0], combo = [0, 0], enCombo = [0, 0],
+        hizSay = [0, 0], dogruSay = [0, 0], yanlisSay = [0, 0];
+      let sinifKulup = [], turlar = [], tur = 0, turBitti = true;
+      let cevapladi = [false, false], kilitli = [false, false], ilkDogru = null;
+      let asama = "tur";                             /* tur | final | bitti */
+      let fKulup = [null, null], fOgr = [null, null], fUye = [[], []], finalBitti = false;
+      let isimHavuz = [];
+      let sayac = null, zamanlar = [], tusDinle = null, canli = true, buyuk = false;
+      let sureToplam = 0, sureKalan = 0, sureBas = 0, sureBitince = null, hedefSure = 0;
+
+      const bekle = (f, ms) => { const t = setTimeout(() => { if (canli) f(); }, ms); zamanlar.push(t); return t; };
+      function tusBirak(){ if (tusDinle){ document.removeEventListener("keydown", tusDinle); tusDinle = null; } }
+      function durdur(){
+        canli = false; sayacDur(); zamanlar.forEach(clearTimeout); zamanlar = []; tusBirak();
+        muzikDurdur(); konusmaDur();
+        document.removeEventListener("fullscreenchange", tamEkranDegisti);
+        tamEkrandanCik();
+      }
+      temizleyici.push(durdur);
+
+      const rastSec = liste => liste[Math.floor(Math.random() * liste.length)];
+      const benzersiz = liste => [...new Set(liste)];
+      const satirlar = ad => String(A[ad] || "").split("\n").map(x => x.trim()).filter(Boolean);
+      const parcala = (h, n) => { const p = h.split("|").map(x => x.trim()); while (p.length < n) p.push(""); return p; };
+      const secAd = s => typeof s === "string" ? s : s.ad;
+      const secenekSayisi = () => (A.zorluk === 1 ? 3 : 4);
+      const hiz = () => Math.max(50, Math.min(120, +A.sesHiz || 88)) / 100;
+      const sesVar = () => (typeof ingilizceHazir === "function" ? ingilizceHazir() : false);
+      const trVar = () => A.trIpucu !== false;
+
+      /* ---- VERİ ---- */
+      const kulupListesi = () => satirlar("kulupler").map(h => {
+        const p = parcala(h, 4);
+        return { ikon: p[0] || "🎯", ad: p[1], tr: p[3] || p[1],
+          beceriler: p[2].split(";").map(x => x.trim()).filter(Boolean) };
+      }).filter(x => x.ad && x.beceriler.length);
+      const beceriListesi = () => satirlar("beceriler").map(h => {
+        const p = parcala(h, 3);
+        return { ad: p[0], tr: p[1] || p[0], etiket: p[2] };
+      }).filter(x => x.ad);
+      const isimListesi = () => satirlar("isimler").map(h => {
+        const p = parcala(h, 2);
+        return { ad: p[0], cins: /^he$/i.test(p[1]) ? "he" : "she" };
+      }).filter(x => x.ad);
+      const beceriTr = b => { const k = beceriListesi().find(x => x.ad === b); return k ? k.tr : b; };
+      const enstrumanBecerileri = () => beceriListesi().filter(x => /instrument/i.test(x.etiket || "")).map(x => x.ad);
+
+      /* ---- KARAKTER ÜRETİMİ ---- */
+      function isimCek(){
+        if (!isimHavuz.length) isimHavuz = karistir(isimListesi());
+        return isimHavuz.pop();
+      }
+      function isimSec(kullanilan){
+        for (let i = 0; i < 20; i++){
+          const k = isimCek();
+          if (!kullanilan.has(k.ad)){ kullanilan.add(k.ad); return k; }
+          isimHavuz.unshift(k);
+        }
+        const k = isimCek(); kullanilan.add(k.ad); return k;
+      }
+      /* «I can A and B.» / «I can A, but I can't B.» — dil bilgisi tek yerden kurulur */
+      function canCumle(k){
+        const c = k.can, n = k.cant, s = [];
+        const listele = l => l.length > 1 ? l.slice(0, -1).join(", ") + " and " + l[l.length - 1] : l[0];
+        if (c.length === 1 && n.length === 1) s.push(`I can ${c[0]}, but I can't ${n[0]}.`);
+        else {
+          if (c.length) s.push(`I can ${listele(c)}.`);
+          if (n.length) s.push(`I can't ${n.join(" or ")}.`);
+        }
+        return s;
+      }
+      function karakterYap(kullanilan, can, cant){
+        const kim = isimSec(kullanilan);
+        const k = { ad: kim.ad, cins: kim.cins,
+          can: benzersiz((can || []).filter(Boolean)),
+          cant: benzersiz((cant || []).filter(Boolean)) };
+        k.cant = k.cant.filter(b => k.can.indexOf(b) < 0);
+        k.cumleler = canCumle(k);
+        return k;
+      }
+
+      /* ---- TUR ÜRETİCİLERİ ----
+         Çift doğru çıkmaması iki kurala dayanır: bir beceri tek kulüptedir
+         (öğretmen paneli doğrular) ve çeldirici karakterlerin «can» becerileri
+         hedef kulüpten seçilmez. */
+      const URETICI = {
+        findClub(){
+          const kac = Math.min(secenekSayisi(), sinifKulup.length);
+          if (kac < 2) return null;
+          const gosterilen = karistir(sinifKulup).slice(0, kac);
+          const hedef = gosterilen[0];
+          const kullanilan = new Set();
+          const can = karistir(hedef.beceriler).slice(0, Math.min(2, hedef.beceriler.length));
+          const cant = [];
+          const digerler = gosterilen.slice(1);
+          if (digerler.length && (A.zorluk === 3 || (A.zorluk === 2 && Math.random() < 0.55)))
+            cant.push(rastSec(rastSec(digerler).beceriler));
+          if (A.zorluk === 3){
+            /* Gösterilmeyen bir kulübün becerisi: okuma yükünü artırır, cevabı değiştirmez */
+            const dis = kulupListesi().filter(c => gosterilen.every(g => g.ad !== c.ad));
+            if (dis.length) can.push(rastSec(rastSec(dis).beceriler));
+          }
+          const k = karakterYap(kullanilan, karistir(can), cant);
+          return { bolum: "findClub", gorev: `Which club is perfect for ${k.ad}?`,
+            karakter: k, secenekTur: "kulup", secenekler: karistir(gosterilen), dogru: hedef.ad,
+            ses: k.ad + " says: " + k.cumleler.join(" "),
+            tr: k.can.map(b => `«${b}» = ${beceriTr(b)}`).join(" · ")
+              + (k.cant.length ? ` · «can't ${k.cant[0]}» = ${beceriTr(k.cant[0])} yapamaz` : "")
+              + ` → ${hedef.ikon} ${hedef.ad} (${hedef.tr})`,
+            surukle: false, sure: Math.max(5, +A.turSure || 15) };
+        },
+        grabStudent(){
+          if (sinifKulup.length < 2) return null;
+          const hedef = rastSec(sinifKulup);
+          const digerler = karistir(sinifKulup.filter(c => c.ad !== hedef.ad));
+          const kartSayi = Math.min(Math.max(3, secenekSayisi()), 4);
+          const kullanilan = new Set();
+          const beceri = rastSec(hedef.beceriler);
+          const dogruK = karakterYap(kullanilan, [beceri], []);
+          const kartlar = [dogruK];
+          const tuzakVar = A.zorluk === 3 && Math.random() < 0.6;
+          for (let i = 1; i < kartSayi; i++){
+            const c = digerler[(i - 1) % digerler.length];
+            kartlar.push(karakterYap(kullanilan, [rastSec(c.beceriler)], i === 1 && tuzakVar ? [beceri] : []));
+          }
+          const tip = Math.random() < 0.5 ? "uye" : "beceri";
+          const gorev = tip === "uye"
+            ? `${hedef.ad.toUpperCase()} IS LOOKING FOR A NEW MEMBER!`
+            : `Find someone who can ${beceri}.`;
+          return { bolum: "grabStudent", gorev, gorevIkon: hedef.ikon,
+            secenekTur: "ogrenci", secenekler: karistir(kartlar), dogru: dogruK.ad,
+            ses: tip === "uye" ? hedef.ad + " is looking for a new member!" : "Find someone who can " + beceri + ".",
+            tr: `Aranan beceri: «${beceri}» = ${beceriTr(beceri)} → doğru kişi ${dogruK.ad}.`,
+            surukle: true, sure: Math.max(5, +A.turSure || 15) };
+        },
+        watchOut(){
+          if (sinifKulup.length < 2) return null;
+          const kullanilan = new Set();
+          const sure = Math.max(5, +A.turSure || 15);
+          const tip = rastSec(["kim", "kimDegil", "ikili"]);
+          if (tip === "ikili"){
+            const ikiKulup = karistir(sinifKulup).slice(0, 2);
+            const a = rastSec(ikiKulup[0].beceriler), b = rastSec(ikiKulup[1].beceriler);
+            const dogruK = karakterYap(kullanilan, [a], [b]);
+            const kartlar = [dogruK,
+              karakterYap(kullanilan, [a, b], []),
+              karakterYap(kullanilan, [b], [a])];
+            if (A.zorluk >= 2 && sinifKulup.length > 2){
+              const c = rastSec(sinifKulup.filter(x => x.ad !== ikiKulup[0].ad && x.ad !== ikiKulup[1].ad));
+              if (c) kartlar.push(karakterYap(kullanilan, [rastSec(c.beceriler)], [a]));
+            }
+            return { bolum: "watchOut", gorev: `Find someone who can ${a} but can't ${b}.`,
+              secenekTur: "ogrenci", secenekler: karistir(kartlar), dogru: dogruK.ad,
+              ses: `Find someone who can ${a}, but can't ${b}.`,
+              tr: `«can ${a}» = ${beceriTr(a)} ✓ ve «can't ${b}» = ${beceriTr(b)} ✗ — ikisi birden aynı kişide olmalı.`,
+              surukle: true, sure };
+          }
+          const hedef = rastSec(sinifKulup);
+          const digerler = sinifKulup.filter(c => c.ad !== hedef.ad);
+          if (!digerler.length) return null;
+          const hedefBeceri = rastSec(hedef.beceriler);
+          const tuzakKulup = rastSec(digerler);
+          const tuzak = karakterYap(kullanilan, [rastSec(tuzakKulup.beceriler)], [hedefBeceri]);
+          const kalan = digerler.filter(c => c.ad !== tuzakKulup.ad);
+          if (tip === "kim"){
+            const dogruK = karakterYap(kullanilan,
+              karistir(hedef.beceriler).slice(0, Math.min(2, hedef.beceriler.length)), []);
+            const kartlar = [dogruK, tuzak];
+            if (kalan.length) kartlar.push(karakterYap(kullanilan, [rastSec(rastSec(kalan).beceriler)], []));
+            return { bolum: "watchOut", gorev: `Who can join the ${hedef.ad}?`, gorevIkon: hedef.ikon,
+              secenekTur: "ogrenci", secenekler: karistir(kartlar), dogru: dogruK.ad,
+              ses: `Who can join the ${hedef.ad}?`,
+              tr: `Tuzak: ${tuzak.ad} «can't ${hedefBeceri}» diyor (${beceriTr(hedefBeceri)} yapamaz) — kulübe giremez.`,
+              surukle: true, sure };
+          }
+          const bs = karistir(hedef.beceriler);
+          const u1 = karakterYap(kullanilan, [bs[0]], []);
+          const u2can = [bs[1 % bs.length]];
+          if (kalan.length) u2can.push(rastSec(rastSec(kalan).beceriler));
+          const u2 = karakterYap(kullanilan, u2can, []);
+          return { bolum: "watchOut", gorev: `Who can't join the ${hedef.ad}?`, gorevIkon: hedef.ikon,
+            secenekTur: "ogrenci", secenekler: karistir([tuzak, u1, u2]), dogru: tuzak.ad,
+            ses: `Who can't join the ${hedef.ad}?`,
+            tr: `Soru «can't» soruyor: kulübe KATILAMAYACAK kişi aranıyor → ${tuzak.ad} («can't ${hedefBeceri}»).`,
+            surukle: true, sure };
+        },
+        clubBattle(){
+          if (sinifKulup.length < 2) return null;
+          const kullanilan = new Set();
+          const sure = Math.max(4, +A.hizliSure || 10);
+          const ens = enstrumanBecerileri().filter(b => sinifKulup.some(c => c.beceriler.indexOf(b) >= 0));
+          const tipler = ["yesNo", "hizliKulup", "kim"];
+          if (ens.length) tipler.push("enstruman");
+          const tip = rastSec(tipler);
+          if (tip === "yesNo"){
+            const kulup = rastSec(sinifKulup);
+            const diger = sinifKulup.filter(c => c.ad !== kulup.ad);
+            const can = karistir(kulup.beceriler).slice(0, Math.min(2, kulup.beceriler.length));
+            const cant = diger.length ? [rastSec(rastSec(diger).beceriler)] : [];
+            const k = karakterYap(kullanilan, can, cant);
+            const evet = !k.cant.length || Math.random() < 0.5;
+            const sorulan = evet ? rastSec(k.can) : k.cant[0];
+            return { bolum: "clubBattle", gorev: `Can ${k.ad} ${sorulan}?`, karakterler: [k],
+              secenekTur: "metin", secenekler: [`Yes, ${k.cins} can.`, `No, ${k.cins} can't.`],
+              dogru: evet ? `Yes, ${k.cins} can.` : `No, ${k.cins} can't.`,
+              ses: k.ad + " says: " + k.cumleler.join(" ") + " Can " + k.ad + " " + sorulan + "?",
+              tr: `Kısa yanıt kalıbı: «Can ${k.cins} …?» → «Yes, ${k.cins} can.» ya da «No, ${k.cins} can't.»`,
+              surukle: false, sure };
+          }
+          if (tip === "hizliKulup"){
+            const gosterilen = karistir(sinifKulup).slice(0, Math.min(3, sinifKulup.length));
+            const hedef = gosterilen[0];
+            const beceri = rastSec(hedef.beceriler);
+            const k = karakterYap(kullanilan, [beceri], []);
+            return { bolum: "clubBattle", gorev: `Which club can ${k.ad} join?`, karakterler: [k],
+              secenekTur: "kulup", secenekler: karistir(gosterilen), dogru: hedef.ad,
+              ses: k.ad + " can " + beceri + ". Which club can " + k.cins + " join?",
+              tr: `«${beceri}» = ${beceriTr(beceri)} → ${hedef.ikon} ${hedef.ad}.`,
+              surukle: false, sure };
+          }
+          let dogruK, kartlar, gorev, trM;
+          if (tip === "enstruman"){
+            const b = rastSec(ens);
+            const havuz = karistir(benzersiz(sinifKulup.reduce((t, c) => t.concat(c.beceriler), [])
+              .filter(x => ens.indexOf(x) < 0)));
+            if (havuz.length < 2) return null;
+            dogruK = karakterYap(kullanilan, [b], []);
+            kartlar = [dogruK,
+              karakterYap(kullanilan, [havuz[0]], []),
+              karakterYap(kullanilan, [havuz[1]], [])];
+            gorev = "Who can play an instrument?";
+            trM = `«instrument» = çalgı; ${b} (${beceriTr(b)}) bir çalgıdır.`;
+          } else {
+            const kulup = rastSec(sinifKulup);
+            const b = rastSec(kulup.beceriler);
+            const digerler = sinifKulup.filter(c => c.ad !== kulup.ad);
+            if (!digerler.length) return null;
+            dogruK = karakterYap(kullanilan, [b], []);
+            kartlar = [dogruK,
+              karakterYap(kullanilan, [rastSec(rastSec(digerler).beceriler)], []),
+              karakterYap(kullanilan, [rastSec(rastSec(digerler).beceriler)], A.zorluk >= 2 ? [b] : [])];
+            gorev = `Who can ${b}?`;
+            trM = `Aranan: «can ${b}» (${beceriTr(b)}) diyen kişi.`;
+          }
+          const gosterim = karistir(kartlar);
+          return { bolum: "clubBattle", gorev, karakterler: gosterim, secenekTur: "metin",
+            secenekler: gosterim.map(x => x.ad), dogru: dogruK.ad,
+            ses: gosterim.map(x => x.ad + " says: " + x.cumleler.join(" ")).join(" ") + " " + gorev,
+            tr: trM, surukle: false, sure };
+        },
+      };
+
+      const seciliBolumler = () => {
+        const s = String(A.bolumler || "").split(",").map(x => x.trim()).filter(Boolean);
+        const g = s.filter(b => BOLUM_SIRA.indexOf(b) >= 0);
+        return g.length ? BOLUM_SIRA.filter(b => g.indexOf(b) >= 0) : BOLUM_SIRA.slice();
+      };
+      function kulupSec(){
+        const L = karistir(kulupListesi());
+        sinifKulup = L.slice(0, Math.max(3, Math.min(+A.kulupSayisi || 5, L.length)));
+      }
+      function turUret(bolum){
+        for (let i = 0; i < 6; i++){
+          const t = URETICI[bolum] ? URETICI[bolum]() : null;
+          if (t && t.secenekler && t.secenekler.length >= 2 &&
+              t.secenekler.some(s => secAd(s) === t.dogru)) return t;
+        }
+        return null;
+      }
+      function turlarUret(){
+        const kac = Math.max(1, Math.min(6, +A.bolumBasina || 3));
+        const liste = [];
+        seciliBolumler().forEach(b => {
+          for (let i = 0; i < kac; i++){
+            const t = turUret(b);
+            if (t) liste.push(t);
+          }
+        });
+        return liste;
+      }
+
+      /* ---- SÜRE (duraklatılabilir: akıllı tahta çubuğu süreyi durdurabiliyor) ---- */
+      function sayacDur(){
+        if (!sayac) return;
+        clearInterval(sayac); sayac = null;
+        sureKalan = Math.max(0, sureKalan - (Date.now() - sureBas));
+      }
+      function sureKur(saniye, bitince){
+        sayacDur();
+        sureToplam = Math.max(1, saniye) * 1000; sureKalan = sureToplam; sureBitince = bitince;
+        sureCiz(sureKalan); sureBaslat();
+      }
+      function sureCiz(kalan){
+        const dolgu = $("ccSure");
+        if (dolgu) dolgu.style.width = (sureToplam ? kalan / sureToplam * 100 : 0).toFixed(1) + "%";
+        const sy = $("ccSaniye");
+        if (sy) sy.textContent = Math.ceil(kalan / 1000) + " sn";
+      }
+      function sureBaslat(){
+        if (sayac || sureKalan <= 0) return;
+        sureBas = Date.now();
+        sayac = setInterval(() => {
+          const kalan = Math.max(0, sureKalan - (Date.now() - sureBas));
+          sureCiz(kalan);
+          if (kalan <= 0){ sayacDur(); const f = sureBitince; sureBitince = null; if (f) f(); }
+        }, 100);
+      }
+      /* İlk doğru gelince rakibe kısa süre tanınır: tur sürüncemede kalmaz */
+      function sureKisalt(saniye){
+        const kalan = sayac ? Math.max(0, sureKalan - (Date.now() - sureBas)) : sureKalan;
+        if (kalan > saniye * 1000){ sayacDur(); sureKalan = saniye * 1000; sureBaslat(); }
+      }
+
+      /* ---- BÜYÜK EKRAN ---- */
+      function tamEkrandanCik(){
+        const s = $("ccSahne");
+        if (s && document.fullscreenElement === s && document.exitFullscreen){
+          try { const p = document.exitFullscreen(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        }
+      }
+      function buyukAyarla(x){
+        buyuk = x;
+        const s = $("ccSahne"), d = $("ccBuyut");
+        if (s) s.classList.toggle("buyuk", x);
+        if (d){ d.textContent = x ? "⤢ Küçült" : "⛶ Büyük Ekran"; d.setAttribute("aria-pressed", x ? "true" : "false"); }
+      }
+      function buyutDegistir(){
+        const s = $("ccSahne");
+        if (!s) return;
+        if (buyuk){ tamEkrandanCik(); buyukAyarla(false); return; }
+        buyukAyarla(true);
+        if (!document.fullscreenElement && s.requestFullscreen){
+          try { const p = s.requestFullscreen(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        }
+      }
+      function tamEkranDegisti(){ if (!document.fullscreenElement && buyuk) buyukAyarla(false); }
+
+      /* ---- HAZIRLIK EKRANI ---- */
+      function hazirEkran(){
+        A = oyunAyarVars(oyun.id, VARS);
+        const K = kulupListesi(), B = beceriListesi(), I = isimListesi();
+        const metinAlan = (id, etiket, not, deger, satir) => `
+          <div class="ok-metin-alan">
+            <label for="${id}">${etiket}</label>
+            <p class="bl-ayar-not">${not}</p>
+            <textarea id="${id}" rows="${satir || 5}">${kacis(deger || "")}</textarea>
+          </div>`;
+        $("app").innerHTML = `${oyunBaslik(oyun)}
+          <div class="dl-hazir">
+            <h3>🏆 Club Challenge — Aynı Cihazda İki Kişilik</h3>
+            <p class="dl-hazir-alt">${oyun.ders} · Theme 1 School Life · can / can't · ${seciliBolumler().length} bölüm + 🏆 Build Your Club finali</p>
+            <div class="dl-adlar">
+              <div class="dl-ad-alan a1"><label for="ccAd1">🔴 1. Oyuncu</label><input id="ccAd1" maxlength="14" placeholder="Oyuncu 1" autocomplete="off" /></div>
+              <div class="dl-ad-alan a2"><label for="ccAd2">🔵 2. Oyuncu</label><input id="ccAd2" maxlength="14" placeholder="Oyuncu 2" autocomplete="off" /></div>
+            </div>
+            <div class="bl-kazanim">${(oyun.kazanimlar || []).map(k => `<span>✓ ${kacis(k)}</span>`).join("")}</div>
+            <div class="bl-secim">
+              <div class="bl-secim-bas">Bölümler</div>
+              <div class="bl-onizleme">${BOLUM_SIRA.map((b, i) =>
+                `<span>${i + 1}. ${BOLUM_IKON[b]} ${BOLUM_AD[b]}</span>`).join("")}<span>${BOLUM_SIRA.length + 1}. 🏆 Build Your Club</span></div>
+            </div>
+            <div class="bl-secim">
+              <div class="bl-secim-bas">İçerik</div>
+              <div class="bl-onizleme">
+                <span>🎯 ${K.length} kulüp (maç başına ${Math.max(3, Math.min(+A.kulupSayisi || 5, K.length))})</span>
+                <span>💪 ${B.length} beceri</span>
+                <span>🧑 ${I.length} isim</span>
+                <span>🔊 İngilizce ses: ${sesVar() ? "hazır" : "yok — metin görünür"}</span>
+              </div>
+            </div>
+            <div class="bl-secim">
+              <div class="bl-secim-bas">Seviye</div>
+              <div class="bl-secim-sira" id="ccZorluk">
+                ${[1, 2, 3].map(z => `<button class="bl-sec${A.zorluk === z ? " aktif" : ""}" data-z="${z}">${SEVIYE_AD[z]}</button>`).join("")}
+              </div>
+            </div>
+            <ul class="dl-kural">
+              <li>Cihazı ikinizin arasına koyun: görev ortada, cevap kartları her oyuncunun kendi panelinde.</li>
+              <li>Doğru cevap <b>+${+A.dogruPuan}</b>; rakibinden önce bilirsen <b>+${+A.hizBonusPuan} hız bonusu</b>. Yanlış <b>−${+A.yanlisPuan}</b> ve panelin ${Math.max(1, +A.kilitSaniye || 1)} sn kilitlenir — sonra yeniden deneyebilirsin.</li>
+              <li>Üst üste 3 doğru <b>COMBO x2</b>, 5 doğru <b>SUPER COMBO x3</b> — yanlış yapınca seri sıfırlanır.</li>
+              <li><b>🧲 Grab the Student:</b> aranan öğrenciyi kartından tutup kendi <b>MY CLUB</b> alanına sürükle (dokunmak da yeter).</li>
+              <li><b>⚠️ Watch Out for CAN'T:</b> yalnızca beceri kelimesine bakma; «can't» diyen kişi o kulübe giremez!</li>
+              <li><b>🏆 Build Your Club finali:</b> herkese ayrı kulüp verilir. ${+A.finalSure} saniyede uygun öğrencileri <b>✅ Recruit</b> et, uymayanı <b>▶ Skip</b> geç; yanlış üye puan götürür.</li>
+              <li>Klavye → 1. oyuncu: <b>1 2 3 4</b> · 2. oyuncu: <b>7 8 9 0</b> (finalde 1/7 Recruit, 2/8 Skip).</li>
+              <li>Akıllı tahtada oyun içindeki <b>⛶ Büyük Ekran</b> düğmesiyle sahneyi tam ekrana alabilirsiniz.</li>
+            </ul>
+            <div class="bl-hazir-btn">
+              <button class="btn btn-primary" id="ccBasla">▶ Start the Challenge</button>
+              <button class="btn btn-ghost" id="ccAyarAc" aria-expanded="false">⚙️ Öğretmen Ayarları</button>
+            </div>
+            <div class="bl-ayar" id="ccAyarPanel" hidden>
+              <h4>⚙️ Öğretmen Ayarları<span>Değişiklikler yalnızca bu cihazda saklanır ve bu oyuna uygulanır.</span></h4>
+              <p class="bl-ayar-not">Karakterler her turda kulüp-beceri listesinden üretilir. <b>Bir beceri yalnızca tek
+                kulüpte yer alabilir</b>; aksi hâlde bir turda iki doğru cevap oluşurdu (kayıt sırasında denetlenir).</p>
+              <div class="bl-ayar-grid">
+                <label>Seviye
+                  <select id="ccyZorluk">${[1, 2, 3].map(z => `<option value="${z}"${A.zorluk === z ? " selected" : ""}>${SEVIYE_AD[z]}</option>`).join("")}</select>
+                </label>
+                <label>Bölümler
+                  <select id="ccyBolum" multiple size="4">${BOLUM_SIRA.map(b =>
+                    `<option value="${b}"${seciliBolumler().indexOf(b) >= 0 ? " selected" : ""}>${BOLUM_IKON[b]} ${BOLUM_AD[b]}</option>`).join("")}</select>
+                  <small>Ctrl ile birden çok seçilir · final her zaman oynanır</small>
+                </label>
+                <label>Bölüm başına tur<input type="number" id="ccySoru" min="1" max="6" value="${Math.max(1, Math.min(6, +A.bolumBasina || 3))}" /></label>
+                <label>Maç başına kulüp<input type="number" id="ccyKulupSayisi" min="3" max="6" value="${Math.max(3, Math.min(6, +A.kulupSayisi || 5))}" /><small>Her maçta listeden rastgele seçilir</small></label>
+                <label>Tur süresi (sn)<input type="number" id="ccyTurSure" min="5" max="60" value="${Math.max(5, Math.min(60, +A.turSure || 15))}" /></label>
+                <label>Club Battle süresi (sn)<input type="number" id="ccyHizliSure" min="4" max="30" value="${Math.max(4, Math.min(30, +A.hizliSure || 10))}" /></label>
+                <label>Final süresi (sn)<input type="number" id="ccyFinalSure" min="20" max="180" value="${Math.max(20, Math.min(180, +A.finalSure || 60))}" /></label>
+                <label>Yanlışta kilit (sn)<input type="number" id="ccyKilit" min="1" max="5" value="${Math.max(1, Math.min(5, +A.kilitSaniye || 1))}" /></label>
+                <label>Doğru puanı<input type="number" id="ccyDogru" min="1" max="50" value="${Math.max(1, Math.min(50, +A.dogruPuan || 10))}" /></label>
+                <label>Hız bonusu<input type="number" id="ccyHiz" min="0" max="20" value="${Math.max(0, Math.min(20, +A.hizBonusPuan))}" /></label>
+                <label>Yanlış cezası<input type="number" id="ccyYanlis" min="0" max="20" value="${Math.max(0, Math.min(20, +A.yanlisPuan))}" /></label>
+                <label>Görevi kendiliğinden oku
+                  <select id="ccySesOto"><option value="1"${A.sesOto === false ? "" : " selected"}>Açık</option><option value="0"${A.sesOto === false ? " selected" : ""}>Kapalı</option></select>
+                </label>
+                <label>Okuma hızı (%)<input type="number" id="ccySesHiz" min="50" max="120" value="${Math.max(50, Math.min(120, +A.sesHiz || 88))}" /></label>
+                <label>Türkçe açıklama
+                  <select id="ccyTr"><option value="1"${A.trIpucu === false ? "" : " selected"}>Açık</option><option value="0"${A.trIpucu === false ? " selected" : ""}>Kapalı</option></select>
+                </label>
+              </div>
+              <p class="ht-uyari" id="ccyUyari"></p>
+              ${metinAlan("ccyKulup", "Clubs",
+                "Her satır: <b>ikon | Club | beceriler (;) | Türkçe ad</b>. Örn. <b>🎵 | Music Club | sing;play the guitar | Müzik Kulübü</b><br />Beceriler «I can …» cümlesine girdiği için yalın fiille başlamalıdır ve <b>bir beceri yalnızca tek kulüpte</b> bulunabilir.", A.kulupler, 10)}
+              ${metinAlan("ccyBeceri", "Skills (Türkçe karşılıklar)",
+                "Her satır: <b>beceri | Türkçe | etiket</b>. «instrument» etiketi «Who can play an instrument?» görevinde kullanılır. Örn. <b>play the piano | piyano çalmak | instrument</b>", A.beceriler, 10)}
+              ${metinAlan("ccyIsim", "Students",
+                "Her satır: <b>İsim | he/she</b>. Kısa yanıtlarda («Yes, she can.») doğru zamiri seçmek için gereklidir.", A.isimler, 8)}
+              <div class="bl-ayar-alt">
+                <button class="btn btn-primary" id="ccyKaydet">Ayarları Kaydet</button>
+                <button class="btn btn-outline" id="ccySifirla">Varsayılana Dön</button>
+              </div>
+            </div>
+          </div>`;
+        $("ccZorluk").addEventListener("click", e => {
+          const b = e.target.closest("[data-z]"); if (!b) return;
+          oyunAyarYaz(oyun.id, { zorluk: +b.dataset.z }); hazirEkran();
+        });
+        $("ccAyarAc").addEventListener("click", () => {
+          const p = $("ccAyarPanel"), a = !p.hidden;
+          p.hidden = a; $("ccAyarAc").setAttribute("aria-expanded", a ? "false" : "true");
+          if (!a) p.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+        $("ccyKaydet").addEventListener("click", ayarlariKaydet);
+        $("ccySifirla").addEventListener("click", () => { oyunAyarSil(oyun.id); hazirEkran(); });
+        $("ccBasla").addEventListener("click", () => {
+          const a1 = $("ccAd1").value.trim(), a2 = $("ccAd2").value.trim();
+          adlar[0] = a1 || "Oyuncu 1";
+          adlar[1] = a2 || "Oyuncu 2";
+          if (adlar[0] === adlar[1]) adlar[1] += " (2)";
+          basla();
+        });
+      }
+
+      /* ---- ÖĞRETMEN PANELİ ---- */
+      function ayarlariKaydet(){
+        const say = (id, en, boy, vars) => {
+          const n = parseInt($(id).value, 10);
+          return isNaN(n) ? vars : Math.max(en, Math.min(boy, n));
+        };
+        const oku = id => String($(id).value || "").split("\n").map(x => x.trim()).filter(Boolean);
+        const hatalar = [], uyarilar = [];
+        const bolumSec = [].slice.call($("ccyBolum").selectedOptions).map(o => o.value);
+        const secili = bolumSec.length ? bolumSec : BOLUM_SIRA.slice();
+        const kulupSatir = oku("ccyKulup"), beceriSatir = oku("ccyBeceri"), isimSatir = oku("ccyIsim");
+        const kulupKayit = [];
+        kulupSatir.forEach(h => {
+          const p = h.split("|").map(x => x.trim());
+          const beceriler = (p[2] || "").split(";").map(x => x.trim()).filter(Boolean);
+          if (!p[1] || !beceriler.length){
+            hatalar.push("Kulüp satırı eksik (ikon | kulüp | beceriler): " + h.slice(0, 34));
+            return;
+          }
+          if (beceriler.some(b => /^(to |can |can't )/i.test(b))){
+            hatalar.push("Beceri «I can …» içine girer, yalın fiille başlamalı: " + p[1]);
+            return;
+          }
+          kulupKayit.push({ ad: p[1], beceriler });
+        });
+        if (kulupKayit.length < 3) hatalar.push("En az üç kulüp gerekir; çeldirici üretilemiyor.");
+        const sahip = {};
+        kulupKayit.forEach(c => c.beceriler.forEach(b => {
+          if (sahip[b]) hatalar.push(`«${b}» hem ${sahip[b]} hem ${c.ad} listesinde; bir beceri tek kulüpte olmalı, yoksa turda iki doğru cevap çıkar.`);
+          else sahip[b] = c.ad;
+        }));
+        let isimSayi = 0;
+        isimSatir.forEach(h => {
+          const p = h.split("|").map(x => x.trim());
+          if (!p[0] || !/^(he|she)$/i.test(p[1] || "")){
+            hatalar.push("İsim satırı «İsim | he/she» biçiminde olmalı: " + h.slice(0, 24));
+            return;
+          }
+          isimSayi++;
+        });
+        if (isimSayi < 4) hatalar.push("En az dört isim gerekir; bir turda dört karakter görünebilir.");
+        if (hatalar.length){ kelimeUyariGoster("ccy", hatalar); return; }
+        if (isimSayi < 8) uyarilar.push("İsim havuzu küçük; aynı adlar sık tekrar eder (8+ önerilir).");
+        const tanimli = {};
+        beceriSatir.forEach(h => { const p = h.split("|").map(x => x.trim()); if (p[0]) tanimli[p[0]] = true; });
+        const cevirisiz = Object.keys(sahip).filter(b => !tanimli[b]);
+        if (cevirisiz.length) uyarilar.push("Türkçe karşılığı tanımsız beceriler (ipucu İngilizce kalır): " + cevirisiz.join(", "));
+        const enstrumanlar = beceriSatir
+          .filter(h => /instrument/i.test(h.split("|")[2] || ""))
+          .map(h => (h.split("|")[0] || "").trim());
+        if (!enstrumanlar.some(b => sahip[b]))
+          uyarilar.push("Kulüplerde «instrument» etiketli beceri yok; «Who can play an instrument?» görevi üretilmez.");
+        const kSayi = say("ccyKulupSayisi", 3, 6, 5);
+        if (kSayi > kulupKayit.length)
+          uyarilar.push("Maç başına kulüp sayısı listedekinden çok; eldeki " + kulupKayit.length + " kulüp kullanılacak.");
+        oyunAyarYaz(oyun.id, {
+          zorluk: +$("ccyZorluk").value, bolumler: secili.join(","),
+          bolumBasina: say("ccySoru", 1, 6, 3), kulupSayisi: kSayi,
+          turSure: say("ccyTurSure", 5, 60, 15), hizliSure: say("ccyHizliSure", 4, 30, 10),
+          finalSure: say("ccyFinalSure", 20, 180, 60), kilitSaniye: say("ccyKilit", 1, 5, 1),
+          dogruPuan: say("ccyDogru", 1, 50, 10), hizBonusPuan: say("ccyHiz", 0, 20, 5),
+          yanlisPuan: say("ccyYanlis", 0, 20, 5),
+          sesOto: $("ccySesOto").value === "1", sesHiz: say("ccySesHiz", 50, 120, 88),
+          trIpucu: $("ccyTr").value === "1",
+          kulupler: kulupSatir.join("\n"), beceriler: beceriSatir.join("\n"), isimler: isimSatir.join("\n"),
+        });
+        hazirEkran();
+        $("ccAyarAc").click();
+        kelimeUyariGoster("ccy", null, uyarilar);
+      }
+
+      /* ---- OYUN ---- */
+      function basla(){
+        A = oyunAyarVars(oyun.id, VARS);
+        if (kulupListesi().length < 3 || isimListesi().length < 4){
+          $("app").innerHTML = oyunBaslik(oyun) + bosMesaj("Bu ayarlarla oyun kurulamadı; öğretmen panelinden en az üç kulüp ve dört isim tanımlayın.");
+          return;
+        }
+        kulupSec();
+        isimHavuz = [];
+        turlar = turlarUret();
+        tur = 0;
+        [0, 1].forEach(p => { skor[p] = 0; combo[p] = 0; enCombo[p] = 0; hizSay[p] = 0; dogruSay[p] = 0; yanlisSay[p] = 0; });
+        fKulup = [null, null]; fOgr = [null, null]; fUye = [[], []]; finalBitti = false;
+        asama = "tur";
+        hedefSure = turlar.length * 8 + (+A.finalSure || 60);
+        oyunBaslangic = Date.now();
+        sesMotor(); muzikBaslat();
+        tahtaKur();
+        if (turlar.length) turGoster(); else finalBasla();
+        $("app").scrollIntoView({ behavior: "smooth", block: "start" });
+        tahtaBaglan({
+          yeniden: basla,
+          sonraki: () => {
+            if (asama === "final"){ finalSonu(); return; }
+            if (asama === "tur") turKapat(false);
+          },
+          degistir: () => {
+            if (asama !== "tur" || turBitti) return;
+            const t = turlar[tur];
+            if (!t) return;
+            const yeni = turUret(t.bolum);
+            if (yeni){ turlar[tur] = yeni; turGoster(); }
+          },
+          ipucu: () => {
+            const t = turlar[tur];
+            bildir("💡 " + (asama === "tur" && t ? YONERGE[t.bolum]
+              : "Uygun öğrenci, kulübün becerisini «can» ile söyleyen ve o beceri için «can't» demeyen kişidir."), "");
+          },
+          cevap: () => {
+            if (asama === "tur"){
+              const t = turlar[tur];
+              if (!t) return;
+              [0, 1].forEach(p => {
+                const kap = $("ccKartlar" + p);
+                if (!kap) return;
+                [].slice.call(kap.querySelectorAll("[data-metin]")).forEach(b => {
+                  if (b.dataset.metin === t.dogru) b.classList.add("acik");
+                });
+              });
+            } else if (asama === "final"){
+              [0, 1].forEach(p => {
+                const k = fOgr[p], kart = $("ccIc" + p) && $("ccIc" + p).querySelector(".cc-aday");
+                if (k && kart) kart.classList.add(uygunMu(k, fKulup[p]) ? "acik" : "yanlis");
+              });
+            }
+          },
+          sureDur: sayacDur, sureDevam: sureBaslat,
+        });
+      }
+
+      /* Tahta bir kez kurulur; turlar yalnızca içeriği günceller — böylece
+         büyük ekran modu turlar ve final arasında bozulmaz. */
+      function tahtaKur(){
+        $("app").innerHTML = `${oyunBaslik(oyun)}
+          <div class="dl-sahne" id="ccSahne">
+            <div class="dl-arac">
+              <span class="dl-arac-not">Akıllı tahtada mı oynuyorsunuz?</span>
+              <button type="button" class="bl-mini" id="ccSes" title="Ses efektleri" aria-label="Ses efektleri">🔊</button>
+              <button type="button" class="bl-mini" id="ccMuzik" title="Arka plan müziği" aria-label="Arka plan müziği">🎵</button>
+              <button type="button" class="bl-mini" id="ccKonus" title="Sesli okuma" aria-label="Sesli okuma">🗣️</button>
+              <button type="button" class="btn btn-ghost dl-buyut" id="ccBuyut" aria-pressed="false">⛶ Büyük Ekran</button>
+            </div>
+            <div class="dl-skor">
+              <div class="dl-skor-taraf s1"><span class="dl-skor-ad">${RENK[0]} ${kacis(adlar[0])}</span><span class="dl-skor-puan" id="ccS0">0</span><span class="cc-combo" id="ccC0"></span></div>
+              <span class="dl-vs">VS</span>
+              <div class="dl-skor-taraf s2"><span class="dl-skor-ad">${kacis(adlar[1])} ${RENK[1]}</span><span class="dl-skor-puan" id="ccS1">0</span><span class="cc-combo" id="ccC1"></span></div>
+            </div>
+            <div class="wr-harita">
+              <div class="wr-harita-bas"><span>🎯 School Clubs</span><span class="wr-harita-not" id="ccKulupNot">Bu maçın kulüpleri</span></div>
+              <div class="wr-pinler" id="ccKulupler"></div>
+            </div>
+            <div class="wr-serit" id="ccSerit"></div>
+            <div class="dl-soru-kart">
+              <div class="dl-tur-bilgi"><span id="ccTur"></span> · <span id="ccSaniye"></span></div>
+              <div class="wr-bayrak-buyuk" id="ccIkon"></div>
+              <div class="dl-soru" id="ccGorev"></div>
+              <div id="ccMerkez"></div>
+              <div><button type="button" class="wr-oku" id="ccOku">🔊 Listen</button></div>
+              <div class="dl-sure-yol"><div class="dl-sure-dolgu" id="ccSure"></div></div>
+            </div>
+            <div class="wr-tr" id="ccTr"></div>
+            <div class="dl-bildirim" id="ccBildirim">Doğru cevabı ilk veren hız bonusunu kapar!</div>
+            <div class="dl-taraflar">
+              ${[0, 1].map(p => `
+                <div class="dl-panel p${p + 1}" id="ccPanel${p}">
+                  <div class="dl-panel-bas">
+                    <span class="dl-panel-ad">${RENK[p]} ${kacis(adlar[p])}</span>
+                    <span class="dl-panel-not" id="ccNot${p}">0 puan</span>
+                  </div>
+                  <div id="ccIc${p}"></div>
+                </div>`).join("")}
+            </div>
+          </div>`;
+        $("ccBuyut").addEventListener("click", buyutDegistir);
+        document.addEventListener("fullscreenchange", tamEkranDegisti);
+        hudSesBagla("cc");
+        kulupSeritCiz();
+        seritCiz();
+      }
+
+      function bildir(metin, sinif){
+        const el = $("ccBildirim");
+        if (el){ el.innerHTML = metin; el.className = "dl-bildirim" + (sinif ? " " + sinif : ""); }
+      }
+      function trGoster(metin){
+        const el = $("ccTr");
+        if (!el) return;
+        if (!metin || !trVar()){ el.className = "wr-tr"; el.textContent = ""; return; }
+        el.className = "wr-tr acik"; el.textContent = "💡 " + metin;
+      }
+      function kulupSeritCiz(){
+        const kap = $("ccKulupler");
+        if (!kap) return;
+        kap.innerHTML = sinifKulup.map(c => {
+          let sinif = "";
+          if (asama !== "tur"){
+            if (fKulup[0] && fKulup[0].ad === c.ad) sinif = " o1";
+            else if (fKulup[1] && fKulup[1].ad === c.ad) sinif = " o2";
+          }
+          return `<span class="wr-pin${sinif}"><span class="wr-pin-bayrak">${gorselHtml(c.ikon)}</span>${kacis(c.ad)}</span>`;
+        }).join("");
+      }
+      function seritCiz(){
+        const kap = $("ccSerit");
+        if (!kap) return;
+        const varOlan = BOLUM_SIRA.filter(b => turlar.some(t => t.bolum === b));
+        const cipler = varOlan.map(b => {
+          const yerler = turlar.map((x, j) => x.bolum === b ? j : -1).filter(j => j >= 0);
+          const d = asama !== "tur" ? "tamam"
+            : turlar[tur] && turlar[tur].bolum === b ? "aktif"
+            : tur > yerler[yerler.length - 1] ? "tamam" : "";
+          return `<span class="wr-serit-cip${d ? " " + d : ""}">${BOLUM_IKON[b]} ${BOLUM_AD[b]}</span>`;
+        });
+        cipler.push(`<span class="wr-serit-cip${asama === "final" ? " aktif" : asama === "bitti" ? " tamam" : ""}">🏆 Build Your Club</span>`);
+        kap.innerHTML = cipler.join("");
+      }
+      function skorTazele(){
+        [0, 1].forEach(p => {
+          const s = $("ccS" + p);
+          if (s) s.textContent = skor[p];
+          notTazele(p);
+        });
+      }
+      function notTazele(p){
+        const not = $("ccNot" + p);
+        if (!not) return;
+        not.textContent = asama === "tur" ? skor[p] + " puan" : `👥 ${fUye[p].length} üye`;
+      }
+      function comboTazele(){
+        [0, 1].forEach(p => {
+          const el = $("ccC" + p);
+          if (!el) return;
+          const kat = combo[p] >= 5 ? " · x3" : combo[p] >= 3 ? " · x2" : "";
+          el.textContent = combo[p] >= 2 ? `🔥 ${combo[p]} seri${kat}` : "";
+          el.classList.toggle("acik", combo[p] >= 2);
+        });
+      }
+      function comboPop(p, kat, kazanc, ilkMi){
+        const panel = $("ccPanel" + p);
+        if (!panel) return;
+        const pop = document.createElement("span");
+        pop.className = "cc-pop";
+        pop.textContent = kat >= 3 ? `🔥 SUPER COMBO x3 · +${kazanc}`
+          : kat === 2 ? `🔥 COMBO x2 · +${kazanc}`
+          : ilkMi ? `⚡ +${kazanc}` : `+${kazanc}`;
+        panel.appendChild(pop);
+        setTimeout(() => pop.remove(), 1200);
+      }
+      const avatarSinif = ad => "r" + (String(ad).split("").reduce((t, c) => t + c.charCodeAt(0), 0) % 6);
+      const avatarHtml = k => `<span class="cc-avatar ${avatarSinif(k.ad)}">${kacis(String(k.ad).charAt(0))}</span>`;
+      const karakterHtml = k => `<div class="cc-karakter">${avatarHtml(k)}<span class="cc-ad-buyuk">${kacis(k.ad)}</span>
+        <span class="cc-cumleler">${k.cumleler.map(c => `<span class="cc-cumle">“${kacis(c)}”</span>`).join("")}</span></div>`;
+      const miniHtml = k => `<span class="cc-mini">${avatarHtml(k)}<span class="cc-mini-ad">${kacis(k.ad)}</span>
+        <span class="cc-mini-cumle">${k.cumleler.map(c => "“" + kacis(c) + "”").join("<br />")}</span></span>`;
+      function secenekKartHtml(p, s, i){
+        const tus = `<span class="dl-kart-tus">${TUSLAR[p][i] || "•"}</span>`;
+        if (typeof s !== "string" && s.cumleler)
+          return `<button class="cc-ogr-kart" data-o="${p}" data-i="${i}" data-metin="${kacis(s.ad)}">${tus}
+            ${avatarHtml(s)}<span class="cc-ogr-ad">${kacis(s.ad)}</span>
+            <span class="cc-ogr-soz">${s.cumleler.map(c => "“" + kacis(c) + "”").join("<br />")}</span></button>`;
+        if (typeof s !== "string")
+          return `<button class="dl-kart" data-o="${p}" data-i="${i}" data-metin="${kacis(s.ad)}">${tus}
+            <span class="wr-kart-bayrak">${gorselHtml(s.ikon)}</span><span>${kacis(s.ad)}</span></button>`;
+        return `<button class="dl-kart" data-o="${p}" data-i="${i}" data-metin="${kacis(s)}">${tus}<span>${kacis(s)}</span></button>`;
+      }
+      function soruSes(metin){
+        const b = $("ccOku");
+        if (!b) return;
+        b.hidden = !metin;
+        b.onclick = () => { if (metin) konusEn(metin, hiz()); };
+      }
+
+      /* ---- REKABET TURLARI ---- */
+      function turGoster(){
+        const t = turlar[tur];
+        if (!t) return finalBasla();
+        asama = "tur";
+        turBitti = false;
+        cevapladi = [false, false]; kilitli = [false, false]; ilkDogru = null;
+        tusBirak();
+        seritCiz();
+        $("ccTur").textContent = `Tur ${tur + 1} / ${turlar.length} · ${BOLUM_IKON[t.bolum]} ${BOLUM_AD[t.bolum]}`;
+        $("ccIkon").innerHTML = t.gorevIkon ? gorselHtml(t.gorevIkon) : "";
+        $("ccGorev").textContent = t.gorev;
+        $("ccMerkez").innerHTML = t.karakter ? karakterHtml(t.karakter)
+          : t.karakterler ? `<div class="cc-minis">${t.karakterler.map(miniHtml).join("")}</div>` : "";
+        trGoster("");
+        soruSes(t.ses);
+        bildir(`${BOLUM_IKON[t.bolum]} ${kacis(YONERGE[t.bolum])}`, "");
+        [0, 1].forEach(p => {
+          $("ccPanel" + p).classList.remove("pas");
+          $("ccIc" + p).innerHTML = t.surukle
+            ? `<div class="cc-ogr-kartlar" id="ccKartlar${p}">${t.secenekler.map((s, i) => secenekKartHtml(p, s, i)).join("")}</div>
+               <div class="cc-drop" id="ccDrop${p}">🎯 MY CLUB — sürükle ya da dokun</div>`
+            : `<div class="dl-kartlar" id="ccKartlar${p}">${t.secenekler.map((s, i) => secenekKartHtml(p, s, i)).join("")}</div>`;
+          if (t.surukle) surukleKur(p);
+          else $("ccKartlar" + p).querySelectorAll("[data-metin]").forEach(b =>
+            b.addEventListener("click", () => turCevap(+b.dataset.o, +b.dataset.i)));
+        });
+        skorTazele(); comboTazele();
+        tusDinle = e => {
+          if (turBitti) return;
+          for (let p = 0; p < 2; p++){
+            const i = TUSLAR[p].indexOf(e.key);
+            if (i >= 0 && i < t.secenekler.length){ e.preventDefault(); turCevap(p, i); return; }
+          }
+        };
+        document.addEventListener("keydown", tusDinle);
+        if (A.sesOto !== false && t.ses) bekle(() => konusEn(t.ses, hiz()), 380);
+        sureKur(t.sure, () => turKapat(true));
+      }
+
+      /* Sürükle ya da dokun: kart MY CLUB alanına bırakılırsa veya kısa dokunuşla
+         seçilirse cevap sayılır. Her panel kendi işaretçisini yakalar; iki oyuncu
+         çok dokunmatik tahtada aynı anda sürükleyebilir. */
+      function surukleKur(p){
+        const kap = $("ccKartlar" + p), birakma = $("ccDrop" + p);
+        if (!kap || !birakma) return;
+        [].slice.call(kap.querySelectorAll(".cc-ogr-kart")).forEach(b => {
+          b.addEventListener("pointerdown", e => {
+            if (turBitti || cevapladi[p] || kilitli[p] || b.disabled) return;
+            e.preventDefault();
+            const id = e.pointerId, bx = e.clientX, by = e.clientY;
+            let golge = null;
+            try { b.setPointerCapture(id); } catch (err) {}
+            const uzerinde = (x, y) => {
+              const r = birakma.getBoundingClientRect();
+              return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+            };
+            const tasi = ev => {
+              if (ev.pointerId !== id) return;
+              if (!golge && Math.hypot(ev.clientX - bx, ev.clientY - by) > 12){
+                golge = b.cloneNode(true);
+                golge.className = "cc-ogr-kart cc-ghost";
+                document.body.appendChild(golge);
+                b.style.opacity = ".45";
+              }
+              if (golge){
+                golge.style.left = ev.clientX + "px";
+                golge.style.top = ev.clientY + "px";
+                birakma.classList.toggle("uzerinde", uzerinde(ev.clientX, ev.clientY));
+              }
+            };
+            const birak = ev => {
+              if (ev.pointerId !== id) return;
+              b.removeEventListener("pointermove", tasi);
+              b.removeEventListener("pointerup", birak);
+              b.removeEventListener("pointercancel", birak);
+              b.style.opacity = "";
+              birakma.classList.remove("uzerinde");
+              const suruklendi = !!golge;
+              if (golge){ golge.remove(); golge = null; }
+              if (ev.type === "pointercancel") return;
+              if (!suruklendi || uzerinde(ev.clientX, ev.clientY)) turCevap(p, +b.dataset.i);
+            };
+            b.addEventListener("pointermove", tasi);
+            b.addEventListener("pointerup", birak);
+            b.addEventListener("pointercancel", birak);
+          });
+        });
+      }
+
+      function turCevap(p, i){
+        const t = turlar[tur];
+        if (turBitti || !t || cevapladi[p] || kilitli[p]) return;
+        const kap = $("ccKartlar" + p);
+        const el = kap ? kap.querySelector(`[data-o="${p}"][data-i="${i}"]`) : null;
+        if (secAd(t.secenekler[i]) === t.dogru){
+          cevapladi[p] = true;
+          combo[p]++; enCombo[p] = Math.max(enCombo[p], combo[p]);
+          const ilkMi = ilkDogru === null;
+          if (ilkMi){ ilkDogru = p; hizSay[p]++; }
+          const kat = combo[p] >= 5 ? 3 : combo[p] >= 3 ? 2 : 1;
+          const kazanc = (+A.dogruPuan || 10) * kat + (ilkMi ? Math.max(0, +A.hizBonusPuan || 0) : 0);
+          skor[p] += kazanc; dogruSay[p]++;
+          if (el) el.classList.add("dogru");
+          if (kap) [].slice.call(kap.querySelectorAll("[data-metin]")).forEach(b => { b.disabled = true; });
+          sesEfekt(kat > 1 ? "bonus" : "dogru");
+          comboPop(p, kat, kazanc, ilkMi);
+          comboTazele(); skorTazele();
+          const panel = $("ccPanel" + p);
+          if (kat > 1 && panel) efektKonfeti(panel, el || panel, 14);
+          if (cevapladi[0] && cevapladi[1]){ turKapat(false); return; }
+          bildir(`${ilkMi ? "⚡" : "✅"} ${kacis(adlar[p])} +${kazanc}${ilkMi && +A.hizBonusPuan ? " (hız bonusu dahil)" : ""} — ${kacis(adlar[1 - p])} hâlâ cevaplayabilir!`, p === 0 ? "k1" : "k2");
+          if (ilkMi) sureKisalt(6);
+          return;
+        }
+        yanlisSay[p]++; combo[p] = 0;
+        skor[p] -= Math.max(0, +A.yanlisPuan || 0);
+        kilitli[p] = true;
+        if (el){ el.classList.add("yanlis"); el.disabled = true; }
+        sesEfekt("yanlis");
+        const panel = $("ccPanel" + p), not = $("ccNot" + p);
+        if (panel) panel.classList.add("pas");
+        if (not) not.textContent = "⛔ kilit";
+        comboTazele(); skorTazele();
+        bildir(`❌ ${kacis(adlar[p])} yanlış (−${Math.max(0, +A.yanlisPuan || 0)}); ${Math.max(1, +A.kilitSaniye || 1)} sn sonra yeniden deneyebilir.`, p === 0 ? "k1" : "k2");
+        bekle(() => {
+          kilitli[p] = false;
+          if (panel && !turBitti) panel.classList.remove("pas");
+          notTazele(p);
+        }, Math.max(300, (+A.kilitSaniye || 1) * 1000));
+      }
+
+      function turKapat(zamanAsimi){
+        if (turBitti || asama !== "tur") return;
+        turBitti = true;
+        sayacDur();
+        tusBirak();
+        const t = turlar[tur];
+        [0, 1].forEach(p => {
+          const kap = $("ccKartlar" + p);
+          if (kap) [].slice.call(kap.querySelectorAll("[data-metin]")).forEach(b => {
+            b.disabled = true;
+            if (b.dataset.metin === t.dogru && !b.classList.contains("dogru")) b.classList.add("acik");
+          });
+          const panel = $("ccPanel" + p);
+          if (panel) panel.classList.remove("pas");
+          if (!cevapladi[p]) combo[p] = 0;
+        });
+        comboTazele(); skorTazele();
+        trGoster(t.tr);
+        if (!cevapladi[0] && !cevapladi[1]){
+          bildir(`⏱️ ${zamanAsimi ? "Süre doldu — " : ""}doğru cevap: <b>${kacis(t.dogru)}</b>`, "");
+          sesEfekt("bitis");
+        } else if (cevapladi[0] && cevapladi[1]){
+          bildir("🤝 İkiniz de buldunuz! Sıradaki görev geliyor…", "");
+        } else {
+          const p = cevapladi[0] ? 0 : 1;
+          bildir(`🎉 Turu ${kacis(adlar[p])} kaptı! Doğru cevap: <b>${kacis(t.dogru)}</b>`, p === 0 ? "k1" : "k2");
+        }
+        tur++;
+        bekle(() => { if (tur >= turlar.length) finalBasla(); else turGoster(); },
+          t.tr && trVar() ? 2600 : 1800);
+      }
+
+      /* ---- FİNAL: BUILD YOUR CLUB ---- */
+      const uygunMu = (k, c) => k.can.some(b => c.beceriler.indexOf(b) >= 0)
+        && !k.cant.some(b => c.beceriler.indexOf(b) >= 0);
+
+      function finalOgrUret(p){
+        const benim = fKulup[p];
+        const kullanilan = new Set([fOgr[0] && fOgr[0].ad, fOgr[1] && fOgr[1].ad].filter(Boolean));
+        const digerler = sinifKulup.filter(c => c.ad !== benim.ad);
+        const zar = Math.random();
+        let can = [], cant = [];
+        if (zar < 0.5 || !digerler.length){
+          can = karistir(benim.beceriler).slice(0, Math.min(2, benim.beceriler.length));
+          if (A.zorluk >= 2 && digerler.length && Math.random() < 0.4)
+            cant = [rastSec(rastSec(digerler).beceriler)];
+        } else if (zar < 0.78){
+          /* Tuzak: başka beceri var ama kulübümün becerisini yapamıyor */
+          can = [rastSec(rastSec(digerler).beceriler)];
+          cant = [rastSec(benim.beceriler)];
+        } else {
+          const c1 = rastSec(digerler);
+          can = [rastSec(c1.beceriler)];
+          const c2ler = digerler.filter(x => x.ad !== c1.ad);
+          if (c2ler.length && Math.random() < 0.5) can.push(rastSec(rastSec(c2ler).beceriler));
+        }
+        return karakterYap(kullanilan, can, cant);
+      }
+
+      function finalBasla(){
+        asama = "final";
+        turBitti = true;
+        tusBirak();
+        sayacDur();
+        const secilen = karistir(sinifKulup).slice(0, 2);
+        fKulup = [secilen[0], secilen[1] || secilen[0]];
+        fUye = [[], []]; finalBitti = false; kilitli = [false, false];
+        seritCiz(); kulupSeritCiz();
+        const not = $("ccKulupNot");
+        if (not) not.textContent = "Her oyuncuya kendi kulübü verildi";
+        $("ccTur").textContent = "🏆 Build Your Club";
+        $("ccIkon").innerHTML = "";
+        $("ccGorev").textContent = "Recruit the right students for YOUR club before the time runs out!";
+        $("ccMerkez").innerHTML = `<div class="wr-yer">${gorselHtml(fKulup[0].ikon)} ${kacis(adlar[0])}  vs  ${kacis(adlar[1])} ${gorselHtml(fKulup[1].ikon)}</div>`;
+        soruSes("");
+        trGoster(`Uygun öğrenciyi ✅ Recruit ile kulübüne al, uymayanı ▶ Skip ile geç. Yanlış üye −${Math.max(0, +A.yanlisPuan || 0)} puan ve ${Math.max(1, +A.kilitSaniye || 1)} sn kilit.`);
+        bildir(`🏁 Ready… Go! Doğru üye +${+A.dogruPuan || 10}; combo katlamayı unutma!`, "");
+        [0, 1].forEach(p => {
+          $("ccPanel" + p).classList.remove("pas");
+          fOgr[p] = finalOgrUret(p);
+          finalCiz(p);
+        });
+        skorTazele();
+        tusDinle = e => {
+          if (finalBitti) return;
+          for (let p = 0; p < 2; p++){
+            if (e.key === TUSLAR[p][0]){ e.preventDefault(); finalCevap(p, true); return; }
+            if (e.key === TUSLAR[p][1]){ e.preventDefault(); finalCevap(p, false); return; }
+          }
+        };
+        document.addEventListener("keydown", tusDinle);
+        sesEfekt("bonus");
+        sureKur(Math.max(20, +A.finalSure || 60), finalSonu);
+      }
+
+      function finalCiz(p){
+        const kap = $("ccIc" + p);
+        if (!kap) return;
+        const c = fKulup[p], k = fOgr[p];
+        kap.innerHTML = `
+          <div class="cc-final-kulup">${gorselHtml(c.ikon)} ${kacis(c.ad)}</div>
+          <div class="cc-uyeler">${fUye[p].length
+            ? fUye[p].map(u => `<span class="cc-uye">${kacis(u.ad)}</span>`).join("")
+            : `<span class="cc-uye bos">Henüz üye yok</span>`}</div>
+          ${finalBitti || !k ? "" : `
+          <div class="cc-ogr-kart cc-aday">${avatarHtml(k)}<span class="cc-ogr-ad">${kacis(k.ad)}</span>
+            <span class="cc-ogr-soz">${k.cumleler.map(x => "“" + kacis(x) + "”").join("<br />")}</span>
+            <button type="button" class="wr-oku kucuk" data-oku="${p}">🔊 Listen</button></div>
+          <div class="cc-aksiyon">
+            <button type="button" class="cc-al" data-al="${p}">✅ Recruit <span class="dl-kart-tus">${TUSLAR[p][0]}</span></button>
+            <button type="button" class="cc-gec" data-gec="${p}">▶ Skip <span class="dl-kart-tus">${TUSLAR[p][1]}</span></button>
+          </div>`}`;
+        const al = kap.querySelector("[data-al]"), gec = kap.querySelector("[data-gec]"), oku = kap.querySelector("[data-oku]");
+        if (al) al.addEventListener("click", () => finalCevap(p, true));
+        if (gec) gec.addEventListener("click", () => finalCevap(p, false));
+        if (oku && k) oku.addEventListener("click", () => konusEn(k.ad + " says: " + k.cumleler.join(" "), hiz()));
+        notTazele(p);
+      }
+
+      function finalCevap(p, alindi){
+        if (finalBitti || asama !== "final" || kilitli[p] || !fOgr[p]) return;
+        const k = fOgr[p], c = fKulup[p], uygun = uygunMu(k, c);
+        const panel = $("ccPanel" + p);
+        if (alindi && !uygun){
+          yanlisSay[p]++; combo[p] = 0;
+          skor[p] -= Math.max(0, +A.yanlisPuan || 0);
+          kilitli[p] = true;
+          sesEfekt("yanlis");
+          if (panel) panel.classList.add("pas");
+          comboTazele(); skorTazele();
+          bildir(`⚠️ ${kacis(k.ad)}, ${kacis(c.ad)} için uygun değil — ${k.cant.some(b => c.beceriler.indexOf(b) >= 0)
+            ? `dikkat: “I can't ${kacis(k.cant.find(b => c.beceriler.indexOf(b) >= 0))}.”`
+            : "kulübün becerisini söylemiyor!"}`, p === 0 ? "k1" : "k2");
+          bekle(() => {
+            kilitli[p] = false;
+            if (panel) panel.classList.remove("pas");
+            if (!finalBitti){ fOgr[p] = finalOgrUret(p); finalCiz(p); }
+          }, Math.max(300, (+A.kilitSaniye || 1) * 1000));
+          return;
+        }
+        if (alindi){
+          combo[p]++; enCombo[p] = Math.max(enCombo[p], combo[p]);
+          const kat = combo[p] >= 5 ? 3 : combo[p] >= 3 ? 2 : 1;
+          const kazanc = (+A.dogruPuan || 10) * kat;
+          skor[p] += kazanc; dogruSay[p]++; fUye[p].push(k);
+          sesEfekt(kat > 1 ? "bonus" : "dogru");
+          comboPop(p, kat, kazanc, false);
+          comboTazele(); skorTazele();
+          if (kat > 1 && panel) efektKonfeti(panel, panel, 12);
+        } else {
+          if (uygun){
+            combo[p] = 0; comboTazele();
+            bildir(`💨 ${kacis(k.ad)} aslında katılabilirdi (“I can ${kacis(k.can[0])}.”) — kaçtı!`, "");
+          }
+          sesEfekt("sayfa");
+        }
+        fOgr[p] = finalOgrUret(p);
+        finalCiz(p);
+      }
+
+      function finalSonu(){
+        if (finalBitti) return;
+        finalBitti = true;
+        sayacDur();
+        tusBirak();
+        sonEkran();
+      }
+
+      /* ---- OYUN SONU ---- */
+      function sonEkran(){
+        asama = "bitti";
+        seritCiz();
+        const berabere = skor[0] === skor[1];
+        const kz = berabere ? -1 : (skor[0] > skor[1] ? 0 : 1);
+        $("ccTur").textContent = "🏆 Club Champion";
+        $("ccSaniye").textContent = "";
+        $("ccIkon").innerHTML = berabere ? "🤝" : "🏆";
+        $("ccGorev").textContent = berabere ? "It's a draw! Great match!" : `CLUB CHAMPION: ${adlar[kz]}!`;
+        $("ccMerkez").innerHTML = `<div class="cc-istat">${[0, 1].map(p => `
+          <div class="cc-istat-kart${p === kz ? " kazanan" : ""}">
+            <b>${RENK[p]} ${kacis(adlar[p])}</b>
+            <span class="cc-istat-buyuk">${skor[p]} PTS</span>
+            <span>✅ Correct: ${dogruSay[p]} · ❌ Wrong: ${yanlisSay[p]}</span>
+            <span>🔥 Best Combo: ${enCombo[p]} · ⚡ Speed Bonus: ${hizSay[p]}</span>
+            <span>👥 Club Members: ${fUye[p].length}</span>
+          </div>`).join("")}</div>`;
+        soruSes("");
+        trGoster("");
+        bildir(berabere ? "🤝 Berabere — rövanş şart!" : `🎉 ${kacis(adlar[kz])} kulüp şampiyonu oldu!`,
+          kz === 0 ? "k1" : kz === 1 ? "k2" : "");
+        [0, 1].forEach(p => {
+          const panel = $("ccPanel" + p);
+          if (panel) panel.classList.remove("pas");
+          finalCiz(p);
+        });
+        const sahne = $("ccSahne");
+        if (kz >= 0 && sahne){
+          const hedef = $("ccPanel" + kz);
+          if (hedef) efektKonfeti(sahne, hedef, 30);
+        }
+        sesEfekt("bitis");
+        konusEn(berabere ? "It's a draw! Great match!" : adlar[kz] + " is the Club Champion! Congratulations!", hiz());
+        bekle(sonlandir, 5200);
+      }
+
+      function sonlandir(){
+        const sure = sn();
+        durdur();
+        bitir({ dogru: dogruSay[0] + dogruSay[1], yanlis: yanlisSay[0] + yanlisSay[1], sure, hedefSure,
+          ikili: { adlar: adlar.slice(), skor: skor.slice(), tur: turlar.length + 1 },
+          oyunPuan: Math.max(0, skor[0]) + Math.max(0, skor[1]),
+          ekBilgi: [{ ad: "En iyi combo", deger: enCombo[0] + " / " + enCombo[1] },
+            { ad: "Hız bonusu", deger: hizSay[0] + " / " + hizSay[1] },
+            { ad: "Kulüp üyesi", deger: fUye[0].length + " / " + fUye[1].length }],
+          rozet: Math.max(enCombo[0], enCombo[1]) >= 5 ? "Super Combo rozeti"
+            : (dogruSay[0] + dogruSay[1] > 0 && !yanlisSay[0] && !yanlisSay[1]) ? "Perfect Recruiter rozeti" : null });
+      }
+
+      hazirEkran();
+    }
+  },
+
   /* ── SÖZCÜK LABORATUVARI ──────────────────────────────────────────────────
      3. sınıf söz varlığı. Beş bölüm: bağlamdan anlam tahmini, eş anlamlı ve
      zıt anlamlı eşleştirme, sözcüğü doğru anlamda kullanma ve kelime haritası.
@@ -77525,8 +78813,9 @@ $("app").addEventListener("click", e => {
         aktifOyun = ORY_OYUNLAR.find(o => o.id === arg) || null;
         if (aktifOyun) durum.oyunKaynak = "oryantasyon";
       }
+      if (aktifOyun && window.KKSayac) KKSayac.gonder("oyun", aktifOyun.baslik || aktifOyun.id);
       durum.ekran = "oyun"; render(); break;
-    case "tekrar": if (aktifOyun){ durum.ekran = "oyun"; render(); } break;
+    case "tekrar": if (aktifOyun){ if (window.KKSayac) KKSayac.gonder("oyun", aktifOyun.baslik || aktifOyun.id); durum.ekran = "oyun"; render(); } break;
     case "ogretmen": durum.ekran = "ogretmen"; render(); break;
     case "rapor": durum.raporId = arg; durum.ekran = "rapor"; render(); break;
     case "rozetler": durum.ekran = "rozetler"; render(); break;

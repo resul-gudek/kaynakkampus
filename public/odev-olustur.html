@@ -235,6 +235,8 @@
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
+  <script src="assets/analitik.js" defer></script>
+  <script src="assets/kullanim-sayac.js" data-sayfa="odev-olustur" defer></script>
 </head>
 <body>
 
@@ -4547,11 +4549,13 @@ function renderSheet(missing) {
   $("sheetArea").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-$("genBtn").onclick = generate;
+/* Anonim kullanım sayacı (assets/kullanim-sayac.js) — yalnızca adet tutar */
+const sayac = (d) => { if (window.KKSayac) KKSayac.gonder("odev", d); };
+$("genBtn").onclick = () => { generate(); sayac("olusturuldu"); };
 $("shuffleBtn").onclick = generate;
 $("shuffleBtn2").onclick = generate;
-$("printBtn").onclick = () => { if (!st.qs.length) generate(); window.print(); };
-$("printBtn2").onclick = () => window.print();
+$("printBtn").onclick = () => { if (!st.qs.length) generate(); sayac("yazdirildi"); window.print(); };
+$("printBtn2").onclick = () => { sayac("yazdirildi"); window.print(); };
 
 /* Mobil menü davranışı assets/site-header.js içinde */
 

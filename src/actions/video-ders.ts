@@ -478,6 +478,9 @@ export async function videoTamamlandi(videoId: string, tamam: boolean): Promise<
       create: { videoId, ogrenciId: kim.id, ilkIzleme: tamam ? simdi : null, ...veri },
       update: veri,
     });
+    // Öğretmene görünen ilerlemenin elle değiştirilmesi denetlenir
+    // (otomatik ilerleme kaydı videoIlerlemeKaydet'te kasıtlı olarak loglanmaz — çok sık)
+    denetim("video.tamamlandi", kim, { videoId, tamam });
     videolariTazele(videoId);
     return { tamam: true };
   } catch (e) {

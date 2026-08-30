@@ -3,6 +3,9 @@
 import { AuthError } from "next-auth";
 import { signIn } from "@/lib/auth";
 import { GIRIS_TURU_ANASAYFA } from "@/lib/auth.config";
+import { logcu } from "@/lib/log";
+
+const log = logcu("giris");
 
 export type GirisSonuc = { hata?: string };
 
@@ -22,15 +25,21 @@ export async function girisYapAction(
     return {};
   } catch (e) {
     if (e instanceof AuthError) {
-      /* Hangi bilginin hatalı olduğu kasıtlı olarak söylenmez (hesap sayımı
-         yapılmasın diye); ancak hesap türü de kimlik bilgisinin parçası
-         olduğundan (bkz. lib/auth.ts) yanlış sekme sık karşılaşılan bir
-         hatadır — sekmeyi kontrol etmesi açıkça hatırlatılır. */
-      return {
-        hata:
-          "Kullanıcı adı, şifre ya da seçilen hesap türü hatalı. " +
-          "Üstteki sekmenin hesabınızın türüyle (Eğitimci / Öğrenci / Yönetici) aynı olduğundan emin olun.",
-      };
+      if (e.type === "CredentialsSignin") {
+        /* Hangi bilginin hatalı olduğu kasıtlı olarak söylenmez (hesap sayımı
+           yapılmasın diye); ancak hesap türü de kimlik bilgisinin parçası
+           olduğundan (bkz. lib/auth.ts) yanlış sekme sık karşılaşılan bir
+           hatadır — sekmeyi kontrol etmesi açıkça hatırlatılır. */
+        return {
+          hata:
+            "Kullanıcı adı, şifre ya da seçilen hesap türü hatalı. " +
+            "Üstteki sekmenin hesabınızın türüyle (Eğitimci / Öğrenci / Yönetici) aynı olduğundan emin olun.",
+        };
+      }
+      /* CallbackRouteError vb. kimlik hatası değil sistem arızasıdır (örn. DB
+         erişilemedi) — kullanıcıya "şifre hatalı" denmez, hata loglanır. */
+      log.error({ tip: e.type, e }, "giriş sırasında beklenmeyen kimlik hatası");
+      return { hata: "Giriş şu anda gerçekleştirilemiyor. Lütfen birazdan tekrar deneyin." };
     }
     throw e; // NEXT_REDIRECT buradan geçer — yutma
   }

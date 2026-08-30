@@ -123,16 +123,22 @@ model Mesaj {
 }
 
 // ── Kullanıcı aktivite izleme ────────────────────────────────
-// Her başarılı giriş bir kayıt üretir (admin panelindeki aktivite modülü).
+// Her giriş DENEMESİ bir kayıt üretir — başarılısı da reddedileni de
+// (admin panelindeki aktivite modülü; ret nedeni "neden" alanında).
 model GirisKaydi {
-  id          String    @id @default(cuid())
-  kullaniciId String
-  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  zaman       DateTime  @default(now())
-  ip          String    @default("")
-  tarayici    String    @default("") @db.NVarChar(Max) // user-agent
+  id          String     @id @default(cuid())
+  // Başarısız denemede hesap bulunamamış olabilir → nullable
+  kullaniciId String?
+  kullanici   Kullanici? @relation(fields: [kullaniciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  zaman       DateTime   @default(now())
+  basarili    Boolean    @default(true)
+  denenen     String     @default("") // girilen (normalize) kullanıcı adı — hesap yoksa tek iz budur
+  neden       String     @default("") // başarısızsa: kullanici-yok | pasif | tur-uyusmaz | sifre-yanlis
+  ip          String     @default("")
+  tarayici    String     @default("") @db.NVarChar(Max) // user-agent
 
   @@index([kullaniciId, zaman])
+  @@index([basarili, zaman])
   @@index([zaman])
 }
 
@@ -803,4 +809,17 @@ model Odeme {
   @@index([ogrenciId, tarih])
   @@index([kocId, kocDurum])
   @@index([ogrenciDurum, tarih])
+}
+
+/// Anonim site kullanım sayaçları — kişisel veri İÇERMEZ (IP, kullanıcı,
+/// tarayıcı bilgisi tutulmaz). Gün İstanbul saatine göredir; artırım herkese
+/// açık /api/olay ucundan gelir (bkz. src/lib/kullanim-sayaci.ts).
+model KullanimSayaci {
+  id    Int      @id @default(autoincrement())
+  gun   DateTime @db.Date
+  olay  String   @db.NVarChar(40) // "sayfa" | "oyun" | "etkinlik" | "odev" | "bep" | "ders-programi"
+  detay String   @default("") @db.NVarChar(120) // sayfa/oyun/etkinlik adı vb.
+  sayi  Int      @default(0)
+
+  @@unique([gun, olay, detay])
 }

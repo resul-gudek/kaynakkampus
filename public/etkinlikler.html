@@ -326,6 +326,8 @@
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
+  <script src="assets/analitik.js" defer></script>
+  <script src="assets/kullanim-sayac.js" data-sayfa="etkinlikler" defer></script>
 </head>
 <body>
 
@@ -908,6 +910,15 @@
     state.page = parseInt(btn.dataset.page, 10);
     render();
     document.querySelector(".toolbar").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // Anonim sayaç: "İndir" tıklaması etkinlik adıyla sayılır (assets/kullanim-sayac.js)
+  grid.addEventListener("click", e => {
+    const btn = e.target.closest(".btn-primary");
+    if (!btn) return;
+    const kart = btn.closest(".activity-card");
+    const baslik = kart && kart.querySelector(".activity-title");
+    if (window.KKSayac) KKSayac.gonder("etkinlik", baslik ? baslik.textContent.trim() : "");
   });
 
   // ── Kademe / sınıf sekmeleri ─────────────────────────────

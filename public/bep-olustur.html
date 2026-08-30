@@ -219,6 +219,8 @@
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
+  <script src="assets/analitik.js" defer></script>
+  <script src="assets/kullanim-sayac.js" data-sayfa="bep-olustur" defer></script>
 </head>
 <body>
 
@@ -1272,10 +1274,12 @@ loadDraft();
 
 FIELDS.forEach(id => $(id).addEventListener("change", saveDraft));
 CHECKS.forEach(id => $(id).addEventListener("change", saveDraft));
-$("genBtn").onclick = generate;
+/* Anonim kullanım sayacı (assets/kullanim-sayac.js) — yalnızca adet tutar */
+const sayac = (d) => { if (window.KKSayac) KKSayac.gonder("bep", d); };
+$("genBtn").onclick = () => { generate(); sayac("olusturuldu"); };
 $("regenBtn").onclick = generate;
-$("printBtn").onclick = () => { if ($("sheetArea").style.display === "none") generate(); window.print(); };
-$("printBtn2").onclick = () => window.print();
+$("printBtn").onclick = () => { if ($("sheetArea").style.display === "none") generate(); sayac("yazdirildi"); window.print(); };
+$("printBtn2").onclick = () => { sayac("yazdirildi"); window.print(); };
 $("clearBtn").onclick = clearAll;
 
 /* Mobil menü davranışı assets/site-header.js içinde */

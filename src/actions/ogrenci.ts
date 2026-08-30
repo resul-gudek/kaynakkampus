@@ -71,10 +71,15 @@ export async function telefonGuncelle(
         ...(alanlar.veliTelefon !== undefined && { veliTelefon: telefonDuzelt(alanlar.veliTelefon) }),
       },
     });
+    // Telefon değerleri PII olduğundan loga yazılmaz; hangi alanların değiştiği yeter
+    denetim("ogrenci.telefonGuncelle", koc, {
+      ogrenciId,
+      alanlar: Object.keys(alanlar).filter((a) => alanlar[a as keyof typeof alanlar] !== undefined),
+    });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ogrenci.telefonGuncelle") };
   }
 }
 
@@ -91,9 +96,10 @@ export async function profilKaydet(ogrenciId: string, girdi: unknown): Promise<E
       where: { id: ogrenciId },
       data: { profil: JSON.stringify(profil) },
     });
+    denetim("ogrenci.profilKaydet", kim, { ogrenciId });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "ogrenci.profilKaydet") };
   }
 }

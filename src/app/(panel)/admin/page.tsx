@@ -46,7 +46,7 @@ export default async function AdminDashboard() {
         where: { durum: "planlandi", tarih: { gte: bugunBasi } },
       }),
       prisma.girisKaydi.findMany({
-        where: { zaman: { gte: bugunBasi } },
+        where: { zaman: { gte: bugunBasi }, basarili: true },
         select: { kullaniciId: true },
         distinct: ["kullaniciId"],
       }),

@@ -66,9 +66,10 @@ export async function yolTamamla(id: string, tamamlandi: boolean): Promise<Eylem
     }
 
     await prisma.yolAdimi.update({ where: { id }, data: { tamamlandi } });
+    denetim("yol.tamamla", kim, { adimId: id, ogrenciId: a.ogrenciId, tamamlandi });
     panelleriTazele();
     return { tamam: true };
   } catch (e) {
-    return { hata: hataMetni(e) };
+    return { hata: hataMetni(e, "yol.tamamla") };
   }
 }

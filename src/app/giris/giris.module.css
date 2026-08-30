@@ -1,59 +1,6 @@
-/* legacy/giris.html'den birebir taşınan giriş ekranı stilleri */
-
-.sahne {
-  min-height: calc(100vh - 72px);
-  background: linear-gradient(140deg, rgba(201,135,146,.06) 0%, transparent 50%, rgba(201,135,146,.06) 100%), var(--bg-soft);
-  display: flex; align-items: center; justify-content: center;
-  padding: 48px 24px; position: relative; overflow: hidden;
-}
-.sahne::before {
-  content: ''; position: absolute; top: -120px; right: -120px;
-  width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,135,146,.12) 0%, transparent 70%);
-}
-.sahne::after {
-  content: ''; position: absolute; bottom: -80px; left: -80px;
-  width: 380px; height: 380px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,135,146,.10) 0%, transparent 70%);
-}
-
-.kart {
-  position: relative; z-index: 1;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-  width: 100%; max-width: 440px; padding: 40px 36px;
-}
-.kart h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -.4px; text-align: center; }
-.kart h1 span { color: var(--bordo); }
-.alt { text-align: center; color: var(--muted); font-size: .9rem; margin-top: 6px; }
-
-.rolSecim {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
-  background: var(--bg-soft); border-radius: 10px; padding: 6px; margin: 24px 0;
-}
-.rolBtn {
-  border: none; background: transparent; font-family: inherit;
-  padding: 10px 8px; border-radius: 10px; font-size: .85rem; font-weight: 600;
-  color: var(--muted); cursor: pointer; transition: all .25s;
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-}
-.rolBtnAktif {
-  composes: rolBtn;
-  background: var(--nav-aktif-bg); color: var(--nav-aktif-renk); box-shadow: var(--shadow);
-}
-
-.formGrup { margin-bottom: 16px; }
-.formGrup label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-.formGrup input {
-  width: 100%; padding: 12px 16px; border: 1px solid var(--border);
-  border-radius: 14px; font-family: inherit; font-size: .95rem; color: var(--text);
-  transition: border-color .2s; background: var(--surface);
-}
-.formGrup input:focus { outline: none; border-color: var(--teal); }
-
-.hataKutu {
-  background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;
-  border-radius: 14px; padding: 10px 14px; font-size: .85rem; margin-bottom: 16px;
-}
+/* Giriş ekranı — bölünmüş kart: bordo marka paneli + form yüzü.
+   DESIGN.md düz sistemine uyar: hairline çizgi, 12/16/24 köşe, koyu birincil.
+   Marka paneli her iki temada da bordo kalır (bilinçli sabit hex). */
 
 .ustBar {
   position: sticky; top: 0; z-index: 100;
@@ -65,9 +12,156 @@
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--blue); }
 .logoIkon { width: 48px; height: 48px; object-fit: contain; }
 .logo span { color: var(--orange); }
-.geriLink { font-size: .9rem; font-weight: 600; color: var(--blue); padding: 8px 14px; border-radius: 14px; transition: all .2s; }
+.geriLink { font-size: .9rem; font-weight: 600; color: var(--blue); padding: 8px 14px; border-radius: var(--radius-sm); transition: all .2s; }
 .geriLink:hover { background: var(--bg-soft); }
 
+.sahne {
+  min-height: calc(100vh - 72px);
+  background:
+    radial-gradient(circle at 85% 12%, rgba(201, 135, 146, .16) 0%, transparent 45%),
+    radial-gradient(circle at 8% 92%, rgba(201, 135, 146, .12) 0%, transparent 42%),
+    var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 24px;
+}
+
+.kart {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  width: 100%; max-width: 900px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--golge-yumusak);
+  animation: kartGiris .5s ease both;
+}
+@keyframes kartGiris {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .kart { animation: none; } }
+
+/* ── Marka paneli (sol) ── */
+.marka {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #7A2035 0%, #5E1728 58%, #47101E 100%);
+  color: #fff;
+  padding: 44px 40px;
+  display: flex; flex-direction: column;
+}
+.marka::before {
+  content: ''; position: absolute; top: -140px; left: -100px;
+  width: 340px; height: 340px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 203, 209, .14) 0%, transparent 70%);
+  pointer-events: none;
+}
+.markaLogo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.1rem; }
+.markaLogo img {
+  width: 44px; height: 44px; object-fit: contain;
+  background: #fff; border-radius: var(--radius-sm); padding: 4px;
+}
+.markaLogo b span { color: #E8CBD1; }
+.markaSoz { position: relative; z-index: 1; margin-top: auto; padding-top: 40px; }
+.markaBaslik { font-size: 1.65rem; font-weight: 800; letter-spacing: -.4px; color: #fff; line-height: 1.2; }
+.markaMetin { margin-top: 12px; color: rgba(255, 255, 255, .78); font-size: .93rem; line-height: 1.65; max-width: 34ch; }
+.tuy {
+  position: absolute; right: -30px; bottom: -24px;
+  width: 216px; height: 216px; color: #fff;
+  transform: rotate(8deg); pointer-events: none;
+}
+
+/* ── Form yüzü (sağ) ── */
+.formYan { padding: 44px 40px; }
+.formYan h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.4px; }
+.formYan h1 span { color: var(--bordo); }
+.alt { color: var(--muted); font-size: .92rem; margin-top: 6px; }
+
+.rolSecim {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 5px; margin: 22px 0 20px;
+}
+.rolBtn {
+  border: none; background: transparent; font-family: inherit;
+  padding: 10px 6px; border-radius: 9px; font-size: .85rem; font-weight: 600;
+  color: var(--muted); cursor: pointer; transition: all .2s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.rolBtn:hover { color: var(--text); }
+.rolBtnAktif {
+  composes: rolBtn;
+  background: var(--nav-aktif-bg); color: var(--nav-aktif-renk);
+}
+.rolBtnAktif:hover { color: var(--nav-aktif-renk); }
+
+.formGrup { margin-bottom: 16px; }
+.formGrup label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+
+.girdiSarici { position: relative; }
+.girdiIkon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px; color: var(--kursun);
+  pointer-events: none; transition: color .2s;
+}
+.girdiSarici:focus-within .girdiIkon { color: var(--bordo); }
+.girdi {
+  width: 100%; padding: 12px 16px 12px 44px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: .95rem; color: var(--text);
+  background: var(--bg-soft);
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.girdi::placeholder { color: var(--kursun); opacity: .75; }
+.girdi:focus {
+  outline: none; border-color: var(--bordo);
+  background: var(--surface); box-shadow: 0 0 0 3px var(--tint);
+}
+.girdiSifre { composes: girdi; padding-right: 46px; }
+.sifreGoz {
+  position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+  border: none; background: transparent; color: var(--kursun);
+  border-radius: 8px; cursor: pointer; transition: all .2s;
+}
+.sifreGoz:hover { color: var(--text); background: var(--bg-soft); }
+.sifreGoz svg { width: 18px; height: 18px; }
+
+.girisBtn { width: 100%; margin-top: 6px; }
+.spinner {
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 2px solid currentColor; border-top-color: transparent;
+  opacity: .85; animation: don .8s linear infinite;
+}
+@keyframes don { to { transform: rotate(360deg); } }
+
+.hataKutu {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(192, 57, 43, .08); color: var(--kirmizi);
+  border: 1px solid rgba(192, 57, 43, .25);
+  border-radius: var(--radius-sm); padding: 11px 14px;
+  font-size: .85rem; font-weight: 500; margin-bottom: 16px;
+}
+.hataKutu svg { flex-shrink: 0; width: 17px; height: 17px; margin-top: 1px; }
+:global([data-theme="dark"]) .hataKutu {
+  color: #F0968B; border-color: rgba(240, 150, 139, .35);
+  background: rgba(192, 57, 43, .16);
+}
+
+.yardim { margin-top: 18px; text-align: center; font-size: .83rem; color: var(--muted); }
+.yardim a { color: var(--bordo); font-weight: 600; }
+.yardim a:hover { text-decoration: underline; }
+
+@media (max-width: 860px) {
+  .kart { grid-template-columns: 1fr; max-width: 460px; }
+  .marka { padding: 26px 28px; }
+  .markaSoz { margin-top: 18px; padding-top: 0; }
+  .markaBaslik { font-size: 1.3rem; }
+  .tuy { width: 150px; height: 150px; right: -34px; bottom: -34px; }
+  .formYan { padding: 30px 28px; }
+}
 @media (max-width: 520px) {
-  .kart { padding: 30px 22px; }
+  .sahne { padding: 28px 16px; }
+  .marka { padding: 22px; }
+  .markaMetin { display: none; }
+  .formYan { padding: 26px 20px; }
 }

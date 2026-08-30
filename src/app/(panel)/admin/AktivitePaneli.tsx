@@ -15,16 +15,19 @@ export interface Aktivite {
   }[];
   girisler: {
     id: string;
-    ad: string;
-    kullanici: string;
+    ad: string; // başarısız denemede hesap yoksa boş
+    kullanici: string; // hesap yoksa denenen kullanıcı adı
     rol: string;
     zaman: string; // "Bugün · 14:35" gibi hazır metin
     ip: string;
     tarayici: string; // kısaltılmış "Chrome · Windows"
+    basarili: boolean;
+    neden: string; // başarısızsa ekrana hazır ret nedeni
   }[];
   sayilar: {
     cevrimici: number;
     bugunGiris: number;
+    bugunBasarisiz: number;
     son24sAktif: number;
     toplamKullanici: number;
   };
@@ -66,6 +69,12 @@ export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
             <small>Bugün giriş yapan</small>
           </div>
           <div className={stil.statKutu}>
+            <b style={{ color: veri.sayilar.bugunBasarisiz > 0 ? "var(--kirmizi)" : undefined }}>
+              {veri.sayilar.bugunBasarisiz}
+            </b>
+            <small>Bugün başarısız deneme</small>
+          </div>
+          <div className={stil.statKutu}>
             <b>{veri.sayilar.son24sAktif}</b>
             <small>Son 24 saatte aktif</small>
           </div>
@@ -99,7 +108,7 @@ export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
 
       <div className={stil.bolum}>
         <h2>
-          🕐 <span>Giriş Geçmişi</span> (son {veri.girisler.length} giriş)
+          🕐 <span>Giriş Geçmişi</span> (son {veri.girisler.length} kayıt)
         </h2>
         <div className={stil.tabloSarici}>
           <table className={stil.tablo}>
@@ -107,6 +116,7 @@ export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
               <tr>
                 <th>Kullanıcı</th>
                 <th>Rol</th>
+                <th>Durum</th>
                 <th>Zaman</th>
                 <th>IP</th>
                 <th>Tarayıcı</th>
@@ -114,15 +124,34 @@ export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
             </thead>
             <tbody>
               {veri.girisler.map((g) => (
-                <tr key={g.id}>
+                <tr key={g.id} style={g.basarili ? undefined : { opacity: 0.85 }}>
                   <td>
-                    <b>{g.ad}</b>{" "}
+                    {g.ad ? (
+                      <b>{g.ad}</b>
+                    ) : (
+                      <b style={{ color: "var(--muted)" }}>Kayıtsız</b>
+                    )}{" "}
                     <span style={{ color: "var(--muted)", fontSize: ".8rem" }}>@{g.kullanici}</span>
                   </td>
                   <td data-label="Rol">
-                    <span className={stil[ROL_SINIF[g.rol]] ?? stil.rolEtiket}>
-                      {ROL_AD[g.rol] ?? g.rol}
-                    </span>
+                    {g.rol ? (
+                      <span className={stil[ROL_SINIF[g.rol]] ?? stil.rolEtiket}>
+                        {ROL_AD[g.rol] ?? g.rol}
+                      </span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td data-label="Durum" style={{ whiteSpace: "nowrap" }}>
+                    {g.basarili ? (
+                      <span style={{ color: "var(--yesil)", fontWeight: 600, fontSize: ".82rem" }}>
+                        ✓ Başarılı
+                      </span>
+                    ) : (
+                      <span style={{ color: "var(--kirmizi)", fontWeight: 600, fontSize: ".82rem" }}>
+                        ✗ {g.neden || "reddedildi"}
+                      </span>
+                    )}
                   </td>
                   <td data-label="Zaman" style={{ whiteSpace: "nowrap" }}>{g.zaman}</td>
                   <td data-label="IP">{g.ip || "—"}</td>
@@ -131,7 +160,7 @@ export default function AktivitePaneli({ veri }: { veri: Aktivite }) {
               ))}
               {veri.girisler.length === 0 && (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: "center", color: "var(--muted)" }}>
+                  <td colSpan={6} style={{ textAlign: "center", color: "var(--muted)" }}>
                     Henüz giriş kaydı yok.
                   </td>
                 </tr>
