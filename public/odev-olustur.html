@@ -612,19 +612,19 @@ const TYMM_SINIFLARI = new Set([1, 2, 3, 5, 6, 7, 9, 10, 11]);
    u: ünite adı — g: işlem/problem üreteci etiketi (varsa) */
 const UNITS = {
   tr: {
-    1: [{u:"İlk Okuma Yazma: Ses Grupları",g:"sesgrup"}, "Harfler ve Alfabemiz", "Hece – Kelime – Cümle", "Büyük Harflerin Kullanımı", "Noktalama: Nokta ve Soru İşareti", "Okuduğunu Anlama"],
-    2: ["Alfabetik Sıralama", "Eş ve Zıt Anlamlı Kelimeler", "Eş Sesli Kelimeler", "Yazım Kuralları", "Noktalama İşaretleri", "Cümle Bilgisi", "Okuduğunu Anlama"],
-    3: ["Gerçek ve Mecaz Anlam", "Eş – Zıt – Eş Sesli Kelimeler", "Adlar (İsimler)", "Kök ve Ekler", "Yazım Kuralları ve Noktalama", "Paragraf ve Metin Anlama"],
+    1: [{u:"Güzel Davranışlarımız",g:"sesgrup"},{u:"Mustafa Kemal'den Atatürk'e",g:"sesgrup"},{u:"Çevremizdeki Yaşam",g:"sesgrup"},{u:"Yol Arkadaşımız Kitaplar",g:"sesgrup"},{u:"Yeteneklerimizi Keşfediyoruz"},{u:"Minik Kâşifler"},{u:"Atalarımızın İzleri"},{u:"Sorumluluklarımızın Farkındayız"}],
+    2: ["Değerlerimizle Varız", "Atatürk ve Çocuk", "Doğada Neler Oluyor?", "Okuma Serüvenimiz", "Yeteneklerimizi Tanıyoruz", "Mucit Çocuk", "Kültür Hazinemiz", "Haklarımızı Biliyoruz"],
+    3: ["Değerlerimizle Yaşıyoruz", "Atatürk ve Kahramanlarımız", "Doğayı Tanıyoruz", "Bilgi Hazinemiz", "Yeteneklerimizi Kullanıyoruz", "Bilim Yolculuğu", "Millî Kültürümüz", "Hak ve Sorumluluklarımız"],
     4: ["Gerçek – Mecaz – Terim Anlam", "Deyimler ve Atasözleri", "Adlar, Sıfatlar, Zamirler", "Yapım ve Çekim Ekleri", "Cümle Bilgisi", "Noktalama ve Yazım", "Metin Türleri"],
-    5: ["Sözcükte Anlam", "Deyimler ve Atasözleri", "Cümlede Anlam", "Paragraf", "Yazım Kuralları", "Noktalama İşaretleri", "Kök ve Ekler"],
-    6: ["Sözcükte ve Cümlede Anlam", "Paragraf", "İsimler ve İsim Tamlamaları", "Sıfatlar", "Zamirler", "Edat – Bağlaç – Ünlem", "Yazım ve Noktalama"],
-    7: ["Sözcükte ve Cümlede Anlam", "Paragraf", "Fiiller: Kip ve Kişi", "Zarflar", "Ek Fiil", "Fiilde Yapı", "Anlatım Bozuklukları"],
+    5: ["Oyun Dünyası", "Atatürk'ü Tanımak", "Duygularımı Tanıyorum", "Geleneklerimiz", "İletişim ve Sosyal İlişkiler", "Sağlıklı Yaşıyorum"],
+    6: ["Dilimizin Zenginliği", "Bağımsızlık Yolu", "Farklı Dünyalar", "İletişim ve Sosyal İlişkiler", "Bilim ve Teknoloji", "Lider Ruhlar"],
+    7: ["Hayat Boyu Gelişim", "Bir Hilal Uğruna", "İletişim ve Sosyal İlişkiler", "Türk Sanatı", "Okuma Kültürü", "Hak ve Sorumluluklar"],
     8: ["Sözcükte ve Cümlede Anlam", "Paragraf", "Fiilimsiler", "Cümlenin Ögeleri", "Cümle Türleri", "Yazım ve Noktalama", "Söz Sanatları"],
   },
   tde: {
-    9:  ["Giriş: Edebiyat Nedir?", "Hikâye", "Şiir", "Masal / Fabl", "Roman", "Tiyatro", "Biyografi – Otobiyografi", "Mektup – E-posta", "Günlük – Blog"],
-    10: ["Edebiyat Tarihi ve Dönemler", "Dede Korkut ve Halk Hikâyesi", "İslamiyet Öncesi ve Geçiş Dönemi Şiiri", "Halk ve Divan Şiiri", "Destan – Efsane", "Roman", "Tiyatro", "Anı", "Gezi Yazısı – Haber Metni"],
-    11: ["Edebiyat ve Toplum", "Cumhuriyet Dönemi Hikâyesi", "Tanzimat'tan Cumhuriyet'e Şiir", "Makale – Sohbet – Fıkra", "Tanzimat ve Servetifünun Romanı", "Cumhuriyet Dönemi Romanı", "Tiyatro", "Eleştiri", "Mülakat – Röportaj"],
+    9:  ["Sözün İnceliği", "Anlam Arayışı", "Anlamın Yapı Taşları", "Dilin Zenginliği"],
+    10: ["Sözün Ezgisi", "Kelimelerin Ritmi", "Dünden Bugüne", "Nesillerin Mirası"],
+    11: ["Bir Diyeceğim Var!", "Kültür Yolculuğu", "Yaşamın İzinde", "Hayatın Aynası"],
     12: ["Edebiyat ve Felsefe – Psikoloji", "1960 Sonrası Hikâye", "Cumhuriyet Sonrası Şiir", "Dünya Edebiyatında Roman", "1950 Sonrası Türk Romanı", "Tiyatro", "Deneme", "Söylev (Nutuk)"],
   },
   mat: {
@@ -1020,165 +1020,310 @@ const BANK = {
    hazırlanmıştır. */
 const UNIT_BANK = {
   "tr-1": {
-    "Harfler ve Alfabemiz": [
-      {ty:"mc",q:"Türk alfabesinde kaç harf vardır?",o:["26","28","29","31"],a:2},
-      {ty:"mc",q:"Alfabemizde aşağıdaki harflerden hangisi YOKTUR?",o:["Q","M","T","K"],a:0},
-      {ty:"mc",q:"'B' harfinin küçük yazılışı hangisidir?",o:["b","d","p","6"],a:0},
-      {ty:"mc",q:"Aşağıdakilerden hangisi bir ÜNLÜ (sesli) harftir?",o:["m","e","t","k"],a:1},
-      {ty:"mc",q:"Aşağıdakilerden hangisi bir ÜNSÜZ (sessiz) harftir?",o:["a","e","l","ı"],a:2},
-      {ty:"mc",q:"Alfabede 'C' harfinden hemen sonra hangi harf gelir?",o:["B","Ç","D","A"],a:1},
-      {ty:"tf",q:"Türk alfabesinde 29 harf vardır.",a:true},
-      {ty:"tf",q:"'X' harfi Türk alfabesinde bulunur.",a:false},
-      {ty:"fb",q:"Alfabemizin ilk harfi ____ 'dir.",a:"A"},
-      {ty:"fb",q:"Alfabemizin son harfi ____ 'dir.",a:"Z"},
-    ],
-    "Hece – Kelime – Cümle": [
-      {ty:"mc",q:"'Kalem' kelimesi kaç hecelidir?",o:["1","2","3","4"],a:1},
-      {ty:"mc",q:"Aşağıdakilerden hangisi bir CÜMLEDİR?",o:["masa, kitap, kalem","Ali okula gitti.","kırmızı çanta","koştu, geldi"],a:1},
-      {ty:"mc",q:"'Pencere' kelimesinin heceleri hangi seçenekte doğru verilmiştir?",o:["pen-ce-re","pence-re","p-en-cere","penc-ere"],a:0},
-      {ty:"mc",q:"'Kulak' kelimesi kaç hecedir?",o:["1","2","3","4"],a:1},
-      {ty:"tf",q:"Anlamlı ve düzenli kelime dizisine cümle denir.",a:true},
-      {ty:"tf",q:"Her hecede mutlaka bir sessiz (ünsüz) harf bulunur.",a:false},
-      {ty:"fb",q:"'Okul' kelimesi ____ hecelidir.",a:"2 (iki)"},
-      {ty:"fb",q:"'Anne, çocuğuna kitap okudu.' cümlesinde toplam ____ kelime vardır.",a:"5 (beş)"},
-    ],
-    "Büyük Harflerin Kullanımı": [
-      {ty:"mc",q:"Cümleye hangi harfle başlanır?",o:["Küçük harfle","Büyük harfle","Rakamla","Hiçbiri"],a:1},
-      {ty:"mc",q:"Aşağıdakilerden hangisi doğru yazılmıştır?",o:["ali okula gitti.","Ali okula gitti.","ALİ okula gitti","aLİ okula gitti."],a:1},
-      {ty:"mc",q:"Özel adların (kişi, yer adları) ilk harfi nasıl yazılır?",o:["Küçük harfle","Büyük harfle","Yazılmaz","Rakamla"],a:1},
-      {ty:"mc",q:"Aşağıdaki kelimelerden hangisi bir özel addır (yer adıdır) ve büyük harfle başlamalıdır?",o:["kitap","istanbul","top","kalem"],a:1},
-      {ty:"tf",q:"Kişi adları her zaman büyük harfle başlar.",a:true},
-      {ty:"tf",q:"Cümle ortasındaki kişi adları küçük harfle yazılır.",a:false},
-      {ty:"fb",q:"Cümlenin ilk harfi ____ harfle yazılır.",a:"büyük"},
-      {ty:"fb",q:"'ayşe okula gitti.' cümlesinde büyük yazılması gereken kelime ____ 'dir.",a:"Ayşe"},
-    ],
-    "Noktalama: Nokta ve Soru İşareti": [
-      {ty:"mc",q:"Bildirme (düz anlatım) cümlelerinin sonuna hangi işaret konur?",o:["Soru işareti (?)","Nokta (.)","Ünlem (!)","Virgül (,)"],a:1},
-      {ty:"mc",q:"Soru cümlelerinin sonuna hangi işaret konur?",o:["Nokta (.)","Soru işareti (?)","Virgül (,)","İki nokta (:)"],a:1},
-      {ty:"mc",q:"'Bugün hava çok güzel____' cümlesinin sonuna hangi işaret gelmelidir?",o:[".","?","!",","],a:0},
-      {ty:"mc",q:"'Yarın okula gidecek misin____' cümlesinin sonuna hangi işaret gelmelidir?",o:[".","?","!",","],a:1},
-      {ty:"tf",q:"Her cümlenin sonuna mutlaka bir noktalama işareti konur.",a:true},
-      {ty:"tf",q:"Soru cümlesinin sonuna nokta (.) konur.",a:false},
-      {ty:"fb",q:"'Adın ne____' cümlesinin sonuna ____ işareti gelmelidir.",a:"soru (?)"},
-      {ty:"fb",q:"'Bugün pazartesi____' cümlesinin sonuna ____ işareti gelmelidir.",a:"nokta (.)"},
-    ],
-    "Okuduğunu Anlama": [
-      {ty:"mc",q:'Metni okuyunuz: "Ali sabah erken kalktı. Kahvaltısını yaptı ve okula gitti." Ali okula gitmeden önce ne yaptı?',o:["Uyudu","Kahvaltı yaptı","Oyun oynadı","Kitap okudu"],a:1},
-      {ty:"mc",q:'Metni okuyunuz: "Kedi bahçede topla oynuyordu. Sonra yorulup uyudu." Kedi neden uyudu?',o:["Acıktığı için","Yorulduğu için","Üşüdüğü için","Korktuğu için"],a:1},
-      {ty:"mc",q:'Metni okuyunuz: "Mert parkta arkadaşlarıyla oynadı. Eve dönünce ellerini yıkadı." Mert parktan sonra ilk ne yaptı?',o:["Yemek yedi","Ellerini yıkadı","Uyudu","Ders çalıştı"],a:1},
-      {ty:"mc",q:'Metni okuyunuz: "Bulutlar karardı, yağmur yağmaya başladı. Ayşe şemsiyesini açtı." Ayşe neden şemsiyesini açtı?',o:["Güneş çok parlaktı","Yağmur yağıyordu","Rüzgâr esiyordu","Karanlık oldu"],a:1},
-      {ty:"tf",q:'Metni okuyunuz: "Elif çiçekleri suladı. Çiçekler çok güzel açtı." Bu metne göre "Elif çiçekleri hiç sulamadı." ifadesi doğrudur.',a:false},
-      {ty:"tf",q:'Metni okuyunuz: "Can köpeğini gezdirmeye çıktı. Köpek çok mutluydu." Bu metne göre Can\'ın bir kedisi vardır.',a:false},
-      {ty:"fb",q:'Metni okuyunuz: "Zeynep kitabını okudu, sonra resim yaptı." Zeynep kitabını okuduktan sonra ne yaptı?',a:"resim yaptı"},
-    ],
-  },
+  /* Anahtar kavramlar: ahlak, ailede sorumluluk alma, azim, cömertlik,
+     çalışkanlık, dostluk, dürüstlük, güven, merhamet, nezaket, paylaşma,
+     saygı, sevgi, yardımseverlik.
+     İlk okuma yazma süreci resmî programda 1-4. temalarda yürütülür; bu dört
+     temaya ses grubu üreteci (GEN.sesgrup) bağlıdır ve sınırsız ses/hece
+     sorusu üretir. */
+  "Güzel Davranışlarımız": [
+    {ty:"mc",q:"Arkadaşımız üzgün olduğunda yapılacak en güzel davranış hangisidir?",o:["Onu dinlemek ve yanında olmak","Onunla alay etmek","Hiç ilgilenmemek","Uzaklaşmak"],a:0},
+    {ty:"mc",q:"Elimizdeki oyuncağı arkadaşımızla kullanmaya ne denir?",o:["Paylaşmak","Saklamak","Kırmak","Kaybetmek"],a:0},
+    {ty:"mc",q:"Bir işi yaparken doğruyu söylemeye ne denir?",o:["Dürüstlük","Şakacılık","Aceleci olmak","Utangaçlık"],a:0},
+    {ty:"mc",q:"Büyüklerimizle konuşurken nasıl davranmalıyız?",o:["Saygılı ve nazik","Yüksek sesle","Sözünü keserek","İlgisiz"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerden hangisi nezaket sözüdür?",o:["Teşekkür ederim.","Ver şunu!","Çekil oradan.","Bana ne."],a:0},
+    {ty:"tf",q:"Arkadaşımıza yardım etmek güzel bir davranıştır.",a:true},
+    {ty:"tf",q:"Söz verdiğimiz şeyi yapmamak güven kazandırır.",a:false},
+    {ty:"tf",q:"Evde kendi eşyalarımızı toplamak sorumluluğumuzdur.",a:true},
+    {ty:"fb",q:"Bir kişiye iyilik yapıldığında söylenen nezaket sözü \"____ ederim\" dir.",a:"teşekkür"},
+    {ty:"fb",q:"Bir şeyi arkadaşımızla birlikte kullanmaya ____ denir.",a:"paylaşmak"}
+  ],
+  "Mustafa Kemal'den Atatürk'e": [
+    {ty:"mc",q:"Cumhuriyetimizin kurucusu kimdir?",o:["Mustafa Kemal Atatürk","Bir öğretmen","Bir doktor","Bir asker arkadaşı"],a:0},
+    {ty:"mc",q:"Atatürk'ün çocuklara armağan ettiği bayram hangisidir?",o:["23 Nisan","19 Mayıs","29 Ekim","30 Ağustos"],a:0},
+    {ty:"mc",q:"Cumhuriyet Bayramı hangi tarihte kutlanır?",o:["29 Ekim","23 Nisan","19 Mayıs","10 Kasım"],a:0},
+    {ty:"mc",q:"Atatürk'ün en çok önem verdiği şeylerden biri aşağıdakilerden hangisidir?",o:["Çocukların okuması","Oyun oynanmaması","Kitapların saklanması","Okula gitmemek"],a:0},
+    {ty:"mc",q:"\"atatürk\" kelimesi cümle içinde nasıl yazılır?",o:["Atatürk","atatürk","ATAtürk","atatÜrk"],a:0},
+    {ty:"tf",q:"Atatürk'ün doğum yeri Selanik'tir.",a:true},
+    {ty:"tf",q:"Bayrağımıza saygı göstermeliyiz.",a:true},
+    {ty:"tf",q:"Kişi adları küçük harfle başlar.",a:false},
+    {ty:"fb",q:"Ülkemizin bayrağının rengi ____ dır.",a:"kırmızı"},
+    {ty:"fb",q:"Kişi adları ____ harfle başlar.",a:"büyük"}
+  ],
+  "Çevremizdeki Yaşam": [
+    {ty:"mc",q:"Aşağıdakilerden hangisi bir canlıdır?",o:["Ağaç","Taş","Masa","Kalem"],a:0},
+    {ty:"mc",q:"Bitkilerin büyümesi için gerekli olan nedir?",o:["Su ve güneş ışığı","Karanlık","Gürültü","Plastik"],a:0},
+    {ty:"mc",q:"Çevremizi temiz tutmak için ne yapmalıyız?",o:["Çöpleri çöp kutusuna atmak","Yere atmak","Suya atmak","Ateşe atmak"],a:0},
+    {ty:"mc",q:"Aşağıdaki kelimelerden hangisi bir hayvan adıdır?",o:["kelebek","kapı","defter","sandalye"],a:0},
+    {ty:"mc",q:"\"Bahçede güzel çiçekler açtı\" cümlesinde kaç kelime vardır?",o:["4","3","5","2"],a:0},
+    {ty:"tf",q:"Hayvanlara iyi davranmalıyız.",a:true},
+    {ty:"tf",q:"Ağaçları kesmek çevremize yardım eder.",a:false},
+    {ty:"tf",q:"Suyu boşa akıtmamalıyız.",a:true},
+    {ty:"fb",q:"Cümlenin sonuna ____ konur.",a:"nokta"},
+    {ty:"fb",q:"Kuşların yaşadığı, dallardan yapılmış yuvaya ____ denir.",a:"yuva"}
+  ],
+  "Yol Arkadaşımız Kitaplar": [
+    {ty:"mc",q:"Kitap okumanın bize kazandırdığı en önemli şey nedir?",o:["Yeni bilgiler ve kelimeler","Yorgunluk","Gürültü","Uykusuzluk"],a:0},
+    {ty:"mc",q:"Kitapların ödünç alınıp okunduğu yere ne denir?",o:["Kütüphane","Fırın","Market","Garaj"],a:0},
+    {ty:"mc",q:"Bir kitabın ön yüzünde genellikle ne bulunur?",o:["Kitabın adı ve resmi","Sadece boş sayfa","Ders programı","Alışveriş listesi"],a:0},
+    {ty:"mc",q:"Kitaplara nasıl davranmalıyız?",o:["Temiz ve özenli","Sayfalarını yırtarak","Üzerine su dökerek","Yere atarak"],a:0},
+    {ty:"mc",q:"Masal kitaplarında en çok ne bulunur?",o:["Hayal ürünü olaylar","Ders notları","Alışveriş fişleri","Hava durumu"],a:0},
+    {ty:"tf",q:"Her gün kitap okumak iyi bir alışkanlıktır.",a:true},
+    {ty:"tf",q:"Kütüphanede yüksek sesle konuşulur.",a:false},
+    {ty:"tf",q:"Kitapların sayfalarını karalamak doğru değildir.",a:true},
+    {ty:"fb",q:"Kitapları ödünç alıp okuduğumuz yere ____ denir.",a:"kütüphane"},
+    {ty:"fb",q:"Soru cümlesinin sonuna ____ işareti konur.",a:"soru"}
+  ],
+  "Yeteneklerimizi Keşfediyoruz": [
+    {ty:"mc",q:"Resim yapmayı çok seven bir çocuk hangi alanda yetenekli olabilir?",o:["Görsel sanatlar","Yüzme","Matematik yarışması","Koşu"],a:0},
+    {ty:"mc",q:"Bir işi başarmak için gösterilen kararlı çabaya ne denir?",o:["Azim","Tembellik","Acele","Kayıtsızlık"],a:0},
+    {ty:"mc",q:"Yeni bir beceriyi öğrenirken en çok neye ihtiyaç duyarız?",o:["Deneme ve çalışma","Hemen vazgeçme","Uyuma","Beklemeye devam"],a:0},
+    {ty:"mc",q:"Şarkı söylemeyi seven bir arkadaşımıza nasıl destek olabiliriz?",o:["Onu dinleyip alkışlamak","Alay etmek","Susturmak","Uzaklaşmak"],a:0},
+    {ty:"mc",q:"\"Ali güzel resim yapar.\" cümlesinde kim resim yapıyor?",o:["Ali","Ayşe","Öğretmen","Kimse"],a:0},
+    {ty:"tf",q:"Herkesin farklı yetenekleri olabilir.",a:true},
+    {ty:"tf",q:"Yetenekler çalışmakla gelişir.",a:true},
+    {ty:"tf",q:"Bir işte başarısız olunca hemen vazgeçmek gerekir.",a:false},
+    {ty:"fb",q:"Bir işi başarmak için gösterilen kararlı çabaya ____ denir.",a:"azim"},
+    {ty:"fb",q:"Kelimeleri oluşturan ses parçalarına ____ denir.",a:"hece"}
+  ],
+  "Minik Kâşifler": [
+    {ty:"mc",q:"Merak ettiğimiz bir şeyi öğrenmek için ne yapabiliriz?",o:["Gözlem yapmak ve soru sormak","Beklemek","Susmak","Vazgeçmek"],a:0},
+    {ty:"mc",q:"Bir şeyi dikkatle izleyip incelemeye ne denir?",o:["Gözlem","Uyku","Oyun","Koşu"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi bir soru cümlesidir?",o:["Bu çiçeğin adı nedir?","Çiçek çok güzel.","Çiçeği suladım.","Bahçeye çıktım."],a:0},
+    {ty:"mc",q:"Yeni bir şey öğrendiğimizde ne yapmalıyız?",o:["Arkadaşlarımızla paylaşmak","Saklamak","Unutmak","Yazmamak"],a:0},
+    {ty:"mc",q:"Bir deney yaparken en önemli kural nedir?",o:["Öğretmenimizin yönergesine uymak","Tek başına denemek","Acele etmek","Kuralları unutmak"],a:0},
+    {ty:"tf",q:"Merak etmek öğrenmemize yardımcı olur.",a:true},
+    {ty:"tf",q:"Gözlem yaparken dikkatli olmalıyız.",a:true},
+    {ty:"tf",q:"Soru sormak ayıptır.",a:false},
+    {ty:"fb",q:"Bir şeyi dikkatle izleyip incelemeye ____ denir.",a:"gözlem"},
+    {ty:"fb",q:"Merakımızı gidermek için sorduğumuz cümlelere ____ cümlesi denir.",a:"soru"}
+  ],
+  "Atalarımızın İzleri": [
+    {ty:"mc",q:"Büyüklerimizden dinlediğimiz eski hikâyelere ne denir?",o:["Masal ve efsane","Ders kitabı","Gazete haberi","Alışveriş listesi"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi geleneksel oyunlarımızdan biridir?",o:["Körebe","Bilgisayar oyunu","Sinema","Televizyon"],a:0},
+    {ty:"mc",q:"Bayramlarda büyükleri ziyaret etmek neyi gösterir?",o:["Kültürümüze bağlılığı","İlgisizliği","Aceleyi","Yorgunluğu"],a:0},
+    {ty:"mc",q:"Atalarımızın bize bıraktığı değerlere ne denir?",o:["Kültür mirası","Alışveriş","Oyun kuralı","Hava durumu"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi bir atasözüdür?",o:["Damlaya damlaya göl olur.","Bugün hava güzel.","Kitabı okudum.","Okula gittim."],a:0},
+    {ty:"tf",q:"Atasözleri kısa ve öğüt vericidir.",a:true},
+    {ty:"tf",q:"Geleneksel oyunlarımızı öğrenmek kültürümüzü tanımamızı sağlar.",a:true},
+    {ty:"tf",q:"Büyüklerimizin anlattıklarını dinlemek gereksizdir.",a:false},
+    {ty:"fb",q:"Kısa, öğüt veren ve halkın ortak sözü olan cümlelere ____ denir.",a:"atasözü"},
+    {ty:"fb",q:"Bir toplumun kuşaklar boyunca sürdürdüğü alışkanlıklara ____ denir.",a:"gelenek"}
+  ],
+  "Sorumluluklarımızın Farkındayız": [
+    {ty:"mc",q:"Aşağıdakilerden hangisi okuldaki sorumluluklarımızdandır?",o:["Ödevlerimizi yapmak","Ders kitabını saklamak","Gürültü yapmak","Geç kalmak"],a:0},
+    {ty:"mc",q:"Evde bize düşen sorumluluklardan biri hangisidir?",o:["Odamızı toplamak","Eşyaları dağıtmak","Işıkları açık bırakmak","Suyu akıtmak"],a:0},
+    {ty:"mc",q:"Her çocuğun sahip olduğu en temel haklardan biri nedir?",o:["Eğitim hakkı","Ders kaçırma hakkı","Kural bozma hakkı","Ödev yapmama hakkı"],a:0},
+    {ty:"mc",q:"Sınıf kurallarına uymak neden önemlidir?",o:["Birlikte huzurlu öğrenmek için","Ders bitsin diye","Öğretmen görmesin diye","Zaman geçsin diye"],a:0},
+    {ty:"mc",q:"Bir işi zamanında yapmaya ne denir?",o:["Sorumluluk","Erteleme","Unutkanlık","Aceleci olma"],a:0},
+    {ty:"tf",q:"Haklarımızın yanında sorumluluklarımız da vardır.",a:true},
+    {ty:"tf",q:"Sınıf kurallarına yalnızca öğretmen uyar.",a:false},
+    {ty:"tf",q:"Kendi çöpümüzü çöp kutusuna atmak sorumluluğumuzdur.",a:true},
+    {ty:"fb",q:"Üstlendiğimiz görevi zamanında yapmaya ____ denir.",a:"sorumluluk"},
+    {ty:"fb",q:"Her çocuğun okula gitme ve öğrenme hakkına ____ hakkı denir.",a:"eğitim"}
+  ]
+},
 "tr-2": {
-  "Alfabetik Sıralama": [
+  /* Resmî temalar. Her temada dinleme/izleme, konuşma, okuma ve yazma
+     becerilerine ait öğrenme çıktıları ile sınıf düzeyine uygun söz varlığı
+     ve yazım-noktalama kazanımları temanın bağlamı içinde ölçülür. */
+  "Değerlerimizle Varız": [
+    {ty:"mc",q:"'Güzel' kelimesinin eş anlamlısı hangisidir?",o:["Hoş","Çirkin","Kısa","Uzun"],a:0},
+    {ty:"mc",q:"'Büyük' kelimesinin zıt anlamlısı hangisidir?",o:["Küçük","Kocaman","Geniş","İri"],a:0},
+    {ty:"mc",q:"Bir arkadaşımıza söz verdiğimizde ne yapmalıyız?",o:["Sözümüzü tutmalıyız","Unutmalıyız","Ertelemeliyiz","Vazgeçmeliyiz"],a:0},
+    {ty:"mc",q:"Aşağıdaki davranışlardan hangisi yardımseverliğe örnektir?",o:["Düşen arkadaşımıza elimizi uzatmak","Gülüp geçmek","Uzaklaşmak","Görmezden gelmek"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde büyük harf kullanımı doğrudur?",o:["Ayşe okula gitti.","ayşe okula gitti.","Ayşe Okula Gitti.","ayşe Okula gitti."],a:0},
+    {ty:"tf",q:"Farklı düşünen arkadaşımıza saygı göstermeliyiz.",a:true},
+    {ty:"tf",q:"Doğruyu söylemek dürüstlüktür.",a:true},
+    {ty:"tf",q:"Cümleler küçük harfle başlar.",a:false},
+    {ty:"fb",q:"Anlamları birbirine yakın kelimelere ____ anlamlı kelimeler denir.",a:"eş"},
+    {ty:"fb",q:"Anlamları birbirinin karşıtı olan kelimelere ____ anlamlı kelimeler denir.",a:"zıt"}
+  ],
+  "Atatürk ve Çocuk": [
+    {ty:"mc",q:"23 Nisan hangi bayramımızdır?",o:["Ulusal Egemenlik ve Çocuk Bayramı","Cumhuriyet Bayramı","Zafer Bayramı","Emek Bayramı"],a:0},
+    {ty:"mc",q:"Atatürk çocuklar için ne düşünmüştür?",o:["Geleceğin sahibi olduklarını","Okumamaları gerektiğini","Oyun oynamamaları gerektiğini","Çalışmamaları gerektiğini"],a:0},
+    {ty:"mc",q:"Cumhuriyet hangi yıl ilan edilmiştir?",o:["1923","1920","1938","1919"],a:0},
+    {ty:"mc",q:"Atatürk'ün öğrenmeye verdiği önemi gösteren söz hangisidir?",o:["Hayatta en hakiki mürşit ilimdir.","Bugün hava güzel.","Yarın tatil var.","Kitaplar ağırdır."],a:0},
+    {ty:"mc",q:"\"23 nisan\" ifadesi doğru olarak nasıl yazılır?",o:["23 Nisan","23 nisan","23 NİSAN gibi tümü küçük","23 nisAn"],a:0},
+    {ty:"tf",q:"Bayram günlerinde bayrağımızı asarız.",a:true},
+    {ty:"tf",q:"Ay ve gün adları cümle içinde büyük harfle başlar.",a:true},
+    {ty:"tf",q:"Atatürk, eğitime önem vermemiştir.",a:false},
+    {ty:"fb",q:"Cumhuriyet Bayramı'nı ____ Ekim'de kutlarız.",a:"29"},
+    {ty:"fb",q:"Atatürk'ün çocuklara armağan ettiği bayram ____ Nisan'dır.",a:"23"}
+  ],
+  "Doğada Neler Oluyor?": [
+    {ty:"mc",q:"Aşağıdaki mevsimlerden hangisinde yapraklar dökülür?",o:["Sonbahar","İlkbahar","Yaz","Kış"],a:0},
+    {ty:"mc",q:"Bitkilerin yaşaması için gerekli olanlar hangileridir?",o:["Su, ışık ve hava","Yalnızca karanlık","Yalnızca taş","Yalnızca gürültü"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi doğayı korumaya örnektir?",o:["Ağaç dikmek","Çöp atmak","Dalları kırmak","Suyu kirletmek"],a:0},
+    {ty:"mc",q:"'Yaz' ve 'kış' kelimeleri arasında nasıl bir ilişki vardır?",o:["Zıt anlamlıdır","Eş anlamlıdır","Eş seslidir","İlişkisizdir"],a:0},
+    {ty:"mc",q:"\"Bahçeye elma ağacı diktik.\" cümlesinde kaç kelime vardır?",o:["4","3","5","6"],a:0},
+    {ty:"tf",q:"Hayvanların yaşam alanlarını korumalıyız.",a:true},
+    {ty:"tf",q:"Mevsimler yıl içinde sırayla değişir.",a:true},
+    {ty:"tf",q:"Ormanları yakmak doğaya yardım eder.",a:false},
+    {ty:"fb",q:"Bir yılda ____ mevsim vardır.",a:"dört"},
+    {ty:"fb",q:"Yazılışları aynı, anlamları farklı kelimelere ____ sesli kelimeler denir.",a:"eş"}
+  ],
+  "Okuma Serüvenimiz": [
+    {ty:"mc",q:"Kelimeleri alfabetik sıraya dizerken neye bakılır?",o:["Baştaki harflere","Son harfe","Kelimenin uzunluğuna","Kelimenin anlamına"],a:0},
+    {ty:"mc",q:"Elma, armut, kiraz, muz kelimeleri alfabetik sıraya konulduğunda ilk sırada hangisi olur?",o:["armut","elma","kiraz","muz"],a:0},
     {ty:"mc",q:"'K' harfi ile 'M' harfi arasında hangi harf vardır?",o:["L","N","J","P"],a:0},
-    {ty:"mc",q:"Aşağıdaki kelimelerden hangisi alfabetik sıralamada ilk sırada yer alır?",o:["Kedi","Armut","Masa","Tavşan"],a:1},
-    {ty:"mc",q:"Elma, kiraz, armut, muz kelimeleri alfabetik sıraya konulduğunda ilk sırada hangisi olur?",o:["elma","kiraz","armut","muz"],a:2},
+    {ty:"mc",q:"Bir kitabın konusunu en hızlı nereden anlarız?",o:["Adı ve kapak resminden","Sayfa sayısından","Fiyatından","Renginden"],a:0},
+    {ty:"mc",q:"Okuduğumuz metinde anlamını bilmediğimiz kelime için ne yapmalıyız?",o:["Sözlüğe bakmalıyız","Atlamalıyız","Silmeliyiz","Değiştirmeliyiz"],a:0},
     {ty:"tf",q:"Alfabede 'A' harfi 'B' harfinden önce gelir.",a:true},
+    {ty:"tf",q:"Kütüphaneden aldığımız kitabı zamanında geri vermeliyiz.",a:true},
     {ty:"tf",q:"Alfabetik sıralama yapılırken kelimenin son harfine bakılır.",a:false},
     {ty:"fb",q:"'İ' harfi alfabede ____ harfinden hemen sonra gelir.",a:"I"},
+    {ty:"fb",q:"Kelimelerin anlamlarını bulduğumuz kitaba ____ denir.",a:"sözlük"}
   ],
-  "Eş ve Zıt Anlamlı Kelimeler": [
-    {ty:"mc",q:"'Güzel' kelimesinin eş anlamlısı hangisidir?",o:["Çirkin","Hoş","Kısa","Uzun"],a:1},
-    {ty:"mc",q:"'Büyük' kelimesinin zıt anlamlısı hangisidir?",o:["Küçük","İri","Kocaman","Geniş"],a:0},
-    {ty:"mc",q:"Aşağıdaki kelime çiftlerinden hangisi zıt (karşıt) anlamlıdır?",o:["Sıcak - Soğuk","Ev - Konut","Mutlu - Sevinçli","Hızlı - Çabuk"],a:0},
-    {ty:"tf",q:"'Sevinçli' ile 'Mutlu' kelimeleri eş anlamlıdır.",a:true},
-    {ty:"tf",q:"'Uzun' kelimesinin zıt anlamlısı 'Yüksek'tir.",a:false},
-    {ty:"fb",q:"'Aç' kelimesinin zıt anlamlısı ____ 'dur.",a:"Tok"},
+  "Yeteneklerimizi Tanıyoruz": [
+    {ty:"mc",q:"Bir işi tekrar tekrar denemek bize ne kazandırır?",o:["Beceri ve deneyim","Yorgunluk","Unutkanlık","İlgisizlik"],a:0},
+    {ty:"mc",q:"Müzik aleti çalmayı seven biri hangi alanda yetenekli olabilir?",o:["Müzik","Yüzme","Resim","Koşu"],a:0},
+    {ty:"mc",q:"Arkadaşımızın başarısı karşısında nasıl davranmalıyız?",o:["Onu tebrik etmeliyiz","Kıskanmalıyız","Görmezden gelmeliyiz","Alay etmeliyiz"],a:0},
+    {ty:"mc",q:"\"Ali resim yapmayı çok sever.\" cümlesinde yüklem hangisidir?",o:["sever","Ali","resim","yapmayı"],a:0},
+    {ty:"mc",q:"Bir işi yapmayı öğrenirken yaptığımız hatalar için ne düşünmeliyiz?",o:["Öğrenmenin bir parçası olduğunu","Vazgeçmemiz gerektiğini","Yeteneksiz olduğumuzu","Denememenin daha iyi olduğunu"],a:0},
+    {ty:"tf",q:"Herkes farklı alanlarda yetenekli olabilir.",a:true},
+    {ty:"tf",q:"Çalışmak yeteneği geliştirir.",a:true},
+    {ty:"tf",q:"Hata yapmak öğrenmeyi engeller.",a:false},
+    {ty:"fb",q:"Bir cümlede işi yapanı bildiren ögeye ____ denir.",a:"özne"},
+    {ty:"fb",q:"Bir işi çok iyi yapabilme gücüne ____ denir.",a:"yetenek"}
   ],
-  "Eş Sesli Kelimeler": [
-    {ty:"mc",q:"'Yüz' kelimesi aşağıdaki cümlelerin hangisinde sayı anlamında kullanılmıştır?",o:["Yüzünü yıkadı.","Bu sınıfta yüz öğrenci var.","Havuzda yüzdü.","Yüzü gülüyordu."],a:1},
-    {ty:"mc",q:"'Kır' kelimesi hangi cümlede kırmak fiili anlamında kullanılmıştır?",o:["Kır çiçekleri topladı.","Kırda pikniğe gittiler.","Şu dalı kır.","Kır saçlı bir adamdı."],a:2},
-    {ty:"mc",q:"Aşağıdakilerden hangisi eş sesli (aynı yazılıp farklı anlama gelen) bir kelime çiftine örnektir?",o:["Yaz (mevsim) - Yaz (yazmak)","Ev - Konut","Güzel - Hoş","Küçük - Büyük"],a:0},
-    {ty:"tf",q:"Eş sesli kelimeler yazılışları aynı, anlamları farklı olan kelimelerdir.",a:true},
-    {ty:"tf",q:"'Ocak' kelimesi sadece ay adı olarak kullanılır, başka anlamı yoktur.",a:false},
-    {ty:"fb",q:"'Dolu' kelimesi hem 'boş olmayan' hem de gökten yağan buz taneleri anlamında kullanılan bir ____ kelimedir.",a:"eş sesli"},
+  "Mucit Çocuk": [
+    {ty:"mc",q:"Bir sorunu çözmek için yeni bir araç geliştirmeye ne denir?",o:["Buluş","Oyun","Şaka","Sıralama"],a:0},
+    {ty:"mc",q:"Ampulü geliştiren mucit kimdir?",o:["Thomas Edison","Graham Bell","Newton","Einstein"],a:0},
+    {ty:"mc",q:"Bir mucit için en gerekli özellik hangisidir?",o:["Merak ve deneme isteği","Aceleci olma","İlgisizlik","Vazgeçme"],a:0},
+    {ty:"mc",q:"Teknolojik araçları kullanırken nelere dikkat etmeliyiz?",o:["Güvenlik kurallarına ve süreye","Sadece hıza","Sadece renge","Sadece fiyata"],a:0},
+    {ty:"mc",q:"\"Yeni bir oyuncak tasarladım.\" cümlesi hangi tür cümledir?",o:["Bildirme cümlesi","Soru cümlesi","Ünlem cümlesi","Emir cümlesi"],a:0},
+    {ty:"tf",q:"Buluşlar insanların işini kolaylaştırabilir.",a:true},
+    {ty:"tf",q:"Denemekten vazgeçmeyen kişi daha çok öğrenir.",a:true},
+    {ty:"tf",q:"Ekran karşısında sınırsız zaman geçirmek sağlıklıdır.",a:false},
+    {ty:"fb",q:"Yeni bir araç ya da yöntem geliştirmeye ____ denir.",a:"buluş"},
+    {ty:"fb",q:"Ünlem cümlelerinin sonuna ____ işareti konur.",a:"ünlem"}
   ],
-  "Yazım Kuralları": [
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde büyük harf kullanımı doğrudur?",o:["ayşe okula gitti.","Ayşe okula gitti.","Ayşe Okula Gitti.","ayşe Okula gitti."],a:1},
-    {ty:"mc",q:"Şehir, ülke ve kişi adları (özel isimler) nasıl yazılır?",o:["Bütün harfleri büyük yazılır","Sadece baş harfi büyük yazılır","Küçük harfle yazılır","Rakamla yazılır"],a:1},
-    {ty:"mc",q:"Aşağıdaki kelimelerden hangisinin ilk harfi büyük yazılmalıdır?",o:["kalem","ankara","masa","kitap"],a:1},
-    {ty:"tf",q:"Özel isimler (insan, hayvan, şehir adları) her zaman büyük harfle başlar.",a:true},
-    {ty:"tf",q:"Cümle içinde geçen özel isimler küçük harfle yazılabilir.",a:false},
-    {ty:"fb",q:"'istanbul çok güzel bir şehirdir.' cümlesinde büyük harfle yazılması gereken kelime ____ 'dir.",a:"İstanbul"},
+  "Kültür Hazinemiz": [
+    {ty:"mc",q:"Aşağıdakilerden hangisi kültürümüze ait bir yemektir?",o:["Mantı","Pizza","Suşi","Taco"],a:0},
+    {ty:"mc",q:"Halk oyunları neyi yansıtır?",o:["Yaşadığımız yerin kültürünü","Hava durumunu","Nüfus sayısını","Ders programını"],a:0},
+    {ty:"mc",q:"'Damlaya damlaya göl olur.' sözü nedir?",o:["Atasözü","Deyim","Bilmece","Şiir"],a:0},
+    {ty:"mc",q:"Bayramlarda büyükleri ziyaret etmek hangi değeri gösterir?",o:["Saygı","İlgisizlik","Acele","Kayıtsızlık"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi geleneksel bir çocuk oyunudur?",o:["Mendil kapmaca","Tablet oyunu","Sinema","Televizyon"],a:0},
+    {ty:"tf",q:"Kültürel değerlerimizi yaşatmak önemlidir.",a:true},
+    {ty:"tf",q:"Atasözleri kısa ve öğüt vericidir.",a:true},
+    {ty:"tf",q:"Her ülkenin kültürü aynıdır.",a:false},
+    {ty:"fb",q:"Halkın ortak sözü olan, öğüt veren kısa cümlelere ____ denir.",a:"atasözü"},
+    {ty:"fb",q:"Bir toplumun yaşayış biçimine ____ denir.",a:"kültür"}
   ],
-  "Noktalama İşaretleri": [
-    {ty:"mc",q:"Şaşkınlık, sevinç gibi duyguları anlatan cümlelerin sonuna hangi işaret konur?",o:["Nokta (.)","Soru işareti (?)","Ünlem işareti (!)","Virgül (,)"],a:2},
-    {ty:"mc",q:"'Bugün doğum günüm____' cümlesinin sonunda sevinç ifade etmek için hangi işaret kullanılır?",o:[".","?","!",","],a:2},
-    {ty:"mc",q:"Sıralı kelimeler arasında hangi noktalama işareti kullanılır?",o:["Nokta (.)","Virgül (,)","Soru işareti (?)","Ünlem işareti (!)"],a:1},
-    {ty:"tf",q:"Soru cümlelerinin sonuna soru işareti (?) konur.",a:true},
-    {ty:"tf",q:"Ünlem işareti (!) sadece soru cümlelerinin sonunda kullanılır.",a:false},
-    {ty:"fb",q:"'Elma, armut ve muz aldık.' cümlesinde elma ile armut kelimeleri arasına ____ işareti konmuştur.",a:"virgül (,)"},
-  ],
-  "Cümle Bilgisi": [
-    {ty:"mc",q:"Aşağıdakilerden hangisi bir cümledir?",o:["kalem, defter, silgi","Ali topla oynadı.","kırmızı büyük ev","koşarak, gülerek"],a:1},
-    {ty:"mc",q:"'Kapıyı kapat!' cümlesi ne tür bir cümledir?",o:["Soru cümlesi","Buyruk (emir) cümlesi","Ünlem cümlesi","Bildirme cümlesi"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerden hangisi soru cümlesidir?",o:["Bugün hava güneşli.","Okula gidiyorum.","Yarın sınav var mı?","Kitabımı okudum."],a:2},
-    {ty:"tf",q:"Anlamlı ve düzenli kelime dizisine cümle denir.",a:true},
-    {ty:"tf",q:"Tek bir kelime hiçbir zaman cümle olamaz.",a:false},
-    {ty:"fb",q:"'Ayşe bahçede çiçek topladı.' cümlesinde kim çiçek topladığını bildiren kelime ____ 'dir.",a:"Ayşe"},
-  ],
-  "Okuduğunu Anlama": [
-    {ty:"mc",q:"Metni okuyunuz: Zeynep bahçede çiçek topladı. Çiçekleri bir vazoya koydu ve masanın üstüne bıraktı. Zeynep çiçekleri nereye koydu?",o:["Buzdolabına","Bir vazoya","Çantasına","Bahçeye"],a:1},
-    {ty:"mc",q:"Metni okuyunuz: Küçük kedi yağmurda ıslanmıştı. Ayşe onu eve aldı, kuruladı ve sıcak süt verdi. Ayşe kediye ne verdi?",o:["Su","Ekmek","Sıcak süt","Balık"],a:2},
-    {ty:"mc",q:"Metni okuyunuz: Mert ödevini bitirdikten sonra bisikletine bindi. Parkta bir saat gezdi ve eve yorgun döndü. Mert parka gitmeden önce ne yaptı?",o:["Uyudu","Ödevini bitirdi","Yemek yedi","Televizyon izledi"],a:1},
-    {ty:"tf",q:"Metni okuyunuz: Deniz kenarında yürüyen çocuklar kum kaleleri yaptı. Dalgalar gelince kaleler yıkıldı. Bu metne göre kaleler dalgalar sayesinde daha da sağlamlaştı.",a:false},
-    {ty:"tf",q:"Metni okuyunuz: Öğretmen sınıfa yeni bir kitap getirdi. Öğrenciler kitabı görünce çok sevindi. Bu metne göre öğrenciler kitabı görünce üzüldü.",a:false},
-    {ty:"fb",q:"Metni okuyunuz: Baba markete gitti, ekmek ve süt aldı. Eve dönünce çantasını mutfağa bıraktı. Baba marketten hangi iki şeyi aldı?",a:"ekmek ve süt"},
-  ],
+  "Haklarımızı Biliyoruz": [
+    {ty:"mc",q:"Her çocuğun okula gitme hakkına ne denir?",o:["Eğitim hakkı","Oyun hakkı","Seyahat hakkı","Mülkiyet hakkı"],a:0},
+    {ty:"mc",q:"Haklarımızın yanında ne bulunur?",o:["Sorumluluklarımız","Tatillerimiz","Oyunlarımız","Eşyalarımız"],a:0},
+    {ty:"mc",q:"Sınıfta söz almak için ne yapmalıyız?",o:["Parmak kaldırıp sıramızı beklemek","Bağırmak","Ayağa kalkmak","Sözünü kesmek"],a:0},
+    {ty:"mc",q:"Bir arkadaşımızın hakkına saygı göstermek ne demektir?",o:["Onun da haklarını gözetmek","Onu görmezden gelmek","Sadece kendimizi düşünmek","Kuralları bozmak"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde noktalama yanlışı yoktur?",o:["Ali, Ayşe ve Mehmet okula gitti.","Ali Ayşe, ve Mehmet, okula gitti.","Ali, Ayşe ve, Mehmet okula gitti.","Ali Ayşe ve Mehmet, okula, gitti."],a:0},
+    {ty:"tf",q:"Her çocuğun sağlıklı yaşama hakkı vardır.",a:true},
+    {ty:"tf",q:"Kurallar birlikte yaşamayı kolaylaştırır.",a:true},
+    {ty:"tf",q:"Haklarımızı kullanırken başkalarının hakkını düşünmemize gerek yoktur.",a:false},
+    {ty:"fb",q:"Sıralanan kelimelerin arasına ____ konur.",a:"virgül"},
+    {ty:"fb",q:"Her çocuğun oynama ve dinlenme hakkına ____ hakkı denir.",a:"oyun"}
+  ]
 },
 "tr-3": {
-  "Gerçek ve Mecaz Anlam": [
-    {ty:"mc",q:"'Bugün hava çok soğuk, su buz gibi oldu.' cümlesindeki 'buz gibi' ifadesi hangi anlamda kullanılmıştır?",o:["Mecaz anlamda","Gerçek anlamda","Zıt anlamda","Eş anlamda"],a:1},
-    {ty:"mc",q:"'Öğretmenin bakışları buz gibiydi.' cümlesindeki 'buz gibi' ifadesi hangi anlamda kullanılmıştır?",o:["Gerçek anlamda (soğuk)","Mecaz anlamda (sert, soğuk tavır)","Sayı anlamında","Yer anlamında"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde kelime mecaz anlamda kullanılmıştır?",o:["Taş çok ağırdı.","Yüreği taş kesildi.","Duvara taş örüldü.","Bahçede taş vardı."],a:1},
-    {ty:"tf",q:"Bir kelimenin gerçek (temel) anlamı, o kelimenin akla ilk gelen, sözlükteki anlamıdır.",a:true},
-    {ty:"tf",q:"Mecaz anlam, kelimenin gerçek anlamından uzaklaşarak benzetme yoluyla kazandığı anlamdır.",a:true},
-    {ty:"fb",q:"'Kalbi kırıldı.' cümlesindeki 'kırılmak' kelimesi ____ anlamda kullanılmıştır.",a:"mecaz"},
+  /* Resmî temalar. Sınıf düzeyine uygun söz varlığı (gerçek/mecaz anlam, eş-
+     zıt-eş sesli), kök-ek, yazım-noktalama ve okuduğunu anlama kazanımları
+     temanın bağlamı içinde ölçülür. */
+  "Değerlerimizle Yaşıyoruz": [
+    {ty:"mc",q:"'Eli açık' sözü hangi anlamda kullanılır?",o:["Cömert","Cimri","Aceleci","Dikkatsiz"],a:0},
+    {ty:"mc",q:"Bir sözcüğün ilk akla gelen anlamına ne denir?",o:["Gerçek anlam","Mecaz anlam","Terim anlam","Eş anlam"],a:0},
+    {ty:"mc",q:"'Tatlı' kelimesi \"Tatlı bir sesle konuştu.\" cümlesinde hangi anlamdadır?",o:["Mecaz anlam","Gerçek anlam","Terim anlam","Eş sesli"],a:0},
+    {ty:"mc",q:"Sözünde durmayan bir kişi için hangi değer eksik denir?",o:["Güvenilirlik","Çalışkanlık","Merak","Hız"],a:0},
+    {ty:"mc",q:"Bir hatamızı kabul edip özür dilemek hangi değeri gösterir?",o:["Dürüstlük ve sorumluluk","Kayıtsızlık","İnatçılık","Aceleci olma"],a:0},
+    {ty:"tf",q:"Bir kelime hem gerçek hem mecaz anlamda kullanılabilir.",a:true},
+    {ty:"tf",q:"Deyimler genellikle mecaz anlam taşır.",a:true},
+    {ty:"tf",q:"Özür dilemek bir zayıflık göstergesidir.",a:false},
+    {ty:"fb",q:"Kelimenin sözlükteki ilk anlamına ____ anlam denir.",a:"gerçek"},
+    {ty:"fb",q:"Kelimenin asıl anlamından uzaklaşarak kazandığı yeni anlama ____ anlam denir.",a:"mecaz"}
   ],
-  "Eş – Zıt – Eş Sesli Kelimeler": [
-    {ty:"mc",q:"'Cesur' kelimesinin eş anlamlısı hangisidir?",o:["Korkak","Yürekli","Sakin","Yorgun"],a:1},
-    {ty:"mc",q:"'Kalabalık' kelimesinin zıt anlamlısı hangisidir?",o:["Tenha","Gürültülü","Karmaşık","Geniş"],a:0},
-    {ty:"mc",q:"'Kaz' kelimesi aşağıdaki cümlelerin hangisinde bir kuş türü anlamında kullanılmıştır?",o:["Çiftlikte kazlar geziniyordu.","Yerden kazı kazıp çıkardı.","Toprağı kazdı.","Bahçeyi kazıyordu."],a:0},
-    {ty:"tf",q:"'Misafir' ile 'konuk' kelimeleri eş anlamlıdır.",a:true},
-    {ty:"tf",q:"Eş sesli kelimeler farklı yazılıp aynı anlama gelen kelimelerdir.",a:false},
-    {ty:"fb",q:"'Ağır' kelimesinin zıt anlamlısı ____ 'dur.",a:"Hafif"},
+  "Atatürk ve Kahramanlarımız": [
+    {ty:"mc",q:"Kurtuluş Savaşı'nda Sakarya Savaşı'nı yöneten kişi kimdir?",o:["Mustafa Kemal","Bir vali","Bir öğretmen","Bir doktor"],a:0},
+    {ty:"mc",q:"Türkiye Büyük Millet Meclisi hangi yıl açılmıştır?",o:["1920","1923","1919","1938"],a:0},
+    {ty:"mc",q:"\"Nene Hatun\" hangi özelliğiyle tanınır?",o:["Kahramanlığıyla","Ressamlığıyla","Şairliğiyle","Doktorluğuyla"],a:0},
+    {ty:"mc",q:"Bayrağımızın bize hatırlattığı en önemli değer nedir?",o:["Bağımsızlık ve vatan sevgisi","Alışveriş","Oyun","Tatil"],a:0},
+    {ty:"mc",q:"\"İstanbul'un\" kelimesindeki kesme işaretinin görevi nedir?",o:["Özel ada gelen eki ayırmak","Cümleyi bitirmek","Soru sormak","Ünlem bildirmek"],a:0},
+    {ty:"tf",q:"Özel adlara gelen çekim ekleri kesme işaretiyle ayrılır.",a:true},
+    {ty:"tf",q:"Millî bayramlarımız tarihimizdeki önemli olayları anmak için kutlanır.",a:true},
+    {ty:"tf",q:"Kurtuluş Savaşı 1938'de başlamıştır.",a:false},
+    {ty:"fb",q:"Cumhuriyet ____ Ekim 1923'te ilan edilmiştir.",a:"29"},
+    {ty:"fb",q:"Özel adlara gelen ekleri ayırmak için ____ işareti kullanılır.",a:"kesme"}
   ],
-  "Adlar (İsimler)": [
-    {ty:"mc",q:"Aşağıdakilerden hangisi özel isimdir?",o:["şehir","Ankara","kitap","masa"],a:1},
-    {ty:"mc",q:"'Kitaplar' kelimesi tekil midir, çoğul mudur?",o:["Tekil","Çoğul","Özel isim","Soyut isim"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi soyut bir isimdir (elle tutulup gözle görülemez)?",o:["Masa","Sevgi","Kalem","Ağaç"],a:1},
-    {ty:"tf",q:"Cins isimler aynı türden bütün varlıklara verilen ortak adlardır.",a:true},
-    {ty:"tf",q:"'Sürü, orman, takım' gibi topluluk adları birden fazla varlığı anlatmaz.",a:false},
-    {ty:"fb",q:"Bir kişiye, şehre ya da ülkeye verilen ve büyük harfle başlayan isimlere ____ isim denir.",a:"özel"},
+  "Doğayı Tanıyoruz": [
+    {ty:"mc",q:"'Yağmur' kelimesinin kökü hangisidir?",o:["yağ","yağmur","mur","ur"],a:0},
+    {ty:"mc",q:"'Ormanlık' kelimesinde kaç ek vardır?",o:["1","2","3","4"],a:0},
+    {ty:"mc",q:"Suyun buhar olup yükselmesine ne denir?",o:["Buharlaşma","Yoğuşma","Donma","Erime"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi doğal kaynaklarımızı korumaya örnektir?",o:["Suyu tasarruflu kullanmak","Musluğu açık bırakmak","Çöpü ormana atmak","Ağaç kesmek"],a:0},
+    {ty:"mc",q:"Metni okuyunuz: \"Serçe pencereye kondu, birkaç kırıntı yedi ve uçup gitti.\" Serçe önce ne yaptı?",o:["Pencereye kondu","Uçup gitti","Kırıntı yedi","Yuva yaptı"],a:0},
+    {ty:"tf",q:"Kelimenin anlamlı en küçük parçasına kök denir.",a:true},
+    {ty:"tf",q:"Doğadaki canlılar birbirine bağlıdır.",a:true},
+    {ty:"tf",q:"Yapım ekleri kelimenin anlamını hiç değiştirmez.",a:false},
+    {ty:"fb",q:"Kelimenin anlamlı en küçük parçasına ____ denir.",a:"kök"},
+    {ty:"fb",q:"Suyun gaz hâlinden sıvı hâle geçmesine ____ denir.",a:"yoğuşma"}
   ],
-  "Kök ve Ekler": [
-    {ty:"mc",q:"'Kitapçı' kelimesinin kökü hangisidir?",o:["Kitap","Kitapçı","-çı","Kitab"],a:0},
-    {ty:"mc",q:"'Göz-lük-çü' kelimesinde kaç ek vardır?",o:["1","2","3","4"],a:1},
-    {ty:"mc",q:"Aşağıdaki kelimelerden hangisinin kökü 'göz'dür?",o:["Gözlük","Kulaklık","Elbise","Ayakkabı"],a:0},
-    {ty:"tf",q:"Bir kelimenin anlamlı en küçük parçasına kök denir.",a:true},
-    {ty:"tf",q:"Ekler tek başına anlam taşımaz, köke eklenerek yeni anlamlar oluşturur.",a:true},
-    {ty:"fb",q:"'Balık-çı-lık' kelimesinin kökü ____ 'tır.",a:"Balık"},
+  "Bilgi Hazinemiz": [
+    {ty:"mc",q:"Bir metnin ne hakkında olduğunu bildiren unsura ne denir?",o:["Konu","Yazar","Başlık boyutu","Sayfa sayısı"],a:0},
+    {ty:"mc",q:"Paragrafın ana düşüncesini bulmak için ne yapılır?",o:["Paragrafın bütününe bakılır","İlk kelimeye bakılır","Son harfe bakılır","Sayfa numarasına bakılır"],a:0},
+    {ty:"mc",q:"Bilgi ararken en güvenilir yol hangisidir?",o:["Güvenilir kaynaklardan doğrulamak","İlk gördüğüne inanmak","Arkadaşa sormakla yetinmek","Tahmin etmek"],a:0},
+    {ty:"mc",q:"Ansiklopedi hangi amaçla kullanılır?",o:["Konular hakkında bilgi edinmek","Masal okumak","Şiir yazmak","Resim yapmak"],a:0},
+    {ty:"mc",q:"Metni okuyunuz: \"Kitap okumak kelime dağarcığımızı geliştirir ve hayal gücümüzü besler.\" Bu metne göre kitap okumanın bir yararı nedir?",o:["Kelime dağarcığını geliştirmesi","Uykuyu artırması","Zamanı boşa harcaması","Yorgunluk vermesi"],a:0},
+    {ty:"tf",q:"Bir paragrafta birden çok yardımcı düşünce bulunabilir.",a:true},
+    {ty:"tf",q:"Okuduğumuzu anlamak için metni dikkatle okumalıyız.",a:true},
+    {ty:"tf",q:"İnternette gördüğümüz her bilgi doğrudur.",a:false},
+    {ty:"fb",q:"Bir metinde anlatılmak istenen temel yargıya ____ düşünce denir.",a:"ana"},
+    {ty:"fb",q:"Aynı konuyu işleyen, bir arada duran cümle topluluğuna ____ denir.",a:"paragraf"}
   ],
-  "Yazım Kuralları ve Noktalama": [
-    {ty:"mc",q:"'Ali de bize geldi.' cümlesinde 'de' nasıl yazılmıştır?",o:["Bitişik","Ayrı","Kesme işaretiyle","Büyük harfle"],a:1},
-    {ty:"mc",q:"Cümle sonunda anlatım tamamlandığında hangi noktalama işareti kullanılır?",o:["Virgül (,)","Nokta (.)","İki nokta (:)","Kesme işareti (')"],a:1},
-    {ty:"mc",q:"Özel isimlere gelen çekim ekleri nasıl ayrılır?",o:["Bitişik yazılır","Kesme işaretiyle ayrılır","Ayrı yazılır","Tire ile ayrılır"],a:1},
-    {ty:"tf",q:"'Okul'a gidiyorum.' yazımı doğrudur çünkü 'okul' özel isimdir.",a:false},
-    {ty:"tf",q:"'Ankara'ya tatile gittik.' cümlesinde kesme işaretinin kullanılması doğrudur çünkü 'Ankara' özel isimdir.",a:true},
-    {ty:"fb",q:"'Sen de mi geldin?' cümlesindeki 'de' bağlacı ____ yazılır (bitişik/ayrı).",a:"ayrı"},
+  "Yeteneklerimizi Kullanıyoruz": [
+    {ty:"mc",q:"'Göz' kelimesi \"İğnenin gözünden iplik geçirdim.\" cümlesinde hangi anlamdadır?",o:["Eş sesli (delik)","Organ adı","Mecaz anlam","Terim anlam"],a:0},
+    {ty:"mc",q:"Bir işi düzenli çalışarak geliştirmeye ne denir?",o:["Emek vermek","Şansa bırakmak","Ertelemek","Vazgeçmek"],a:0},
+    {ty:"mc",q:"Kendi yeteneğimizi tanımak için ne yapabiliriz?",o:["Farklı etkinlikler deneyip gözlem yapmak","Hiçbir şey denememek","Sadece izlemek","Beklemek"],a:0},
+    {ty:"mc",q:"Bir sunum yaparken en önemli davranış hangisidir?",o:["Anlaşılır konuşmak ve göz teması kurmak","Hızlı okumak","Sessiz kalmak","Yere bakmak"],a:0},
+    {ty:"mc",q:"\"Yüz\" kelimesi hangi cümlede sayı anlamındadır?",o:["Sınıfta yüz kitap var.","Yüzünü yıkadı.","Yüzü güldü.","Yüzüne baktı."],a:0},
+    {ty:"tf",q:"Yazılışı ve okunuşu aynı, anlamı farklı kelimelere eş sesli denir.",a:true},
+    {ty:"tf",q:"Yeteneklerimiz çalışmakla gelişir.",a:true},
+    {ty:"tf",q:"Sunum yaparken dinleyiciyle iletişim kurmak gereksizdir.",a:false},
+    {ty:"fb",q:"Yazılışı aynı, anlamı farklı kelimelere ____ sesli kelimeler denir.",a:"eş"},
+    {ty:"fb",q:"Bir işi başarmak için harcanan çabaya ____ denir.",a:"emek"}
   ],
-  "Paragraf ve Metin Anlama": [
-    {ty:"mc",q:"Metni okuyunuz: Küçük bir tohum toprağa ekildi. Her gün sulandı ve güneş ışığı aldı. Zamanla filizlenip büyük bir ağaç oldu. Tohum ağaç olana kadar neye ihtiyaç duymuştur?",o:["Sadece toprağa","Su ve güneş ışığına","Sadece rüzgâra","Hiçbir şeye"],a:1},
-    {ty:"mc",q:"Metni okuyunuz: Ahmet kütüphaneye gitti. Okumak istediği kitabı bulamayınca görevliden yardım istedi. Görevli ona kitabı raflardan buldu. Ahmet neden görevliden yardım istedi?",o:["Kitabı okuyamadığı için","Kitabı bulamadığı için","Kütüphaneden çıkmak istediği için","Kitabı beğenmediği için"],a:1},
-    {ty:"mc",q:"Metni okuyunuz: Yaz tatili gelince aile deniz kenarına gitti. Çocuklar kum kalesi yaptı, büyükler ise gölgede dinlendi. Akşam olunca hep birlikte eve döndüler. Bu metnin ana konusu nedir?",o:["Bir aile deniz tatili","Bir okul gezisi","Bir doğum günü partisi","Bir spor müsabakası"],a:0},
-    {ty:"tf",q:"Metni okuyunuz: Fabrikada üretilen oyuncaklar kutulara konup kamyonlarla mağazalara taşınır. Bu metne göre oyuncaklar mağazalara uçakla taşınır.",a:false},
-    {ty:"tf",q:"Metni okuyunuz: Bilim insanları yıllarca çalışarak bir aşı geliştirdi. Bu aşı sayesinde birçok hastalık önlendi. Bu metne göre aşı hastalıkların artmasına neden olmuştur.",a:false},
-    {ty:"fb",q:"Metni okuyunuz: Nehir kenarındaki köylüler tarlalarını suladı. Bol su sayesinde o yıl bereketli bir hasat elde ettiler. Köylüler bereketli hasadı neye borçludur?",a:"bol suya"},
+  "Bilim Yolculuğu": [
+    {ty:"mc",q:"Bir araştırmaya başlarken ilk adım hangisidir?",o:["Soru belirlemek","Sonucu yazmak","Rapor basmak","Sunum yapmak"],a:0},
+    {ty:"mc",q:"Deney yaparken sonuçları not etmenin yararı nedir?",o:["Sonradan karşılaştırma yapabilmek","Zaman kaybetmek","Deneyi zorlaştırmak","Sonucu gizlemek"],a:0},
+    {ty:"mc",q:"Bilim insanlarının ortak özelliği hangisidir?",o:["Merak edip araştırmak","Hemen vazgeçmek","Soru sormamak","Tahminle yetinmek"],a:0},
+    {ty:"mc",q:"Teknolojik araçları kullanırken hangisine dikkat edilmelidir?",o:["Kullanım süresi ve güvenlik","Sadece rengine","Sadece markasına","Sadece ağırlığına"],a:0},
+    {ty:"mc",q:"Bir bilgi kaynağının güvenilirliğini anlamak için neye bakılır?",o:["Kaynağın kim tarafından hazırlandığına","Yazı tipine","Sayfa rengine","Başlık boyutuna"],a:0},
+    {ty:"tf",q:"Bilimsel bilgi yeni kanıtlarla değişebilir.",a:true},
+    {ty:"tf",q:"Gözlem yaparken not almak yararlıdır.",a:true},
+    {ty:"tf",q:"Deney sonuçlarını değiştirerek yazmak doğrudur.",a:false},
+    {ty:"fb",q:"Bir soruya cevap bulmak için yapılan denetimli denemeye ____ denir.",a:"deney"},
+    {ty:"fb",q:"Olayları dikkatle izleyip incelemeye ____ denir.",a:"gözlem"}
   ],
+  "Millî Kültürümüz": [
+    {ty:"mc",q:"'Ayağı yere basmak' deyimi ne anlama gelir?",o:["Gerçekçi olmak","Yürüyüşe çıkmak","Yorulmak","Koşmak"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi geleneksel el sanatlarımızdandır?",o:["Halı dokumacılığı","Bilgisayar oyunu","Sinema","Fotokopi"],a:0},
+    {ty:"mc",q:"Atasözleri ile deyimler arasındaki temel fark nedir?",o:["Atasözleri öğüt verir, deyimler durum anlatır","İkisi de aynıdır","Deyimler öğüt verir","Atasözleri kalıplaşmamıştır"],a:0},
+    {ty:"mc",q:"Bir bölgeye özgü yemek, giyim ve oyunlar neyi gösterir?",o:["Kültürel zenginliğimizi","Nüfus sayısını","Hava durumunu","Yüzey şekillerini"],a:0},
+    {ty:"mc",q:"\"Ne mutlu bize!\" cümlesinin sonuna hangi işaret konur?",o:["Ünlem işareti","Nokta","Soru işareti","Virgül"],a:0},
+    {ty:"tf",q:"Deyimler kalıplaşmış söz gruplarıdır.",a:true},
+    {ty:"tf",q:"Kültürel mirasımızı korumak sorumluluğumuzdur.",a:true},
+    {ty:"tf",q:"Atasözlerinin sözcükleri değiştirilebilir.",a:false},
+    {ty:"fb",q:"Kalıplaşmış, genellikle mecaz anlam taşıyan söz gruplarına ____ denir.",a:"deyim"},
+    {ty:"fb",q:"Sevinç, şaşkınlık gibi duyguları bildiren cümlelerin sonuna ____ işareti konur.",a:"ünlem"}
+  ],
+  "Hak ve Sorumluluklarımız": [
+    {ty:"mc",q:"Okulumuzda alınan kararlara herkesin oy vermesine ne denir?",o:["Oylama","Kura","Atama","Seçilme"],a:0},
+    {ty:"mc",q:"Sınıf başkanı seçilirken hangi yöntem kullanılır?",o:["Oylama yaparak demokratik seçim","Kura ile","Sadece boy sırasına göre","Rastgele"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi hem hakkımız hem sorumluluğumuzdur?",o:["Eğitim","Uyku","Oyun süresi","Tatil"],a:0},
+    {ty:"mc",q:"Ortak alanları temiz kullanmak neden önemlidir?",o:["Herkesin hakkı olduğu için","Öğretmen görsün diye","Zaman geçsin diye","Kural olsun diye"],a:0},
+    {ty:"mc",q:"\"Sen de mi geldin?\" cümlesindeki 'de' nasıl yazılır?",o:["Ayrı","Bitişik","Kesmeyle","Büyük harfle"],a:0},
+    {ty:"tf",q:"Okulumuzdaki ortak alanları temiz kullanmak hepimizin görevidir.",a:true},
+    {ty:"tf",q:"Bağlaç olan 'de' ayrı yazılır.",a:true},
+    {ty:"tf",q:"Nöbetçi öğrenci sadece kendi arkadaşlarına yardım eder.",a:false},
+    {ty:"fb",q:"Okulumuzda alınan kararlara herkesin oy vermesine ____ denir.",a:"oylama"},
+    {ty:"fb",q:"Soru eki olan 'mi' kelimeden ____ yazılır.",a:"ayrı"}
+  ]
 },
 "tr-4": {
   "Gerçek – Mecaz – Terim Anlam": [
@@ -1239,177 +1384,234 @@ const UNIT_BANK = {
   ],
 },
 "tr-5": {
-  "Sözcükte Anlam": [
-    {ty:"mc",q:"\"Cesur\" kelimesinin eş anlamlısı hangisidir?",o:["korkak","yürekli","tembel","sessiz"],a:1},
-    {ty:"mc",q:"\"Aydınlık\" kelimesinin zıt (karşıt) anlamlısı hangisidir?",o:["karanlık","parlak","güneşli","ışıklı"],a:0},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde 'yüz' kelimesi 'sayı' anlamında kullanılmıştır?",o:["Yüzünü güzelce yıkadı.","Bahçede yüz elma topladık.","Yüzünde büyük bir gülümseme vardı.","Onun yüzüne bakamadım."],a:1},
-    {ty:"tf",q:"\"Sıcak\" kelimesi hem gerçek hem mecaz anlamda kullanılabilir.",a:true},
-    {ty:"tf",q:"Eş sesli (sesteş) kelimeler yazılışları aynı, anlamları da aynı olan kelimelerdir.",a:false},
-    {ty:"fb",q:"\"İğnenin gözü\" örneğinde 'göz' kelimesi ____ anlamda kullanılmıştır.",a:"mecaz"}
+  /* Resmî temalar. Sınıf düzeyindeki söz varlığı (sözcükte/cümlede anlam,
+     deyim-atasözü), kök-ek, yazım ve noktalama kazanımları temanın bağlamı
+     içinde ölçülür. */
+  "Oyun Dünyası": [
+    {ty:"mc",q:"'Oyunu kurala uygun oynamak' hangi değerle ilgilidir?",o:["Adil olmak","Aceleci olmak","Kayıtsız olmak","Kural bozmak"],a:0},
+    {ty:"mc",q:"'Pas vermek' sözü hangi anlamda kullanılır?",o:["Topu arkadaşına aktarmak","Sıradan çekilmek","Yorulmak","Kural bozmak"],a:0},
+    {ty:"mc",q:"\"Takım hâlinde oynamak\" ifadesi hangi beceriyi öne çıkarır?",o:["İş birliği","Bencillik","Rekabetin tek başına önemi","Kayıtsızlık"],a:0},
+    {ty:"mc",q:"'Oyuncu' kelimesinin kökü hangisidir?",o:["oyun","oy","oyna","cu"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde yazım yanlışı yoktur?",o:["Bugün maça gideceğiz.","Bugün maca gideceğiz.","Bugün maçe gideceğiz.","Bu gün maça gideceğiz."],a:0},
+    {ty:"tf",q:"Oyunlarda kurallara uymak herkesin hakkını korur.",a:true},
+    {ty:"tf",q:"Yapım ekleri kelimeye yeni anlam kazandırır.",a:true},
+    {ty:"tf",q:"Kaybetmek, oyunun bir parçası değildir.",a:false},
+    {ty:"fb",q:"Kelimenin anlamlı en küçük parçasına ____ denir.",a:"kök"},
+    {ty:"fb",q:"Bir işi birlikte yapmaya ____ birliği denir.",a:"iş"}
   ],
-  "Deyimler ve Atasözleri": [
-    {ty:"mc",q:"\"Ağzından bal damlamak\" deyiminin anlamı nedir?",o:["çok tatlı konuşmak","çok yemek yemek","susmak","hızlı koşmak"],a:0},
-    {ty:"mc",q:"\"Damlaya damlaya göl olur\" atasözü ne anlatır?",o:["Küçük birikimlerin zamanla büyük olacağını","Suyun her yerde bulunduğunu","Gölün derin olduğunu","Yağmurun faydasını"],a:0},
-    {ty:"mc",q:"Aşağıdakilerden hangisi bir deyimdir?",o:["Kitap okumak","Ağzı kulaklarına varmak","Bahçede oynamak","Yemek yemek"],a:1},
-    {ty:"tf",q:"Atasözlerinin kim tarafından söylendiği bellidir, sahibi bilinir.",a:false},
-    {ty:"tf",q:"Deyimler genellikle gerçek anlamlarının dışında, mecazi anlam taşır.",a:true},
-    {ty:"fb",q:"\"Eli kulağında\" deyiminin anlamı: bir işin ____ olması.",a:"bitmek üzere / neredeyse tamamlanmak üzere"}
+  "Atatürk'ü Tanımak": [
+    {ty:"mc",q:"Türkiye Büyük Millet Meclisi hangi yıl açılmıştır?",o:["1920","1923","1919","1938"],a:0},
+    {ty:"mc",q:"Atatürk'ün \"Hayatta en hakiki mürşit ilimdir.\" sözü neyi vurgular?",o:["Bilimin yol göstericiliğini","Ticaretin önemini","Sporun önemini","Seyahatin önemini"],a:0},
+    {ty:"mc",q:"Cumhuriyetin ilan edilmesi hangi yönetim biçimine geçişi gösterir?",o:["Halkın yönetimde söz sahibi olduğu yönetime","Saltanata","Krallığa","Beyliğe"],a:0},
+    {ty:"mc",q:"\"Atatürk'ün\" kelimesindeki kesme işaretinin görevi nedir?",o:["Özel ada gelen eki ayırmak","Soru sormak","Ünlem bildirmek","Cümleyi bitirmek"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi Atatürk'ün yaptığı yeniliklerden biridir?",o:["Harf İnkılabı","Kavimler Göçü","Coğrafi Keşifler","Sanayi Devrimi"],a:0},
+    {ty:"tf",q:"Özel adlara gelen çekim ekleri kesme işaretiyle ayrılır.",a:true},
+    {ty:"tf",q:"Millî bayramlar tarihimizdeki önemli olayları anmak için kutlanır.",a:true},
+    {ty:"tf",q:"Cumhuriyet 1919'da ilan edilmiştir.",a:false},
+    {ty:"fb",q:"Cumhuriyet ____ Ekim 1923'te ilan edilmiştir.",a:"29"},
+    {ty:"fb",q:"Yeni Türk harflerinin kabulüne ____ İnkılabı denir.",a:"Harf"}
   ],
-  "Cümlede Anlam": [
-    {ty:"mc",q:"\"Yağmur yağdığı için maçı erteledik.\" cümlesinde hangi anlam ilişkisi vardır?",o:["Amaç-sonuç","Neden-sonuç","Zıtlık","Karşılaştırma"],a:1},
-    {ty:"mc",q:"\"Ne yazık ki bu yıl tatile çıkamadık.\" cümlesinde konuşmacının duygusu nedir?",o:["Sevinç","Üzüntü","Öfke","Şaşkınlık"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde karşılaştırma anlamı vardır?",o:["Ali bugün okula geç kaldı.","Bu çanta şu çantadan daha büyük.","Kapıyı kapatır mısın?","Yarın pikniğe gideceğiz."],a:1},
-    {ty:"tf",q:"\"Belki yarın deniz kenarına gideriz.\" cümlesinde kesinlik anlamı vardır.",a:false},
-    {ty:"tf",q:"\"Hem ders çalıştı hem de maç izledi.\" cümlesinde iki eylemin birlikte yapıldığı anlatılır.",a:true},
-    {ty:"fb",q:"\"Param olsaydı o bisikleti alırdım.\" cümlesi ____ anlamı taşır.",a:"koşul / şart"}
+  "Duygularımı Tanıyorum": [
+    {ty:"mc",q:"'İçi içine sığmamak' deyimi ne anlama gelir?",o:["Çok heyecanlanmak","Çok üzülmek","Çok yorulmak","Çok acele etmek"],a:0},
+    {ty:"mc",q:"Kendini karşısındakinin yerine koyarak anlamaya çalışmaya ne denir?",o:["Empati","Önyargı","Kayıtsızlık","Rekabet"],a:0},
+    {ty:"mc",q:"Öfkelendiğimizde yapılacak en sağlıklı davranış hangisidir?",o:["Sakinleşip düşünmek","Bağırmak","Eşya kırmak","Kaçmak"],a:0},
+    {ty:"mc",q:"\"Ne kadar mutluyum!\" cümlesi hangi tür cümledir?",o:["Ünlem cümlesi","Soru cümlesi","Emir cümlesi","Bildirme cümlesi"],a:0},
+    {ty:"mc",q:"'Gözü kara' deyimi hangi anlamda kullanılır?",o:["Cesur","Korkak","Üzgün","Kızgın"],a:0},
+    {ty:"tf",q:"Duygularımızı uygun biçimde ifade etmek iletişimi kolaylaştırır.",a:true},
+    {ty:"tf",q:"Deyimler genellikle mecaz anlam taşır.",a:true},
+    {ty:"tf",q:"Ünlem cümlelerinin sonuna nokta konur.",a:false},
+    {ty:"fb",q:"Kalıplaşmış, çoğu mecaz anlamlı söz gruplarına ____ denir.",a:"deyim"},
+    {ty:"fb",q:"Başkasının duygularını anlamaya çalışmaya ____ denir.",a:"empati"}
   ],
-  "Paragraf": [
-    {ty:"mc",q:"\"Elif her sabah erken kalkar, kahvaltısını yapar ve okula yürüyerek gider. Yolda arkadaşlarıyla buluşur, birlikte sohbet ederek yürürler. Bu düzenli alışkanlık onu hem sağlıklı kılar hem de günün başında keyifli bir başlangıç sağlar.\" Bu parçanın ana fikri nedir?",o:["Elif'in arkadaşları çoktur","Düzenli sabah alışkanlıkları sağlıklı ve keyifli bir gün sağlar","Okul çok uzaktadır","Elif kahvaltı yapmayı sevmez"],a:1},
-    {ty:"mc",q:"\"Ormanlar, dünyadaki oksijenin büyük bir kısmını üretir. Ayrıca pek çok hayvana yuva olur ve toprağın erozyona uğramasını engeller. Bu nedenle ormanları korumak, tüm canlıların geleceği için önemlidir.\" Bu parçaya göre ormanları korumamız gerekmesinin nedeni aşağıdakilerden hangisi değildir?",o:["Oksijen üretmeleri","Hayvanlara yuva olmaları","Erozyonu engellemeleri","Turistik gelir sağlamaları"],a:3},
-    {ty:"mc",q:"\"Mert, kütüphaneden aldığı kitabı bir haftada bitirdi. Kitabın kahramanının yaşadığı maceraları çok merak ediyordu. Her gece uyumadan önce birkaç sayfa okuyarak hikâyeye kendini kaptırdı.\" Bu parçadan Mert ile ilgili hangi çıkarım yapılabilir?",o:["Mert kitap okumayı sevmiyor","Mert kitaba ilgi duymuş ve severek okumuştur","Mert kitabı hiç bitirememiştir","Mert kütüphaneye hiç gitmemiştir"],a:1},
-    {ty:"tf",q:"\"Arılar, çiçeklerden topladıkları nektarla bal yaparlar. Aynı zamanda bir çiçekten diğerine taşıdıkları polenle bitkilerin üremesine yardımcı olurlar. Bu yüzden arılar doğada hem üretici hem de yardımcı bir role sahiptir.\" Bu parçaya göre arılar sadece bal üretmek için önemlidir.",a:false},
-    {ty:"tf",q:"\"Ayşe, harçlığından her ay biraz biriktirerek yeni bir bisiklet almayı planlıyordu. Aylar geçtikçe biriktirdiği para arttı ve sonunda hayalindeki bisikleti satın alabildi.\" Bu parçaya göre Ayşe sabırla biriktirerek hedefine ulaşmıştır.",a:true},
-    {ty:"fb",q:"\"Kağıt israfını önlemek için hem okulda hem de evde geri dönüşüm kutuları kullanılmalıdır. Kullanılmış kağıtları çöpe atmak yerine bu kutulara atmak, doğaya ve orman varlığına katkı sağlar.\" Bu parçanın ana fikrine göre kağıtların ____ doğaya katkı sağlar.",a:"geri dönüştürülmesi"}
+  "Geleneklerimiz": [
+    {ty:"mc",q:"'Damlaya damlaya göl olur.' sözü nedir?",o:["Atasözü","Deyim","Bilmece","Tekerleme"],a:0},
+    {ty:"mc",q:"Atasözlerinin en belirgin özelliği nedir?",o:["Öğüt vermesi ve kalıplaşmış olması","Uzun olması","Yazarı bilinmesi","Ölçülü yazılması"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi geleneksel el sanatlarımızdandır?",o:["Ebru","Fotokopi","Baskı makinesi","Bilgisayar tasarımı"],a:0},
+    {ty:"mc",q:"Bayramlarda büyükleri ziyaret etme geleneği neyi güçlendirir?",o:["Aile ve toplum bağlarını","Rekabeti","Bireyselliği","Kayıtsızlığı"],a:0},
+    {ty:"mc",q:"\"Anadolu'nun\" sözcüğünde kesme işareti neden kullanılmıştır?",o:["Özel ada gelen ek ayrıldığı için","Kısaltma olduğu için","Soru olduğu için","Ünlem olduğu için"],a:0},
+    {ty:"tf",q:"Atasözlerinin sözcükleri değiştirilmez.",a:true},
+    {ty:"tf",q:"Gelenekler kuşaktan kuşağa aktarılır.",a:true},
+    {ty:"tf",q:"Atasözleri ile deyimler aynı anlamı taşır.",a:false},
+    {ty:"fb",q:"Halkın ortak sözü olan, öğüt veren kalıplaşmış cümlelere ____ denir.",a:"atasözü"},
+    {ty:"fb",q:"Bir toplumun kuşaklar boyunca sürdürdüğü uygulamalara ____ denir.",a:"gelenek"}
   ],
-  "Yazım Kuralları": [
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde büyük harf kullanımı doğrudur?",o:["Ali Türkiye'nin başkenti Ankara'dır dedi.","ali türkiye'nin başkenti ankara'dır dedi.","Ali türkiye'nin başkenti ankara'dır dedi.","Ali Türkiye'nin Başkenti Ankara'dır Dedi."],a:0},
-    {ty:"mc",q:"\"Okulda bugün resim yarışması var.\" cümlesinde \"-da\" eki nasıl yazılmıştır?",o:["Bulunma durumu eki olarak bitişik","Bağlaç olarak ayrı","Soru eki olarak","Yanlış yazılmıştır"],a:0},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde 'de' bağlacı yanlış yazılmıştır?",o:["O da bize katıldı.","Ben de seninle geleceğim.","Oda bize katıldı.","Sen de haklısın."],a:2},
-    {ty:"tf",q:"\"mi\" soru eki kendinden önceki kelimeden her zaman ayrı yazılır.",a:true},
-    {ty:"tf",q:"Özel isimlere gelen çekim ekleri kesme işaretiyle ayrılmaz.",a:false},
-    {ty:"fb",q:"\"Sen ____ bu işi yaptın?\" cümlesindeki soru eki ayrı yazılır.",a:"mi"}
+  "İletişim ve Sosyal İlişkiler": [
+    {ty:"mc",q:"İletişimde karşımızdaki kişiyi yargılamadan dinlemeye ne denir?",o:["Etkin dinleme","Yüzeysel dinleme","Kayıtsız dinleme","Ön yargılı dinleme"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi sözsüz iletişim ögesidir?",o:["Beden dili","Mektup","E-posta","Telefon araması"],a:0},
+    {ty:"mc",q:"Bir arkadaşımızla anlaşmazlığa düştüğümüzde en doğru yol nedir?",o:["Konuşarak çözüm aramak","Susmak","Küsmek","Bağırmak"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde noktalama yanlışı yoktur?",o:["Ali, Ayşe ve Mehmet geldi.","Ali Ayşe, ve Mehmet geldi.","Ali, Ayşe ve, Mehmet geldi.","Ali Ayşe ve Mehmet, geldi."],a:0},
+    {ty:"mc",q:"Bir metinde yazarın okura iletmek istediği temel yargıya ne denir?",o:["Ana düşünce","Konu","Başlık","Yardımcı düşünce"],a:0},
+    {ty:"tf",q:"Beden dili iletişimin bir parçasıdır.",a:true},
+    {ty:"tf",q:"Sıralanan sözcükler arasına virgül konur.",a:true},
+    {ty:"tf",q:"İletişimde yalnızca sözler anlam taşır.",a:false},
+    {ty:"fb",q:"Bir paragrafta anlatılmak istenen temel yargıya ____ düşünce denir.",a:"ana"},
+    {ty:"fb",q:"Sıralanan sözcüklerin arasına ____ konur.",a:"virgül"}
   ],
-  "Noktalama İşaretleri": [
-    {ty:"mc",q:"Sıralı cümleleri veya eş görevli sözcükleri birbirinden ayırmak için hangi noktalama işareti kullanılır?",o:["Nokta","Virgül","Soru işareti","Ünlem"],a:1},
-    {ty:"mc",q:"\"Ne kadar güzel bir manzara!\" cümlesinin sonunda hangi noktalama işareti kullanılmalıdır?",o:["Nokta","Virgül","Ünlem işareti","İki nokta"],a:2},
-    {ty:"mc",q:"Bir cümlede örnek verme veya açıklama yapmak için hangi noktalama işareti kullanılır?",o:["Ünlem","İki nokta","Soru işareti","Kesme işareti"],a:1},
-    {ty:"tf",q:"Konuşma çizgisi, karşılıklı konuşmaları göstermek için kullanılır.",a:true},
-    {ty:"tf",q:"Kısaltmalarda kesme işareti her zaman kullanılır.",a:false},
-    {ty:"fb",q:"Cümle sonunda soru anlamı varsa ____ kullanılır.",a:"soru işareti"}
-  ],
-  "Kök ve Ekler": [
-    {ty:"mc",q:"\"Kitaplık\" kelimesinin kökü nedir?",o:["Kitap","Kitaplı","Kitapl","Lık"],a:0},
-    {ty:"mc",q:"\"Gözlükçü\" kelimesinde kaç ek vardır?",o:["1","2","3","4"],a:1},
-    {ty:"mc",q:"Aşağıdaki kelimelerden hangisi yapım eki almıştır?",o:["Evler","Kalemim","Öğretmen","Kitaplar"],a:2},
-    {ty:"tf",q:"Çekim ekleri kelimenin anlamını değiştirmez, sadece görevini değiştirir.",a:true},
-    {ty:"tf",q:"Yapım ekleri kelimenin türünü ve anlamını değiştirebilir.",a:true},
-    {ty:"fb",q:"\"Yolcu\" kelimesinde kök ____, ek ise \"-cu\" dur.",a:"yol"}
+  "Sağlıklı Yaşıyorum": [
+    {ty:"mc",q:"Dengeli beslenme için aşağıdakilerden hangisi gereklidir?",o:["Her besin grubundan yeterli miktarda tüketmek","Sadece tatlı yemek","Öğün atlamak","Sadece bir besin yemek"],a:0},
+    {ty:"mc",q:"Düzenli spor yapmanın yararı nedir?",o:["Kas ve kalp sağlığını güçlendirmek","Uykusuzluk","İştahsızlık","Yorgunluk"],a:0},
+    {ty:"mc",q:"Ekran karşısında uzun süre kalmanın olası etkisi nedir?",o:["Göz yorgunluğu ve uyku düzeninin bozulması","Boyun uzaması","Görme keskinliğinin artması","İştahın düzelmesi"],a:0},
+    {ty:"mc",q:"'Sağlıklı' kelimesinde kaç ek vardır?",o:["2","1","3","4"],a:0},
+    {ty:"mc",q:"Metni okuyunuz: \"Düzenli uyku, dikkati ve öğrenmeyi olumlu etkiler.\" Bu metne göre uykunun yararı nedir?",o:["Dikkati ve öğrenmeyi desteklemesi","Boy uzatması","İştahı kesmesi","Zamanı artırması"],a:0},
+    {ty:"tf",q:"Yeterli ve düzenli uyku sağlığımız için gereklidir.",a:true},
+    {ty:"tf",q:"El yıkamak hastalıklardan korunmaya yardımcı olur.",a:true},
+    {ty:"tf",q:"Öğün atlamak sağlıklı beslenmenin bir gereğidir.",a:false},
+    {ty:"fb",q:"Vücudumuzu hastalıklara karşı koruyan sisteme ____ sistemi denir.",a:"bağışıklık"},
+    {ty:"fb",q:"Kelimeye yeni anlam kazandıran eklere ____ eki denir.",a:"yapım"}
   ]
 },
 "tr-6": {
-  "Sözcükte ve Cümlede Anlam": [
-    {ty:"mc",q:"\"Kalbi taş kesildi.\" cümlesinde 'taş' kelimesi hangi anlamda kullanılmıştır?",o:["Gerçek anlamda","Mecaz anlamda","Terim anlamda","Eş anlamda"],a:1},
-    {ty:"mc",q:"\"Kök\" kelimesi matematik dersinde 'bir sayının karekökü' anlamında kullanıldığında hangi anlam türüne girer?",o:["Mecaz anlam","Terim anlam","Yan anlam","Gerçek anlam"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde neden-sonuç ilişkisi vardır?",o:["Kar yağdığı için okullar tatil edildi.","Bugün hava çok soğuk.","Yarın erken kalkacağım.","Kitabı masaya bıraktı."],a:0},
-    {ty:"tf",q:"Bir kelimenin cümle içinde kazandığı yeni anlama 'yan anlam' denir.",a:true},
-    {ty:"tf",q:"\"Ayağına kara sular indi.\" cümlesinde 'ayak' kelimesi gerçek anlamda kullanılmıştır.",a:false},
-    {ty:"fb",q:"Bir kelimenin sözlükteki ilk ve temel anlamına ____ denir.",a:"gerçek (temel) anlam"}
-  ],
-  "Paragraf": [
-    {ty:"mc",q:"\"Deniz kıyısında yaşayan Ahmet, her hafta sonu babasıyla balık tutmaya giderdi. Zamanla balık türlerini tanımayı, oltayı doğru kullanmayı öğrendi. Artık kendi başına bile güvenle balık tutabiliyordu.\" Bu parçaya göre Ahmet ile ilgili hangi çıkarım yapılabilir?",o:["Ahmet denizden korkar","Ahmet zamanla deneyim kazanmıştır","Ahmet hiç balık tutamamıştır","Ahmet babasıyla hiç vakit geçirmemiştir"],a:1},
-    {ty:"mc",q:"\"Güneş enerjisi, temiz ve yenilenebilir bir enerji kaynağıdır. Fosil yakıtların aksine çevreyi kirletmez ve tükenme tehlikesi yoktur. Bu nedenle pek çok ülke güneş enerjisine yatırım yapmaktadır.\" Bu parçanın ana fikri nedir?",o:["Fosil yakıtlar ucuzdur","Güneş enerjisi temiz ve sürdürülebilir bir kaynaktır","Ülkeler enerjiye yatırım yapmamalıdır","Güneş her yerde aynı şiddette yanar"],a:1},
-    {ty:"mc",q:"\"Kütüphanede sessizlik kuralına uyulması, herkesin rahat çalışabilmesi için gereklidir. Yüksek sesle konuşmak diğer okuyucuların dikkatini dağıtır. Bu yüzden kütüphane görevlileri zaman zaman uyarıda bulunur.\" Bu parçada asıl anlatılmak istenen nedir?",o:["Kütüphaneler çok kalabalıktır","Kütüphanede sessizlik kuralına uyulmalıdır","Görevliler çok konuşur","Kütüphaneye kimse gitmemelidir"],a:1},
-    {ty:"tf",q:"\"Sinem her akşam ders çalışma programını gözden geçirir, ertesi gün için plan yapar. Bu sayede sınavlara daha hazırlıklı girer ve zamanını verimli kullanır.\" Bu parçaya göre Sinem düzenli çalışma sayesinde zaman yönetimini iyi yapmaktadır.",a:true},
-    {ty:"tf",q:"\"Geri dönüşüm, atıkların yeniden işlenerek kullanılabilir hale getirilmesidir. Cam, plastik ve kağıt gibi malzemeler geri dönüştürülerek doğal kaynakların tükenmesi yavaşlatılır.\" Bu parçaya göre geri dönüşüm sadece kağıt için uygulanabilir bir yöntemdir.",a:false},
-    {ty:"fb",q:"\"Spor yapmak sadece bedensel değil zihinsel sağlığı da olumlu etkiler. Düzenli spor yapan kişilerde stres azalır, konsantrasyon artar.\" Bu parçaya göre spor hem ____ hem de zihinsel sağlığa katkı sağlar.",a:"bedensel"}
-  ],
-  "İsimler ve İsim Tamlamaları": [
-    {ty:"mc",q:"\"Kapının kolu kırılmış.\" cümlesindeki isim tamlaması hangi türdendir?",o:["Belirtisiz isim tamlaması","Belirtili isim tamlaması","Zincirleme isim tamlaması","Takısız isim tamlaması"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi belirtisiz isim tamlamasına örnektir?",o:["Okulun bahçesi","Çocuğun kitabı","Okul bahçesi","Ali'nin çantası"],a:2},
-    {ty:"mc",q:"\"Sevgi, mutluluk, dostluk\" kelimeleri isim türü olarak neye örnektir?",o:["Somut isim","Soyut isim","Topluluk ismi","Özel isim"],a:1},
+  /* Resmî temalar. Sınıf düzeyindeki söz varlığı, isim-sıfat-zamir,
+     edat-bağlaç-ünlem, yazım ve noktalama kazanımları temanın bağlamı içinde
+     ölçülür. */
+  "Dilimizin Zenginliği": [
+    {ty:"mc",q:"Varlıkları niteleyen ya da belirten sözcüklere ne denir?",o:["Sıfat","Zamir","Edat","Bağlaç"],a:0},
+    {ty:"mc",q:"\"Üç kalem aldım.\" cümlesinde 'üç' hangi tür sıfattır?",o:["Sayı sıfatı","Niteleme sıfatı","İşaret sıfatı","Soru sıfatı"],a:0},
+    {ty:"mc",q:"İsmin yerine kullanılan sözcüklere ne denir?",o:["Zamir","Sıfat","Edat","Ünlem"],a:0},
+    {ty:"mc",q:"'Kitap' kelimesi hangi tür isimdir?",o:["Somut isim","Soyut isim","Özel isim","Topluluk ismi"],a:0},
+    {ty:"mc",q:"\"Türkçe, dünyanın köklü dillerinden biridir.\" cümlesinde 'Türkçe' hangi tür isimdir?",o:["Özel isim","Cins isim","Soyut isim","Topluluk ismi"],a:0},
     {ty:"tf",q:"Özel isimler cümle içinde büyük harfle başlar.",a:true},
-    {ty:"tf",q:"\"Kalem, masa, kitap\" gibi isimler soyut isimlerdir.",a:false},
-    {ty:"fb",q:"\"Öğretmenin çantası\" tamlamasında tamlayan eki ____, tamlanan eki ise \"-sı\" dır.",a:"-in"}
+    {ty:"tf",q:"Sıfatlar isimlerden önce gelerek onları niteler.",a:true},
+    {ty:"tf",q:"Zamirler ismin yerine kullanılamaz.",a:false},
+    {ty:"fb",q:"Varlıkların yerini tutan sözcüklere ____ denir.",a:"zamir"},
+    {ty:"fb",q:"Duyularımızla algılayabildiğimiz varlıkların adlarına ____ isim denir.",a:"somut"}
   ],
-  "Sıfatlar": [
-    {ty:"mc",q:"\"Kırmızı elbise\" tamlamasında 'kırmızı' kelimesi hangi tür sıfattır?",o:["Sayı sıfatı","Niteleme sıfatı","İşaret sıfatı","Soru sıfatı"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde işaret sıfatı kullanılmıştır?",o:["Bu okul çok büyük.","Hızlı koşan çocuk düştü.","Beş kalem aldım.","Kaç kişi geldi?"],a:0},
-    {ty:"mc",q:"\"Beş öğrenci sınıfa girdi.\" cümlesindeki sıfat hangi türdendir?",o:["Niteleme sıfatı","Belgisiz sıfat","Asıl sayı sıfatı","İşaret sıfatı"],a:2},
-    {ty:"tf",q:"Sıfatlar isimlerden önce gelerek onları niteler veya belirtir.",a:true},
-    {ty:"tf",q:"\"Bazı, birkaç, her\" kelimeleri sayı sıfatıdır.",a:false},
-    {ty:"fb",q:"\"Uzun, güzel, akıllı\" gibi sıfatlar ____ sıfatlarına örnektir.",a:"niteleme"}
+  "Bağımsızlık Yolu": [
+    {ty:"mc",q:"Kurtuluş Savaşı'nda millî iradenin ortaya konduğu, kararların birleştirildiği kongre hangisidir?",o:["Sivas Kongresi","Erzurum Kongresi öncesi toplantı","Amasya kongresi yerine görüşme","Lozan görüşmesi"],a:0},
+    {ty:"mc",q:"\"Vatan\" kelimesi hangi tür isimdir?",o:["Soyut isim","Somut isim","Özel isim","Topluluk ismi"],a:0},
+    {ty:"mc",q:"Millî bayramlarımızın toplum için önemi nedir?",o:["Ortak tarih bilincini güçlendirmesi","Tatil sağlaması","Alışverişi artırması","Trafiği azaltması"],a:0},
+    {ty:"mc",q:"\"Ne mutlu bana!\" cümlesinde 'ne' hangi görevde kullanılmıştır?",o:["Ünlem bildirme","Soru sorma","Bağlama","İsim olma"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisinde bağlaç kullanılmıştır?",o:["Ali ve Ayşe geldi.","Ali geldi.","Ali koştu.","Ali okudu."],a:0},
+    {ty:"tf",q:"Bağlaçlar sözcükleri ve cümleleri birbirine bağlar.",a:true},
+    {ty:"tf",q:"Kurtuluş Savaşı Türk milletinin bağımsızlık mücadelesidir.",a:true},
+    {ty:"tf",q:"Ünlemler duygu bildirmez.",a:false},
+    {ty:"fb",q:"Sözcükleri veya cümleleri birbirine bağlayan sözcüklere ____ denir.",a:"bağlaç"},
+    {ty:"fb",q:"Duyularımızla algılayamadığımız kavramların adlarına ____ isim denir.",a:"soyut"}
   ],
-  "Zamirler": [
-    {ty:"mc",q:"\"Ben, sen, o, biz, siz, onlar\" kelimeleri hangi zamir türüdür?",o:["İşaret zamiri","Kişi zamiri","Soru zamiri","Belgisiz zamir"],a:1},
-    {ty:"mc",q:"\"Bunu kim getirdi?\" cümlesinde 'bunu' kelimesi hangi zamir türündendir?",o:["Kişi zamiri","İşaret zamiri","Soru zamiri","İyelik zamiri"],a:1},
-    {ty:"mc",q:"\"Herkes, kimse, birçoğu\" kelimeleri hangi zamir türüne örnektir?",o:["Kişi zamiri","İşaret zamiri","Belgisiz zamir","Soru zamiri"],a:2},
-    {ty:"tf",q:"\"Kimi, nere, ne\" gibi kelimeler soru zamiri olarak kullanılabilir.",a:true},
-    {ty:"tf",q:"Zamirler her zaman isimlerin yerini tutar ve isim gibi çekim eki alabilir.",a:true},
-    {ty:"fb",q:"\"Benimki senden daha güzel.\" cümlesindeki 'benimki' kelimesi ____ zamiridir.",a:"iyelik"}
+  "Farklı Dünyalar": [
+    {ty:"mc",q:"Farklı kültürleri tanımanın bize kazandırdığı en önemli şey nedir?",o:["Hoşgörü ve geniş bakış açısı","Kayıtsızlık","Önyargı","Rekabet"],a:0},
+    {ty:"mc",q:"Bir grup insan hakkında genelleyici, kalıplaşmış yargılara ne denir?",o:["Kalıp yargı","Empati","Diyalog","Hoşgörü"],a:0},
+    {ty:"mc",q:"\"Bu kitabı okudum.\" cümlesinde 'bu' hangi tür sıfattır?",o:["İşaret sıfatı","Sayı sıfatı","Niteleme sıfatı","Soru sıfatı"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi edat (ilgeç) örneğidir?",o:["gibi","ve","ama","ah"],a:0},
+    {ty:"mc",q:"Metni okuyunuz: \"Farklı ülkelerin yemekleri, o toplumun coğrafyasından ve geleneğinden etkilenir.\" Bu metne göre yemek kültürünü etkileyen unsurlardan biri nedir?",o:["Coğrafya","Nüfus sayısı","Bayrak rengi","Para birimi"],a:0},
+    {ty:"tf",q:"Edatlar tek başına anlamı olmayan, sözcükler arasında ilgi kuran sözcüklerdir.",a:true},
+    {ty:"tf",q:"Kalıp yargılar yanlış genellemelere yol açabilir.",a:true},
+    {ty:"tf",q:"Farklı kültürler arasında hiçbir etkileşim olmaz.",a:false},
+    {ty:"fb",q:"Sözcükler arasında ilgi kuran, tek başına anlamı olmayan sözcüklere ____ denir.",a:"edat"},
+    {ty:"fb",q:"Bir grup hakkında genelleyici yargılara ____ yargı denir.",a:"kalıp"}
   ],
-  "Edat – Bağlaç – Ünlem": [
-    {ty:"mc",q:"\"Okula kadar yürüdüm.\" cümlesindeki 'kadar' kelimesi hangi tür sözcüktür?",o:["Bağlaç","Edat (ilgeç)","Ünlem","Zamir"],a:1},
-    {ty:"mc",q:"\"Hem çalıştı hem dinlendi.\" cümlesindeki 'hem...hem' hangi görevdedir?",o:["Edat","Bağlaç","Ünlem","Sıfat"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi bir ünlemdir?",o:["Ah! Çok acıdı.","Kitap okudu.","Eve gitti.","Su içti."],a:0},
-    {ty:"tf",q:"Edatlar tek başlarına anlam taşımaz, isimlerle birlikte kullanılırlar.",a:true},
-    {ty:"tf",q:"Bağlaçlar cümleleri veya sözcükleri birbirine bağlar.",a:true},
-    {ty:"fb",q:"\"Ve, ile, ama, fakat\" kelimeleri ____ görevindedir.",a:"bağlaç"}
+  "İletişim ve Sosyal İlişkiler": [
+    {ty:"mc",q:"Medyada yer alan bilgileri sorgulayarak değerlendirme becerisine ne denir?",o:["Medya okuryazarlığı","Etkin dinleme","Empati","Diyalog"],a:0},
+    {ty:"mc",q:"Bir kişinin toplumda sahip olduğu konum ve saygınlığa ne denir?",o:["Sosyal statü","Sosyal rol","Empati","Önyargı"],a:0},
+    {ty:"mc",q:"Bir haberin doğruluğunu anlamak için öncelikle ne yapılır?",o:["Kaynağı ve başka kaynakları kontrol etmek","Başlığa inanmak","Yorumları okumak","Hemen paylaşmak"],a:0},
+    {ty:"mc",q:"\"Kendini bilen, başkasını da anlar.\" cümlesinde 'kendini' hangi tür zamirdir?",o:["Dönüşlülük zamiri","İşaret zamiri","Soru zamiri","Belgisiz zamir"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde noktalama yanlışı yoktur?",o:["Ali, dün akşam geldi.","Ali dün, akşam geldi","Ali dün akşam, geldi","Ali, dün, akşam geldi"],a:0},
+    {ty:"tf",q:"Etkili iletişimde beden dili de rol oynar.",a:true},
+    {ty:"tf",q:"Dijital ortamda da nezaket kuralları geçerlidir.",a:true},
+    {ty:"tf",q:"Medyada gördüğümüz her bilgi mutlaka doğrudur.",a:false},
+    {ty:"fb",q:"Başkalarının duygularını anlayabilme becerisine ____ denir.",a:"empati"},
+    {ty:"fb",q:"'Kendi' sözcüğü ____ zamiri olarak kullanılır.",a:"dönüşlülük"}
   ],
-  "Yazım ve Noktalama": [
-    {ty:"mc",q:"Aşağıdaki kelimelerden hangisinin yazımı doğrudur?",o:["Herşey","Her şey","Herşe","Her şe"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde noktalama yanlışı yoktur?",o:["Ali, Ayşe ve Mehmet okula gitti.","Ali Ayşe, ve Mehmet, okula gitti.","Ali, Ayşe ve, Mehmet okula gitti.","Ali Ayşe ve Mehmet, okula, gitti."],a:0},
-    {ty:"mc",q:"\"Bu gece film izleyeceğiz.\" cümlesinde 'bu gece' nasıl yazılmalıdır?",o:["Bitişik: bugece","Ayrı: bu gece","Kesmeli: bu'gece","Büyük harfle: Bu Gece"],a:1},
-    {ty:"tf",q:"Kısaltmalar büyük harfle yapılmışsa nokta konulmaz.",a:true},
-    {ty:"tf",q:"Birleşik kelimeler her zaman ayrı yazılır.",a:false},
-    {ty:"fb",q:"Cümle içinde ara söz niteliğindeki ifadeler ____ arasına alınır.",a:"virgül / yay ayraç (parantez)"}
+  "Bilim ve Teknoloji": [
+    {ty:"mc",q:"Bilimsel bir çalışmada gözlem yapıp veri toplama sürecine ne denir?",o:["Bilimsel yöntem","Rastgele deneme","Tahmin","Sezgi"],a:0},
+    {ty:"mc",q:"İnternette kişisel bilgilerimizi korumak için ne yapmalıyız?",o:["Şifreleri kimseyle paylaşmamak","Herkese açık paylaşmak","Aynı şifreyi her yerde kullanmak","Bilgileri yayınlamak"],a:0},
+    {ty:"mc",q:"Teknolojinin bilinçli kullanımına örnek hangisidir?",o:["Kullanım süresini sınırlamak","Gece boyu ekran başında kalmak","Kılavuzu okumamak","Uyarıları önemsememek"],a:0},
+    {ty:"mc",q:"\"Bilgisayar\" kelimesi nasıl oluşmuştur?",o:["Birleşik kelime olarak","Tek kökle","Yalnızca ekle","Kısaltmayla"],a:0},
+    {ty:"mc",q:"Bir metinde ana düşünceyi destekleyen düşüncelere ne denir?",o:["Yardımcı düşünce","Ana düşünce","Konu","Başlık"],a:0},
+    {ty:"tf",q:"Bilimsel bilgi yeni kanıtlarla değişebilir.",a:true},
+    {ty:"tf",q:"Birleşik kelimeler genellikle bitişik yazılır.",a:true},
+    {ty:"tf",q:"Teknolojinin yalnızca olumlu etkileri vardır.",a:false},
+    {ty:"fb",q:"İki ya da daha çok sözcüğün birleşerek yeni bir sözcük oluşturmasına ____ kelime denir.",a:"birleşik"},
+    {ty:"fb",q:"İnternette gezinirken geride bıraktığımız kayıtlara dijital ____ izi denir.",a:"ayak"}
+  ],
+  "Lider Ruhlar": [
+    {ty:"mc",q:"Bir grubu ortak hedefe yönlendiren kişiye ne denir?",o:["Lider","Seyirci","Rakip","Aracı"],a:0},
+    {ty:"mc",q:"İyi bir liderin en önemli özelliği hangisidir?",o:["Dinlemek ve sorumluluk almak","Emir vermek","Kendi çıkarını düşünmek","Kural bozmak"],a:0},
+    {ty:"mc",q:"Bir toplulukta karar alırken en demokratik yol nedir?",o:["Görüşleri dinleyip oylamak","Tek kişinin karar vermesi","Kura çekmek","Sessiz kalmak"],a:0},
+    {ty:"mc",q:"\"Çalışkan öğrenci ödülü aldı.\" cümlesinde 'çalışkan' hangi tür sıfattır?",o:["Niteleme sıfatı","Sayı sıfatı","İşaret sıfatı","Soru sıfatı"],a:0},
+    {ty:"mc",q:"Metni okuyunuz: \"Lider, ekibinin güçlü yönlerini fark eder ve görev paylaşımını buna göre yapar.\" Bu metne göre lider ne yapar?",o:["Görevleri güçlü yönlere göre paylaştırır","Bütün işi kendi yapar","Görev vermez","Ekibi dinlemez"],a:0},
+    {ty:"tf",q:"Liderlik yalnızca bir kişinin doğuştan gelen özelliği değildir, geliştirilebilir.",a:true},
+    {ty:"tf",q:"İyi bir lider ekibin görüşlerini dikkate alır.",a:true},
+    {ty:"tf",q:"Sıfatlar isimlerin yerini tutar.",a:false},
+    {ty:"fb",q:"İsimleri niteleyen sözcüklere ____ sıfat denir.",a:"niteleme"},
+    {ty:"fb",q:"Bir grubu ortak amaca yönlendiren kişiye ____ denir.",a:"lider"}
   ]
 },
 "tr-7": {
-  "Sözcükte ve Cümlede Anlam": [
-    {ty:"mc",q:"'Bu kitabı okuyunca içim ısındı.' cümlesindeki 'ısındı' sözcüğü hangi anlamda kullanılmıştır?",o:["Gerçek anlamda","Mecaz anlamda","Terim anlamında","Yan anlamda"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde öznel bir yargı vardır?",o:["Türkiye'nin başkenti Ankara'dır.","Bu roman 320 sayfadan oluşmaktadır.","Bence bu şarkı yılın en güzel şarkısıdır.","Su, 100 derecede kaynar."],a:2},
-    {ty:"mc",q:"Aşağıdaki kelime çiftlerinden hangisi anlamdaş (eş anlamlı) değildir?",o:["Cevap - yanıt","Kısmet - nasip","Acele - yavaş","Kolay - basit"],a:2},
-    {ty:"tf",q:"Bir sözcüğün cümle içinde kazandığı yeni anlama 'mecaz anlam' denir.",a:true},
-    {ty:"tf",q:"'Eli kalem tutmak' deyimi, 'yazı yazabilmek' anlamında kullanılır.",a:true},
-    {ty:"fb",q:"Söyleyenin kişisel görüşünü yansıtan, doğruluğu tartışılabilecek yargılara ____ yargı denir.",a:"öznel"}
+  /* Resmî temalar. Sınıf düzeyindeki dil bilgisi kazanımları (fiil kip-kişi,
+     zarf, ek fiil, fiilde yapı, anlatım bozuklukları) ve söz varlığı temanın
+     bağlamı içinde ölçülür. */
+  "Hayat Boyu Gelişim": [
+    {ty:"mc",q:"'Sen bu işi başarabilirsin.' cümlesindeki fiil hangi kişiye göre çekimlenmiştir?",o:["2. tekil kişi","1. tekil kişi","3. tekil kişi","2. çoğul kişi"],a:0},
+    {ty:"mc",q:"\"Okuyacağım\" fiili hangi kipte çekimlenmiştir?",o:["Gelecek zaman","Geçmiş zaman","Şimdiki zaman","Emir kipi"],a:0},
+    {ty:"mc",q:"Kendini geliştirmek isteyen biri için en gerekli tutum hangisidir?",o:["Öğrenmeye açık olmak","Vazgeçmek","Değişime kapalı olmak","Ertelemek"],a:0},
+    {ty:"mc",q:"\"Hedef belirlemek\" neden önemlidir?",o:["Çabayı yönlendirdiği için","Zaman kaybettirdiği için","Kararsızlık yarattığı için","Gereksiz olduğu için"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi haber kiplerinden biridir?",o:["Şimdiki zaman","Emir","Dilek-şart","Gereklilik"],a:0},
+    {ty:"tf",q:"Fiiller kip ve kişi ekleriyle çekimlenir.",a:true},
+    {ty:"tf",q:"Öğrenme yaşam boyu sürebilir.",a:true},
+    {ty:"tf",q:"Emir kipi haber kiplerinden biridir.",a:false},
+    {ty:"fb",q:"Fiilin gerçekleştiği zamanı ve tarzı bildiren eklere ____ eki denir.",a:"kip"},
+    {ty:"fb",q:"Bir amaca ulaşmak için belirlenen sonuca ____ denir.",a:"hedef"}
   ],
-  "Paragraf": [
-    {ty:"mc",q:"'Kitap okumak, insanın hayal gücünü geliştirir. Farklı dünyalar keşfeden okur, kelime dağarcığını da zenginleştirir. Bu yüzden çocuklara küçük yaştan itibaren kitap okuma alışkanlığı kazandırılmalıdır.' Bu parçanın ana fikri aşağıdakilerden hangisidir?",o:["Kitaplar pahalıdır ve herkes alamaz.","Çocuklara erken yaşta kitap okuma alışkanlığı kazandırılmalıdır.","Hayal gücü sadece oyunla gelişir.","Kelime dağarcığı okulda öğrenilir."],a:1},
-    {ty:"mc",q:"'Arılar, çiçekten çiçeğe konarak hem beslenir hem de bitkilerin tozlaşmasını sağlar. Bu küçük canlılar sayesinde meyve ve sebze üretimi artar. Arı nüfusundaki azalma, tarım için büyük bir tehdittir.' Bu parçanın konusu nedir?",o:["Arıların bal yapma süreci","Arıların tozlaşmadaki rolü ve önemi","Meyve sebze çeşitleri","Tarımda kullanılan ilaçlar"],a:1},
-    {ty:"mc",q:"'Bazı öğrenciler ders çalışırken sessiz bir ortamı tercih ederken bazıları hafif müzik eşliğinde daha verimli çalışabilir. Örneğin arkadaşım Ayşe, kütüphanenin sessizliğinde ders çalışırken kardeşi ancak kulaklıkla müzik dinleyerek odaklanabiliyor.' Bu parçada düşünceyi geliştirme yollarından hangisi kullanılmıştır?",o:["Tanık gösterme","Örnekleme","Sayısal verilerden yararlanma","Tanımlama"],a:1},
-    {ty:"tf",q:"Bir paragrafta konuyu ilk kez ortaya koyan cümleye giriş cümlesi denir.",a:true},
-    {ty:"tf",q:"Bir metin farklı konulara geçildiğinde paragraflara ayrılır.",a:true},
-    {ty:"fb",q:"Bir paragrafın ele aldığı konuyu en kısa ve genel biçimde ifade eden cümleye paragrafın ____ denir.",a:"ana fikri"}
+  "Bir Hilal Uğruna": [
+    {ty:"mc",q:"Kurtuluş Savaşı'nda cephede ve cephe gerisinde verilen mücadele neyi gösterir?",o:["Millî birlik ve dayanışmayı","Bireysel çabayı","Kayıtsızlığı","Rekabeti"],a:0},
+    {ty:"mc",q:"\"Vatanını sevmek\" hangi değerle ifade edilir?",o:["Vatanseverlik","Cimrilik","Kayıtsızlık","Bencillik"],a:0},
+    {ty:"mc",q:"\"Çanakkale geçilmez.\" cümlesinde yüklem hangisidir?",o:["geçilmez","Çanakkale","cümle","yok"],a:0},
+    {ty:"mc",q:"\"Gelmiştir\" sözcüğünde ek fiil hangi görevde kullanılmıştır?",o:["Fiili yüklem olarak tamamlamak","İsmi yüklem yapmak","Soru sormak","Bağlama"],a:0},
+    {ty:"mc",q:"Şiirlerde vatan sevgisinin işlenmesi hangi temayla ilgilidir?",o:["Millî değerler","Doğa betimlemesi","Bilimsel bilgi","Ekonomi"],a:0},
+    {ty:"tf",q:"Ek fiil isimleri yüklem yapabilir.",a:true},
+    {ty:"tf",q:"Millî mücadelede halkın desteği önemli rol oynamıştır.",a:true},
+    {ty:"tf",q:"Yüklem cümlede işi yapanı bildirir.",a:false},
+    {ty:"fb",q:"İsimleri yüklem yapan, fiillere zaman anlamı katan yardımcı fiile ____ fiil denir.",a:"ek"},
+    {ty:"fb",q:"Cümlede işin, oluşun bildirildiği ögeye ____ denir.",a:"yüklem"}
   ],
-  "Fiiller: Kip ve Kişi": [
-    {ty:"mc",q:"'Yarın sizi ziyarete geleceğiz.' cümlesindeki fiilin kipi nedir?",o:["Görülen geçmiş zaman","Gelecek zaman","Geniş zaman","Şimdiki zaman"],a:1},
-    {ty:"mc",q:"'Keşke bu sınavı iyi geçirebilseydim.' cümlesindeki yüklem hangi kiple çekimlenmiştir?",o:["Emir kipi","Şart kipi","İstek kipi","Gereklilik kipi"],a:1},
-    {ty:"mc",q:"'Sen bu işi başarabilirsin.' cümlesindeki fiil hangi kişiye göre çekimlenmiştir?",o:["1. tekil kişi","2. tekil kişi","3. tekil kişi","2. çoğul kişi"],a:1},
-    {ty:"tf",q:"'-mış, -miş, -muş, -müş' eki, öğrenilen (rivayet) geçmiş zamanı bildirir.",a:true},
-    {ty:"tf",q:"'Okula gidiyorum.' cümlesindeki fiil, geniş zaman kipiyle çekimlenmiştir.",a:false},
-    {ty:"fb",q:"'Hemen buraya gel!' cümlesindeki yüklem ____ kipiyle çekimlenmiştir.",a:"emir"}
+  "İletişim ve Sosyal İlişkiler": [
+    {ty:"mc",q:"'Bir kişinin kendini karşısındakinin yerine koyması' hangi kavramdır?",o:["Empati","Önyargı","Ayrımcılık","Kayıtsızlık"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi etkili dinlemenin özelliği değildir?",o:["Konuşurken sürekli telefonla ilgilenmek","Göz teması kurmak","Sözünü kesmemek","Yargılamadan dinlemek"],a:0},
+    {ty:"mc",q:"\"Dün akşam erken yattım.\" cümlesinde 'dün akşam' hangi tür zarftır?",o:["Zaman zarfı","Durum zarfı","Yer-yön zarfı","Azlık-çokluk zarfı"],a:0},
+    {ty:"mc",q:"\"Çok hızlı koştu.\" cümlesinde 'çok' hangi tür zarftır?",o:["Azlık-çokluk zarfı","Zaman zarfı","Yer-yön zarfı","Soru zarfı"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerden hangisinde anlatım bozukluğu vardır?",o:["Yaşlı kadın yavaş yavaş yavaşça yürüdü.","Yaşlı kadın yavaşça yürüdü.","Kadın hızla yürüdü.","Kadın sessizce yürüdü."],a:0},
+    {ty:"tf",q:"Zarflar fiilleri, sıfatları ve başka zarfları niteler.",a:true},
+    {ty:"tf",q:"Gereksiz sözcük kullanımı anlatım bozukluğuna yol açar.",a:true},
+    {ty:"tf",q:"Zarflar yalnızca isimleri niteler.",a:false},
+    {ty:"fb",q:"İşin, oluşun ne zaman gerçekleştiğini bildiren zarflara ____ zarfı denir.",a:"zaman"},
+    {ty:"fb",q:"Gereksiz sözcük kullanımından doğan yanlışa anlatım ____ denir.",a:"bozukluğu"}
   ],
-  "Zarflar": [
-    {ty:"mc",q:"'Çocuk yavaşça odaya girdi.' cümlesinde altı çizili sözcük olan 'yavaşça' hangi zarf türüdür?",o:["Zaman zarfı","Durum zarfı","Miktar zarfı","Soru zarfı"],a:1},
-    {ty:"mc",q:"'Bu proje için oldukça fazla çalıştık.' cümlesindeki 'oldukça fazla' ifadesi hangi zarf çeşididir?",o:["Yer-yön zarfı","Zaman zarfı","Miktar zarfı","Durum zarfı"],a:2},
-    {ty:"mc",q:"'Neden bu kadar geç kaldın?' cümlesindeki 'neden' sözcüğü hangi zarf türüne örnektir?",o:["Soru zarfı","Zaman zarfı","Yer-yön zarfı","Durum zarfı"],a:0},
-    {ty:"tf",q:"Zarflar; fiillerin, fiilimsilerin, sıfatların ve başka zarfların anlamlarını etkileyen sözcüklerdir.",a:true},
-    {ty:"tf",q:"'Yukarı çıktı.' cümlesindeki 'yukarı' sözcüğü zaman zarfıdır.",a:false},
-    {ty:"fb",q:"Dün, yarın, akşam gibi sözcüklerle fiilin gerçekleşme vaktini bildiren zarflara ____ zarfı denir.",a:"zaman"}
+  "Türk Sanatı": [
+    {ty:"mc",q:"Arap harflerinin estetik biçimde yazılması sanatına ne denir?",o:["Hat","Ebru","Tezhip","Minyatür"],a:0},
+    {ty:"mc",q:"Su üzerine boya damlatılarak yapılan geleneksel sanat hangisidir?",o:["Ebru","Hat","Minyatür","Çini"],a:0},
+    {ty:"mc",q:"El yazması kitapları süsleme sanatına ne denir?",o:["Tezhip","Ebru","Hat","Oyma"],a:0},
+    {ty:"mc",q:"\"Ustalaşmak\" sözcüğü yapı bakımından nasıl bir fiildir?",o:["Türemiş fiil","Basit fiil","Birleşik fiil","Yardımcı fiil"],a:0},
+    {ty:"mc",q:"Metni okuyunuz: \"Geleneksel sanatlarımız, ustadan çırağa aktarılarak günümüze ulaşmıştır.\" Bu metne göre aktarım nasıl gerçekleşmiştir?",o:["Ustadan çırağa","Yalnızca kitapla","Yalnızca müzeyle","Yalnızca dijital ortamla"],a:0},
+    {ty:"tf",q:"Türemiş fiiller yapım eki almış fiillerdir.",a:true},
+    {ty:"tf",q:"Geleneksel sanatlarımız kültürel mirasımızın parçasıdır.",a:true},
+    {ty:"tf",q:"Basit fiiller yapım eki almış fiillerdir.",a:false},
+    {ty:"fb",q:"Yapım eki almış fiillere ____ fiil denir.",a:"türemiş"},
+    {ty:"fb",q:"Su üzerine boya damlatılarak yapılan geleneksel sanata ____ denir.",a:"ebru"}
   ],
-  "Ek Fiil": [
-    {ty:"mc",q:"'Sınıfın en çalışkan öğrencisiydi.' cümlesinde ek fiil hangi görevde kullanılmıştır?",o:["İsim soylu sözcüğü yüklem yapmıştır","Basit çekimli fiili bileşik çekime dönüştürmüştür","Fiile olumsuzluk anlamı katmıştır","Fiili isim-fiile dönüştürmüştür"],a:0},
-    {ty:"mc",q:"'Her sabah erken kalkarmış.' cümlesindeki fiil hangi bileşik çekimle kullanılmıştır?",o:["Görülen geçmiş zamanın hikâyesi","Geniş zamanın rivayeti","Şimdiki zamanın şartı","Gelecek zamanın hikâyesi"],a:1},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde ek fiil kullanılmamıştır?",o:["Hava bugün çok soğukmuş.","O, sınıfın en uzun boylusuydu.","Yarın erkenden kalkacağım.","Küçükken çok yaramazmış."],a:2},
-    {ty:"tf",q:"Ek fiilin olumsuzu 'değil' sözcüğü ile yapılır.",a:true},
-    {ty:"tf",q:"'Geliyordu.' sözcüğündeki '-du' eki, ek fiilin şimdiki zamanın hikâyesi çekimini gösterir.",a:true},
-    {ty:"fb",q:"İsim soylu sözcükleri yükleme dönüştüren veya basit çekimli fiilleri bileşik çekimli fiile dönüştüren fiile ____ denir.",a:"ek fiil"}
+  "Okuma Kültürü": [
+    {ty:"mc",q:"Bir metnin ana düşüncesini bulmak için ne yapılır?",o:["Metnin bütününe bakılır","İlk cümleye bakılır","Başlık boyutuna bakılır","Sayfa sayısına bakılır"],a:0},
+    {ty:"mc",q:"Okuduğunu anlama becerisini geliştirmenin en etkili yolu nedir?",o:["Düzenli ve çeşitli okuma yapmak","Hızlı geçmek","Sadece başlıkları okumak","Özet dinlemek"],a:0},
+    {ty:"mc",q:"Bir paragrafta konu ile ana düşünce arasındaki fark nedir?",o:["Konu neyden söz edildiği, ana düşünce iletilmek isteneni belirtir","İkisi aynıdır","Konu daha uzundur","Ana düşünce başlıktır"],a:0},
+    {ty:"mc",q:"\"Kitap okumak\" sözcük grubunda 'okumak' hangi türdendir?",o:["Fiilimsi (isim-fiil)","Sıfat","Zarf","Edat"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi öğretici metin türüdür?",o:["Makale","Hikâye","Şiir","Roman"],a:0},
+    {ty:"tf",q:"Fiilimsiler fiilden türeyip isim, sıfat veya zarf görevinde kullanılır.",a:true},
+    {ty:"tf",q:"Okuma alışkanlığı söz varlığını genişletir.",a:true},
+    {ty:"tf",q:"Öğretici metinlerde kurmaca olay örgüsü bulunması zorunludur.",a:false},
+    {ty:"fb",q:"Fiilden türeyip isim, sıfat ya da zarf gibi kullanılan sözcüklere ____ denir.",a:"fiilimsi"},
+    {ty:"fb",q:"Aynı konuyu işleyen cümle topluluğuna ____ denir.",a:"paragraf"}
   ],
-  "Fiilde Yapı": [
-    {ty:"mc",q:"Aşağıdaki fiillerden hangisi basit yapılı bir fiildir?",o:["Sevindirmek","Okudu","Yardım etmek","Göz kırpmak"],a:1},
-    {ty:"mc",q:"'Göz ardı etmek' fiili yapı bakımından nasıl bir fiildir?",o:["Basit fiil","Türemiş fiil","Birleşik fiil (deyimleşmiş)","Ek fiilli basit fiil"],a:2},
-    {ty:"mc",q:"'Temizlemek' fiili nasıl oluşmuştur?",o:["İsim kökünden fiil yapan ekle türemiştir","Fiil kökünden fiil yapan ekle türemiştir","Basit bir fiildir, kökü fiildir","Yardımcı fiille kurulmuş birleşik fiildir"],a:0},
-    {ty:"tf",q:"Birleşik fiiller; yardımcı fiillerle, kurallı birleşik fiillerle veya anlamca kaynaşmış birleşik fiillerle oluşturulabilir.",a:true},
-    {ty:"tf",q:"'Kitap okumak' ifadesindeki 'okumak' fiili birleşik fiildir.",a:false},
-    {ty:"fb",q:"Yapım eki almadan çekim eki alan fiillere ____ fiil denir.",a:"basit"}
-  ],
-  "Anlatım Bozuklukları": [
-    {ty:"mc",q:"'Bu kitabı okuyan herkes çok beğendiler.' cümlesindeki anlatım bozukluğunun nedeni nedir?",o:["Özne-yüklem uyumsuzluğu","Anlam belirsizliği","Gereksiz sözcük kullanımı","Ek eksikliği"],a:0},
-    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde anlatım bozukluğu vardır?",o:["Öğretmenimiz bize ödevlerimizi düzenli yapmamızı istedi.","Kardeşim hem yüzme hem de resim kursuna gidiyor.","Bu elbise hem çok pahalı hem de ucuzdu.","Arkadaşım bana yeni aldığı kitabı gösterdi."],a:2},
-    {ty:"mc",q:"'Yarın sabah erken saatte saat 7'de kalkacağım.' cümlesindeki anlatım bozukluğunun nedeni nedir?",o:["Anlamca çelişen sözcüklerin bir arada kullanılması","Gereksiz yere aynı anlama gelen sözcüklerin kullanılması (gereksiz tekrar)","Özne eksikliği","Tamlama yanlışlığı"],a:1},
-    {ty:"tf",q:"Bir cümlede gereksiz sözcük kullanılması anlatım bozukluğuna yol açabilir.",a:true},
-    {ty:"tf",q:"'Öğrencilerin çoğu sınavı başarıyla geçti fakat bazıları kaldı.' cümlesinde anlatım bozukluğu yoktur.",a:true},
-    {ty:"fb",q:"'Bu haber beni hem sevindirdi hem de üzüldüm.' cümlesindeki anlatım bozukluğunun nedeni, cümledeki yüklemlerin özneyle ____ bakımından uyumsuz olmasıdır.",a:"kişi"}
+  "Hak ve Sorumluluklar": [
+    {ty:"mc",q:"Bir demokraside vatandaşların yöneticileri belirlemek için kullandığı temel hak nedir?",o:["Seçme ve seçilme hakkı","Seyahat hakkı","Mülkiyet hakkı","Dinlenme hakkı"],a:0},
+    {ty:"mc",q:"Bireylerin bir konuda resmî makamlara yazılı başvurma hakkına ne denir?",o:["Dilekçe hakkı","Oy hakkı","Eğitim hakkı","Sağlık hakkı"],a:0},
+    {ty:"mc",q:"\"Herkes kanun önünde eşittir.\" cümlesi hangi ilkeyi anlatır?",o:["Hukukun üstünlüğü","Kuvvetler birliği","Saltanat","Ayrımcılık"],a:0},
+    {ty:"mc",q:"\"Ödevini yapan öğrenci başarılı olur.\" cümlesinde 'yapan' hangi fiilimsidir?",o:["Sıfat-fiil","İsim-fiil","Zarf-fiil","Ek fiil"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerden hangisinde anlatım bozukluğu vardır?",o:["Öğrenciler ve gençler toplantıya katıldı.","Öğrenciler toplantıya katıldı.","Gençler toplantıya katıldı.","Veliler toplantıya katıldı."],a:0},
+    {ty:"tf",q:"Haklarımızın yanında sorumluluklarımız da vardır.",a:true},
+    {ty:"tf",q:"Sıfat-fiiller isimleri niteler.",a:true},
+    {ty:"tf",q:"Anlam bakımından birbirini kapsayan sözcükleri birlikte kullanmak doğrudur.",a:false},
+    {ty:"fb",q:"Fiilden türeyip ismi niteleyen sözcüklere ____ fiil denir.",a:"sıfat"},
+    {ty:"fb",q:"Bireylerin resmî makamlara yazılı başvurma hakkına ____ hakkı denir.",a:"dilekçe"}
   ]
 },
 "tr-8": {
@@ -3063,225 +3265,245 @@ const UNIT_BANK = {
   ]
 },
 "tde-9": {
-  "Giriş: Edebiyat Nedir?": [
-    {ty:"mc",q:"Bir düşünceyi, bir duyguyu etkili ve güzel biçimde anlatmak amacıyla dilin sanat değeri taşıyacak şekilde kullanılmasına ne ad verilir?",o:["Dil bilgisi","Edebiyat","Hitabet","Fonetik"],a:1},
-    {ty:"mc",q:"Edebiyatın kendisine malzeme olarak kullandığı temel unsur aşağıdakilerden hangisidir?",o:["Ses","Renk ve çizgi","Dil","Hareket"],a:2},
-    {ty:"mc",q:"Aşağıdakilerden hangisi edebî metinlerin ortak özelliklerinden biri değildir?",o:["Kurmaca bir dünya sunması","Dilin sanatsal işlevde kullanılması","Yalnızca bilgi vermeyi amaçlaması","Okuyucuda estetik haz uyandırması"],a:2},
-    {ty:"tf",q:"Edebiyat, insan yaşayışını ve duygularını dil aracılığıyla etkili biçimde anlatan bir sanat dalıdır.",a:true},
-    {ty:"tf",q:"Resmî bir dilekçe ya da fatura metni edebî bir eser sayılır.",a:false},
-    {ty:"fb",q:"Sanatçının duygu, düşünce ve hayallerini anlatırken kullandığı temel malzemeye ____ denir.",a:"dil"}
+  /* Anahtar kavramlar: açık ve örtük ileti, çağrışım, edebî dil, gerçeklik,
+     günlük dil, hayal gücü, imge, kurmaca, sembol, sürükleyicilik,
+     yaratıcılık. Tema şiir ve deneme metinleri üzerinden yürütülür. */
+  "Sözün İnceliği": [
+    {ty:"mc",q:"Bir düşünceyi, bir duyguyu etkili ve güzel biçimde anlatmak amacıyla oluşturulan ürünlere ne ad verilir?",o:["Edebî eser","Ansiklopedi maddesi","Kullanım kılavuzu","Tutanak"],a:0},
+    {ty:"mc",q:"Edebiyatın kendisine malzeme olarak kullandığı temel unsur aşağıdakilerden hangisidir?",o:["Dil","Renk","Ses dalgası","Taş"],a:0},
+    {ty:"mc",q:"Şiirde zihinde canlanan tasarım ve görüntülere ne ad verilir?",o:["İmge","Kafiye","Redif","Ölçü"],a:0},
+    {ty:"mc",q:"Bir sözcüğün okurun zihninde başka kavramları hatırlatmasına ne denir?",o:["Çağrışım","Ölçü","Redif","Durak"],a:0},
+    {ty:"mc",q:"Edebî dil ile günlük dil arasındaki temel fark aşağıdakilerden hangisidir?",o:["Edebî dilde çok anlamlılık ve sanatlı anlatım öne çıkar","Günlük dil daha sanatlıdır","Edebî dilde yalnızca tek anlam bulunur","İkisi arasında fark yoktur"],a:0},
+    {ty:"mc",q:"Metinde doğrudan söylenmeyip sezdirilen anlama ne denir?",o:["Örtük ileti","Açık ileti","Ana düşünce","Konu"],a:0},
+    {ty:"mc",q:"Yazarın gerçek yaşamdan yola çıkarak hayal gücüyle oluşturduğu dünyaya ne denir?",o:["Kurmaca","Nesnellik","Kanıtlanabilirlik","Belgesellik"],a:0},
+    {ty:"mc",q:"Bir kavramı kendisi dışında bir varlıkla temsil etme yoluna ne denir?",o:["Sembol (simge)","Ölçü","Kafiye","Durak"],a:0},
+    {ty:"tf",q:"Edebî metinlerde bir sözcük birden çok anlama gelebilir.",a:true},
+    {ty:"tf",q:"Kurmaca metinlerde anlatılanların gerçekte yaşanmış olması zorunludur.",a:false},
+    {ty:"tf",q:"İmge, okurun zihninde duyusal bir canlanma oluşturur.",a:true},
+    {ty:"tf",q:"Açık iletiler metinde doğrudan ifade edilir.",a:true},
+    {ty:"fb",q:"Bir metnin okuru kendine bağlama, merak uyandırma özelliğine ____ denir.",a:"sürükleyicilik"},
+    {ty:"fb",q:"Şiirde sözcüklerin zihinde oluşturduğu tasarıma ____ denir.",a:"imge"}
   ],
-  "Hikâye": [
-    {ty:"mc",q:"Kişi, olay, zaman ve mekân unsurlarıyla kısa ve yoğun biçimde anlatılan kurmaca türe ne ad verilir?",o:["Roman","Hikâye","Deneme","Makale"],a:1},
-    {ty:"mc",q:"Olay örgüsünün serim, düğüm, çözüm bölümleriyle ilerlediği, Guy de Maupassant'ın öncülük ettiği hikâye tarzı aşağıdakilerden hangisidir?",o:["Durum hikâyesi","Olay hikâyesi (klasik vak'a hikâyesi)","Modern hikâye","Fantastik hikâye"],a:1},
-    {ty:"mc",q:"Aşağıdaki yazarlardan hangisi Türk edebiyatında 'durum hikâyeciliği'nin önemli temsilcilerinden biridir?",o:["Ömer Seyfettin","Sait Faik Abasıyanık","Namık Kemal","Ziya Gökalp"],a:1},
-    {ty:"tf",q:"Anton Çehov, durum (kesit) hikâyeciliğinin dünya edebiyatındaki öncülerindendir.",a:true},
-    {ty:"tf",q:"Hikâyede olay örgüsü mutlaka bir çözüm ve kesin sonuçla bitmek zorundadır.",a:false},
-    {ty:"fb",q:"Bir olayın kesin bir sonuca bağlanmadan, günlük yaşamdan bir kesitin anlatıldığı hikâye türüne ____ hikâyesi denir.",a:"durum"}
+  /* Anahtar kavramlar: açık ileti, ana duygu, ana düşünce, çağrışım, konu,
+     örtük ileti, tema, yardımcı düşünce, yazarın tutumu, yazar-metin ilişkisi,
+     yazma amacı */
+  "Anlam Arayışı": [
+    {ty:"mc",q:"Bir metinde üzerinde durulan, metnin ne hakkında olduğunu belirten unsur hangisidir?",o:["Konu","Ölçü","Kafiye","Redif"],a:0},
+    {ty:"mc",q:"Metinde yazarın okura iletmek istediği temel yargıya ne denir?",o:["Ana düşünce","Yardımcı düşünce","Kafiye","Durak"],a:0},
+    {ty:"mc",q:"Ana düşünceyi destekleyen, açıklayan düşüncelere ne denir?",o:["Yardımcı düşünce","Ana duygu","Tema","Konu"],a:0},
+    {ty:"mc",q:"Şiirde okura sezdirilen baskın duyguya ne denir?",o:["Ana duygu","Ana düşünce","Konu","Ölçü"],a:0},
+    {ty:"mc",q:"Bir metnin konusunun soyutlanmış, genel ifadesine ne denir?",o:["Tema","Konu","İleti","Başlık"],a:0},
+    {ty:"mc",q:"Yazarın ele aldığı konuya karşı yaklaşımını gösteren unsura ne denir?",o:["Yazarın tutumu","Kafiye düzeni","Ölçü","Durak"],a:0},
+    {ty:"mc",q:"Bir metnin yazılış amacını belirlemek için öncelikle neye bakılır?",o:["Metnin türü ve iletisine","Sayfa sayısına","Yazı tipine","Basım yılına"],a:0},
+    {ty:"tf",q:"Konu ile tema aynı şeyi ifade eder.",a:false},
+    {ty:"tf",q:"Aynı konu farklı yazarlar tarafından farklı temalarla ele alınabilir.",a:true},
+    {ty:"tf",q:"Yardımcı düşünceler ana düşünceyi destekler.",a:true},
+    {ty:"tf",q:"Bir metinde örtük ileti bulunamaz.",a:false},
+    {ty:"fb",q:"Metnin bütününden çıkarılan temel yargıya ____ düşünce denir.",a:"ana"},
+    {ty:"fb",q:"Yazarın metni hangi amaçla kaleme aldığına yazma ____ denir.",a:"amacı"}
   ],
-  "Şiir": [
-    {ty:"mc",q:"Şiirde dize sonlarındaki ses benzerliğine ne ad verilir?",o:["Redif","Kafiye","Ölçü","Ahenk"],a:1},
-    {ty:"mc",q:"Dize sonlarında tekrarlanan, anlamca ve görevce aynı olan ek veya kelimelere ne denir?",o:["Kafiye","Redif","Nazım birimi","Uyak"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi şiirde ahengi sağlayan unsurlardan biri değildir?",o:["Ölçü (vezin)","Kafiye ve redif","Ses tekrarları (aliterasyon-asonans)","Öyküleyici anlatım"],a:3},
-    {ty:"tf",q:"Hece ölçüsü, dizelerdeki hece sayısının eşitliğine dayanan bir ölçü türüdür.",a:true},
-    {ty:"tf",q:"Bir şiirde nazım birimi yalnızca dörtlük olabilir, başka birim kullanılamaz.",a:false},
-    {ty:"fb",q:"Dizelerin başında veya içinde aynı sessiz harflerin tekrar edilmesine ____ denir.",a:"aliterasyon"}
+  /* Anahtar kavramlar: ahenk unsurları (ölçü, kafiye, redif, durak), anlatıcı,
+     bakış açısı, giriş-gelişme-sonuç, mekân, nesnellik, olay örgüsü, öznellik,
+     serim-düğüm-çözüm */
+  "Anlamın Yapı Taşları": [
+    {ty:"mc",q:"Şiirde dize sonlarındaki ses benzerliğine ne ad verilir?",o:["Kafiye","Redif","Ölçü","Durak"],a:0},
+    {ty:"mc",q:"Dize sonlarında tekrarlanan, anlamca ve görevce aynı olan ek veya sözcüklere ne denir?",o:["Redif","Kafiye","Durak","İmge"],a:0},
+    {ty:"mc",q:"Kişi, olay, zaman ve mekân unsurlarıyla kısa ve yoğun biçimde kurgulanan anlatı türü hangisidir?",o:["Hikâye","Deneme","Makale","Fıkra"],a:0},
+    {ty:"mc",q:"Olay örgüsünün serim, düğüm ve çözüm bölümleriyle ilerlediği yapıya ne denir?",o:["Klasik (olay) hikâye yapısı","Bilgi görseli","Kafiye düzeni","Ölçü"],a:0},
+    {ty:"mc",q:"Bir anlatıda olayları aktaran sese ne denir?",o:["Anlatıcı","Yazar","Okur","Söyleyici"],a:0},
+    {ty:"mc",q:"Anlatıcının olayları kendi başından geçmiş gibi aktardığı bakış açısı hangisidir?",o:["Kahraman anlatıcı bakış açısı","Hâkim bakış açısı","Gözlemci bakış açısı","Nesnel bakış açısı"],a:0},
+    {ty:"mc",q:"Anlatıcının her şeyi bilerek, kişilerin iç dünyasına dahi girerek anlattığı bakış açısı hangisidir?",o:["Hâkim (ilahi) bakış açısı","Kahraman bakış açısı","Gözlemci bakış açısı","Öznel bakış açısı"],a:0},
+    {ty:"mc",q:"Öğretici metinlerde yapı genellikle hangi bölümlerden oluşur?",o:["Giriş-gelişme-sonuç","Serim-düğüm-çözüm","Beyit-kıta","Perde-sahne"],a:0},
+    {ty:"tf",q:"Nesnel anlatımda kişisel duygu ve yorumlara yer verilmez.",a:true},
+    {ty:"tf",q:"Öznel anlatımda yazarın kişisel görüşü öne çıkar.",a:true},
+    {ty:"tf",q:"Olay örgüsü, olayların rastgele sıralanmasıdır.",a:false},
+    {ty:"tf",q:"Mekân, anlatıda olayların geçtiği yeri belirtir.",a:true},
+    {ty:"fb",q:"Şiirde dizelerin hece sayısına ya da ses uzunluğuna dayanan ahenk unsuruna ____ denir.",a:"ölçü"},
+    {ty:"fb",q:"Hece ölçüsünde dizelerin okunurken bölündüğü yerlere ____ denir.",a:"durak"}
   ],
-  "Masal / Fabl": [
-    {ty:"mc",q:"Kahramanları genellikle hayvanlar, bitkiler veya cansız varlıklar olan, sonunda bir ders (ahlaki mesaj) veren kısa türe ne ad verilir?",o:["Fabl","Roman","Deneme","Efsane"],a:0},
-    {ty:"mc",q:"Aşağıdakilerden hangisi dünya edebiyatında fabl türünün en tanınmış temsilcilerindendir?",o:["La Fontaine","Victor Hugo","Shakespeare","Tolstoy"],a:0},
-    {ty:"mc",q:"Masal türüyle ilgili aşağıdaki bilgilerden hangisi yanlıştır?",o:["Olağanüstü kahraman ve olaylara yer verilir.","Yer ve zaman belirsizdir.","Anonimdir, yazarı bilinmez.","Anlatılan olaylar mutlaka gerçek yaşanmış olaylardır."],a:3},
-    {ty:"tf",q:"Fabllarda kişileştirme (teşhis) sanatına sıkça başvurulur.",a:true},
-    {ty:"tf",q:"Masallar, belirli bir yazarın imzasını taşıyan, telif hakkı bulunan eserlerdir.",a:false},
-    {ty:"fb",q:"Masalların, halkın ortak malı olması ve söyleyeninin belli olmaması özelliğine ____ denir.",a:"anonimlik"}
-  ],
-  "Roman": [
-    {ty:"mc",q:"Kişi, olay, zaman ve mekânın geniş biçimde ele alındığı, uzun soluklu kurmaca anlatı türüne ne ad verilir?",o:["Hikâye","Roman","Fıkra","Sohbet"],a:1},
-    {ty:"mc",q:"Türk edebiyatında ilk yerli roman kabul edilen 'Taaşşuk-ı Talat ve Fitnat' adlı eserin yazarı kimdir?",o:["Namık Kemal","Şemsettin Sami","Ahmet Mithat Efendi","Recaizade Mahmut Ekrem"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi romanın yapı unsurlarından biri değildir?",o:["Olay örgüsü","Kişiler","Vezin ve kafiye","Zaman ve mekân"],a:2},
-    {ty:"tf",q:"Roman türü, Türk edebiyatına Tanzimat Dönemi'nde Batı edebiyatı etkisiyle girmiştir.",a:true},
-    {ty:"tf",q:"Romanda yalnızca tek bir anlatıcı bakış açısı vardır, bu hiçbir romanda değişemez.",a:false},
-    {ty:"fb",q:"Bir romanda olayların geçtiği yere ____ denir.",a:"mekân"}
-  ],
-  "Tiyatro": [
-    {ty:"mc",q:"Seyirci karşısında sahnelenmek üzere yazılan, diyalog ve dramatik çatışmaya dayanan edebî türe ne ad verilir?",o:["Roman","Tiyatro","Deneme","Anı"],a:1},
-    {ty:"mc",q:"Bir oyun kişisinin sahnede yalnız kalarak kendi kendine, iç dünyasını dile getirdiği konuşmaya ne ad verilir?",o:["Diyalog","Monolog","Tirad","Repertuar"],a:1},
-    {ty:"mc",q:"Aşağıdaki yazarlardan hangisi dünya tiyatro edebiyatının trajedi türündeki en önemli temsilcilerindendir?",o:["Molière","Shakespeare","Ezop","Anton Çehov"],a:1},
-    {ty:"tf",q:"Trajedide seçkin/soylu kişiler arasındaki çatışmalar ağır, ciddi bir üslupla işlenir.",a:true},
-    {ty:"tf",q:"Tiyatro eserlerinde 'perde', oyunun 'sahne'den daha küçük bölümlerine verilen isimdir.",a:false},
-    {ty:"fb",q:"Bir oyun kişisinin sahnede diğer kişilere seslenircesine, ama uzun ve coşkulu biçimde yaptığı konuşmaya ____ denir.",a:"tirad"}
-  ],
-  "Biyografi – Otobiyografi": [
-    {ty:"mc",q:"Bir kişinin hayatının başka biri tarafından anlatıldığı yazı türüne ne ad verilir?",o:["Otobiyografi","Biyografi","Anı","Günlük"],a:1},
-    {ty:"mc",q:"Bir kişinin kendi hayatını kendisinin anlattığı yazı türüne ne ad verilir?",o:["Biyografi","Otobiyografi","Deneme","Fıkra"],a:1},
-    {ty:"mc",q:"Biyografi yazarken yazarın öncelikle dikkat etmesi gereken temel ilke aşağıdakilerden hangisidir?",o:["Kendi duygularını ön plana çıkarmak","Nesnel ve belgelere dayalı bilgi vermek","Kurgusal olaylar eklemek","Kişiyi olduğundan farklı göstermek"],a:1},
-    {ty:"tf",q:"Otobiyografide anlatıcı ile eserin konusu olan kişi aynıdır.",a:true},
-    {ty:"tf",q:"Biyografi türünde yazar, konu edindiği kişiyle mutlaka aynı dönemde yaşamış olmalıdır.",a:false},
-    {ty:"fb",q:"Ünlü bir kişinin hayatının başkası tarafından yazıya geçirilmesiyle oluşan türe ____ denir.",a:"biyografi"}
-  ],
-  "Mektup – E-posta": [
-    {ty:"mc",q:"Duygu, düşünce ve haberlerin karşıdaki bir kişiye yazılı olarak iletilmesini sağlayan türe ne ad verilir?",o:["Günlük","Mektup","Roman","Fabl"],a:1},
-    {ty:"mc",q:"Bir kişiye değil, kamuoyuna seslenmek amacıyla gazete ya da dergide yayımlanan mektup türüne ne ad verilir?",o:["Özel mektup","Resmî mektup","Açık mektup","Edebî mektup"],a:2},
-    {ty:"mc",q:"Aşağıdakilerden hangisi e-postanın mektuba göre öne çıkan bir özelliğidir?",o:["Elle yazılıp posta yoluyla gönderilmesi","Anında ve hızlı iletişim sağlaması","Yalnızca resmî kurumlar arasında kullanılması","Kâğıt zarf gerektirmesi"],a:1},
-    {ty:"tf",q:"Resmî mektuplarda samimi ve senli benli bir dil kullanılması beklenir.",a:false},
-    {ty:"tf",q:"E-posta, teknolojinin gelişmesiyle mektubun işlevini büyük ölçüde üstlenen bir iletişim aracıdır.",a:true},
-    {ty:"fb",q:"Bir mektupta gönderenin, alıcıya seslenirken kullandığı 'Sevgili... / Sayın...' gibi ifadelere ____ denir.",a:"hitap"}
-  ],
-  "Günlük – Blog": [
-    {ty:"mc",q:"Bir kişinin günlük yaşadığı olayları, izlenimlerini o günün tarihiyle kaydettiği yazı türüne ne ad verilir?",o:["Anı","Günlük","Biyografi","Deneme"],a:1},
-    {ty:"mc",q:"İnternet ortamında kişisel görüş, deneyim ve içeriklerin paylaşıldığı, genellikle tarih sırasına göre düzenlenen sayfalara ne ad verilir?",o:["Forum","Blog","Wiki","E-posta"],a:1},
-    {ty:"mc",q:"Günlük türüyle ilgili aşağıdaki bilgilerden hangisi yanlıştır?",o:["Yazıldığı gün itibarıyla tarih taşır.","Genellikle yazarın ölümünden sonra ya da izniyle yayımlanır.","Kurgusal bir kahramanın uydurma maceralarını anlatır.","İçtenlik ve öznellik ön plandadır."],a:2},
-    {ty:"tf",q:"Günlükte anlatım genellikle birinci tekil kişi ağzından, içten bir üslupla yapılır.",a:true},
-    {ty:"tf",q:"Blog, yalnızca kâğıt üzerine elle yazılan bir günlük türüdür.",a:false},
-    {ty:"fb",q:"Günlük türünde her yazının başına yazıldığı günün ____ eklenir.",a:"tarihi"}
+  /* Anahtar kavramlar: anlatım özellikleri (duruluk, akıcılık, yalınlık,
+     özgünlük, tutarlılık), anlatım teknikleri (geriye dönüş, monolog, diyalog),
+     düşünceyi geliştirme yolları (tanımlama, karşılaştırma) */
+  "Dilin Zenginliği": [
+    {ty:"mc",q:"Bir metinde gereksiz sözcük bulunmamasına ne denir?",o:["Duruluk","Akıcılık","Özgünlük","Tutarlılık"],a:0},
+    {ty:"mc",q:"Metnin kolay ve pürüzsüz okunmasını sağlayan niteliğe ne denir?",o:["Akıcılık","Duruluk","Yalınlık","Tutarlılık"],a:0},
+    {ty:"mc",q:"Bir metnin kendi içinde çelişki barındırmamasına ne denir?",o:["Tutarlılık","Duruluk","Akıcılık","Özgünlük"],a:0},
+    {ty:"mc",q:"Anlatımda süslü söyleyişten kaçınıp sade bir dil kullanmaya ne denir?",o:["Yalınlık","Özgünlük","Akıcılık","Tutarlılık"],a:0},
+    {ty:"mc",q:"Bir oyun kişisinin sahnede yalnız kalarak kendi kendine konuşmasına ne ad verilir?",o:["Monolog","Diyalog","Geriye dönüş","Betimleme"],a:0},
+    {ty:"mc",q:"Anlatıda olayın akışının kesilip geçmişe dönülmesine ne denir?",o:["Geriye dönüş","Monolog","Diyalog","Öyküleme"],a:0},
+    {ty:"mc",q:"Bir kavramın ne olduğunu belirtmek için kullanılan düşünceyi geliştirme yolu hangisidir?",o:["Tanımlama","Karşılaştırma","Örneklendirme","Tanık gösterme"],a:0},
+    {ty:"mc",q:"İki varlık ya da kavram arasındaki benzerlik ve farklılıkları ortaya koyan yol hangisidir?",o:["Karşılaştırma","Tanımlama","Öyküleme","Betimleme"],a:0},
+    {ty:"tf",q:"Diyalog, iki ya da daha çok kişinin karşılıklı konuşmasıdır.",a:true},
+    {ty:"tf",q:"Özgünlük, anlatımın başkalarından farklı ve kendine ait olmasıdır.",a:true},
+    {ty:"tf",q:"Duruluk ile akıcılık aynı anlatım özelliğidir.",a:false},
+    {ty:"tf",q:"Tanık gösterme, düşünceyi geliştirme yollarından biridir.",a:true},
+    {ty:"fb",q:"Bir düşünceyi somutlaştırmak için benzer durumlar sunmaya ____ denir.",a:"örneklendirme"},
+    {ty:"fb",q:"Anlatımda gereksiz sözcük kullanılmamasına ____ denir.",a:"duruluk"}
   ]
 },
 "tde-10": {
-  "Edebiyat Tarihi ve Dönemler": [
-    {ty:"mc",q:"Türk edebiyatı, temel olarak hangi büyük dönemlere ayrılarak incelenir?",o:["Yalnızca Divan ve Halk edebiyatı","İslamiyet Öncesi, Geçiş Dönemi, İslami Dönem ve Batı Etkisindeki Türk Edebiyatı","Yalnızca Tanzimat ve Cumhuriyet dönemleri","Yalnızca Servet-i Fünun ve Millî Edebiyat"],a:1},
-    {ty:"mc",q:"Türk edebiyatında Batı etkisinin başlangıcı olarak kabul edilen dönem aşağıdakilerden hangisidir?",o:["Tanzimat Dönemi","Divan Edebiyatı Dönemi","İslamiyet Öncesi Dönem","Geçiş Dönemi"],a:0},
-    {ty:"mc",q:"Bir edebiyat dönemini incelerken aşağıdakilerden hangisine öncelikle bakılmaz?",o:["Dönemin siyasi ve sosyal olayları","Eserlerin yazıldığı dilin ve üslubun özellikleri","Yazarların doğum yerlerinin hava durumu","Dönemin sanat ve düşünce akımları"],a:2},
-    {ty:"tf",q:"Edebiyat tarihi, eserleri yalnızca estetik açıdan değil, yazıldığı dönemin sosyal ve tarihî koşullarıyla birlikte ele alır.",a:true},
-    {ty:"tf",q:"Türk edebiyatı tarihinde tüm dönemler aynı anda, tek bir kültür dairesinin etkisiyle oluşmuştur.",a:false},
-    {ty:"fb",q:"Kutadgu Bilig ve Divânü Lügati't-Türk gibi eserlerin yazıldığı, İslami kültürün Türk edebiyatına girmeye başladığı döneme ____ dönemi denir.",a:"geçiş"}
+  /* Anahtar kavramlar: ahenk, anonim, ezgi, gelenek, kurmaca, masal
+     anlatıcısı, masalın bölümleri, olağanüstülük, ritim, sözlü kültür,
+     varyant, yapı unsurları (olay, kişiler, zaman, mekân).
+     Not: Eski "Masal / Fabl" ve "İslamiyet Öncesi Şiir" ünitelerinin sözlü
+     kültürle ilgili soruları buraya taşındı. */
+  "Sözün Ezgisi": [
+    {ty:"mc",q:"Söyleyeni bilinmeyen, halkın ortak ürünü olan eserlere ne denir?",o:["Anonim ürünler","Divan şiiri","Deneme","Makale"],a:0},
+    {ty:"mc",q:"Masallarda olayların olağan dışı özellikler taşımasına ne denir?",o:["Olağanüstülük","Nesnellik","Kanıtlanabilirlik","Duruluk"],a:0},
+    {ty:"mc",q:"Masalın giriş bölümünde yer alan kalıplaşmış sözlere ne denir?",o:["Tekerleme","Kafiye","Redif","Durak"],a:0},
+    {ty:"mc",q:"Aynı masalın farklı yörelerde değişik biçimlerde anlatılmasına ne denir?",o:["Varyant","Anonimlik","Ritim","Ezgi"],a:0},
+    {ty:"mc",q:"Sözlü kültür ürünlerinin kuşaktan kuşağa aktarılma yolu hangisidir?",o:["Anlatım ve ezgiyle söyleme","Yalnızca basılı kitap","Yalnızca dijital ortam","Yalnızca resim"],a:0},
+    {ty:"mc",q:"İslamiyet öncesi Türk şiirinde ölüm ve yas konularını işleyen tür hangisidir?",o:["Sagu","Koşuk","Destan","Mesnevi"],a:0},
+    {ty:"mc",q:"İslamiyet öncesi Türk edebiyatında sevinç, doğa ve aşk gibi konuları işleyen tür hangisidir?",o:["Koşuk","Sagu","Sav","Mesnevi"],a:0},
+    {ty:"mc",q:"Masalda olay, kişiler, zaman ve mekân neyi oluşturur?",o:["Yapı unsurlarını","Ahenk unsurlarını","Anlatım biçimlerini","Ölçüyü"],a:0},
+    {ty:"tf",q:"Masallarda zaman ve mekân genellikle belirsizdir.",a:true},
+    {ty:"tf",q:"Anonim ürünlerin yazarı bilinir.",a:false},
+    {ty:"tf",q:"Sözlü kültür ürünleri toplumun ortak değerlerini yansıtır.",a:true},
+    {ty:"tf",q:"Masal anlatıcısı, dinleyiciyle iletişim kurarak anlatımı biçimlendirir.",a:true},
+    {ty:"fb",q:"Aynı ürünün yöreye göre değişen biçimlerine ____ denir.",a:"varyant"},
+    {ty:"fb",q:"İslamiyet öncesi Türk edebiyatında atasözü karşılığı olarak kullanılan türe ____ denir.",a:"sav"}
   ],
-  "Dede Korkut ve Halk Hikâyesi": [
-    {ty:"mc",q:"Oğuz Türklerinin yaşayışını, mertlik ve kahramanlık anlayışını yansıtan, hem sözlü hem yazılı geleneğe ait ürün olarak kabul edilen eser aşağıdakilerden hangisidir?",o:["Dede Korkut Hikâyeleri","Kutadgu Bilig","Divan-ı Hikmet","Şehname"],a:0},
-    {ty:"mc",q:"Aşkı konu edinen, âşık tarzı halk edebiyatı ürünlerinden olan ve genellikle nazım-nesir karışık anlatılan türe ne ad verilir?",o:["Destan","Halk hikâyesi","Fabl","Kaside"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi Dede Korkut Hikâyeleri'nin özelliklerinden biri değildir?",o:["Nazım-nesir karışık anlatılması","Oğuz Türklerinin sosyal hayatını yansıtması","Yazarının belli, tek bir kişi olması","Kopuzla anlatılan bir gelenekten gelmesi"],a:2},
-    {ty:"tf",q:"Kerem ile Aslı, Türk halk hikâyeciliğinin tanınmış örneklerindendir.",a:true},
-    {ty:"tf",q:"Halk hikâyelerinde olaylar yalnızca manzum (şiir) biçimde anlatılır, hiç düz yazı bölüm bulunmaz.",a:false},
-    {ty:"fb",q:"Oğuznamelerde boyları öğütleriyle yönlendiren, ozan kimliğiyle anılan ve hikâyelere adını veren bilge kişinin adı ____ 'tur.",a:"Dede Korkut"}
+  /* Anahtar kavramlar: açık ve örtük ileti, ahenk unsurları, aruz, beyit,
+     gerçeklik, imge, kafiye, ölçü, ritim, sembol (simge).
+     Not: Eski "Halk ve Divan Şiiri" ünitesinin soruları buraya taşındı. */
+  "Kelimelerin Ritmi": [
+    {ty:"mc",q:"Divan şiirinde kullanılan, hecelerin uzunluk-kısalığına dayanan ölçü hangisidir?",o:["Aruz ölçüsü","Hece ölçüsü","Serbest ölçü","Durak ölçüsü"],a:0},
+    {ty:"mc",q:"Divan şiirinde iki dizeden oluşan birime ne denir?",o:["Beyit","Kıta","Bend","Dörtlük"],a:0},
+    {ty:"mc",q:"Divan şiirinin en yaygın nazım şekillerinden olan, aşk ve güzellik konularını işleyen tür hangisidir?",o:["Gazel","Mesnevi","Koşma","Semai"],a:0},
+    {ty:"mc",q:"Aşağıdaki şairlerden hangisi tekke (tasavvuf) edebiyatının Anadolu'daki öncüsü kabul edilir?",o:["Yunus Emre","Fuzûlî","Bâkî","Nedim"],a:0},
+    {ty:"mc",q:"Halk şiirinde en çok kullanılan nazım şekli hangisidir?",o:["Koşma","Gazel","Kaside","Mesnevi"],a:0},
+    {ty:"mc",q:"Halk şiirinde kullanılan ölçü hangisidir?",o:["Hece ölçüsü","Aruz ölçüsü","Serbest ölçü","Karışık ölçü"],a:0},
+    {ty:"mc",q:"Şiirde sesin düzenli yinelenmesiyle oluşan akışa ne denir?",o:["Ritim","Konu","Tema","İleti"],a:0},
+    {ty:"tf",q:"Aruz ölçüsü hecelerin açık-kapalı olmasına dayanır.",a:true},
+    {ty:"tf",q:"Kafiye ve redif ahenk unsurlarındandır.",a:true},
+    {ty:"tf",q:"Halk şiiri aruz ölçüsüyle yazılır.",a:false},
+    {ty:"tf",q:"Şiirde sembol, soyut bir kavramı somut bir varlıkla anlatmaya yarar.",a:true},
+    {ty:"fb",q:"Divan şiirinde iki dizelik birime ____ denir.",a:"beyit"},
+    {ty:"fb",q:"Halk şiirinde dizelerin hece sayısına dayanan ölçüye ____ ölçüsü denir.",a:"hece"}
   ],
-  "İslamiyet Öncesi ve Geçiş Dönemi Şiiri": [
-    {ty:"mc",q:"İslamiyet öncesi Türk şiirinde ölüm ve yas konularını işleyen, cenaze törenlerinde söylenen nazım türüne ne ad verilir?",o:["Koşuk","Sagu","Sav","Destan"],a:1},
-    {ty:"mc",q:"İslamiyet öncesi Türk edebiyatında sevinç, doğa, aşk gibi konuları işleyen ve düğünlerde/şölenlerde söylenen şiirlere ne ad verilir?",o:["Sagu","Koşuk","Kaside","Gazel"],a:1},
-    {ty:"mc",q:"Aşağıdaki eserlerden hangisi Geçiş Dönemi'nde yazılmış, İslami-Türk kültürünün ilk ürünlerinden biridir?",o:["Kutadgu Bilig","Dede Korkut Hikâyeleri","Divan-ı Hümayun","Şecere-i Terâkime"],a:0},
-    {ty:"tf",q:"Orhun Yazıtları, Türklerin bilinen ilk yazılı belgelerinden kabul edilir ve hem tarihî hem edebî değer taşır.",a:true},
-    {ty:"tf",q:"Sav, İslamiyet öncesi Türk edebiyatında dönemin uzun destan anlatılarına verilen isimdir.",a:false},
-    {ty:"fb",q:"Yusuf Has Hâcib tarafından yazılan ve 'mutluluk veren bilgi' anlamına gelen Geçiş Dönemi eseri ____ adını taşır.",a:"Kutadgu Bilig"}
+  /* Anahtar kavramlar: anlatım biçimleri, destan, didaktik üslup, doğal
+     destan, fabl, halk hikâyesi, kurmaca, mesnevi, motif, olağanüstülük,
+     sözlü gelenek, yapma destan.
+     Not: Eski "Destan – Efsane" ve "Dede Korkut ve Halk Hikâyesi" ünitelerinin
+     soruları buraya taşındı. */
+  "Dünden Bugüne": [
+    {ty:"mc",q:"Bir milletin tarih öncesi dönemlerine ait, olağanüstü olay ve kahramanları anlatan uzun manzum eserlere ne denir?",o:["Destan","Fabl","Deneme","Makale"],a:0},
+    {ty:"mc",q:"Kahramanları genellikle hayvanlar olan, sonunda ders verilen kısa öykülere ne denir?",o:["Fabl","Destan","Mesnevi","Tezkire"],a:0},
+    {ty:"mc",q:"Oğuz Türklerinin yaşayışını, mertlik ve kahramanlık anlayışını anlatan eser hangisidir?",o:["Dede Korkut Hikâyeleri","Kutadgu Bilig","Divan-ı Hikmet","Şehname"],a:0},
+    {ty:"mc",q:"Aşkı konu edinen, âşık tarzı halk edebiyatı ürünlerinden olan anlatı türü hangisidir?",o:["Halk hikâyesi","Fabl","Mesnevi","Tezkire"],a:0},
+    {ty:"mc",q:"Bir şairin yazdığı, uzun konuları beyitler hâlinde anlatan divan edebiyatı türü hangisidir?",o:["Mesnevi","Gazel","Kaside","Rubai"],a:0},
+    {ty:"mc",q:"Halk anlatılarında yinelenen kalıplaşmış ögelere ne denir?",o:["Motif","Kafiye","Redif","Durak"],a:0},
+    {ty:"mc",q:"Bir şair tarafından sonradan kaleme alınan destanlara ne denir?",o:["Yapma destan","Doğal destan","Halk hikâyesi","Fabl"],a:0},
+    {ty:"mc",q:"Okura bilgi ve ders vermeyi amaçlayan üsluba ne denir?",o:["Didaktik üslup","Lirik üslup","Epik üslup","Dramatik üslup"],a:0},
+    {ty:"tf",q:"Doğal destanlar sözlü gelenekte oluşup sonradan yazıya geçirilmiştir.",a:true},
+    {ty:"tf",q:"Fabllarda genellikle bir öğüt (ders) bulunur.",a:true},
+    {ty:"tf",q:"Halk hikâyeleri yalnızca yazılı olarak üretilmiştir.",a:false},
+    {ty:"tf",q:"Destanlarda olağanüstü olaylara yer verilir.",a:true},
+    {ty:"fb",q:"Halk anlatılarında yinelenen kalıp ögelere ____ denir.",a:"motif"},
+    {ty:"fb",q:"Bilgi ve ders verme amacı taşıyan anlatım tutumuna ____ üslup denir.",a:"didaktik"}
   ],
-  "Halk ve Divan Şiiri": [
-    {ty:"mc",q:"Aşağıdaki şairlerden hangisi tekke (tasavvuf) edebiyatının Anadolu'daki en önemli temsilcilerindendir?",o:["Karacaoğlan","Yunus Emre","Fuzuli","Bakî"],a:1},
-    {ty:"mc",q:"Divan şiirinin en yaygın nazım şekillerinden olan, aşk ve güzellik konularını işleyen, beyitlerle kurulan nazım şekli aşağıdakilerden hangisidir?",o:["Gazel","Koşma","Mani","Türkü"],a:0},
-    {ty:"mc",q:"Halk şiirinde dörtlüklerle kurulan, hece ölçüsüyle yazılan ve aşk, doğa, ayrılık gibi konuları işleyen nazım şekli aşağıdakilerden hangisidir?",o:["Kaside","Koşma","Gazel","Rubai"],a:1},
-    {ty:"tf",q:"Divan şiiri aruz ölçüsüyle, halk şiiri ise genellikle hece ölçüsüyle yazılır.",a:true},
-    {ty:"tf",q:"Fuzuli, Divan edebiyatının değil, âşık tarzı halk edebiyatının temsilcisidir.",a:false},
-    {ty:"fb",q:"Halk edebiyatında ozanların/âşıkların şiirlerini söylerken çaldığı, tellerden oluşan geleneksel çalgıya ____ denir.",a:"saz"}
-  ],
-  "Destan – Efsane": [
-    {ty:"mc",q:"Bir milletin tarih öncesi dönemlerine ait, olağanüstü olay ve kahramanları konu edinen, toplumun ortak hafızasından doğan uzun manzum anlatılara ne ad verilir?",o:["Destan","Anı","Gezi yazısı","Mektup"],a:0},
-    {ty:"mc",q:"Yazıya geçirilmeden önce sözlü gelenekte oluşan, bir olayın ortaya çıkışını anlatan ve halk arasında gerçek olduğuna inanılan kısa anlatılara ne ad verilir?",o:["Efsane","Roman","Kaside","Deneme"],a:0},
-    {ty:"mc",q:"Aşağıdakilerden hangisi Türk destanlarından biri değildir?",o:["Oğuz Kağan Destanı","Ergenekon Destanı","Manas Destanı","İlyada Destanı"],a:3},
-    {ty:"tf",q:"Doğal destanlar, belli bir yazarı olmayan, toplumun ortak ürünü olan destanlardır.",a:true},
-    {ty:"tf",q:"Yapma destanlar da tıpkı doğal destanlar gibi anonimdir, yazarı bilinmez.",a:false},
-    {ty:"fb",q:"Türklerin sıkışıp kaldıkları vatandan bir demir dağı eriterek çıkışını anlatan destana ____ Destanı denir.",a:"Ergenekon"}
-  ],
-  "Roman": [
-    {ty:"mc",q:"Tanzimat Dönemi'nde 'roman' türünün Türk edebiyatına girmesinde etkili olan temel gelişme aşağıdakilerden hangisidir?",o:["Divan şiiri geleneğinin güçlenmesi","Batı edebiyatından yapılan çeviriler ve Batı ile kurulan kültürel ilişkiler","Halk hikâyeciliğinin sona ermesi","Aruz ölçüsünün terk edilmesi"],a:1},
-    {ty:"mc",q:"Servet-i Fünun Dönemi romanında öne çıkan akım aşağıdakilerden hangisidir?",o:["Klasisizm","Realizm ve Natüralizm","Sürrealizm","Dadaizm"],a:1},
-    {ty:"mc",q:"Halit Ziya Uşaklıgil'in 'Aşk-ı Memnu' adlı eseri hangi dönemin roman anlayışını yansıtır?",o:["Tanzimat Dönemi","Servet-i Fünun Dönemi","Millî Edebiyat Dönemi","Cumhuriyet Dönemi"],a:1},
-    {ty:"tf",q:"Tanzimat Dönemi'nin ilk romanlarında teknik kusurlar ve romantizm etkisi görülür.",a:true},
-    {ty:"tf",q:"Millî Edebiyat Dönemi romanlarında Anadolu ve halk yaşayışı konu edinilmemiştir.",a:false},
-    {ty:"fb",q:"Recaizade Mahmut Ekrem'in, dönemin yanlış Batılılaşmasını eleştirdiği romanı ____ adını taşır.",a:"Araba Sevdası"}
-  ],
-  "Tiyatro": [
-    {ty:"mc",q:"Türk edebiyatında sahnelenen ilk tiyatro eseri kabul edilen 'Şair Evlenmesi'nin yazarı kimdir?",o:["Namık Kemal","Şinasi","Ahmet Vefik Paşa","Ziya Paşa"],a:1},
-    {ty:"mc",q:"Tanzimat Dönemi tiyatrosunda vatan, hürriyet gibi konuları işleyen, 'Vatan yahut Silistre' adlı oyunuyla tanınan yazar kimdir?",o:["Namık Kemal","Şinasi","Recaizade Mahmut Ekrem","Abdülhak Hamit Tarhan"],a:0},
-    {ty:"mc",q:"Osmanlı'da halk arasında doğaçlamaya dayalı, güldürü ağırlıklı geleneksel tiyatro türü aşağıdakilerden hangisidir?",o:["Tuluat tiyatrosu","Trajedi","Opera","Bale"],a:0},
-    {ty:"tf",q:"Türk tiyatrosu, Batılı anlamda Tanzimat Dönemi'nde gelişmeye başlamıştır.",a:true},
-    {ty:"tf",q:"Karagöz ve Orta Oyunu, Batılı anlamda modern tiyatronun ilk örnekleridir.",a:false},
-    {ty:"fb",q:"Şinasi'nin yazdığı ve Türk edebiyatının ilk tiyatro eseri kabul edilen oyunun adı ____'dir.",a:"Şair Evlenmesi"}
-  ],
-  "Anı": [
-    {ty:"mc",q:"Bir kişinin yaşadığı, tanık olduğu olayları geçmişe dönük olarak anlattığı yazı türüne ne ad verilir?",o:["Günlük","Anı (Hatıra)","Biyografi","Fabl"],a:1},
-    {ty:"mc",q:"Anı türüyle günlük türü arasındaki temel fark aşağıdakilerden hangisidir?",o:["Anı olay anında, günlük ise yıllar sonra yazılır.","Anı genellikle olaydan bir süre sonra hatırlanarak, günlük ise olayın yaşandığı gün yazılır.","Anı yalnızca ünlü kişiler tarafından yazılabilir.","Günlükte üçüncü tekil kişi anlatımı zorunludur."],a:1},
-    {ty:"mc",q:"Falih Rıfkı Atay'ın Atatürk ve Cumhuriyet yıllarına tanıklığını anlattığı anı türü eserlerinden biri aşağıdakilerden hangisidir?",o:["Çankaya","Aşk-ı Memnu","Mai ve Siyah","Sinekli Bakkal"],a:0},
-    {ty:"tf",q:"Anı türünde yazar, tanık olduğu veya bizzat yaşadığı olayları öznel bir bakış açısıyla aktarır.",a:true},
-    {ty:"tf",q:"Anı türünde anlatılan olayların gerçekliği önemli değildir, tamamen hayal ürünü olabilir.",a:false},
-    {ty:"fb",q:"Kişinin geçmişte yaşadığı veya tanık olduğu olayları belgesel bir değerle anlattığı türe anı ya da diğer adıyla ____ denir.",a:"hatıra"}
-  ],
-  "Gezi Yazısı – Haber Metni": [
-    {ty:"mc",q:"Bir yazarın gezip gördüğü yerlerin özelliklerini, izlenimlerini anlattığı yazı türüne ne ad verilir?",o:["Gezi yazısı","Deneme","Fıkra","Sohbet"],a:0},
-    {ty:"mc",q:"Osmanlı Dönemi'nde kaleme aldığı 'Seyahatname' adlı eseriyle tanınan, gezip gördüğü yerleri ayrıntılı biçimde anlatan yazar kimdir?",o:["Evliya Çelebi","Kâtip Çelebi","Piri Reis","Naima"],a:0},
-    {ty:"mc",q:"Haber metninin okuyucuya '5N1K' (ne, nerede, ne zaman, nasıl, niçin, kim) ilkesine göre bilgi vermesinin temel amacı aşağıdakilerden hangisidir?",o:["Okuyucuyu duygusal olarak etkilemek","Olayı eksiksiz ve nesnel biçimde aktarmak","Yazarın kişisel görüşünü kanıtlamak","Şiirsel bir anlatım oluşturmak"],a:1},
-    {ty:"tf",q:"Gezi yazılarında yazarın gözlem ve izlenimlerine geniş yer verilir.",a:true},
-    {ty:"tf",q:"Haber metinlerinde nesnellik esastır, yazarın kişisel yorumu haberin temelini oluşturmalıdır.",a:false},
-    {ty:"fb",q:"Gezip görülen yerlerin anlatıldığı, Divan edebiyatındaki karşılığı 'seyahatname' olan türün günümüzdeki adı ____ yazısıdır.",a:"gezi"}
+  /* Anahtar kavramlar: açık ve örtük ileti, değişim, dönem, hikâye, kurmaca,
+     millî bilinç, millî edebiyat, olağanüstülük, roman, sözlü kültür, şiir,
+     yaşantı, yenilik.
+     Not: Eski "Edebiyat Tarihi ve Dönemler" ile "Roman" ünitelerinin soruları
+     buraya taşındı. */
+  "Nesillerin Mirası": [
+    {ty:"mc",q:"Türk edebiyatı, temel olarak hangi büyük dönemlere ayrılarak incelenir?",o:["İslamiyet öncesi, İslamî dönem ve Batı etkisindeki dönem","Yalnızca Cumhuriyet dönemi","Yalnızca Divan dönemi","Yalnızca halk edebiyatı"],a:0},
+    {ty:"mc",q:"Türk edebiyatında Batı etkisinin başlangıcı olarak kabul edilen dönem hangisidir?",o:["Tanzimat Dönemi","Servet-i Fünun","Millî Edebiyat","Cumhuriyet"],a:0},
+    {ty:"mc",q:"Kişi, olay, zaman ve mekânın geniş biçimde ele alındığı, uzun kurmaca anlatı türü hangisidir?",o:["Roman","Hikâye","Fabl","Deneme"],a:0},
+    {ty:"mc",q:"Türk edebiyatında ilk yerli roman kabul edilen eser hangisidir?",o:["Taaşşuk-ı Talat ve Fitnat","İntibah","Araba Sevdası","Mai ve Siyah"],a:0},
+    {ty:"mc",q:"Millî Edebiyat akımının temel amacı aşağıdakilerden hangisidir?",o:["Millî değerlere ve yerli konulara yönelmek","Yalnızca Batı'yı taklit etmek","Yalnızca aruzu kullanmak","Yalnızca çeviri yapmak"],a:0},
+    {ty:"mc",q:"Bir edebî dönemi belirlemede en önemli ölçüt aşağıdakilerden hangisidir?",o:["Dönemin sanat anlayışı ve toplumsal koşulları","Kitapların sayfa sayısı","Yazarların yaşı","Kitapların rengi"],a:0},
+    {ty:"mc",q:"Edebî metinlerin dönemin toplumsal yaşantısını yansıtması neyi gösterir?",o:["Edebiyat ile toplum arasındaki ilişkiyi","Edebiyatın toplumdan bağımsızlığını","Metinlerin gerçek dışı olduğunu","Dönemin önemsizliğini"],a:0},
+    {ty:"tf",q:"Roman ve hikâye kurmaca anlatı türlerindendir.",a:true},
+    {ty:"tf",q:"Edebî dönemler toplumsal değişimlerden etkilenir.",a:true},
+    {ty:"tf",q:"Millî edebiyat anlayışı yerli konulardan uzak durmayı savunur.",a:false},
+    {ty:"tf",q:"Hikâye, romana göre daha kısa ve yoğun bir türdür.",a:true},
+    {ty:"fb",q:"Belirli sanat anlayışının egemen olduğu zaman aralığına edebî ____ denir.",a:"dönem"},
+    {ty:"fb",q:"Bir toplumun kendi değerlerine yönelme bilincine ____ bilinç denir.",a:"millî"}
   ]
 },
 "tde-11": {
-  "Edebiyat ve Toplum": [
-    {ty:"mc",q:"Edebiyatın toplumsal olayları, insan ilişkilerini ve toplumsal yapıyı yansıtan bir sanat dalı olarak ele alınmasına ne ad verilir?",o:["Edebiyat sosyolojisi","Halk bilimi","Dil bilimi","Ruh bilimi"],a:0},
-    {ty:"mc",q:"Aşağıdakilerden hangisi \"toplum için sanat\" anlayışını benimseyen bir edebiyat görüşünün özelliğidir?",o:["Eserlerde toplumsal sorunlara ve insanların yaşayışına yer verilmesi","Sanatın yalnızca estetik kaygıyla var olduğunun savunulması","Eserlerin bireysel iç dünyayı öncelemesi","Toplumsal gerçekliğin tamamen göz ardı edilmesi"],a:0},
-    {ty:"mc",q:"Türk edebiyatında toplumcu gerçekçi anlayışın öncülerinden kabul edilen \"Kuyucaklı Yusuf\" adlı romanın yazarı kimdir?",o:["Sabahattin Ali","Reşat Nuri Güntekin","Halide Edip Adıvar","Yakup Kadri Karaosmanoğlu"],a:0},
-    {ty:"tf",q:"Edebî eserler, yazıldıkları dönemin sosyal, siyasal ve kültürel özelliklerinden bağımsız olarak değerlendirilemez.",a:true},
-    {ty:"tf",q:"\"Sanat için sanat\" anlayışını benimseyen sanatçılar, eserlerinde toplumsal fayda ve öğreticiliği ön planda tutar.",a:false},
-    {ty:"fb",q:"Edebiyat eserlerini içinde doğduğu toplumun özellikleriyle ilişkilendirerek inceleyen bilim dalına edebiyat ____ denir.",a:"sosyolojisi"}
+  /* Anahtar kavramlar: dilekçe, elektronik içerik, e-posta, figür, geleneksel
+     Türk tiyatrosu, gölge oyunu, Karagöz, mektup, mizah.
+     Not: Eski "Mektup – E-posta" ve "Mülakat – Röportaj" ünitelerinin soruları
+     buraya taşındı. */
+  "Bir Diyeceğim Var!": [
+    {ty:"mc",q:"Duygu, düşünce ve haberlerin karşıdaki bir kişiye yazılı olarak iletildiği tür hangisidir?",o:["Mektup","Makale","Deneme","Fıkra"],a:0},
+    {ty:"mc",q:"Bir kuruma istek veya şikâyet bildirmek amacıyla yazılan resmî yazı türü hangisidir?",o:["Dilekçe","Mektup","Anı","Deneme"],a:0},
+    {ty:"mc",q:"Geleneksel Türk tiyatrosunun perde arkasından ışıkla oynatılan türü hangisidir?",o:["Karagöz (gölge oyunu)","Orta oyunu","Meddah","Modern tiyatro"],a:0},
+    {ty:"mc",q:"Geleneksel Türk tiyatrosunda tek kişinin anlatı ve canlandırmayla oynadığı tür hangisidir?",o:["Meddah","Karagöz","Orta oyunu","Kukla"],a:0},
+    {ty:"mc",q:"Karagöz oyunlarında kullanılan, deriden yapılmış tasvirlere ne denir?",o:["Figür","Dekor","Kostüm","Perde"],a:0},
+    {ty:"mc",q:"Gazetecilikte bir kişiyle yüz yüze görüşerek soru-cevap yoluyla hazırlanan tür hangisidir?",o:["Mülakat","Deneme","Fıkra","Eleştiri"],a:0},
+    {ty:"mc",q:"E-posta yazarken aşağıdakilerden hangisi gereklidir?",o:["Konu satırının açık yazılması","Konu satırının boş bırakılması","Selamlama kullanılmaması","İmzanın atlanması"],a:0},
+    {ty:"mc",q:"Geleneksel Türk tiyatrosunun ortak özelliği aşağıdakilerden hangisidir?",o:["Yazılı metne bağlı olmayıp doğaçlamaya dayanması","Kesin metne bağlı olması","Dekora dayalı olması","Yalnızca sarayda oynanması"],a:0},
+    {ty:"tf",q:"Dilekçe resmî bir yazı türüdür ve belirli bir biçime uyar.",a:true},
+    {ty:"tf",q:"Karagöz oyunlarında mizah önemli bir yer tutar.",a:true},
+    {ty:"tf",q:"E-posta yazışmalarında da nezaket kuralları geçerlidir.",a:true},
+    {ty:"tf",q:"Mektup türü yalnızca edebî amaçla yazılır.",a:false},
+    {ty:"fb",q:"Bir isteği resmî makama yazılı olarak bildiren belgeye ____ denir.",a:"dilekçe"},
+    {ty:"fb",q:"Karagöz oyununda perdeyi aydınlatarak tasvirleri gösteren oyun türüne ____ oyunu denir.",a:"gölge"}
   ],
-  "Cumhuriyet Dönemi Hikâyesi": [
-    {ty:"mc",q:"Sade bir dille, Anadolu insanının gündelik yaşamını ve sıradan olayları konu edinen \"Ayaşlı ile Kiracıları\" adlı eserin yazarı kimdir?",o:["Memduh Şevket Esendal","Sait Faik Abasıyanık","Ömer Seyfettin","Refik Halit Karay"],a:0},
-    {ty:"mc",q:"İstanbul'un sıradan insanlarını, balıkçılarını, adalarını konu alan; olay örgüsünden çok izlenim ve duyguya dayalı hikâyeleriyle tanınan yazar kimdir?",o:["Sait Faik Abasıyanık","Yakup Kadri Karaosmanoğlu","Halikarnas Balıkçısı","Reşat Nuri Güntekin"],a:0},
-    {ty:"mc",q:"Aşağıdaki eserlerden hangisi Sabahattin Ali'nin hikâye kitaplarından biridir?",o:["Değirmen","Çalıkuşu","Sinekli Bakkal","Fahim Bey ve Biz"],a:0},
-    {ty:"tf",q:"Cumhuriyet Dönemi hikâyesinde Anadolu'nun gerçekleri, köy yaşamı ve toplumsal sorunlar da işlenmiştir.",a:true},
-    {ty:"tf",q:"Sait Faik Abasıyanık'ın hikâyelerinde olay örgüsü ve entrik kurgu ön planda olup insan ruhu ikinci plandadır.",a:false},
-    {ty:"fb",q:"\"Semaver\" adlı hikâye kitabıyla tanınan ve İstanbul hikâyeciliğinin önemli isimlerinden biri olan yazar ____'dır.",a:"Sait Faik Abasıyanık"}
+  /* Anahtar kavramlar: anlatıcı, anlatma, diyalog, edebî metin, geriye dönüş,
+     kişi, mekân, metin, olay örgüsü, öğretici metin, özetleme, söz varlığı,
+     zaman.
+     Not: Eski "Makale – Sohbet – Fıkra", "Eleştiri", "Edebiyat ve Toplum" ve
+     "Gezi Yazısı – Haber Metni" ünitelerinin soruları buraya taşındı. */
+  "Kültür Yolculuğu": [
+    {ty:"mc",q:"Bir düşünceyi kanıtlarıyla ortaya koymak amacıyla yazılan, bilgi veren tür hangisidir?",o:["Makale","Hikâye","Şiir","Roman"],a:0},
+    {ty:"mc",q:"Sohbet (söyleşi) türünün en belirgin özelliği nedir?",o:["Okurla konuşuyormuş gibi samimi bir dil kullanılması","Kanıt gösterme zorunluluğu","Kurmaca olay örgüsü","Ölçü kullanılması"],a:0},
+    {ty:"mc",q:"Bir sanat eserini inceleyip değerlendiren tür hangisidir?",o:["Eleştiri","Fabl","Destan","Mesnevi"],a:0},
+    {ty:"mc",q:"Bir yazarın gezip gördüğü yerlerin özelliklerini ve izlenimlerini anlattığı tür hangisidir?",o:["Gezi yazısı","Anı","Eleştiri","Makale"],a:0},
+    {ty:"mc",q:"Osmanlı Dönemi'nde kaleme aldığı \"Seyahatname\" adlı eseriyle tanınan yazar kimdir?",o:["Evliya Çelebi","Kâtip Çelebi","Naima","Âşık Paşa"],a:0},
+    {ty:"mc",q:"Öğretici metinlerin temel amacı aşağıdakilerden hangisidir?",o:["Bilgi vermek ve açıklamak","Kurmaca bir dünya oluşturmak","Ölçü ve kafiye kurmak","Sahnede oynanmak"],a:0},
+    {ty:"mc",q:"Bir metnin ana hatlarını kısaca yeniden yazmaya ne denir?",o:["Özetleme","Betimleme","Öyküleme","Tartışma"],a:0},
+    {ty:"mc",q:"Edebiyatın toplumsal olayları ve insan ilişkilerini yansıtması neyi gösterir?",o:["Edebiyat ile toplum arasındaki bağı","Edebiyatın gerçek dışı olduğunu","Toplumun edebiyatı etkilemediğini","Metinlerin önemsizliğini"],a:0},
+    {ty:"tf",q:"Makalede öne sürülen düşünce kanıtlarla desteklenir.",a:true},
+    {ty:"tf",q:"Gezi yazılarında yazarın gözlem ve izlenimleri yer alır.",a:true},
+    {ty:"tf",q:"Öğretici metinlerde kurmaca bir olay örgüsü bulunması zorunludur.",a:false},
+    {ty:"tf",q:"Özetleme yaparken metnin ana düşüncesi korunmalıdır.",a:true},
+    {ty:"fb",q:"Bir metnin ana hatlarını kısaltarak aktarmaya ____ denir.",a:"özetleme"},
+    {ty:"fb",q:"Bir dilin ya da metnin sahip olduğu sözcük dağarcığına ____ varlığı denir.",a:"söz"}
   ],
-  "Tanzimat'tan Cumhuriyet'e Şiir": [
-    {ty:"mc",q:"Tanzimat edebiyatının ilk şairi kabul edilen ve Türk edebiyatına ilk kez Batılı tarzda tiyatro eseri de kazandıran sanatçı kimdir?",o:["Şinasi","Namık Kemal","Recaizade Mahmut Ekrem","Ziya Paşa"],a:0},
-    {ty:"mc",q:"\"Şair-i Azam\" (Büyük Şair) unvanıyla anılan, \"Makber\" adlı ünlü mersiyesiyle tanınan Tanzimat şairi kimdir?",o:["Abdülhak Hamit Tarhan","Recaizade Mahmut Ekrem","Muallim Naci","Namık Kemal"],a:0},
-    {ty:"mc",q:"Servetifünun şiirinin en önemli temsilcisi olan ve \"Sis\", \"Balıkçılar\" gibi şiirleriyle tanınan sanatçı kimdir?",o:["Tevfik Fikret","Cenap Şahabettin","Ahmet Haşim","Yahya Kemal Beyatlı"],a:0},
-    {ty:"tf",q:"Fecriati topluluğunun en önemli ve kalıcı şairi olan Ahmet Haşim, \"saf şiir\" anlayışını benimsemiş ve şiirde müzikaliteye önem vermiştir.",a:true},
-    {ty:"tf",q:"Namık Kemal, şiirlerinde \"hürriyet, vatan, millet\" gibi kavramları işleyerek toplumsal içerikli bir şiir anlayışı ortaya koymuştur.",a:true},
-    {ty:"fb",q:"Beş Hececiler grubunda yer alan ve \"Han Duvarları\" adlı şiiriyle tanınan şair ____'dır.",a:"Faruk Nafiz Çamlıbel"}
+  /* Anahtar kavramlar: divan edebiyatı geleneği, gerçek, kişi tanıtımı,
+     kurmaca, nesnellik, öznellik, radyo tiyatrosu, roman, tezkire, üslup,
+     yaşam öyküsü.
+     Not: Eski "Biyografi – Otobiyografi" ve roman üniteleri buraya taşındı. */
+  "Yaşamın İzinde": [
+    {ty:"mc",q:"Bir kişinin hayatının başka biri tarafından anlatıldığı tür hangisidir?",o:["Biyografi (yaşam öyküsü)","Otobiyografi","Anı","Günlük"],a:0},
+    {ty:"mc",q:"Bir kişinin kendi hayatını kendisinin anlattığı tür hangisidir?",o:["Otobiyografi","Biyografi","Tezkire","Eleştiri"],a:0},
+    {ty:"mc",q:"Divan edebiyatı geleneğinde şairlerin hayatını ve eserlerini tanıtan eserlere ne denir?",o:["Tezkire","Mesnevi","Divan","Gazel"],a:0},
+    {ty:"mc",q:"Türk edebiyatında Batılı anlamda yazılan ilk roman kabul edilen eser hangisidir?",o:["Taaşşuk-ı Talat ve Fitnat","Mai ve Siyah","Ateşten Gömlek","Yaban"],a:0},
+    {ty:"mc",q:"\"Bihruz Bey\" tiplemesiyle Batılılaşmayı yanlış anlayan bir tipi eleştiren roman hangisidir?",o:["Araba Sevdası","İntibah","Mai ve Siyah","Çalıkuşu"],a:0},
+    {ty:"mc",q:"Kurtuluş Savaşı yıllarını ve Anadolu'yu konu alan \"Ateşten Gömlek\" romanının yazarı kimdir?",o:["Halide Edib Adıvar","Yakup Kadri Karaosmanoğlu","Reşat Nuri Güntekin","Peyami Safa"],a:0},
+    {ty:"mc",q:"Yalnızca ses ögeleriyle sahnelenen tiyatro türü hangisidir?",o:["Radyo tiyatrosu","Gölge oyunu","Orta oyunu","Modern tiyatro"],a:0},
+    {ty:"mc",q:"Bir yazarın dili kullanmadaki kendine özgü biçimine ne denir?",o:["Üslup","Konu","Tema","Ölçü"],a:0},
+    {ty:"tf",q:"Biyografilerde nesnel bilgilere yer verilmesi beklenir.",a:true},
+    {ty:"tf",q:"Otobiyografide yazarın öznel bakışı doğal olarak öne çıkar.",a:true},
+    {ty:"tf",q:"Tezkireler modern dönemde ortaya çıkmış bir türdür.",a:false},
+    {ty:"tf",q:"Roman, geniş bir zaman ve mekân kurgusuna yer verebilir.",a:true},
+    {ty:"fb",q:"Divan edebiyatında şair biyografilerini içeren eserlere ____ denir.",a:"tezkire"},
+    {ty:"fb",q:"Bir yazarın kendine özgü anlatım biçimine ____ denir.",a:"üslup"}
   ],
-  "Makale – Sohbet – Fıkra": [
-    {ty:"mc",q:"Bir düşünceyi kanıtlarıyla ortaya koymak amacıyla yazılan, bilgi verme ve ikna etme amacı taşıyan gazete/dergi yazı türüne ne ad verilir?",o:["Makale","Sohbet","Anı","Roman"],a:0},
-    {ty:"mc",q:"Sohbet (söyleşi) türünün Türk edebiyatındaki en önemli temsilcilerinden biri olan ve okuyucuyla samimi bir dille sohbet eder gibi yazan yazar kimdir?",o:["Ahmet Rasim","Namık Kemal","Ziya Paşa","Recaizade Mahmut Ekrem"],a:0},
-    {ty:"mc",q:"Güncel bir konuyu kısa, sohbet havası içinde ve genellikle mizahi bir üslupla ele alan gazete yazı türüne ne ad verilir?",o:["Fıkra","Makale","Deneme","Eleştiri"],a:0},
-    {ty:"tf",q:"Makale türünde yazar, ele aldığı konuyu nesnel ve kanıtlara dayalı biçimde ele alır.",a:true},
-    {ty:"tf",q:"Fıkra türünde konular genellikle bilimsel yöntemlerle, kesin kanıtlar sunularak işlenir; öznel yorum bulunmaz.",a:false},
-    {ty:"fb",q:"Türk edebiyatında ilk özel gazete olan Tercüman-ı Ahval'i çıkaran ve gazetede ilk makaleyi yazan sanatçı ____'dır.",a:"Şinasi"}
-  ],
-  "Tanzimat ve Servetifünun Romanı": [
-    {ty:"mc",q:"Türk edebiyatında Batılı anlamda yazılan ilk roman kabul edilen \"Taaşşuk-ı Talat ve Fitnat\" adlı eserin yazarı kimdir?",o:["Şemsettin Sami","Namık Kemal","Ahmet Mithat Efendi","Recaizade Mahmut Ekrem"],a:0},
-    {ty:"mc",q:"\"Bihruz Bey\" tiplemesiyle Batılılaşmayı yanlış anlayan bir tipi eleştiren, realizmin etkisiyle yazılmış roman aşağıdakilerden hangisidir?",o:["Araba Sevdası","İntibah","Zehra","Eylül"],a:0},
-    {ty:"mc",q:"Servetifünun romanının en önemli temsilcisi olan ve \"Aşk-ı Memnu\", \"Kırık Hayatlar\" gibi eserleriyle tanınan yazar kimdir?",o:["Halit Ziya Uşaklıgil","Mehmet Rauf","Hüseyin Rahmi Gürpınar","Namık Kemal"],a:0},
-    {ty:"tf",q:"Tanzimat romanında genellikle \"esir alma-satma, kölelik, yanlış Batılılaşma, görücü usulü evlilik\" gibi konular işlenmiştir.",a:true},
-    {ty:"tf",q:"Servetifünun romanında sade bir dil ve halk deyişlerine dayalı anlatım tercih edilmiş, İstanbul Türkçesinden uzaklaşılmamıştır.",a:false},
-    {ty:"fb",q:"Türk edebiyatında psikolojik roman türünün ilk örneği kabul edilen \"Eylül\" adlı romanın yazarı ____'dır.",a:"Mehmet Rauf"}
-  ],
-  "Cumhuriyet Dönemi Romanı": [
-    {ty:"mc",q:"Kurtuluş Savaşı yıllarını ve Anadolu'yu konu alan \"Ateşten Gömlek\" adlı romanın yazarı kimdir?",o:["Halide Edip Adıvar","Yakup Kadri Karaosmanoğlu","Reşat Nuri Güntekin","Peyami Safa"],a:0},
-    {ty:"mc",q:"Aşağıdaki romanlardan hangisi Yakup Kadri Karaosmanoğlu'na aittir?",o:["Yaban","Çalıkuşu","Sinekli Bakkal","Fatih-Harbiye"],a:0},
-    {ty:"mc",q:"\"Doğu-Batı çatışması\" temasını \"Fatih-Harbiye\" adlı romanında işleyen yazar kimdir?",o:["Peyami Safa","Ahmet Hamdi Tanpınar","Kemal Tahir","Orhan Kemal"],a:0},
-    {ty:"tf",q:"Cumhuriyet Dönemi romanında Kurtuluş Savaşı, Anadolu'nun sorunları ve toplumsal değişim önemli temalar arasındadır.",a:true},
-    {ty:"tf",q:"\"Huzur\" adlı romanıyla tanınan Ahmet Hamdi Tanpınar, eserlerinde zaman, hafıza ve medeniyet değişimi konularını işlemiştir.",a:true},
-    {ty:"fb",q:"Öğretmen Feride'nin Anadolu'daki yaşamını konu alan ve Reşat Nuri Güntekin'in en tanınmış romanı olan eser ____'dır.",a:"Çalıkuşu"}
-  ],
-  "Tiyatro": [
-    {ty:"mc",q:"Türk edebiyatında Batılı tarzda yazılmış ilk tiyatro eseri kabul edilen \"Şair Evlenmesi\" adlı komedinin yazarı kimdir?",o:["Şinasi","Namık Kemal","Ahmet Vefik Paşa","Recaizade Mahmut Ekrem"],a:0},
-    {ty:"mc",q:"Vatan ve hürriyet temalarını işleyen, sahnelendiğinde büyük yankı uyandıran ve yazarının sürgüne gönderilmesine neden olan tiyatro eseri aşağıdakilerden hangisidir?",o:["Vatan yahut Silistre","Şair Evlenmesi","Çürük Temel","Akif Bey"],a:0},
-    {ty:"mc",q:"Moliere'in oyunlarını Türkçeye uyarlayarak Türk tiyatrosuna kazandıran devlet adamı ve yazar kimdir?",o:["Ahmet Vefik Paşa","Direktör Ali Bey","Ahmet Mithat Efendi","Şemsettin Sami"],a:0},
-    {ty:"tf",q:"Tiyatroda dramatik eserler; okunmak için değil, sahnede oynanmak için yazılır.",a:true},
-    {ty:"tf",q:"Namık Kemal'in \"Vatan yahut Silistre\" adlı oyunu bir komedi türü eseridir.",a:false},
-    {ty:"fb",q:"Trajedi ve komedinin özelliklerini bir arada barındıran, 19. yüzyılda ortaya çıkan tiyatro türüne ____ denir.",a:"dram"}
-  ],
-  "Eleştiri": [
-    {ty:"mc",q:"Bir sanat eserini ya da düşünce ürününü inceleyip değerlendiren, olumlu ve olumsuz yönlerini ortaya koyan yazı türüne ne ad verilir?",o:["Eleştiri","Makale","Fıkra","Deneme"],a:0},
-    {ty:"mc",q:"Tanzimat Dönemi'nde Muallim Naci ile \"eski-yeni edebiyat\" tartışmasını sürdüren ve \"Zemzeme\" adlı eserle bu tartışmaya katılan sanatçı kimdir?",o:["Recaizade Mahmut Ekrem","Namık Kemal","Ziya Paşa","Şinasi"],a:0},
-    {ty:"mc",q:"Cumhuriyet Dönemi Türk edebiyatında \"devrik cümle\" uygulamalarıyla da tanınan, eleştiri türünün önemli isimlerinden biri olan yazar kimdir?",o:["Nurullah Ataç","Yahya Kemal Beyatlı","Falih Rıfkı Atay","Reşat Nuri Güntekin"],a:0},
-    {ty:"tf",q:"Eleştiri yazılarında yazarın öznel değerlendirmeleri, kanıtlar ve karşılaştırmalarla desteklenerek sunulur.",a:true},
-    {ty:"tf",q:"Eleştiri türünde amaç yalnızca eseri övmek olup eserin eksik yönlerinden söz edilmez.",a:false},
-    {ty:"fb",q:"Bir eseri, yazarını ya da sanat akımını konu alan, değerlendirme ve yargı bildiren yazı türüne ____ denir.",a:"eleştiri"}
-  ],
-  "Mülakat – Röportaj": [
-    {ty:"mc",q:"Türk edebiyatında ilk röportaj örneklerinden biri kabul edilen, dönemin ünlü sanatçılarıyla yapılan söyleşilerden oluşan \"Diyorlar ki\" adlı eserin yazarı kimdir?",o:["Ruşen Eşref Ünaydın","Ahmet Rasim","Falih Rıfkı Atay","Yaşar Kemal"],a:0},
-    {ty:"mc",q:"Gazetecilikte; bir kişiyle yüz yüze görüşerek soru-cevap yoluyla bilgi edinme ve bunu yazıya aktarma esasına dayanan türe ne ad verilir?",o:["Mülakat (Söyleşi/Görüşme)","Deneme","Fıkra","Makale"],a:0},
-    {ty:"mc",q:"Röportaj türünü diğer gazete yazı türlerinden ayıran en belirgin özellik aşağıdakilerden hangisidir?",o:["Yerinde gözlem, araştırma, fotoğraf ve belgelerle desteklenmiş olması","Yalnızca yazarın hayal gücüne dayanması","Kurgusal bir olay örgüsü içermesi","Şiirsel bir dille yazılması"],a:0},
-    {ty:"tf",q:"Röportaj; gazetecilik, edebiyat ve sosyolojinin kesiştiği, araştırmaya dayalı bir türdür.",a:true},
-    {ty:"tf",q:"Mülakatta amaç, görüşülen kişinin düşüncelerini soru-cevap yoluyla okuyucuya aktarmaktır.",a:true},
-    {ty:"fb",q:"Yaşar Kemal'in Çukurova ve Anadolu'daki toplumsal sorunları ve gözlemlerini konu alan röportaj yazılarını topladığı eserlerden biri ____'dir.",a:"Bu Diyar Baştanbaşa"}
+  /* Anahtar kavramlar: dekor, diyalog, dramatik örgü, gösterme tekniği,
+     kostüm, küçürek hikâye, modern Türk tiyatrosu, monolog, oyun, perde,
+     sahne.
+     Not: Eski tiyatro ve Cumhuriyet Dönemi hikâyesi üniteleri buraya taşındı. */
+  "Hayatın Aynası": [
+    {ty:"mc",q:"Seyirci karşısında sahnelenmek üzere yazılan, diyalog ve dramatik örgüye dayanan tür hangisidir?",o:["Tiyatro","Roman","Deneme","Makale"],a:0},
+    {ty:"mc",q:"Tiyatroda olayların bölümlendiği büyük birime ne denir?",o:["Perde","Beyit","Kıta","Dize"],a:0},
+    {ty:"mc",q:"Tiyatroda oyuncuların giydiği giysilere ne denir?",o:["Kostüm","Dekor","Figür","Replik"],a:0},
+    {ty:"mc",q:"Sahnedeki mekânı görsel olarak oluşturan ögelere ne denir?",o:["Dekor","Kostüm","Monolog","Diyalog"],a:0},
+    {ty:"mc",q:"Tiyatroda olayın anlatılmak yerine sahnede canlandırılmasına ne denir?",o:["Gösterme tekniği","Anlatma tekniği","Özetleme","Betimleme"],a:0},
+    {ty:"mc",q:"Türk edebiyatında Batılı tarzda yazılmış ilk tiyatro eseri kabul edilen yapıt hangisidir?",o:["Şair Evlenmesi","Vatan yahut Silistre","Zavallı Çocuk","Akif Bey"],a:0},
+    {ty:"mc",q:"Çok kısa, yoğun ve tek bir ana odaklanan hikâye türüne ne denir?",o:["Küçürek hikâye","Roman","Destan","Mesnevi"],a:0},
+    {ty:"mc",q:"Sade bir dille Anadolu insanının gündelik yaşamını anlatan Cumhuriyet Dönemi hikâyeciliğinin özelliği nedir?",o:["Yerel yaşamı ve sıradan insanı öne çıkarması","Yalnızca saray yaşamını anlatması","Yalnızca çeviri yapması","Yalnızca aruz kullanması"],a:0},
+    {ty:"tf",q:"Tiyatro metinlerinde diyalog temel anlatım biçimidir.",a:true},
+    {ty:"tf",q:"Dramatik örgü, olayların çatışma çevresinde kurulmasıdır.",a:true},
+    {ty:"tf",q:"Monolog, iki kişinin karşılıklı konuşmasıdır.",a:false},
+    {ty:"tf",q:"Küçürek hikâyede yoğunluk ve az sözle çok şey anlatma öne çıkar.",a:true},
+    {ty:"fb",q:"Bir oyun kişisinin sahnede kendi kendine konuşmasına ____ denir.",a:"monolog"},
+    {ty:"fb",q:"Tiyatroda mekânın değişmesiyle oluşan alt bölüme ____ denir.",a:"sahne"}
   ]
 },
 "tde-12": {
