@@ -5003,8 +5003,16 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"Goodbye\" vedalaşırken kullanılır.",a:true},
     {ty:"tf",q:"\"Good afternoon\" akşam kullanılır.",a:false},
     {ty:"fb",q:"\"Nice to meet ____.\" cümlesindeki boşluğa gelen kelime nedir?",a:"you"},
-    {ty:"fb",q:"\"Öğrenci\" kelimesinin İngilizcesi ____ dır.",a:"student"}
-  ],
+    {ty:"fb",q:"\"Öğrenci\" kelimesinin İngilizcesi ____ dır.",a:"student"},
+      {ty:"mc",q:"\"Goodbye!\" ifadesinin Türkçe karşılığı hangisidir?",o:["Güle güle!","Merhaba!","Lütfen!","Teşekkürler!"],a:0},
+      {ty:"mc",q:"\"How are you?\" sorusuna uygun cevap hangisidir?",o:["I am fine, thanks.","My name is Ece.","It is a pen.","Yes, please."],a:0},
+      {ty:"mc",q:"\"friend\" kelimesinin Türkçe karşılığı nedir?",o:["Arkadaş","Öğretmen","Okul","Kardeş"],a:0},
+      {ty:"mc",q:"Akşam vedalaşırken kullanılan ifade hangisidir?",o:["Good night","Good morning","Hello","Please"],a:0},
+      {ty:"tf",q:"\"Thank you\" teşekkür etmek için kullanılır.",a:true},
+      {ty:"tf",q:"\"Hello\" vedalaşırken kullanılır.",a:false},
+      {ty:"fb",q:"\"Öğretmen\" kelimesinin İngilizcesi ____ dır.",a:"teacher"},
+      {ty:"fb",q:"\"Good ____!\" (Günaydın) ifadesindeki boşluğa gelen kelime ____ dir.",a:"morning"}
+    ],
   "Classroom Life": [
     {ty:"mc",q:"\"pencil\" kelimesinin Türkçe karşılığı nedir?",o:["Kalem","Silgi","Defter","Çanta"],a:0},
     {ty:"mc",q:"\"Open your ____, please!\" cümlesinde öğretmen kitabı açmanızı istiyorsa boşluğa ne gelir?",o:["book","door","bag","desk"],a:0},
@@ -5014,8 +5022,16 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"Listen!\" ifadesi \"Dinle!\" anlamındadır.",a:true},
     {ty:"tf",q:"\"board\" kelimesi çanta anlamına gelir.",a:false},
     {ty:"fb",q:"\"Tahta\" kelimesinin İngilizcesi ____ dir.",a:"board"},
-    {ty:"fb",q:"\"Defter\" kelimesinin İngilizcesi ____ dur.",a:"notebook"}
-  ],
+    {ty:"fb",q:"\"Defter\" kelimesinin İngilizcesi ____ dur.",a:"notebook"},
+      {ty:"mc",q:"\"ruler\" kelimesinin Türkçe karşılığı nedir?",o:["Cetvel","Silgi","Defter","Sandalye"],a:0},
+      {ty:"mc",q:"\"Stand ____, please!\" cümlesinde öğretmen kalkmanızı istiyorsa boşluğa ne gelir?",o:["up","down","in","on"],a:0},
+      {ty:"mc",q:"\"bag\" kelimesinin Türkçe karşılığı nedir?",o:["Çanta","Kitap","Masa","Kapı"],a:0},
+      {ty:"mc",q:"Öğretmen \"Be quiet!\" derse ne yapmalıyız?",o:["Sessiz olmalıyız","Ayağa kalkmalıyız","Yazmalıyız","Çıkmalıyız"],a:0},
+      {ty:"tf",q:"\"desk\" kelimesi sıra veya masa anlamına gelir.",a:true},
+      {ty:"tf",q:"\"chair\" kelimesi kalem anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kitap\" kelimesinin İngilizcesi ____ tur.",a:"book"},
+      {ty:"fb",q:"\"Kapı\" kelimesinin İngilizcesi ____ dur.",a:"door"}
+    ],
   "Personal Life": [
     {ty:"mc",q:"\"How old are you?\" sorusuna uygun cevap hangisidir?",o:["I am eight.","I am fine.","It is blue.","My name is Ece."],a:0},
     {ty:"mc",q:"\"red\" kelimesinin Türkçe karşılığı nedir?",o:["Kırmızı","Mavi","Yeşil","Sarı"],a:0},
@@ -5025,8 +5041,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"blue\" kelimesi mavi anlamına gelir.",a:true},
     {ty:"tf",q:"\"eye\" kelimesi kulak anlamına gelir.",a:false},
     {ty:"fb",q:"\"Sarı\" kelimesinin İngilizcesi ____ dur.",a:"yellow"},
-    {ty:"fb",q:"\"Baş\" kelimesinin İngilizcesi ____ dır.",a:"head"}
-  ],
+    {ty:"fb",q:"\"Baş\" kelimesinin İngilizcesi ____ dır.",a:"head"},
+      {ty:"mc",q:"\"How old are you?\" sorusu neyi öğrenmek için sorulur?",o:["Yaşı","Adı","Rengi","Sınıfı"],a:0},
+      {ty:"mc",q:"\"I like apples.\" cümlesi neyi anlatır?",o:["Sevilen bir yiyeceği","Bir kuralı","Bir soruyu","Bir yeri"],a:0},
+      {ty:"mc",q:"\"blue\" kelimesinin Türkçe karşılığı nedir?",o:["Mavi","Kırmızı","Siyah","Beyaz"],a:0},
+      {ty:"tf",q:"\"I am seven.\" cümlesi yaş bildirir.",a:true},
+      {ty:"tf",q:"\"green\" kelimesi sarı anlamına gelir.",a:false},
+      {ty:"fb",q:"\"My favourite ____ is blue.\" (renk) cümlesindeki boşluğa gelen kelime ____ dur.",a:"colour"}
+    ],
   "Family Life": [
     {ty:"mc",q:"\"mother\" kelimesinin Türkçe karşılığı nedir?",o:["Anne","Baba","Kardeş","Dede"],a:0},
     {ty:"mc",q:"\"father\" kelimesinin Türkçe karşılığı nedir?",o:["Baba","Anne","Abla","Amca"],a:0},
@@ -5036,8 +5058,12 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"brother\" kelimesi erkek kardeş anlamındadır.",a:true},
     {ty:"tf",q:"\"sister\" kelimesi dede anlamına gelir.",a:false},
     {ty:"fb",q:"\"Kız kardeş\" kelimesinin İngilizcesi ____ dır.",a:"sister"},
-    {ty:"fb",q:"\"Aile\" kelimesinin İngilizcesi ____ dir.",a:"family"}
-  ],
+    {ty:"fb",q:"\"Aile\" kelimesinin İngilizcesi ____ dir.",a:"family"},
+      {ty:"mc",q:"\"This is my sister.\" cümlesi kimi tanıtır?",o:["Kız kardeşi","Erkek kardeşi","Anneyi","Babayı"],a:0},
+      {ty:"tf",q:"\"brother\" kelimesi erkek kardeş anlamına gelir.",a:true},
+      {ty:"tf",q:"\"family\" kelimesi okul anlamına gelir.",a:false},
+      {ty:"fb",q:"\"I ____ two brothers.\" (sahip olmak) cümlesindeki boşluğa gelen kelime ____ dir.",a:"have"}
+    ],
   "Homes & Houses & Neighbourhoods": [
     {ty:"mc",q:"\"house\" kelimesinin Türkçe karşılığı nedir?",o:["Ev","Okul","Bahçe","Sokak"],a:0},
     {ty:"mc",q:"\"door\" kelimesinin Türkçe karşılığı nedir?",o:["Kapı","Pencere","Duvar","Çatı"],a:0},
@@ -5047,8 +5073,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"garden\" kelimesi bahçe anlamına gelir.",a:true},
     {ty:"tf",q:"\"table\" kelimesi kapı anlamına gelir.",a:false},
     {ty:"fb",q:"\"Oda\" kelimesinin İngilizcesi ____ dur.",a:"room"},
-    {ty:"fb",q:"\"Masanın üstünde\" ifadesindeki edat ____ dur.",a:"on"}
-  ],
+    {ty:"fb",q:"\"Masanın üstünde\" ifadesindeki edat ____ dur.",a:"on"},
+      {ty:"mc",q:"\"kitchen\" kelimesinin Türkçe karşılığı nedir?",o:["Mutfak","Banyo","Bahçe","Salon"],a:0},
+      {ty:"mc",q:"\"The cat is ____ the table.\" cümlesinde kedi masanın üstündeyse boşluğa ne gelir?",o:["on","in","under","behind"],a:0},
+      {ty:"mc",q:"\"garden\" kelimesinin Türkçe karşılığı nedir?",o:["Bahçe","Mutfak","Oda","Cadde"],a:0},
+      {ty:"tf",q:"\"bedroom\" kelimesi yatak odası anlamına gelir.",a:true},
+      {ty:"tf",q:"\"under\" kelimesi üstünde anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Banyo\" kelimesinin İngilizcesi ____ dur.",a:"bathroom"},
+      {ty:"fb",q:"\"The ball is ____ the box.\" (içinde) cümlesindeki boşluğa gelen edat ____ dir.",a:"in"}
+    ],
   "Life in the City & The World": [
     {ty:"mc",q:"\"park\" kelimesinin Türkçe karşılığı nedir?",o:["Park","Okul","Ev","Sınıf"],a:0},
     {ty:"mc",q:"\"I read books in the ____.\" cümlesinde kitap okunan yer hangisidir?",o:["library","kitchen","garden","street"],a:0},
@@ -5058,8 +5091,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"bird\" kelimesi kuş anlamına gelir.",a:true},
     {ty:"tf",q:"\"cat\" kelimesi köpek anlamına gelir.",a:false},
     {ty:"fb",q:"\"Bisiklet\" kelimesinin İngilizcesi ____ dir.",a:"bike"},
-    {ty:"fb",q:"\"Kedi\" kelimesinin İngilizcesi ____ dir.",a:"cat"}
-  ]
+    {ty:"fb",q:"\"Kedi\" kelimesinin İngilizcesi ____ dir.",a:"cat"},
+      {ty:"mc",q:"\"I go to school by ____.\" cümlesinde servisle gidiliyorsa boşluğa ne gelir?",o:["bus","foot","hand","book"],a:0},
+      {ty:"mc",q:"\"city\" kelimesinin Türkçe karşılığı nedir?",o:["Şehir","Köy","Ülke","Sokak"],a:0},
+      {ty:"tf",q:"\"street\" kelimesi sokak anlamına gelir.",a:true},
+      {ty:"tf",q:"\"bike\" kelimesi otobüs anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Bisiklet\" kelimesinin İngilizcesi ____ dır.",a:"bike"},
+      {ty:"fb",q:"\"Ülke\" kelimesinin İngilizcesi ____ dir.",a:"country"}
+    ]
 },
 "ing-3": {
   /* Resmî temalar (THEME 1-6). Sorular 3. sınıf düzeyinde tutulmuştur. */
@@ -5072,8 +5111,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"Thank you\" teşekkür etmek için kullanılır.",a:true},
     {ty:"tf",q:"\"Good night\" sabah kullanılır.",a:false},
     {ty:"fb",q:"\"Kütüphane\" kelimesinin İngilizcesi ____ dir.",a:"library"},
-    {ty:"fb",q:"\"How ____ you?\" sorusunda boşluğa gelen kelime nedir?",a:"are"}
-  ],
+    {ty:"fb",q:"\"How ____ you?\" sorusunda boşluğa gelen kelime nedir?",a:"are"},
+      {ty:"mc",q:"\"Nice to meet you.\" ifadesi hangi durumda kullanılır?",o:["Biriyle ilk kez tanışırken","Vedalaşırken","Özür dilerken","Yardım isterken"],a:0},
+      {ty:"mc",q:"\"Where is the library?\" sorusu neyi öğrenmek için sorulur?",o:["Kütüphanenin yerini","Kitabın adını","Dersin saatini","Öğretmenin adını"],a:0},
+      {ty:"mc",q:"\"See you tomorrow!\" ifadesinin Türkçe karşılığı hangisidir?",o:["Yarın görüşürüz!","İyi geceler!","Teşekkürler!","Hoş geldin!"],a:0},
+      {ty:"tf",q:"\"library\" kelimesi kütüphane anlamına gelir.",a:true},
+      {ty:"tf",q:"\"canteen\" kelimesi sınıf anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Bahçe\" (okul bahçesi) anlamındaki kelimenin İngilizcesi school ____ dır.",a:"garden"},
+      {ty:"fb",q:"\"Excuse ____!\" (Affedersiniz) ifadesindeki boşluğa gelen kelime ____ dir.",a:"me"}
+    ],
   "Classroom Life": [
     {ty:"mc",q:"\"ruler\" kelimesinin Türkçe karşılığı nedir?",o:["Cetvel","Silgi","Kalemtıraş","Kalem"],a:0},
     {ty:"mc",q:"\"Don't run in the corridor!\" cümlesi ne anlatır?",o:["Bir kuralı/uyarıyı","Bir isteği","Bir teşekkürü","Bir soruyu"],a:0},
@@ -5083,8 +5129,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"Be quiet!\" \"Sessiz ol!\" anlamındadır.",a:true},
     {ty:"tf",q:"\"scissors\" kelimesi defter anlamına gelir.",a:false},
     {ty:"fb",q:"\"Kalemtıraş\" kelimesinin İngilizcesi ____ dır.",a:"sharpener"},
-    {ty:"fb",q:"\"I have ____ a ruler.\" cümlesinde boşluğa gelen kelime nedir?",a:"got"}
-  ],
+    {ty:"fb",q:"\"I have ____ a ruler.\" cümlesinde boşluğa gelen kelime nedir?",a:"got"},
+      {ty:"mc",q:"\"Raise your hand.\" ifadesi ne anlama gelir?",o:["Elini kaldır","Ayağa kalk","Otur","Yaz"],a:0},
+      {ty:"mc",q:"\"Can I come in?\" cümlesi neyi ifade eder?",o:["İzin isteme","Şikâyet","Teşekkür","Emir"],a:0},
+      {ty:"mc",q:"\"scissors\" kelimesinin Türkçe karşılığı nedir?",o:["Makas","Cetvel","Kalemtıraş","Silgi"],a:0},
+      {ty:"mc",q:"\"Let's work in pairs.\" cümlesi neyi önerir?",o:["İkili çalışmayı","Tek çalışmayı","Dışarı çıkmayı","Sessiz olmayı"],a:0},
+      {ty:"tf",q:"\"crayon\" kelimesi pastel boya anlamına gelir.",a:true},
+      {ty:"tf",q:"\"glue\" kelimesi makas anlamına gelir.",a:false},
+      {ty:"fb",q:"\"May I borrow your ____?\" (silgi) cümlesindeki boşluğa gelen kelime ____ dır.",a:"eraser"}
+    ],
   "Personal Life": [
     {ty:"mc",q:"\"I like playing football.\" cümlesi neyi anlatır?",o:["Hoşlanmayı","Sahip olmayı","Bir yeri","Bir rengi"],a:0},
     {ty:"mc",q:"\"happy\" kelimesinin zıt anlamlısı hangisidir?",o:["sad","glad","fine","nice"],a:0},
@@ -5094,8 +5147,16 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"favourite\" kelimesi \"en sevdiğim\" anlamındadır.",a:true},
     {ty:"tf",q:"\"angry\" kelimesi mutlu anlamına gelir.",a:false},
     {ty:"fb",q:"\"Üzgün\" kelimesinin İngilizcesi ____ dir.",a:"sad"},
-    {ty:"fb",q:"\"I ____ like tea.\" olumsuz cümlede boşluğa gelen kelime nedir?",a:"don't"}
-  ],
+    {ty:"fb",q:"\"I ____ like tea.\" olumsuz cümlede boşluğa gelen kelime nedir?",a:"don't"},
+      {ty:"mc",q:"\"I can ride a bike.\" cümlesinde 'can' neyi bildirir?",o:["Yetenek","Zorunluluk","Yasak","İstek"],a:0},
+      {ty:"mc",q:"\"When is your birthday?\" sorusu neyi öğrenmek için sorulur?",o:["Doğum gününü","Yaşı","Adı","Sınıfı"],a:0},
+      {ty:"mc",q:"\"tall\" kelimesinin Türkçe karşılığı nedir?",o:["Uzun (boylu)","Kısa","Şişman","İnce"],a:0},
+      {ty:"mc",q:"\"I don't like onions.\" cümlesi neyi anlatır?",o:["Sevilmeyen bir yiyeceği","Sevilen bir yiyeceği","Bir kuralı","Bir soruyu"],a:0},
+      {ty:"tf",q:"\"short\" kelimesi kısa anlamına gelir.",a:true},
+      {ty:"tf",q:"\"can't\" ifadesi yetenek olduğunu belirtir.",a:false},
+      {ty:"fb",q:"\"Yüzmek\" fiilinin İngilizcesi ____ dir.",a:"swim"},
+      {ty:"fb",q:"\"My birthday is ____ May.\" (mayısta) cümlesindeki boşluğa gelen edat ____ dir.",a:"in"}
+    ],
   "Family Life": [
     {ty:"mc",q:"\"My mother is a doctor.\" cümlesinde annenin mesleği nedir?",o:["Doktor","Öğretmen","Aşçı","Şoför"],a:0},
     {ty:"mc",q:"\"cousin\" kelimesinin Türkçe karşılığı nedir?",o:["Kuzen","Amca","Dede","Kardeş"],a:0},
@@ -5105,8 +5166,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"aunt\" kelimesi teyze/hala anlamındadır.",a:true},
     {ty:"tf",q:"\"uncle\" kelimesi anne anlamına gelir.",a:false},
     {ty:"fb",q:"\"Dede\" kelimesinin İngilizcesi ____ dır.",a:"grandfather"},
-    {ty:"fb",q:"\"There ____ four people in my family.\" cümlesinde boşluğa gelen kelime nedir?",a:"are"}
-  ],
+    {ty:"fb",q:"\"There ____ four people in my family.\" cümlesinde boşluğa gelen kelime nedir?",a:"are"},
+      {ty:"mc",q:"\"aunt\" kelimesinin Türkçe karşılığı nedir?",o:["Hala veya teyze","Amca veya dayı","Kuzen","Yenge"],a:0},
+      {ty:"mc",q:"\"My father is a doctor.\" cümlesinde hangi bilgi verilir?",o:["Babanın mesleği","Babanın yaşı","Babanın adı","Babanın boyu"],a:0},
+      {ty:"mc",q:"\"We have dinner together.\" cümlesi neyi anlatır?",o:["Birlikte akşam yemeği yenildiğini","Yemeğin bittiğini","Yemeğin sevilmediğini","Yemeğin pişirildiğini"],a:0},
+      {ty:"tf",q:"\"uncle\" kelimesi amca veya dayı anlamına gelir.",a:true},
+      {ty:"tf",q:"\"parents\" kelimesi yalnızca anne anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Ebeveynler\" kelimesinin İngilizcesi ____ dır.",a:"parents"}
+    ],
   "Homes & Houses & The Neighbourhood": [
     {ty:"mc",q:"\"living room\" evin hangi bölümüdür?",o:["Oturma odası","Mutfak","Banyo","Balkon"],a:0},
     {ty:"mc",q:"\"The book is ____ the table.\" cümlesinde kitap masanın üstündeyse boşluğa ne gelir?",o:["on","in","under","behind"],a:0},
@@ -5116,8 +5183,16 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"There are two beds.\" cümlesi çoğul varlık bildirir.",a:true},
     {ty:"tf",q:"\"under\" kelimesi üstünde anlamına gelir.",a:false},
     {ty:"fb",q:"\"Yatak odası\" ifadesinin İngilizcesi ____ dur.",a:"bedroom"},
-    {ty:"fb",q:"\"There ____ a chair.\" tekil cümlede boşluğa gelen kelime nedir?",a:"is"}
-  ],
+    {ty:"fb",q:"\"There ____ a chair.\" tekil cümlede boşluğa gelen kelime nedir?",a:"is"},
+      {ty:"mc",q:"\"living room\" kelimesinin Türkçe karşılığı nedir?",o:["Oturma odası","Yatak odası","Mutfak","Banyo"],a:0},
+      {ty:"mc",q:"\"How many rooms are there in your house?\" sorusu neyi öğrenmek için sorulur?",o:["Oda sayısını","Evin rengini","Evin adresini","Evin yaşını"],a:0},
+      {ty:"mc",q:"\"next to\" ifadesinin Türkçe karşılığı nedir?",o:["Yanında","Üstünde","Altında","Arkasında"],a:0},
+      {ty:"mc",q:"\"neighbour\" kelimesinin Türkçe karşılığı nedir?",o:["Komşu","Arkadaş","Kuzen","Öğretmen"],a:0},
+      {ty:"tf",q:"\"behind\" kelimesi arkasında anlamına gelir.",a:true},
+      {ty:"tf",q:"\"between\" kelimesi yanında anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Buzdolabı\" kelimesinin İngilizcesi ____ dır.",a:"fridge"},
+      {ty:"fb",q:"\"The lamp is ____ the desk.\" (üstünde) cümlesindeki boşluğa gelen edat ____ dur.",a:"on"}
+    ],
   "Life in the City & The World": [
     {ty:"mc",q:"\"I go to school by ____.\" cümlesinde bir ulaşım aracı hangisidir?",o:["bus","house","book","tree"],a:0},
     {ty:"mc",q:"\"It is rainy today.\" cümlesi neyi anlatır?",o:["Hava durumunu","Bir mesleği","Bir rengi","Bir sayıyı"],a:0},
@@ -5127,8 +5202,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"snowy\" kelimesi karlı anlamına gelir.",a:true},
     {ty:"tf",q:"\"market\" kelimesi hastane anlamına gelir.",a:false},
     {ty:"fb",q:"\"Güneşli\" kelimesinin İngilizcesi ____ dir.",a:"sunny"},
-    {ty:"fb",q:"\"Tren\" kelimesinin İngilizcesi ____ dir.",a:"train"}
-  ]
+    {ty:"fb",q:"\"Tren\" kelimesinin İngilizcesi ____ dir.",a:"train"},
+      {ty:"mc",q:"\"How can I go to the museum?\" sorusu neyi öğrenmek için sorulur?",o:["Müzeye nasıl gidileceğini","Müzenin adını","Müzenin ücretini","Müzenin kapanışını"],a:0},
+      {ty:"mc",q:"\"turn left\" ifadesi ne anlama gelir?",o:["Sola dön","Sağa dön","Düz git","Geri dön"],a:0},
+      {ty:"mc",q:"\"Where do you live?\" sorusuna uygun cevap hangisidir?",o:["I live in Bursa.","I am nine.","It is red.","Yes, please."],a:0},
+      {ty:"tf",q:"\"go straight\" ifadesi düz git anlamındadır.",a:true},
+      {ty:"tf",q:"\"bank\" kelimesi hastane anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Postane\" kelimesinin İngilizcesi post ____ dir.",a:"office"},
+      {ty:"fb",q:"\"Sağa dön\" ifadesinin İngilizcesi turn ____ dır.",a:"right"}
+    ]
 },
 "ing-4": {
   "Classroom Rules": [
@@ -5136,71 +5218,151 @@ const UNIT_BANK = {
     {ty:"mc",q:"\"Be quiet, please!\" cümlesi hangi anlama gelir?",o:["Konuş lütfen!","Sessiz ol lütfen!","Yaz lütfen!","Koş lütfen!"],a:1},
     {ty:"mc",q:"\"Listen to me!\" cümlesi ne demektir?",o:["Beni dinle!","Bana bak!","Otur!","Yaz!"],a:0},
     {ty:"tf",q:"\"Sit down!\" cümlesi \"Ayağa kalk!\" anlamına gelir.",a:false},
-    {ty:"fb",q:"\"Don't ____ in the classroom!\" (konuşma anlamına gelen kelime)",a:"talk"}
-  ],
+    {ty:"fb",q:"\"Don't ____ in the classroom!\" (konuşma anlamına gelen kelime)",a:"talk"},
+      {ty:"mc",q:"\"You must not run in the corridor.\" cümlesi neyi bildirir?",o:["Yasak","İzin","Yetenek","Öneri"],a:0},
+      {ty:"mc",q:"\"Don't be late!\" ifadesi ne anlama gelir?",o:["Geç kalma!","Acele et!","Otur!","Dinle!"],a:0},
+      {ty:"mc",q:"\"Listen to your teacher.\" cümlesi hangi tür ifadedir?",o:["Kural veya yönlendirme","Soru","Tercih","Şikâyet"],a:0},
+      {ty:"mc",q:"\"May I go out?\" cümlesi neyi ifade eder?",o:["İzin isteme","Yasak koyma","Öneri sunma","Şikâyet etme"],a:0},
+      {ty:"tf",q:"\"must\" ifadesi zorunluluk bildirir.",a:true},
+      {ty:"tf",q:"\"Don't\" ile başlayan cümleler izin verir.",a:false},
+      {ty:"fb",q:"\"Sessiz ol!\" ifadesinin İngilizcesi Be ____! biçimindedir.",a:"quiet"},
+      {ty:"fb",q:"\"Kural\" kelimesinin İngilizcesi ____ dur.",a:"rule"}
+    ],
   "Nationality": [
     {ty:"mc",q:"Türkiye'den olan biri için hangi kelime kullanılır?",o:["English","Turkish","American","German"],a:1},
     {ty:"mc",q:"\"Where are you from?\" sorusuna uygun cevap hangisidir?",o:["I'm ten.","I'm from Turkey.","I'm fine.","I'm a student."],a:1},
     {ty:"mc",q:"\"American\" kelimesi hangi anlama gelir?",o:["Türk","İngiliz","Amerikalı","Alman"],a:2},
     {ty:"tf",q:"\"Turkish\" kelimesi Türkçede \"Türk/Türkçe\" demektir.",a:true},
-    {ty:"fb",q:"\"I am from Turkey. I am ____.\" (milliyet belirten kelime)",a:"Turkish"}
-  ],
+    {ty:"fb",q:"\"I am from Turkey. I am ____.\" (milliyet belirten kelime)",a:"Turkish"},
+      {ty:"mc",q:"\"What nationality are you?\" sorusuna uygun cevap hangisidir?",o:["I am Turkish.","I am ten.","It is blue.","Yes, please."],a:0},
+      {ty:"mc",q:"\"Japanese\" kelimesi hangi ülkenin uyruğunu belirtir?",o:["Japonya","Çin","Kore","Tayland"],a:0},
+      {ty:"mc",q:"\"He speaks German.\" cümlesi neyi anlatır?",o:["Konuştuğu dili","Yaşadığı şehri","Yaşını","Mesleğini"],a:0},
+      {ty:"mc",q:"\"flag\" kelimesinin Türkçe karşılığı nedir?",o:["Bayrak","Harita","Şehir","Dil"],a:0},
+      {ty:"tf",q:"\"Turkish\" kelimesi hem dili hem uyruğu belirtmek için kullanılabilir.",a:true},
+      {ty:"tf",q:"\"country\" kelimesi bayrak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"İtalya\" ülkesinin İngilizcesi ____ dır.",a:"Italy"},
+      {ty:"fb",q:"\"I am ____ Ankara.\" (den/dan) cümlesindeki boşluğa gelen edat ____ dur.",a:"from"}
+    ],
   "Cartoon Characters": [
     {ty:"mc",q:"\"He is brave.\" cümlesindeki \"brave\" kelimesi ne anlama gelir?",o:["Korkak","Cesur","Yorgun","Küçük"],a:1},
     {ty:"mc",q:"Bir çizgi film kahramanı için \"She is funny.\" cümlesi ne anlatır?",o:["Komik olduğunu","Üzgün olduğunu","Yavaş olduğunu","Sessiz olduğunu"],a:0},
     {ty:"mc",q:"\"Strong\" kelimesi hangi anlama gelir?",o:["Zayıf","Güçlü","Küçük","Yavaş"],a:1},
     {ty:"tf",q:"\"Funny\" kelimesi Türkçede \"komik\" demektir.",a:true},
-    {ty:"fb",q:"\"My favourite cartoon character is very ____.\" (cesur anlamına gelen kelime)",a:"brave"}
-  ],
+    {ty:"fb",q:"\"My favourite cartoon character is very ____.\" (cesur anlamına gelen kelime)",a:"brave"},
+      {ty:"mc",q:"\"She has got long hair.\" cümlesi neyi anlatır?",o:["Görünüşü","Yaşı","Mesleği","Adresi"],a:0},
+      {ty:"mc",q:"\"strong\" kelimesinin Türkçe karşılığı nedir?",o:["Güçlü","Zayıf","Uzun","Kısa"],a:0},
+      {ty:"mc",q:"\"He is funny.\" cümlesi neyi bildirir?",o:["Kişilik özelliğini","Boyunu","Yaşını","Rengini"],a:0},
+      {ty:"mc",q:"\"cartoon\" kelimesinin Türkçe karşılığı nedir?",o:["Çizgi film","Kitap","Şarkı","Oyun"],a:0},
+      {ty:"tf",q:"\"has got\" ifadesi sahip olmayı anlatır.",a:true},
+      {ty:"tf",q:"\"brave\" kelimesi korkak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Akıllı\" kelimesinin İngilizcesi ____ dır.",a:"clever"},
+      {ty:"fb",q:"\"He ____ got blue eyes.\" cümlesindeki boşluğa gelen kelime ____ tır.",a:"has"}
+    ],
   "Free Time": [
     {ty:"mc",q:"\"I like reading books.\" cümlesinin Türkçesi nedir?",o:["Kitap okumayı severim","Yüzmeyi severim","Dans etmeyi severim","Resim yapmayı severim"],a:0},
     {ty:"mc",q:"\"Swimming\" kelimesi hangi anlama gelir?",o:["Koşmak","Yüzmek","Dans etmek","Çizmek"],a:1},
     {ty:"mc",q:"Boş zamanda resim yapmak İngilizce ne denir?",o:["Dancing","Drawing","Swimming","Reading"],a:1},
     {ty:"tf",q:"\"Dancing\" kelimesi Türkçede \"dans etmek\" demektir.",a:true},
-    {ty:"fb",q:"\"In my free time, I like ____ computer games.\" (oynamak anlamına gelen kelime)",a:"playing"}
-  ],
+    {ty:"fb",q:"\"In my free time, I like ____ computer games.\" (oynamak anlamına gelen kelime)",a:"playing"},
+      {ty:"mc",q:"\"What do you do in your free time?\" sorusu neyi öğrenmek için sorulur?",o:["Boş zaman etkinliklerini","Ders programını","Adresi","Yaşı"],a:0},
+      {ty:"mc",q:"\"I like playing chess.\" cümlesi neyi anlatır?",o:["Sevilen bir etkinliği","Bir kuralı","Bir yasağı","Bir soruyu"],a:0},
+      {ty:"mc",q:"\"hobby\" kelimesinin Türkçe karşılığı nedir?",o:["Uğraş","Ödev","Ders","Görev"],a:0},
+      {ty:"mc",q:"\"go fishing\" ifadesinin Türkçe karşılığı nedir?",o:["Balığa gitmek","Yüzmeye gitmek","Koşmaya gitmek","Alışverişe gitmek"],a:0},
+      {ty:"tf",q:"\"ride a bike\" ifadesi bisiklete binmek anlamındadır.",a:true},
+      {ty:"tf",q:"\"free time\" ifadesi ders saati anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Resim yapmak\" fiilinin İngilizcesi ____ dır.",a:"draw"},
+      {ty:"fb",q:"\"I enjoy ____ books.\" (okumak) cümlesindeki boşluğa gelen kelime ____ dir.",a:"reading"}
+    ],
   "My Day": [
     {ty:"mc",q:"\"I wake up at seven.\" cümlesinin Türkçesi nedir?",o:["Yediye kalkarım","Yedide uyurum","Yedide yemek yerim","Yedide okula giderim"],a:0},
     {ty:"mc",q:"\"Brush your teeth!\" cümlesi ne demektir?",o:["Yüzünü yıka!","Dişlerini fırçala!","Saçını tara!","Ellerini yıka!"],a:1},
     {ty:"mc",q:"\"Breakfast\" kelimesi hangi anlama gelir?",o:["Akşam yemeği","Öğle yemeği","Kahvaltı","Atıştırmalık"],a:2},
     {ty:"tf",q:"\"Breakfast\" kelimesi Türkçede \"kahvaltı\" demektir.",a:true},
-    {ty:"fb",q:"\"I go to ____ at nine o'clock.\" (uyumak anlamına gelen kelime)",a:"bed"}
-  ],
+    {ty:"fb",q:"\"I go to ____ at nine o'clock.\" (uyumak anlamına gelen kelime)",a:"bed"},
+      {ty:"mc",q:"\"I get up at seven o'clock.\" cümlesi neyi anlatır?",o:["Kalkma saatini","Yatma saatini","Yemek saatini","Ders saatini"],a:0},
+      {ty:"mc",q:"\"What time is it?\" sorusu neyi öğrenmek için sorulur?",o:["Saati","Günü","Ayı","Yılı"],a:0},
+      {ty:"mc",q:"\"in the evening\" ifadesi günün hangi bölümünü belirtir?",o:["Akşam","Sabah","Öğle","Gece yarısı"],a:0},
+      {ty:"mc",q:"\"have breakfast\" ifadesinin Türkçe karşılığı nedir?",o:["Kahvaltı yapmak","Akşam yemeği yemek","Öğle yemeği yemek","Çay içmek"],a:0},
+      {ty:"tf",q:"\"go to bed\" ifadesi yatmaya gitmek anlamındadır.",a:true},
+      {ty:"tf",q:"\"half past six\" ifadesi altıya çeyrek anlamındadır.",a:false},
+      {ty:"fb",q:"\"Half ____ nine\" (dokuz buçuk) ifadesindeki boşluğa gelen kelime ____ tır.",a:"past"},
+      {ty:"fb",q:"\"Dişlerini fırçalamak\" ifadesinin İngilizcesi brush your ____ dir.",a:"teeth"}
+    ],
   "Fun with Science": [
     {ty:"mc",q:"\"Magnet\" kelimesinin Türkçesi nedir?",o:["Mıknatıs","Termometre","Mikroskop","Pusula"],a:0},
     {ty:"mc",q:"Bitkilerin büyümesi için gerekli olan şey hangisidir?",o:["Water","Ice","Stone","Metal"],a:0},
     {ty:"mc",q:"\"Ice\" kelimesi hangi anlama gelir?",o:["Su buharı","Buz","Yağmur","Kar"],a:1},
     {ty:"tf",q:"\"Experiment\" kelimesi Türkçede \"deney\" demektir.",a:true},
-    {ty:"fb",q:"\"Plants need water and ____ to grow.\" (güneş ışığı anlamına gelen kelime)",a:"sunlight"}
-  ],
+    {ty:"fb",q:"\"Plants need water and ____ to grow.\" (güneş ışığı anlamına gelen kelime)",a:"sunlight"},
+      {ty:"mc",q:"\"experiment\" kelimesinin Türkçe karşılığı nedir?",o:["Deney","Sonuç","Kural","Ölçü"],a:0},
+      {ty:"mc",q:"\"Water boils at 100 degrees.\" cümlesi neyi bildirir?",o:["Bilimsel bir gerçeği","Bir isteği","Bir yasağı","Bir öneriyi"],a:0},
+      {ty:"mc",q:"\"magnet\" kelimesinin Türkçe karşılığı nedir?",o:["Mıknatıs","Termometre","Mercek","Pil"],a:0},
+      {ty:"mc",q:"\"Be careful in the lab!\" ifadesi neyi anlatır?",o:["Dikkatli olma uyarısını","İzin verildiğini","Bir tercihi","Bir teşekkürü"],a:0},
+      {ty:"tf",q:"\"melt\" fiili erimek anlamındadır.",a:true},
+      {ty:"tf",q:"\"freeze\" fiili kaynamak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Buz\" kelimesinin İngilizcesi ____ dir.",a:"ice"},
+      {ty:"fb",q:"\"Termometre\" kelimesinin İngilizcesi ____ dır.",a:"thermometer"}
+    ],
   "Jobs": [
     {ty:"mc",q:"Hastaları tedavi eden meslek İngilizce ne denir?",o:["Teacher","Doctor","Farmer","Driver"],a:1},
     {ty:"mc",q:"\"Firefighter\" kelimesi hangi anlama gelir?",o:["Polis","İtfaiyeci","Doktor","Öğretmen"],a:1},
     {ty:"mc",q:"\"Teacher\" kelimesi hangi anlama gelir?",o:["Doktor","Çiftçi","Öğretmen","Polis"],a:2},
     {ty:"tf",q:"\"Police officer\" kelimesi Türkçede \"polis memuru\" demektir.",a:true},
-    {ty:"fb",q:"\"A ____ grows vegetables and fruit.\" (çiftçi anlamına gelen kelime)",a:"farmer"}
-  ],
+    {ty:"fb",q:"\"A ____ grows vegetables and fruit.\" (çiftçi anlamına gelen kelime)",a:"farmer"},
+      {ty:"mc",q:"\"nurse\" kelimesinin Türkçe karşılığı nedir?",o:["Hemşire","Doktor","Öğretmen","Mühendis"],a:0},
+      {ty:"mc",q:"\"What does your mother do?\" sorusu neyi öğrenmek için sorulur?",o:["Mesleğini","Yaşını","Adresini","Adını"],a:0},
+      {ty:"mc",q:"\"A pilot flies a plane.\" cümlesi neyi anlatır?",o:["Bir mesleğin yaptığı işi","Bir uçağın rengini","Bir yolculuğu","Bir kuralı"],a:0},
+      {ty:"mc",q:"\"farmer\" kelimesinin Türkçe karşılığı nedir?",o:["Çiftçi","Aşçı","Şoför","Postacı"],a:0},
+      {ty:"tf",q:"\"cook\" kelimesi aşçı anlamına gelebilir.",a:true},
+      {ty:"tf",q:"\"vet\" kelimesi öğretmen anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Mühendis\" kelimesinin İngilizcesi ____ dir.",a:"engineer"},
+      {ty:"fb",q:"\"Postacı\" kelimesinin İngilizcesi ____ dır.",a:"postman"}
+    ],
   "My Clothes": [
     {ty:"mc",q:"\"Shirt\" kelimesinin Türkçesi nedir?",o:["Pantolon","Gömlek","Ayakkabı","Şapka"],a:1},
     {ty:"mc",q:"Ayaklarımıza giydiğimiz eşya İngilizce ne denir?",o:["Hat","Shoes","Shirt","Socks"],a:1},
     {ty:"mc",q:"\"Dress\" kelimesi hangi anlama gelir?",o:["Elbise","Pantolon","Çorap","Ceket"],a:0},
     {ty:"tf",q:"\"Socks\" kelimesi Türkçede \"çorap\" demektir.",a:true},
-    {ty:"fb",q:"\"I wear a ____ on my head when it's sunny.\" (şapka anlamına gelen kelime)",a:"hat"}
-  ],
+    {ty:"fb",q:"\"I wear a ____ on my head when it's sunny.\" (şapka anlamına gelen kelime)",a:"hat"},
+      {ty:"mc",q:"\"trousers\" kelimesinin Türkçe karşılığı nedir?",o:["Pantolon","Gömlek","Ceket","Ayakkabı"],a:0},
+      {ty:"mc",q:"\"I am wearing a red T-shirt.\" cümlesi neyi anlatır?",o:["O anda giyileni","Sevilen rengi","Bir kuralı","Bir isteği"],a:0},
+      {ty:"mc",q:"\"It is cold. Put on your ____.\" cümlesinde boşluğa en uygun kelime hangisidir?",o:["coat","shorts","sandals","cap"],a:0},
+      {ty:"mc",q:"\"shoes\" kelimesinin Türkçe karşılığı nedir?",o:["Ayakkabı","Çorap","Şapka","Eldiven"],a:0},
+      {ty:"tf",q:"\"skirt\" kelimesi etek anlamına gelir.",a:true},
+      {ty:"tf",q:"\"gloves\" kelimesi çorap anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Şapka\" kelimesinin İngilizcesi ____ tır.",a:"hat"},
+      {ty:"fb",q:"\"She is ____ a blue dress.\" (giyiyor) cümlesindeki boşluğa gelen kelime ____ dir.",a:"wearing"}
+    ],
   "My Friends": [
     {ty:"mc",q:"\"He is kind.\" cümlesindeki \"kind\" kelimesi ne anlama gelir?",o:["Kaba","Nazik","Yorgun","Tembel"],a:1},
     {ty:"mc",q:"\"My friend is tall.\" cümlesinin Türkçesi nedir?",o:["Arkadaşım uzun boylu","Arkadaşım kısa boylu","Arkadaşım şişman","Arkadaşım zayıf"],a:0},
     {ty:"mc",q:"\"Friendly\" kelimesi hangi anlama gelir?",o:["Kızgın","Cana yakın/arkadaş canlısı","Üzgün","Sessiz"],a:1},
     {ty:"tf",q:"\"Short\" kelimesi Türkçede \"uzun\" demektir.",a:false},
-    {ty:"fb",q:"\"My best friend is very ____ to everyone.\" (nazik anlamına gelen kelime)",a:"kind"}
-  ],
+    {ty:"fb",q:"\"My best friend is very ____ to everyone.\" (nazik anlamına gelen kelime)",a:"kind"},
+      {ty:"mc",q:"\"Who is your best friend?\" sorusu neyi öğrenmek için sorulur?",o:["En yakın arkadaşı","Arkadaşın yaşını","Arkadaşın adresini","Arkadaşın dersini"],a:0},
+      {ty:"mc",q:"\"She is helpful.\" cümlesi neyi bildirir?",o:["Kişilik özelliğini","Boyunu","Yaşını","Sınıfını"],a:0},
+      {ty:"mc",q:"\"We play together after school.\" cümlesi neyi anlatır?",o:["Birlikte oyun oynandığını","Okulun kapandığını","Dersin bittiğini","Ödev yapıldığını"],a:0},
+      {ty:"mc",q:"\"kind\" kelimesinin Türkçe karşılığı nedir?",o:["Nazik","Kaba","Tembel","Sessiz"],a:0},
+      {ty:"tf",q:"\"share\" fiili paylaşmak anlamındadır.",a:true},
+      {ty:"tf",q:"\"selfish\" kelimesi cömert anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Dürüst\" kelimesinin İngilizcesi ____ tir.",a:"honest"},
+      {ty:"fb",q:"\"Paylaşmak\" fiilinin İngilizcesi ____ dir.",a:"share"}
+    ],
   "Food and Drinks": [
     {ty:"mc",q:"\"Bread\" kelimesinin Türkçesi nedir?",o:["Ekmek","Pirinç","Süt","Su"],a:0},
     {ty:"mc",q:"\"Milk\" kelimesi hangi anlama gelir?",o:["Su","Süt","Meyve suyu","Çay"],a:1},
     {ty:"mc",q:"\"Chicken\" kelimesi hangi anlama gelir?",o:["Balık","Tavuk eti","Ekmek","Pirinç"],a:1},
     {ty:"tf",q:"\"Juice\" kelimesi Türkçede \"meyve suyu\" demektir.",a:true},
-    {ty:"fb",q:"\"I drink a glass of ____ every morning.\" (süt anlamına gelen kelime)",a:"milk"}
-  ]
+    {ty:"fb",q:"\"I drink a glass of ____ every morning.\" (süt anlamına gelen kelime)",a:"milk"},
+      {ty:"mc",q:"\"Would you like some tea?\" sorusuna uygun cevap hangisidir?",o:["Yes, please.","I am ten.","It is red.","See you."],a:0},
+      {ty:"mc",q:"\"milk\" kelimesinin Türkçe karşılığı nedir?",o:["Süt","Su","Çay","Meyve suyu"],a:0},
+      {ty:"mc",q:"\"I don't like olives.\" cümlesi neyi anlatır?",o:["Sevilmeyen bir yiyeceği","Sevilen bir yiyeceği","Bir tarifi","Bir kuralı"],a:0},
+      {ty:"mc",q:"\"vegetable\" kelimesinin Türkçe karşılığı nedir?",o:["Sebze","Meyve","Et","Tatlı"],a:0},
+      {ty:"tf",q:"\"cheese\" kelimesi peynir anlamına gelir.",a:true},
+      {ty:"tf",q:"\"breakfast\" kelimesi akşam yemeği anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Ekmek\" kelimesinin İngilizcesi ____ dir.",a:"bread"},
+      {ty:"fb",q:"\"Yumurta\" kelimesinin İngilizcesi ____ dur.",a:"egg"}
+    ]
 },
 "din-9": {
   /* Kapsam: İnsan ve İnsanın Yaratılışı · Doğruyu Arayan Bir Varlık Olarak
@@ -6097,8 +6259,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"break time\" teneffüs anlamındadır.",a:true},
     {ty:"tf",q:"\"Saturday\" hafta içi bir gündür.",a:false},
     {ty:"fb",q:"\"I have Maths ____ Monday.\" cümlesinde boşluğa gelen edat nedir?",a:"on"},
-    {ty:"fb",q:"\"Ders programı\" ifadesinin İngilizcesi ____ dır.",a:"timetable"}
-  ],
+    {ty:"fb",q:"\"Ders programı\" ifadesinin İngilizcesi ____ dır.",a:"timetable"},
+      {ty:"mc",q:"\"What is your favourite subject?\" sorusu neyi öğrenmek için sorulur?",o:["En sevilen dersi","Okulun adını","Sınıf numarasını","Öğretmenin adını"],a:0},
+      {ty:"mc",q:"\"We have Maths on Mondays.\" cümlesi neyi anlatır?",o:["Haftalık ders düzenini","Bir sınav tarihini","Bir tatili","Bir ödevi"],a:0},
+      {ty:"tf",q:"\"break time\" ifadesi teneffüs anlamındadır.",a:true},
+      {ty:"tf",q:"\"subject\" kelimesi okul anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Beden eğitimi\" dersinin İngilizce kısaltması ____ dir.",a:"PE"},
+      {ty:"fb",q:"\"Coğrafya\" dersinin İngilizcesi ____ dir.",a:"Geography"}
+    ],
   "Classroom Life": [
     {ty:"mc",q:"\"Can I come in, please?\" cümlesi neyi ifade eder?",o:["İzin isteme","Emir verme","Teşekkür etme","Vedalaşma"],a:0},
     {ty:"mc",q:"\"You must listen to your teacher.\" cümlesinde 'must' neyi bildirir?",o:["Zorunluluk","İzin","İstek","Yetenek"],a:0},
@@ -6108,8 +6276,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"mustn't\" yasak bildirir.",a:true},
     {ty:"tf",q:"\"Can\" kelimesi yalnızca zorunluluk bildirir.",a:false},
     {ty:"fb",q:"\"Yapmamalısın\" anlamı için ____ kullanılır.",a:"mustn't"},
-    {ty:"fb",q:"\"Can I ____ your pencil?\" ödünç isterken boşluğa gelen fiil nedir?",a:"borrow"}
-  ],
+    {ty:"fb",q:"\"Can I ____ your pencil?\" ödünç isterken boşluğa gelen fiil nedir?",a:"borrow"},
+      {ty:"mc",q:"\"I don't understand.\" cümlesi hangi durumda kullanılır?",o:["Anlaşılmadığını belirtirken","Onay verirken","Vedalaşırken","Övgü yaparken"],a:0},
+      {ty:"mc",q:"\"How do you spell it?\" sorusu neyi öğrenmek için sorulur?",o:["Bir kelimenin harflerini","Bir kelimenin anlamını","Bir kelimenin sesini","Bir kelimenin kökenini"],a:0},
+      {ty:"tf",q:"\"Well done!\" ifadesi övgü bildirir.",a:true},
+      {ty:"tf",q:"\"May I ask a question?\" cümlesi emir bildirir.",a:false},
+      {ty:"fb",q:"\"Tekrar etmek\" fiilinin İngilizcesi ____ tir.",a:"repeat"},
+      {ty:"fb",q:"\"Anlamak\" fiilinin İngilizcesi ____ dır.",a:"understand"}
+    ],
   "Personal Life": [
     {ty:"mc",q:"\"I usually get up at seven.\" cümlesinde 'usually' ne bildirir?",o:["Sıklık","Zaman dilimi","Yer","Miktar"],a:0},
     {ty:"mc",q:"\"I always brush my teeth.\" cümlesinde en yüksek sıklığı bildiren kelime hangisidir?",o:["always","sometimes","never","rarely"],a:0},
@@ -6119,8 +6293,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"Sıklık zarfları genellikle fiilden önce gelir.",a:true},
     {ty:"tf",q:"\"never\" kelimesi \"her zaman\" anlamındadır.",a:false},
     {ty:"fb",q:"\"She ____ television every evening.\" cümlesinde boşluğa gelen fiil biçimi nedir?",a:"watches"},
-    {ty:"fb",q:"\"Bazen\" anlamındaki sıklık zarfı ____ dir.",a:"sometimes"}
-  ],
+    {ty:"fb",q:"\"Bazen\" anlamındaki sıklık zarfı ____ dir.",a:"sometimes"},
+      {ty:"mc",q:"\"I usually get up early.\" cümlesindeki 'usually' neyi bildirir?",o:["Sıklık","Zaman aralığı","Yer","Neden"],a:0},
+      {ty:"mc",q:"\"How often do you exercise?\" sorusu neyi öğrenmek için sorulur?",o:["Sıklığı","Süreyi","Yeri","Nedeni"],a:0},
+      {ty:"mc",q:"\"healthy\" kelimesinin Türkçe karşılığı nedir?",o:["Sağlıklı","Hasta","Yorgun","Aç"],a:0},
+      {ty:"tf",q:"\"never\" kelimesi hiçbir zaman anlamına gelir.",a:true},
+      {ty:"tf",q:"\"always\" kelimesi bazen anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Bazen\" kelimesinin İngilizcesi ____ tir.",a:"sometimes"},
+      {ty:"fb",q:"\"Sıklıkla\" anlamındaki sıklık zarfı ____ tir.",a:"often"}
+    ],
   "Family Life": [
     {ty:"mc",q:"\"We have dinner together at seven.\" cümlesi hangi öğünü anlatır?",o:["Akşam yemeği","Kahvaltı","Öğle yemeği","Ara öğün"],a:0},
     {ty:"mc",q:"\"My sister is helpful.\" cümlesinde kız kardeşin hangi özelliği anlatılıyor?",o:["Kişilik","Boy","Yaş","Meslek"],a:0},
@@ -6130,8 +6311,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"housework\" ev işleri anlamındadır.",a:true},
     {ty:"tf",q:"\"Whose\" sorusu yer sorar.",a:false},
     {ty:"fb",q:"\"Bulaşık yıkamak\" ifadesinin İngilizcesi do the ____ dır.",a:"dishes"},
-    {ty:"fb",q:"\"My father's car\" ifadesinde sahiplik ____ ile kurulmuştur.",a:"'s"}
-  ],
+    {ty:"fb",q:"\"My father's car\" ifadesinde sahiplik ____ ile kurulmuştur.",a:"'s"},
+      {ty:"mc",q:"\"Whose book is this?\" sorusu neyi öğrenmek için sorulur?",o:["Kitabın kime ait olduğunu","Kitabın adını","Kitabın fiyatını","Kitabın rengini"],a:0},
+      {ty:"mc",q:"\"My sister's room\" ifadesinde kesme işareti neyi gösterir?",o:["Aitliği","Çoğulluğu","Geçmiş zamanı","Soruyu"],a:0},
+      {ty:"mc",q:"\"We do the shopping at the weekend.\" cümlesi neyi anlatır?",o:["Düzenli bir aile işini","Bir tatili","Bir kuralı","Bir isteği"],a:0},
+      {ty:"tf",q:"\"relatives\" kelimesi akrabalar anlamına gelir.",a:true},
+      {ty:"tf",q:"\"chores\" kelimesi tatil anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Ev işleri\" ifadesinin İngilizcesi ____ dır.",a:"chores"},
+      {ty:"fb",q:"\"This is my ____ bike.\" (kardeşimin) cümlesinde aitlik eki kullanılarak brother kelimesi ____ biçiminde yazılır.",a:"brother's"}
+    ],
   "Life in the Neighbourhood & City": [
     {ty:"mc",q:"\"Excuse me, where is the post office?\" cümlesi neyi ifade eder?",o:["Yol sorma","Teşekkür","İzin isteme","Şikâyet"],a:0},
     {ty:"mc",q:"\"Go straight and turn left.\" cümlesi neyi anlatır?",o:["Yön tarifi","Hava durumu","Fiyat","Saat"],a:0},
@@ -6141,8 +6329,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"opposite\" kelimesi karşısında anlamındadır.",a:true},
     {ty:"tf",q:"\"turn right\" sola dön anlamındadır.",a:false},
     {ty:"fb",q:"\"Düz git\" ifadesinin İngilizcesi go ____ dır.",a:"straight"},
-    {ty:"fb",q:"\"Eczane\" kelimesinin İngilizcesi ____ dir.",a:"pharmacy"}
-  ],
+    {ty:"fb",q:"\"Eczane\" kelimesinin İngilizcesi ____ dir.",a:"pharmacy"},
+      {ty:"mc",q:"\"Is there a chemist's near here?\" sorusu neyi öğrenmek için sorulur?",o:["Yakında eczane olup olmadığını","Eczanenin adını","İlacın fiyatını","Doktorun adını"],a:0},
+      {ty:"mc",q:"\"opposite\" kelimesinin Türkçe karşılığı nedir?",o:["Karşısında","Yanında","Arkasında","Arasında"],a:0},
+      {ty:"mc",q:"\"You can take the tram.\" cümlesi neyi bildirir?",o:["Bir olanağı","Bir yasağı","Bir zorunluluğu","Bir şikâyeti"],a:0},
+      {ty:"tf",q:"\"corner\" kelimesi köşe anlamına gelir.",a:true},
+      {ty:"tf",q:"\"crossroads\" kelimesi köprü anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kavşak\" kelimesinin İngilizcesi ____ tır.",a:"crossroads"},
+      {ty:"fb",q:"\"Go ____ the traffic lights.\" (kadar/e doğru) cümlesindeki boşluğa gelen edat ____ dur.",a:"to"}
+    ],
   "Life in the World": [
     {ty:"mc",q:"\"Where are you from?\" sorusuna uygun cevap hangisidir?",o:["I'm from Türkiye.","I am ten.","It is blue.","Yes, I am."],a:0},
     {ty:"mc",q:"\"nationality\" kelimesinin Türkçe karşılığı nedir?",o:["Uyruk/milliyet","Şehir","Dil","Bayrak"],a:0},
@@ -6152,8 +6347,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"tourist attraction\" turistik yer anlamındadır.",a:true},
     {ty:"tf",q:"\"language\" kelimesi ülke anlamına gelir.",a:false},
     {ty:"fb",q:"\"Başkent\" ifadesinin İngilizcesi capital ____ dir.",a:"city"},
-    {ty:"fb",q:"\"I'm ____ Türkiye.\" cümlesinde boşluğa gelen edat nedir?",a:"from"}
-  ],
+    {ty:"fb",q:"\"I'm ____ Türkiye.\" cümlesinde boşluğa gelen edat nedir?",a:"from"},
+      {ty:"mc",q:"\"continent\" kelimesinin Türkçe karşılığı nedir?",o:["Kıta","Ülke","Şehir","Ada"],a:0},
+      {ty:"mc",q:"\"People speak Spanish in Mexico.\" cümlesi neyi bildirir?",o:["Bir ülkede konuşulan dili","Bir şehrin nüfusunu","Bir yolculuğu","Bir geleneği"],a:0},
+      {ty:"mc",q:"\"traditional\" kelimesinin Türkçe karşılığı nedir?",o:["Geleneksel","Modern","Yabancı","Yeni"],a:0},
+      {ty:"tf",q:"\"culture\" kelimesi kültür anlamına gelir.",a:true},
+      {ty:"tf",q:"\"island\" kelimesi kıta anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Ada\" kelimesinin İngilizcesi ____ dır.",a:"island"},
+      {ty:"fb",q:"\"Gelenek\" kelimesinin İngilizcesi ____ dır.",a:"tradition"}
+    ],
   "Life in Nature": [
     {ty:"mc",q:"\"Don't drop litter!\" cümlesi neyi ifade eder?",o:["Çöp atmamayı","Çöp toplamayı","Ağaç dikmeyi","Su içmeyi"],a:0},
     {ty:"mc",q:"\"We must protect the environment.\" cümlesi neyi anlatır?",o:["Çevreyi korumayı","Çevreyi kirletmeyi","Bir yeri","Bir saati"],a:0},
@@ -6163,8 +6365,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"save water\" suyu tasarruflu kullanmak anlamındadır.",a:true},
     {ty:"tf",q:"\"pollution\" kelimesi temizlik anlamına gelir.",a:false},
     {ty:"fb",q:"\"Geri dönüşüm\" ifadesinin İngilizcesi ____ dır.",a:"recycling"},
-    {ty:"fb",q:"\"Kirlilik\" kelimesinin İngilizcesi ____ dur.",a:"pollution"}
-  ],
+    {ty:"fb",q:"\"Kirlilik\" kelimesinin İngilizcesi ____ dur.",a:"pollution"},
+      {ty:"mc",q:"\"We should protect animals.\" cümlesinde 'should' neyi bildirir?",o:["Öneri","Yasak","Yetenek","İzin"],a:0},
+      {ty:"mc",q:"\"wild animals\" ifadesinin Türkçe karşılığı nedir?",o:["Yabani hayvanlar","Evcil hayvanlar","Çiftlik hayvanları","Deniz canlıları"],a:0},
+      {ty:"tf",q:"\"protect\" fiili korumak anlamındadır.",a:true},
+      {ty:"tf",q:"\"desert\" kelimesi orman anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Çöl\" kelimesinin İngilizcesi ____ tır.",a:"desert"},
+      {ty:"fb",q:"\"Çevre\" kelimesinin İngilizcesi ____ tır.",a:"environment"}
+    ],
   "Life in the Universe & Future": [
     {ty:"mc",q:"\"planet\" kelimesinin Türkçe karşılığı nedir?",o:["Gezegen","Yıldız","Uydu","Güneş"],a:0},
     {ty:"mc",q:"\"I want to be an astronaut.\" cümlesi neyi anlatır?",o:["Gelecekle ilgili bir isteği","Geçmiş bir olayı","Bir kuralı","Bir yeri"],a:0},
@@ -6174,8 +6382,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"will\" gelecek zaman bildirir.",a:true},
     {ty:"tf",q:"\"moon\" kelimesi güneş anlamına gelir.",a:false},
     {ty:"fb",q:"\"Uzay\" kelimesinin İngilizcesi ____ dir.",a:"space"},
-    {ty:"fb",q:"\"Gelecekte\" ifadesinin İngilizcesi in the ____ dur.",a:"future"}
-  ]
+    {ty:"fb",q:"\"Gelecekte\" ifadesinin İngilizcesi in the ____ dur.",a:"future"},
+      {ty:"mc",q:"\"I will be an engineer.\" cümlesi hangi zamanı bildirir?",o:["Gelecek","Geçmiş","Şimdiki","Geniş"],a:0},
+      {ty:"mc",q:"\"astronaut\" kelimesinin Türkçe karşılığı nedir?",o:["Astronot","Pilot","Bilim insanı","Mühendis"],a:0},
+      {ty:"tf",q:"\"space\" kelimesi uzay anlamına gelir.",a:true},
+      {ty:"tf",q:"\"will\" yardımcı fiili geçmiş zaman kurar.",a:false},
+      {ty:"fb",q:"\"Uydu\" kelimesinin İngilizcesi ____ tir.",a:"satellite"},
+      {ty:"fb",q:"\"In the future, robots ____ help us.\" (yardım edecek) cümlesindeki boşluğa gelen kelime ____ dır.",a:"will"}
+    ]
 },
 "ing-6": {
   /* Resmî temalar (THEME 1-8). Sorular 6. sınıf düzeyinde tutulmuştur. */
@@ -6188,8 +6402,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"than\" karşılaştırma cümlelerinde kullanılır.",a:true},
     {ty:"tf",q:"\"club\" kelimesi ders anlamına gelir.",a:false},
     {ty:"fb",q:"\"Maths is ____ (easy) than Physics.\" karşılaştırma biçimi nedir?",a:"easier"},
-    {ty:"fb",q:"\"Katılmak\" fiilinin İngilizcesi ____ dır.",a:"join"}
-  ],
+    {ty:"fb",q:"\"Katılmak\" fiilinin İngilizcesi ____ dır.",a:"join"},
+      {ty:"mc",q:"\"I have to wear a uniform.\" cümlesinde 'have to' neyi bildirir?",o:["Zorunluluk","Öneri","Yasak","Tercih"],a:0},
+      {ty:"mc",q:"\"club\" kelimesi okul bağlamında neyi ifade eder?",o:["Öğrenci kulübünü","Sınıfı","Dersi","Sınavı"],a:0},
+      {ty:"tf",q:"\"schedule\" kelimesi program anlamına gelir.",a:true},
+      {ty:"tf",q:"\"absent\" kelimesi derse katılmış anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Devamsız\" anlamındaki kelimenin İngilizcesi ____ tır.",a:"absent"},
+      {ty:"fb",q:"\"Üniforma\" kelimesinin İngilizcesi ____ dır.",a:"uniform"}
+    ],
   "Classroom Life": [
     {ty:"mc",q:"\"You should take notes in class.\" cümlesinde 'should' neyi bildirir?",o:["Öneri","Zorunluluk","Yasak","Yetenek"],a:0},
     {ty:"mc",q:"\"We are working on a project.\" cümlesi hangi zamandadır?",o:["Şimdiki zaman","Geniş zaman","Geçmiş zaman","Gelecek zaman"],a:0},
@@ -6199,8 +6419,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"should\" tavsiye bildirir.",a:true},
     {ty:"tf",q:"\"Let's\" emir kipi bildirir.",a:false},
     {ty:"fb",q:"\"İş birliği\" kelimesinin İngilizcesi ____ dır.",a:"cooperation"},
-    {ty:"fb",q:"\"We are ____ (study) now.\" şimdiki zaman biçimi nedir?",a:"studying"}
-  ],
+    {ty:"fb",q:"\"We are ____ (study) now.\" şimdiki zaman biçimi nedir?",a:"studying"},
+      {ty:"mc",q:"\"Let me check my notes.\" cümlesi neyi anlatır?",o:["Notlara bakma isteğini","Not almayı bırakmayı","Notların kaybolduğunu","Notların bittiğini"],a:0},
+      {ty:"mc",q:"\"Take notes while listening.\" cümlesi hangi tür ifadedir?",o:["Yönlendirme","Soru","Şikâyet","Tercih"],a:0},
+      {ty:"mc",q:"\"group work\" ifadesinin Türkçe karşılığı nedir?",o:["Grup çalışması","Bireysel çalışma","Sınav","Ödev"],a:0},
+      {ty:"tf",q:"\"take notes\" ifadesi not almak anlamındadır.",a:true},
+      {ty:"tf",q:"\"revise\" fiili silmek anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Sunum\" kelimesinin İngilizcesi ____ dır.",a:"presentation"},
+      {ty:"fb",q:"\"Not almak\" ifadesinin İngilizcesi take ____ tır.",a:"notes"}
+    ],
   "Personal Life": [
     {ty:"mc",q:"\"I had a healthy breakfast.\" cümlesi hangi zamandadır?",o:["Geçmiş zaman","Geniş zaman","Şimdiki zaman","Gelecek zaman"],a:0},
     {ty:"mc",q:"\"How often do you exercise?\" sorusu neyi sorar?",o:["Sıklığı","Süreyi","Yeri","Fiyatı"],a:0},
@@ -6210,8 +6437,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"twice a week\" haftada iki kez anlamındadır.",a:true},
     {ty:"tf",q:"\"was/were\" gelecek zaman bildirir.",a:false},
     {ty:"fb",q:"\"I ____ (be) tired yesterday.\" boşluğa gelen biçim nedir?",a:"was"},
-    {ty:"fb",q:"\"Ne sıklıkla\" ifadesinin İngilizcesi how ____ dır.",a:"often"}
-  ],
+    {ty:"fb",q:"\"Ne sıklıkla\" ifadesinin İngilizcesi how ____ dır.",a:"often"},
+      {ty:"mc",q:"\"I am interested in photography.\" cümlesi neyi anlatır?",o:["İlgi alanını","Mesleği","Yaşı","Adresi"],a:0},
+      {ty:"mc",q:"\"Which one do you prefer?\" sorusu neyi öğrenmek için sorulur?",o:["Tercihi","Nedeni","Yeri","Zamanı"],a:0},
+      {ty:"mc",q:"\"cheerful\" kelimesinin Türkçe karşılığı nedir?",o:["Neşeli","Üzgün","Kızgın","Yorgun"],a:0},
+      {ty:"tf",q:"\"prefer\" fiili tercih etmek anlamındadır.",a:true},
+      {ty:"tf",q:"\"shy\" kelimesi cesur anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Utangaç\" kelimesinin İngilizcesi ____ dır.",a:"shy"},
+      {ty:"fb",q:"\"I am interested ____ music.\" cümlesindeki boşluğa gelen edat ____ dir.",a:"in"}
+    ],
   "Family Life": [
     {ty:"mc",q:"\"We usually have a family dinner on Sundays.\" cümlesi neyi anlatır?",o:["Aile alışkanlığını","Bir kuralı","Bir yeri","Bir fiyatı"],a:0},
     {ty:"mc",q:"\"My grandparents live in a village.\" cümlesinde 'grandparents' kimlerdir?",o:["Büyükanne ve büyükbaba","Anne ve baba","Kardeşler","Kuzenler"],a:0},
@@ -6221,8 +6455,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"responsible for\" kalıbı sorumluluk bildirir.",a:true},
     {ty:"tf",q:"\"chores\" kelimesi tatil anlamına gelir.",a:false},
     {ty:"fb",q:"\"Ev işleri\" kelimesinin İngilizcesi ____ dır.",a:"chores"},
-    {ty:"fb",q:"\"I am responsible ____ my room.\" boşluğa gelen edat nedir?",a:"for"}
-  ],
+    {ty:"fb",q:"\"I am responsible ____ my room.\" boşluğa gelen edat nedir?",a:"for"},
+      {ty:"mc",q:"\"We celebrate birthdays together.\" cümlesi neyi anlatır?",o:["Aile geleneğini","Bir kuralı","Bir yasağı","Bir sorunu"],a:0},
+      {ty:"mc",q:"\"take care of\" ifadesinin Türkçe karşılığı nedir?",o:["Bakmak, ilgilenmek","Terk etmek","Unutmak","Kızmak"],a:0},
+      {ty:"mc",q:"\"My grandparents live in a village.\" cümlesinde hangi bilgi verilir?",o:["Yaşadıkları yer","Yaşları","Meslekleri","Adları"],a:0},
+      {ty:"tf",q:"\"celebrate\" fiili kutlamak anlamındadır.",a:true},
+      {ty:"tf",q:"\"grandparents\" kelimesi kuzenler anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Büyükanne ve büyükbaba\" için kullanılan kelime ____ tır.",a:"grandparents"},
+      {ty:"fb",q:"\"Kutlamak\" fiilinin İngilizcesi ____ tir.",a:"celebrate"}
+    ],
   "Life in the Neighbourhood & City": [
     {ty:"mc",q:"\"There used to be a cinema here.\" cümlesi neyi anlatır?",o:["Geçmişteki bir durumu","Şimdiki durumu","Gelecek planı","Bir kuralı"],a:0},
     {ty:"mc",q:"\"neighbourhood\" kelimesinin Türkçe karşılığı nedir?",o:["Mahalle","Şehir","Ülke","Kıta"],a:0},
@@ -6232,8 +6473,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"famous for\" kalıbı bir yerin ünlü olduğu şeyi anlatır.",a:true},
     {ty:"tf",q:"\"quiet\" kelimesi kalabalık anlamına gelir.",a:false},
     {ty:"fb",q:"\"Mahalle\" kelimesinin İngilizcesi ____ dur.",a:"neighbourhood"},
-    {ty:"fb",q:"\"Ne kadar\" fiyat sorusu how ____ ile kurulur.",a:"much"}
-  ],
+    {ty:"fb",q:"\"Ne kadar\" fiyat sorusu how ____ ile kurulur.",a:"much"},
+      {ty:"mc",q:"\"Excuse me, how can I get to the station?\" cümlesi neyi ifade eder?",o:["Yol sorma","Bilet alma","Şikâyet etme","Randevu isteme"],a:0},
+      {ty:"mc",q:"\"pedestrian\" kelimesinin Türkçe karşılığı nedir?",o:["Yaya","Sürücü","Yolcu","Bisikletli"],a:0},
+      {ty:"mc",q:"\"It is on the second floor.\" cümlesi neyi bildirir?",o:["Bulunduğu katı","Bulunduğu sokağı","Açılış saatini","Fiyatını"],a:0},
+      {ty:"tf",q:"\"traffic\" kelimesi trafik anlamına gelir.",a:true},
+      {ty:"tf",q:"\"driver\" kelimesi yaya anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kaldırım\" kelimesinin İngilizcesi ____ tır.",a:"pavement"},
+      {ty:"fb",q:"\"Durak\" anlamındaki kelimenin İngilizcesi bus ____ tur.",a:"stop"}
+    ],
   "Life in the World & Culture": [
     {ty:"mc",q:"\"traditional\" kelimesinin Türkçe karşılığı nedir?",o:["Geleneksel","Modern","Yabancı","Kolay"],a:0},
     {ty:"mc",q:"\"People celebrate different festivals around the world.\" cümlesi neyi anlatır?",o:["Kültürel çeşitliliği","Bir kuralı","Bir yeri","Bir saati"],a:0},
@@ -6243,8 +6491,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"celebrate\" kutlamak anlamındadır.",a:true},
     {ty:"tf",q:"\"custom\" kelimesi kostüm anlamına gelir.",a:false},
     {ty:"fb",q:"\"Gelenek\" kelimesinin İngilizcesi ____ dur.",a:"tradition"},
-    {ty:"fb",q:"\"Kutlamak\" fiilinin İngilizcesi ____ dır.",a:"celebrate"}
-  ],
+    {ty:"fb",q:"\"Kutlamak\" fiilinin İngilizcesi ____ dır.",a:"celebrate"},
+      {ty:"mc",q:"\"festival\" kelimesinin Türkçe karşılığı nedir?",o:["Şenlik, festival","Sınav","Tatil günü","Toplantı"],a:0},
+      {ty:"mc",q:"\"In Japan, people take off their shoes indoors.\" cümlesi neyi anlatır?",o:["Bir kültürel alışkanlığı","Bir yasağı","Bir yolculuğu","Bir sınavı"],a:0},
+      {ty:"mc",q:"\"souvenir\" kelimesinin Türkçe karşılığı nedir?",o:["Hatıra eşyası","Bilet","Harita","Bavul"],a:0},
+      {ty:"tf",q:"\"custom\" kelimesi gelenek anlamına gelebilir.",a:true},
+      {ty:"tf",q:"\"foreign\" kelimesi yerli anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yabancı\" kelimesinin İngilizcesi ____ dır.",a:"foreign"},
+      {ty:"fb",q:"\"Görenek/gelenek\" anlamındaki kelime ____ tur.",a:"custom"}
+    ],
   "Life in Nature & Global Problems": [
     {ty:"mc",q:"\"climate change\" ifadesinin Türkçe karşılığı nedir?",o:["İklim değişikliği","Hava durumu","Mevsim","Sıcaklık"],a:0},
     {ty:"mc",q:"\"We should reduce plastic waste.\" cümlesinde 'reduce' ne anlama gelir?",o:["Azaltmak","Artırmak","Satmak","Taşımak"],a:0},
@@ -6254,8 +6509,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"reduce, reuse, recycle\" çevre için üç temel ilkedir.",a:true},
     {ty:"tf",q:"\"waste\" kelimesi temizlik anlamına gelir.",a:false},
     {ty:"fb",q:"\"Yenilenebilir\" kelimesinin İngilizcesi ____ dır.",a:"renewable"},
-    {ty:"fb",q:"\"İklim\" kelimesinin İngilizcesi ____ dır.",a:"climate"}
-  ],
+    {ty:"fb",q:"\"İklim\" kelimesinin İngilizcesi ____ dır.",a:"climate"},
+      {ty:"mc",q:"\"pollution\" kelimesinin Türkçe karşılığı nedir?",o:["Kirlilik","Temizlik","Yağış","Sıcaklık"],a:0},
+      {ty:"mc",q:"\"We must save water.\" cümlesinde 'must' neyi bildirir?",o:["Zorunluluk","Öneri","Yetenek","İzin"],a:0},
+      {ty:"mc",q:"\"recycle\" fiilinin Türkçe karşılığı nedir?",o:["Geri dönüştürmek","Çöpe atmak","Yakmak","Gömmek"],a:0},
+      {ty:"tf",q:"\"waste\" kelimesi atık anlamına gelebilir.",a:true},
+      {ty:"tf",q:"\"save\" fiili harcamak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Küresel ısınma\" ifadesinin İngilizcesi global ____ dır.",a:"warming"},
+      {ty:"fb",q:"\"Geri dönüşüm\" kelimesinin İngilizcesi ____ dır.",a:"recycling"}
+    ],
   "Life in the Universe & Future": [
     {ty:"mc",q:"\"I think robots will help us in the future.\" cümlesi hangi zamanı kullanır?",o:["Gelecek zaman","Geçmiş zaman","Geniş zaman","Şimdiki zaman"],a:0},
     {ty:"mc",q:"\"satellite\" kelimesinin Türkçe karşılığı nedir?",o:["Uydu","Gezegen","Yıldız","Kuyruklu yıldız"],a:0},
@@ -6265,8 +6527,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"will\" ile gelecekle ilgili tahmin yapılabilir.",a:true},
     {ty:"tf",q:"\"satellite\" kelimesi yıldız anlamına gelir.",a:false},
     {ty:"fb",q:"\"Keşif\" kelimesinin İngilizcesi ____ dır.",a:"discovery"},
-    {ty:"fb",q:"\"Belki\" kelimesinin İngilizcesi ____ dir.",a:"maybe"}
-  ]
+    {ty:"fb",q:"\"Belki\" kelimesinin İngilizcesi ____ dir.",a:"maybe"},
+      {ty:"mc",q:"\"telescope\" kelimesinin Türkçe karşılığı nedir?",o:["Teleskop","Mikroskop","Pusula","Termometre"],a:0},
+      {ty:"mc",q:"\"Scientists are going to launch a satellite.\" cümlesi hangi zamanı bildirir?",o:["Planlanmış gelecek","Geçmiş","Şimdiki alışkanlık","Genel gerçek"],a:0},
+      {ty:"mc",q:"\"solar system\" ifadesinin Türkçe karşılığı nedir?",o:["Güneş sistemi","Yıldız kümesi","Galaksi","Uydu yörüngesi"],a:0},
+      {ty:"tf",q:"\"orbit\" kelimesi yörünge anlamına gelir.",a:true},
+      {ty:"tf",q:"\"launch\" fiili indirmek anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yörünge\" kelimesinin İngilizcesi ____ tır.",a:"orbit"},
+      {ty:"fb",q:"\"Keşfetmek\" fiilinin İngilizcesi ____ dır.",a:"explore"}
+    ]
 },
 "ing-7": {
   /* Resmî temalar (THEME 1-8). Sorular 7. sınıf düzeyinde tutulmuştur. */
@@ -6279,8 +6548,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"be going to\" planlanmış gelecek için kullanılır.",a:true},
     {ty:"tf",q:"\"because\" zıtlık bildirir.",a:false},
     {ty:"fb",q:"\"Başarı\" kelimesinin İngilizcesi ____ dır.",a:"success"},
-    {ty:"fb",q:"\"I am going ____ study tonight.\" boşluğa gelen kelime nedir?",a:"to"}
-  ],
+    {ty:"fb",q:"\"I am going ____ study tonight.\" boşluğa gelen kelime nedir?",a:"to"},
+      {ty:"mc",q:"\"graduate\" fiilinin Türkçe karşılığı nedir?",o:["Mezun olmak","Kaydolmak","Devamsızlık yapmak","Ders vermek"],a:0},
+      {ty:"mc",q:"\"I'm good at solving problems.\" cümlesi neyi anlatır?",o:["Bir beceriyi","Bir yasağı","Bir zorunluluğu","Bir planı"],a:0},
+      {ty:"mc",q:"\"scholarship\" kelimesinin Türkçe karşılığı nedir?",o:["Burs","Diploma","Sınav","Kayıt"],a:0},
+      {ty:"tf",q:"\"be good at\" ifadesi bir konuda iyi olmayı anlatır.",a:true},
+      {ty:"tf",q:"\"graduate\" fiili okula başlamak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Diploma\" kelimesinin İngilizcesi ____ dır.",a:"diploma"},
+      {ty:"fb",q:"\"I'm good ____ Maths.\" cümlesindeki boşluğa gelen edat ____ tır.",a:"at"}
+    ],
   "Classroom Life & Learning": [
     {ty:"mc",q:"\"If you study hard, you will pass the exam.\" cümlesi hangi koşul tipidir?",o:["Birinci tip koşul","İkinci tip koşul","Üçüncü tip koşul","Koşul değil"],a:0},
     {ty:"mc",q:"\"I find grammar difficult but useful.\" cümlesinde 'but' ne bildirir?",o:["Zıtlık","Neden","Sonuç","Zaman"],a:0},
@@ -6290,8 +6566,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"Birinci tip koşul cümlelerinde \"if + present, will + fiil\" yapısı kullanılır.",a:true},
     {ty:"tf",q:"\"but\" neden bildirir.",a:false},
     {ty:"fb",q:"\"If it rains, we ____ stay at home.\" boşluğa gelen kelime nedir?",a:"will"},
-    {ty:"fb",q:"\"Alıştırma yapmak\" fiilinin İngilizcesi ____ dır.",a:"practise"}
-  ],
+    {ty:"fb",q:"\"Alıştırma yapmak\" fiilinin İngilizcesi ____ dır.",a:"practise"},
+      {ty:"mc",q:"\"summarise\" fiilinin Türkçe karşılığı nedir?",o:["Özetlemek","Uzatmak","Yazmak","Ezberlemek"],a:0},
+      {ty:"mc",q:"\"Could you explain it again?\" cümlesi neyi ifade eder?",o:["Yeniden açıklama isteği","Bir emir","Bir şikâyet","Bir teşekkür"],a:0},
+      {ty:"mc",q:"\"highlight\" fiilinin ders çalışmadaki karşılığı nedir?",o:["Önemli yerleri işaretlemek","Sayfayı yırtmak","Kitabı kapatmak","Not silmek"],a:0},
+      {ty:"tf",q:"\"summarise\" fiili özetlemek anlamındadır.",a:true},
+      {ty:"tf",q:"\"guess\" fiili kesin bilmek anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Tahmin etmek\" fiilinin İngilizcesi ____ tir.",a:"guess"},
+      {ty:"fb",q:"\"Özet\" kelimesinin İngilizcesi ____ dir.",a:"summary"}
+    ],
   "Personal Life & Well-being": [
     {ty:"mc",q:"\"You had better rest.\" cümlesi neyi ifade eder?",o:["Güçlü bir öneri","Bir yasağı","Bir izni","Bir soruyu"],a:0},
     {ty:"mc",q:"\"stress\" ile baş etmek için önerilebilecek davranış hangisidir?",o:["Doing sports and sleeping well","Skipping meals","Staying up late","Ignoring problems"],a:0},
@@ -6301,8 +6584,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"used to\" geçmişte yapılıp artık yapılmayan alışkanlıkları anlatır.",a:true},
     {ty:"tf",q:"\"generous\" cimri anlamına gelir.",a:false},
     {ty:"fb",q:"\"Cömert\" kelimesinin İngilizcesi ____ dur.",a:"generous"},
-    {ty:"fb",q:"\"I ____ to live in Ankara.\" geçmiş alışkanlık kalıbında boşluğa gelen kelime nedir?",a:"used"}
-  ],
+    {ty:"fb",q:"\"I ____ to live in Ankara.\" geçmiş alışkanlık kalıbında boşluğa gelen kelime nedir?",a:"used"},
+      {ty:"mc",q:"\"I've had a headache since morning.\" cümlesinde 'since' neyi bildirir?",o:["Başlangıç zamanını","Süreyi","Nedeni","Yeri"],a:0},
+      {ty:"mc",q:"\"You'd better rest.\" cümlesi neyi ifade eder?",o:["Güçlü bir öneri","Bir yasak","Bir izin","Bir tercih"],a:0},
+      {ty:"mc",q:"\"balanced diet\" ifadesinin Türkçe karşılığı nedir?",o:["Dengeli beslenme","Aç kalma","Fazla yemek","Diyet yapmama"],a:0},
+      {ty:"tf",q:"\"You'd better\" ifadesi öneri bildirir.",a:true},
+      {ty:"tf",q:"\"for\" ile süre, \"since\" ile başlangıç noktası verilir; bu ikisi aynıdır.",a:false},
+      {ty:"fb",q:"\"Uyku\" kelimesinin İngilizcesi ____ tir.",a:"sleep"},
+      {ty:"fb",q:"\"I've lived here ____ five years.\" (beş yıldır) cümlesindeki boşluğa gelen kelime ____ dur.",a:"for"}
+    ],
   "Family Life & Home": [
     {ty:"mc",q:"\"My room is tidier than my brother's.\" cümlesinde hangi yapı var?",o:["Karşılaştırma","Üstünlük","Koşul","Edilgen"],a:0},
     {ty:"mc",q:"\"We share the housework in our family.\" cümlesi neyi anlatır?",o:["İş bölümünü","Bir yasağı","Bir kuralı","Bir yeri"],a:0},
@@ -6312,8 +6602,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"Edilgen çatıda \"be + past participle\" yapısı kullanılır.",a:true},
     {ty:"tf",q:"\"tidier\" kelimesi daha dağınık anlamındadır.",a:false},
     {ty:"fb",q:"\"The room ____ cleaned yesterday.\" edilgen cümlede boşluğa gelen kelime nedir?",a:"was"},
-    {ty:"fb",q:"\"Ev aletleri\" ifadesinin İngilizcesi household ____ dır.",a:"appliances"}
-  ],
+    {ty:"fb",q:"\"Ev aletleri\" ifadesinin İngilizcesi household ____ dır.",a:"appliances"},
+      {ty:"mc",q:"\"We share the housework.\" cümlesi neyi anlatır?",o:["Ev işlerinin paylaşıldığını","Evin satıldığını","Evin taşındığını","Evin boş olduğunu"],a:0},
+      {ty:"mc",q:"\"I used to play in the garden.\" cümlesi neyi bildirir?",o:["Geçmişteki bir alışkanlığı","Şimdiki alışkanlığı","Gelecek planı","Bir kuralı"],a:0},
+      {ty:"mc",q:"\"appliance\" kelimesi ev bağlamında neyi ifade eder?",o:["Ev aletini","Odayı","Bahçeyi","Komşuyu"],a:0},
+      {ty:"tf",q:"\"used to\" ifadesi geçmişteki alışkanlığı anlatır.",a:true},
+      {ty:"tf",q:"\"housework\" kelimesi okul ödevi anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Bulaşık makinesi\" ifadesinin İngilizcesi ____ dır.",a:"dishwasher"},
+      {ty:"fb",q:"\"Ev işi\" kelimesinin İngilizcesi ____ tur.",a:"housework"}
+    ],
   "Life in the Neighbourhood & City and Social Life": [
     {ty:"mc",q:"\"Would you like to come to my birthday party?\" cümlesi neyi ifade eder?",o:["Davet","Emir","Şikâyet","Yasak"],a:0},
     {ty:"mc",q:"Bir daveti kibarca reddetmek için hangisi uygundur?",o:["I'd love to, but I'm busy.","No!","I don't care.","Never ask me."],a:0},
@@ -6323,8 +6620,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"Would you like...?\" kibar teklif kalıbıdır.",a:true},
     {ty:"tf",q:"\"volunteer\" ücretli çalışan anlamındadır.",a:false},
     {ty:"fb",q:"\"Gönüllü\" kelimesinin İngilizcesi ____ dır.",a:"volunteer"},
-    {ty:"fb",q:"\"Toplu taşıma\" ifadesinin İngilizcesi public ____ dur.",a:"transport"}
-  ],
+    {ty:"fb",q:"\"Toplu taşıma\" ifadesinin İngilizcesi public ____ dur.",a:"transport"},
+      {ty:"mc",q:"\"Would you like to join us?\" cümlesi neyi ifade eder?",o:["Davet etme","Reddetme","Şikâyet etme","İzin isteme"],a:0},
+      {ty:"mc",q:"\"I'm afraid I can't.\" cümlesi neyi ifade eder?",o:["Nazik bir reddetme","Kabul etme","Soru sorma","Emir verme"],a:0},
+      {ty:"mc",q:"\"venue\" kelimesinin Türkçe karşılığı nedir?",o:["Etkinlik yeri","Bilet","Süre","Konuk"],a:0},
+      {ty:"tf",q:"\"invitation\" kelimesi davet anlamına gelir.",a:true},
+      {ty:"tf",q:"\"accept\" fiili reddetmek anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Davet\" kelimesinin İngilizcesi ____ dır.",a:"invitation"},
+      {ty:"fb",q:"\"Reddetmek\" fiilinin İngilizcesi ____ tir.",a:"refuse"}
+    ],
   "Life in the World & Culture": [
     {ty:"mc",q:"\"Istanbul is one of the most beautiful cities.\" cümlesinde hangi yapı var?",o:["Üstünlük derecesi","Karşılaştırma","Koşul","Edilgen"],a:0},
     {ty:"mc",q:"\"heritage\" kelimesinin Türkçe karşılığı nedir?",o:["Miras","Gelecek","Kural","Görev"],a:0},
@@ -6334,8 +6638,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"Üstünlük derecesinde \"the most\" kullanılabilir.",a:true},
     {ty:"tf",q:"\"heritage\" kelimesi gelecek anlamına gelir.",a:false},
     {ty:"fb",q:"\"Miras\" kelimesinin İngilizcesi ____ dır.",a:"heritage"},
-    {ty:"fb",q:"\"It ____ built in 1550.\" edilgen cümlede boşluğa gelen kelime nedir?",a:"was"}
-  ],
+    {ty:"fb",q:"\"It ____ built in 1550.\" edilgen cümlede boşluğa gelen kelime nedir?",a:"was"},
+      {ty:"mc",q:"\"Ancient Egyptians built the pyramids.\" cümlesi hangi zamanı bildirir?",o:["Geçmiş","Şimdiki","Gelecek","Geniş"],a:0},
+      {ty:"mc",q:"\"The pyramids were built thousands of years ago.\" cümlesi hangi yapıdadır?",o:["Edilgen (passive)","Etken şimdiki","Gelecek","Soru"],a:0},
+      {ty:"tf",q:"\"ancient\" kelimesi antik, çok eski anlamına gelir.",a:true},
+      {ty:"tf",q:"\"heritage\" kelimesi tatil anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Uygarlık\" kelimesinin İngilizcesi ____ tır.",a:"civilisation"},
+      {ty:"fb",q:"\"The bridge ____ built in 1970.\" (edilgen yapı) cümlesindeki boşluğa gelen kelime ____ tır.",a:"was"}
+    ],
   "Life in Nature": [
     {ty:"mc",q:"\"If we don't protect forests, animals will lose their homes.\" cümlesi neyi anlatır?",o:["Bir sonucu/koşulu","Bir emri","Bir teşekkürü","Bir yeri"],a:0},
     {ty:"mc",q:"\"deforestation\" ifadesinin Türkçe karşılığı nedir?",o:["Orman kaybı","Ağaç dikimi","Toprak ıslahı","Su tasarrufu"],a:0},
@@ -6345,8 +6655,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"wildlife\" doğadaki hayvan ve bitki yaşamını anlatır.",a:true},
     {ty:"tf",q:"\"deforestation\" ağaç dikmek anlamına gelir.",a:false},
     {ty:"fb",q:"\"Doğal kaynaklar\" ifadesinin İngilizcesi natural ____ dır.",a:"resources"},
-    {ty:"fb",q:"\"Korumak\" fiilinin İngilizcesi ____ dur.",a:"protect"}
-  ],
+    {ty:"fb",q:"\"Korumak\" fiilinin İngilizcesi ____ dur.",a:"protect"},
+      {ty:"mc",q:"\"endangered species\" ifadesinin Türkçe karşılığı nedir?",o:["Nesli tükenmekte olan türler","Evcil hayvanlar","Göçmen kuşlar","Deniz bitkileri"],a:0},
+      {ty:"mc",q:"\"If we cut down trees, soil erodes.\" cümlesi neyi anlatır?",o:["Bir neden-sonuç ilişkisini","Bir tercihi","Bir isteği","Bir izni"],a:0},
+      {ty:"mc",q:"\"habitat\" kelimesinin Türkçe karşılığı nedir?",o:["Yaşam alanı","Göç yolu","Besin zinciri","İklim"],a:0},
+      {ty:"tf",q:"\"extinct\" kelimesi soyu tükenmiş anlamına gelir.",a:true},
+      {ty:"tf",q:"\"habitat\" kelimesi alışkanlık anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yaşam alanı\" kelimesinin İngilizcesi ____ tır.",a:"habitat"},
+      {ty:"fb",q:"\"Soyu tükenmiş\" anlamındaki kelime ____ tır.",a:"extinct"}
+    ],
   "Life in the Universe & Future": [
     {ty:"mc",q:"\"Scientists believe that life may exist on other planets.\" cümlesinde 'may' neyi bildirir?",o:["Olasılığı","Zorunluluğu","Yasağı","Yeteneği"],a:0},
     {ty:"mc",q:"\"exploration\" kelimesinin Türkçe karşılığı nedir?",o:["Keşif/araştırma","Kayıp","Bekleme","Kapatma"],a:0},
@@ -6356,8 +6673,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"may\" olasılık bildiren bir modal fiildir.",a:true},
     {ty:"tf",q:"\"exploration\" kelimesi patlama anlamına gelir.",a:false},
     {ty:"fb",q:"\"Yapay zekâ\" ifadesinin İngilizcesi artificial ____ dır.",a:"intelligence"},
-    {ty:"fb",q:"\"Keşfetmek\" fiilinin İngilizcesi ____ dur.",a:"explore"}
-  ]
+    {ty:"fb",q:"\"Keşfetmek\" fiilinin İngilizcesi ____ dur.",a:"explore"},
+      {ty:"mc",q:"\"If it rains, we will stay at home.\" cümlesi hangi yapıdadır?",o:["Birinci tip koşul cümlesi","Edilgen yapı","Geçmiş zaman","Emir kipi"],a:0},
+      {ty:"mc",q:"\"gravity\" kelimesinin Türkçe karşılığı nedir?",o:["Yer çekimi","Hız","Işık","Basınç"],a:0},
+      {ty:"mc",q:"\"Robots may replace some jobs.\" cümlesinde 'may' neyi bildirir?",o:["Olasılık","Zorunluluk","Yasak","Yetenek"],a:0},
+      {ty:"tf",q:"\"may\" ifadesi olasılık bildirebilir.",a:true},
+      {ty:"tf",q:"\"gravity\" kelimesi ışık anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yer çekimi\" kelimesinin İngilizcesi ____ tir.",a:"gravity"},
+      {ty:"fb",q:"\"If I ____ time, I will help you.\" (sahip olmak) cümlesindeki boşluğa gelen kelime ____ tır.",a:"have"}
+    ]
 },
 "ing-8": {
   "Friendship": [
@@ -6365,71 +6689,151 @@ const UNIT_BANK = {
     {ty:"mc",q:"\"You ___ keep your friend's secrets; it is very important.\" boşluğa hangisi gelmelidir?",o:["must","mustn't","don't have to","can't"],a:0},
     {ty:"mc",q:"Aşağıdakilerden hangisi iyi bir arkadaşın özelliği değildir?",o:["honest","loyal","selfish","supportive"],a:2},
     {ty:"tf",q:"\"A true friend supports you in difficult times.\" cümlesi doğrudur.",a:true},
-    {ty:"fb",q:"\"Best friends ____ everything with each other, like secrets and feelings.\" (paylaşmak anlamına gelen kelimeyi yaz)",a:"share"}
-  ],
+    {ty:"fb",q:"\"Best friends ____ everything with each other, like secrets and feelings.\" (paylaşmak anlamına gelen kelimeyi yaz)",a:"share"},
+      {ty:"mc",q:"\"trust\" kelimesinin Türkçe karşılığı nedir?",o:["Güven","Kaygı","Öfke","Şaşkınlık"],a:0},
+      {ty:"mc",q:"\"A real friend supports you.\" cümlesi neyi anlatır?",o:["Arkadaşlıkta desteği","Bir kuralı","Bir yasağı","Bir planı"],a:0},
+      {ty:"mc",q:"\"Why don't we meet at the café?\" cümlesi neyi ifade eder?",o:["Öneri","Emir","Yasak","Şikâyet"],a:0},
+      {ty:"mc",q:"\"apologise\" fiilinin Türkçe karşılığı nedir?",o:["Özür dilemek","Teşekkür etmek","Davet etmek","Reddetmek"],a:0},
+      {ty:"tf",q:"\"Why don't we ...?\" kalıbı öneri bildirir.",a:true},
+      {ty:"tf",q:"\"trust\" kelimesi kuşku anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Güvenilir\" kelimesinin İngilizcesi ____ dır.",a:"reliable"},
+      {ty:"fb",q:"\"Özür dilemek\" fiilinin İngilizcesi ____ dir.",a:"apologise"}
+    ],
   "Teen Life": [
     {ty:"mc",q:"\"Teenagers ___ do their homework before playing computer games.\" boşluğa hangisi gelmelidir?",o:["have to","mustn't","can","would"],a:0},
     {ty:"mc",q:"\"I usually ___ up at seven o'clock on school days.\" boşluğa hangisi gelmelidir?",o:["get","gets","getting","got"],a:0},
     {ty:"mc",q:"Ergenlerin (teenagers) genellikle karşılaştığı zorluklardan biri hangisidir?",o:["peer pressure","retirement","marriage","pension"],a:0},
     {ty:"tf",q:"\"Teenagers don't have to follow any rules at school.\" cümlesi doğrudur.",a:false},
-    {ty:"fb",q:"\"She spends a lot of time on social ____ every day.\" (medya anlamına gelen kelimeyi yaz)",a:"media"}
-  ],
+    {ty:"fb",q:"\"She spends a lot of time on social ____ every day.\" (medya anlamına gelen kelimeyi yaz)",a:"media"},
+      {ty:"mc",q:"\"I prefer reading to watching TV.\" cümlesi neyi ifade eder?",o:["Tercihi","Zorunluluğu","Yasağı","İzni"],a:0},
+      {ty:"mc",q:"\"How often do you go to the gym?\" sorusu neyi öğrenmek için sorulur?",o:["Sıklığı","Süreyi","Yeri","Ücreti"],a:0},
+      {ty:"mc",q:"\"hardly ever\" ifadesi hangi sıklığı belirtir?",o:["Neredeyse hiç","Her zaman","Sık sık","Genellikle"],a:0},
+      {ty:"mc",q:"\"I feel like eating something sweet.\" cümlesi neyi anlatır?",o:["Bir isteği","Bir kuralı","Bir yasağı","Bir görevi"],a:0},
+      {ty:"tf",q:"\"prefer ... to ...\" kalıbı tercih bildirir.",a:true},
+      {ty:"tf",q:"\"hardly ever\" ifadesi çok sık anlamına gelir.",a:false},
+      {ty:"fb",q:"\"I prefer tea ____ coffee.\" cümlesindeki boşluğa gelen edat ____ dur.",a:"to"},
+      {ty:"fb",q:"\"Nadiren\" anlamındaki sıklık zarfı ____ dır.",a:"rarely"}
+    ],
   "In the Kitchen": [
     {ty:"mc",q:"\"First, ___ the onions, then add them to the pan.\" (doğramak anlamında) boşluğa hangisi gelmelidir?",o:["chop","boil","bake","mix"],a:0},
     {ty:"mc",q:"\"How much ___ do we need for this cake?\" (un anlamında) boşluğa hangisi gelmelidir?",o:["flour","flours","a flour","flour's"],a:0},
     {ty:"mc",q:"Bir tarifte malzemelerin karıştırılması için hangi fiil kullanılır?",o:["mix","peel","slice","fry"],a:0},
     {ty:"tf",q:"\"Sugar\" sayılamayan (uncountable) bir isimdir.",a:true},
-    {ty:"fb",q:"\"Don't forget to ____ the oven before you put the cake in.\" (önceden ısıtmak anlamına gelen kelimeyi yaz)",a:"preheat"}
-  ],
+    {ty:"fb",q:"\"Don't forget to ____ the oven before you put the cake in.\" (önceden ısıtmak anlamına gelen kelimeyi yaz)",a:"preheat"},
+      {ty:"mc",q:"\"recipe\" kelimesinin Türkçe karşılığı nedir?",o:["Tarif","Fatura","Menü","Sipariş"],a:0},
+      {ty:"mc",q:"\"First, chop the onions.\" cümlesi hangi tür ifadedir?",o:["Sıralı yönlendirme","Soru","Tercih","Şikâyet"],a:0},
+      {ty:"mc",q:"\"a slice of bread\" ifadesi neyi belirtir?",o:["Bir dilim ekmeği","Bir somun ekmeği","Bir paket ekmeği","Bir kase ekmeği"],a:0},
+      {ty:"mc",q:"\"boil\" fiilinin Türkçe karşılığı nedir?",o:["Kaynatmak","Kızartmak","Doğramak","Karıştırmak"],a:0},
+      {ty:"tf",q:"\"a cup of\" ifadesi ölçü belirtmek için kullanılır.",a:true},
+      {ty:"tf",q:"\"fry\" fiili kaynatmak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Doğramak\" fiilinin İngilizcesi ____ tur.",a:"chop"},
+      {ty:"fb",q:"\"Bir kaşık şeker\" ifadesinin İngilizcesi a ____ of sugar biçimindedir.",a:"spoonful"}
+    ],
   "On the Phone": [
     {ty:"mc",q:"\"Hello, ___. Can I speak to Mr. Smith, please?\" boşluğa hangisi gelmelidir?",o:["this is Jane","I am here","who is that","speak now"],a:0},
     {ty:"mc",q:"\"Can I take a ___? He isn't here right now.\" (mesaj anlamında) boşluğa hangisi gelmelidir?",o:["message","letter","note","call"],a:0},
     {ty:"mc",q:"Bir telefon görüşmesini nazikçe sonlandırmak için ne söylenir?",o:["Shut up!","Goodbye, talk to you later!","Never call me again.","I don't care."],a:1},
     {ty:"tf",q:"\"Hold on a second, please.\" ifadesi karşı tarafı beklemeye almak için kullanılır.",a:true},
-    {ty:"fb",q:"\"Sorry, wrong ____. There is no one here with that name.\" (numara anlamına gelen kelimeyi yaz)",a:"number"}
-  ],
+    {ty:"fb",q:"\"Sorry, wrong ____. There is no one here with that name.\" (numara anlamına gelen kelimeyi yaz)",a:"number"},
+      {ty:"mc",q:"\"Can I take a message?\" cümlesi neyi ifade eder?",o:["Not almayı önerme","Şikâyet etme","Hattı kapatma","Randevu isteme"],a:0},
+      {ty:"mc",q:"\"Hold on, please.\" ifadesi ne anlama gelir?",o:["Hatta bekleyin","Kapatın","Tekrar arayın","Sesli konuşun"],a:0},
+      {ty:"mc",q:"\"The line is busy.\" cümlesi neyi bildirir?",o:["Hattın meşgul olduğunu","Numaranın yanlış olduğunu","Telefonun bozuk olduğunu","Konuşmanın bittiğini"],a:0},
+      {ty:"mc",q:"\"He said he would call back.\" cümlesi hangi yapıdadır?",o:["Dolaylı anlatım","Doğrudan anlatım","Edilgen","Koşul"],a:0},
+      {ty:"tf",q:"\"Hold on\" ifadesi beklemeyi anlatır.",a:true},
+      {ty:"tf",q:"\"hang up\" ifadesi telefonu açmak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Telefonu kapatmak\" ifadesinin İngilizcesi hang ____ tır.",a:"up"},
+      {ty:"fb",q:"\"Yanlış numara\" ifadesinin İngilizcesi wrong ____ dır.",a:"number"}
+    ],
   "The Internet": [
     {ty:"mc",q:"\"You should never ___ your password with strangers online.\" boşluğa hangisi gelmelidir?",o:["share","shares","sharing","shared"],a:0},
     {ty:"mc",q:"İnternette kişisel bilgileri korumaya ne denir?",o:["online safety","web browsing","downloading","chatting"],a:0},
     {ty:"mc",q:"\"I need to ___ this file before I can open it on my computer.\" (indirmek anlamında) boşluğa hangisi gelmelidir?",o:["download","upload","delete","print"],a:0},
     {ty:"tf",q:"\"You should meet a stranger from the internet alone.\" cümlesi güvenli bir internet davranışını anlatır.",a:false},
-    {ty:"fb",q:"\"Before you buy something online, you should read the ____ from other customers.\" (yorumlar anlamına gelen kelimeyi yaz)",a:"reviews"}
-  ],
+    {ty:"fb",q:"\"Before you buy something online, you should read the ____ from other customers.\" (yorumlar anlamına gelen kelimeyi yaz)",a:"reviews"},
+      {ty:"mc",q:"\"password\" kelimesinin Türkçe karşılığı nedir?",o:["Şifre","Kullanıcı adı","Bağlantı","Sunucu"],a:0},
+      {ty:"mc",q:"\"You shouldn't share your personal data.\" cümlesi neyi bildirir?",o:["Bir uyarı ve öneri","Bir izin","Bir yetenek","Bir plan"],a:0},
+      {ty:"mc",q:"\"download\" fiilinin Türkçe karşılığı nedir?",o:["İndirmek","Yüklemek","Silmek","Paylaşmak"],a:0},
+      {ty:"mc",q:"\"reliable website\" ifadesinin Türkçe karşılığı nedir?",o:["Güvenilir internet sitesi","Ücretsiz site","Yeni site","Popüler site"],a:0},
+      {ty:"tf",q:"\"upload\" fiili yüklemek anlamındadır.",a:true},
+      {ty:"tf",q:"\"password\" kelimesi bağlantı anlamına gelir.",a:false},
+      {ty:"fb",q:"\"İndirmek\" fiilinin İngilizcesi ____ dır.",a:"download"},
+      {ty:"fb",q:"\"Çevrim içi\" ifadesinin İngilizcesi ____ dır.",a:"online"}
+    ],
   "Adventures": [
     {ty:"mc",q:"\"While we ___ camping, it suddenly started to rain.\" boşluğa hangisi gelmelidir?",o:["go","went","were going","are going"],a:2},
     {ty:"mc",q:"\"They ___ climbing the mountain when the storm began.\" boşluğa hangisi gelmelidir?",o:["were","was","are","is"],a:0},
     {ty:"mc",q:"Aşağıdakilerden hangisi bir macera aktivitesi değildir?",o:["bungee jumping","rock climbing","white-water rafting","doing homework"],a:3},
     {ty:"tf",q:"Past continuous tense, geçmişte devam eden bir eylemi anlatmak için kullanılır.",a:true},
-    {ty:"fb",q:"\"We went on an exciting ____ in the jungle last summer.\" (macera anlamına gelen kelimeyi yaz)",a:"adventure"}
-  ],
+    {ty:"fb",q:"\"We went on an exciting ____ in the jungle last summer.\" (macera anlamına gelen kelimeyi yaz)",a:"adventure"},
+      {ty:"mc",q:"\"If you climb that hill, you will see the lake.\" cümlesi hangi yapıdadır?",o:["Birinci tip koşul cümlesi","Edilgen","Geçmiş zaman","Emir"],a:0},
+      {ty:"mc",q:"\"rafting\" kelimesi hangi tür etkinliği belirtir?",o:["Su sporunu","Kış sporunu","Salon sporunu","Takım sporunu"],a:0},
+      {ty:"mc",q:"\"He is brave enough to try it.\" cümlesindeki 'enough' neyi bildirir?",o:["Yeterliliği","Aşırılığı","Yasağı","Olasılığı"],a:0},
+      {ty:"mc",q:"\"scared\" kelimesinin Türkçe karşılığı nedir?",o:["Korkmuş","Mutlu","Şaşkın","Yorgun"],a:0},
+      {ty:"tf",q:"Birinci tip koşul cümlelerinde 'if' bölümünde geniş zaman kullanılır.",a:true},
+      {ty:"tf",q:"\"scared\" kelimesi cesur anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kaykay\" kelimesinin İngilizcesi ____ tır.",a:"skateboard"},
+      {ty:"fb",q:"\"If it ____, we will cancel the trip.\" (yağarsa) cümlesindeki boşluğa gelen kelime ____ tır.",a:"rains"}
+    ],
   "Tourism": [
     {ty:"mc",q:"\"Excuse me, how can I get to the museum ___ here?\" boşluğa hangisi gelmelidir?",o:["from","to","of","at"],a:0},
     {ty:"mc",q:"\"Last summer, we ___ the Blue Mosque in Istanbul.\" boşluğa hangisi gelmelidir?",o:["visit","visits","visited","visiting"],a:2},
     {ty:"mc",q:"Tatil yaparken kalınan yer için hangi kelime kullanılır?",o:["accommodation","souvenir","passport","itinerary"],a:0},
     {ty:"tf",q:"\"A tourist guide\" turistlere bir şehri veya yeri gezdiren kişidir.",a:true},
-    {ty:"fb",q:"\"We bought some ____ to remember our trip to Antalya.\" (hatıra eşyası anlamına gelen kelimeyi yaz)",a:"souvenirs"}
-  ],
+    {ty:"fb",q:"\"We bought some ____ to remember our trip to Antalya.\" (hatıra eşyası anlamına gelen kelimeyi yaz)",a:"souvenirs"},
+      {ty:"mc",q:"\"accommodation\" kelimesinin Türkçe karşılığı nedir?",o:["Konaklama","Ulaşım","Rehberlik","Yemek"],a:0},
+      {ty:"mc",q:"\"I'd like to book a room.\" cümlesi neyi ifade eder?",o:["Oda ayırtma isteğini","Şikâyet etmeyi","İptal etmeyi","Yol sormayı"],a:0},
+      {ty:"mc",q:"\"sightseeing\" kelimesinin Türkçe karşılığı nedir?",o:["Gezip görme","Alışveriş","Dinlenme","Yemek"],a:0},
+      {ty:"mc",q:"\"The hotel is fully booked.\" cümlesi neyi bildirir?",o:["Otelin dolu olduğunu","Otelin boş olduğunu","Otelin kapandığını","Otelin yeni olduğunu"],a:0},
+      {ty:"tf",q:"\"book\" fiili yer ayırtmak anlamında kullanılabilir.",a:true},
+      {ty:"tf",q:"\"accommodation\" kelimesi ulaşım anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Konaklama\" kelimesinin İngilizcesi ____ dur.",a:"accommodation"},
+      {ty:"fb",q:"\"Gidiş dönüş bilet\" ifadesinin İngilizcesi ____ ticket biçimindedir.",a:"return"}
+    ],
   "Chores": [
     {ty:"mc",q:"\"My brother has to ___ the trash every evening.\" (çöpü atmak anlamında) boşluğa hangisi gelmelidir?",o:["take out","make up","turn on","look after"],a:0},
     {ty:"mc",q:"\"You ___ tidy your room before you go out.\" (zorunluluk anlamında) boşluğa hangisi gelmelidir?",o:["must","mustn't","can","could"],a:0},
     {ty:"mc",q:"Aşağıdakilerden hangisi bir ev işi değildir?",o:["doing the laundry","vacuuming the carpet","watching a movie","setting the table"],a:2},
     {ty:"tf",q:"\"Household chores\" ev içinde yapılması gereken günlük işleri ifade eder.",a:true},
-    {ty:"fb",q:"\"She always ____ the bed in the morning before school.\" (yatağı toplamak anlamına gelen fiili yaz)",a:"makes"}
-  ],
+    {ty:"fb",q:"\"She always ____ the bed in the morning before school.\" (yatağı toplamak anlamına gelen fiili yaz)",a:"makes"},
+      {ty:"mc",q:"\"Take out the rubbish.\" cümlesi hangi tür ifadedir?",o:["Emir veya rica","Soru","Tercih","Öneri"],a:0},
+      {ty:"mc",q:"\"do the laundry\" ifadesinin Türkçe karşılığı nedir?",o:["Çamaşır yıkamak","Bulaşık yıkamak","Yer silmek","Toz almak"],a:0},
+      {ty:"mc",q:"\"Could you help me set the table?\" cümlesi neyi ifade eder?",o:["Nazik bir yardım isteği","Bir emir","Bir yasak","Bir şikâyet"],a:0},
+      {ty:"mc",q:"\"iron\" fiilinin ev işi bağlamındaki karşılığı nedir?",o:["Ütü yapmak","Süpürmek","Yıkamak","Kurulamak"],a:0},
+      {ty:"tf",q:"\"do the washing-up\" ifadesi bulaşık yıkamayı anlatır.",a:true},
+      {ty:"tf",q:"\"laundry\" kelimesi bulaşık anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Süpürmek\" fiilinin İngilizcesi ____ dur.",a:"sweep"},
+      {ty:"fb",q:"\"Yatağı toplamak\" ifadesinin İngilizcesi make the ____ tir.",a:"bed"}
+    ],
   "Science": [
     {ty:"mc",q:"\"Water ___ at 100 degrees Celsius.\" (bilimsel gerçek) boşluğa hangisi gelmelidir?",o:["boil","boils","boiled","boiling"],a:1},
     {ty:"mc",q:"\"Thomas Edison ___ the light bulb.\" boşluğa hangisi gelmelidir?",o:["invent","invents","invented","inventing"],a:2},
     {ty:"mc",q:"Bitkilerin güneş ışığından besin üretme sürecine ne denir?",o:["evaporation","photosynthesis","gravity","reflection"],a:1},
     {ty:"tf",q:"\"The Earth revolves around the Sun.\" bilimsel bir gerçektir.",a:true},
-    {ty:"fb",q:"\"Scientists do ____ in a laboratory to test their ideas.\" (deney anlamına gelen kelimeyi yaz)",a:"experiments"}
-  ],
+    {ty:"fb",q:"\"Scientists do ____ in a laboratory to test their ideas.\" (deney anlamına gelen kelimeyi yaz)",a:"experiments"},
+      {ty:"mc",q:"\"invention\" kelimesinin Türkçe karşılığı nedir?",o:["Buluş","Keşif gezisi","Deney","Ölçüm"],a:0},
+      {ty:"mc",q:"\"The telephone was invented by Bell.\" cümlesi hangi yapıdadır?",o:["Edilgen","Etken şimdiki","Gelecek","Koşul"],a:0},
+      {ty:"mc",q:"\"laboratory\" kelimesinin Türkçe karşılığı nedir?",o:["Laboratuvar","Kütüphane","Atölye","Müze"],a:0},
+      {ty:"mc",q:"\"discover\" ile \"invent\" arasındaki fark nedir?",o:["Biri var olanı bulmak, diğeri yeni bir şey yapmaktır","İkisi de aynıdır","Biri yalnızca kimyada kullanılır","Biri yalnızca geçmişte kullanılır"],a:0},
+      {ty:"tf",q:"Edilgen yapıda eylemi yapan 'by' ile belirtilebilir.",a:true},
+      {ty:"tf",q:"\"invention\" kelimesi deney anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Buluş\" kelimesinin İngilizcesi ____ dur.",a:"invention"},
+      {ty:"fb",q:"\"Penicillin ____ discovered in 1928.\" (edilgen) cümlesindeki boşluğa gelen kelime ____ tır.",a:"was"}
+    ],
   "Natural Forces": [
     {ty:"mc",q:"\"An earthquake is ___ dangerous than a light rain.\" boşluğa hangisi gelmelidir?",o:["much more","much most","more much","most much"],a:0},
     {ty:"mc",q:"\"A ___ is a violent storm with strong winds that spins in a circle.\" boşluğa hangisi gelmelidir?",o:["tornado","drought","flood","earthquake"],a:0},
     {ty:"mc",q:"Uzun süre yağmur yağmaması sonucu oluşan su kıtlığına ne denir?",o:["flood","drought","hurricane","avalanche"],a:1},
     {ty:"tf",q:"\"A tsunami is a giant wave usually caused by an earthquake under the sea.\" cümlesi doğrudur.",a:true},
-    {ty:"fb",q:"\"Heavy rain caused a big ____ in the city; the streets were under water.\" (sel anlamına gelen kelimeyi yaz)",a:"flood"}
-  ]
+    {ty:"fb",q:"\"Heavy rain caused a big ____ in the city; the streets were under water.\" (sel anlamına gelen kelimeyi yaz)",a:"flood"},
+      {ty:"mc",q:"\"earthquake\" kelimesinin Türkçe karşılığı nedir?",o:["Deprem","Sel","Fırtına","Çığ"],a:0},
+      {ty:"mc",q:"\"During an earthquake, you should stay calm.\" cümlesi neyi bildirir?",o:["Bir öneriyi","Bir yasağı","Bir olasılığı","Bir izni"],a:0},
+      {ty:"mc",q:"\"avalanche\" kelimesinin Türkçe karşılığı nedir?",o:["Çığ","Sel","Kasırga","Kuraklık"],a:0},
+      {ty:"mc",q:"\"first aid kit\" ifadesinin Türkçe karşılığı nedir?",o:["İlk yardım çantası","Deprem çantası","Alet çantası","Sırt çantası"],a:0},
+      {ty:"tf",q:"\"hurricane\" kelimesi kasırga anlamına gelir.",a:true},
+      {ty:"tf",q:"\"avalanche\" kelimesi deprem anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Deprem\" kelimesinin İngilizcesi ____ tır.",a:"earthquake"},
+      {ty:"fb",q:"\"Yanardağ\" kelimesinin İngilizcesi ____ dur.",a:"volcano"}
+    ]
 },
 "ing-9": {
   /* Resmî temalar (THEME 1-8). Sorular 9. sınıf düzeyinde tutulmuştur. */
@@ -6442,8 +6846,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"tourist attraction\" turistik yer anlamındadır.",a:true},
     {ty:"tf",q:"\"abroad\" kelimesi yurt içi anlamına gelir.",a:false},
     {ty:"fb",q:"\"Tanıştırmak\" fiilinin İngilizcesi ____ dur.",a:"introduce"},
-    {ty:"fb",q:"\"I'm ____ Ankara.\" cümlesinde boşluğa gelen edat nedir?",a:"from"}
-  ],
+    {ty:"fb",q:"\"I'm ____ Ankara.\" cümlesinde boşluğa gelen edat nedir?",a:"from"},
+      {ty:"mc",q:"\"enrol\" fiilinin Türkçe karşılığı nedir?",o:["Kaydolmak","Mezun olmak","Ayrılmak","Devamsızlık yapmak"],a:0},
+      {ty:"mc",q:"\"I'm looking forward to meeting you.\" cümlesi neyi ifade eder?",o:["Bir şeyi sabırsızlıkla beklemeyi","Bir şeyi reddetmeyi","Bir şeyi unutmayı","Bir şeye kızmayı"],a:0},
+      {ty:"mc",q:"\"exchange programme\" ifadesinin Türkçe karşılığı nedir?",o:["Değişim programı","Ders programı","Yaz okulu","Sınav takvimi"],a:0},
+      {ty:"tf",q:"\"enrol\" fiili kaydolmak anlamındadır.",a:true},
+      {ty:"tf",q:"\"look forward to\" ifadesinden sonra fiilin yalın hâli gelir.",a:false},
+      {ty:"fb",q:"\"Kaydolmak\" fiilinin İngilizcesi ____ dur.",a:"enrol"},
+      {ty:"fb",q:"\"I look forward to ____ from you.\" (duymak) cümlesindeki boşluğa gelen kelime ____ dır.",a:"hearing"}
+    ],
   "Classroom Life": [
     {ty:"mc",q:"\"You should revise before the exam.\" cümlesinde 'should' neyi bildirir?",o:["Öneri","Zorunluluk","Yasak","Yetenek"],a:0},
     {ty:"mc",q:"\"I'd rather work in a group.\" cümlesi neyi ifade eder?",o:["Tercih","Yasak","Zorunluluk","İzin"],a:0},
@@ -6453,8 +6864,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"I'd rather\" tercih bildirir.",a:true},
     {ty:"tf",q:"\"assignment\" kelimesi tatil anlamına gelir.",a:false},
     {ty:"fb",q:"\"Bence\" ifadesinin İngilizcesi in my ____ dır.",a:"opinion"},
-    {ty:"fb",q:"\"Tekrar etmek/gözden geçirmek\" fiilinin İngilizcesi ____ dır.",a:"revise"}
-  ],
+    {ty:"fb",q:"\"Tekrar etmek/gözden geçirmek\" fiilinin İngilizcesi ____ dır.",a:"revise"},
+      {ty:"mc",q:"\"clarify\" fiilinin Türkçe karşılığı nedir?",o:["Açıklığa kavuşturmak","Karıştırmak","Ezberlemek","Silmek"],a:0},
+      {ty:"mc",q:"\"Let's brainstorm ideas.\" cümlesi neyi önerir?",o:["Fikir üretmeyi","Sınav yapmayı","Sessiz kalmayı","Ders bitirmeyi"],a:0},
+      {ty:"mc",q:"\"I agree with you up to a point.\" cümlesi neyi ifade eder?",o:["Kısmen katılmayı","Tamamen katılmayı","Hiç katılmamayı","Soru sormayı"],a:0},
+      {ty:"tf",q:"\"brainstorm\" ifadesi fikir üretme etkinliğini anlatır.",a:true},
+      {ty:"tf",q:"\"disagree\" fiili aynı görüşte olmak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Katılmamak\" fiilinin İngilizcesi ____ dir.",a:"disagree"},
+      {ty:"fb",q:"\"I agree ____ you.\" cümlesindeki boşluğa gelen edat ____ tır.",a:"with"}
+    ],
   "Personal Life: Physical Appearance & Personality": [
     {ty:"mc",q:"\"She is reliable and hard-working.\" cümlesinde hangi özellikler anlatılıyor?",o:["Kişilik","Görünüş","Meslek","Hobi"],a:0},
     {ty:"mc",q:"\"reliable\" kelimesinin Türkçe karşılığı nedir?",o:["Güvenilir","Güvensiz","Cimri","Tembel"],a:0},
@@ -6464,8 +6882,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"What is she like?\" kişilik sorar.",a:true},
     {ty:"tf",q:"\"reliable\" güvenilmez anlamındadır.",a:false},
     {ty:"fb",q:"\"Güvenilir\" kelimesinin İngilizcesi ____ dır.",a:"reliable"},
-    {ty:"fb",q:"\"Kıvırcık saçlı\" ifadesinde saç için kullanılan sıfat ____ dır.",a:"curly"}
-  ],
+    {ty:"fb",q:"\"Kıvırcık saçlı\" ifadesinde saç için kullanılan sıfat ____ dır.",a:"curly"},
+      {ty:"mc",q:"\"He is easy-going.\" cümlesi neyi bildirir?",o:["Kişilik özelliğini","Boyunu","Mesleğini","Yaşını"],a:0},
+      {ty:"mc",q:"\"curly hair\" ifadesinin Türkçe karşılığı nedir?",o:["Kıvırcık saç","Düz saç","Uzun saç","Kısa saç"],a:0},
+      {ty:"mc",q:"\"She looks like her mother.\" cümlesi neyi anlatır?",o:["Benzerliği","Yaşı","Mesleği","Adresi"],a:0},
+      {ty:"tf",q:"\"generous\" kelimesi cömert anlamına gelir.",a:true},
+      {ty:"tf",q:"\"stubborn\" kelimesi uyumlu anlamına gelir.",a:false},
+      {ty:"fb",q:"\"İnatçı\" kelimesinin İngilizcesi ____ dur.",a:"stubborn"},
+      {ty:"fb",q:"\"She takes ____ her father.\" (benzemek) cümlesindeki boşluğa gelen edat ____ tır.",a:"after"}
+    ],
   "Family Life": [
     {ty:"mc",q:"\"We are used to having dinner late.\" cümlesi neyi anlatır?",o:["Alışkın olmayı","Geçmiş alışkanlığı","Gelecek planı","Bir yasağı"],a:0},
     {ty:"mc",q:"\"relative\" kelimesinin Türkçe karşılığı nedir?",o:["Akraba","Komşu","Arkadaş","Müşteri"],a:0},
@@ -6475,8 +6900,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"be used to\" bir şeye alışkın olmayı anlatır.",a:true},
     {ty:"tf",q:"\"relative\" kelimesi komşu anlamına gelir.",a:false},
     {ty:"fb",q:"\"Akraba\" kelimesinin İngilizcesi ____ dır.",a:"relative"},
-    {ty:"fb",q:"\"Nesil\" kelimesinin İngilizcesi ____ dır.",a:"generation"}
-  ],
+    {ty:"fb",q:"\"Nesil\" kelimesinin İngilizcesi ____ dır.",a:"generation"},
+      {ty:"mc",q:"\"get along with\" ifadesinin Türkçe karşılığı nedir?",o:["İyi geçinmek","Kavga etmek","Ayrılmak","Beklemek"],a:0},
+      {ty:"mc",q:"\"We usually have dinner at eight.\" cümlesi neyi anlatır?",o:["Düzenli bir aile alışkanlığını","Bir kuralı","Bir planı","Bir isteği"],a:0},
+      {ty:"tf",q:"\"get along with\" ifadesi iyi geçinmeyi anlatır.",a:true},
+      {ty:"tf",q:"\"argue\" fiili anlaşmak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Tartışmak\" fiilinin İngilizcesi ____ dur.",a:"argue"},
+      {ty:"fb",q:"\"Akraba\" kelimesinin İngilizcesi ____ dir.",a:"relative"}
+    ],
   "Life in the House & Neighbourhood": [
     {ty:"mc",q:"\"Our flat is on the third floor.\" cümlesinde 'flat' ne anlama gelir?",o:["Daire","Kat planı yerine bahçe","Sokak","Bina girişi"],a:0},
     {ty:"mc",q:"\"furniture\" kelimesinin Türkçe karşılığı nedir?",o:["Mobilya","Ev aleti","Halı","Perde"],a:0},
@@ -6486,8 +6917,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"furniture\" sayılamayan bir isimdir.",a:true},
     {ty:"tf",q:"\"rent\" kelimesi vergi anlamına gelir.",a:false},
     {ty:"fb",q:"\"Mobilya\" kelimesinin İngilizcesi ____ dır.",a:"furniture"},
-    {ty:"fb",q:"\"Kira\" kelimesinin İngilizcesi ____ dir.",a:"rent"}
-  ],
+    {ty:"fb",q:"\"Kira\" kelimesinin İngilizcesi ____ dir.",a:"rent"},
+      {ty:"mc",q:"\"There isn't much furniture in the room.\" cümlesinde 'much' hangi tür adla kullanılır?",o:["Sayılamayan adlarla","Sayılabilen çoğul adlarla","Özel adlarla","Yalnızca çoğullarla"],a:0},
+      {ty:"mc",q:"\"tidy up\" ifadesinin Türkçe karşılığı nedir?",o:["Toplamak, düzenlemek","Dağıtmak","Kırmak","Satmak"],a:0},
+      {ty:"mc",q:"\"rent\" kelimesi ev bağlamında neyi ifade eder?",o:["Kira","Tapu","Kat","Bahçe"],a:0},
+      {ty:"tf",q:"\"furniture\" kelimesi sayılamayan bir addır.",a:true},
+      {ty:"tf",q:"\"many\" sözcüğü sayılamayan adlarla kullanılır.",a:false},
+      {ty:"fb",q:"\"Mobilya\" kelimesinin İngilizcesi ____ dir.",a:"furniture"},
+      {ty:"fb",q:"\"There are ____ chairs in the room.\" (çok, sayılabilen) cümlesindeki boşluğa gelen kelime ____ dir.",a:"many"}
+    ],
   "Life in the City & Country": [
     {ty:"mc",q:"\"Living in the city is busier than living in the country.\" cümlesinde hangi yapı var?",o:["Karşılaştırma","Üstünlük","Koşul","Edilgen"],a:0},
     {ty:"mc",q:"\"crowded\" kelimesinin Türkçe karşılığı nedir?",o:["Kalabalık","Sessiz","Temiz","Ucuz"],a:0},
@@ -6497,8 +6935,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"Karşılaştırmada iki heceli sıfatlarda \"more\" kullanılabilir.",a:true},
     {ty:"tf",q:"\"crowded\" sessiz anlamındadır.",a:false},
     {ty:"fb",q:"\"Trafik sıkışıklığı\" ifadesinin İngilizcesi traffic ____ dır.",a:"jam"},
-    {ty:"fb",q:"\"Kırsal\" kelimesinin İngilizcesi ____ dır.",a:"rural"}
-  ],
+    {ty:"fb",q:"\"Kırsal\" kelimesinin İngilizcesi ____ dır.",a:"rural"},
+      {ty:"mc",q:"\"The city is noisier than the village.\" cümlesi hangi yapıdadır?",o:["Karşılaştırma","Üstünlük derecesi","Edilgen","Koşul"],a:0},
+      {ty:"mc",q:"\"Living in the countryside is quieter.\" cümlesi neyi anlatır?",o:["Bir karşılaştırmayı","Bir yasağı","Bir planı","Bir emri"],a:0},
+      {ty:"tf",q:"\"than\" sözcüğü karşılaştırma cümlelerinde kullanılır.",a:true},
+      {ty:"tf",q:"\"crowded\" kelimesi ıssız anlamına gelir.",a:false},
+      {ty:"fb",q:"\"This street is ____ than that one.\" (daha geniş) cümlesindeki boşluğa gelen kelime ____ dir.",a:"wider"},
+      {ty:"fb",q:"\"Kırsal alan\" ifadesinin İngilizcesi ____ tir.",a:"countryside"}
+    ],
   "Life in the World & Nature": [
     {ty:"mc",q:"\"Many species are in danger because of human activities.\" cümlesinde 'because of' ne bildirir?",o:["Neden","Sonuç","Zıtlık","Zaman"],a:0},
     {ty:"mc",q:"\"pollution\" kelimesinin Türkçe karşılığı nedir?",o:["Kirlilik","Temizlik","Geri dönüşüm","Enerji"],a:0},
@@ -6508,8 +6952,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"because of\" ismin önünde kullanılır.",a:true},
     {ty:"tf",q:"\"habitat\" kelimesi iklim anlamına gelir.",a:false},
     {ty:"fb",q:"\"Yaşam alanı\" kelimesinin İngilizcesi ____ dır.",a:"habitat"},
-    {ty:"fb",q:"\"Tehlikede olan türler\" ifadesinde 'tehlikede' anlamı ____ ile verilir.",a:"endangered"}
-  ],
+    {ty:"fb",q:"\"Tehlikede olan türler\" ifadesinde 'tehlikede' anlamı ____ ile verilir.",a:"endangered"},
+      {ty:"mc",q:"\"drought\" kelimesinin Türkçe karşılığı nedir?",o:["Kuraklık","Sel","Fırtına","Deprem"],a:0},
+      {ty:"mc",q:"\"Trees are cut down every year.\" cümlesi hangi yapıdadır?",o:["Edilgen","Etken geçmiş","Gelecek","Koşul"],a:0},
+      {ty:"mc",q:"\"renewable energy\" ifadesinin Türkçe karşılığı nedir?",o:["Yenilenebilir enerji","Fosil yakıt","Nükleer atık","Kömür"],a:0},
+      {ty:"tf",q:"\"flood\" kelimesi sel anlamına gelir.",a:true},
+      {ty:"tf",q:"\"drought\" kelimesi sel anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kuraklık\" kelimesinin İngilizcesi ____ tur.",a:"drought"},
+      {ty:"fb",q:"\"Water ____ wasted in big cities.\" (edilgen yapı) cümlesindeki boşluğa gelen kelime ____ tir.",a:"is"}
+    ],
   "Life in the Universe & Future": [
     {ty:"mc",q:"\"Space exploration may help us understand the universe.\" cümlesinde 'may' neyi bildirir?",o:["Olasılığı","Zorunluluğu","Yasağı","Yeteneği"],a:0},
     {ty:"mc",q:"\"universe\" kelimesinin Türkçe karşılığı nedir?",o:["Evren","Gezegen","Uydu","Galaksi"],a:0},
@@ -6519,8 +6970,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"İkinci tip koşulda \"if + past, would + fiil\" yapısı kullanılır.",a:true},
     {ty:"tf",q:"\"universe\" kelimesi uydu anlamına gelir.",a:false},
     {ty:"fb",q:"\"Evren\" kelimesinin İngilizcesi ____ dır.",a:"universe"},
-    {ty:"fb",q:"\"If I ____ rich, I would travel.\" ikinci tip koşulda boşluğa gelen kelime nedir?",a:"were"}
-  ]
+    {ty:"fb",q:"\"If I ____ rich, I would travel.\" ikinci tip koşulda boşluğa gelen kelime nedir?",a:"were"},
+      {ty:"mc",q:"\"In 2050, people will be using electric cars.\" cümlesi hangi zamanı bildirir?",o:["Gelecekte sürmekte olan bir eylemi","Geçmişi","Şimdiki alışkanlığı","Genel gerçeği"],a:0},
+      {ty:"mc",q:"\"exploration\" kelimesinin Türkçe karşılığı nedir?",o:["Keşif","Kayıt","Sunum","Ölçüm"],a:0},
+      {ty:"mc",q:"\"Space travel might become cheaper.\" cümlesinde 'might' neyi bildirir?",o:["Olasılık","Zorunluluk","Yasak","Yetenek"],a:0},
+      {ty:"tf",q:"\"might\" ifadesi zayıf olasılık bildirir.",a:true},
+      {ty:"tf",q:"\"exploration\" kelimesi patlama anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Keşif\" kelimesinin İngilizcesi ____ dır.",a:"exploration"},
+      {ty:"fb",q:"\"Yapay zekâ\" ifadesinin İngilizce kısaltması ____ dır.",a:"AI"}
+    ]
 },
 "ing-10": {
   /* Resmî temalar (THEME 1-8). Sorular 10. sınıf düzeyinde tutulmuştur. */
@@ -6533,8 +6991,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"already\" present perfect ile sık kullanılır.",a:true},
     {ty:"tf",q:"\"scholarship\" kelimesi diploma anlamına gelir.",a:false},
     {ty:"fb",q:"\"Burs\" kelimesinin İngilizcesi ____ dır.",a:"scholarship"},
-    {ty:"fb",q:"\"I have ____ my homework.\" (bitirmek) boşluğa gelen fiil biçimi nedir?",a:"finished"}
-  ],
+    {ty:"fb",q:"\"I have ____ my homework.\" (bitirmek) boşluğa gelen fiil biçimi nedir?",a:"finished"},
+      {ty:"mc",q:"\"curriculum\" kelimesinin Türkçe karşılığı nedir?",o:["Öğretim programı","Sınav takvimi","Ders kitabı","Not sistemi"],a:0},
+      {ty:"mc",q:"\"He is used to studying late.\" cümlesi neyi anlatır?",o:["Bir alışkanlığı","Geçmişteki bir alışkanlığı","Bir yasağı","Bir planı"],a:0},
+      {ty:"mc",q:"\"vocational school\" ifadesinin Türkçe karşılığı nedir?",o:["Meslek lisesi","Anadolu lisesi","Üniversite","Anaokulu"],a:0},
+      {ty:"tf",q:"\"be used to\" ifadesi alışkın olmayı anlatır.",a:true},
+      {ty:"tf",q:"\"curriculum\" kelimesi sınıf anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Öğretim programı\" ifadesinin İngilizcesi ____ dur.",a:"curriculum"},
+      {ty:"fb",q:"\"He is used to ____ early.\" (kalkmak) cümlesindeki boşluğa gelen kelime ____ tir.",a:"getting"}
+    ],
   "Classroom Life & Learning": [
     {ty:"mc",q:"\"The teacher said that we should study harder.\" cümlesi hangi yapıdadır?",o:["Dolaylı anlatım","Doğrudan anlatım","Koşul","Edilgen"],a:0},
     {ty:"mc",q:"\"She suggested that we ____ (take) notes.\" boşluğa uygun biçim hangisidir?",o:["take","took","taking","takes"],a:0},
@@ -6544,8 +7009,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"Dolaylı anlatımda zaman genellikle bir adım geriye çekilir.",a:true},
     {ty:"tf",q:"\"feedback\" kelimesi sınav anlamına gelir.",a:false},
     {ty:"fb",q:"\"Geri bildirim\" kelimesinin İngilizcesi ____ dır.",a:"feedback"},
-    {ty:"fb",q:"\"He said he ____ tired.\" dolaylı anlatımda boşluğa gelen kelime nedir?",a:"was"}
-  ],
+    {ty:"fb",q:"\"He said he ____ tired.\" dolaylı anlatımda boşluğa gelen kelime nedir?",a:"was"},
+      {ty:"mc",q:"\"Having finished the task, she left.\" cümlesindeki yapı neyi gösterir?",o:["Önce tamamlanan eylemi","Aynı anda olan eylemi","Gelecek eylemi","Koşulu"],a:0},
+      {ty:"mc",q:"\"evaluate\" fiilinin Türkçe karşılığı nedir?",o:["Değerlendirmek","Ezberlemek","Kopyalamak","Silmek"],a:0},
+      {ty:"mc",q:"\"peer feedback\" ifadesinin Türkçe karşılığı nedir?",o:["Akran geri bildirimi","Öğretmen notu","Sınav sonucu","Ders özeti"],a:0},
+      {ty:"tf",q:"\"evaluate\" fiili değerlendirmek anlamındadır.",a:true},
+      {ty:"tf",q:"\"feedback\" kelimesi ödev anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Geri bildirim\" kelimesinin İngilizcesi ____ tir.",a:"feedback"},
+      {ty:"fb",q:"\"Değerlendirme\" kelimesinin İngilizcesi ____ dur.",a:"evaluation"}
+    ],
   "Personal Life & Well-being": [
     {ty:"mc",q:"\"You ought to sleep more.\" cümlesinde 'ought to' neyi bildirir?",o:["Öneri","Yasak","İzin","Yetenek"],a:0},
     {ty:"mc",q:"\"balanced diet\" ifadesinin Türkçe karşılığı nedir?",o:["Dengeli beslenme","Aşırı beslenme","Diyet kesme","Öğün atlama"],a:0},
@@ -6555,8 +7027,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"ought to\" tavsiye bildirir.",a:true},
     {ty:"tf",q:"\"balanced diet\" öğün atlamak anlamındadır.",a:false},
     {ty:"fb",q:"\"Dengeli beslenme\" ifadesinin İngilizcesi balanced ____ dır.",a:"diet"},
-    {ty:"fb",q:"\"I have been ____ (study) since morning.\" boşluğa gelen biçim nedir?",a:"studying"}
-  ],
+    {ty:"fb",q:"\"I have been ____ (study) since morning.\" boşluğa gelen biçim nedir?",a:"studying"},
+      {ty:"mc",q:"\"cope with\" ifadesinin Türkçe karşılığı nedir?",o:["Baş etmek","Vazgeçmek","Kaçınmak","Beklemek"],a:0},
+      {ty:"mc",q:"\"If I were you, I would rest.\" cümlesi hangi yapıdadır?",o:["İkinci tip koşul cümlesi","Birinci tip koşul","Edilgen","Geçmiş zaman"],a:0},
+      {ty:"mc",q:"\"stress management\" ifadesinin Türkçe karşılığı nedir?",o:["Stres yönetimi","Zaman planı","Beslenme düzeni","Uyku takibi"],a:0},
+      {ty:"tf",q:"\"cope with\" ifadesi bir güçlükle baş etmeyi anlatır.",a:true},
+      {ty:"tf",q:"\"If I were you\" yapısı gerçek bir durumu anlatır.",a:false},
+      {ty:"fb",q:"\"Baş etmek\" fiilinin İngilizcesi cope ____ dır.",a:"with"},
+      {ty:"fb",q:"\"If I ____ rich, I would travel.\" (ikinci tip koşul) cümlesindeki boşluğa gelen kelime ____ dir.",a:"were"}
+    ],
   "Family Life & Home": [
     {ty:"mc",q:"\"My father used to work abroad.\" cümlesi neyi anlatır?",o:["Geçmişteki bir alışkanlığı","Şimdiki durumu","Gelecek planı","Bir kuralı"],a:0},
     {ty:"mc",q:"\"household\" kelimesinin Türkçe karşılığı nedir?",o:["Hane/ev halkı","Ev aleti","Bahçe","Kira"],a:0},
@@ -6566,8 +7045,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"have something done\" kalıbı bir işi başkasına yaptırmayı anlatır.",a:true},
     {ty:"tf",q:"\"household\" kelimesi bahçe anlamına gelir.",a:false},
     {ty:"fb",q:"\"Ev halkı\" kelimesinin İngilizcesi ____ dır.",a:"household"},
-    {ty:"fb",q:"\"Gider\" kelimesinin İngilizcesi ____ dir.",a:"expense"}
-  ],
+    {ty:"fb",q:"\"Gider\" kelimesinin İngilizcesi ____ dir.",a:"expense"},
+      {ty:"mc",q:"\"generation gap\" ifadesinin Türkçe karşılığı nedir?",o:["Kuşak farkı","Aile bağı","Ev düzeni","Miras paylaşımı"],a:0},
+      {ty:"mc",q:"\"My parents let me choose my course.\" cümlesi neyi bildirir?",o:["İzin verildiğini","Yasaklandığını","Zorunlu olduğunu","Önerildiğini"],a:0},
+      {ty:"tf",q:"\"let\" fiili izin vermeyi anlatır.",a:true},
+      {ty:"tf",q:"\"generation gap\" ifadesi aile bütçesi anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kuşak\" kelimesinin İngilizcesi ____ dur.",a:"generation"},
+      {ty:"fb",q:"\"My father made me ____ my room.\" (temizlemek) cümlesindeki boşluğa gelen kelime ____ dır.",a:"clean"}
+    ],
   "Life in the Neighbourhood, City & Social Life": [
     {ty:"mc",q:"\"I'd like to book a table for two.\" cümlesi neyi ifade eder?",o:["Rezervasyon yapma","Şikâyet etme","Yol sorma","Teşekkür etme"],a:0},
     {ty:"mc",q:"\"complaint\" kelimesinin Türkçe karşılığı nedir?",o:["Şikâyet","Öneri","Teşekkür","Davet"],a:0},
@@ -6577,8 +7062,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"Would you mind + fiil-ing\" kibar rica kalıbıdır.",a:true},
     {ty:"tf",q:"\"complaint\" kelimesi davet anlamına gelir.",a:false},
     {ty:"fb",q:"\"Rezervasyon yapmak\" fiilinin İngilizcesi ____ dur.",a:"book"},
-    {ty:"fb",q:"\"Şikâyet\" kelimesinin İngilizcesi ____ dır.",a:"complaint"}
-  ],
+    {ty:"fb",q:"\"Şikâyet\" kelimesinin İngilizcesi ____ dır.",a:"complaint"},
+      {ty:"mc",q:"\"volunteer\" kelimesinin Türkçe karşılığı nedir?",o:["Gönüllü","Görevli","Yönetici","Üye"],a:0},
+      {ty:"mc",q:"\"The event, which starts at six, is free.\" cümlesindeki 'which' neyi tanıtır?",o:["Bir sıfat cümlesini","Bir koşulu","Bir nedeni","Bir zamanı"],a:0},
+      {ty:"mc",q:"\"charity\" kelimesinin Türkçe karşılığı nedir?",o:["Hayır kurumu","Belediye","Okul kulübü","Şirket"],a:0},
+      {ty:"tf",q:"\"volunteer\" kelimesi gönüllü anlamına gelir.",a:true},
+      {ty:"tf",q:"\"charity\" kelimesi ticaret anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Gönüllü\" kelimesinin İngilizcesi ____ dır.",a:"volunteer"},
+      {ty:"fb",q:"\"The man ____ helped us is a teacher.\" (kişi için sıfat cümlesi) boşluğa gelen kelime ____ dur.",a:"who"}
+    ],
   "Life in the World & Culture": [
     {ty:"mc",q:"\"When in Rome, do as the Romans do.\" sözü neyi anlatır?",o:["Kültürel uyumu","Bir kuralı","Bir yasağı","Bir yeri"],a:0},
     {ty:"mc",q:"\"cultural diversity\" ifadesinin Türkçe karşılığı nedir?",o:["Kültürel çeşitlilik","Kültürel yoksunluk","Tek kültürlülük","Kültürel miras"],a:0},
@@ -6588,8 +7080,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"cultural heritage\" kültürel miras anlamındadır.",a:true},
     {ty:"tf",q:"\"stereotype\" kelimesi gelenek anlamına gelir.",a:false},
     {ty:"fb",q:"\"Kültürel çeşitlilik\" ifadesinin İngilizcesi cultural ____ dır.",a:"diversity"},
-    {ty:"fb",q:"\"Önyargı\" kelimesinin İngilizcesi ____ dir.",a:"prejudice"}
-  ],
+    {ty:"fb",q:"\"Önyargı\" kelimesinin İngilizcesi ____ dir.",a:"prejudice"},
+      {ty:"mc",q:"\"It is said that the castle is very old.\" cümlesi hangi yapıdadır?",o:["Edilgen (kişisiz anlatım)","Etken geçmiş","Koşul","Emir"],a:0},
+      {ty:"mc",q:"\"cuisine\" kelimesinin Türkçe karşılığı nedir?",o:["Mutfak (yemek kültürü)","Mutfak odası","Tarif kitabı","Restoran"],a:0},
+      {ty:"tf",q:"\"stereotype\" kelimesi kalıp yargı anlamına gelir.",a:true},
+      {ty:"tf",q:"\"cuisine\" kelimesi kıyafet anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kalıp yargı\" ifadesinin İngilizcesi ____ dır.",a:"stereotype"},
+      {ty:"fb",q:"\"It is ____ that the bridge is Roman.\" (söylenir) cümlesindeki boşluğa gelen kelime ____ dir.",a:"said"}
+    ],
   "Life in Nature & Global Problems": [
     {ty:"mc",q:"\"Global warming is caused by greenhouse gases.\" cümlesi hangi çatıdadır?",o:["Edilgen","Etken","Koşul","Emir"],a:0},
     {ty:"mc",q:"\"sustainable\" kelimesinin Türkçe karşılığı nedir?",o:["Sürdürülebilir","Tükenebilir","Zararlı","Pahalı"],a:0},
@@ -6599,8 +7097,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"sustainable\" gelecek nesilleri de gözeten kullanımı anlatır.",a:true},
     {ty:"tf",q:"\"global warming\" küresel soğuma anlamındadır.",a:false},
     {ty:"fb",q:"\"Sürdürülebilirlik\" kelimesinin İngilizcesi ____ dır.",a:"sustainability"},
-    {ty:"fb",q:"\"Sera gazları\" ifadesinin İngilizcesi ____ gases dır.",a:"greenhouse"}
-  ],
+    {ty:"fb",q:"\"Sera gazları\" ifadesinin İngilizcesi ____ gases dır.",a:"greenhouse"},
+      {ty:"mc",q:"\"carbon footprint\" ifadesinin Türkçe karşılığı nedir?",o:["Karbon ayak izi","Karbon üretimi","Karbon depolama","Karbon ölçüsü"],a:0},
+      {ty:"mc",q:"\"Unless we act now, the problem will grow.\" cümlesindeki 'unless' neyi bildirir?",o:["Olumsuz koşul","Neden","Sonuç","Zaman"],a:0},
+      {ty:"mc",q:"\"deforestation\" kelimesinin Türkçe karşılığı nedir?",o:["Orman yok oluşu","Ağaçlandırma","Sulama","Gübreleme"],a:0},
+      {ty:"tf",q:"\"unless\" ifadesi \"eğer ... değilse\" anlamı taşır.",a:true},
+      {ty:"tf",q:"\"deforestation\" kelimesi ağaç dikmek anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Orman yok oluşu\" ifadesinin İngilizcesi ____ dur.",a:"deforestation"},
+      {ty:"fb",q:"\"Sürdürülebilir\" kelimesinin İngilizcesi ____ dir.",a:"sustainable"}
+    ],
   "Life in the Universe & The Future": [
     {ty:"mc",q:"\"By 2040, scientists will have built a base on the Moon.\" cümlesi hangi zamandadır?",o:["Gelecekte tamamlanmış zaman","Geçmiş zaman","Geniş zaman","Şimdiki zaman"],a:0},
     {ty:"mc",q:"\"breakthrough\" kelimesinin Türkçe karşılığı nedir?",o:["Çığır açan gelişme","Başarısızlık","Gecikme","Duraklama"],a:0},
@@ -6610,8 +7115,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"will have + past participle\" gelecekte tamamlanmış eylemi anlatır.",a:true},
     {ty:"tf",q:"\"breakthrough\" başarısızlık anlamına gelir.",a:false},
     {ty:"fb",q:"\"Yapay zekâ\" ifadesinin İngilizcesi artificial ____ dır.",a:"intelligence"},
-    {ty:"fb",q:"\"They will ____ finished by then.\" boşluğa gelen kelime nedir?",a:"have"}
-  ]
+    {ty:"fb",q:"\"They will ____ finished by then.\" boşluğa gelen kelime nedir?",a:"have"},
+      {ty:"mc",q:"\"By 2040, we will have colonised Mars.\" cümlesi hangi zamanı bildirir?",o:["Gelecekte tamamlanmış eylemi","Şimdiki eylemi","Geçmiş eylemi","Genel gerçeği"],a:0},
+      {ty:"mc",q:"\"innovation\" kelimesinin Türkçe karşılığı nedir?",o:["Yenilik","Gelenek","Tekrar","Kural"],a:0},
+      {ty:"mc",q:"\"Automation is likely to change jobs.\" cümlesi neyi bildirir?",o:["Olasılığı","Kesinliği","Yasağı","İzni"],a:0},
+      {ty:"tf",q:"\"innovation\" kelimesi yenilik anlamına gelir.",a:true},
+      {ty:"tf",q:"\"automation\" kelimesi el işçiliği anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yenilik\" kelimesinin İngilizcesi ____ dur.",a:"innovation"},
+      {ty:"fb",q:"\"Otomasyon\" kelimesinin İngilizcesi ____ dur.",a:"automation"}
+    ]
 },
 "ing-11": {
   /* Resmî temalar (THEME 1-8). Sorular 11. sınıf düzeyinde tutulmuştur. */
@@ -6624,8 +7136,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"Üçüncü tip koşul geçmişteki gerçekleşmemiş durumları anlatır.",a:true},
     {ty:"tf",q:"\"vocational\" akademik anlamındadır.",a:false},
     {ty:"fb",q:"\"Mesleki eğitim\" ifadesinin İngilizcesi ____ training dır.",a:"vocational"},
-    {ty:"fb",q:"\"If I had known, I ____ have come.\" boşluğa gelen kelime nedir?",a:"would"}
-  ],
+    {ty:"fb",q:"\"If I had known, I ____ have come.\" boşluğa gelen kelime nedir?",a:"would"},
+      {ty:"mc",q:"\"lifelong learning\" ifadesinin Türkçe karşılığı nedir?",o:["Yaşam boyu öğrenme","Zorunlu eğitim","Uzaktan eğitim","Mesleki eğitim"],a:0},
+      {ty:"mc",q:"\"She said she had finished the project.\" cümlesi hangi yapıdadır?",o:["Dolaylı anlatım","Doğrudan anlatım","Koşul","Edilgen"],a:0},
+      {ty:"mc",q:"\"tuition\" kelimesinin Türkçe karşılığı nedir?",o:["Öğrenim ücreti","Diploma","Burs","Kayıt formu"],a:0},
+      {ty:"tf",q:"Dolaylı anlatımda zaman genellikle bir adım geriye çekilir.",a:true},
+      {ty:"tf",q:"\"tuition\" kelimesi burs anlamına gelir.",a:false},
+      {ty:"fb",q:"\"He said he ____ tired.\" (dolaylı anlatım) cümlesindeki boşluğa gelen kelime ____ tır.",a:"was"},
+      {ty:"fb",q:"\"Yaşam boyu öğrenme\" ifadesinin İngilizcesi ____ learning biçimindedir.",a:"lifelong"}
+    ],
   "Classroom Life & Learning": [
     {ty:"mc",q:"\"The report was written by the students.\" cümlesinde eylemi yapan kimdir?",o:["Öğrenciler","Rapor","Öğretmen","Okul"],a:0},
     {ty:"mc",q:"\"critical thinking\" ifadesinin Türkçe karşılığı nedir?",o:["Eleştirel düşünme","Hızlı okuma","Ezberleme","Kopyalama"],a:0},
@@ -6635,8 +7154,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"plagiarism\" kaynak göstermeden başkasının çalışmasını kullanmaktır.",a:true},
     {ty:"tf",q:"\"critical thinking\" ezberlemek anlamındadır.",a:false},
     {ty:"fb",q:"\"Kaynak gösterme\" kelimesinin İngilizcesi ____ dır.",a:"citation"},
-    {ty:"fb",q:"\"Öte yandan\" ifadesinin İngilizcesi on the other ____ dır.",a:"hand"}
-  ],
+    {ty:"fb",q:"\"Öte yandan\" ifadesinin İngilizcesi on the other ____ dır.",a:"hand"},
+      {ty:"mc",q:"\"He asked me whether I had read the text.\" cümlesindeki 'whether' neyi bildirir?",o:["Dolaylı soruyu","Koşulu","Nedeni","Zamanı"],a:0},
+      {ty:"mc",q:"\"paraphrase\" fiilinin Türkçe karşılığı nedir?",o:["Kendi sözcükleriyle yeniden anlatmak","Aynen kopyalamak","Özetlemek","Çevirmek"],a:0},
+      {ty:"tf",q:"\"paraphrase\" bir metni kendi sözcükleriyle yeniden anlatmaktır.",a:true},
+      {ty:"tf",q:"\"plagiarism\" kelimesi kaynak göstermek anlamına gelir.",a:false},
+      {ty:"fb",q:"\"İntihal\" kelimesinin İngilizcesi ____ dır.",a:"plagiarism"},
+      {ty:"fb",q:"\"Eleştirel\" kelimesinin İngilizcesi ____ dir.",a:"critical"}
+    ],
   "Personal Life & Well-being": [
     {ty:"mc",q:"\"I wish I had more free time.\" cümlesi neyi ifade eder?",o:["Gerçekleşmemiş bir dileği","Bir planı","Bir kuralı","Bir emri"],a:0},
     {ty:"mc",q:"\"resilience\" kelimesinin Türkçe karşılığı nedir?",o:["Dayanıklılık/toparlanma gücü","Zayıflık","Kayıtsızlık","Aceleci olma"],a:0},
@@ -6646,8 +7171,13 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"I wish + past\" şimdiki gerçeğe aykırı dilek bildirir.",a:true},
     {ty:"tf",q:"\"resilience\" zayıflık anlamındadır.",a:false},
     {ty:"fb",q:"\"Öz saygı\" ifadesinin İngilizcesi self-____ dir.",a:"esteem"},
-    {ty:"fb",q:"\"I wish I ____ taller.\" boşluğa gelen kelime nedir?",a:"were"}
-  ],
+    {ty:"fb",q:"\"I wish I ____ taller.\" boşluğa gelen kelime nedir?",a:"were"},
+      {ty:"mc",q:"\"You should have slept earlier.\" cümlesi neyi bildirir?",o:["Geçmişe yönelik pişmanlık","Şimdiki öneri","Gelecek plan","Bir izin"],a:0},
+      {ty:"tf",q:"\"I wish\" yapısından sonra gerçekleşmemiş bir durum anlatılır.",a:true},
+      {ty:"tf",q:"\"should have\" yapısı gelecek plan bildirir.",a:false},
+      {ty:"fb",q:"\"I wish I ____ swim.\" (yüzebilseydim) cümlesindeki boşluğa gelen kelime ____ tur.",a:"could"},
+      {ty:"fb",q:"\"Dayanıklılık\" (ruhsal) kelimesinin İngilizcesi ____ dır.",a:"resilience"}
+    ],
   "Family Life & Home": [
     {ty:"mc",q:"\"Not only did she work, but she also studied.\" cümlesinde hangi yapı var?",o:["Devrik yapı (inversion)","Edilgen","Koşul","Dolaylı anlatım"],a:0},
     {ty:"mc",q:"\"upbringing\" kelimesinin Türkçe karşılığı nedir?",o:["Yetiştirilme tarzı","Ev taşıma","Kira artışı","Aile bütçesi"],a:0},
@@ -6657,8 +7187,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"must have + past participle\" geçmişe yönelik güçlü tahmin bildirir.",a:true},
     {ty:"tf",q:"\"extended family\" çekirdek aile anlamındadır.",a:false},
     {ty:"fb",q:"\"Geniş aile\" ifadesinin İngilizcesi ____ family dır.",a:"extended"},
-    {ty:"fb",q:"\"Yetiştirilme\" kelimesinin İngilizcesi ____ dır.",a:"upbringing"}
-  ],
+    {ty:"fb",q:"\"Yetiştirilme\" kelimesinin İngilizcesi ____ dır.",a:"upbringing"},
+      {ty:"mc",q:"\"They have been living here for ten years.\" cümlesi neyi bildirir?",o:["Süregelen bir durumu","Bitmiş bir eylemi","Gelecek planı","Bir kuralı"],a:0},
+      {ty:"mc",q:"\"We had the roof repaired.\" cümlesi neyi anlatır?",o:["İşi başkasına yaptırmayı","İşi kendi yapmayı","İşi bırakmayı","İşi ertelemeyi"],a:0},
+      {ty:"tf",q:"\"have something done\" yapısı işi başkasına yaptırmayı anlatır.",a:true},
+      {ty:"tf",q:"\"upbringing\" kelimesi taşınma anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yetiştirilme\" kelimesinin İngilizcesi ____ dir.",a:"upbringing"},
+      {ty:"fb",q:"\"I had my hair ____.\" (kesildi) cümlesindeki boşluğa gelen kelime ____ tur.",a:"cut"}
+    ],
   "Life in the Neighbourhood, City & Social Life": [
     {ty:"mc",q:"\"Urbanisation has changed the way we live.\" cümlesinde 'urbanisation' ne anlama gelir?",o:["Kentleşme","Kırsallaşma","Sanayileşme","Küreselleşme"],a:0},
     {ty:"mc",q:"\"The park, which was built last year, is very popular.\" cümlesinde hangi yapı var?",o:["Sıfat cümleciği","Koşul","Edilgen zorunluluk","Dolaylı soru"],a:0},
@@ -6668,8 +7204,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"which\" cansız varlıklar için sıfat cümleciğinde kullanılır.",a:true},
     {ty:"tf",q:"\"urbanisation\" kırsallaşma anlamındadır.",a:false},
     {ty:"fb",q:"\"Kentleşme\" kelimesinin İngilizcesi ____ dır.",a:"urbanisation"},
-    {ty:"fb",q:"\"Gönüllü olmak\" fiilinin İngilizcesi ____ dır.",a:"volunteer"}
-  ],
+    {ty:"fb",q:"\"Gönüllü olmak\" fiilinin İngilizcesi ____ dır.",a:"volunteer"},
+      {ty:"mc",q:"\"urbanisation\" kelimesinin Türkçe karşılığı nedir?",o:["Kentleşme","Köyleşme","Göç","Nüfus artışı"],a:0},
+      {ty:"mc",q:"\"Not only did she help, but she also donated.\" cümlesindeki yapı neyi sağlar?",o:["Vurgu","Koşul","Karşılaştırma","Zaman"],a:0},
+      {ty:"mc",q:"\"community service\" ifadesinin Türkçe karşılığı nedir?",o:["Toplum hizmeti","Kamu görevi","Belediye işi","Özel ders"],a:0},
+      {ty:"tf",q:"\"urbanisation\" kelimesi kentleşme anlamına gelir.",a:true},
+      {ty:"tf",q:"\"community\" kelimesi yalnızlık anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kentleşme\" kelimesinin İngilizcesi ____ dur.",a:"urbanisation"},
+      {ty:"fb",q:"\"Toplum\" kelimesinin İngilizcesi ____ dir.",a:"community"}
+    ],
   "Life in the World & Culture": [
     {ty:"mc",q:"\"Globalisation has both advantages and disadvantages.\" cümlesi neyi anlatır?",o:["Dengeli bir değerlendirmeyi","Tek yönlü övgüyü","Bir yasağı","Bir emri"],a:0},
     {ty:"mc",q:"\"heritage site\" ifadesinin Türkçe karşılığı nedir?",o:["Miras alanı","Tatil köyü","Alışveriş merkezi","Sanayi bölgesi"],a:0},
@@ -6679,8 +7222,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"date back\" bir şeyin geçmişe uzandığını anlatır.",a:true},
     {ty:"tf",q:"\"multicultural\" tek kültürlü anlamındadır.",a:false},
     {ty:"fb",q:"\"Küreselleşme\" kelimesinin İngilizcesi ____ dır.",a:"globalisation"},
-    {ty:"fb",q:"\"Miras alanı\" ifadesinin İngilizcesi heritage ____ dır.",a:"site"}
-  ],
+    {ty:"fb",q:"\"Miras alanı\" ifadesinin İngilizcesi heritage ____ dır.",a:"site"},
+      {ty:"mc",q:"\"diversity\" kelimesinin Türkçe karşılığı nedir?",o:["Çeşitlilik","Benzerlik","Ayrım","Birlik"],a:0},
+      {ty:"mc",q:"\"The mosque is believed to date back to the 15th century.\" cümlesi hangi yapıdadır?",o:["Edilgen kişisiz anlatım","Etken geçmiş","Koşul","Emir"],a:0},
+      {ty:"mc",q:"\"intangible heritage\" ifadesinin Türkçe karşılığı nedir?",o:["Somut olmayan kültürel miras","Anıt eser","Müze koleksiyonu","Arkeolojik alan"],a:0},
+      {ty:"tf",q:"\"diversity\" kelimesi çeşitlilik anlamına gelir.",a:true},
+      {ty:"tf",q:"\"intangible\" kelimesi elle tutulur anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Çeşitlilik\" kelimesinin İngilizcesi ____ dir.",a:"diversity"},
+      {ty:"fb",q:"\"The castle is ____ to be Roman.\" (sanılıyor) cümlesindeki boşluğa gelen kelime ____ dur.",a:"thought"}
+    ],
   "Life in Nature & Global Problems": [
     {ty:"mc",q:"\"Unless we act now, the situation will worsen.\" cümlesinde 'unless' ne anlama gelir?",o:["...mazsa/olmadıkça","Çünkü","Ancak","Ayrıca"],a:0},
     {ty:"mc",q:"\"biodiversity\" kelimesinin Türkçe karşılığı nedir?",o:["Biyoçeşitlilik","Biyografi","Biyoyakıt","Biyokimya"],a:0},
@@ -6690,8 +7240,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"unless\" olumsuz koşul bildirir.",a:true},
     {ty:"tf",q:"\"biodiversity\" biyoyakıt anlamına gelir.",a:false},
     {ty:"fb",q:"\"Biyoçeşitlilik\" kelimesinin İngilizcesi ____ dır.",a:"biodiversity"},
-    {ty:"fb",q:"\"Salım/emisyon\" kelimesinin İngilizcesi ____ dır.",a:"emission"}
-  ],
+    {ty:"fb",q:"\"Salım/emisyon\" kelimesinin İngilizcesi ____ dır.",a:"emission"},
+      {ty:"mc",q:"\"Had we acted earlier, the damage would have been less.\" cümlesi hangi yapıdadır?",o:["Üçüncü tip koşul","İkinci tip koşul","Birinci tip koşul","Edilgen"],a:0},
+      {ty:"mc",q:"\"emission\" kelimesinin çevre bağlamındaki karşılığı nedir?",o:["Salım","Arıtma","Depolama","Ölçüm"],a:0},
+      {ty:"tf",q:"Üçüncü tip koşul cümleleri gerçekleşmemiş geçmişi anlatır.",a:true},
+      {ty:"tf",q:"\"emission\" kelimesi filtreleme anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Salım\" kelimesinin İngilizcesi ____ dur.",a:"emission"},
+      {ty:"fb",q:"\"If we ____ acted, it would have helped.\" (üçüncü tip koşul) boşluğa gelen kelime ____ tır.",a:"had"}
+    ],
   "Life in the Universe & Future": [
     {ty:"mc",q:"\"Were we to invest in space research, we might find answers.\" cümlesinde hangi yapı var?",o:["Devrik koşul","Edilgen","Dolaylı anlatım","Sıfat cümleciği"],a:0},
     {ty:"mc",q:"\"speculate\" fiilinin Türkçe karşılığı nedir?",o:["Tahminde bulunmak","Kanıtlamak","Ölçmek","Yasaklamak"],a:0},
@@ -6701,8 +7257,15 @@ const UNIT_BANK = {
     {ty:"tf",q:"\"depend on\" bir şeye bağlı olmayı anlatır.",a:true},
     {ty:"tf",q:"\"speculate\" kanıtlamak anlamındadır.",a:false},
     {ty:"fb",q:"\"Etik\" kelimesinin İngilizcesi ____ dır.",a:"ethical"},
-    {ty:"fb",q:"\"İnsanlık\" kelimesinin İngilizcesi ____ dır.",a:"humanity"}
-  ]
+    {ty:"fb",q:"\"İnsanlık\" kelimesinin İngilizcesi ____ dır.",a:"humanity"},
+      {ty:"mc",q:"\"breakthrough\" kelimesinin Türkçe karşılığı nedir?",o:["Çığır açan gelişme","Gerileme","Deneme","Tekrar"],a:0},
+      {ty:"mc",q:"\"This technology, which was developed in 2020, is now common.\" cümlesindeki ara cümle ne işlev görür?",o:["Ek bilgi verir","Koşul kurar","Zıtlık kurar","Sonuç bildirir"],a:0},
+      {ty:"mc",q:"\"sustainable future\" ifadesinin Türkçe karşılığı nedir?",o:["Sürdürülebilir gelecek","Yakın gelecek","Belirsiz gelecek","Uzak geçmiş"],a:0},
+      {ty:"tf",q:"\"breakthrough\" kelimesi önemli bir ilerlemeyi anlatır.",a:true},
+      {ty:"tf",q:"\"artificial\" kelimesi doğal anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yapay\" kelimesinin İngilizcesi ____ dır.",a:"artificial"},
+      {ty:"fb",q:"\"Çığır açan gelişme\" ifadesinin İngilizcesi ____ tur.",a:"breakthrough"}
+    ]
 },
 "ing-12": {
   "Music": [
@@ -6710,71 +7273,151 @@ const UNIT_BANK = {
     {ty:"mc",q:"'Söz yazarı' anlamına gelen kelime hangisidir?",o:["lyricist","conductor","instrumentalist","audience"],a:0},
     {ty:"mc",q:"'Bir müzik aletini profesyonelce çalabilmek' ifadesinin İngilizcesi hangisidir?",o:["to play an instrument skillfully","to tune out completely","to give up music","to look down on music"],a:0},
     {ty:"tf",q:"\"Genre\" kelimesi bir müzik türünü (rock, jazz, classical vb.) ifade eder.",a:true},
-    {ty:"fb",q:"\"This symphony ____ (compose) by Beethoven two centuries ago.\" (edilgen çatı - was/were + past participle)",a:"was composed"}
-  ],
+    {ty:"fb",q:"\"This symphony ____ (compose) by Beethoven two centuries ago.\" (edilgen çatı - was/were + past participle)",a:"was composed"},
+      {ty:"mc",q:"\"lyrics\" kelimesinin Türkçe karşılığı nedir?",o:["Şarkı sözleri","Melodi","Ritim","Enstrüman"],a:0},
+      {ty:"mc",q:"\"This is the band whose album won the prize.\" cümlesindeki 'whose' neyi bildirir?",o:["Aitliği","Yeri","Zamanı","Nedeni"],a:0},
+      {ty:"mc",q:"\"live performance\" ifadesinin Türkçe karşılığı nedir?",o:["Canlı performans","Kayıt","Prova","Turne"],a:0},
+      {ty:"mc",q:"\"I can't stand loud music.\" cümlesi neyi ifade eder?",o:["Katlanamamayı","Sevmeyi","Tercih etmeyi","Merak etmeyi"],a:0},
+      {ty:"tf",q:"\"can't stand\" ifadesi hoşlanmamayı güçlü biçimde anlatır.",a:true},
+      {ty:"tf",q:"\"lyrics\" kelimesi enstrüman anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Şarkı sözleri\" ifadesinin İngilizcesi ____ tır.",a:"lyrics"},
+      {ty:"fb",q:"\"The singer ____ song I like is Turkish.\" (aitlik) boşluğa gelen kelime ____ dır.",a:"whose"}
+    ],
   "Friendship": [
     {ty:"mc",q:"\"She said that she ___ me the next day.\" (dolaylı anlatım) boşluğa hangisi gelmelidir?",o:["will call","would call","calls","has called"],a:1},
     {ty:"mc",q:"\"He told me he ___ finished the project the week before.\" boşluğa hangisi gelmelidir?",o:["has","had","have","was"],a:1},
     {ty:"mc",q:"'Güvenilirlik / sadakat' anlamına gelen kelime hangisidir?",o:["loyalty","betrayal","jealousy","indifference"],a:0},
     {ty:"tf",q:"\"Betrayal\" kelimesi, bir arkadaşa duyulan güvenin kötüye kullanılması, ihanet anlamına gelir.",a:true},
-    {ty:"fb",q:"\"My friend said that she ____ (be) there for me forever.\" (dolaylı anlatım - would + fiil)",a:"would be"}
-  ],
+    {ty:"fb",q:"\"My friend said that she ____ (be) there for me forever.\" (dolaylı anlatım - would + fiil)",a:"would be"},
+      {ty:"mc",q:"\"loyalty\" kelimesinin Türkçe karşılığı nedir?",o:["Vefa, bağlılık","Kıskançlık","Kayıtsızlık","Utangaçlık"],a:0},
+      {ty:"mc",q:"\"We've known each other since childhood.\" cümlesi neyi bildirir?",o:["Süregelen bir ilişkiyi","Bitmiş bir ilişkiyi","Gelecek planı","Bir kuralı"],a:0},
+      {ty:"mc",q:"\"fall out with someone\" ifadesinin Türkçe karşılığı nedir?",o:["Biriyle bozuşmak","Biriyle tanışmak","Biriyle çalışmak","Biriyle gezmek"],a:0},
+      {ty:"mc",q:"\"He is the one who always listens.\" cümlesindeki 'who' neyi tanıtır?",o:["Bir sıfat cümlesini","Bir koşulu","Bir nedeni","Bir zamanı"],a:0},
+      {ty:"tf",q:"\"since\" sözcüğü başlangıç noktası bildirir.",a:true},
+      {ty:"tf",q:"\"loyalty\" kelimesi ihanet anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Bağlılık\" kelimesinin İngilizcesi ____ dır.",a:"loyalty"},
+      {ty:"fb",q:"\"We've been friends ____ ten years.\" (on yıldır) boşluğa gelen kelime ____ dur.",a:"for"}
+    ],
   "Human Rights": [
     {ty:"mc",q:"\"Everyone ___ treated equally regardless of race or gender.\" (edilgen çatı + modal) boşluğa hangisi gelmelidir?",o:["should be","should","is being","was"],a:0},
     {ty:"mc",q:"'Eşitlik' anlamına gelen kelime hangisidir?",o:["equality","discrimination","oppression","injustice"],a:0},
     {ty:"mc",q:"'Ayrımcılık' anlamına gelen kelime hangisidir?",o:["equality","freedom","discrimination","dignity"],a:2},
     {ty:"tf",q:"\"Dignity\" kelimesi, bir insanın saygıya layık olma haline, onuruna işaret eder.",a:true},
-    {ty:"fb",q:"\"Basic human rights ____ (protect) by international law.\" (edilgen çatı - are/is + past participle)",a:"are protected"}
-  ],
+    {ty:"fb",q:"\"Basic human rights ____ (protect) by international law.\" (edilgen çatı - are/is + past participle)",a:"are protected"},
+      {ty:"mc",q:"\"equality\" kelimesinin Türkçe karşılığı nedir?",o:["Eşitlik","Özgürlük","Adalet","Güvenlik"],a:0},
+      {ty:"mc",q:"\"Everyone is entitled to education.\" cümlesi neyi bildirir?",o:["Bir hakkı","Bir yasağı","Bir öneriyi","Bir tercihi"],a:0},
+      {ty:"mc",q:"\"discrimination\" kelimesinin Türkçe karşılığı nedir?",o:["Ayrımcılık","Dayanışma","Katılım","Temsil"],a:0},
+      {ty:"mc",q:"\"Human rights must be protected.\" cümlesi hangi yapıdadır?",o:["Edilgen ve zorunluluk","Etken ve öneri","Koşul","Soru"],a:0},
+      {ty:"tf",q:"\"equality\" kelimesi eşitlik anlamına gelir.",a:true},
+      {ty:"tf",q:"\"discrimination\" kelimesi dayanışma anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Ayrımcılık\" kelimesinin İngilizcesi ____ dır.",a:"discrimination"},
+      {ty:"fb",q:"\"Özgürlük\" kelimesinin İngilizcesi ____ dur.",a:"freedom"}
+    ],
   "Coming Soon": [
     {ty:"mc",q:"\"Look at those dark clouds! It ___ rain soon.\" (kanıta dayalı tahmin) boşluğa hangisi gelmelidir?",o:["will","is going to","would","might have"],a:1},
     {ty:"mc",q:"\"By next year, scientists ___ a cure for that disease.\" boşluğa hangisi gelmelidir?",o:["will have found","find","found","are finding"],a:0},
     {ty:"mc",q:"'Öngörmek / tahmin etmek' anlamına gelen kelime hangisidir?",o:["to predict","to postpone","to abandon","to disregard"],a:0},
     {ty:"tf",q:"\"Be going to\" yapısı, konuşma anında verilen ani kararları değil, önceden planlanmış niyetleri ifade etmek için kullanılır.",a:true},
-    {ty:"fb",q:"\"Experts believe that self-driving cars ____ (become) common within a decade.\" (will + fiil)",a:"will become"}
-  ],
+    {ty:"fb",q:"\"Experts believe that self-driving cars ____ (become) common within a decade.\" (will + fiil)",a:"will become"},
+      {ty:"mc",q:"\"trailer\" kelimesi sinema bağlamında neyi ifade eder?",o:["Tanıtım filmini","Bileti","Salonu","Yönetmeni"],a:0},
+      {ty:"mc",q:"\"The film is based on a true story.\" cümlesi neyi bildirir?",o:["Filmin kaynağını","Filmin süresini","Filmin türünü","Filmin bütçesini"],a:0},
+      {ty:"mc",q:"\"documentary\" kelimesinin Türkçe karşılığı nedir?",o:["Belgesel","Komedi","Gerilim","Animasyon"],a:0},
+      {ty:"mc",q:"\"I found the ending predictable.\" cümlesi neyi ifade eder?",o:["Bir değerlendirmeyi","Bir soruyu","Bir emri","Bir izni"],a:0},
+      {ty:"tf",q:"\"be based on\" ifadesi bir kaynağa dayanmayı anlatır.",a:true},
+      {ty:"tf",q:"\"documentary\" kelimesi çizgi film anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Yönetmen\" kelimesinin İngilizcesi ____ dur.",a:"director"},
+      {ty:"fb",q:"\"Altyazı\" kelimesinin İngilizcesi ____ tır.",a:"subtitle"}
+    ],
   "Psychology": [
     {ty:"mc",q:"\"He looks exhausted. He ___ been working all night.\" (geçmişe yönelik tahmin/deduction) boşluğa hangisi gelmelidir?",o:["can't have","must have","should have","would have"],a:1},
     {ty:"mc",q:"'Davranış' anlamına gelen kelime hangisidir?",o:["behavior","emotion","memory","perception"],a:0},
     {ty:"mc",q:"\"She never lies, so she ___ have said that.\" boşluğa hangisi gelmelidir?",o:["must","can't","should","might"],a:1},
     {ty:"tf",q:"\"He must have forgotten our appointment.\" cümlesi, geçmişe yönelik güçlü bir tahmini (deduction) ifade eder.",a:true},
-    {ty:"fb",q:"\"She ____ (must) have felt very anxious before the exam.\" (geçmişe yönelik tahmin bildiren modal fiili yazınız)",a:"must"}
-  ],
+    {ty:"fb",q:"\"She ____ (must) have felt very anxious before the exam.\" (geçmişe yönelik tahmin bildiren modal fiili yazınız)",a:"must"},
+      {ty:"mc",q:"\"behaviour\" kelimesinin Türkçe karşılığı nedir?",o:["Davranış","Duygu","Düşünce","Alışkanlık"],a:0},
+      {ty:"mc",q:"\"He seems to be worried about the exam.\" cümlesi neyi bildirir?",o:["Bir çıkarımı","Bir kesinliği","Bir yasağı","Bir izni"],a:0},
+      {ty:"mc",q:"\"phobia\" kelimesinin Türkçe karşılığı nedir?",o:["Aşırı korku","Merak","Kararsızlık","Yorgunluk"],a:0},
+      {ty:"mc",q:"\"cognitive\" kelimesinin Türkçe karşılığı nedir?",o:["Bilişsel","Duygusal","Fiziksel","Toplumsal"],a:0},
+      {ty:"tf",q:"\"seem to\" ifadesi çıkarım bildirir.",a:true},
+      {ty:"tf",q:"\"behaviour\" kelimesi düşünce anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Davranış\" kelimesinin İngilizcesi ____ dur.",a:"behaviour"},
+      {ty:"fb",q:"\"Kaygı\" kelimesinin İngilizcesi ____ dir.",a:"anxiety"}
+    ],
   "Favors": [
     {ty:"mc",q:"\"___ you mind helping me carry these boxes?\" (kibar rica) boşluğa hangisi gelmelidir?",o:["Would","Do","Are","Can"],a:0},
     {ty:"mc",q:"\"If I ___ you, I would ask for a favor politely.\" boşluğa hangisi gelmelidir?",o:["am","were","was being","be"],a:1},
     {ty:"mc",q:"'Bir iyilik istemek' ifadesinin İngilizcesi hangisidir?",o:["to ask for a favor","to turn down a request","to take for granted","to look down on"],a:0},
     {ty:"tf",q:"\"Would you mind opening the window?\" sorusuna olumlu cevap genellikle \"No, not at all.\" şeklinde verilir.",a:true},
-    {ty:"fb",q:"\"If she ____ (have) more time, she would help her neighbor with the shopping.\" (2. tip koşul cümlesi)",a:"had"}
-  ],
+    {ty:"fb",q:"\"If she ____ (have) more time, she would help her neighbor with the shopping.\" (2. tip koşul cümlesi)",a:"had"},
+      {ty:"mc",q:"\"Would you mind opening the window?\" cümlesi neyi ifade eder?",o:["Nazik bir rica","Bir emir","Bir yasak","Bir şikâyet"],a:0},
+      {ty:"mc",q:"\"Would you mind ...?\" kalıbından sonra hangi biçim gelir?",o:["Fiil + -ing","Fiilin yalın hâli","to + fiil","Geçmiş biçim"],a:0},
+      {ty:"mc",q:"\"I'm afraid I can't help you now.\" cümlesi neyi ifade eder?",o:["Nazik bir reddetme","Kabul etme","Soru sorma","Övgü"],a:0},
+      {ty:"mc",q:"\"Not at all.\" ifadesi bir ricaya verilen yanıt olarak ne anlama gelir?",o:["Hiç sorun değil","Kesinlikle hayır","Anlamadım","Belki"],a:0},
+      {ty:"tf",q:"\"Would you mind\" kalıbı nazik rica bildirir.",a:true},
+      {ty:"tf",q:"\"Would you mind\" kalıbından sonra 'to' ile fiil gelir.",a:false},
+      {ty:"fb",q:"\"Would you mind ____ me?\" (yardım etmek) boşluğa gelen kelime ____ dir.",a:"helping"},
+      {ty:"fb",q:"\"İyilik, ricada bulunulan şey\" anlamındaki kelime ____ dur.",a:"favour"}
+    ],
   "News Stories": [
     {ty:"mc",q:"\"The reporter said that the fire ___ under control the day before.\" (dolaylı anlatım) boşluğa hangisi gelmelidir?",o:["is","was","has been","will be"],a:1},
     {ty:"mc",q:"\"The bridge ___ by the local authorities after the earthquake.\" (edilgen çatı) boşluğa hangisi gelmelidir?",o:["closed","was closed","closes","is closing"],a:1},
     {ty:"mc",q:"'Güvenilir kaynak' anlamına gelen ifade hangisidir?",o:["a reliable source","a fake headline","an exaggerated claim","a biased opinion"],a:0},
     {ty:"tf",q:"\"Breaking news\" ifadesi, o an gerçekleşmekte olan ya da yeni açıklanan önemli bir haberi ifade eder.",a:true},
-    {ty:"fb",q:"\"The journalist announced that the missing hikers ____ (find) safe.\" (dolaylı anlatım - edilgen çatı: had been + past participle)",a:"had been found"}
-  ],
+    {ty:"fb",q:"\"The journalist announced that the missing hikers ____ (find) safe.\" (dolaylı anlatım - edilgen çatı: had been + past participle)",a:"had been found"},
+      {ty:"mc",q:"\"headline\" kelimesinin Türkçe karşılığı nedir?",o:["Haber başlığı","Haber metni","Muhabir","Kaynak"],a:0},
+      {ty:"mc",q:"\"The suspect is reported to have escaped.\" cümlesi hangi yapıdadır?",o:["Edilgen kişisiz anlatım","Etken geçmiş","Koşul","Emir"],a:0},
+      {ty:"mc",q:"\"eyewitness\" kelimesinin Türkçe karşılığı nedir?",o:["Görgü tanığı","Muhabir","Kurban","Yetkili"],a:0},
+      {ty:"mc",q:"\"According to the police, ...\" ifadesi neyi belirtir?",o:["Bilginin kaynağını","Bilginin zamanını","Bilginin yerini","Bilginin nedenini"],a:0},
+      {ty:"tf",q:"\"according to\" ifadesi kaynak belirtmek için kullanılır.",a:true},
+      {ty:"tf",q:"\"headline\" kelimesi muhabir anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Görgü tanığı\" ifadesinin İngilizcesi ____ tir.",a:"eyewitness"},
+      {ty:"fb",q:"\"Muhabir\" kelimesinin İngilizcesi ____ tir.",a:"reporter"}
+    ],
   "Alternative Energy": [
     {ty:"mc",q:"\"If governments invested more in solar power, pollution ___ significantly.\" (2. tip koşul) boşluğa hangisi gelmelidir?",o:["would decrease","decreases","will decrease","decreased"],a:0},
     {ty:"mc",q:"'Yenilenebilir enerji' anlamına gelen ifade hangisidir?",o:["renewable energy","fossil fuel","carbon emission","nuclear waste"],a:0},
     {ty:"mc",q:"\"If we had invested in wind energy earlier, we ___ so dependent on fossil fuels now.\" (3. tip koşul - sonucu şimdiki zamana bağlı karma koşul) boşluğa hangisi gelmelidir?",o:["wouldn't have been","wouldn't be","won't be","hadn't been"],a:1},
     {ty:"tf",q:"\"Fossil fuel\" ifadesi, kömür ve petrol gibi tükenebilir ve yenilenemeyen enerji kaynaklarını ifade eder.",a:true},
-    {ty:"fb",q:"\"If more countries used solar panels, carbon emissions ____ (be) much lower.\" (2. tip koşul cümlesi)",a:"would be"}
-  ],
+    {ty:"fb",q:"\"If more countries used solar panels, carbon emissions ____ (be) much lower.\" (2. tip koşul cümlesi)",a:"would be"},
+      {ty:"mc",q:"\"wind turbine\" ifadesinin Türkçe karşılığı nedir?",o:["Rüzgâr türbini","Güneş paneli","Su bendi","Jeneratör"],a:0},
+      {ty:"mc",q:"\"Solar panels are becoming cheaper.\" cümlesi neyi bildirir?",o:["Sürmekte olan bir değişimi","Tamamlanmış bir eylemi","Bir kuralı","Bir yasağı"],a:0},
+      {ty:"mc",q:"\"fossil fuel\" ifadesinin Türkçe karşılığı nedir?",o:["Fosil yakıt","Yenilenebilir yakıt","Biyoyakıt","Nükleer yakıt"],a:0},
+      {ty:"mc",q:"\"Energy consumption should be reduced.\" cümlesi hangi yapıdadır?",o:["Edilgen ve öneri","Etken ve emir","Koşul","Soru"],a:0},
+      {ty:"tf",q:"\"renewable\" kelimesi yenilenebilir anlamına gelir.",a:true},
+      {ty:"tf",q:"\"fossil fuel\" ifadesi yenilenebilir kaynak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Tüketim\" kelimesinin İngilizcesi ____ dur.",a:"consumption"},
+      {ty:"fb",q:"\"Jeotermal\" kelimesinin İngilizcesi ____ dır.",a:"geothermal"}
+    ],
   "Technology": [
     {ty:"mc",q:"\"Smartphones, ___ have changed our daily lives, are now indispensable.\" boşluğa hangi ilgi zamiri gelmelidir?",o:["who","which","whose","where"],a:1},
     {ty:"mc",q:"\"This is the device ___ features amazed everyone.\" boşluğa hangi ilgi zamiri gelmelidir?",o:["which","who","whose","that"],a:2},
     {ty:"mc",q:"'Bir yeniliği ilk kullananlardan olmak' ifadesinin İngilizcesi hangisidir?",o:["to be an early adopter","to fall behind","to switch off","to break down"],a:0},
     {ty:"tf",q:"\"Artificial intelligence\", insan zekasını taklit edebilen bilgisayar sistemlerini ifade eder.",a:true},
-    {ty:"fb",q:"\"New software ____ (develop) by engineers every single day.\" (edilgen çatı - is/are + past participle)",a:"is developed"}
-  ],
+    {ty:"fb",q:"\"New software ____ (develop) by engineers every single day.\" (edilgen çatı - is/are + past participle)",a:"is developed"},
+      {ty:"mc",q:"\"device\" kelimesinin Türkçe karşılığı nedir?",o:["Aygıt","Uygulama","Program","Ağ"],a:0},
+      {ty:"mc",q:"\"If I had a 3D printer, I would make models.\" cümlesi hangi yapıdadır?",o:["İkinci tip koşul cümlesi","Birinci tip koşul","Üçüncü tip koşul","Edilgen"],a:0},
+      {ty:"mc",q:"\"update\" fiilinin Türkçe karşılığı nedir?",o:["Güncellemek","Silmek","Kapatmak","Kurmak"],a:0},
+      {ty:"mc",q:"\"Wearable technology is on the rise.\" cümlesi neyi bildirir?",o:["Bir eğilimi","Bir yasağı","Bir kuralı","Bir emri"],a:0},
+      {ty:"tf",q:"\"device\" kelimesi aygıt anlamına gelir.",a:true},
+      {ty:"tf",q:"\"update\" fiili kaldırmak anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Aygıt\" kelimesinin İngilizcesi ____ dır.",a:"device"},
+      {ty:"fb",q:"\"Güncelleme\" kelimesinin İngilizcesi ____ dir.",a:"update"}
+    ],
   "Manners": [
     {ty:"mc",q:"\"I wish I ___ more polite at the dinner table yesterday.\" (geçmişe pişmanlık) boşluğa hangisi gelmelidir?",o:["was","had been","would be","am"],a:1},
     {ty:"mc",q:"\"You ___ interrupt people while they are speaking; it's rude.\" (yasaklama/olumsuz zorunluluk) boşluğa hangisi gelmelidir?",o:["shouldn't","don't have to","can","might"],a:0},
     {ty:"mc",q:"'Kaba / saygısız' anlamına gelen kelime hangisidir?",o:["polite","rude","gracious","courteous"],a:1},
     {ty:"tf",q:"\"If only I had listened to my manners teacher\" cümlesi, geçmişe yönelik bir pişmanlığı ifade eder.",a:true},
-    {ty:"fb",q:"\"If only I ____ (not/interrupt) the guest speaker during the ceremony.\" (if only + geçmişe pişmanlık, olumsuz)",a:"hadn't interrupted"}
-  ]
+    {ty:"fb",q:"\"If only I ____ (not/interrupt) the guest speaker during the ceremony.\" (if only + geçmişe pişmanlık, olumsuz)",a:"hadn't interrupted"},
+      {ty:"mc",q:"\"polite\" kelimesinin Türkçe karşılığı nedir?",o:["Nazik","Kaba","Sessiz","Aceleci"],a:0},
+      {ty:"mc",q:"\"You are not supposed to talk loudly here.\" cümlesi neyi bildirir?",o:["Beklenen davranışı","Bir izni","Bir yeteneği","Bir olasılığı"],a:0},
+      {ty:"mc",q:"\"It is rude to interrupt.\" cümlesi neyi anlatır?",o:["Bir davranışın kabalığını","Bir kuralı yasaklamayı","Bir öneriyi","Bir tercihi"],a:0},
+      {ty:"mc",q:"\"queue\" kelimesinin Türkçe karşılığı nedir?",o:["Sıra, kuyruk","Bilet","Masa","Kapı"],a:0},
+      {ty:"tf",q:"\"be supposed to\" ifadesi beklenen davranışı anlatır.",a:true},
+      {ty:"tf",q:"\"polite\" kelimesi kaba anlamına gelir.",a:false},
+      {ty:"fb",q:"\"Kaba\" kelimesinin İngilizcesi ____ dur.",a:"rude"},
+      {ty:"fb",q:"\"Sözünü kesmek\" fiilinin İngilizcesi ____ tır.",a:"interrupt"}
+    ]
 },
 "fiz-9": {
   /* Kapsam: Fizik Bilimi · Fizik Biliminin Alt Dalları · Fizik Bilimine Yön
