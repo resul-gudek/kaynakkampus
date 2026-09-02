@@ -187,6 +187,26 @@
     .q-op-lines div { border-bottom: 1.5px dotted #cbd5e1; height: 26px; }
     .q-islem { margin: 8px 0 0 24px; font-weight: 700; }
     .q-islem i { font-style: normal; color: #94a3b8; letter-spacing: 2px; }
+    /* Eşleştirme: iki sütun; sol öğenin önünde cevap kutusu vardır.
+       Mevcut kâğıt tipografisini kullanır, yeni renk/font getirmez. */
+    .q-match { margin: 8px 0 0 24px; display: grid; grid-template-columns: 1.7fr 1fr; gap: 4px 20px; align-items: start; }
+    .q-match ol, .q-match ul { margin: 0; padding: 0; list-style: none; }
+    /* Uzun ifadeler sarktığında girinti korunur, öğeler birbirine karışmaz */
+    .q-match li { padding: 3px 0; font-weight: 500; padding-left: 34px; text-indent: -34px; }
+    .q-match .mbox { display: inline-block; min-width: 26px; border-bottom: 1.5px dotted #94a3b8; margin-right: 6px; text-align: center; text-indent: 0; }
+    /* Sıralama: karışık öğeler + numara kutuları */
+    .q-order { margin: 8px 0 0 24px; }
+    .q-order li { padding: 2px 0; font-weight: 500; list-style: none; }
+    .q-order .obox { display: inline-block; min-width: 26px; border-bottom: 1.5px dotted #94a3b8; margin-right: 6px; text-align: center; }
+    /* Tablo/veri yorumlama: kâğıda basılabilen sade tablo */
+    .q-data { margin: 8px 0 0 24px; }
+    .q-data table { border-collapse: collapse; margin-bottom: 6px; }
+    .q-data th, .q-data td { border: 1px solid #94a3b8; padding: 3px 10px; font-size: .95em; text-align: center; }
+    .q-data th { font-weight: 700; background: #f1f5f9; }
+    .sheet.bw .q-data th { background: #eee; }
+    /* İki sütunlu kâğıt düzeninde eşleştirme sütunları alt alta geçer */
+    .q-grid.two-col .q-match { grid-template-columns: 1fr; }
+    .q-grid.two-col .q-data table { font-size: .88em; }
 
     .answer-key { margin-top: 34px; border-top: 3px double var(--blue); padding-top: 16px; }
     .answer-key h3 { color: var(--blue); font-size: 1.05em; margin-bottom: 12px; }
@@ -222,11 +242,13 @@
 
     /* PRINT */
     @media print {
-      header, .page-hero, .panel, .toolbar-float, footer, .mobile-nav { display: none !important; }
+      header, .page-hero, .panel, .toolbar-float, footer, .mobile-nav, .tani-not { display: none !important; }
       .builder { padding: 0; }
       .builder-grid { display: block; }
       .sheet { box-shadow: none; padding: 0; max-width: none; border-radius: 0; }
       .answer-key { page-break-before: always; }
+      /* Tablo ve eşleştirme gövdeleri sayfa ortasından bölünmesin */
+      .q-data, .q-match, .q-order { break-inside: avoid; page-break-inside: avoid; }
       body { background: #fff; }
     }
   </style>
@@ -321,7 +343,7 @@
   <div class="container">
     <div class="meb-badge">🇹🇷 MEB Güncel Müfredatı (Türkiye Yüzyılı Maarif Modeli) ile uyumlu</div>
     <h1>Akıllı <span>Ödev Oluşturucu</span></h1>
-    <p>Kademe, sınıf, ders ve üniteyi seç; soru tipini, sayısını ve zorluğu ayarla. Saniyeler içinde yazdırmaya hazır, cevap anahtarlı ödev kâğıdın hazır. İlkokul, ortaokul ve lise — tüm sınıflar için.</p>
+    <p>Kademe, sınıf, ders ve üniteyi seç; soru türü, soru sayısı ve zorluk seviyesini belirle. İhtiyacına uygun ödevini kolayca oluştur.</p>
   </div>
 </section>
 
@@ -349,7 +371,7 @@
         </div>
 
         <div class="step-box">
-          <div class="step-head"><div class="step-num">4</div><div class="step-title">Ünite / Konu Seç</div></div>
+          <div class="step-head"><div class="step-num">4</div><div class="step-title" id="unitStepTitle">Ünite / Konu Seç</div></div>
           <div class="unit-tools">
             <button id="selAll">Tümünü Seç</button>
             <button id="selNone">Temizle</button>
@@ -376,8 +398,11 @@
           <label class="check-row"><input type="checkbox" data-ty="tf" checked /><span>✔️ Doğru – Yanlış</span></label>
           <label class="check-row"><input type="checkbox" data-ty="fb" checked /><span>➖ Boşluk Doldurma</span></label>
           <label class="check-row"><input type="checkbox" data-ty="islem" checked /><span>🔢 İşlem / Problem</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="es" checked /><span>🔗 Eşleştirme</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="sira" checked /><span>🔢 Sıralama</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="veri" checked /><span>📊 Tablo / Veri Yorumlama</span></label>
           <label class="check-row"><input type="checkbox" data-ty="op" /><span>✍️ Açık Uçlu</span></label>
-          <div class="hint">İşlem/problem soruları Matematik, Geometri, Fizik, Kimya derslerinin sayısal ünitelerinde; ses/hece soruları 1. sınıf Türkçe "Ses Grupları" ünitesinde sınırsız ve rastgele üretilir. Ünite seçimine göre soru üretimi Türkçe (1-8), Fen Bilimleri (3-8), Sosyal Bilgiler (4-8), Hayat Bilgisi (1-3), Din Kültürü (4-12), Türk Dili ve Edebiyatı (9-12), Biyoloji (9-12), İngilizce (2-12) ve Almanca (9-12) derslerinde, ayrıca Fizik/Kimya'nın kavramsal üniteleri ile Matematik/Geometri'nin veri-istatistik ve mantık ünitelerinde tamamen üniteye özeldir; henüz üniteye özel içerik eklenmemiş diğer ders/sınıf/ünitelerde müfredata uygun genel soru bankası kullanılır.</div>
+          <div class="hint" id="uretimHint"></div>
         </div>
 
         <div class="step-box">
@@ -519,12 +544,12 @@ const SUBJECTS = {
   tr:  { name: "Türkçe",                        icon: "📖" },
   tde: { name: "Türk Dili ve Edebiyatı",        icon: "📜" },
   mat: { name: "Matematik",                     icon: "🔢" },
-  geo: { name: "Geometri",                      icon: "📐" },
   fen: { name: "Fen Bilimleri",                 icon: "⚗️" },
   fiz: { name: "Fizik",                         icon: "🧲" },
   kim: { name: "Kimya",                         icon: "🧪" },
   bio: { name: "Biyoloji",                      icon: "🧬" },
   sos: { name: "Sosyal Bilgiler",               icon: "🌍" },
+  ink: { name: "T.C. İnkılap Tarihi ve Atatürkçülük", icon: "🇹🇷" },
   hay: { name: "Hayat Bilgisi",                 icon: "🌱" },
   din: { name: "Din Kültürü ve Ahlak Bilgisi",  icon: "🕌" },
   ing: { name: "İngilizce",                     icon: "🇬🇧" },
@@ -533,24 +558,55 @@ const SUBJECTS = {
 
 const LEVELS = {
   ilkokul:  { name: "🎒 İlkokul",  grades: [1, 2, 3, 4],   subjects: ["tr", "mat", "hay", "fen", "sos", "ing"] },
-  ortaokul: { name: "🏫 Ortaokul", grades: [5, 6, 7, 8],   subjects: ["tr", "mat", "fen", "sos", "din", "ing"] },
-  lise:     { name: "🎓 Lise",     grades: [9, 10, 11, 12], subjects: ["tde", "mat", "geo", "fiz", "kim", "bio", "ing", "alm", "din"] },
+  ortaokul: { name: "🏫 Ortaokul", grades: [5, 6, 7, 8],   subjects: ["tr", "mat", "fen", "sos", "ink", "din", "ing"] },
+  lise:     { name: "🎓 Lise",     grades: [9, 10, 11, 12], subjects: ["tde", "mat", "fiz", "kim", "bio", "ing", "alm", "din"] },
 };
 
-/* MEB müfredatında dersin okutulduğu sınıflar */
+/* Dersin okutulduğu sınıflar — resmî program kapsamlarına göre
+   (mufredat.meb.gov.tr program listesi, Ağustos 2026 sürümleri):
+     Sosyal Bilgiler .......... 4-7   (8. sınıfın dersi T.C. İnkılap Tarihi'dir)
+     T.C. İnkılap Tarihi ...... 8     (lisede 12. sınıfta ayrı program)
+     Fen Bilimleri ............ 3-8
+     Hayat Bilgisi ............ 1-3
+     İngilizce ................ 2-8 ve 9-12
+     Din Kültürü .............. 4-8 ve 9-12
+   Not: "Geometri" resmî program listesinde bağımsız bir ders değildir;
+   geometri kazanımları Matematik programının içinde yer alır. */
 const AVAIL = {
   tr: [1,2,3,4,5,6,7,8], tde: [9,10,11,12], mat: [1,2,3,4,5,6,7,8,9,10,11,12],
-  geo: [9,10,11,12], fen: [3,4,5,6,7,8], fiz: [9,10,11,12], kim: [9,10,11,12],
-  bio: [9,10,11,12], sos: [4,5,6,7,8], hay: [1,2,3], din: [4,5,6,7,8,9,10,11,12],
+  fen: [3,4,5,6,7,8], fiz: [9,10,11,12], kim: [9,10,11,12],
+  bio: [9,10,11,12], sos: [4,5,6,7], ink: [8], hay: [1,2,3], din: [4,5,6,7,8,9,10,11,12],
   ing: [2,3,4,5,6,7,8,9,10,11,12], alm: [9,10,11,12],
 };
 const AVAIL_NOTE = {
   fen: "Fen Bilimleri MEB müfredatında 3. sınıfta başlar.",
-  sos: "Sosyal Bilgiler MEB müfredatında 4. sınıfta başlar.",
+  sos: "Sosyal Bilgiler 4-7. sınıflarda okutulur; 8. sınıfın dersi T.C. İnkılap Tarihi ve Atatürkçülük'tür.",
+  ink: "T.C. İnkılap Tarihi ve Atatürkçülük 8. sınıfta okutulur.",
   hay: "Hayat Bilgisi MEB müfredatında 1-3. sınıflarda okutulur.",
   ing: "İngilizce MEB müfredatında 2. sınıfta başlar.",
   din: "Din Kültürü ve Ahlak Bilgisi 4. sınıfta başlar.",
 };
+
+/* ── Dersin resmî programında kullanılan yapı adı ──────────────────────────
+   Her derse "ünite" demek yanlıştır: Türkçe ve Matematik programları TEMA,
+   Hayat Bilgisi ve Sosyal Bilgiler ÖĞRENME ALANI, Fen Bilimleri ve Din
+   Kültürü ÜNİTE kullanır. Arayüz etiketi buna göre değişir.
+   Kaynak: ilgili derslerin mufredat.meb.gov.tr'deki öğretim programları. */
+const YAPI_ADI = {
+  tr: "Tema", tde: "Tema", mat: "Tema",
+  fen: "Ünite", din: "Ünite", fiz: "Ünite",
+  kim: "Tema", bio: "Tema",
+  hay: "Öğrenme Alanı", sos: "Öğrenme Alanı",
+  ink: "Ünite", ing: "Theme", alm: "Ünite",
+};
+function yapiAdi() { return YAPI_ADI[st.subject] || "Ünite"; }
+
+/* ── 2026-2027'de yürürlükte olan program ─────────────────────────────────
+   Türkiye Yüzyılı Maarif Modeli kademeli uygulanır. 2026-2027'de TYMM
+   programları 1, 2, 3 / 5, 6, 7 / 9, 10, 11. sınıflarda; 4, 8 ve 12.
+   sınıflarda ise önceki öğretim programları yürürlüktedir.
+   Kaynak: ogm.meb.gov.tr ve tymm.meb.gov.tr duyuruları. */
+const TYMM_SINIFLARI = new Set([1, 2, 3, 5, 6, 7, 9, 10, 11]);
 
 /* ═══════════════ MEB GÜNCEL MÜFREDAT ÜNİTELERİ ═══════════════
    u: ünite adı — g: işlem/problem üreteci etiketi (varsa) */
@@ -585,12 +641,6 @@ const UNITS = {
     11: [{u:"Trigonometri",g:"trig"},{u:"Analitik Geometri",g:"analitik"},{u:"Fonksiyonlarda Uygulamalar",g:"fonk"},{u:"Denklem ve Eşitsizlik Sistemleri",g:"sistem"},{u:"Çember ve Daire",g:"cember"},{u:"Olasılık",g:"olasi"}],
     12: [{u:"Üstel ve Logaritmik Fonksiyonlar",g:"log"},{u:"Diziler",g:"dizi"},{u:"Trigonometri",g:"trig"},{u:"Türev",g:"turev"},{u:"İntegral",g:"integral"},{u:"Analitik Geometri",g:"analitik"}],
   },
-  geo: {
-    9:  [{u:"Üçgende Açılar",g:"ucgen"},{u:"Üçgende Açı-Kenar Bağıntıları",g:"ucgen"},{u:"Dik Üçgen ve Pisagor",g:"pisagor"},{u:"Üçgende Alan",g:"ucgalan"}],
-    10: [{u:"Dörtgenler",g:"alan",p:[5,30]},{u:"Özel Dörtgenler (Kare, Dikdörtgen, Paralelkenar)",g:"alan",p:[5,30]},{u:"Çokgenler",g:"cokgen"},{u:"Katı Cisimler: Prizma ve Silindir",g:"hacim"}],
-    11: [{u:"Çemberde Açılar",g:"cember"},{u:"Çemberde Uzunluk ve Daire Alanı",g:"cember"},{u:"Analitik Geometri: Doğru",g:"analitik"},{u:"Analitik Geometri: Nokta ve Uzaklık",g:"analitik"}],
-    12: [{u:"Analitik Geometri: Çember Denklemi",g:"analitik"},{u:"Dönüşüm Geometrisi"},{u:"Trigonometrik Uygulamalar",g:"trig"},{u:"Katı Cisimlerde Hacim",g:"hacim"}],
-  },
   fen: {
     3: ["Gezegenimizi Tanıyalım", "Beş Duyumuz", "Kuvveti Tanıyalım", "Maddeyi Tanıyalım", "Çevremizdeki Işık ve Sesler", "Canlılar Dünyasına Yolculuk", "Elektrikli Araçlar"],
     4: ["Yer Kabuğu ve Dünya'mızın Hareketleri", "Besinlerimiz", "Kuvvetin Etkileri", "Maddenin Özellikleri", "Aydınlatma ve Ses Teknolojileri", "İnsan ve Çevre", "Basit Elektrik Devreleri"],
@@ -604,12 +654,18 @@ const UNITS = {
     5: ["Birey ve Toplum", "Kültür ve Miras (Anadolu Uygarlıkları)", "İnsanlar, Yerler ve Çevreler", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
     6: ["Birey ve Toplum", "Kültür ve Miras (İlk Türk Devletleri)", "İnsanlar, Yerler ve Çevreler", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
     7: ["İletişim ve İnsan İlişkileri", "Kültür ve Miras (Osmanlı)", "İnsanlar, Yerler ve Çevreler (Nüfus)", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
+  },
+  /* 8. sınıfın dersi Sosyal Bilgiler değil T.C. İnkılap Tarihi ve
+     Atatürkçülük'tür (Sosyal Bilgiler programı 4-7. sınıfları kapsar).
+     8. sınıf 2026-2027'de henüz TYMM'ye geçmediği için önceki programın
+     ünite adları geçerlidir. */
+  ink: {
     8: ["Bir Kahraman Doğuyor", "Millî Uyanış: Bağımsızlık Yolunda Atılan Adımlar", "Millî Bir Destan: Ya İstiklal Ya Ölüm!", "Atatürkçülük ve Çağdaşlaşan Türkiye", "Demokratikleşme Çabaları", "Atatürk Dönemi Türk Dış Politikası", "Atatürk'ün Ölümü ve Sonrası"],
   },
   hay: {
     1: ["Ben ve Okulum", "Sağlığım ve Güvenliğim", "Ailem ve Toplum", "Yaşadığım Yer ve Ülkem", "Doğa ve Çevre", "Bilim, Teknoloji ve Sanat"],
     2: ["Ben ve Okulum", "Sağlığım ve Güvenliğim", "Ailem ve Toplum", "Yaşadığım Yer ve Ülkem", "Doğa ve Çevre", "Bilim, Teknoloji ve Sanat"],
-    3: ["Okulumuzda Hayat", "Evimizde Hayat", "Sağlıklı Hayat", "Güvenli Hayat", "Ülkemizde Hayat", "Doğada Hayat"],
+    3: ["Ben ve Okulum", "Sağlığım ve Güvenliğim", "Ailem ve Toplum", "Yaşadığım Yer ve Ülkem", "Doğa ve Çevre", "Bilim, Teknoloji ve Sanat"],
   },
   din: {
     4: ["Günlük Hayattaki Dinî İfadeler", "İslam'ı Tanıyalım", "Güzel Ahlak", "Hz. Muhammed'i Tanıyalım", "Din ve Temizlik"],
@@ -806,7 +862,7 @@ const BANK = {
     {ty:"tf",q:"Rönesans, Avrupa'da bilim ve sanatta yeniden doğuş hareketidir.",a:true},
     {ty:"fb",q:"Osmanlı Devleti'nde ülke topraklarının kaydını tutan deftere ____ defteri denirdi.",a:"tahrir"},
   ],
-  "sos-8": [
+  "ink-8": [
     {ty:"mc",q:"Mustafa Kemal hangi şehirde doğmuştur?",o:["İstanbul","Ankara","Selanik","Manastır"],a:2},
     {ty:"mc",q:"Kurtuluş Savaşı'nın başlangıcı kabul edilen olay hangisidir?",o:["TBMM'nin açılması","Mustafa Kemal'in 19 Mayıs 1919'da Samsun'a çıkışı","Sivas Kongresi","Lozan Antlaşması"],a:1},
     {ty:"mc",q:"TBMM hangi tarihte açılmıştır?",o:["23 Nisan 1920","29 Ekim 1923","19 Mayıs 1919","30 Ağustos 1922"],a:0},
@@ -1329,7 +1385,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"'Neden bu kadar geç kaldın?' cümlesindeki 'neden' sözcüğü hangi zarf türüne örnektir?",o:["Soru zarfı","Zaman zarfı","Yer-yön zarfı","Durum zarfı"],a:0},
     {ty:"tf",q:"Zarflar; fiillerin, fiilimsilerin, sıfatların ve başka zarfların anlamlarını etkileyen sözcüklerdir.",a:true},
     {ty:"tf",q:"'Yukarı çıktı.' cümlesindeki 'yukarı' sözcüğü zaman zarfıdır.",a:false},
-    {ty:"fb",q:"İşin, oluşun ne zaman gerçekleştiğini bildiren zarflara ____ zarfı denir.",a:"zaman"}
+    {ty:"fb",q:"Dün, yarın, akşam gibi sözcüklerle fiilin gerçekleşme vaktini bildiren zarflara ____ zarfı denir.",a:"zaman"}
   ],
   "Ek Fiil": [
     {ty:"mc",q:"'Sınıfın en çalışkan öğrencisiydi.' cümlesinde ek fiil hangi görevde kullanılmıştır?",o:["İsim soylu sözcüğü yüklem yapmıştır","Basit çekimli fiili bileşik çekime dönüştürmüştür","Fiile olumsuzluk anlamı katmıştır","Fiili isim-fiile dönüştürmüştür"],a:0},
@@ -1970,7 +2026,7 @@ const UNIT_BANK = {
     {ty:"fb",q:"Dünya genelinde ekonomik, siyasi ve kültürel açıdan ülkelerin birbirine bağımlı hâle gelmesine ____ denir.",a:"küreselleşme"}
   ]
 },
-"sos-8": {
+"ink-8": {
   "Bir Kahraman Doğuyor": [
     {ty:"mc",q:"Mustafa Kemal 1881 yılında hangi şehirde doğmuştur?",o:["Selanik","İstanbul","Manastır","Şam"],a:0},
     {ty:"mc",q:"Mustafa Kemal'e matematik öğretmeni tarafından üstün başarısından dolayı 'Kemal' adı hangi okulda verilmiştir?",o:["Selanik Askeri Rüştiyesi","İstanbul Harp Okulu","Manastır Askeri İdadisi","Harp Akademisi"],a:0},
@@ -1985,7 +2041,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Türkiye Büyük Millet Meclisi (TBMM) hangi tarihte açılmıştır?",o:["23 Nisan 1920","19 Mayıs 1919","29 Ekim 1923","30 Ağustos 1922"],a:0},
     {ty:"tf",q:"Amasya Genelgesi'nde 'Milletin bağımsızlığını yine milletin azim ve kararı kurtaracaktır' ifadesi yer almıştır.",a:true},
     {ty:"tf",q:"Sivas Kongresi, sadece bir bölgenin temsilcilerinin katıldığı yerel bir kongredir.",a:false},
-    {ty:"fb",q:"Erzurum ve Sivas kongrelerinde alınan kararların birleştirildiği, Kurtuluş Savaşı'nı yürütecek iradenin ortaya konduğu kongre ____ Kongresi'dir.",a:"Sivas"}
+    {ty:"fb",q:"Erzurum Kongresi'nden sonra toplanan, bütün yurdu ilgilendiren kararların alındığı ve millî iradenin tek çatı altında birleştirildiği kongre ____ Kongresi'dir.",a:"Sivas"}
   ],
   "Millî Bir Destan: Ya İstiklal Ya Ölüm!": [
     {ty:"mc",q:"Kurtuluş Savaşı'nda dönüm noktası kabul edilen Sakarya Meydan Muharebesi hangi cephede yaşanmıştır?",o:["Batı Cephesi (Yunanlara karşı)","Doğu Cephesi (Ermenilere karşı)","Güney Cephesi (Fransızlara karşı)","Çanakkale Cephesi"],a:0},
@@ -2129,7 +2185,7 @@ const UNIT_BANK = {
   ]
 },
 "hay-3": {
-  "Okulumuzda Hayat": [
+  "Ben ve Okulum": [
     {ty:"mc",q:"Okulda nöbetçi öğretmenin görevi nedir?",o:["Öğrencileri cezalandırmak","Teneffüste güvenliği sağlamak","Ders anlatmak","Yemek yapmak"],a:1},
     {ty:"mc",q:"Okul aile birliği neden önemlidir?",o:["Okul ve aile arasında iş birliği sağlar","Hiçbir işe yaramaz","Sadece para toplar","Öğrencileri ayırır"],a:0},
     {ty:"mc",q:"Sınıf başkanı seçilirken nasıl bir yöntem kullanılır?",o:["Kura ile","Oylama yaparak demokratik seçim ile","Sadece öğretmen seçer","Kimse seçilmez"],a:1},
@@ -2137,7 +2193,7 @@ const UNIT_BANK = {
     {ty:"tf",q:"Nöbetçi öğrenci sadece kendi arkadaşlarına yardım eder.",a:false},
     {ty:"fb",q:"Okulumuzda alınan kararlara herkesin oy vermesine ____ denir.",a:"oylama"}
   ],
-  "Evimizde Hayat": [
+  "Ailem ve Toplum": [
     {ty:"mc",q:"Evde bütçe planlaması neden önemlidir?",o:["Parayı bilinçli ve gereksiz yere harcamamak için","Parayı hemen bitirmek için","Hiçbir önemi yok","Sadece oyuncak almak için"],a:0},
     {ty:"mc",q:"Ev işlerini paylaşmak ailede neyi sağlar?",o:["Dayanışma ve yardımlaşmayı","Kavgayı","Yorgunluğu artırmayı","Hiçbir şeyi"],a:0},
     {ty:"mc",q:"Evde bir eşya bozulduğunda ne yapmalıyız?",o:["Büyüklerimize haber vermeliyiz","Saklamalı ve söylememeliyiz","Kırıp atmalıyız","Umursamamalıyız"],a:0},
@@ -2145,15 +2201,13 @@ const UNIT_BANK = {
     {ty:"tf",q:"Evde elektrik ve suyu israf etmek doğru bir davranıştır.",a:false},
     {ty:"fb",q:"Bir ailenin gelir ve giderlerini planlamasına ____ denir.",a:"bütçe"}
   ],
-  "Sağlıklı Hayat": [
+  "Sağlığım ve Güvenliğim": [
     {ty:"mc",q:"Bağışıklık sistemimizi güçlendirmek için neler yapmalıyız?",o:["Dengeli beslenmeli ve spor yapmalıyız","Hiç uyumamalıyız","Sadece şeker yemeliyiz","Hareketsiz durmalıyız"],a:0},
     {ty:"mc",q:"Aşıların vücudumuza faydası nedir?",o:["Bizi hastalıklardan korur","Bizi hasta eder","Hiçbir faydası yok","Sadece acı verir"],a:0},
     {ty:"mc",q:"Düzenli spor yapmanın faydası nedir?",o:["Kaslarımızı ve kalbimizi güçlendirir","Bizi yorar ve zayıflatır","Hiçbir faydası yoktur","Sadece vakit kaybıdır"],a:0},
     {ty:"tf",q:"Yeterince ve düzenli uyumak sağlığımız için gereklidir.",a:true},
     {ty:"tf",q:"Hasta olduğumuzda okula gidip arkadaşlarımıza yaklaşmalıyız.",a:false},
-    {ty:"fb",q:"Vücudumuzu hastalıklara karşı koruyan sisteme ____ sistemi denir.",a:"bağışıklık"}
-  ],
-  "Güvenli Hayat": [
+    {ty:"fb",q:"Vücudumuzu hastalıklara karşı koruyan sisteme ____ sistemi denir.",a:"bağışıklık"},
     {ty:"mc",q:"Deprem anında yapılması gereken en doğru hareket hangisidir?",o:["Çök-Kapan-Tutun hareketi yapmak","Pencereden atlamak","Asansöre binmek","Koşarak dışarı çıkmaya çalışmak"],a:0},
     {ty:"mc",q:"İnternet güvenliği için neye dikkat etmeliyiz?",o:["Şifremizi kimseyle paylaşmamalıyız","Şifremizi herkese söylemeliyiz","Tanımadığımız linklere tıklamalıyız","Kişisel bilgilerimizi paylaşmalıyız"],a:0},
     {ty:"mc",q:"Trafik ışığı kırmızı yanınca ne yapmalıyız?",o:["Beklemeliyiz, geçmemeliyiz","Koşarak geçmeliyiz","Göz kapatıp geçmeliyiz","Önemi yok"],a:0},
@@ -2161,7 +2215,7 @@ const UNIT_BANK = {
     {ty:"tf",q:"Ev güvenliği için kapıyı tanımadığımız kişilere açmamalıyız.",a:true},
     {ty:"fb",q:"Deprem sırasında uygulanan güvenlik hareketine \"Çök, Kapan, ____\" denir.",a:"Tutun"}
   ],
-  "Ülkemizde Hayat": [
+  "Yaşadığım Yer ve Ülkem": [
     {ty:"mc",q:"Türkiye'de yönetim şekli nedir?",o:["Cumhuriyet","Krallık","Sultanlık","Diktatörlük"],a:0},
     {ty:"mc",q:"Cumhuriyetimizin kurucusu kimdir?",o:["Mustafa Kemal Atatürk","Mehmet Akif Ersoy","Bir vali","Bilinmiyor"],a:0},
     {ty:"mc",q:"Farklı bölgelerimizde yaşayan insanların farklı kültürel özellikleri olması neyi gösterir?",o:["Ülkemizin zengin bir kültürel çeşitliliğe sahip olduğunu","Hiçbir şey göstermez","İnsanların birbirinden kopuk olduğunu","Bir sorun olduğunu"],a:0},
@@ -2169,13 +2223,26 @@ const UNIT_BANK = {
     {ty:"tf",q:"Ülkemizde tek bir bölgede yaşamak zorunludur.",a:false},
     {ty:"fb",q:"Türkiye Cumhuriyeti ____ yılında kurulmuştur.",a:"1923"}
   ],
-  "Doğada Hayat": [
+  "Doğa ve Çevre": [
     {ty:"mc",q:"Ekosistem nedir?",o:["Canlıların ve cansızların birbirleriyle etkileşimde bulunduğu ortam","Sadece hayvanlar","Sadece bitkiler","Hiçbir canlının olmadığı yer"],a:0},
     {ty:"mc",q:"Besin zincirinde bitkiler genellikle hangi rolü üstlenir?",o:["Üretici","Tüketici","Ayrıştırıcı","Hiçbiri"],a:0},
     {ty:"mc",q:"İklim değişikliğinin nedenlerinden biri hangisidir?",o:["Fabrika ve araçlardan çıkan zararlı gazlar","Temiz hava","Ağaç dikmek","Güneş enerjisi kullanmak"],a:0},
     {ty:"tf",q:"Doğal kaynakları bilinçsizce tüketmek gelecek nesilleri olumsuz etkiler.",a:true},
     {ty:"tf",q:"Sulak alanlar birçok canlı türüne ev sahipliği yapar.",a:true},
     {ty:"fb",q:"Bitkilerin güneş ışığı ile kendi besinini üretmesine ____ denir.",a:"fotosentez"}
+  ],
+  /* Altıncı öğrenme alanı: resmî programda yer alıyor, sistemde soru
+     bankası yoktu. Sorular 3. sınıf düzeyinde ve alan kapsamındadır. */
+  "Bilim, Teknoloji ve Sanat": [
+    {ty:"mc",q:"Bir bilim insanı bir soruyu araştırırken önce ne yapar?",o:["Gözlem yapar ve soru sorar","Hemen sonucu açıklar","Tahminini kimseye söylemez","Araştırmayı bırakır"],a:0},
+    {ty:"mc",q:"Teknolojik bir aracı kullanırken en önemli kural hangisidir?",o:["Kullanım yönergesine ve güvenlik kurallarına uymak","En yüksek sesle çalıştırmak","Kılavuzu hiç okumamak","Tek başına tamir etmeye çalışmak"],a:0},
+    {ty:"mc",q:"Aşağıdakilerden hangisi bir sanat çalışmasıdır?",o:["Resim yapmak","Çöp atmak","Ders kitabını yırtmak","Gürültü yapmak"],a:0},
+    {ty:"mc",q:"Ekran karşısında uzun süre kalmanın sağlığımıza etkisi ne olabilir?",o:["Gözler yorulur, uyku düzeni bozulur","Gözler güçlenir","Hiçbir etkisi olmaz","Boyumuz uzar"],a:0},
+    {ty:"tf",q:"Bir buluş, insanların günlük işlerini kolaylaştırabilir.",a:true},
+    {ty:"tf",q:"İnternette gördüğümüz her bilgi doğrudur.",a:false},
+    {ty:"tf",q:"Kendi tasarımımızı yaparken atık malzemeleri yeniden kullanabiliriz.",a:true},
+    {ty:"fb",q:"Bir sorunu çözmek için yeni bir araç ya da yöntem geliştirmeye ____ denir.",a:"buluş"},
+    {ty:"fb",q:"Duygu ve düşüncelerimizi resim, müzik ya da tiyatro ile anlatmamıza ____ denir.",a:"sanat"}
   ]
 },
 "din-4": {
@@ -2185,7 +2252,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Müslümanlar birbirleriyle karşılaştıklarında hangi ifadeyle selamlaşır?",o:["Hoş geldin","Esselamü aleyküm","Allah'a emanet ol","Görüşürüz"],a:1},
     {ty:"tf",q:"\"İnşallah\" ifadesi, yapılması planlanan bir işin Allah'ın izniyle gerçekleşeceğini ifade eder.",a:true},
     {ty:"tf",q:"\"Maşallah\" ifadesi sadece üzüntü bildiren durumlarda kullanılır.",a:false},
-    {ty:"fb",q:"Aksırma sonrasında \"elhamdülillah\" diyen kişiye ____ denir.",a:"Yerhamükellah"}
+    {ty:"fb",q:"Aksıran kişinin \"elhamdülillah\" demesine karşılık, bunu duyan kişinin söylediği dua sözü ____ 'tır.",a:"Yerhamükellah"}
   ],
   "İslam'ı Tanıyalım": [
     {ty:"mc",q:"Aşağıdakilerden hangisi İslam'ın şartlarından biri değildir?",o:["Namaz kılmak","Oruç tutmak","Zekât vermek","Kurban kesmek"],a:3},
@@ -2477,7 +2544,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Aşağıdakilerden hangisi Dede Korkut Hikâyeleri'nin özelliklerinden biri değildir?",o:["Nazım-nesir karışık anlatılması","Oğuz Türklerinin sosyal hayatını yansıtması","Yazarının belli, tek bir kişi olması","Kopuzla anlatılan bir gelenekten gelmesi"],a:2},
     {ty:"tf",q:"Kerem ile Aslı, Türk halk hikâyeciliğinin tanınmış örneklerindendir.",a:true},
     {ty:"tf",q:"Halk hikâyelerinde olaylar yalnızca manzum (şiir) biçimde anlatılır, hiç düz yazı bölüm bulunmaz.",a:false},
-    {ty:"fb",q:"Dede Korkut Hikâyeleri'nde olayları anlatan, bilge ve ozan kimliğiyle öne çıkan efsanevi kişiye ____ denir.",a:"Dede Korkut"}
+    {ty:"fb",q:"Oğuznamelerde boyları öğütleriyle yönlendiren, ozan kimliğiyle anılan ve hikâyelere adını veren bilge kişinin adı ____ 'tur.",a:"Dede Korkut"}
   ],
   "İslamiyet Öncesi ve Geçiş Dönemi Şiiri": [
     {ty:"mc",q:"İslamiyet öncesi Türk şiirinde ölüm ve yas konularını işleyen, cenaze törenlerinde söylenen nazım türüne ne ad verilir?",o:["Koşuk","Sagu","Sav","Destan"],a:1},
@@ -2501,7 +2568,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Aşağıdakilerden hangisi Türk destanlarından biri değildir?",o:["Oğuz Kağan Destanı","Ergenekon Destanı","Manas Destanı","İlyada Destanı"],a:3},
     {ty:"tf",q:"Doğal destanlar, belli bir yazarı olmayan, toplumun ortak ürünü olan destanlardır.",a:true},
     {ty:"tf",q:"Yapma destanlar da tıpkı doğal destanlar gibi anonimdir, yazarı bilinmez.",a:false},
-    {ty:"fb",q:"Türklerin Ergenekon'dan bir demir dağı eriterek çıkışını anlatan destana ____ Destanı denir.",a:"Ergenekon"}
+    {ty:"fb",q:"Türklerin sıkışıp kaldıkları vatandan bir demir dağı eriterek çıkışını anlatan destana ____ Destanı denir.",a:"Ergenekon"}
   ],
   "Roman": [
     {ty:"mc",q:"Tanzimat Dönemi'nde 'roman' türünün Türk edebiyatına girmesinde etkili olan temel gelişme aşağıdakilerden hangisidir?",o:["Divan şiiri geleneğinin güçlenmesi","Batı edebiyatından yapılan çeviriler ve Batı ile kurulan kültürel ilişkiler","Halk hikâyeciliğinin sona ermesi","Aruz ölçüsünün terk edilmesi"],a:1},
@@ -2798,7 +2865,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Birine teşekkür ederken İngilizce ne denir?",o:["Sorry","Please","Thank you","Bye"],a:2},
     {ty:"mc",q:"\"Bye-bye\" ne zaman kullanılır?",o:["Karşılaşınca","Ayrılırken","Yemek yerken","Uyurken"],a:1},
     {ty:"tf",q:"\"Yes\" kelimesi Türkçede \"hayır\" demektir.",a:false},
-    {ty:"fb",q:"\"____, please!\" (bir şey rica ederken kullanılan kelime)",a:"Please"}
+    {ty:"fb",q:"\"Sit ____, please!\" (öğretmenin oturmanı istediği cümle)",a:"down"}
   ],
   "Friends": [
     {ty:"mc",q:"\"Friend\" kelimesinin Türkçe karşılığı nedir?",o:["Öğretmen","Arkadaş","Aile","Okul"],a:1},
@@ -2912,7 +2979,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Kitap ve eğitim alınan yer İngilizce ne denir?",o:["School","Hospital","Cinema","Market"],a:0},
     {ty:"mc",q:"\"Market\" kelimesi hangi anlama gelir?",o:["Sinema","Market","Park","Hastane"],a:1},
     {ty:"tf",q:"\"Cinema\" kelimesi Türkçede \"sinema\" demektir.",a:true},
-    {ty:"fb",q:"\"I play football in the ____.\" (park anlamına gelen kelime)",a:"park"}
+    {ty:"fb",q:"\"I read books in the ____.\" (kitap okunan yer)",a:"library"}
   ],
   "Transportation": [
     {ty:"mc",q:"\"Car\" kelimesinin Türkçesi nedir?",o:["Otobüs","Araba","Tren","Uçak"],a:1},
@@ -3219,14 +3286,14 @@ const UNIT_BANK = {
     {ty:"mc",q:"\"der Supermarkt\" kelimesi neyi ifade eder?",o:["Eczane","Süpermarket","Fırın","Kütüphane"],a:1},
     {ty:"mc",q:"\"Ich möchte einen Apfel kaufen.\" cümlesinin Türkçe anlamı nedir?",o:["Bir elma satmak istiyorum","Bir elma almak istiyorum","Bir elma yedim","Elmayı sevmiyorum"],a:1},
     {ty:"tf",q:"\"billig\" kelimesi Almancada \"ucuz\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Das kostet zehn ____.\" (Euro anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Euro"}
+    {ty:"fb",q:"\"Das kostet zehn ____.\" (Almanya'da kullanılan para biriminin adı)",a:"Euro"}
   ],
   "Essen und Trinken – Yiyecek İçecek": [
     {ty:"mc",q:"\"das Brot\" kelimesinin Türkçe anlamı nedir?",o:["Süt","Ekmek","Peynir","Su"],a:1},
     {ty:"mc",q:"\"Ich trinke gern Wasser.\" cümlesinin Türkçe anlamı nedir?",o:["Su içmeyi severim","Suyu sevmiyorum","Su satın alıyorum","Su döktüm"],a:0},
     {ty:"mc",q:"\"der Käse\" kelimesi neyi ifade eder?",o:["Peynir","Yumurta","Et","Balık"],a:0},
     {ty:"tf",q:"\"das Obst\" kelimesi Almancada \"meyve\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Ich esse gern ____.\" (pizza anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Pizza"}
+    {ty:"fb",q:"\"Ich esse gern ____.\" (İtalyan mutfağına ait, üzeri malzemeyle kaplanmış hamur yemeği)",a:"Pizza"}
   ],
   "Wohnen – Ev ve Yaşam": [
     {ty:"mc",q:"\"das Wohnzimmer\" kelimesinin Türkçe anlamı nedir?",o:["Mutfak","Oturma odası","Banyo","Bahçe"],a:1},
@@ -3437,7 +3504,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"\"What does she do? – She's a ___. She flies planes.\" boşluğa hangisi gelmelidir?",o:["nurse","pilot","cook","cleaner"],a:1},
     {ty:"mc",q:"\"A person who grows fruit and vegetables\" tanımına uyan meslek hangisidir?",o:["Farmer","Firefighter","Dentist","Waiter"],a:0},
     {ty:"tf",q:"\"A firefighter puts out fires and saves people.\" cümlesi doğrudur.",a:true},
-    {ty:"fb",q:"\"A person who cooks food in a restaurant is called a ___.\" (aşçı)",a:"cook"}
+    {ty:"fb",q:"\"A person who prepares meals in a restaurant is called a ____.\" (aşçı)",a:"cook"}
   ],
   "Holidays": [
     {ty:"mc",q:"\"We ___ going to visit our grandparents next summer.\" boşluğa hangisi gelmelidir?",o:["is","am","are","be"],a:2},
@@ -3502,7 +3569,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Hava durumu, haberler ve maçların anlatıldığı program türü hangisidir?",o:["cartoon","documentary","the news","sitcom"],a:2},
     {ty:"mc",q:"\"I never watch horror films because they ___ me.\" (korkutmak anlamında) boşluğa hangisi gelmelidir?",o:["scare","scares","scared","scaring"],a:0},
     {ty:"tf",q:"\"A remote control\" televizyon kanallarını değiştirmek için kullanılır.",a:true},
-    {ty:"fb",q:"\"This channel shows a lot of cooking programs; it is my favourite ____.\" (kanal anlamına gelen kelimeyi yaz)",a:"channel"}
+    {ty:"fb",q:"\"This ____ shows a lot of cooking programs; I watch it every evening.\" (televizyonda izlenen yayın kanalı)",a:"channel"}
   ],
   "Celebrations": [
     {ty:"mc",q:"\"We ___ fireworks on New Year's Eve.\" boşluğa hangisi gelmelidir?",o:["watch","watches","watching","watched to"],a:0},
@@ -3999,14 +4066,6 @@ const UNIT_BANK = {
 {ty:"tf",q:"İstatistiksel araştırmalarda örneklem, araştırmacının en tanıdığı kişilerden seçilmelidir ki güvenilir olsun.",a:false},
 {ty:"fb",q:"Bir veri grubunda gözlemlenen değerlerin, ilgilenilen özelliğe göre değişebilen niteliğine istatistikte ____ denir.",a:"değişken"}
 ] },
-"geo-12": { "Dönüşüm Geometrisi": [
-{ty:"mc",q:"Bir şeklin düzlemdeki konumunu değiştirirken şeklin boyutunu ve açılarını koruyan dönüşümlere ne ad verilir?",o:["İzometrik dönüşüm (öteleme, yansıma, dönme gibi)","Homoteti (benzerlik dönüşümü)","Sadece büyültme dönüşümü","Sadece küçültme dönüşümü"],a:0},
-{ty:"mc",q:"Bir noktanın sabit bir doğruya göre yansıması alındığında oluşan görüntü ile ilgili hangisi doğrudur?",o:["Görüntü noktası ile asıl nokta, yansıma doğrusuna eşit uzaklıktadır ve doğru, bu iki noktayı birleştiren parçaya diktir","Görüntü noktası her zaman orijinal noktanın üzerine çakışır","Görüntü noktası ile asıl nokta arasındaki uzaklık her zaman sıfırdır","Yansıma doğrusu, görüntü ile orijinal noktayı birleştiren doğruya paraleldir"],a:0},
-{ty:"mc",q:"k oranlı bir homoteti (benzerlik) dönüşümünde k>1 olması şekilde nasıl bir değişime neden olur?",o:["Şekil büyür","Şekil küçülür","Şekil aynı boyutta kalır, yalnızca yer değiştirir","Şekil ters çevrilir"],a:0},
-{ty:"tf",q:"Öteleme (paralel kaydırma) dönüşümünde bir şeklin tüm noktaları aynı yönde ve aynı miktarda kaydırılır.",a:true},
-{ty:"tf",q:"Dönme (rotasyon) dönüşümünde şeklin döndüğü sabit noktaya dönme merkezi denir.",a:true},
-{ty:"fb",q:"Bir dönüşüm sonucu oluşan şekil ile orijinal şeklin karşılıklı kenar uzunlukları ve açıları eşitse bu tür dönüşümlere ____ denir.",a:"izometri"}
-] },
 "kim-9": {
   "Kimya Bilimi": [
     {ty:"mc",q:"Maddenin yapısını, özelliklerini, birbirleriyle etkileşimlerini ve bu etkileşimler sırasında meydana gelen enerji değişimlerini inceleyen bilim dalı aşağıdakilerden hangisidir?",o:["Fizik","Kimya","Biyoloji","Jeoloji"],a:1},
@@ -4022,7 +4081,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Periyodik sistemde aynı grupta yukarıdan aşağıya inildikçe atom yarıçapı ile ilgili aşağıdaki yargılardan hangisi doğrudur?",o:["Elektron sayısı azaldığından atom yarıçapı küçülür","Yeni enerji katmanları eklendiğinden atom yarıçapı büyür","Çekirdek yükü azaldığından atom yarıçapı küçülür","Değerlik elektron sayısı arttığından atom yarıçapı büyür"],a:1},
     {ty:"tf",q:"Bir atomun nötr hâlde bulunması için proton sayısı ile elektron sayısının birbirine eşit olması gerekir.",a:true},
     {ty:"tf",q:"Aynı periyotta soldan sağa gidildikçe elementlerin iyonlaşma enerjisi genel eğilim olarak azalır.",a:false},
-    {ty:"fb",q:"Periyodik sistemde bir elementin bulunduğu ____ numarası, baş grup elementleri için o elementin nötr atomundaki değerlik elektron sayısı hakkında bilgi verir.",a:"grup"}
+    {ty:"fb",q:"Periyodik sistemde bir elementin bulunduğu ____ numarası, A bloku elementleri için o elementin nötr atomundaki değerlik elektron sayısı hakkında bilgi verir.",a:"grup"}
   ],
   "Kimyasal Türler Arası Etkileşimler": [
     {ty:"mc",q:"Elektronegatiflik farkı büyük olan bir metal ile bir ametal arasında, metal atomunun elektron(lar)ını ametale aktarması sonucu oluşan güçlü etkileşim türü aşağıdakilerden hangisidir?",o:["Kovalent bağ","İyonik bağ","Metalik bağ","Van der Waals etkileşimi"],a:1},
@@ -4046,7 +4105,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Atmosferdeki serbest azot gazının, canlılar tarafından kullanılabilecek bileşiklere dönüştürülmesi sürecine ne ad verilir?",o:["Karbon döngüsü","Azot fiksasyonu (bağlanması)","Fotosentez","Ötrofikasyon"],a:1},
     {ty:"tf",q:"Sürdürülebilirlik kavramı, bugünün ihtiyaçlarını gelecek nesillerin ihtiyaçlarını karşılama imkânından ödün vermeden karşılamayı amaçlar.",a:true},
     {ty:"tf",q:"Mineraller yalnızca metalik elementlerden oluşan, organik yapıya sahip doğal katılardır.",a:false},
-    {ty:"fb",q:"Canlıların solunum ve fotosentez gibi süreçlerle karbonu atmosfer, canlılar, toprak ve okyanuslar arasında dolaştırdığı döngüye ____ döngüsü denir.",a:"karbon"}
+    {ty:"fb",q:"Canlıların solunum ve fotosentez gibi süreçlerle bu elementi atmosfer, canlılar, toprak ve okyanuslar arasında dolaştırdığı döngüye ____ döngüsü denir.",a:"karbon"}
   ]
 },
 "kim-10": {
@@ -4116,7 +4175,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Dışarıdan elektrik enerjisi verilerek kendiliğinden gerçekleşmeyen bir redoks tepkimesinin zorlanmasına dayanan işleme ne ad verilir?",o:["Elektroliz","Nötrleşme","Hidroliz","Katalitik dönüşüm"],a:0},
     {ty:"tf",q:"Metallerin nemli ortamda oksijenle etkileşerek yükseltgenmesi sonucu oluşan bozunmaya korozyon denir.",a:true},
     {ty:"tf",q:"Bir galvanik pilde elektronlar dış devre üzerinden katottan anota doğru akar.",a:false},
-    {ty:"fb",q:"Standart koşullar altında bir elektrot yarı tepkimesinin indirgenme eğilimini sayısal olarak ifade eden büyüklüğe standart ____ potansiyeli denir.",a:"elektrot"}
+    {ty:"fb",q:"Standart koşullar altında bir yarı hücre tepkimesinin indirgenme eğilimini sayısal olarak ifade eden büyüklüğe standart ____ potansiyeli denir.",a:"elektrot"}
   ],
   "Karbon Kimyasına Giriş": [
     {ty:"mc",q:"Karbon atomunun aynı molekül formülüne sahip fakat farklı yapılara/özelliklere sahip bileşikler (izomerler) oluşturabilme özelliğine ne ad verilir?",o:["Alotropi","İzomerlik","Polimerizasyon","Hibritleşme"],a:1},
@@ -4157,11 +4216,27 @@ const VOCAB = {
 const NAMES = ["Ali","Ayşe","Mehmet","Zeynep","Emre","Elif","Can","Defne","Mert","Ece"];
 const scale = (p, d) => { const [lo, hi] = p || [1, 20]; const span = hi - lo; const top = lo + Math.ceil(span * (d === 1 ? .4 : d === 2 ? .7 : 1)); return [lo, Math.max(lo + 1, top)]; };
 
+/* Sayının Türkçe okunuşu (0–99.999) — "okunuşunu yazınız" sorularının
+   cevap anahtarının gerçekten doğru olması için. "bir bin"/"bir yüz" değil,
+   "bin"/"yüz" biçimi kullanılır. */
+const OKU_BIR = ["", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
+const OKU_ON = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
+function ucBasamakOku(n) {
+  const y = Math.floor(n / 100), o = Math.floor((n % 100) / 10), b = n % 10;
+  return [y ? (y === 1 ? "yüz" : OKU_BIR[y] + " yüz") : "", OKU_ON[o], OKU_BIR[b]].filter(Boolean).join(" ");
+}
+function sayiyiOku(n) {
+  if (n === 0) return "sıfır";
+  const bin = Math.floor(n / 1000), kalan = n % 1000;
+  const binMetni = bin ? (bin === 1 ? "bin" : ucBasamakOku(bin) + " bin") : "";
+  return [binMetni, ucBasamakOku(kalan)].filter(Boolean).join(" ");
+}
+
 const GEN = {
   say1: d => { const n = shuffle([R(1,20),R(1,20),R(1,20),R(1,20)]); return { q: `Aşağıdaki sayıları küçükten büyüğe sıralayınız: ${n.join(", ")}`, a: [...n].sort((x,y)=>x-y).join(" < ") }; },
   say2: d => { const n = R(10,99); return { q: `${n} sayısının onlar basamağındaki rakam kaçtır?`, a: Math.floor(n/10) }; },
   say3: d => { const n = R(100,999); return { q: `${n} sayısının yüzler basamağındaki rakamın basamak değeri kaçtır?`, a: Math.floor(n/100)*100 }; },
-  say4: d => { const n = R(1000, d===3?99999:9999); return { q: `${n.toLocaleString("tr-TR")} sayısının okunuşunu yazınız.`, a: "(okunuş) — örn. basamaklara dikkat" , open:true}; },
+  say4: d => { const n = R(1000, d===3?99999:9999); return { q: `${n.toLocaleString("tr-TR")} sayısının okunuşunu yazınız.`, a: sayiyiOku(n) }; },
   rit1: d => { const s = pick([1,2,5,10]), b = R(1,10)*s; return { q: `${b}'den başlayarak ${s}'er ritmik sayınız (5 adım): ${b}, ___, ___, ___, ___`, a: [1,2,3,4].map(i=>b+s*i).join(", ") }; },
   add: (d,p) => { const [lo,hi]=scale(p,d); const a=R(lo,hi),b=R(lo,hi); return { q: `${a} + ${b} = ?`, a: a+b }; },
   sub: (d,p) => { const [lo,hi]=scale(p,d); let a=R(lo,hi),b=R(lo,hi); if(b>a)[a,b]=[b,a]; return { q: `${a} − ${b} = ?`, a: a-b }; },
@@ -4174,7 +4249,7 @@ const GEN = {
   kesadd: d => { const q=pick([4,5,6,8,10]); const a=R(1,q-2), b=R(1,q-a-1); return { q: `${a}/${q} + ${b}/${q} = ?`, a: `${a+b}/${q}` }; },
   kesmul: d => { const a=R(1,5),b=R(2,6),c=R(1,5),e=R(2,6); const p1=a*c, p2=b*e, g=gcd(p1,p2); return { q: `${a}/${b} × ${c}/${e} = ? (Sonucu sadeleştiriniz.)`, a: `${p1/g}/${p2/g}` }; },
   ond: d => { const a=(R(10,99)/10), b=(R(10,99)/10); return { q: `${String(a).replace(".",",")} + ${String(b).replace(".",",")} = ?`, a: String(Math.round((a+b)*10)/10).replace(".",",") }; },
-  yuzde: d => { const pc=pick(d===1?[10,50]:[10,20,25,50,75]); const n=R(2,20)*(100/gcd(100,pc))/ (100/gcd(100,pc)) * (100/pc) * pick([1,2]); const base = (100/pc)*R(1,10)*pc/pc; const num = pick([20,40,60,80,100,120,200,150,300])* (d===3?pick([1,3]):1); return { q: `${num} sayısının %${pc}'i kaçtır?`, a: num*pc/100 }; },
+  yuzde: d => { const pc=pick(d===1?[10,50]:[10,20,25,50,75]); const num=pick([20,40,60,80,100,120,150,200,300])*(d===3?pick([1,3]):1); return pick([ {q:`${num} sayısının %${pc}'i kaçtır?`, a:num*pc/100}, {q:`Bir üründe %${pc} indirim yapılıyor. Ürünün etiket fiyatı ${num} TL ise indirimli fiyatı kaç TL olur?`, a:(num-num*pc/100)+" TL"} ]); },
   tam: (d,p) => { const [lo,hi]=scale(p,d); const a=R(-hi,hi), b=R(-hi,hi); return { q: `(${a}) + (${b}) = ?`, a: a+b }; },
   uslu: (d,p) => { const [lo,hi]=scale(p,d); const b=R(2,Math.min(hi,d+4)), e=R(2,d+1); return { q: `${b}^${e} (${b} üssü ${e}) kaçtır?`, a: Math.pow(b,e) }; },
   carpan: d => { const n=pick([12,18,20,24,30,36,48]); return { q: `${n} sayısının tüm doğal sayı çarpanlarını yazınız.`, a: Array.from({length:n},(_,i)=>i+1).filter(x=>n%x===0).join(", ") }; },
@@ -4185,7 +4260,7 @@ const GEN = {
   egim: d => { const x1=R(0,5),y1=R(0,5),m=R(1,4),dx=R(1,5); return { q: `A(${x1}, ${y1}) ve B(${x1+dx}, ${y1+m*dx}) noktalarından geçen doğrunun eğimi kaçtır?`, a: m }; },
   oran: d => { const a=R(2,9),k=R(2,6); return { q: `${a} kalemin ${a*k} deftere oranı kaçtır? (En sade hâliyle)`, a: `1/${k}` }; },
   cebir: d => { const a=R(2,6),b=R(1,9),x=R(2,7); return { q: `x = ${x} için ${a}x + ${b} ifadesinin değeri kaçtır?`, a: a*x+b }; },
-  zaman: d => { const s=R(1,5); return pick([ {q:`${s} saat kaç dakikadır?`, a:s*60+" dakika"}, {q:`${s*60+R(1,59)} dakika kaç saat kaç dakikadır?`, a:`(hesaplayınız — 60 dk = 1 saat)`, open:true} ]); },
+  zaman: d => { const s=R(1,5); const t=s*60+R(1,59); return pick([ {q:`${s} saat kaç dakikadır?`, a:s*60+" dakika"}, {q:`${t} dakika kaç saat kaç dakikadır?`, a:`${Math.floor(t/60)} saat ${t%60} dakika`} ]); },
   olc: d => pick([ {q:"1 metre kaç santimetredir?",a:"100 cm"}, {q:"1 hafta kaç gündür?",a:"7 gün"}, {q:"1 gün kaç saattir?",a:"24 saat"} ]),
   sek: d => pick([ {q:"Üç kenarı ve üç köşesi olan şeklin adı nedir?",a:"üçgen"}, {q:"Dört kenarı eşit ve dört açısı dik olan şeklin adı nedir?",a:"kare"}, {q:"Futbol topu hangi geometrik cisme benzer?",a:"küre"} ]),
   cevre: (d,p) => { const [lo,hi]=scale(p,d); const a=R(lo,hi),b=R(lo,hi); return { q: `Kısa kenarı ${Math.min(a,b)} cm, uzun kenarı ${Math.max(a,b)} cm olan dikdörtgenin çevresi kaç cm'dir?`, a: 2*(a+b)+" cm" }; },
@@ -4215,7 +4290,7 @@ const GEN = {
   is: d => { const F=R(5,50), x=R(2,20); return { q: `Bir cisme yatay yönde ${F} N kuvvet uygulanarak cisim ${x} m yer değiştiriyor. Yapılan iş kaç Joule'dür?`, a: F*x+" J" }; },
   ohm: d => { const i=R(1,8), r=R(2,15); return { q: `Direnci ${r} Ω olan bir iletkenden ${i} A akım geçiyor. İletkenin uçları arasındaki gerilim kaç V'tur?`, a: i*r+" V" }; },
   basinc: d => { const F=R(10,100)*10, A=pick([2,4,5,10]); return { q: `${F} N ağırlığındaki bir cisim ${A} m²'lik yüzeye oturuyor. Yaptığı basınç kaç Pascal'dır?`, a: F/A+" Pa" }; },
-  isi: d => { const m=R(1,5), c=pick([1,2,4]), dt=R(5,30); return { q: `Kütlesi ${m} kg, öz ısısı ${c} J/(g·°C)... yerine basit hâliyle: ${m} kg suyun sıcaklığını ${dt}°C artırmak için gereken ısı kaç kcal'dir? (1 kg su için 1 kcal/°C alınız)`, a: m*dt+" kcal" }; },
+  isi: d => { const m=R(1,5), dt=R(5,30); return { q: `${m} kg suyun sıcaklığını ${dt}°C artırmak için gereken ısı kaç kcal'dir? (Suyun öz ısısı 1 kcal/(kg·°C) alınacaktır.)`, a: m*dt+" kcal" }; },
   momentum: d => { const m=R(2,20), v=R(2,15); return { q: `Kütlesi ${m} kg olan cisim ${v} m/s hızla hareket ediyor. Momentumu kaç kg·m/s'dir?`, a: m*v+" kg·m/s" }; },
   dalga: d => { const f=R(2,20), l=R(2,10); return { q: `Frekansı ${f} Hz, dalga boyu ${l} m olan dalganın yayılma hızı kaç m/s'dir?`, a: f*l+" m/s" }; },
   yogun: d => { const V=pick([2,4,5,10]), yo=R(1,8); return { q: `Hacmi ${V} cm³, kütlesi ${yo*V} g olan cismin özkütlesi kaç g/cm³'tür?`, a: yo+" g/cm³" }; },
@@ -4361,10 +4436,22 @@ function renderSubjects() {
 }
 function renderUnits() {
   const us = unitsFor();
+  const y = yapiAdi();
   st.units = new Set(us.map((_, i) => i));
+  /* Başlık dersin resmî programındaki yapı adını kullanır: Türkçe/Matematik
+     "Tema", Hayat Bilgisi/Sosyal Bilgiler "Öğrenme Alanı", Fen/Din "Ünite". */
+  $("unitStepTitle").textContent = `${y} / Konu Seç`;
   $("unitList").innerHTML = us.map((u, i) =>
     `<label class="unit-item"><input type="checkbox" data-i="${i}" checked /> ${unitName(u)}</label>`).join("") ||
-    `<div class="hint">Bu sınıf için ünite bulunamadı.</div>`;
+    `<div class="hint">Bu sınıf için ${y.toLocaleLowerCase("tr")} bulunamadı.</div>`;
+  /* Üretim kaynağı ve yürürlükteki program bilgisi */
+  const tymm = TYMM_SINIFLARI.has(st.grade);
+  const perUnit = UNIT_BANK[`${st.subject}-${st.grade}`];
+  const kendi = perUnit ? us.map(unitName).filter(u => perUnit[u]).length : 0;
+  const uretecli = us.filter(u => typeof u !== "string" && u.g && GEN[u.g]).length;
+  $("uretimHint").innerHTML =
+    `${st.grade}. sınıfta 2026-2027 için <b>${tymm ? "Türkiye Yüzyılı Maarif Modeli" : "önceki öğretim"}</b> programı yürürlüktedir. ` +
+    `Bu seçimde ${us.length} ${y.toLocaleLowerCase("tr")} var; ${kendi} tanesinin kendi soru bankası, ${uretecli} tanesinin sınırsız soru üreteci bulunuyor.`;
 }
 function renderPanel() { renderLevels(); renderGrades(); renderSubjects(); renderUnits(); }
 
@@ -4392,14 +4479,26 @@ $("unitList").addEventListener("change", e => {
 $("selAll").onclick = () => { renderUnits(); };
 $("selNone").onclick = () => { st.units.clear(); document.querySelectorAll("#unitList input").forEach(c => c.checked = false); };
 
-/* ═══════════════ SORU ÜRETİMİ ═══════════════ */
+/* ═══════════════ SORU ÜRETİMİ ═══════════════
+   Motor üç katmandan oluşur:
+     1) ADAY TOPLAMA   — seçili ünitelerin kendi bankası + o ünitelere bağlı
+                         prosedürel üreteçler (GEN) + kelime / açık uçlu katmanı.
+     2) KALİTE SÜZGECİ — cevap anahtarı ve soru gövdesi doğrulaması; geçersiz
+                         soru kullanıcıya hiç gösterilmez, yerine yenisi seçilir.
+     3) ÇEŞİTLİLİK SEÇİMİ — parmak izi + anlamsal benzerlik karşılaştırmasıyla
+                         hem aynı kâğıt içinde hem de daha önce üretilmiş
+                         ödevlerle tekrarı engelleyen açgözlü seçim.
+   Ünite adları ve soru içerikleri bu katmanların hiçbirinde değiştirilmez;
+   motor yalnızca hangi sorunun seçileceğine ve nasıl sunulacağına karar verir. */
+
+/* ── Korunan yardımcılar (davranışları değişmedi) ─────────────────────── */
 function bankFor() {
   const s = st.subject, g = st.grade;
   if (s === "ing") return BANK[g <= 4 ? "ing-i" : g <= 8 ? "ing-o" : "ing-l"] || [];
   if (s === "alm") return BANK["alm"] || [];
   if (s === "din") return BANK[g <= 8 ? "din-o" : "din-l"] || [];
   if (s === "tde") return BANK["tde"] || [];
-  return BANK[`${s}-${g}`] || [];
+  return BANK[s + "-" + g] || [];
 }
 function vocabFor() {
   const s = st.subject, g = st.grade;
@@ -4415,82 +4514,665 @@ function vocabQ() {
   const lang = st.subject === "alm" ? "Almanca" : "İngilizce";
   return { ty: "mc", q: `${lang} "${w}" kelimesinin Türkçe karşılığı hangisidir?`, o: opts, a: opts.indexOf(tr) };
 }
-/* Üniteye özel soru bankası: seçili ünitelere ait sorular birleştirilir.
-   Henüz üniteye özel içerik girilmemiş ders/sınıflarda eski genel bankaya
-   (bankFor) düşülür — böylece diğer tüm derslerde davranış değişmez. */
-function unitBankFor() {
-  const key = `${st.subject}-${st.grade}`;
-  const perUnit = UNIT_BANK[key];
-  if (perUnit) {
-    const seciliAdlar = unitsFor().filter((_, i) => st.units.has(i)).map(unitName);
-    const toplanan = [];
-    seciliAdlar.forEach(ad => { if (perUnit[ad]) toplanan.push(...perUnit[ad]); });
-    if (toplanan.length) return toplanan;
-  }
-  return bankFor();
-}
-/* Seçili ünitelerden üretici (GEN) tanımlı olanları dener. Üreteç ya eski
-   biçimde {q,a[,open]} (matematik vb. — dolaylı islem/op tipine çevrilir)
-   ya da yeni biçimde açık {ty,q,o?,a[,grup]} döndürebilir (ör. ses grupları:
-   mc/tf/fb). Sonuç, öğretmenin işaretlediği soru tiplerinden biri değilse
-   göz ardı edilip tekrar denenir. */
-function procQ(d, types) {
-  const gens = unitsFor().filter((u, i) => st.units.has(i) && typeof u !== "string" && u.g && GEN[u.g]);
-  if (!gens.length) return null;
-  for (let deneme = 0; deneme < 8; deneme++) {
-    const u = pick(gens);
-    const r = GEN[u.g](d, u.p);
-    if (!r) continue;
-    const q = r.ty
-      ? { ...r, unit: u.u }
-      : { ty: r.open ? "op" : "islem", q: r.q, a: String(r.a), unit: u.u };
-    if (types.has(q.ty)) return q;
-  }
-  return null;
-}
+/* Açık uçlu kalıplar. Her kalıp farklı bir düşünme becerisini hedefler ve
+   kendi "kalip" kimliğini taşır; böylece bir kâğıtta aynı beceri iki kez
+   sorulmaz. Kalıplar ünite adıyla doldurulduğu için müfredat dışına çıkmaz. */
+const ACIK_UCLU_KALIPLAR = [
+  { k: "op-aciklama",     f: u => `"${u}" konusunda öğrendiklerinizi üç cümle ile açıklayınız.` },
+  { k: "op-gunluk",       f: u => `"${u}" konusuyla ilgili günlük hayattan iki örnek veriniz ve bu örneklerin konuyla bağlantısını yazınız.` },
+  { k: "op-kavram",       f: u => `"${u}" konusundaki en önemli kavramı tanımlayınız ve bir örnek veriniz.` },
+  { k: "op-neden-sonuc",  f: u => `"${u}" konusuyla ilgili bir durum düşününüz. Bu durumun nedenini ve sonucunu yazınız.` },
+  { k: "op-karsilastirma",f: u => `"${u}" konusunda öğrendiğiniz iki kavramı seçiniz. Bu kavramların benzerliğini ve farkını yazınız.` },
+  { k: "op-karar",        f: u => `"${u}" konusuyla ilgili bir sorunla karşılaşsanız nasıl davranırdınız? Kararınızın gerekçesini yazınız.` },
+  { k: "op-hata",         f: u => `"${u}" konusunda sık yapılan bir hatayı yazınız ve bu hatanın nasıl düzeltileceğini açıklayınız.` },
+  { k: "op-soru-kurma",   f: u => `"${u}" konusuyla ilgili bir soru kurunuz ve kendi sorunuzu cevaplayınız.` },
+];
 function openQ() {
   const us = unitsFor().filter((_, i) => st.units.has(i));
   if (!us.length) return null;
   const u = unitName(pick(us));
-  const tmpl = pick([
-    `"${u}" konusunda öğrendiklerinizi üç cümle ile açıklayınız.`,
-    `"${u}" konusuyla ilgili günlük hayattan iki örnek veriniz.`,
-    `"${u}" konusundaki en önemli kavramı tanımlayınız ve bir örnek veriniz.`,
-  ]);
-  return { ty: "op", q: tmpl, a: "Açık uçlu — öğretmen değerlendirmesi" };
+  const kalip = pick(ACIK_UCLU_KALIPLAR);
+  return { ty: "op", q: kalip.f(u), a: "Açık uçlu — öğretmen değerlendirmesi", unit: u, kalip: kalip.k };
 }
 
+/* ═══════════════ TÜRETİLMİŞ SORU TİPLERİ ═══════════════
+   Eşleştirme / sıralama / tablo yorumlama soruları uydurulmuş içerikten
+   DEĞİL, hâlihazırda müfredata göre yazılmış veriden türetilir:
+     • eşleştirme → aynı ünitenin boşluk doldurma sorularından (tanım ↔ terim)
+       ve yabancı dilde kelime havuzundan,
+     • sıralama   → sayı/kesir/ondalık sıralaması ve Türkçe'de alfabetik sıra,
+     • tablo      → üretilen sıklık tablosu; cevabı tablodan hesaplandığı için
+       anahtar her zaman doğrudur.
+   Böylece yeni tipler müfredat dışına çıkmadan sınırsız çeşitlilik verir. */
+
+/* Boşluk doldurma sorusunun kökünden "tanım" metni üretir: boşluk işareti
+   ve sonundaki kalıp ekler atılır. */
+function tanimMetni(q) {
+  return String(q.q)
+    .replace(/_{2,}\s*'?[a-zçğıöşü]*\s*$/i, "")
+    .replace(/_{2,}/g, "……")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/[.,;:]$/, "");
+}
+/* Bir soru listesinden "tanım ↔ terim" çiftleri çıkarır.
+   Kaynak: boşluk doldurma (kök = tanım, cevap = terim) ve çoktan seçmeli
+   (kök = tanım, doğru seçenek = terim) soruları. İkisi de zaten müfredata
+   göre yazılmış olduğu için eşleştirme uydurma içerik üretmez. */
+function esCiftleri(liste) {
+  const cift = [];
+  const ekle = (tanim, terim, kaynak) => {
+    /* Eşleştirmede tanım, karşılığını metninde barındırmamalı. Tek başına
+       sorulduğunda bu kabul edilebilir (ör. büyük harf sorusu bilinçli olarak
+       kelimeyi küçük yazıyla verir) ama sütun eşleştirmesinde cevabı ele
+       verir; bu yüzden böyle çiftler alınmaz. */
+    const t = terim.toLocaleLowerCase("tr");
+    if (t.length >= 3 && tanim.toLocaleLowerCase("tr").indexOf(t) !== -1) return;
+    cift.push([tanim, terim, parmakIzi(kaynak)]);
+  };
+  liste.forEach(q => {
+    if (q.ty === "fb" && String(q.a).trim().length > 1) ekle(tanimMetni(q), String(q.a).trim(), q);
+    else if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) {
+      const terim = String(q.o[q.a] || "").trim();
+      /* Seçeneklere gönderme yapan kökler ("Aşağıdakilerden hangisi…")
+         eşleştirme sütununda seçenekler görünmediği için anlamsız kalır. */
+      if (/aşağıdaki|yukarıdaki|hangisi doğrudur|hangisi yanlıştır/i.test(q.q)) return;
+      /* Çok uzun seçenekler eşleştirme sütununa sığmaz, atlanır */
+      if (terim.length > 1 && terim.length <= 40) ekle(tanimMetni(q), terim, q);
+    }
+  });
+  return cift;
+}
+function esKur(ciftler, unit) {
+  if (ciftler.length < 3) return null;
+  const secilenler = shuffle(ciftler).slice(0, Math.min(5, ciftler.length));
+  const sol = secilenler.map(c => c[0]);
+  const dogru = secilenler.map(c => c[1]);
+  if (new Set(sol).size !== sol.length || new Set(dogru).size !== dogru.length) return null;
+  const sag = shuffle(dogru);
+  return {
+    ty: "es", q: "Aşağıdaki ifadeleri karşılarındaki kavramlarla eşleştiriniz. (Kutulara harfi yazınız.)",
+    sol: sol, sag: sag, a: dogru.map(x => sag.indexOf(x)),
+    unit: unit, kaynak: "türetilmiş", kalip: "es-tanim",
+    /* Eşleştirme, bu kaynak soruların cevaplarını sütunda gösterir. Aynı
+       kâğıtta o sorular da yer alırsa cevapları ele verilmiş olur; seçim
+       aşaması bu izleri kullanarak ikisini bir arada seçmez. */
+    kapsar: secilenler.map(c => c[2]),
+  };
+}
+/* Yabancı dilde kelime ↔ Türkçe karşılığı eşleştirmesi */
+function esKelimeden() {
+  const pool = vocabFor();
+  if (!pool || pool.length < 5) return null;
+  const secilenler = shuffle(pool).slice(0, 5);
+  const sol = secilenler.map(p => p[0]);
+  const dogru = secilenler.map(p => p[1]);
+  if (new Set(sol).size !== 5 || new Set(dogru).size !== 5) return null;
+  const sag = shuffle(dogru);
+  const dil = st.subject === "alm" ? "Almanca" : "İngilizce";
+  return {
+    ty: "es", q: `Aşağıdaki ${dil} kelimeleri Türkçe karşılıklarıyla eşleştiriniz. (Kutulara harfi yazınız.)`,
+    sol: sol, sag: sag, a: dogru.map(x => sag.indexOf(x)),
+    unit: "", kaynak: "türetilmiş", kalip: "es-kelime",
+  };
+}
+/* Sayı / kesir / ondalık sıralaması — zorluğa göre biçim değişir */
+function siraSayi(d) {
+  const bicim = pick(d === 1 ? ["dogal"] : d === 2 ? ["dogal", "ondalik"] : ["dogal", "ondalik", "kesir"]);
+  const artan = R(0, 1) === 1;
+  let ogeler, deger;
+  if (bicim === "dogal") {
+    const ust = d === 1 ? 100 : d === 2 ? 1000 : 100000;
+    const kume = new Set(); while (kume.size < 5) kume.add(R(1, ust));
+    deger = [...kume]; ogeler = deger.map(n => n.toLocaleString("tr-TR"));
+  } else if (bicim === "ondalik") {
+    const kume = new Set(); while (kume.size < 5) kume.add(R(10, 999) / 10);
+    deger = [...kume]; ogeler = deger.map(n => String(n).replace(".", ","));
+  } else {
+    const paydalar = [2, 3, 4, 5, 6, 8, 10];
+    const set = new Map();
+    while (set.size < 5) { const b = pick(paydalar), a = R(1, b - 1); set.set(a + "/" + b, a / b); }
+    ogeler = [...set.keys()]; deger = [...set.values()];
+  }
+  const sirali = deger.map((v, i) => i).sort((x, y) => artan ? deger[x] - deger[y] : deger[y] - deger[x]);
+  const ad = bicim === "dogal" ? "sayıları" : bicim === "ondalik" ? "ondalık gösterimleri" : "kesirleri";
+  return {
+    ty: "sira",
+    q: `Aşağıdaki ${ad} ${artan ? "küçükten büyüğe" : "büyükten küçüğe"} sıralayınız. (Kutulara sıra numarasını yazınız.)`,
+    ogeler: ogeler, a: sirali, kaynak: "türetilmiş", kalip: "sira-" + bicim,
+  };
+}
+/* Türkçe alfabetik sıralama — 2. sınıf "alfabetik sıralama" kazanımına uygun */
+const SIRA_KELIMELER = ["armut", "balık", "ceviz", "çilek", "defter", "elma", "fındık", "gemi", "halı",
+  "ışık", "kalem", "limon", "masa", "nar", "orman", "portakal", "sepet", "şeker", "tavşan", "uçak",
+  "üzüm", "vazo", "yaprak", "zeytin", "kedi", "köpek", "kitap", "kapı", "bulut", "deniz"];
+function siraAlfabetik(d) {
+  const kume = new Set(); while (kume.size < 5) kume.add(pick(SIRA_KELIMELER));
+  const ogeler = [...kume];
+  const sirali = ogeler.map((_, i) => i).sort((x, y) => ogeler[x].localeCompare(ogeler[y], "tr"));
+  return {
+    ty: "sira", q: "Aşağıdaki kelimeleri alfabetik sıraya diziniz. (Kutulara sıra numarasını yazınız.)",
+    ogeler: ogeler, a: sirali, kaynak: "türetilmiş", kalip: "sira-alfabetik",
+  };
+}
+/* Sıklık tablosu + tablodan hesaplanan soru — cevap anahtarı daima doğrudur */
+/* Senaryo cümlesi "en çok / en az" gibi ifadeler İÇERMEMELİDİR: soru kökü de
+   bu ifadeleri kullandığı için öğrenci hangisinin sorulduğunu karıştırır. */
+const VERI_SENARYO = [
+  { b: "Meyve", o: ["Elma", "Muz", "Çilek", "Kiraz", "Üzüm"], s: "Bir sınıftaki öğrencilerin sevdiği meyveler" },
+  { b: "Spor", o: ["Futbol", "Basketbol", "Voleybol", "Yüzme", "Tenis"], s: "Öğrencilerin yaptığı sporlar" },
+  { b: "Kitap türü", o: ["Masal", "Şiir", "Roman", "Bilim", "Çizgi roman"], s: "Kütüphaneden ödünç alınan kitap türleri" },
+  { b: "Ulaşım", o: ["Yürüyerek", "Servis", "Otobüs", "Bisiklet", "Otomobil"], s: "Öğrencilerin okula geliş biçimleri" },
+  { b: "Gün", o: ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"], s: "Bir öğrencinin günlere göre okuduğu sayfa sayısı" },
+];
+function veriTablo(d) {
+  const sen = pick(VERI_SENARYO);
+  const kac = d === 1 ? 4 : 5;
+  const ogeler = shuffle(sen.o).slice(0, kac);
+  const ust = d === 1 ? 12 : d === 2 ? 30 : 60;
+  const sayilar = ogeler.map(() => R(2, ust));
+  /* Eşit değer soruyu belirsizleştirir; en büyük ve en küçük tek olmalı */
+  const enB = Math.max(...sayilar), enK = Math.min(...sayilar);
+  if (sayilar.filter(x => x === enB).length > 1 || sayilar.filter(x => x === enK).length > 1) return null;
+  const toplam = sayilar.reduce((a, b) => a + b, 0);
+  const iB = sayilar.indexOf(enB), iK = sayilar.indexOf(enK);
+  const soru = pick([
+    { s: `Tabloya göre en çok seçilen ${sen.b.toLocaleLowerCase("tr")} hangisidir?`, a: ogeler[iB] },
+    { s: `Tabloya göre en az seçilen ${sen.b.toLocaleLowerCase("tr")} hangisidir?`, a: ogeler[iK] },
+    { s: "Tablodaki tüm değerlerin toplamı kaçtır?", a: String(toplam) },
+    { s: `En çok seçilen ile en az seçilen arasındaki fark kaçtır?`, a: String(enB - enK) },
+    { s: `"${ogeler[0]}" ile "${ogeler[1]}" değerlerinin toplamı kaçtır?`, a: String(sayilar[0] + sayilar[1]) },
+  ]);
+  return {
+    ty: "veri", q: `${sen.s} aşağıdaki tabloda verilmiştir. ${soru.s}`,
+    basliklar: [sen.b, "Kişi sayısı"], satirlar: ogeler.map((o, i) => [o, sayilar[i]]),
+    a: soru.a, kaynak: "türetilmiş", kalip: "veri-tablo",
+  };
+}
+
+/* Seçili ünitelerden türetilmiş tip adayları toplar. */
+function turetilmisAdaylar(types, d, adet) {
+  const out = [];
+  const perUnit = UNIT_BANK[`${st.subject}-${st.grade}`];
+  const adlar = seciliUniteler().map(unitName);
+  if (types.has("es")) {
+    if (perUnit) {
+      /* Önce ünite içinden kurulmaya çalışılır (ünite adıyla etiketlenir) */
+      let uniteIci = 0;
+      adlar.forEach(ad => {
+        const q = esKur(esCiftleri(perUnit[ad] || []), ad);
+        if (q) { out.push(q); uniteIci++; }
+      });
+      /* Tek bir ünite yetmiyorsa seçili ünitelerin tamamı havuzlanır. Bu soru
+         belirli bir üniteye ait sayılmaz; unit boş bırakılır, böylece ünite
+         adıyla yanlış etiketlenmez. */
+      if (uniteIci < 2) {
+        const havuz = [].concat.apply([], adlar.map(ad => esCiftleri(perUnit[ad] || [])));
+        for (let i = 0; i < 3; i++) { const q = esKur(havuz, ""); if (q) out.push(q); }
+      }
+    }
+    for (let i = 0; i < 3; i++) { const q = esKelimeden(); if (q) out.push(q); }
+  }
+  if (types.has("sira")) {
+    const sayisal = ["mat", "fiz", "kim", "fen"].includes(st.subject);
+    const alfabe = st.subject === "tr" && st.grade <= 4;
+    for (let i = 0; i < adet; i++) {
+      const q = alfabe && R(0, 1) ? siraAlfabetik(d) : (sayisal || alfabe ? (sayisal ? siraSayi(d) : siraAlfabetik(d)) : null);
+      if (q) out.push(q);
+    }
+  }
+  if (types.has("veri")) {
+    /* Tablo yorumlama her derste anlamlı değil; veri okuma kazanımı bulunan
+       derslerde üretilir. */
+    if (["mat", "fen", "sos", "fiz", "kim", "bio", "hay"].includes(st.subject)) {
+      for (let i = 0; i < adet; i++) { const q = veriTablo(d); if (q) out.push(q); }
+    }
+  }
+  return out;
+}
+
+/* ── Ders bazlı üretim stratejisi ─────────────────────────────────────────
+   Her dersin ölçme doğası farklıdır; bu ağırlıklar seçim aşamasında soru tipi
+   dağılımını yönlendirir (1 = nötr). Listede olmayan ders nötr kabul edilir. */
+const STRATEJI = {
+  tr:  { mc: 1.15, fb: 1.10, tf: 0.85, op: 1.20, islem: 0.60, es: 1.15, sira: 0.95, veri: 0.55 },
+  tde: { mc: 1.20, fb: 0.95, tf: 0.80, op: 1.25, islem: 0.50, es: 1.10, sira: 0.40, veri: 0.45 },
+  mat: { islem: 1.35, mc: 0.95, fb: 0.85, tf: 0.70, op: 1.00, es: 0.80, sira: 1.25, veri: 1.30 },
+  fen: { mc: 1.10, tf: 1.00, fb: 1.00, islem: 1.15, op: 1.15, es: 1.20, sira: 0.90, veri: 1.25 },
+  fiz: { islem: 1.30, mc: 1.00, fb: 0.85, tf: 0.75, op: 1.05, es: 0.90, sira: 0.85, veri: 1.15 },
+  kim: { islem: 1.25, mc: 1.05, fb: 0.90, tf: 0.80, op: 1.05, es: 1.05, sira: 0.80, veri: 1.10 },
+  bio: { mc: 1.15, tf: 0.95, fb: 1.00, op: 1.20, islem: 0.70, es: 1.25, sira: 0.60, veri: 1.10 },
+  sos: { mc: 1.10, tf: 0.95, fb: 1.00, op: 1.25, islem: 0.55, es: 1.25, sira: 0.70, veri: 1.15 },
+  ink: { mc: 1.10, tf: 0.95, fb: 1.00, op: 1.25, islem: 0.55, es: 1.25, sira: 1.10, veri: 1.05 },
+  hay: { mc: 1.05, tf: 1.10, fb: 1.05, op: 1.10, islem: 0.60, es: 1.20, sira: 0.70, veri: 1.00 },
+  din: { mc: 1.10, tf: 1.00, fb: 1.00, op: 1.20, islem: 0.50, es: 1.20, sira: 0.55, veri: 0.40 },
+  ing: { mc: 1.15, fb: 1.20, tf: 0.90, op: 0.95, islem: 0.40, es: 1.30, sira: 0.45, veri: 0.40 },
+  alm: { mc: 1.15, fb: 1.20, tf: 0.90, op: 0.95, islem: 0.40, es: 1.30, sira: 0.45, veri: 0.40 },
+};
+
+/* ── Metin normalleştirme ve parmak izi ──────────────────────────────────
+   Amaç: "Ali'nin 5 elması vardı" ile "Ahmet'in 8 elması vardı" sorularının
+   AYNI soru sayılması. Bunun için sayılar ve kişi adları maskelenir; kalan
+   gövde sorunun kimliği olarak kullanılır. */
+const AD_HAVUZU = new Set(
+  [].concat(NAMES, ["Ahmet", "Fatma", "Hasan", "Hüseyin", "Merve", "Burak", "Selin",
+    "Kaan", "Deniz", "Yusuf", "Esra", "Aylin", "Ömer", "Sema", "Kerem", "Nur"])
+    .map(function (n) { return n.toLocaleLowerCase("tr"); })
+);
+
+const DURAK = new Set(["aşağıdaki", "aşağıdakilerden", "hangisi", "hangisidir", "kaçtır", "nedir",
+  "bir", "bu", "şu", "ve", "ile", "için", "olan", "göre", "daha", "kaç", "yazınız", "bulunuz",
+  "hesaplayınız", "işaretleyiniz", "açıklayınız", "veriniz", "seçiniz", "doldurunuz", "boşluğu",
+  "boşluğa", "cümlede", "soruyu", "cevaplayınız", "yukarıdaki", "değildir", "değil", "olur",
+  "olarak", "gelir", "vardır", "sayısının", "aşağıdakilerin"]);
+
+function sadeMetin(s) {
+  return String(s == null ? "" : s)
+    .toLocaleLowerCase("tr")
+    .replace(/\d+(?:[.,]\d+)?/g, " # ")
+    .replace(/[^0-9a-zçğıöşü#\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function jetonlar(s) {
+  return sadeMetin(s).split(" ").filter(Boolean).map(function (t) {
+    return AD_HAVUZU.has(t) ? "@" : t;
+  });
+}
+/* Parmak izi: sayı/ad farkları silindikten sonra kalan soru kimliği.
+   Eşleştirme/sıralama/tablo sorularının kökü hep aynı kalıptır; bu tiplerde
+   ayırt edici olan içeriktir, bu yüzden öğeler de parmak izine katılır. */
+function parmakIzi(q) {
+  let ek = "";
+  if (q.ty === "es") ek = " " + jetonlar([].concat(q.sol || [], q.sag || []).join(" ")).join(" ");
+  else if (q.ty === "sira") ek = " " + jetonlar((q.ogeler || []).join(" ")).join(" ");
+  else if (q.ty === "veri") ek = " " + jetonlar((q.satirlar || []).map(r => r.join(" ")).join(" ")).join(" ");
+  return jetonlar(q.q).join(" ") + ek;
+}
+/* Çekirdek: kalıp sözcükleri de atılmış anlam çekirdeği. */
+function cekirdek(q) {
+  return new Set(jetonlar(q.q).filter(function (t) {
+    return t !== "#" && t !== "@" && t.length > 2 && !DURAK.has(t);
+  }));
+}
+/* Jaccard benzerliği — 0 (alakasız) ile 1 (aynı) arası. */
+function benzerlik(a, b) {
+  if (!a.size || !b.size) return 0;
+  var kesisim = 0;
+  a.forEach(function (t) { if (b.has(t)) kesisim++; });
+  return kesisim / (a.size + b.size - kesisim);
+}
+const AYNI_SAYILIR = 0.74;   // bu eşiğin üstü "aynı mantık, farklı kelime" kabul edilir
+
+/* ── Oturum geçmişi ───────────────────────────────────────────────────────
+   Daha önce üretilmiş ödevlerin soru parmak izleri sekme oturumu boyunca
+   saklanır; yeni ödevde bunlar cezalandırılır. Ders + sınıf başına ayrı tutulur.
+   sessionStorage engelliyse bellek içi kopya kullanılır. */
+const gecmisBellek = {};
+const GECMIS_SINIR = 400;
+function gecmisAnahtar() { return "kk-odev-gecmis-" + st.subject + "-" + st.grade; }
+function gecmisOku() {
+  const k = gecmisAnahtar();
+  if (gecmisBellek[k]) return gecmisBellek[k];
+  let v = [];
+  try {
+    const raw = sessionStorage.getItem(k);
+    if (raw) v = JSON.parse(raw) || [];
+  } catch (e) { /* depolama kapalı — bellek içi kopya kullanılır */ }
+  gecmisBellek[k] = Array.isArray(v) ? v : [];
+  return gecmisBellek[k];
+}
+function gecmisYaz(izler) {
+  const k = gecmisAnahtar();
+  const yeni = gecmisOku().concat(izler).slice(-GECMIS_SINIR);
+  gecmisBellek[k] = yeni;
+  try { sessionStorage.setItem(k, JSON.stringify(yeni)); } catch (e) { /* depolama kapalı */ }
+}
+
+/* ── Cevap anahtarı ve soru gövdesi doğrulaması ───────────────────────────
+   Kullanıcıya gösterilmeden önce her soru buradan geçer. Elenen soru kâğıda
+   hiç girmez; yerine başka soru seçilir. */
+const BOZUK_IZ = [/yerine basit h[âa]liyle/i, /örn\.\s*basamaklara/i, /\bTODO\b/, /\bXXX\b/];
+
+/* Doğrulama için ham karşılaştırma: sadeMetin sayıları ve noktalamayı
+   maskelediğinden seçenek/cevap denetiminde KULLANILAMAZ — "26" ile "28"
+   ya da "Ali" ile "ali" aynı görünürdü. Burada yalnızca baş/son boşluk ve
+   içteki fazla boşluk sadeleştirilir; harf büyüklüğü ve sayılar korunur. */
+function hamMetin(s) { return String(s == null ? "" : s).replace(/\s+/g, " ").trim(); }
+function sorunTespit(q) {
+  if (!q || typeof q.q !== "string" || q.q.trim().length < 8) return "soru metni yok veya çok kısa";
+  if (BOZUK_IZ.some(function (r) { return r.test(q.q); })) return "soru metninde taslak/hata izi var";
+  if (q.ty === "mc") {
+    if (!Array.isArray(q.o) || q.o.length < 2) return "çoktan seçmelide yeterli seçenek yok";
+    const sec = q.o.map(hamMetin);
+    if (sec.some(function (o) { return !o; })) return "boş seçenek var";
+    if (new Set(sec).size !== sec.length) return "aynı seçenek iki kez var (birden fazla doğru cevap)";
+    if (!Number.isInteger(q.a) || q.a < 0 || q.a >= q.o.length) return "cevap anahtarı seçenek aralığının dışında";
+  } else if (q.ty === "tf") {
+    if (typeof q.a !== "boolean") return "doğru-yanlış cevabı boolean değil";
+  } else if (q.ty === "fb") {
+    if (q.a == null || !String(q.a).trim()) return "boşluk doldurma cevabı boş";
+    /* NOT: "cevap soru kökünde geçiyor" denetimi bilinçli olarak YOKTUR.
+       Okuduğunu anlama sorularında cevabın verilen metinde bulunması
+       zorunludur; yabancı dil boşluk sorularında parantezdeki kök biçim
+       (ör. "____ (forget)") kalıbın kendisidir; "(bitişik/ayrı)" gibi
+       parantezler de seçenekleri sıralar. Mekanik bir denetim bunları
+       ayırt edemediği için geçerli soruları eliyordu. Cevabı gerçekten ele
+       veren sorular bunun yerine soru bankasında tek tek düzeltilir. */
+  } else if (q.ty === "islem") {
+    if (q.a == null || !String(q.a).trim()) return "işlem sorusunun cevabı boş";
+  } else if (q.ty === "es") {
+    /* Eşleştirme: sol[i] ↔ sag[a[i]]. Sol ve sağ eşit uzunlukta olmalı,
+       her sağ öğe en fazla bir kez kullanılmalı (aksi hâlde soru belirsiz olur). */
+    if (!Array.isArray(q.sol) || !Array.isArray(q.sag) || q.sol.length < 3) return "eşleştirmede yeterli öğe yok";
+    if (q.sol.length !== q.sag.length) return "eşleştirmede sol ve sağ öğe sayısı farklı";
+    if (!Array.isArray(q.a) || q.a.length !== q.sol.length) return "eşleştirme cevap anahtarı eksik";
+    if (q.a.some(j => !Number.isInteger(j) || j < 0 || j >= q.sag.length)) return "eşleştirme cevabı aralık dışında";
+    if (new Set(q.a).size !== q.a.length) return "eşleştirmede bir sağ öğe iki kez eşleşiyor";
+    if (new Set(q.sol.map(hamMetin)).size !== q.sol.length) return "eşleştirmede aynı sol öğe iki kez var";
+    if (new Set(q.sag.map(hamMetin)).size !== q.sag.length) return "eşleştirmede aynı sağ öğe iki kez var";
+  } else if (q.ty === "sira") {
+    /* Sıralama: a, ogeler dizisindeki indekslerin doğru sıralamasıdır. */
+    if (!Array.isArray(q.ogeler) || q.ogeler.length < 3) return "sıralamada yeterli öğe yok";
+    if (!Array.isArray(q.a) || q.a.length !== q.ogeler.length) return "sıralama cevap anahtarı eksik";
+    if (new Set(q.a).size !== q.a.length) return "sıralama cevabında tekrar eden indeks var";
+    if (q.a.some(j => !Number.isInteger(j) || j < 0 || j >= q.ogeler.length)) return "sıralama cevabı aralık dışında";
+    if (new Set(q.ogeler.map(hamMetin)).size !== q.ogeler.length) return "sıralamada aynı öğe iki kez var";
+  } else if (q.ty === "veri") {
+    /* Tablo yorumlama: başlıklar + eşit uzunlukta satırlar + tek cevap */
+    if (!Array.isArray(q.basliklar) || q.basliklar.length < 2) return "veri tablosunda yeterli sütun yok";
+    if (!Array.isArray(q.satirlar) || q.satirlar.length < 2) return "veri tablosunda yeterli satır yok";
+    if (q.satirlar.some(r => !Array.isArray(r) || r.length !== q.basliklar.length)) return "veri tablosunda satır/sütun sayısı uyuşmuyor";
+    if (q.a == null || !String(q.a).trim()) return "veri yorumlama sorusunun cevabı boş";
+  } else if (q.ty !== "op") {
+    return "bilinmeyen soru tipi";
+  }
+  return null;
+}
+
+/* ── Çoktan seçmelide seçenek karıştırma ──────────────────────────────────
+   Doğru cevabın hep aynı harfe düşmesini engeller ve aynı sorunun her
+   üretimde farklı görünmesini sağlar. Sırası anlam taşıyan seçenekler
+   (ör. "hepsi", "yalnız I") karıştırılmaz. */
+const SIRA_BAGIMLI = /^(hepsi|hiçbiri|tümü|yukarıdakilerin|yalnız|yalnızca|ı ve|i ve|ıı ve|a ve|b ve|i+\s*$)/i;
+function seceneginSirasiOnemli(q) {
+  return (q.o || []).some(function (o) { return SIRA_BAGIMLI.test(String(o).trim()); });
+}
+function secenekKaristir(q, hedefIndeks) {
+  if (q.ty !== "mc" || seceneginSirasiOnemli(q)) return q;
+  const dogru = q.o[q.a];
+  const digerleri = shuffle(q.o.filter(function (_, i) { return i !== q.a; }));
+  const yer = hedefIndeks == null ? R(0, q.o.length - 1) : Math.max(0, Math.min(hedefIndeks, q.o.length - 1));
+  const yeni = digerleri.slice();
+  yeni.splice(yer, 0, dogru);
+  return Object.assign({}, q, { o: yeni, a: yeni.indexOf(dogru) });
+}
+
+/* ── Aday toplama ─────────────────────────────────────────────────────────
+   Yalnızca SEÇİLİ ünitelere ait sorular toplanır. Bir ünitenin kendi bankası
+   yoksa yalnızca o üniteye bağlı üreteç kullanılır; sınıf genelindeki karışık
+   bankaya DÜŞÜLMEZ. (Eski davranış, seçilmemiş ünitelerin sorularını seçili
+   ünite adı altında gösterebiliyordu.) */
+function seciliUniteler() { return unitsFor().filter(function (_, i) { return st.units.has(i); }); }
+
+function bankAdaylari(types) {
+  const perUnit = UNIT_BANK[st.subject + "-" + st.grade];
+  const out = [];
+  if (!perUnit) return out;
+  seciliUniteler().map(unitName).forEach(function (ad) {
+    (perUnit[ad] || []).forEach(function (b) {
+      if (types.has(b.ty)) out.push(Object.assign({}, b, { unit: ad, kaynak: "banka" }));
+    });
+  });
+  return out;
+}
+
+function uretecAdaylari(types, d, adet) {
+  const gens = seciliUniteler().filter(function (u) {
+    return typeof u !== "string" && u.g && GEN[u.g];
+  });
+  const out = [];
+  if (!gens.length) return out;
+  for (let i = 0; i < adet; i++) {
+    const u = pick(gens);
+    let r;
+    try { r = GEN[u.g](d, u.p); } catch (e) { continue; }
+    if (!r) continue;
+    const q = r.ty
+      ? Object.assign({}, r, { unit: u.u, kaynak: "üreteç" })
+      : { ty: r.open ? "op" : "islem", q: r.q, a: String(r.a), unit: u.u, kaynak: "üreteç" };
+    if (types.has(q.ty)) out.push(q);
+  }
+  return out;
+}
+
+/* kalip: sorunun ölçme KALIBI. Aynı kalıptan gelen sorular, kelimeleri farklı
+   olsa bile aynı kazanımı aynı yöntemle ölçer; seçim aşamasında bir kâğıtta
+   üst üste binmeleri engellenir. */
+function vocabAdaylari(types, adet) {
+  if (!types.has("mc") || !vocabFor()) return [];
+  const us = seciliUniteler();
+  const out = [];
+  for (let i = 0; i < adet; i++) {
+    const q = vocabQ();
+    if (q) out.push(Object.assign({}, q, { unit: us.length ? unitName(pick(us)) : "", kaynak: "kelime", kalip: "kelime-karsiligi" }));
+  }
+  return out;
+}
+
+function acikUcluAdaylari(types, adet) {
+  if (!types.has("op")) return [];
+  const out = [];
+  for (let i = 0; i < adet; i++) {
+    const q = openQ();   // kalip'i openQ kendi kalıp kimliğiyle verir, ezilmemeli
+    if (q) out.push(Object.assign({}, q, { kaynak: "açık uçlu" }));
+  }
+  return out;
+}
+
+/* Son çare: seçili ünitelerin hiçbiri soru üretemediyse sınıf genelindeki
+   bankaya bakılır. Bu sorular BELİRLİ bir üniteye ait değildir; ünite adıyla
+   etiketlenmez ve kâğıtta bu durum ayrıca bildirilir. */
+function genelBankaAdaylari(types) {
+  return bankFor()
+    .filter(function (b) { return types.has(b.ty); })
+    .map(function (b) { return Object.assign({}, b, { unit: "", kaynak: "genel banka" }); });
+}
+
+/* ── Çeşitlilik odaklı seçim ──────────────────────────────────────────────
+   Adaylar puanlanır; her seçimden sonra puanlar yeniden hesaplanır. Böylece
+   seçilen her soru, o ana kadar seçilmişlerden ve geçmişten olabildiğince
+   uzaklaşır. */
+function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
+  /* Adil pay: birden fazla soru tipi seçiliyse tek bir tip kâğıdı ele
+     geçirmesin. Sert bir yasak değil güçlü bir ceza — başka tip kalmadıysa
+     ödev eksik bırakılmaz, yine bu tipten tamamlanır. */
+  const adilPay = tipSayisi && tipSayisi > 1 ? Math.max(1, (count / tipSayisi) * 1.5) : Infinity;
+  const gecmis = gecmisiYoksay ? new Set() : new Set(gecmisOku());
+  const secilen = [];
+  const secilenCekirdek = [];
+  const tipSayaci = {}, uniteSayaci = {}, kalipSayaci = {}, harfSayaci = [0, 0, 0, 0];
+  const secilenIzler = new Set();
+  const secilenCevaplar = new Set();
+  const agirlik = STRATEJI[st.subject] || {};
+  let tfDogru = 0, tfToplam = 0;
+
+  /* kapsananIzler: seçilmiş bir sorunun cevabını başka bir soruda ifşa eden
+     izler. Eşleştirme soruları kaynak sorularının cevaplarını sütunda
+     gösterdiği için bu iki soru aynı kâğıda birlikte alınmaz. */
+  const kapsananIzler = new Set();
+  /* ifsaEdilen: seçilmiş eşleştirme sorularının sağ sütununda görünen kavramlar.
+     Bir sorunun cevabı bu kümede varsa cevabı kâğıtta zaten yazılı demektir.
+     kapsar listesi yalnızca banka kaynaklı türetmeleri kapsadığı için burada
+     cevap metni üzerinden genel bir koruma uygulanır (kelime havuzu dâhil). */
+  const ifsaEdilen = new Set();
+  const cevapMetni = function (q) {
+    if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) return sadeMetin(q.o[q.a]);
+    if (q.ty === "fb" || q.ty === "veri" || q.ty === "islem") return sadeMetin(q.a);
+    return "";
+  };
+  const havuz = adaylar.map(function (q) {
+    const iz = parmakIzi(q);
+    return { q: q, iz: iz, cek: cekirdek(q), kalip: q.kalip || iz };
+  });
+
+  while (secilen.length < count && havuz.length) {
+    let enIyi = -1, enIyiPuan = -Infinity;
+    for (let i = 0; i < havuz.length; i++) {
+      const c = havuz[i];
+      let puan = 10 * (agirlik[c.q.ty] || 1);
+      /* Cevabı bu kâğıttaki bir eşleştirme sorusunda görünen soru alınmaz */
+      if (kapsananIzler.has(c.iz)) puan -= 200;
+      /* Tersi de geçerli: kaynak sorusu zaten seçilmiş bir eşleştirme alınmaz */
+      if (c.q.kapsar && c.q.kapsar.some(function (z) { return secilenIzler.has(z); })) puan -= 200;
+      /* Cevabı, seçilmiş bir eşleştirmenin sağ sütununda yazılı olan soru alınmaz */
+      const cm = cevapMetni(c.q);
+      if (cm && cm.length >= 3 && ifsaEdilen.has(cm)) puan -= 200;
+      /* Sağ sütunu, seçilmiş bir sorunun cevabını içeren eşleştirme alınmaz */
+      if (c.q.ty === "es" && c.q.sag.some(function (x) {
+        const t = sadeMetin(x);
+        return t.length >= 3 && secilenCevaplar.has(t);
+      })) puan -= 200;
+      if (gecmis.has(c.iz)) puan -= 60;                        // önceki ödevlerde çıkmış
+      let enYakin = 0;
+      for (let j = 0; j < secilenCekirdek.length; j++) {
+        const b = benzerlik(c.cek, secilenCekirdek[j]);
+        if (b > enYakin) enYakin = b;
+      }
+      if (enYakin >= AYNI_SAYILIR) puan -= 100;                // aynı kâğıtta çok benzer
+      else puan -= enYakin * 25;
+      puan -= (tipSayaci[c.q.ty] || 0) * 3.5;                  // tip dengesi
+      if ((tipSayaci[c.q.ty] || 0) >= adilPay) puan -= 40;     // tek tip kâğıdı ele geçirmesin
+      puan -= (uniteSayaci[c.q.unit] || 0) * 2.0;              // ünite dengesi
+      puan -= (kalipSayaci[c.kalip] || 0) * 16;                // aynı kalıbın yığılmasını engelle
+      if (c.q.ty === "tf" && tfToplam >= 2) {                  // hep aynı cevap olmasın
+        const oran = tfDogru / tfToplam;
+        if ((c.q.a === true && oran > 0.6) || (c.q.a === false && oran < 0.4)) puan -= 8;
+      }
+      if (c.q.kaynak === "üreteç") puan += 4;                   // sınırsız üretilebilen kaynağa hafif öncelik
+      if (d === 3 && (c.q.ty === "op" || c.q.ty === "islem")) puan += 3;
+      if (d === 1 && (c.q.ty === "tf" || c.q.ty === "fb")) puan += 3;
+      puan += Math.random() * 2.5;                              // eşit puanlarda kararı rastgeleliğe bırak
+      if (puan > enIyiPuan) { enIyiPuan = puan; enIyi = i; }
+    }
+    if (enIyi < 0) break;
+    const c = havuz.splice(enIyi, 1)[0];
+    let cokBenzer = false;
+    for (let j = 0; j < secilenCekirdek.length; j++) {
+      if (benzerlik(c.cek, secilenCekirdek[j]) >= AYNI_SAYILIR) { cokBenzer = true; break; }
+    }
+    if (cokBenzer) continue;                                    // güvenlik kilidi
+    let q = c.q;
+    if (q.ty === "mc") {
+      const kac = Math.min(4, (q.o || []).length);
+      const dilim = harfSayaci.slice(0, kac);
+      q = secenekKaristir(q, dilim.indexOf(Math.min.apply(null, dilim)));
+      harfSayaci[q.a] = (harfSayaci[q.a] || 0) + 1;
+    }
+    if (q.ty === "tf") { tfToplam++; if (q.a === true) tfDogru++; }
+    tipSayaci[q.ty] = (tipSayaci[q.ty] || 0) + 1;
+    uniteSayaci[q.unit] = (uniteSayaci[q.unit] || 0) + 1;
+    kalipSayaci[c.kalip] = (kalipSayaci[c.kalip] || 0) + 1;
+    secilenIzler.add(c.iz);
+    if (q.kapsar) q.kapsar.forEach(function (z) { kapsananIzler.add(z); });
+    if (q.ty === "es") q.sag.forEach(function (x) { const t = sadeMetin(x); if (t.length >= 3) ifsaEdilen.add(t); });
+    const kendiCevap = cevapMetni(q);
+    if (kendiCevap && kendiCevap.length >= 3) secilenCevaplar.add(kendiCevap);
+    secilen.push(q);
+    secilenCekirdek.push(c.cek);
+  }
+  return secilen;
+}
+
+/* ── Ödev üretimi ────────────────────────────────────────────────────────── */
 function generate() {
   const count = Math.min(30, Math.max(4, +$("qCount").value || 10));
   const d = +$("difficulty").value;
-  const types = new Set([...document.querySelectorAll(".check-row input[data-ty]")].filter(c => c.checked).map(c => c.dataset.ty));
+  const types = new Set([].slice.call(document.querySelectorAll(".check-row input[data-ty]"))
+    .filter(function (c) { return c.checked; })
+    .map(function (c) { return c.dataset.ty; }));
   if (!types.size) { alert("En az bir soru tipi seçmelisin."); return; }
   if (!st.units.size) { alert("En az bir ünite seçmelisin."); return; }
 
-  const qs = [];
-  const bank = shuffle(unitBankFor()).filter(b => types.has(b.ty));
-  const hasVocab = types.has("mc") && vocabFor();
+  const tani = { istenen: count, toplamAday: 0, elenen: 0, elenenNeden: {}, tekil: 0, gecmistenTekrar: 0, genelBanka: false, tipler: {} };
+  const gecmisAnlik = new Set(gecmisOku());   // bu ödev yazılmadan ÖNCEKİ geçmiş
 
-  bank.forEach(b => { if (qs.length < count) qs.push({ ...b }); });
+  /* 1) Aday toplama — üreteç ve kelime katmanı istenen sayının katı kadar
+        denenir, böylece süzgeçten sonra da seçecek malzeme kalır. */
+  let ham = [].concat(
+    bankAdaylari(types),
+    uretecAdaylari(types, d, count * 8),
+    turetilmisAdaylar(types, d, count * 3),
+    vocabAdaylari(types, count * 2),
+    acikUcluAdaylari(types, Math.max(3, count))
+  );
+  if (!ham.length) { ham = genelBankaAdaylari(types); tani.genelBanka = ham.length > 0; }
+  tani.toplamAday = ham.length;
 
-  let guard = 0;
-  while (qs.length < count && guard++ < 300) {
-    let q = procQ(d, types);
-    if (!q && hasVocab) q = vocabQ();
-    if (!q && types.has("op")) q = openQ();
-    if (!q) break;
-    if (q.ty === "islem" || q.ty === "mc") {
-      if (!qs.some(x => x.q === q.q)) qs.push(q); // aynı soruyu iki kez ekleme
-    } else if (!qs.some(x => x.q === q.q)) qs.push(q);
+  /* 2) Kalite süzgeci — geçersiz cevap anahtarı / bozuk gövde elenir */
+  const gecerli = [];
+  ham.forEach(function (q) {
+    const sorun = sorunTespit(q);
+    if (sorun) {
+      tani.elenen++;
+      tani.elenenNeden[sorun] = (tani.elenenNeden[sorun] || 0) + 1;
+      return;
+    }
+    gecerli.push(q);
+  });
+
+  /* 3) Parmak izine göre tekilleştirme — aynı soru ya da yalnızca sayısı/adı
+        değişmiş soru havuzda bir kez yer alır */
+  const gorulen = new Set(), tekil = [];
+  gecerli.forEach(function (q) {
+    const iz = parmakIzi(q);
+    if (gorulen.has(iz)) return;
+    gorulen.add(iz);
+    tekil.push(q);
+  });
+  tani.tekil = tekil.length;
+
+  /* 4) Çeşitlilik seçimi */
+  const secilen = odevSec(tekil, count, d, false, types.size);
+
+  /* Havuz tükendiyse seçim, geçmişte çıkmış soruları da almak zorunda kalır.
+     Bu gizlenmez: kaç sorunun tekrar olduğu sayılır ve kâğıtta bildirilir. */
+  secilen.forEach(function (q) {
+    if (gecmisAnlik.has(parmakIzi(q))) tani.gecmistenTekrar++;
+    tani.tipler[q.ty] = (tani.tipler[q.ty] || 0) + 1;
+  });
+  tani.eksik = Math.max(0, count - secilen.length);
+
+  /* 5) Bu ödevin soruları geçmişe yazılır — sonraki "Yeni Ödev Oluştur"
+        bu soruları eler. */
+  gecmisYaz(secilen.map(parmakIzi));
+
+  st.qs = shuffle(secilen);
+  st.tani = tani;
+  renderSheet(tani);
+}
+/* ═══════════════ KÂĞIT ÇİZİMİ ═══════════════ */
+/* Kalite denetimi özeti — öğretmene bilgi verir, yazdırmada gizlenir
+   (.tani-not print kuralı). Görünüm mevcut .sheet-note stilini kullanır. */
+function taniNotu(tani) {
+  if (!tani) return "";
+  const satir = [];
+  if (tani.eksik) {
+    satir.push(`<div class="sheet-note tani-not" style="color:#dc2626;">ℹ️ Bu seçimde ${st.qs.length} özgün soru bulundu (istenen: ${tani.istenen}). Daha fazla ünite seçerek, İşlem/Problem tipini açarak veya soru sayısını azaltarak çoğaltabilirsin.</div>`);
   }
-  if (types.has("op") && !qs.some(q => q.ty === "op")) { const o = openQ(); if (o && qs.length < count) qs.push(o); }
-
-  st.qs = shuffle(qs).slice(0, count);
-  renderSheet(st.qs.length < count ? count - st.qs.length : 0);
+  if (tani.gecmistenTekrar) {
+    satir.push(`<div class="sheet-note tani-not">🔁 Bu ödevdeki ${tani.gecmistenTekrar} soru, bu oturumda daha önce oluşturduğun ödevlerde de çıktı — seçili ünitelerin özgün soru havuzu ${tani.tekil} soruda tükeniyor. Tamamen yeni sorular için ünite ekleyebilir, soru sayısını azaltabilir veya başka bir soru tipi açabilirsin.</div>`);
+  }
+  if (tani.genelBanka) {
+    satir.push(`<div class="sheet-note tani-not" style="color:#dc2626;">⚠️ Seçili ünitelerin kendi soru bankası bulunmadığı için sorular sınıf genelindeki bankadan alındı; ünite başlığıyla birebir örtüşmeyebilir.</div>`);
+  }
+  if (tani.elenen) {
+    satir.push(`<div class="sheet-note tani-not">🔎 Kalite denetimi: ${tani.elenen} aday soru (cevap anahtarı veya soru gövdesi hatası nedeniyle) kâğıda alınmadı.</div>`);
+  }
+  return satir.join("");
 }
 
-/* ═══════════════ KÂĞIT ÇİZİMİ ═══════════════ */
-function renderSheet(missing) {
+function renderSheet(tani) {
   const level = LEVELS[st.level].name.replace(/^\S+\s/, "");
   const subj = SUBJECTS[st.subject].name;
   const autoTitle = `${st.grade}. Sınıf ${subj} Ödevi`;
@@ -4507,6 +5189,19 @@ function renderSheet(missing) {
     else if (q.ty === "tf") body = `<div class="q-tf">(&nbsp;&nbsp;) Doğru &nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;) Yanlış</div>`;
     else if (q.ty === "fb") body = `<div class="q-line"></div>`;
     else if (q.ty === "islem") body = `<div class="q-islem">= <i>........................</i></div>`;
+    else if (q.ty === "es") body = `
+      <div class="q-match">
+        <ul>${q.sol.map((x, j) => `<li><span class="mbox">&nbsp;</span>${j + 1}. ${x}</li>`).join("")}</ul>
+        <ul>${q.sag.map((x, j) => `<li style="padding-left:0;text-indent:0;">${letters[j] || (j + 1)}) ${x}</li>`).join("")}</ul>
+      </div>`;
+    else if (q.ty === "sira") body = `
+      <div class="q-order"><ul>${q.ogeler.map(x => `<li><span class="obox">&nbsp;</span>${x}</li>`).join("")}</ul></div>`;
+    else if (q.ty === "veri") body = `
+      <div class="q-data">
+        <table><tr>${q.basliklar.map(h => `<th>${h}</th>`).join("")}</tr>
+        ${q.satirlar.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table>
+        <div class="q-line"></div>
+      </div>`;
     else body = `<div class="q-op-lines"><div></div><div></div><div></div></div>`;
     return `<div class="q"><div class="q-text"><span class="q-no">${i + 1}.</span><span>${q.q}</span></div>${body}</div>`;
   }).join("");
@@ -4516,7 +5211,14 @@ function renderSheet(missing) {
       <h3>🔑 Cevap Anahtarı — ${title}</h3>
       <div class="ak-grid">
         ${st.qs.map((q, i) => {
-          let a = q.ty === "mc" ? `${letters[q.a]}) ${q.o[q.a]}` : q.ty === "tf" ? (q.a ? "Doğru" : "Yanlış") : q.a;
+          let a;
+          if (q.ty === "mc") a = `${letters[q.a]}) ${q.o[q.a]}`;
+          else if (q.ty === "tf") a = q.a ? "Doğru" : "Yanlış";
+          /* Eşleştirmede cevap, sol öğe sırasına karşılık gelen sağ harflerdir */
+          else if (q.ty === "es") a = q.a.map((j, i2) => `${i2 + 1}-${letters[j] || (j + 1)}`).join(", ");
+          /* Sıralamada cevap, gösterilen öğelerin doğru sıra numaralarıdır */
+          else if (q.ty === "sira") a = q.ogeler.map((_, i2) => `${i2 + 1}. kutu: ${q.a.indexOf(i2) + 1}`).join(", ");
+          else a = q.a;
           return `<div><b>${i + 1}.</b> ${a}</div>`;
         }).join("")}
       </div>
@@ -4539,7 +5241,7 @@ function renderSheet(missing) {
     ${fieldsHtml}
     <div class="sheet-note">Konular: ${selUnits.join(" • ")}</div>
     ${grupNotu.length ? `<div class="sheet-note">🔤 Sesler: ${grupNotu.join(" • ")}</div>` : ""}
-    ${missing ? `<div class="sheet-note" style="color:#dc2626;">ℹ️ Bu ders için soru bankasında ${st.qs.length} özgün soru bulundu (istenen: ${st.qs.length + missing}). İşlem/Problem tipini açarak, daha fazla ünite seçerek veya soru sayısını azaltarak deneyebilirsin.</div>` : ""}
+    ${taniNotu(tani)}
     <div class="q-grid ${$("optTwoCol").checked ? "two-col" : ""}">${qHtml}</div>
     ${akHtml}
     <div class="sheet-footer">Kaynak Kampüs Ödev Oluşturucu · MEB güncel öğretim programlarına (mufredat.meb.gov.tr) uygun hazırlanmıştır.</div>
