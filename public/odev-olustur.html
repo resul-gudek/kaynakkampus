@@ -204,6 +204,18 @@
     .q-data th, .q-data td { border: 1px solid #94a3b8; padding: 3px 10px; font-size: .95em; text-align: center; }
     .q-data th { font-weight: 700; background: #f1f5f9; }
     .sheet.bw .q-data th { background: #eee; }
+    /* Hata bulma: düzeltilecek yanlış ifade, kökten ayrılsın diye çerçevelenir */
+    .q-error { margin: 8px 0 0 24px; }
+    .q-error .qe-box { border: 1px solid #94a3b8; border-left-width: 4px; padding: 5px 10px; margin-bottom: 6px; font-weight: 500; }
+    /* Sütun grafiği: satır içi SVG, dış kaynak yok; yazdırmada da aynı görünür */
+    .q-chart { display: block; max-width: 100%; height: auto; margin-bottom: 6px; }
+    .q-chart .cz-sutun { fill: #cbd5e1; stroke: #475569; stroke-width: 1; }
+    .sheet.bw .q-chart .cz-sutun { fill: #ddd; stroke: #333; }
+    .q-chart .cz-izgi { stroke: #cbd5e1; stroke-width: .8; stroke-dasharray: 3 3; }
+    .q-chart .cz-eksen { stroke: #475569; stroke-width: 1.4; }
+    .q-chart .cz-sayi { font-size: 11px; fill: #334155; }
+    .q-chart .cz-etiket { font-size: 11px; fill: #1e293b; font-weight: 600; }
+    .q-chart .cz-eksen-ad { font-size: 10px; fill: #64748b; }
     /* İki sütunlu kâğıt düzeninde eşleştirme sütunları alt alta geçer */
     .q-grid.two-col .q-match { grid-template-columns: 1fr; }
     .q-grid.two-col .q-data table { font-size: .88em; }
@@ -248,7 +260,9 @@
       .sheet { box-shadow: none; padding: 0; max-width: none; border-radius: 0; }
       .answer-key { page-break-before: always; }
       /* Tablo ve eşleştirme gövdeleri sayfa ortasından bölünmesin */
-      .q-data, .q-match, .q-order { break-inside: avoid; page-break-inside: avoid; }
+      .q-data, .q-match, .q-order, .q-chart, .q-error { break-inside: avoid; page-break-inside: avoid; }
+      /* Yazıcı arka planları basmadığı için sütunlara kenarlık yeterli olmalı */
+      .q-chart .cz-sutun { fill: #e5e7eb; stroke: #333; }
       body { background: #fff; }
     }
   </style>
@@ -401,6 +415,9 @@
           <label class="check-row"><input type="checkbox" data-ty="es" checked /><span>🔗 Eşleştirme</span></label>
           <label class="check-row"><input type="checkbox" data-ty="sira" checked /><span>🔢 Sıralama</span></label>
           <label class="check-row"><input type="checkbox" data-ty="veri" checked /><span>📊 Tablo / Veri Yorumlama</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="grafik" checked /><span>📈 Grafik Yorumlama</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="sinif" checked /><span>🗂️ Sınıflandırma</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="hata" checked /><span>🔍 Hata Bulma – Düzeltme</span></label>
           <label class="check-row"><input type="checkbox" data-ty="op" /><span>✍️ Açık Uçlu</span></label>
           <div class="hint" id="uretimHint"></div>
         </div>
@@ -611,6 +628,13 @@ const TYMM_SINIFLARI = new Set([1, 2, 3, 5, 6, 7, 9, 10, 11]);
 /* ═══════════════ MEB GÜNCEL MÜFREDAT ÜNİTELERİ ═══════════════
    u: ünite adı — g: işlem/problem üreteci etiketi (varsa) */
 const UNITS = {
+  /* Türkçe: 1, 2, 3 ve 5, 6, 7. sınıflarda TYMM'nin resmî tema adları kullanılır.
+     4 ve 8. sınıflar 2026-2027'de önceki programla devam eder; ancak 2019
+     Türkçe Dersi Öğretim Programı içerik ünitesi İÇERMEZ — yalnızca dört
+     öğrenme alanı (dinleme/izleme, konuşma, okuma, yazma) ve bunlara bağlı
+     kazanımlardan oluşur. Bu iki sınıfın başlıkları, programın kazanımlarını
+     konu bazında gruplayan pedagojik etiketlerdir; resmî bir ünite adı
+     karşılığı bulunmadığı için birebir eşleşme aranmaz. */
   tr: {
     1: [{u:"Güzel Davranışlarımız",g:"sesgrup"},{u:"Mustafa Kemal'den Atatürk'e",g:"sesgrup"},{u:"Çevremizdeki Yaşam",g:"sesgrup"},{u:"Yol Arkadaşımız Kitaplar",g:"sesgrup"},{u:"Yeteneklerimizi Keşfediyoruz"},{u:"Minik Kâşifler"},{u:"Atalarımızın İzleri"},{u:"Sorumluluklarımızın Farkındayız"}],
     2: ["Değerlerimizle Varız", "Atatürk ve Çocuk", "Doğada Neler Oluyor?", "Okuma Serüvenimiz", "Yeteneklerimizi Tanıyoruz", "Mucit Çocuk", "Kültür Hazinemiz", "Haklarımızı Biliyoruz"],
@@ -625,21 +649,21 @@ const UNITS = {
     9:  ["Sözün İnceliği", "Anlam Arayışı", "Anlamın Yapı Taşları", "Dilin Zenginliği"],
     10: ["Sözün Ezgisi", "Kelimelerin Ritmi", "Dünden Bugüne", "Nesillerin Mirası"],
     11: ["Bir Diyeceğim Var!", "Kültür Yolculuğu", "Yaşamın İzinde", "Hayatın Aynası"],
-    12: ["Edebiyat ve Felsefe – Psikoloji", "1960 Sonrası Hikâye", "Cumhuriyet Sonrası Şiir", "Dünya Edebiyatında Roman", "1950 Sonrası Türk Romanı", "Tiyatro", "Deneme", "Söylev (Nutuk)"],
+    12: ["Giriş", "Hikâye", "Şiir", "Roman", "Tiyatro", "Deneme", "Söylev (Nutuk)"],
   },
   mat: {
     1: [{u:"Sayılar ve Nicelikler (1)",g:"say1"},{u:"Sayılar ve Nicelikler (2)",g:"olc"},{u:"Sayılar ve Nicelikler (3)",g:"para",p:[1,20]},{u:"İşlemlerden Cebirsel Düşünmeye",g:"add",p:[1,20]},{u:"Nesnelerin Geometrisi (1)"},{u:"Nesnelerin Geometrisi (2)",g:"sek"},{u:"Veriye Dayalı Araştırma"}],
     2: [{u:"Sayılar ve Nicelikler (1)",g:"say2"},{u:"Sayılar ve Nicelikler (2)",g:"kesyarim"},{u:"İşlemlerden Cebirsel Düşünmeye",g:"add",p:[1,100]},{u:"Nesnelerin Geometrisi (1)",g:"sek"},{u:"Nesnelerin Geometrisi (2)"},{u:"Veriye Dayalı Araştırma"}],
     3: [{u:"Sayılar ve Nicelikler (1)",g:"say3"},{u:"Sayılar ve Nicelikler (2)",g:"kespay"},{u:"İşlemlerden Cebirsel Düşünmeye",g:"mul",p:[2,10]},{u:"Nesnelerin Geometrisi (1)",g:"cevre",p:[2,20]},{u:"Nesnelerin Geometrisi (2)"},{u:"Veriye Dayalı Araştırma"}],
-    4: [{u:"Büyük Doğal Sayılar ve Basamak Değeri",g:"say4"},{u:"Dört İşlem",g:"dort",p:[10,999]},{u:"Kesirlerle İşlemler",g:"kesadd"},{u:"Zaman Problemleri",g:"zaman"},{u:"Açılar ve Açı Ölçme",g:"aci"},{u:"Çevre ve Alan",g:"alan",p:[2,25]},{u:"Veri Toplama ve Grafik"}],
+    4: [{u:"Doğal Sayılar",g:"say4"},{u:"Doğal Sayılarla Toplama İşlemi",g:"add",p:[100,9999]},{u:"Doğal Sayılarla Çıkarma İşlemi",g:"sub",p:[100,9999]},{u:"Doğal Sayılarla Çarpma İşlemi",g:"mul",p:[2,99]},{u:"Doğal Sayılarla Bölme İşlemi",g:"div",p:[2,12]},{u:"Kesirler",g:"kespay"},{u:"Kesirlerle İşlemler",g:"kesadd"},{u:"Geometrik Cisimler ve Şekiller",g:"sek"},{u:"Geometride Temel Kavramlar",g:"aci"},{u:"Uzunluk Ölçme",g:"olc"},{u:"Çevre Ölçme",g:"cevre",p:[2,30]},{u:"Alan Ölçme",g:"alan",p:[2,20]},{u:"Sıvı Ölçme"},{u:"Tartma"},{u:"Zaman Ölçme",g:"zaman"},{u:"Veri Toplama ve Değerlendirme"}],
     5: [{u:"Sayılar ve Nicelikler (1)",g:"dort",p:[10,999]},{u:"Sayılar ve Nicelikler (2)",g:"kesadd"},{u:"İşlemlerle Cebirsel Düşünme",g:"cebir"},{u:"Geometrik Şekiller",g:"aci"},{u:"Geometrik Nicelikler",g:"alan",p:[2,20]},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
     6: [{u:"Sayılar ve Nicelikler (1)",g:"carpan"},{u:"Sayılar ve Nicelikler (2)",g:"kesmul"},{u:"İşlemlerle Cebirsel Düşünme ve Değişimler",g:"cebir"},{u:"Geometrik Şekiller",g:"ucgen"},{u:"Geometrik Nicelikler",g:"ucgalan"},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
     7: [{u:"Sayılar ve Nicelikler (1)",g:"tam",p:[1,30]},{u:"Sayılar ve Nicelikler (2)",g:"oran"},{u:"İşlemlerle Cebirsel Düşünme ve Değişimler",g:"denk",p:[1,20]},{u:"Dönüşüm"},{u:"Geometrik Nicelikler (1)",g:"hacim"},{u:"Geometrik Nicelikler (2)",g:"cember"},{u:"Geometrik Şekiller"},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
-    8: [{u:"Çarpanlar ve Katlar (EBOB – EKOK)",g:"ebob"},{u:"Üslü İfadeler",g:"uslu",p:[2,9]},{u:"Kareköklü İfadeler",g:"kok"},{u:"Özdeşlikler ve Çarpanlara Ayırma",g:"ozdes"},{u:"Denklemler ve Eşitsizlikler",g:"denk",p:[3,12]},{u:"Doğrusal Denklemler ve Eğim",g:"egim"},{u:"Üçgenler",g:"ucgen"},{u:"Olasılık",g:"olasi"}],
+    8: [{u:"Çarpanlar ve Katlar",g:"ebob"},{u:"Üslü İfadeler",g:"uslu"},{u:"Kareköklü İfadeler",g:"kok"},{u:"Veri Analizi"},{u:"Basit Olayların Olma Olasılığı",g:"olasi"},{u:"Cebirsel İfadeler ve Özdeşlikler",g:"ozdes"},{u:"Doğrusal Denklemler",g:"egim"},{u:"Eşitsizlikler",g:"denk",p:[1,20]},{u:"Üçgenler",g:"pisagor"},{u:"Eşlik ve Benzerlik"},{u:"Dönüşüm Geometrisi"},{u:"Geometrik Cisimler",g:"hacim"}],
     9: [{u:"Sayılar",g:"kok"},{u:"Nicelikler ve Değişimler",g:"fonk"},{u:"Geometrik Şekiller",g:"ucgen"},{u:"Eşlik ve Benzerlik",g:"pisagor"},{u:"Algoritma ve Bilişim"},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
     10: [{u:"Geometrik Şekiller",g:"trig"},{u:"İstatistiksel Araştırma Süreci"},{u:"Sayılar",g:"ebob"},{u:"Nicelikler ve Değişimler",g:"fonk"},{u:"Sayma, Algoritma ve Bilişim"},{u:"Analitik İnceleme",g:"analitik"},{u:"Veriden Olasılığa",g:"olasi"}],
     11: [{u:"İstatistiksel Araştırma Süreci"},{u:"Geometrik Şekiller",g:"cokgen"},{u:"Nicelikler ve Değişimler (1)",g:"trig"},{u:"Nicelikler ve Değişimler (2)",g:"log"},{u:"Nicelikler ve Değişimler (3)",g:"fonk"}],
-    12: [{u:"Üstel ve Logaritmik Fonksiyonlar",g:"log"},{u:"Diziler",g:"dizi"},{u:"Trigonometri",g:"trig"},{u:"Türev",g:"turev"},{u:"İntegral",g:"integral"},{u:"Analitik Geometri",g:"analitik"}],
+    12: [{u:"Üstel ve Logaritmik Fonksiyonlar",g:"log"},{u:"Diziler",g:"dizi"},{u:"Trigonometri",g:"trig"},{u:"Dönüşümler"},{u:"Türev",g:"turev"},{u:"İntegral",g:"integral"},{u:"Analitik Geometri",g:"analitik"}],
   },
   fen: {
     3: ["Bilimsel Keşif Yolculuğu", "Canlılar Dünyasına Yolculuk", "Yer Bilimciler İş Başında", "Maddeyi Tanıyalım, Karıştırıp Ayıralım", "Hareketi Keşfediyorum", "Yaşamımızı Kolaylaştıran Elektrik", "Toprağı Tanıyorum, Tarımı Keşfediyorum", "Canlıların Yaşam Alanlarına Yolculuk"],
@@ -1019,6 +1043,223 @@ const BANK = {
    (hece bölme, büyük/küçük harf, noktalama, okuduğunu anlama mini metni vb.)
    hazırlanmıştır. */
 const UNIT_BANK = {
+"mat-12": {
+  /* 12. sınıf 2026-2027'de TYMM'ye geçmedi; 2018 Ortaöğretim Matematik
+     Programı'nın ünite adları kullanılır (12.1 – 12.7). */
+  "Üstel ve Logaritmik Fonksiyonlar": [
+    {ty:"mc",q:"log₂ 8 değeri kaçtır?",o:["3","2","4","8"],a:0},
+    {ty:"mc",q:"2ˣ = 32 denkleminde x kaçtır?",o:["5","4","6","16"],a:0},
+    {ty:"mc",q:"Üstel fonksiyonun ters fonksiyonu hangisidir?",o:["Logaritmik fonksiyon","Karesel fonksiyon","Doğrusal fonksiyon","Trigonometrik fonksiyon"],a:0},
+    {ty:"mc",q:"log(a·b) ifadesi neye eşittir?",o:["log a + log b","log a × log b","log a − log b","log a / log b"],a:0},
+    {ty:"mc",q:"Logaritma fonksiyonunun tanım kümesi hangisidir?",o:["Pozitif gerçek sayılar","Tüm gerçek sayılar","Tam sayılar","Negatif sayılar"],a:0},
+    {ty:"tf",q:"Tabanı 1'den büyük üstel fonksiyon artandır.",a:true},
+    {ty:"tf",q:"log 0 tanımlıdır.",a:false},
+    {ty:"fb",q:"e tabanına göre logaritmaya ____ logaritma denir.",a:"doğal"},
+    {ty:"fb",q:"log(a/b) ifadesi log a ____ log b biçiminde yazılır.",a:"eksi"}
+  ],
+  "Diziler": [
+    {ty:"mc",q:"İlk terimi 3, ortak farkı 4 olan aritmetik dizinin 10. terimi kaçtır?",o:["39","43","40","37"],a:0},
+    {ty:"mc",q:"Aritmetik dizide ardışık terimler arasındaki sabit farka ne denir?",o:["Ortak fark","Ortak çarpan","Genel terim","Limit"],a:0},
+    {ty:"mc",q:"İlk terimi 2, ortak çarpanı 3 olan geometrik dizinin 4. terimi kaçtır?",o:["54","24","18","81"],a:0},
+    {ty:"mc",q:"aₙ = 2n + 1 dizisinin 5. terimi kaçtır?",o:["11","10","12","9"],a:0},
+    {ty:"mc",q:"Bir dizinin terimlerini veren kurala ne denir?",o:["Genel terim","Ortak fark","Limit","Toplam"],a:0},
+    {ty:"tf",q:"Dizi, tanım kümesi doğal sayılar olan bir fonksiyondur.",a:true},
+    {ty:"tf",q:"Geometrik dizide ardışık terimler arasındaki fark sabittir.",a:false},
+    {ty:"fb",q:"Ardışık terimlerin oranı sabit olan diziye ____ dizi denir.",a:"geometrik"},
+    {ty:"fb",q:"Bir dizinin n. terimini veren ifadeye ____ terim denir.",a:"genel"}
+  ],
+  "Trigonometri": [
+    {ty:"mc",q:"sin(2x) ifadesi neye eşittir?",o:["2 sin x cos x","sin x + cos x","2 sin x","sin²x − cos²x"],a:0},
+    {ty:"mc",q:"cos(2x) ifadelerinden biri hangisidir?",o:["cos²x − sin²x","2 cos x","cos x + sin x","1 + sin x"],a:0},
+    {ty:"mc",q:"sin x = 0 denkleminin [0, 2π] aralığındaki çözümleri hangileridir?",o:["0, π, 2π","π/2","π/2, 3π/2","Yalnızca 0"],a:0},
+    {ty:"mc",q:"sin(a + b) ifadesi neye eşittir?",o:["sin a cos b + cos a sin b","sin a + sin b","cos a cos b","sin a sin b"],a:0},
+    {ty:"mc",q:"tan x fonksiyonunun periyodu kaçtır?",o:["π","2π","π/2","4π"],a:0},
+    {ty:"tf",q:"sin²x + cos²x = 1 eşitliği her x için doğrudur.",a:true},
+    {ty:"tf",q:"sin(2x) = 2 sin x eşitliği doğrudur.",a:false},
+    {ty:"fb",q:"sin x ve cos x fonksiyonlarının periyodu ____ dir.",a:"2π"},
+    {ty:"fb",q:"Trigonometrik denklemlerde tüm çözümleri veren ifadeye ____ çözüm denir.",a:"genel"}
+  ],
+  "Dönüşümler": [
+    {ty:"mc",q:"y = f(x) grafiğinin y = f(x) + 3 biçimine dönüşmesi hangi hareketi gösterir?",o:["Yukarı 3 birim öteleme","Aşağı 3 birim öteleme","Sağa 3 birim öteleme","Sola 3 birim öteleme"],a:0},
+    {ty:"mc",q:"y = f(x − 2) grafiği y = f(x) grafiğine göre nasıl konumlanır?",o:["Sağa 2 birim ötelenmiş","Sola 2 birim ötelenmiş","Yukarı 2 birim","Aşağı 2 birim"],a:0},
+    {ty:"mc",q:"y = −f(x) grafiği hangi eksene göre simetriktir?",o:["x eksenine","y eksenine","Orijine","y = x doğrusuna"],a:0},
+    {ty:"mc",q:"y = f(−x) grafiği hangi eksene göre simetriktir?",o:["y eksenine","x eksenine","Orijine","y = x doğrusuna"],a:0},
+    {ty:"mc",q:"Bir fonksiyonun ters fonksiyonunun grafiği hangi doğruya göre simetriktir?",o:["y = x","x ekseni","y ekseni","y = −x"],a:0},
+    {ty:"tf",q:"Öteleme dönüşümü grafiğin biçimini değiştirmez.",a:true},
+    {ty:"tf",q:"y = 2f(x) dönüşümü yatay öteleme yapar.",a:false},
+    {ty:"fb",q:"Grafiğin biçimini korurken yerini değiştiren dönüşüme ____ denir.",a:"öteleme"},
+    {ty:"fb",q:"y = f(x) ile ters fonksiyonu ____ doğrusuna göre simetriktir.",a:"y=x"}
+  ],
+  "Türev": [
+    {ty:"mc",q:"f(x) = x³ fonksiyonunun türevi hangisidir?",o:["3x²","x²","3x","x⁴/4"],a:0},
+    {ty:"mc",q:"f(x) = 5x² fonksiyonunun x = 2 noktasındaki türevi kaçtır?",o:["20","10","40","4"],a:0},
+    {ty:"mc",q:"Bir fonksiyonun türevi geometrik olarak neyi verir?",o:["Teğetin eğimini","Grafik altındaki alanı","Fonksiyonun değerini","Kesim noktasını"],a:0},
+    {ty:"mc",q:"Sabit bir fonksiyonun türevi kaçtır?",o:["0","1","Sabitin kendisi","Tanımsız"],a:0},
+    {ty:"mc",q:"Bir fonksiyonun yerel maksimum noktasında türevi nasıldır?",o:["Sıfırdır","Pozitiftir","Negatiftir","Tanımsızdır"],a:0},
+    {ty:"tf",q:"Türev, anlık değişim oranını verir.",a:true},
+    {ty:"tf",q:"Türevi pozitif olan fonksiyon azalandır.",a:false},
+    {ty:"fb",q:"Bir fonksiyonun bir noktadaki anlık değişim oranına ____ denir.",a:"türev"},
+    {ty:"fb",q:"Türevin sıfır olduğu noktalara ____ nokta denir.",a:"kritik"}
+  ],
+  "İntegral": [
+    {ty:"mc",q:"∫ 2x dx belirsiz integrali hangisidir?",o:["x² + C","2x² + C","x + C","2 + C"],a:0},
+    {ty:"mc",q:"∫ 3x² dx belirsiz integrali hangisidir?",o:["x³ + C","3x³ + C","6x + C","x²  + C"],a:0},
+    {ty:"mc",q:"Belirli integral geometrik olarak neyi verir?",o:["Grafik ile eksen arasındaki alanı","Teğetin eğimini","Fonksiyonun türevini","Kesim noktasını"],a:0},
+    {ty:"mc",q:"İntegral hangi işlemin ters işlemidir?",o:["Türev","Toplama","Çarpma","Limit"],a:0},
+    {ty:"mc",q:"Belirsiz integralde eklenen sabite ne denir?",o:["İntegral sabiti","Türev sabiti","Limit değeri","Kritik nokta"],a:0},
+    {ty:"tf",q:"Belirli integralin sonucu bir sayıdır.",a:true},
+    {ty:"tf",q:"Belirsiz integralin sonucu bir sayıdır.",a:false},
+    {ty:"fb",q:"Türevi verilen fonksiyonu bulma işlemine ____ denir.",a:"integral"},
+    {ty:"fb",q:"Belirsiz integral sonucuna eklenen sabit ____ ile gösterilir.",a:"C"}
+  ],
+  "Analitik Geometri": [
+    {ty:"mc",q:"Merkezi (0, 0), yarıçapı 5 olan çemberin denklemi hangisidir?",o:["x² + y² = 25","x² + y² = 5","x + y = 5","x² + y² = 10"],a:0},
+    {ty:"mc",q:"Merkezi (2, 3), yarıçapı 4 olan çemberin denklemi hangisidir?",o:["(x−2)² + (y−3)² = 16","(x+2)² + (y+3)² = 16","(x−2)² + (y−3)² = 4","x² + y² = 16"],a:0},
+    {ty:"mc",q:"x² + y² = 9 çemberinin yarıçapı kaçtır?",o:["3","9","81","1,5"],a:0},
+    {ty:"mc",q:"Bir çemberin merkezinden geçen kirişe ne denir?",o:["Çap","Yarıçap","Teğet","Kesen"],a:0},
+    {ty:"mc",q:"Bir çembere değen doğruya ne denir?",o:["Teğet","Kesen","Kiriş","Çap"],a:0},
+    {ty:"tf",q:"Çemberin denklemi merkez ve yarıçapla belirlenir.",a:true},
+    {ty:"tf",q:"Teğet doğru çemberi iki noktada keser.",a:false},
+    {ty:"fb",q:"Çemberi iki noktada kesen doğruya ____ denir.",a:"kesen"},
+    {ty:"fb",q:"Merkezi (a, b) ve yarıçapı r olan çemberin denklemi (x−a)² + (y−b)² = ____ dir.",a:"r²"}
+  ]
+},
+"mat-8": {
+  /* 8. sınıf 2026-2027'de TYMM'ye geçmedi; 2018 Matematik Dersi Öğretim
+     Programı'nın alt öğrenme alanı adları kullanılır (M.8.1.1 – M.8.5.1). */
+  "Çarpanlar ve Katlar": [
+    {ty:"mc",q:"EBOB(12, 18) kaçtır?",o:["6","36","3","2"],a:0},
+    {ty:"mc",q:"EKOK(4, 6) kaçtır?",o:["12","24","2","10"],a:0},
+    {ty:"mc",q:"36 sayısının asal çarpanlarına ayrılmış hâli hangisidir?",o:["2² × 3²","2 × 3","2³ × 3","6 × 6"],a:0},
+    {ty:"mc",q:"Aralarında asal iki sayının EBOB'u kaçtır?",o:["1","0","2","Sayıların çarpımı"],a:0},
+    {ty:"mc",q:"a ve b için EBOB × EKOK çarpımı neye eşittir?",o:["a × b","a + b","a − b","a / b"],a:0},
+    {ty:"tf",q:"1 sayısı asal sayı değildir.",a:true},
+    {ty:"tf",q:"EKOK her zaman EBOB'dan küçüktür.",a:false},
+    {ty:"fb",q:"İki sayıyı birlikte bölen en büyük sayıya ____ denir.",a:"EBOB"},
+    {ty:"fb",q:"Yalnızca 1 ve kendisine tam bölünen sayılara ____ sayı denir.",a:"asal"}
+  ],
+  "Üslü İfadeler": [
+    {ty:"mc",q:"2³ × 2⁴ işleminin sonucu hangisidir?",o:["2⁷","2¹²","4⁷","2¹"],a:0},
+    {ty:"mc",q:"a⁰ ifadesinin değeri nedir (a ≠ 0)?",o:["1","0","a","Tanımsız"],a:0},
+    {ty:"mc",q:"2⁻² ifadesinin değeri kaçtır?",o:["1/4","−4","4","−1/4"],a:0},
+    {ty:"mc",q:"3.500.000 sayısının bilimsel gösterimi hangisidir?",o:["3,5 × 10⁶","35 × 10⁵","3,5 × 10⁵","0,35 × 10⁷"],a:0},
+    {ty:"mc",q:"(−2)⁴ ifadesinin değeri kaçtır?",o:["16","−16","8","−8"],a:0},
+    {ty:"tf",q:"Negatif bir sayının çift kuvveti pozitiftir.",a:true},
+    {ty:"tf",q:"2³ ifadesi 2 × 3 anlamındadır.",a:false},
+    {ty:"fb",q:"Çok büyük ve çok küçük sayıları yazmak için kullanılan gösterime ____ gösterim denir.",a:"bilimsel"},
+    {ty:"fb",q:"Aynı tabanlı üslü sayılar çarpılırken üsler ____.",a:"toplanır"}
+  ],
+  "Kareköklü İfadeler": [
+    {ty:"mc",q:"√144 değeri kaçtır?",o:["12","14","72","24"],a:0},
+    {ty:"mc",q:"√8 ifadesinin en basit hâli hangisidir?",o:["2√2","4√2","2√4","8"],a:0},
+    {ty:"mc",q:"√2 sayısı hangi sayı kümesindedir?",o:["İrrasyonel sayılar","Doğal sayılar","Tam sayılar","Rasyonel sayılar"],a:0},
+    {ty:"mc",q:"2√3 + 5√3 işleminin sonucu hangisidir?",o:["7√3","7√6","10√3","7"],a:0},
+    {ty:"mc",q:"√9 × √4 işleminin sonucu kaçtır?",o:["6","36","13","5"],a:0},
+    {ty:"tf",q:"Tam kare sayıların karekökü doğal sayıdır.",a:true},
+    {ty:"tf",q:"√(a + b) = √a + √b eşitliği her zaman doğrudur.",a:false},
+    {ty:"fb",q:"Karesi verilen sayıya eşit olan pozitif sayıya o sayının ____ denir.",a:"karekökü"},
+    {ty:"fb",q:"Rasyonel olmayan gerçek sayılara ____ sayılar denir.",a:"irrasyonel"}
+  ],
+  "Veri Analizi": [
+    {ty:"mc",q:"Verilerin merkezî eğilimini gösteren ölçülerden biri hangisidir?",o:["Medyan","Açıklık","Standart sapma","Sütun sayısı"],a:0},
+    {ty:"mc",q:"Verileri yüzdelik paylarla göstermek için hangi grafik uygundur?",o:["Daire grafiği","Histogram","Çizgi grafiği","Serpme grafiği"],a:0},
+    {ty:"mc",q:"4, 7, 7, 10, 12 veri grubunun modu kaçtır?",o:["7","10","8","12"],a:0},
+    {ty:"mc",q:"Bir veri grubunda en büyük ile en küçük değerin farkına ne denir?",o:["Açıklık","Mod","Medyan","Ortalama"],a:0},
+    {ty:"mc",q:"Aritmetik ortalaması 8 olan 6 verinin toplamı kaçtır?",o:["48","14","8","36"],a:0},
+    {ty:"tf",q:"Medyan bulunurken veriler önce sıralanır.",a:true},
+    {ty:"tf",q:"Bir veri grubunda mod bulunmak zorundadır.",a:false},
+    {ty:"fb",q:"Sıralanmış veri grubunun ortasındaki değere ____ denir.",a:"medyan"},
+    {ty:"fb",q:"Verilerin toplamının veri sayısına bölümüne ____ ortalama denir.",a:"aritmetik"}
+  ],
+  "Basit Olayların Olma Olasılığı": [
+    {ty:"mc",q:"Bir zar atıldığında 3 gelmesinin olasılığı kaçtır?",o:["1/6","1/3","1/2","3/6"],a:0},
+    {ty:"mc",q:"Bir madenî para atıldığında tura gelme olasılığı kaçtır?",o:["1/2","1/4","1","0"],a:0},
+    {ty:"mc",q:"Kesin bir olayın olasılığı kaçtır?",o:["1","0","0,5","2"],a:0},
+    {ty:"mc",q:"Bir torbada 3 kırmızı, 5 mavi top varsa mavi çekme olasılığı kaçtır?",o:["5/8","3/8","5/3","8/5"],a:0},
+    {ty:"mc",q:"Bir olayın olma ve olmama olasılıkları toplamı kaçtır?",o:["1","0","2","0,5"],a:0},
+    {ty:"tf",q:"Bir olayın olasılığı 0 ile 1 arasındadır.",a:true},
+    {ty:"tf",q:"Olasılık değeri 1'den büyük olabilir.",a:false},
+    {ty:"fb",q:"Gerçekleşmesi imkânsız olayın olasılığı ____ dır.",a:"0"},
+    {ty:"fb",q:"Bir deneyde olası tüm sonuçların kümesine ____ uzayı denir.",a:"örnek"}
+  ],
+  "Cebirsel İfadeler ve Özdeşlikler": [
+    {ty:"mc",q:"(x + 3)² açılımı hangisidir?",o:["x² + 6x + 9","x² + 9","x² + 3x + 9","x² + 6x + 6"],a:0},
+    {ty:"mc",q:"x² − 25 ifadesinin çarpanlara ayrılmış hâli hangisidir?",o:["(x − 5)(x + 5)","(x − 5)²","(x + 5)²","x(x − 25)"],a:0},
+    {ty:"mc",q:"(a − b)² açılımı hangisidir?",o:["a² − 2ab + b²","a² − b²","a² + 2ab + b²","a² − ab + b²"],a:0},
+    {ty:"mc",q:"3x + 6 ifadesinin çarpanlara ayrılmış hâli hangisidir?",o:["3(x + 2)","3x(2)","x(3 + 6)","3(x + 6)"],a:0},
+    {ty:"mc",q:"x = 4 için 2x² − 3 ifadesinin değeri kaçtır?",o:["29","13","61","5"],a:0},
+    {ty:"tf",q:"İki kare farkı (a − b)(a + b) biçiminde çarpanlara ayrılır.",a:true},
+    {ty:"tf",q:"(x + y)² ile x² + y² aynı ifadedir.",a:false},
+    {ty:"fb",q:"Her değer için doğru olan eşitliklere ____ denir.",a:"özdeşlik"},
+    {ty:"fb",q:"a² − b² ifadesine iki ____ farkı denir.",a:"kare"}
+  ],
+  "Doğrusal Denklemler": [
+    {ty:"mc",q:"3x − 7 = 8 denkleminde x kaçtır?",o:["5","3","15","1"],a:0},
+    {ty:"mc",q:"A(1, 2) ve B(3, 6) noktalarından geçen doğrunun eğimi kaçtır?",o:["2","4","1/2","3"],a:0},
+    {ty:"mc",q:"y = 2x + 5 doğrusunun y eksenini kestiği nokta hangisidir?",o:["(0, 5)","(5, 0)","(0, 2)","(2, 0)"],a:0},
+    {ty:"mc",q:"x eksenine paralel bir doğrunun eğimi kaçtır?",o:["0","1","Tanımsız","−1"],a:0},
+    {ty:"mc",q:"Bir doğrunun eğimi neyi gösterir?",o:["Dikey değişimin yatay değişime oranını","Doğrunun uzunluğunu","Doğrunun rengini","Kesim noktasını"],a:0},
+    {ty:"tf",q:"Paralel doğruların eğimleri eşittir.",a:true},
+    {ty:"tf",q:"y eksenine paralel doğrunun eğimi sıfırdır.",a:false},
+    {ty:"fb",q:"Bir doğrunun dikey değişiminin yatay değişimine oranına ____ denir.",a:"eğim"},
+    {ty:"fb",q:"Dik koordinat sisteminde eksenlerin kesiştiği noktaya ____ denir.",a:"orijin"}
+  ],
+  "Eşitsizlikler": [
+    {ty:"mc",q:"x + 5 > 12 eşitsizliğinin çözümü hangisidir?",o:["x > 7","x < 7","x > 17","x < 17"],a:0},
+    {ty:"mc",q:"2x ≤ 10 eşitsizliğinin çözümü hangisidir?",o:["x ≤ 5","x ≥ 5","x ≤ 20","x ≥ 20"],a:0},
+    {ty:"mc",q:"−3x > 9 eşitsizliğinin çözümü hangisidir?",o:["x < −3","x > −3","x < 3","x > 3"],a:0},
+    {ty:"mc",q:"Eşitsizlikte her iki taraf negatif bir sayıyla çarpılırsa ne olur?",o:["Eşitsizlik yönü değişir","Eşitsizlik bozulmaz","Sonuç sıfırlanır","Çözüm kalmaz"],a:0},
+    {ty:"mc",q:"x ≥ 2 eşitsizliğinin sayı doğrusunda gösteriminde 2 noktası nasıl işaretlenir?",o:["Dolu nokta","Boş nokta","İşaretlenmez","Çift nokta"],a:0},
+    {ty:"tf",q:"Eşitsizliğin her iki tarafına aynı sayı eklenirse yön değişmez.",a:true},
+    {ty:"tf",q:"Eşitsizliklerin tek bir çözümü vardır.",a:false},
+    {ty:"fb",q:"\">\" sembolü ____ anlamına gelir.",a:"büyüktür"},
+    {ty:"fb",q:"Eşitsizliği sağlayan değerlerin oluşturduğu kümeye ____ kümesi denir.",a:"çözüm"}
+  ],
+  "Üçgenler": [
+    {ty:"mc",q:"Dik kenarları 9 cm ve 12 cm olan dik üçgenin hipotenüsü kaç cm'dir?",o:["15","21","20","18"],a:0},
+    {ty:"mc",q:"Bir üçgenin iki kenarı 6 cm ve 10 cm ise üçüncü kenar hangi aralıkta olabilir?",o:["4 < x < 16","6 < x < 10","0 < x < 6","10 < x < 60"],a:0},
+    {ty:"mc",q:"Bir üçgende en büyük açının karşısındaki kenar için hangisi doğrudur?",o:["En uzun kenardır","En kısa kenardır","Orta uzunluktadır","Belirlenemez"],a:0},
+    {ty:"mc",q:"Bir üçgende bir köşeyi karşı kenarın orta noktasına birleştiren doğru parçasına ne denir?",o:["Kenarortay","Açıortay","Yükseklik","Köşegen"],a:0},
+    {ty:"mc",q:"Pisagor bağıntısı hangi üçgenlerde geçerlidir?",o:["Dik üçgenlerde","Bütün üçgenlerde","Eşkenar üçgenlerde","Geniş açılı üçgenlerde"],a:0},
+    {ty:"tf",q:"Üçgen eşitsizliğine göre iki kenarın toplamı üçüncü kenardan büyüktür.",a:true},
+    {ty:"tf",q:"Bir üçgende iki dik açı bulunabilir.",a:false},
+    {ty:"fb",q:"Dik üçgende dik açının karşısındaki kenara ____ denir.",a:"hipotenüs"},
+    {ty:"fb",q:"Bir köşeden karşı kenara indirilen dik doğru parçasına ____ denir.",a:"yükseklik"}
+  ],
+  "Eşlik ve Benzerlik": [
+    {ty:"mc",q:"İki üçgenin benzer olması için hangisi yeterlidir?",o:["İki açısının eşit olması","Bir kenarının eşit olması","Alanlarının eşit olması","Çevrelerinin eşit olması"],a:0},
+    {ty:"mc",q:"Benzer iki üçgende karşılıklı kenarlar için hangisi doğrudur?",o:["Oranları eşittir","Uzunlukları eşittir","Toplamları eşittir","Farkları eşittir"],a:0},
+    {ty:"mc",q:"Benzerlik oranı 3 olan iki üçgenin alanları oranı kaçtır?",o:["9","3","6","1/3"],a:0},
+    {ty:"mc",q:"Eş üçgenler için hangisi doğrudur?",o:["Karşılıklı kenar ve açıları eşittir","Yalnızca açıları eşittir","Yalnızca kenarları orantılıdır","Alanları farklıdır"],a:0},
+    {ty:"mc",q:"Benzerlik oranı 1 olan iki şekil nasıl adlandırılır?",o:["Eş şekiller","Benzer olmayan şekiller","Simetrik şekiller","Ters şekiller"],a:0},
+    {ty:"tf",q:"Eş şekiller aynı zamanda benzerdir.",a:true},
+    {ty:"tf",q:"Benzer üçgenlerin alanları her zaman eşittir.",a:false},
+    {ty:"fb",q:"Benzer şekillerde karşılıklı kenarların oranına ____ oranı denir.",a:"benzerlik"},
+    {ty:"fb",q:"Benzerlik oranı k olan şekillerin alanları oranı k'nin ____ dir.",a:"karesi"}
+  ],
+  "Dönüşüm Geometrisi": [
+    {ty:"mc",q:"Bir şeklin bir doğruya göre simetriğini almaya ne denir?",o:["Yansıma","Öteleme","Dönme","Homoteti"],a:0},
+    {ty:"mc",q:"Bir şeklin belirli bir yönde belirli miktarda kaydırılmasına ne denir?",o:["Öteleme","Yansıma","Dönme","Simetri"],a:0},
+    {ty:"mc",q:"A(2, 3) noktasının y eksenine göre simetriği hangisidir?",o:["(−2, 3)","(2, −3)","(−2, −3)","(3, 2)"],a:0},
+    {ty:"mc",q:"A(4, 1) noktasının x eksenine göre simetriği hangisidir?",o:["(4, −1)","(−4, 1)","(−4, −1)","(1, 4)"],a:0},
+    {ty:"mc",q:"Dönme dönüşümünde şeklin döndüğü sabit noktaya ne denir?",o:["Dönme merkezi","Simetri doğrusu","Öteleme vektörü","Orijin dışı nokta"],a:0},
+    {ty:"tf",q:"Öteleme ve yansımada şeklin boyutu değişmez.",a:true},
+    {ty:"tf",q:"Yansıma şeklin alanını değiştirir.",a:false},
+    {ty:"fb",q:"Bir şekli belirli bir yön ve miktarda kaydırma dönüşümüne ____ denir.",a:"öteleme"},
+    {ty:"fb",q:"Şeklin biçim ve boyutunu koruyan dönüşümlere ____ dönüşüm denir.",a:"eş"}
+  ],
+  "Geometrik Cisimler": [
+    {ty:"mc",q:"Yarıçapı 3 cm, yüksekliği 5 cm olan dik dairesel silindirin hacmi kaç π cm³'tür?",o:["45","30","15","75"],a:0},
+    {ty:"mc",q:"Dik dairesel silindirin yan yüzey açınımı hangi şekildir?",o:["Dikdörtgen","Üçgen","Daire","Yamuk"],a:0},
+    {ty:"mc",q:"Dik piramidin yan yüzleri hangi şekildedir?",o:["Üçgen","Dikdörtgen","Daire","Yamuk"],a:0},
+    {ty:"mc",q:"Boyutları 3 cm, 4 cm ve 5 cm olan dikdörtgenler prizmasının hacmi kaç cm³'tür?",o:["60","12","47","24"],a:0},
+    {ty:"mc",q:"Koninin taban şekli hangisidir?",o:["Daire","Kare","Üçgen","Altıgen"],a:0},
+    {ty:"tf",q:"Silindirin hacmi taban alanı ile yüksekliğin çarpımıdır.",a:true},
+    {ty:"tf",q:"Piramidin bütün yüzleri dikdörtgendir.",a:false},
+    {ty:"fb",q:"Bir cismin yüzeylerinin düzleme açılmış hâline ____ denir.",a:"açınım"},
+    {ty:"fb",q:"Hacim ölçüsünün birimi ____ ile gösterilir.",a:"cm³"}
+  ]
+},
 "mat-11": {
   /* Kapsam: İki Nicel Değişkenli Veriler, Başkaları Tarafından Oluşturulan
      Verileri İnceleme */
@@ -4037,7 +4278,7 @@ const UNIT_BANK = {
   ]
 },
 "tde-12": {
-  "Edebiyat ve Felsefe – Psikoloji": [
+  "Giriş": [
     {ty:"mc",q:"Bir edebî eserde kahramanların iç dünyasının, bilinçaltının ve ruhsal çözümlemelerinin derinlemesine işlenmesi, edebiyatın hangi bilim dalıyla ilişkisini gösterir?",o:["Psikoloji","Tarih","Coğrafya","Kimya"],a:0},
     {ty:"mc",q:"\"Dokuzuncu Hariciye Koğuşu\" adlı romanında kahramanının iç dünyasını, hastalığını ve ruhsal çatışmalarını psikolojik tahlillerle anlatan yazar kimdir?",o:["Peyami Safa","Ahmet Hamdi Tanpınar","Oğuz Atay","Yusuf Atılgan"],a:0},
     {ty:"mc",q:"Varoluşçu felsefenin izlerini taşıyan, bireyin yabancılaşmasını ve bunalımını ele alan \"Tutunamayanlar\" adlı romanın yazarı kimdir?",o:["Oğuz Atay","Yusuf Atılgan","Adalet Ağaoğlu","Orhan Pamuk"],a:0},
@@ -4045,7 +4286,7 @@ const UNIT_BANK = {
     {ty:"tf",q:"Varoluşçuluk (egzistansiyalizm), bireyin özgürlüğünü, seçimlerini ve yabancılaşmasını sorgulayan bir felsefi akımdır ve Cumhuriyet sonrası bazı Türk romanlarını etkilemiştir.",a:true},
     {ty:"fb",q:"Bireyin toplum içindeki yalnızlığını ve yabancılaşmasını ele alan \"Aylak Adam\" adlı romanın yazarı ____'dır.",a:"Yusuf Atılgan"}
   ],
-  "1960 Sonrası Hikâye": [
+  "Hikâye": [
     {ty:"mc",q:"1960 sonrası Türk hikâyeciliğinde bireyin iç dünyasını, yalnızlığını ve varoluşsal bunalımlarını yoğun bir dille ele alan, \"Kaçkınlar\" gibi eserleriyle tanınan yazar kimdir?",o:["Ferit Edgü","Necati Cumalı","Haldun Taner","Aziz Nesin"],a:0},
     {ty:"mc",q:"Toplumcu gerçekçi çizgide, kadın sorunlarını ve toplumsal değişimi işleyen \"Parasız Yatılı\" adlı hikâye kitabının yazarı kimdir?",o:["Füruzan","Sevgi Soysal","Adalet Ağaoğlu","Leyla Erbil"],a:0},
     {ty:"mc",q:"\"Göçmüş Kediler Bahçesi\" ve \"Uzun Sürmüş Bir Günün Akşamı\" gibi eserleriyle tanınan, felsefi içerikli ve deneysel anlatım teknikleri kullanan yazar kimdir?",o:["Bilge Karasu","Ferit Edgü","Adalet Ağaoğlu","Leyla Erbil"],a:0},
@@ -4053,7 +4294,7 @@ const UNIT_BANK = {
     {ty:"tf",q:"1960 sonrası hikâyede yalnızca kırsal yaşam işlenmiş, kentli bireyin sorunlarına hiç yer verilmemiştir.",a:false},
     {ty:"fb",q:"\"Yaşamak Hüzünlü Bir Şeydir Tek Başına\" adlı eseriyle de tanınan, kadın kimliğini ve toplumsal cinsiyet sorunlarını eserlerinde işleyen yazar ____'dır.",a:"Sevgi Soysal"}
   ],
-  "Cumhuriyet Sonrası Şiir": [
+  "Şiir": [
     {ty:"mc",q:"Şiirde vezin, kafiye ve süslü söyleyişi reddederek sade, günlük konuşma diline yakın bir anlayışla şiir yazan \"Garip\" akımının kurucuları arasında aşağıdakilerden hangisi yer almaz?",o:["Necip Fazıl Kısakürek","Orhan Veli Kanık","Oktay Rifat","Melih Cevdet Anday"],a:0},
     {ty:"mc",q:"Türk şiirinde serbest nazmın ve toplumcu içerikli şiirin en önemli temsilcilerinden biri olan, \"Kuvayi Milliye Destanı\" gibi eserleriyle tanınan şair kimdir?",o:["Nazım Hikmet Ran","Ahmet Haşim","Yahya Kemal Beyatlı","Necip Fazıl Kısakürek"],a:0},
     {ty:"mc",q:"1950'li yıllarda ortaya çıkan, kapalı ve soyut bir anlatımı, alışılmamış bağdaştırmaları benimseyen; Turgut Uyar, Cemal Süreya, Edip Cansever gibi şairlerin içinde yer aldığı şiir akımı aşağıdakilerden hangisidir?",o:["İkinci Yeni","Garip (Birinci Yeni)","Beş Hececiler","Fecriati"],a:0},
@@ -4061,15 +4302,14 @@ const UNIT_BANK = {
     {ty:"tf",q:"İkinci Yeni şairleri, açık ve anlaşılır bir dille, toplumsal mesaj vermeyi ön planda tutan şiirler yazmıştır.",a:false},
     {ty:"fb",q:"\"Sisler Bulvarı\" ve \"Üvercinka\" gibi şiir kitaplarıyla tanınan, İkinci Yeni şiirinin önemli temsilcilerinden biri olan şair ____'dır.",a:"Cemal Süreya"}
   ],
-  "Dünya Edebiyatında Roman": [
+  "Roman": [
     {ty:"mc",q:"\"Suç ve Ceza\" adlı romanıyla insan psikolojisini derinlemesine işleyen, Rus edebiyatının en önemli yazarlarından biri kimdir?",o:["Fyodor Dostoyevski","Lev Tolstoy","Anton Çehov","Maksim Gorki"],a:0},
     {ty:"mc",q:"Fransız realist edebiyatının önemli temsilcilerinden olan ve \"Goriot Baba\", \"Vadideki Zambak\" gibi eserleriyle \"İnsanlık Komedyası\" adlı geniş bir roman dizisi oluşturan yazar kimdir?",o:["Honore de Balzac","Victor Hugo","Gustave Flaubert","Emile Zola"],a:0},
     {ty:"mc",q:"Toplumsal ve biyolojik determinizmi esas alan, kalıtım ve çevrenin insan davranışları üzerindeki etkisini bilimsel bir yaklaşımla ele alan edebiyat akımı aşağıdakilerden hangisidir?",o:["Natüralizm","Romantizm","Klasisizm","Sürrealizm"],a:0},
     {ty:"tf",q:"\"Dönüşüm\" adlı eseriyle tanınan Franz Kafka, modern insanın yabancılaşmasını ve bunalımını sembolik bir anlatımla işlemiştir.",a:true},
     {ty:"tf",q:"Realizm akımı, olayları ve karakterleri olduğundan daha güzel ve idealize edilmiş biçimde göstermeyi amaçlar.",a:false},
     {ty:"fb",q:"\"Savaş ve Barış\" ile \"Anna Karenina\" gibi eserleriyle tanınan Rus realist yazar ____'dır.",a:"Lev Tolstoy"}
-  ],
-  "1950 Sonrası Türk Romanı": [
+  ,
     {ty:"mc",q:"Çukurova'yı, ağalık düzenini ve köylülerin yaşamını epik bir dille anlatan \"İnce Memed\" adlı romanın yazarı kimdir?",o:["Yaşar Kemal","Kemal Tahir","Orhan Kemal","Fakir Baykurt"],a:0},
     {ty:"mc",q:"Toplumcu gerçekçi çizgide eserler veren, işçi sınıfının ve kentli yoksul kesimin yaşamını konu alan \"Bereketli Topraklar Üzerinde\" adlı romanın yazarı kimdir?",o:["Orhan Kemal","Kemal Tahir","Yaşar Kemal","Necati Cumalı"],a:0},
     {ty:"mc",q:"Postmodern anlatım tekniklerini kullanan, \"Benim Adım Kırmızı\" ve \"Kar\" gibi eserleriyle uluslararası üne kavuşan ve Nobel Edebiyat Ödülü'nü kazanan Türk yazar kimdir?",o:["Orhan Pamuk","Yaşar Kemal","Ahmet Altan","Elif Şafak"],a:0},
@@ -5837,14 +6077,186 @@ const UNIT_BANK = {
 {ty:"tf",q:"PET (Pozitron Emisyon Tomografisi) görüntüleme yönteminde radyoaktif madde kullanımına gerek yoktur.",a:false},
 {ty:"fb",q:"Belirli bir sıcaklığın altında elektriksel direnci tamamen sıfıra düşen malzemelere ____ denir.",a:"süper iletken"}
 ] },
-"mat-4": { "Veri Toplama ve Grafik": [
-{ty:"mc",q:"Anket, gözlem gibi yöntemlerle elde edilen bilgilere ne ad verilir?",o:["Veri","Grafik","Sıklık tablosu","Ortalama"],a:0},
-{ty:"mc",q:"Bir sınıftaki öğrencilerin en sevdiği spor dallarını karşılaştırmalı olarak göstermek için aşağıdakilerden hangisi en uygundur?",o:["Sütun grafiği","Sadece sözlü anlatım","Sayı doğrusu","Zaman çizelgesi"],a:0},
-{ty:"mc",q:"Bir sütun grafiğinde en uzun sütun neyi gösterir?",o:["En çok tekrar eden / en fazla sayıya sahip veriyi","En az tekrar eden veriyi","Ortalama değeri","Verilerin toplamının yarısını"],a:0},
-{ty:"tf",q:"Veri toplarken elde edilen bilgiler düzenli biçimde bir tabloya yazılabilir.",a:true},
-{ty:"tf",q:"Bir sütun grafiğinde tüm sütunların boyu aynıysa bu, tüm verilerin birbirinden farklı olduğu anlamına gelir.",a:false},
-{ty:"fb",q:"Toplanan verilerin sayılarak çetele işaretleriyle gösterildiği tabloya ____ tablosu denir.",a:"sıklık (çetele)"}
-] },
+"mat-4": {
+  /* 4. sınıf 2026-2027'de TYMM'ye geçmedi; 2018 Matematik Dersi Öğretim
+     Programı'nın alt öğrenme alanı adları kullanılır (M.4.1.1 – M.4.4.1). */
+  "Doğal Sayılar": [
+    {ty:"mc",q:"48.756 sayısının binler basamağındaki rakam kaçtır?",o:["8","4","7","5"],a:0},
+    {ty:"mc",q:"Beş basamaklı en küçük doğal sayı hangisidir?",o:["10.000","99.999","11.111","10.001"],a:0},
+    {ty:"mc",q:"3.507 sayısının okunuşu hangisidir?",o:["Üç bin beş yüz yedi","Üç yüz elli yedi","Otuz beş bin yedi","Üç bin elli yedi"],a:0},
+    {ty:"mc",q:"7.284 sayısının çözümlenmiş biçimi hangisidir?",o:["7000 + 200 + 80 + 4","7 + 2 + 8 + 4","700 + 20 + 8 + 4","70000 + 2000 + 800 + 40"],a:0},
+    {ty:"mc",q:"En yakın yüzlüğe yuvarlandığında 400 olan sayı hangisidir?",o:["386","345","451","299"],a:0},
+    {ty:"tf",q:"Dört basamaklı en büyük doğal sayı 9.999'dur.",a:true},
+    {ty:"tf",q:"Bir sayıda basamak sayısı arttıkça sayı küçülür.",a:false},
+    {ty:"fb",q:"Bir rakamın bulunduğu basamağa göre kazandığı değere ____ değeri denir.",a:"basamak"},
+    {ty:"fb",q:"Beş basamaklı en büyük doğal sayı ____ dur.",a:"99999"}
+  ],
+  "Doğal Sayılarla Toplama İşlemi": [
+    {ty:"mc",q:"2.456 + 3.178 işleminin sonucu kaçtır?",o:["5.634","5.624","5.534","6.634"],a:0},
+    {ty:"mc",q:"Toplama işleminde toplananların yeri değiştiğinde sonuç nasıl olur?",o:["Değişmez","Büyür","Küçülür","Sıfır olur"],a:0},
+    {ty:"mc",q:"Bir toplama işleminin sonucuna ne denir?",o:["Toplam","Fark","Çarpım","Bölüm"],a:0},
+    {ty:"mc",q:"1.250 + 750 işleminin sonucu kaçtır?",o:["2.000","1.900","2.100","1.950"],a:0},
+    {ty:"mc",q:"Toplama işlemini zihinden kolay yapmak için hangi yol kullanılabilir?",o:["Sayıları yuvarlayıp tahmin etmek","Rastgele saymak","Sayıları unutmak","Sonucu değiştirmek"],a:0},
+    {ty:"tf",q:"Toplama işleminde birler basamağından başlanır.",a:true},
+    {ty:"tf",q:"Bir sayıya sıfır eklendiğinde sayı değişir.",a:false},
+    {ty:"fb",q:"Toplama işleminin sonucuna ____ denir.",a:"toplam"},
+    {ty:"fb",q:"Toplananların yerinin değişmesiyle sonucun değişmemesine ____ özelliği denir.",a:"değişme"}
+  ],
+  "Doğal Sayılarla Çıkarma İşlemi": [
+    {ty:"mc",q:"5.000 − 2.365 işleminin sonucu kaçtır?",o:["2.635","2.735","2.645","3.635"],a:0},
+    {ty:"mc",q:"Çıkarma işleminde çıkarılan sayıya ne denir?",o:["Çıkan","Eksilen","Fark","Toplam"],a:0},
+    {ty:"mc",q:"Bir çıkarma işleminin sonucuna ne denir?",o:["Fark","Toplam","Çarpım","Bölüm"],a:0},
+    {ty:"mc",q:"1.800 − 900 işleminin sonucu kaçtır?",o:["900","800","1.000","700"],a:0},
+    {ty:"mc",q:"Çıkarma işleminin doğruluğu nasıl kontrol edilir?",o:["Fark ile çıkan toplanır","İki sayı çarpılır","Fark ikiye bölünür","Eksilen ikiye bölünür"],a:0},
+    {ty:"tf",q:"Çıkarma işleminde eksilenden çıkan çıkarılır.",a:true},
+    {ty:"tf",q:"Çıkarma işleminde sayıların yeri değiştirilebilir.",a:false},
+    {ty:"fb",q:"Çıkarma işleminin sonucuna ____ denir.",a:"fark"},
+    {ty:"fb",q:"Çıkarma işleminde kendisinden çıkarılan sayıya ____ denir.",a:"eksilen"}
+  ],
+  "Doğal Sayılarla Çarpma İşlemi": [
+    {ty:"mc",q:"24 × 15 işleminin sonucu kaçtır?",o:["360","340","380","350"],a:0},
+    {ty:"mc",q:"Bir sayıyı 10 ile çarparken ne yapılır?",o:["Sağına bir sıfır yazılır","Sağından bir sıfır silinir","İkiye bölünür","Bir eklenir"],a:0},
+    {ty:"mc",q:"Çarpma işleminin sonucuna ne denir?",o:["Çarpım","Toplam","Fark","Bölüm"],a:0},
+    {ty:"mc",q:"Bir sayıyı 1 ile çarptığımızda sonuç ne olur?",o:["Sayının kendisi","Sıfır","Bir","İki katı"],a:0},
+    {ty:"mc",q:"Çarpma işlemi hangi işlemin kısa yoludur?",o:["Toplama","Çıkarma","Bölme","Ölçme"],a:0},
+    {ty:"tf",q:"Çarpanların yeri değiştiğinde çarpım değişmez.",a:true},
+    {ty:"tf",q:"Bir sayıyı sıfır ile çarparsak sonuç sayının kendisidir.",a:false},
+    {ty:"fb",q:"Çarpma işleminde çarpılan sayılara ____ denir.",a:"çarpan"},
+    {ty:"fb",q:"Bir sayıyı 100 ile çarparken sağına ____ sıfır yazılır.",a:"iki"}
+  ],
+  "Doğal Sayılarla Bölme İşlemi": [
+    {ty:"mc",q:"144 ÷ 12 işleminin sonucu kaçtır?",o:["12","14","11","13"],a:0},
+    {ty:"mc",q:"Bölme işleminde bölünen sayıya ne denir?",o:["Bölünen","Bölen","Bölüm","Kalan"],a:0},
+    {ty:"mc",q:"37 ÷ 5 işleminde kalan kaçtır?",o:["2","1","3","7"],a:0},
+    {ty:"mc",q:"Bölme işleminde kalan, bölenden nasıl olmalıdır?",o:["Küçük","Büyük","Eşit","Sıfır"],a:0},
+    {ty:"mc",q:"Bölme işleminin doğruluğu nasıl kontrol edilir?",o:["Bölen × bölüm + kalan = bölünen","Bölen + bölüm = bölünen","Bölünen × bölen = bölüm","Kalan × bölen = bölünen"],a:0},
+    {ty:"tf",q:"Bir sayı sıfıra bölünemez.",a:true},
+    {ty:"tf",q:"Bölme işleminde bölen ile bölünenin yeri değiştirilebilir.",a:false},
+    {ty:"fb",q:"Bölme işleminin sonucuna ____ denir.",a:"bölüm"},
+    {ty:"fb",q:"Bölme işleminde bölünenden artan miktara ____ denir.",a:"kalan"}
+  ],
+  "Kesirler": [
+    {ty:"mc",q:"Bir bütün 8 eş parçaya ayrılıp 3 parçası boyandığında boyalı kısım kesirle nasıl gösterilir?",o:["3/8","8/3","3/5","5/8"],a:0},
+    {ty:"mc",q:"Payı paydasından küçük olan kesirlere ne denir?",o:["Basit kesir","Bileşik kesir","Tam sayılı kesir","Birim kesir"],a:0},
+    {ty:"mc",q:"Payı 1 olan kesirlere ne denir?",o:["Birim kesir","Basit kesir","Bileşik kesir","Denk kesir"],a:0},
+    {ty:"mc",q:"2/3 ile 4/6 kesirleri arasındaki ilişki nedir?",o:["Denktir","2/3 büyüktür","4/6 büyüktür","Karşılaştırılamaz"],a:0},
+    {ty:"mc",q:"1 tam 3/4 sayısının bileşik kesir olarak yazılışı hangisidir?",o:["7/4","4/7","3/4","4/3"],a:0},
+    {ty:"tf",q:"Aynı paydalı kesirlerde payı büyük olan kesir daha büyüktür.",a:true},
+    {ty:"tf",q:"Basit kesirlerde pay paydadan büyüktür.",a:false},
+    {ty:"fb",q:"Bir kesirde alttaki sayıya ____ denir.",a:"payda"},
+    {ty:"fb",q:"Payı paydasından büyük olan kesirlere ____ kesir denir.",a:"bileşik"}
+  ],
+  "Kesirlerle İşlemler": [
+    {ty:"mc",q:"2/7 + 3/7 işleminin sonucu kaçtır?",o:["5/7","5/14","6/7","1/7"],a:0},
+    {ty:"mc",q:"5/9 − 2/9 işleminin sonucu kaçtır?",o:["3/9","7/9","3/18","2/9"],a:0},
+    {ty:"mc",q:"Aynı paydalı kesirler toplanırken ne yapılır?",o:["Paylar toplanır, payda aynı kalır","Paylar ve paydalar toplanır","Paydalar toplanır","Paylar çarpılır"],a:0},
+    {ty:"mc",q:"3/5 kesrinin 2 katı kaçtır?",o:["6/5","3/10","5/3","6/10"],a:0},
+    {ty:"mc",q:"1 bütünden 2/5 çıkarıldığında kalan kaçtır?",o:["3/5","2/5","1/5","4/5"],a:0},
+    {ty:"tf",q:"Aynı paydalı kesirlerde çıkarma yapılırken paylar çıkarılır.",a:true},
+    {ty:"tf",q:"Kesirler toplanırken paydalar da toplanır.",a:false},
+    {ty:"fb",q:"4/4 kesri ____ bütüne eşittir.",a:"bir"},
+    {ty:"fb",q:"Aynı paydalı kesirlerde toplama yapılırken ____ toplanır.",a:"paylar"}
+  ],
+  "Geometrik Cisimler ve Şekiller": [
+    {ty:"mc",q:"Küpün kaç yüzü vardır?",o:["6","4","8","12"],a:0},
+    {ty:"mc",q:"Dikdörtgenler prizmasının kaç ayrıtı vardır?",o:["12","6","8","4"],a:0},
+    {ty:"mc",q:"Üçgenleri kenar uzunluklarına göre sınıflandırırken hangi adlar kullanılır?",o:["Eşkenar, ikizkenar, çeşitkenar","Dar, dik, geniş","Büyük, küçük","Kısa, uzun"],a:0},
+    {ty:"mc",q:"Dört kenarı eşit ve açıları dik olan dörtgen hangisidir?",o:["Kare","Dikdörtgen","Paralelkenar","Yamuk"],a:0},
+    {ty:"mc",q:"Silindirin kaç düz yüzeyi vardır?",o:["2","1","3","0"],a:0},
+    {ty:"tf",q:"Kürenin ayrıtı ve köşesi yoktur.",a:true},
+    {ty:"tf",q:"Bütün dörtgenlerin açıları diktir.",a:false},
+    {ty:"fb",q:"Bir cismin yüzlerinin birleştiği doğru parçalarına ____ denir.",a:"ayrıt"},
+    {ty:"fb",q:"Üç kenarı ve üç açısı olan çokgene ____ denir.",a:"üçgen"}
+  ],
+  "Geometride Temel Kavramlar": [
+    {ty:"mc",q:"Ölçüsü 90° olan açıya ne denir?",o:["Dik açı","Dar açı","Geniş açı","Doğru açı"],a:0},
+    {ty:"mc",q:"Ölçüsü 90°'den küçük açılara ne denir?",o:["Dar açı","Geniş açı","Dik açı","Tam açı"],a:0},
+    {ty:"mc",q:"Açı ölçmede kullanılan araç hangisidir?",o:["İletki","Pergel","Cetvel","Terazi"],a:0},
+    {ty:"mc",q:"Birbirini dik kesen iki doğru arasındaki açı kaç derecedir?",o:["90","45","180","60"],a:0},
+    {ty:"mc",q:"Aynı düzlemde hiç kesişmeyen doğrulara ne denir?",o:["Paralel doğrular","Dik doğrular","Kesişen doğrular","Eğik doğrular"],a:0},
+    {ty:"tf",q:"Doğru açının ölçüsü 180°'dir.",a:true},
+    {ty:"tf",q:"Geniş açının ölçüsü 90°'den küçüktür.",a:false},
+    {ty:"fb",q:"Açı ölçü birimi ____ dir.",a:"derece"},
+    {ty:"fb",q:"Ölçüsü 90° ile 180° arasında olan açıya ____ açı denir.",a:"geniş"}
+  ],
+  "Uzunluk Ölçme": [
+    {ty:"mc",q:"1 metre kaç santimetredir?",o:["100","10","1000","50"],a:0},
+    {ty:"mc",q:"1 kilometre kaç metredir?",o:["1000","100","10","10000"],a:0},
+    {ty:"mc",q:"250 cm kaç metredir?",o:["2,5","25","0,25","250"],a:0},
+    {ty:"mc",q:"Bir kalemin uzunluğunu ölçmek için hangi birim uygundur?",o:["Santimetre","Kilometre","Ton","Litre"],a:0},
+    {ty:"mc",q:"Şehirler arası uzaklığı belirtmek için hangi birim uygundur?",o:["Kilometre","Milimetre","Santimetre","Gram"],a:0},
+    {ty:"tf",q:"1 cm 10 milimetredir.",a:true},
+    {ty:"tf",q:"1 metre 10 santimetredir.",a:false},
+    {ty:"fb",q:"Uzunluk ölçmenin temel birimi ____ dir.",a:"metre"},
+    {ty:"fb",q:"1 km ____ metredir.",a:"1000"}
+  ],
+  "Çevre Ölçme": [
+    {ty:"mc",q:"Bir kenarı 9 cm olan karenin çevresi kaç cm'dir?",o:["36","18","81","27"],a:0},
+    {ty:"mc",q:"Kenar uzunlukları 6 cm ve 4 cm olan dikdörtgenin çevresi kaç cm'dir?",o:["20","24","10","12"],a:0},
+    {ty:"mc",q:"Bir şeklin çevresi nasıl bulunur?",o:["Kenar uzunlukları toplanır","Kenarlar çarpılır","Kenar sayısı ikiye bölünür","En uzun kenar alınır"],a:0},
+    {ty:"mc",q:"Çevresi 32 cm olan karenin bir kenarı kaç cm'dir?",o:["8","4","16","6"],a:0},
+    {ty:"mc",q:"Kenar uzunlukları 5 cm, 7 cm ve 9 cm olan üçgenin çevresi kaç cm'dir?",o:["21","20","23","19"],a:0},
+    {ty:"tf",q:"Karenin çevresi bir kenarının 4 katıdır.",a:true},
+    {ty:"tf",q:"Çevre, bir şeklin yüzey ölçüsüdür.",a:false},
+    {ty:"fb",q:"Bir şeklin kenar uzunlukları toplamına ____ denir.",a:"çevre"},
+    {ty:"fb",q:"Dikdörtgenin çevresi (uzun kenar + kısa kenar) × ____ ile bulunur.",a:"2"}
+  ],
+  "Alan Ölçme": [
+    {ty:"mc",q:"Bir kenarı 7 cm olan karenin alanı kaç cm²'dir?",o:["49","28","14","21"],a:0},
+    {ty:"mc",q:"Kenar uzunlukları 8 cm ve 5 cm olan dikdörtgenin alanı kaç cm²'dir?",o:["40","26","13","20"],a:0},
+    {ty:"mc",q:"Alan ölçmede kullanılan birim hangisidir?",o:["cm²","cm","cm³","kg"],a:0},
+    {ty:"mc",q:"Dikdörtgenin alanı nasıl bulunur?",o:["Kısa kenar × uzun kenar","Kenarlar toplanır","Çevre × 2","Uzun kenar ÷ 2"],a:0},
+    {ty:"mc",q:"Alanı 36 cm² olan karenin bir kenarı kaç cm'dir?",o:["6","9","18","4"],a:0},
+    {ty:"tf",q:"Alan, bir yüzeyin kapladığı yer ölçüsüdür.",a:true},
+    {ty:"tf",q:"Aynı çevreye sahip iki dikdörtgenin alanları her zaman eşittir.",a:false},
+    {ty:"fb",q:"Alan ölçüsünün birimi ____ ile gösterilir.",a:"cm²"},
+    {ty:"fb",q:"Karenin alanı bir kenarının ____ ile bulunur.",a:"karesi"}
+  ],
+  "Tartma": [
+    {ty:"mc",q:"1 kilogram kaç gramdır?",o:["1000","100","10","500"],a:0},
+    {ty:"mc",q:"1 ton kaç kilogramdır?",o:["1000","100","10","10000"],a:0},
+    {ty:"mc",q:"2.500 gram kaç kilogramdır?",o:["2,5","25","0,25","250"],a:0},
+    {ty:"mc",q:"Bir elmanın kütlesini belirtmek için hangi birim uygundur?",o:["Gram","Ton","Kilometre","Litre"],a:0},
+    {ty:"mc",q:"Kütle ölçmek için hangi araç kullanılır?",o:["Terazi","Cetvel","İletki","Termometre"],a:0},
+    {ty:"tf",q:"Kütle ölçmenin temel birimi kilogramdır.",a:true},
+    {ty:"tf",q:"1 kilogram 100 gramdır.",a:false},
+    {ty:"fb",q:"1 ton ____ kilogramdır.",a:"1000"},
+    {ty:"fb",q:"Yarım kilogram ____ gramdır.",a:"500"}
+  ],
+  "Sıvı Ölçme": [
+    {ty:"mc",q:"1 litre kaç mililitredir?",o:["1000","100","10","500"],a:0},
+    {ty:"mc",q:"Yarım litre kaç mililitredir?",o:["500","50","250","100"],a:0},
+    {ty:"mc",q:"Bir bardak suyun miktarını belirtmek için hangi birim uygundur?",o:["Mililitre","Ton","Kilometre","Gram"],a:0},
+    {ty:"mc",q:"3 litre 250 mililitre kaç mililitredir?",o:["3.250","3.025","325","3.500"],a:0},
+    {ty:"mc",q:"Sıvı ölçmenin temel birimi hangisidir?",o:["Litre","Metre","Kilogram","Saat"],a:0},
+    {ty:"tf",q:"Sıvı miktarı litre ve mililitre ile ölçülür.",a:true},
+    {ty:"tf",q:"1 litre 100 mililitredir.",a:false},
+    {ty:"fb",q:"1 litre ____ mililitredir.",a:"1000"},
+    {ty:"fb",q:"Çeyrek litre ____ mililitredir.",a:"250"}
+  ],
+  "Zaman Ölçme": [
+    {ty:"mc",q:"Bir saat kaç dakikadır?",o:["60","30","24","100"],a:0},
+    {ty:"mc",q:"Bir gün kaç saattir?",o:["24","12","60","30"],a:0},
+    {ty:"mc",q:"2 saat 30 dakika kaç dakikadır?",o:["150","230","120","180"],a:0},
+    {ty:"mc",q:"Bir yıl kaç aydır?",o:["12","10","24","52"],a:0},
+    {ty:"mc",q:"Bir dakika kaç saniyedir?",o:["60","30","100","24"],a:0},
+    {ty:"tf",q:"Bir haftada 7 gün vardır.",a:true},
+    {ty:"tf",q:"Bir saat 100 dakikadır.",a:false},
+    {ty:"fb",q:"Bir dakika ____ saniyedir.",a:"60"},
+    {ty:"fb",q:"Bir yıl ____ aydır.",a:"12"}
+  ],
+  "Veri Toplama ve Değerlendirme": [
+    {ty:"mc",q:"Anket, gözlem gibi yöntemlerle elde edilen bilgilere ne ad verilir?",o:["Veri","Grafik","Ortalama","Tablo başlığı"],a:0},
+    {ty:"mc",q:"Verileri sütunlarla gösteren grafiğe ne denir?",o:["Sütun grafiği","Daire grafiği","Çizgi grafiği","Kroki"],a:0},
+    {ty:"mc",q:"Bir sütun grafiğinde en uzun sütun neyi gösterir?",o:["En çok tekrarlananı","En az tekrarlananı","Toplamı","Farkı"],a:0},
+    {ty:"mc",q:"Her seçeneğin kaç kez tekrarlandığını gösteren tabloya ne denir?",o:["Sıklık tablosu","Kroki","Çizelge dışı liste","Grafik başlığı"],a:0},
+    {ty:"mc",q:"Veri toplamaya başlarken ilk adım hangisidir?",o:["Araştırma sorusu belirlemek","Grafik çizmek","Sonuç yazmak","Sunum yapmak"],a:0},
+    {ty:"tf",q:"Grafikler verileri daha kolay yorumlamamızı sağlar.",a:true},
+    {ty:"tf",q:"Veri toplamadan yorum yapmak daha güvenilirdir.",a:false},
+    {ty:"fb",q:"Sayıları işaretlerle tutmaya ____ denir.",a:"çetele"},
+    {ty:"fb",q:"Toplanan bilgilere ____ denir.",a:"veri"}
+  ]
+},
 "mat-5": {
   /* Kapsam: Doğal Sayılar ve İşlemler — çok basamaklı sayıları okuma-yazma,
      basamak değerlerini çözümleme, dört işlem içeren problem çözme */
@@ -6806,7 +7218,7 @@ function siraSayi(d) {
   return {
     ty: "sira",
     q: `Aşağıdaki ${ad} ${artan ? "küçükten büyüğe" : "büyükten küçüğe"} sıralayınız. (Kutulara sıra numarasını yazınız.)`,
-    ogeler: ogeler, a: sirali, kaynak: "türetilmiş", kalip: "sira-" + bicim,
+    ogeler: ogeler, a: sirali, kaynak: "türetilmiş", kalip: "sira-" + bicim, yeniden: true,
   };
 }
 /* Türkçe alfabetik sıralama — 2. sınıf "alfabetik sıralama" kazanımına uygun */
@@ -6819,7 +7231,7 @@ function siraAlfabetik(d) {
   const sirali = ogeler.map((_, i) => i).sort((x, y) => ogeler[x].localeCompare(ogeler[y], "tr"));
   return {
     ty: "sira", q: "Aşağıdaki kelimeleri alfabetik sıraya diziniz. (Kutulara sıra numarasını yazınız.)",
-    ogeler: ogeler, a: sirali, kaynak: "türetilmiş", kalip: "sira-alfabetik",
+    ogeler: ogeler, a: sirali, kaynak: "türetilmiş", kalip: "sira-alfabetik", yeniden: true,
   };
 }
 /* Sıklık tablosu + tablodan hesaplanan soru — cevap anahtarı daima doğrudur */
@@ -6853,8 +7265,199 @@ function veriTablo(d) {
   return {
     ty: "veri", q: `${sen.s} aşağıdaki tabloda verilmiştir. ${soru.s}`,
     basliklar: [sen.b, "Kişi sayısı"], satirlar: ogeler.map((o, i) => [o, sayilar[i]]),
-    a: soru.a, kaynak: "türetilmiş", kalip: "veri-tablo",
+    a: soru.a, kaynak: "türetilmiş", kalip: "veri-tablo", yeniden: true,
   };
+}
+
+/* ── Sınıflandırma ────────────────────────────────────────────────────────
+   İki gruba ayırma görevi. Matematikte kural hesaplanabilir olduğu için
+   (tek/çift, asal/bileşik) anahtar daima doğrudur; diğer derslerde ünitenin
+   doğru-yanlış sorularından türetilir: doğru ifadeler bir gruba, yanlış
+   ifadeler diğerine ayrılır. */
+function sinifSayi(d) {
+  /* Asal sayılar 6. sınıf kazanımıdır; altındaki sınıflarda yalnızca tek/çift. */
+  const bicim = st.grade >= 6 ? pick(["tekcift", "asal"]) : "tekcift";
+  const kume = new Set();
+  if (bicim === "tekcift") {
+    const ust = d === 1 ? 50 : d === 2 ? 200 : 1000;
+    while (kume.size < 6) kume.add(R(2, ust));
+    const ogeler = [...kume];
+    return {
+      ty: "sinif", q: "Aşağıdaki sayıları tek ve çift olarak sınıflandırınız. (Kutulara grubun harfini yazınız.)",
+      gruplar: ["Tek sayılar", "Çift sayılar"],
+      ogeler: ogeler.map(String),
+      a: ogeler.map(n => (n % 2 === 1 ? 0 : 1)),
+      kaynak: "türetilmiş", kalip: "sinif-tekcift", yeniden: true,
+    };
+  }
+  const asallar = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43];
+  const bilesikler = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25];
+  const sec = shuffle([...shuffle(asallar).slice(0, 3), ...shuffle(bilesikler).slice(0, 3)]);
+  return {
+    ty: "sinif", q: "Aşağıdaki sayıları asal ve asal olmayan (bileşik) olarak sınıflandırınız. (Kutulara grubun harfini yazınız.)",
+    gruplar: ["Asal sayılar", "Bileşik sayılar"],
+    ogeler: sec.map(String),
+    a: sec.map(n => (asallar.indexOf(n) !== -1 ? 0 : 1)),
+    kaynak: "türetilmiş", kalip: "sinif-asal", yeniden: true,
+  };
+}
+function sinifBankadan(perUnit, adlar) {
+  const tfler = [];
+  adlar.forEach(ad => (perUnit[ad] || []).forEach(q => {
+    if (q.ty === "tf" && typeof q.a === "boolean") tfler.push(q);
+  }));
+  const dogru = shuffle(tfler.filter(q => q.a === true)).slice(0, 3);
+  const yanlis = shuffle(tfler.filter(q => q.a === false)).slice(0, 3);
+  if (dogru.length < 2 || yanlis.length < 2) return null;
+  const secilenler = shuffle([...dogru, ...yanlis]);
+  const ogeler = secilenler.map(q => String(q.q).replace(/\s+/g, " ").trim());
+  if (new Set(ogeler.map(hamMetin)).size !== ogeler.length) return null;
+  return {
+    ty: "sinif", q: "Aşağıdaki ifadeleri doğru ve yanlış olarak sınıflandırınız. (Kutulara grubun harfini yazınız.)",
+    gruplar: ["Doğru ifadeler", "Yanlış ifadeler"],
+    ogeler: ogeler,
+    a: secilenler.map(q => (q.a === true ? 0 : 1)),
+    kaynak: "türetilmiş", kalip: "sinif-dogruyanlis",
+    kapsar: secilenler.map(parmakIzi),
+  };
+}
+
+/* ── Hata bulma ve düzeltme ───────────────────────────────────────────────
+   Kasıtlı olarak yanlış bir ifade verilir, öğrenciden yanlışı bulup
+   düzeltmesi istenir. Çoktan seçmeli sorulardan türetilir: yanlış bir seçenek
+   ifadeye yerleştirilir, doğru seçenek cevap anahtarı olur. Matematikte ise
+   hatalı bir işlem üretilir ve doğru sonuç anahtar olarak hesaplanır. */
+function hataBankadan(perUnit, adlar) {
+  const uygun = [];
+  adlar.forEach(ad => (perUnit[ad] || []).forEach(q => {
+    /* Kökü "ne denir / nedir / hangisidir" biçiminde olan sorular, yanlış
+       seçenek yerleştirildiğinde düzgün bir yanlış ifadeye dönüşür. */
+    if (q.ty !== "mc" || !Array.isArray(q.o) || !Number.isInteger(q.a)) return;
+    if (!/(ne denir|ne ad verilir|nedir)\?\s*$/i.test(q.q)) return;
+    const dogru = String(q.o[q.a]).trim();
+    const yanlislar = q.o.filter((_, i) => i !== q.a).map(x => String(x).trim())
+      .filter(x => x.length > 1 && x.length <= 40);
+    if (!yanlislar.length || dogru.length > 40) return;
+    uygun.push({ q, ad, dogru, yanlis: pick(yanlislar) });
+  }));
+  if (!uygun.length) return null;
+  const s = pick(uygun);
+  const govde = String(s.q.q).replace(/(ne denir|ne ad verilir|nedir)\?\s*$/i, "").trim()
+    .replace(/[,:]?\s*$/, "");
+  return {
+    ty: "hata",
+    q: `Aşağıdaki ifadede bir yanlış vardır. Yanlışı bulup doğrusunu yazınız.\n“${govde} ${s.yanlis} denir.”`,
+    a: s.dogru,
+    unit: s.ad, kaynak: "türetilmiş", kalip: "hata-kavram",
+    kapsar: [parmakIzi(s.q)],
+  };
+}
+/* Boşluk doldurma sorularından hata bulma türetir: boşluğa AYNI ünitedeki
+   başka bir sorunun cevabı yerleştirilir, böylece ifade yanlışlanır; doğru
+   cevap zaten bankada yazılı olduğu için anahtar uydurulmaz. Bu türetme
+   "…ne denir?" kalıbına bağlı olmadığı için her derste çalışır (Tarih,
+   İngilizce gibi tanım sorusu kullanmayan derslerde de). */
+function hataBosluktan(perUnit, adlar) {
+  const uygun = [];
+  adlar.forEach(ad => {
+    const liste = (perUnit[ad] || []).filter(q =>
+      q.ty === "fb" && q.a != null && (String(q.q).match(/_{2,}/g) || []).length === 1 &&
+      String(q.a).trim().length > 1 && String(q.a).trim().length <= 40);
+    if (liste.length) uygun.push({ ad: ad, liste: liste });
+  });
+  if (!uygun.length) return null;
+  const grup = pick(uygun);
+  const s = pick(grup.liste);
+  const dogru = String(s.a).trim();
+  /* Yanlış dolgu, BAŞKA bir boşluk doldurma sorusunun cevabıdır: aynı dersin
+     kavram alanından geldiği için inandırıcı, farklı olgu olduğu için
+     yanlıştır. Önce aynı ünite denenir; ünitede tek soru varsa seçili diğer
+     ünitelerin cevaplarına düşülür (yoksa Tarih gibi az boşluk sorusu olan
+     derslerde bu tür hiç üretilemiyordu). */
+  let adaylar = grup.liste
+    .filter(q => hamMetin(q.a) !== hamMetin(s.a))
+    .map(q => String(q.a).trim());
+  if (!adaylar.length) {
+    adaylar = [];
+    uygun.forEach(g => g.liste.forEach(q => {
+      if (hamMetin(q.a) !== hamMetin(s.a)) adaylar.push(String(q.a).trim());
+    }));
+  }
+  if (!adaylar.length) return null;
+  const yanlis = pick(adaylar);
+  const govde = String(s.q).replace(/_{2,}/, yanlis).replace(/\s+/g, " ").trim();
+  /* Doğru cevap ifadede zaten geçiyorsa hata bulunamaz hâle gelir */
+  if (hamMetin(govde).indexOf(hamMetin(dogru)) !== -1) return null;
+  return {
+    ty: "hata",
+    q: `Aşağıdaki ifadede bir yanlış vardır. Yanlışı bulup doğrusunu yazınız.\n“${govde}”`,
+    a: dogru, unit: grup.ad, kaynak: "türetilmiş", kalip: "hata-bosluk",
+    kapsar: [parmakIzi(s)],
+  };
+}
+function hataIslem(d) {
+  const ust = d === 1 ? 20 : d === 2 ? 100 : 500;
+  const a = R(2, ust), b = R(2, Math.min(ust, 12));
+  const tur = pick(["carp", "topla", "cikar"]);
+  let dogru, ifade;
+  if (tur === "carp") { dogru = a * b; ifade = a + " × " + b; }
+  else if (tur === "topla") { dogru = a + b; ifade = a + " + " + b; }
+  else { const x = Math.max(a, b), y = Math.min(a, b); dogru = x - y; ifade = x + " − " + y; }
+  /* Sonucu belirgin biçimde saptır ki hata gerçekten bulunabilir olsun */
+  const sapma = pick([-3, -2, -1, 1, 2, 3]).valueOf() * (tur === "carp" ? R(1, 3) : 1);
+  const yanlis = dogru + (sapma === 0 ? 1 : sapma);
+  return {
+    ty: "hata",
+    q: `Aşağıdaki işlemde hata yapılmıştır. Hatayı bulup doğru sonucu yazınız.\n“${ifade} = ${yanlis}”`,
+    a: String(dogru),
+    kaynak: "türetilmiş", kalip: "hata-islem", yeniden: true,
+  };
+}
+
+/* ── Grafik yorumlama ─────────────────────────────────────────────────────
+   Aynı sıklık verisi bu kez sütun grafiği olarak çizilir (satır içi SVG).
+   Cevap grafikteki değerlerden hesaplandığı için anahtar daima doğrudur;
+   böylece görsel ve grafik yorumlama becerisi de ölçülür. */
+function grafikTablo(d) {
+  const t = veriTablo(d);
+  if (!t) return null;
+  const etiket = t.satirlar.map(r => String(r[0]));
+  const deger = t.satirlar.map(r => Number(r[1]));
+  return {
+    ty: "grafik",
+    q: t.q.replace("aşağıdaki tabloda verilmiştir", "aşağıdaki sütun grafiğinde verilmiştir")
+         .replace("Tabloya göre", "Grafiğe göre").replace("Tablodaki", "Grafikteki"),
+    basliklar: t.basliklar, etiket: etiket, deger: deger,
+    a: t.a, kaynak: "türetilmiş", kalip: "grafik-sutun", yeniden: true,
+  };
+}
+/* Satır içi SVG sütun grafiği. Dış kaynak yoktur; yazdırmada da aynı görünür.
+   Değer ekseni verinin en büyüğüne göre 2, 5 ya da 10'luk adımlarla bölünür. */
+function sutunGrafik(q) {
+  const enB = Math.max.apply(null, q.deger);
+  const adim = enB <= 12 ? 2 : enB <= 30 ? 5 : 10;
+  const ust = Math.ceil(enB / adim) * adim;
+  const solPay = 34, altPay = 34, ustPay = 10, sagPay = 8;
+  const gw = 62, gy = 168;                       // sütun genişliği ve grafik yüksekliği
+  const w = solPay + q.deger.length * gw + sagPay, h = ustPay + gy + altPay;
+  const yOf = v => ustPay + gy - (v / ust) * gy;
+  let p = "";
+  for (let v = 0; v <= ust; v += adim) {
+    const y = yOf(v).toFixed(1);
+    p += `<line x1="${solPay}" y1="${y}" x2="${w - sagPay}" y2="${y}" class="cz-izgi" />`;
+    p += `<text x="${solPay - 6}" y="${(+y + 4).toFixed(1)}" class="cz-sayi" text-anchor="end">${v}</text>`;
+  }
+  q.deger.forEach((v, i) => {
+    const x = solPay + i * gw + 14, y = yOf(v), yh = ustPay + gy - y;
+    p += `<rect x="${x}" y="${y.toFixed(1)}" width="${gw - 28}" height="${yh.toFixed(1)}" class="cz-sutun" />`;
+    p += `<text x="${x + (gw - 28) / 2}" y="${(y - 4).toFixed(1)}" class="cz-sayi" text-anchor="middle">${v}</text>`;
+    p += `<text x="${x + (gw - 28) / 2}" y="${ustPay + gy + 16}" class="cz-etiket" text-anchor="middle">${q.etiket[i]}</text>`;
+  });
+  p += `<line x1="${solPay}" y1="${ustPay + gy}" x2="${w - sagPay}" y2="${ustPay + gy}" class="cz-eksen" />`;
+  p += `<line x1="${solPay}" y1="${ustPay}" x2="${solPay}" y2="${ustPay + gy}" class="cz-eksen" />`;
+  p += `<text x="${solPay}" y="${ustPay + gy + 31}" class="cz-eksen-ad" text-anchor="start">${q.basliklar[0]}</text>`;
+  return `<svg class="q-chart" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
+    aria-label="${q.basliklar[1]} sütun grafiği">${p}</svg>`;
 }
 
 /* Seçili ünitelerden türetilmiş tip adayları toplar. */
@@ -6880,6 +7483,13 @@ function turetilmisAdaylar(types, d, adet) {
     }
     for (let i = 0; i < 3; i++) { const q = esKelimeden(); if (q) out.push(q); }
   }
+  /* Sıralama YALNIZCA doğruluğu hesaplanabilen verilerde üretilir: sayısal
+     büyüklük (Matematik, Fizik, Kimya, Fen) ve alfabetik sıra (Türkçe 1-4,
+     "sözlük sırası" kazanımı). Sosyal Bilgiler, İnkılap Tarihi, Edebiyat ya
+     da Biyoloji için kronolojik/aşamalı sıralama üretmek, elde doğrulanmış
+     sıra verisi olmadığı için müfredat bilgisini TAHMİN ETMEK olurdu; bu
+     yüzden bu derslerde sıralama sunulmaz. Bu derslerde ölçme, eşleştirme ve
+     hata bulma gibi doğrulanmış veriden türeyen tiplerle yapılır. */
   if (types.has("sira")) {
     const sayisal = ["mat", "fiz", "kim", "fen"].includes(st.subject);
     const alfabe = st.subject === "tr" && st.grade <= 4;
@@ -6888,11 +7498,30 @@ function turetilmisAdaylar(types, d, adet) {
       if (q) out.push(q);
     }
   }
-  if (types.has("veri")) {
-    /* Tablo yorumlama her derste anlamlı değil; veri okuma kazanımı bulunan
-       derslerde üretilir. */
-    if (["mat", "fen", "sos", "fiz", "kim", "bio", "hay"].includes(st.subject)) {
-      for (let i = 0; i < adet; i++) { const q = veriTablo(d); if (q) out.push(q); }
+  /* Tablo/grafik okuma her derste anlamlı değil; resmî programında bu çıktı
+     bulunan derslerde üretilir. Türkçe'de "Okuduğu metindeki içerik ve görsel
+     (tablo, grafik vb.)" ve Türk Dili ve Edebiyatı'nda "Bilgi Görseli
+     (İnfografik metin)" resmî programda yer aldığı için bu iki ders de
+     kapsama alınmıştır. Din Kültürü ile yabancı dil dersleri kapsam dışıdır:
+     programlarında veri okuma çıktısı yoktur. */
+  const VERI_DERSLERI = ["mat", "fen", "sos", "ink", "fiz", "kim", "bio", "hay", "tr", "tde"];
+  if (types.has("veri") && VERI_DERSLERI.includes(st.subject)) {
+    for (let i = 0; i < adet; i++) { const q = veriTablo(d); if (q) out.push(q); }
+  }
+  if (types.has("grafik") && VERI_DERSLERI.includes(st.subject)) {
+    for (let i = 0; i < adet; i++) { const q = grafikTablo(d); if (q) out.push(q); }
+  }
+  if (types.has("sinif")) {
+    const sayisal = ["mat", "fiz", "kim"].includes(st.subject);
+    if (sayisal) for (let i = 0; i < adet; i++) { const q = sinifSayi(d); if (q) out.push(q); }
+    if (perUnit) for (let i = 0; i < 3; i++) { const q = sinifBankadan(perUnit, adlar); if (q) out.push(q); }
+  }
+  if (types.has("hata")) {
+    if (["mat", "fiz", "kim"].includes(st.subject))
+      for (let i = 0; i < adet; i++) { const q = hataIslem(d); if (q) out.push(q); }
+    if (perUnit) for (let i = 0; i < adet; i++) {
+      const q = hataBankadan(perUnit, adlar); if (q) out.push(q);
+      const b = hataBosluktan(perUnit, adlar); if (b) out.push(b);
     }
   }
   return out;
@@ -6902,19 +7531,19 @@ function turetilmisAdaylar(types, d, adet) {
    Her dersin ölçme doğası farklıdır; bu ağırlıklar seçim aşamasında soru tipi
    dağılımını yönlendirir (1 = nötr). Listede olmayan ders nötr kabul edilir. */
 const STRATEJI = {
-  tr:  { mc: 1.15, fb: 1.10, tf: 0.85, op: 1.20, islem: 0.60, es: 1.15, sira: 0.95, veri: 0.55 },
-  tde: { mc: 1.20, fb: 0.95, tf: 0.80, op: 1.25, islem: 0.50, es: 1.10, sira: 0.40, veri: 0.45 },
-  mat: { islem: 1.35, mc: 0.95, fb: 0.85, tf: 0.70, op: 1.00, es: 0.80, sira: 1.25, veri: 1.30 },
-  fen: { mc: 1.10, tf: 1.00, fb: 1.00, islem: 1.15, op: 1.15, es: 1.20, sira: 0.90, veri: 1.25 },
-  fiz: { islem: 1.30, mc: 1.00, fb: 0.85, tf: 0.75, op: 1.05, es: 0.90, sira: 0.85, veri: 1.15 },
-  kim: { islem: 1.25, mc: 1.05, fb: 0.90, tf: 0.80, op: 1.05, es: 1.05, sira: 0.80, veri: 1.10 },
-  bio: { mc: 1.15, tf: 0.95, fb: 1.00, op: 1.20, islem: 0.70, es: 1.25, sira: 0.60, veri: 1.10 },
-  sos: { mc: 1.10, tf: 0.95, fb: 1.00, op: 1.25, islem: 0.55, es: 1.25, sira: 0.70, veri: 1.15 },
-  ink: { mc: 1.10, tf: 0.95, fb: 1.00, op: 1.25, islem: 0.55, es: 1.25, sira: 1.10, veri: 1.05 },
-  hay: { mc: 1.05, tf: 1.10, fb: 1.05, op: 1.10, islem: 0.60, es: 1.20, sira: 0.70, veri: 1.00 },
-  din: { mc: 1.10, tf: 1.00, fb: 1.00, op: 1.20, islem: 0.50, es: 1.20, sira: 0.55, veri: 0.40 },
-  ing: { mc: 1.15, fb: 1.20, tf: 0.90, op: 0.95, islem: 0.40, es: 1.30, sira: 0.45, veri: 0.40 },
-  alm: { mc: 1.15, fb: 1.20, tf: 0.90, op: 0.95, islem: 0.40, es: 1.30, sira: 0.45, veri: 0.40 },
+  tr:  { mc: 1.15, fb: 1.10, tf: 0.85, op: 1.20, islem: 0.60, es: 1.15, sira: 0.95, veri: 0.55, grafik: 0.45, sinif: 1.05, hata: 1.30 },
+  tde: { mc: 1.20, fb: 0.95, tf: 0.80, op: 1.25, islem: 0.50, es: 1.10, sira: 0.40, veri: 0.45, grafik: 0.40, sinif: 1.00, hata: 1.20 },
+  mat: { islem: 1.35, mc: 0.95, fb: 0.85, tf: 0.70, op: 1.00, es: 0.80, sira: 1.25, veri: 1.30, grafik: 1.25, sinif: 1.15, hata: 1.20 },
+  fen: { mc: 1.10, tf: 1.00, fb: 1.00, islem: 1.15, op: 1.15, es: 1.20, sira: 0.90, veri: 1.25, grafik: 1.20, sinif: 1.25, hata: 1.00 },
+  fiz: { islem: 1.30, mc: 1.00, fb: 0.85, tf: 0.75, op: 1.05, es: 0.90, sira: 0.85, veri: 1.15, grafik: 1.10, sinif: 0.95, hata: 1.10 },
+  kim: { islem: 1.25, mc: 1.05, fb: 0.90, tf: 0.80, op: 1.05, es: 1.05, sira: 0.80, veri: 1.10, grafik: 1.05, sinif: 1.20, hata: 1.05 },
+  bio: { mc: 1.15, tf: 0.95, fb: 1.00, op: 1.20, islem: 0.70, es: 1.25, sira: 0.60, veri: 1.10, grafik: 1.05, sinif: 1.30, hata: 0.95 },
+  sos: { mc: 1.10, tf: 0.95, fb: 1.00, op: 1.25, islem: 0.55, es: 1.25, sira: 0.70, veri: 1.15, grafik: 1.10, sinif: 1.15, hata: 0.95 },
+  ink: { mc: 1.10, tf: 0.95, fb: 1.00, op: 1.25, islem: 0.55, es: 1.25, sira: 1.10, veri: 1.05, grafik: 1.00, sinif: 1.10, hata: 0.95 },
+  hay: { mc: 1.05, tf: 1.10, fb: 1.05, op: 1.10, islem: 0.60, es: 1.20, sira: 0.70, veri: 1.00, grafik: 0.90, sinif: 1.20, hata: 0.95 },
+  din: { mc: 1.10, tf: 1.00, fb: 1.00, op: 1.20, islem: 0.50, es: 1.20, sira: 0.55, veri: 0.40, grafik: 0.35, sinif: 1.15, hata: 0.90 },
+  ing: { mc: 1.15, fb: 1.20, tf: 0.90, op: 0.95, islem: 0.40, es: 1.30, sira: 0.45, veri: 0.40, grafik: 0.35, sinif: 1.05, hata: 1.25 },
+  alm: { mc: 1.15, fb: 1.20, tf: 0.90, op: 0.95, islem: 0.40, es: 1.30, sira: 0.45, veri: 0.40, grafik: 0.35, sinif: 1.05, hata: 1.25 },
 };
 
 /* ── Metin normalleştirme ve parmak izi ──────────────────────────────────
@@ -6954,6 +7583,11 @@ function parmakIzi(q) {
   if (q.ty === "es") ek = " " + jetonlar([].concat(q.sol || [], q.sag || []).join(" ")).join(" ");
   else if (q.ty === "sira") ek = " " + jetonlar((q.ogeler || []).join(" ")).join(" ");
   else if (q.ty === "veri") ek = " " + jetonlar((q.satirlar || []).map(r => r.join(" ")).join(" ")).join(" ");
+  /* Sınıflandırma ve grafikte soru kökü SABİTTİR; kimliği taşıyan şey
+     öğeler/etiketlerdir. Bunlar ize katılmazsa aynı kökü kullanan bütün
+     sorular tek soru sayılır ve tekrar denetimi yanlış çalışır. */
+  else if (q.ty === "sinif") ek = " " + jetonlar([].concat(q.gruplar || [], q.ogeler || []).join(" ")).join(" ");
+  else if (q.ty === "grafik") ek = " " + jetonlar([].concat(q.etiket || [], q.deger || []).join(" ")).join(" ");
   return jetonlar(q.q).join(" ") + ek;
 }
 /* Çekirdek: kalıp sözcükleri de atılmış anlam çekirdeği. */
@@ -7051,6 +7685,34 @@ function sorunTespit(q) {
     if (!Array.isArray(q.satirlar) || q.satirlar.length < 2) return "veri tablosunda yeterli satır yok";
     if (q.satirlar.some(r => !Array.isArray(r) || r.length !== q.basliklar.length)) return "veri tablosunda satır/sütun sayısı uyuşmuyor";
     if (q.a == null || !String(q.a).trim()) return "veri yorumlama sorusunun cevabı boş";
+  } else if (q.ty === "grafik") {
+    /* Grafik yorumlama: etiket/değer eşleşmeli, değerler sayı olmalı. */
+    if (!Array.isArray(q.etiket) || q.etiket.length < 2) return "grafikte yeterli sütun yok";
+    if (!Array.isArray(q.deger) || q.deger.length !== q.etiket.length) return "grafikte etiket/değer sayısı uyuşmuyor";
+    if (q.deger.some(v => !Number.isFinite(v) || v < 0)) return "grafik değeri sayı değil";
+    if (new Set(q.etiket.map(hamMetin)).size !== q.etiket.length) return "grafikte aynı etiket iki kez var";
+    if (!Array.isArray(q.basliklar) || q.basliklar.length < 2) return "grafikte eksen adı eksik";
+    if (q.a == null || !String(q.a).trim()) return "grafik yorumlama sorusunun cevabı boş";
+  } else if (q.ty === "sinif") {
+    /* Sınıflandırma: a[i], ogeler[i]'nin ait olduğu grubun indeksidir.
+       Her grup en az bir öğe almalı; aksi hâlde görev sınıflandırma olmaktan
+       çıkıp "hepsi aynı gruba" cevabına dönüşür. */
+    if (!Array.isArray(q.gruplar) || q.gruplar.length < 2) return "sınıflandırmada yeterli grup yok";
+    if (!Array.isArray(q.ogeler) || q.ogeler.length < 4) return "sınıflandırmada yeterli öğe yok";
+    if (!Array.isArray(q.a) || q.a.length !== q.ogeler.length) return "sınıflandırma cevap anahtarı eksik";
+    if (q.a.some(j => !Number.isInteger(j) || j < 0 || j >= q.gruplar.length)) return "sınıflandırma cevabı aralık dışında";
+    if (new Set(q.a).size < q.gruplar.length) return "sınıflandırmada boş kalan grup var";
+    if (new Set(q.ogeler.map(hamMetin)).size !== q.ogeler.length) return "sınıflandırmada aynı öğe iki kez var";
+    if (new Set(q.gruplar.map(hamMetin)).size !== q.gruplar.length) return "sınıflandırmada aynı grup adı iki kez var";
+  } else if (q.ty === "hata") {
+    /* Hata bulma: cevap düzeltilmiş biçimdir ve verilen yanlış ifadeyle
+       AYNI olamaz — aynıysa soru kendi kendini çürütür. */
+    if (q.a == null || !String(q.a).trim()) return "hata düzeltme cevabı boş";
+    if (!/[“"]/.test(String(q.q))) return "hata sorusunda düzeltilecek ifade yok";
+    /* Sözcük sınırıyla bakılır: "150 − 100" içindeki "50" cevabı ele vermez. */
+    const g = " " + hamMetin(q.q).replace(/[^0-9a-zA-ZçğıöşüÇĞİÖŞÜ]+/g, " ") + " ";
+    const c = " " + hamMetin(q.a).replace(/[^0-9a-zA-ZçğıöşüÇĞİÖŞÜ]+/g, " ").trim() + " ";
+    if (c.trim() && g.indexOf(c) !== -1) return "hata sorusunda doğru cevap ifadenin içinde geçiyor";
   } else if (q.ty !== "op") {
     return "bilinmeyen soru tipi";
   }
@@ -7106,8 +7768,8 @@ function uretecAdaylari(types, d, adet) {
     try { r = GEN[u.g](d, u.p); } catch (e) { continue; }
     if (!r) continue;
     const q = r.ty
-      ? Object.assign({}, r, { unit: u.u, kaynak: "üreteç" })
-      : { ty: r.open ? "op" : "islem", q: r.q, a: String(r.a), unit: u.u, kaynak: "üreteç" };
+      ? Object.assign({}, r, { unit: u.u, kaynak: "üreteç", yeniden: true })
+      : { ty: r.open ? "op" : "islem", q: r.q, a: String(r.a), unit: u.u, kaynak: "üreteç", yeniden: true };
     if (types.has(q.ty)) out.push(q);
   }
   return out;
@@ -7175,7 +7837,8 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
   const ifsaEdilen = new Set();
   const cevapMetni = function (q) {
     if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) return sadeMetin(q.o[q.a]);
-    if (q.ty === "fb" || q.ty === "veri" || q.ty === "islem") return sadeMetin(q.a);
+    if (q.ty === "fb" || q.ty === "veri" || q.ty === "islem" || q.ty === "grafik" ||
+        q.ty === "hata") return sadeMetin(q.a);
     return "";
   };
   const havuz = adaylar.map(function (q) {
@@ -7185,6 +7848,16 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
 
   while (secilen.length < count && havuz.length) {
     let enIyi = -1, enIyiPuan = -Infinity;
+    /* Rastgelelik TİP başına bir kez çekilir, aday başına değil. Aksi hâlde
+       yüzlerce adayı olan bir tip (ör. eşleştirme) çekilişte daha çok bilet
+       almış olur ve az adaylı tipler (sınıflandırma, sıralama) strateji
+       ağırlığı yüksek olsa bile kâğıda hiç giremez. Aday içi küçük bir pay
+       aynı tipteki sorular arasında karar verir. */
+    const tipSans = {};
+    for (let i = 0; i < havuz.length; i++) {
+      const t = havuz[i].q.ty;
+      if (tipSans[t] === undefined) tipSans[t] = Math.random() * 2.5;
+    }
     for (let i = 0; i < havuz.length; i++) {
       const c = havuz[i];
       let puan = 10 * (agirlik[c.q.ty] || 1);
@@ -7200,7 +7873,12 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
         const t = sadeMetin(x);
         return t.length >= 3 && secilenCevaplar.has(t);
       })) puan -= 200;
-      if (gecmis.has(c.iz)) puan -= 60;                        // önceki ödevlerde çıkmış
+      /* Önceki ödevlerde çıkmış soru. Parmak izi sayıları maskelediği için
+         prosedürel sorular (hesaplama, sıralama, sınıflandırma, tablo/grafik)
+         tek bir ize düşer; ağır ceza bunları ikinci kâğıttan sonra tamamen
+         yasaklıyordu. Bu sorularda sayılar İÇERİĞİN kendisi olduğu için ceza
+         hafiftir: yeni içerik varsa ona öncelik verilir, yoksa soru gelir. */
+      if (gecmis.has(c.iz)) puan -= c.q.yeniden ? 7 : 60;
       let enYakin = 0;
       for (let j = 0; j < secilenCekirdek.length; j++) {
         const b = benzerlik(c.cek, secilenCekirdek[j]);
@@ -7210,7 +7888,11 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
       else puan -= enYakin * 25;
       puan -= (tipSayaci[c.q.ty] || 0) * 3.5;                  // tip dengesi
       if ((tipSayaci[c.q.ty] || 0) >= adilPay) puan -= 40;     // tek tip kâğıdı ele geçirmesin
-      puan -= (uniteSayaci[c.q.unit] || 0) * 2.0;              // ünite dengesi
+      /* Ünite dengesi yalnızca bir üniteye BAĞLI sorular için işler. Ünitesi
+         olmayan türetilmiş sorular (sıralama, sınıflandırma, tablo, grafik)
+         tek bir "undefined" sayacında birikiyor ve birbirini cezalandırıyordu;
+         bu yüzden kâğıda neredeyse hiç giremiyorlardı. */
+      if (c.q.unit) puan -= (uniteSayaci[c.q.unit] || 0) * 2.0;
       puan -= (kalipSayaci[c.kalip] || 0) * 16;                // aynı kalıbın yığılmasını engelle
       if (c.q.ty === "tf" && tfToplam >= 2) {                  // hep aynı cevap olmasın
         const oran = tfDogru / tfToplam;
@@ -7219,7 +7901,7 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
       if (c.q.kaynak === "üreteç") puan += 4;                   // sınırsız üretilebilen kaynağa hafif öncelik
       if (d === 3 && (c.q.ty === "op" || c.q.ty === "islem")) puan += 3;
       if (d === 1 && (c.q.ty === "tf" || c.q.ty === "fb")) puan += 3;
-      puan += Math.random() * 2.5;                              // eşit puanlarda kararı rastgeleliğe bırak
+      puan += tipSans[c.q.ty] + Math.random() * 0.6;            // eşit puanlarda kararı rastgeleliğe bırak
       if (puan > enIyiPuan) { enIyiPuan = puan; enIyi = i; }
     }
     if (enIyi < 0) break;
@@ -7231,14 +7913,19 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
     if (cokBenzer) continue;                                    // güvenlik kilidi
     let q = c.q;
     if (q.ty === "mc") {
+      /* En az kullanılmış harf seçilir; eşitlik hâlinde KURA çekilir. Sabit
+         "ilk eşit olanı al" davranışı, az çoktan seçmeli içeren kâğıtlarda
+         doğru cevabı her seferinde A ve B'ye düşürüyordu. */
       const kac = Math.min(4, (q.o || []).length);
       const dilim = harfSayaci.slice(0, kac);
-      q = secenekKaristir(q, dilim.indexOf(Math.min.apply(null, dilim)));
+      const enAz = Math.min.apply(null, dilim);
+      const esitler = dilim.reduce(function (a, v, j) { if (v === enAz) a.push(j); return a; }, []);
+      q = secenekKaristir(q, pick(esitler));
       harfSayaci[q.a] = (harfSayaci[q.a] || 0) + 1;
     }
     if (q.ty === "tf") { tfToplam++; if (q.a === true) tfDogru++; }
     tipSayaci[q.ty] = (tipSayaci[q.ty] || 0) + 1;
-    uniteSayaci[q.unit] = (uniteSayaci[q.unit] || 0) + 1;
+    if (q.unit) uniteSayaci[q.unit] = (uniteSayaci[q.unit] || 0) + 1;
     kalipSayaci[c.kalip] = (kalipSayaci[c.kalip] || 0) + 1;
     secilenIzler.add(c.iz);
     if (q.kapsar) q.kapsar.forEach(function (z) { kapsananIzler.add(z); });
@@ -7369,8 +8056,21 @@ function renderSheet(tani) {
         ${q.satirlar.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table>
         <div class="q-line"></div>
       </div>`;
+    else if (q.ty === "sinif") body = `
+      <div class="q-match">
+        <ul>${q.ogeler.map((x, j) => `<li><span class="mbox">&nbsp;</span>${j + 1}. ${x}</li>`).join("")}</ul>
+        <ul>${q.gruplar.map((x, j) => `<li style="padding-left:0;text-indent:0;">${letters[j]}) ${x}</li>`).join("")}</ul>
+      </div>`;
+    /* Hata bulma: yönerge kökte kalır, düzeltilecek yanlış ifade ayrı bir
+       kutuda gösterilir; altındaki çizgi düzeltmenin yazılacağı yerdir. */
+    else if (q.ty === "hata") body = `
+      <div class="q-error"><div class="qe-box">${q.q.split("\n").slice(1).join(" ")}</div>
+      <div class="q-line"></div></div>`;
+    else if (q.ty === "grafik") body = `
+      <div class="q-data">${sutunGrafik(q)}<div class="q-line"></div></div>`;
     else body = `<div class="q-op-lines"><div></div><div></div><div></div></div>`;
-    return `<div class="q"><div class="q-text"><span class="q-no">${i + 1}.</span><span>${q.q}</span></div>${body}</div>`;
+    const kok = q.ty === "hata" ? q.q.split("\n")[0] : q.q;
+    return `<div class="q"><div class="q-text"><span class="q-no">${i + 1}.</span><span>${kok}</span></div>${body}</div>`;
   }).join("");
 
   const akHtml = $("optKey").checked ? `
@@ -7385,6 +8085,11 @@ function renderSheet(tani) {
           else if (q.ty === "es") a = q.a.map((j, i2) => `${i2 + 1}-${letters[j] || (j + 1)}`).join(", ");
           /* Sıralamada cevap, gösterilen öğelerin doğru sıra numaralarıdır */
           else if (q.ty === "sira") a = q.ogeler.map((_, i2) => `${i2 + 1}. kutu: ${q.a.indexOf(i2) + 1}`).join(", ");
+          /* Sınıflandırmada cevap, her öğenin ait olduğu grubun harfidir */
+          else if (q.ty === "sinif") a = q.a.map((j, i2) => `${i2 + 1}-${letters[j] || (j + 1)}`).join(", ")
+            + " &nbsp;(" + q.gruplar.map((g, j) => `${letters[j]}: ${g}`).join(", ") + ")";
+          /* Hata düzeltmede cevap, yanlışın yerine yazılması gereken doğru biçimdir */
+          else if (q.ty === "hata") a = `Doğrusu: ${q.a}`;
           else a = q.a;
           return `<div><b>${i + 1}.</b> ${a}</div>`;
         }).join("")}
