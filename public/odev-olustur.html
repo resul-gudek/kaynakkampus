@@ -10246,23 +10246,117 @@ function vocabQ() {
 }
 /* Açık uçlu kalıplar. Her kalıp farklı bir düşünme becerisini hedefler ve
    kendi "kalip" kimliğini taşır; böylece bir kâğıtta aynı beceri iki kez
-   sorulmaz. Kalıplar ünite adıyla doldurulduğu için müfredat dışına çıkmaz. */
+   sorulmaz.
+
+   ÖLÇÜLEN SORUN: kalıplar yalnızca ÜNİTE ADIYLA dolduruluyordu — "'Ramazan ve
+   Oruç' konusundaki en önemli kavramı tanımlayınız" gibi. Bu, konu başlığından
+   soru üretmenin en açık örneğiydi ve tüm soruların yaklaşık altıda birini
+   oluşturuyordu. Artık kalıplar iki alan alır: `b` = kapsam maddesinin başlığı
+   (resmî öğrenme çıktısı adı), `t` = o maddenin somut kavramları. Böylece soru
+   konunun belirli bir bölümünü hedefler. Kavram bulunamazsa madde başlığına,
+   o da yoksa ünite adına düşülür — hiçbir durumda uydurma içerik üretilmez. */
 const ACIK_UCLU_KALIPLAR = [
-  { k: "op-aciklama",     f: u => `"${u}" konusunda öğrendiklerinizi üç cümle ile açıklayınız.` },
-  { k: "op-gunluk",       f: u => `"${u}" konusuyla ilgili günlük hayattan iki örnek veriniz ve bu örneklerin konuyla bağlantısını yazınız.` },
-  { k: "op-kavram",       f: u => `"${u}" konusundaki en önemli kavramı tanımlayınız ve bir örnek veriniz.` },
-  { k: "op-neden-sonuc",  f: u => `"${u}" konusuyla ilgili bir durum düşününüz. Bu durumun nedenini ve sonucunu yazınız.` },
-  { k: "op-karsilastirma",f: u => `"${u}" konusunda öğrendiğiniz iki kavramı seçiniz. Bu kavramların benzerliğini ve farkını yazınız.` },
-  { k: "op-karar",        f: u => `"${u}" konusuyla ilgili bir sorunla karşılaşsanız nasıl davranırdınız? Kararınızın gerekçesini yazınız.` },
-  { k: "op-hata",         f: u => `"${u}" konusunda sık yapılan bir hatayı yazınız ve bu hatanın nasıl düzeltileceğini açıklayınız.` },
-  { k: "op-soru-kurma",   f: u => `"${u}" konusuyla ilgili bir soru kurunuz ve kendi sorunuzu cevaplayınız.` },
+  { k: "op-aciklama",     n: 0, f: (b, t) => `"${b}" konusunda öğrendiklerinizi üç cümle ile açıklayınız.` },
+  { k: "op-gunluk",       n: 0, f: (b, t) => `"${b}" ile ilgili günlük hayattan iki örnek veriniz ve bu örneklerin konuyla bağlantısını yazınız.` },
+  { k: "op-kavram",       n: 1, f: (b, t) => `"${t[0]}" kavramını tanımlayınız ve günlük hayattan bir örnek veriniz.` },
+  { k: "op-neden-sonuc",  n: 1, f: (b, t) => `"${t[0]}" ile ilgili bir durum düşününüz. Bu durumun nedenini ve sonucunu yazınız.` },
+  { k: "op-karsilastirma",n: 2, f: (b, t) => `"${t[0]}" ile "${t[1]}" kavramlarını karşılaştırınız. Benzerliklerini ve farklarını yazınız.` },
+  { k: "op-iliski",       n: 2, f: (b, t) => `"${t[0]}" ile "${t[1]}" arasında nasıl bir ilişki vardır? Açıklayınız.` },
+  { k: "op-karar",        n: 0, f: (b, t) => `"${b}" konusuyla ilgili bir sorunla karşılaşsanız nasıl davranırdınız? Kararınızın gerekçesini yazınız.` },
+  { k: "op-hata",         n: 1, f: (b, t) => `"${t[0]}" konusunda sık yapılan bir hatayı yazınız ve bu hatanın nasıl düzeltileceğini açıklayınız.` },
+  { k: "op-soru-kurma",   n: 0, f: (b, t) => `"${b}" konusuyla ilgili bir soru kurunuz ve kendi sorunuzu cevaplayınız.` },
 ];
-function openQ() {
+
+/* Bir kapsam maddesinin somut kavramlarını, o maddeye ait BANKA sorularının
+   cevaplarından toplar.
+
+   ÖLÇÜLEN SORUN: her cevap kavram sayılıyordu. "Ramazan Bayramı'nın diğer adı
+   ____ Bayramı'dır" sorusundan "Şeker", maddenin anahtar sözcük listesinden
+   "kaza" ve "çeşit" kavram olarak alınıp `"Şeker" konusunda sık yapılan bir
+   hatayı yazınız` gibi anlamsız sorular kuruluyordu.
+
+   ÇÖZÜM: kavram YALNIZCA tanım sorularından alınır ("… ne denir?", "… ne ad
+   verilir?", "… nedir?", "… ____ denir."). Bu kalıpların cevabı yapısı gereği
+   bir terimdir. Anahtar sözcük listesi kavram kaynağı olarak KULLANILMAZ; o
+   liste yalnızca etiketleme içindir. Kavram bulunamazsa kavram gerektiren
+   kalıplar devre dışı kalır ve madde başlığını kullanan kalıplara düşülür. */
+const TANIM_KALIBI = /(ne denir|ne ad verilir|nedir)\s*\?\s*$|_{2,}[^_]{0,24}\bdenir\s*\.?\s*$/i;
+/* "…nın nedeni nedir?", "…nın önemi nedir?" gibi sorular "nedir" ile bitse de
+   TANIM sorusu değildir: cevabı bir terim değil bir gerekçedir. Bunlardan
+   kavram alınırsa `"Paylaşma bilincinin güçlenmesi" kavramını tanımlayınız`
+   gibi anlamsız sorular kurulur. */
+const TANIM_DEGIL = /(neden|önem|amaç|sonuc|sonuç|katkı|işlev|rol[üu]|görev|özellik|fark)[ıi]?\s*(nedir|ne olur)|(ad[ıi]|ismi)\s*(nedir|ne)\b|kimdir/i;
+/* Kavram, terim gibi durmalı: en çok üç sözcük ve fiilden türemiş ad
+   ekleriyle bitmemeli (bunlar cümle parçasıdır, kavram değil). */
+const TERIM_DEGIL = /(mesi|ması|menin|manın|mek|mak|ilmesi|ulması|tırma|lanması)$/i;
+/* Kavram olarak kullanılamayacak kadar genel sözcükler. Bunlar bir konuyu
+   adlandırmaz; "kural" kavramını tanımlayınız gibi boş bir soru üretirler. */
+const GENEL_SOZ = new Set(["kural", "ortak", "araştırma", "karşılaştırma", "örnek", "durum",
+  "bilgi", "konu", "önemli", "yardım", "davranış", "özellik", "görev", "sonuç", "neden",
+  "amaç", "önem", "ilişki", "değer", "sayı", "işlem"]);
+/* Tek yerde tanımlı terim kalitesi denetimi — hem kapsam maddesi etiketinde
+   hem açık uçlu soruların kavram yuvasında kullanılır. İkisinde ayrı ayrı
+   süzmek, bir tarafta "kahvaltı yapıp hazırlanmak" gibi etiketlerin
+   kalmasına yol açıyordu. */
+function terimMi(s) {
+  const t = String(s == null ? "" : s).trim().replace(/\s+/g, " ");
+  if (t.length < 4 || t.length > 34) return false;
+  if (/^[\d.,/%°]+$/.test(t)) return false;                  // salt sayı
+  if (/\d/.test(t) && t.split(" ").length > 1) return false;  // "1 onluk 4 birlik"
+  if (t.split(" ").length > 3) return false;                  // cümle parçası
+  if (TERIM_DEGIL.test(t)) return false;                      // fiilden türemiş ad
+  if (/^(doğru|yanlış|hepsi|hiçbiri|evet|hayır)$/i.test(t)) return false;
+  if (GENEL_SOZ.has(t.toLocaleLowerCase("tr"))) return false;
+  return true;
+}
+function kapsamKavramlari(madde, perUnit) {
+  const out = [];
+  const ekle = t => {
+    const s = String(t == null ? "" : t).trim().replace(/\s+/g, " ");
+    if (!terimMi(s)) return;
+    if (out.some(x => x.toLocaleLowerCase("tr") === s.toLocaleLowerCase("tr"))) return;
+    out.push(s);
+  };
+  const liste = (perUnit && perUnit[madde.unite]) || [];
+  liste.forEach(q => {
+    if (kapsamEtiketi(q, [madde]) !== 0) return;
+    const kok = String(q.q);
+    if (!TANIM_KALIBI.test(kok) || TANIM_DEGIL.test(kok)) return;  // tanım sorusu değil
+    if (q.ty === "fb") ekle(q.a);
+    else if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) ekle(q.o[q.a]);
+  });
+  return out;
+}
+
+function openQ(kapsam) {
   const us = unitsFor().filter((_, i) => st.units.has(i));
   if (!us.length) return null;
-  const u = unitName(pick(us));
-  const kalip = pick(ACIK_UCLU_KALIPLAR);
-  return { ty: "op", q: kalip.f(u), a: "Açık uçlu — öğretmen değerlendirmesi", unit: u, kalip: kalip.k };
+  const perUnit = UNIT_BANK[st.subject + "-" + st.grade];
+  /* Kapsam maddesi varsa soru o maddeyi hedefler; yoksa eski davranışa
+     (ünite adı) düşülür ki kapsam kaydı olmayan dersler bozulmasın. */
+  const madde = kapsam && kapsam.length ? pick(kapsam) : null;
+  const unite = madde ? madde.unite : unitName(pick(us));
+  const baslik = madde ? madde.k.replace(/^Bilgi noktası:\s*/, "") : unite;
+  const kavramlar = madde ? kapsamKavramlari(madde, perUnit) : [];
+  /* Kalıp, elde kaç kavram olduğuna göre seçilir: iki kavram gerektiren
+     karşılaştırma kalıbı tek kavramla kurulamaz.
+     Yabancı dil derslerinde kavram yuvası KULLANILMAZ: oradaki "kavramlar"
+     sözcük dağarcığı ögeleridir ve `"Gömlek" kavramını tanımlayınız` gibi
+     bir soru dil öğrenme görevi değildir. Bu derslerde madde başlığını
+     kullanan kalıplarla kalınır. */
+  const yabanciDil = st.subject === "ing" || st.subject === "alm";
+  const uygun = ACIK_UCLU_KALIPLAR.filter(x => x.n <= (yabanciDil ? 0 : kavramlar.length));
+  if (!uygun.length) return null;
+  const kalip = pick(uygun);
+  const t = shuffle(kavramlar).slice(0, 2);
+  return {
+    ty: "op", q: kalip.f(baslik, t), a: "Açık uçlu — öğretmen değerlendirmesi",
+    unit: unite, kalip: kalip.k,
+    /* Kalıp + hedeflenen kavram birlikte kimlik oluşturur; aynı kalıp farklı
+       kavramla sorulduğunda tekrar sayılmaz, aynı kavramla sorulduğunda
+       sayılır. */
+    kapsamHedef: baslik
+  };
 }
 
 /* ═══════════════ TÜRETİLMİŞ SORU TİPLERİ ═══════════════
@@ -10525,7 +10619,13 @@ function hataBosluktan(perUnit, adlar) {
   adlar.forEach(ad => {
     const liste = (perUnit[ad] || []).filter(q =>
       q.ty === "fb" && q.a != null && (String(q.q).match(/_{2,}/g) || []).length === 1 &&
-      String(q.a).trim().length > 1 && String(q.a).trim().length <= 40);
+      String(q.a).trim().length > 1 && String(q.a).trim().length <= 40 &&
+      /* ÖLÇÜLEN KUSUR: kaynak soru TANIM biçiminde olmalı. Boşluğu bir özel
+         adın parçası olan sorulara ("… amcasının adı Ebu ____ 'tir.") başka
+         bir cevap yerleştirildiğinde "Ebu Fil" gibi anlamsız bir ifade
+         çıkıyor; öğrenci olgu yanlışını değil bozuk bir adı görüyor.
+         Tanım biçimindeki boşluk ise tek başına bir terim taşır. */
+      TANIM_KALIBI.test(String(q.q)) && !TANIM_DEGIL.test(String(q.q)));
     if (liste.length) uygun.push({ ad: ad, liste: liste });
   });
   if (!uygun.length) return null;
@@ -10700,6 +10800,409 @@ function turetilmisAdaylar(types, d, adet) {
     }
   }
   return out;
+}
+
+/* ═══════════════ MÜFREDAT KAPSAMI ═══════════════
+   ÖLÇÜLEN SORUN: seçim katmanı bir sorunun TİPİNİ ve ÜNİTESİNİ biliyordu ama
+   o ünitenin hangi öğrenme çıktısını ölçtüğünü bilmiyordu. Sonuç: on soruluk
+   bir kâğıt aynı bilgi noktasını iki kez ölçebiliyordu (din-6'da Kadir Gecesi
+   hem boşluk doldurmada hem hata bulmada çıkıyordu) ve programda yazılı başka
+   bir çıktı (aynı kâğıtta fitre) hiç sorulmadan kalabiliyordu.
+
+   ÇÖZÜM: her ünite, resmî programdaki öğrenme çıktılarına karşılık gelen
+   kapsam maddelerine ayrılır. Adaylar bu maddelere etiketlenir; seçim
+   kapsanmamış maddeye öncelik verir; seçimden sonra kapsam denetimi yapılır.
+   Maddeler resmî çıktı sırasına göre yazılır — bu aynı zamanda öncelik
+   sırasıdır (çıktılar → kavramlar → konu bilgisi → günlük hayat bağlantısı).
+
+   `kod` alanı maddenin UYDURULMADIĞININ kanıtıdır: resmî programdaki öğrenme
+   çıktısı kodudur. `a` alanı, adayları maddeye bağlayan anahtar sözcüklerdir.
+   Bir ünitenin KAPSAM kaydı yoksa kapsam, o ünitenin kendi banka
+   sorularından TÜRETİLİR (`kapsamTuret`) — böylece hiçbir ders kapsam
+   dengelemesinden yoksun kalmaz ve müfredat iddiası uydurulmaz. */
+const KAPSAM = {
+  /* Din Kültürü 5-7 ve 9-11: TYMM programı (DKAB kodları).
+     Din Kültürü 8 ve 12: 2026-2027'de önceki programla devam ediyor,
+     kodlar o programın kazanım numaralarıdır. */
+  "din-5": {
+    "Allah İnancı": [
+      { k: "Evrendeki düzenden akıl yürütme", kod: "DKAB.5.1.1", a: ["evren", "düzen", "uyum", "ölçü", "gece", "gündüz", "mevsim", "kâinat"] },
+      { k: "Allah'ın varlığı ve birliği", kod: "DKAB.5.1.2", a: ["varlığı", "birliği", "tevhit", "ortağı", "benzeri", "iman", "ihlas"] },
+      { k: "Allah'ın güzel isimleri (Esmâ-i Hüsnâ)", kod: "DKAB.5.1.3", a: ["esmâ", "esma", "isim", "rahman", "rahim", "alîm", "alim", "kadir", "rezzak"] },
+      { k: "Dua ve kulluk bilinci", kod: "DKAB.5.1.4", a: ["dua", "şükür", "takva", "kulluk", "yönel"] }
+    ],
+    "Namaz": [
+      { k: "Namaz ibadetinin tanımı ve vakitleri", kod: "DKAB.5.2.1", a: ["farz", "vakit", "beş", "sabah", "yatsı", "cuma", "rekât", "ezan", "kıble"] },
+      { k: "Namazın kılınışı ve şartları", kod: "DKAB.5.2.2", a: ["kılınış", "kıyam", "rükû", "secde", "tekbir", "abdest", "teyemmüm", "selam", "şart", "temizlik"] },
+      { k: "Namazın insana kazandırdıkları", kod: "DKAB.5.2.3", a: ["kazandır", "düzen", "sorumlu", "yakın", "huzur"] },
+      { k: "Namazda okunan dua ve sureler", kod: "DKAB.5.2.4", a: ["tahiyyat", "dua", "fatiha", "okunan"] }
+    ],
+    "Kur'an-ı Kerim": [
+      { k: "Kur'an-ı Kerim'in iç düzeni", kod: "DKAB.5.3.1", a: ["sure", "ayet", "cüz", "hizip", "bölüm", "bakara", "fatiha"] },
+      { k: "Kur'an-ı Kerim'in temel özellikleri", kod: "DKAB.5.3.2", a: ["son", "ilahi kitap", "arapça", "korun", "yazı", "hafız", "indiril", "tecvit"] },
+      { k: "Kur'an-ı Kerim'in ana konuları", kod: "DKAB.5.3.3", a: ["ana konu", "inanç", "ibadet", "ahlak", "kıssa", "öğüt"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.5.3.4", a: ["kevser", "kısa sure", "anlam", "meal"] }
+    ],
+    "Peygamber Kıssaları": [
+      { k: "Peygamberlik ve peygamberlerin özellikleri", kod: "DKAB.5.4.1", a: ["peygamber", "elçi", "ismet", "sıdk", "emanet", "fetanet", "tebliğ", "seçil"] },
+      { k: "Kıssalardaki öğütler ve ibret", kod: "DKAB.5.4.2", a: ["kıssa", "ibret", "öğüt", "sabır", "nuh", "yusuf", "eyyub", "ibrahim", "yunus", "musa", "tufan"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.5.4.3", a: ["kureyş", "anlam", "meal"] }
+    ],
+    "Mimarimizde Dinî Motifler": [
+      { k: "Dinin mimarimize etkisi", kod: "DKAB.5.5.1", a: ["mimari", "eser", "sinan", "üslup", "hat", "çini", "ebru", "tezhip", "süsleme"] },
+      { k: "Camilerin bölümleri", kod: "DKAB.5.5.2", a: ["cami", "mihrap", "minber", "minare", "şadırvan", "kubbe", "kürsü", "mescit", "bölüm"] },
+      { k: "Cami örneklerinin karşılaştırılması", kod: "DKAB.5.5.3", a: ["selimiye", "süleymaniye", "edirne", "örnek", "karşılaştır", "haram", "nebe"] }
+    ]
+  },
+  "din-6": {
+    "Peygamber ve İlahi Kitap İnancı": [
+      { k: "Peygamberlerin rehber olarak gönderilmesi", kod: "DKAB.6.1.1", a: ["peygamber", "rehber", "görev", "örnek", "tebliğ", "üsve"] },
+      { k: "Vahyin gönderiliş amacı", kod: "DKAB.6.1.2", a: ["vahiy", "cebrail", "amaç", "doğru yol", "mesaj"] },
+      { k: "İlahi kitaplar", kod: "DKAB.6.1.3", a: ["ilahi kitap", "tevrat", "zebur", "incil", "kur'an", "suhuf", "dört büyük"] },
+      { k: "Peygamberlerin sıfatları", kod: "DKAB.6.1.1", a: ["ismet", "sıdk", "emanet", "fetanet", "tebliğ", "sıfat", "güvenilir", "günah"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.6.1.4", a: ["felak", "anlam", "meal"] }
+    ],
+    "Ramazan ve Oruç": [
+      { k: "Ramazan'ın oruç ve Kur'an ayı olması", kod: "DKAB.6.2.1", a: ["ramazan", "kur'an ayı", "kadir gecesi", "mukabele", "bin aydan", "indiril", "önem"] },
+      { k: "Oruçla ilgili kavramlar (sahur, imsak, iftar, teravih, fitre)", kod: "DKAB.6.2.2", a: ["sahur", "imsak", "iftar", "teravih", "mukabele", "fitre", "kavram"] },
+      { k: "Orucun kimlere farz olduğu ve kolaylıklar", kod: "DKAB.6.2.2", a: ["farz", "yükümlü", "muaf", "hasta", "yolcu", "kolaylık", "çeşit", "vacip", "sünnet"] },
+      { k: "Orucu bozan ve bozmayan durumlar", kod: "DKAB.6.2.2", a: ["bozan", "bozmayan", "dikkat", "durum", "kaza", "kefaret"] },
+      { k: "Orucun insana kazandırdıkları", kod: "DKAB.6.2.3", a: ["kazandır", "irade", "empati", "ihtiyaç sahibi", "paylaş", "dayanış", "davranış"] },
+      { k: "İftar duası ve Ramazan Bayramı", kod: "DKAB.6.2.4", a: ["iftar duası", "bayram", "şeker", "dua"] }
+    ],
+    "Ahlaki Davranışlar": [
+      { k: "Doğru sözlü olmak", kod: "DKAB.6.3.1", a: ["doğru söz", "dürüst", "yalan", "güven", "sıdk", "söz"] },
+      { k: "Merhamet", kod: "DKAB.6.3.2", a: ["merhamet", "şefkat", "acı", "yardım", "canlı"] },
+      { k: "Adap ve nezaket kuralları", kod: "DKAB.6.3.3", a: ["adap", "nezaket", "selam", "sofra", "izin", "misafir", "saygı", "büyük"] },
+      { k: "Vatan sevgisi", kod: "DKAB.6.3.4", a: ["vatan", "millet", "bayrak", "sahip çık"] },
+      { k: "Kaçınılması gereken davranışlar", kod: "DKAB.6.3.1", a: ["gıybet", "haset", "kibir", "israf", "tamah", "cimri"] },
+      { k: "Dua okuma ve anlamını yorumlama", kod: "DKAB.6.3.5", a: ["kunut", "dua", "anlam"] }
+    ],
+    "Peygamberliğinden Önce Hz. Muhammed": [
+      { k: "Doğduğu çevre ve ailesi", kod: "DKAB.6.4.1", a: ["mekke", "fil", "abdülmuttalib", "ebu talib", "amine", "abdullah", "halime", "süt anne", "doğ"] },
+      { k: "Çocukluk yılları", kod: "DKAB.6.4.2", a: ["çocukluk", "yetim", "dede", "amca", "kaybet", "himaye"] },
+      { k: "Gençlik yılları", kod: "DKAB.6.4.3", a: ["gençlik", "ticaret", "el-emin", "güvenilir", "hatice", "hılfü", "kâbe", "onarım"] },
+      { k: "Aile hayatı", kod: "DKAB.6.4.3", a: ["hatice", "fatma", "hasan", "hüseyin", "aile", "eş", "kız", "torun"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.6.4.4", a: ["fil suresi", "anlam", "meal"] }
+    ],
+    "Kültürümüzdeki Dinî Motifler": [
+      { k: "Geleneğimizde dinin izleri", kod: "DKAB.6.5.1", a: ["gelenek", "bayram", "kandil", "ziyaret", "komşu", "davulcu", "mezarlık", "harçlık", "kurban"] },
+      { k: "Edebiyatımızda dinin izleri", kod: "DKAB.6.5.1", a: ["mevlit", "edebiyat", "süleyman çelebi", "vesilet", "şiir", "eser"] },
+      { k: "Musikimizde dinin izleri", kod: "DKAB.6.5.1", a: ["ilahi", "musiki", "ezgi", "tasavvuf musikisi", "nefes"] }
+    ]
+  },
+  "din-7": {
+    "Melek ve Ahiret İnancı": [
+      { k: "Melekler ve görevleri", kod: "DKAB.7.1.1", a: ["melek", "cebrail", "mikail", "azrail", "israfil", "kiramen", "nurdan", "görev", "sınıflandır"] },
+      { k: "Görülmeyen varlıklar", kod: "DKAB.7.1.1", a: ["cin", "görülmeyen", "varlık", "iradeli", "âlem"] },
+      { k: "Ahiret hayatının aşamaları", kod: "DKAB.7.1.2", a: ["ahiret", "berzah", "kıyamet", "mahşer", "mizan", "diriliş", "bâs", "hesap", "aşama"] },
+      { k: "Melek ve ahiret inancının kazandırdıkları", kod: "DKAB.7.1.3", a: ["kazandır", "sorumluluk", "bilinç", "davranış", "hazırlık"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.7.1.4", a: ["nâs", "nas suresi", "anlam", "meal"] }
+    ],
+    "Hac, Umre ve Kurban": [
+      { k: "Hac ibadeti ve uygulamaları", kod: "DKAB.7.2.1", a: ["hac", "tavaf", "sa'y", "vakfe", "arafat", "ihram", "kâbe", "safa", "merve", "farz"] },
+      { k: "Umre ve hacdan farkı", kod: "DKAB.7.2.1", a: ["umre", "zaman", "fark", "ziyaret"] },
+      { k: "Kurban ibadeti", kod: "DKAB.7.2.2", a: ["kurban", "ibrahim", "et", "paylaş", "kesil", "bayram"] },
+      { k: "Hac ve kurbanın kültürümüze yansımaları", kod: "DKAB.7.2.3", a: ["kültür", "gelenek", "bayram", "toplumsal", "dayanış", "evrensel"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.7.2.4", a: ["kâfirun", "kafirun", "anlam", "meal"] }
+    ],
+    "İslam Düşüncesinde Yorumlar": [
+      { k: "Yorum farklılıklarının sebepleri", kod: "DKAB.7.3.1", a: ["sebep", "farklılık", "coğrafya", "kültür", "yorum", "ictihat", "içtihat"] },
+      { k: "Yorum biçimlerinin sınıflandırılması", kod: "DKAB.7.3.2", a: ["mezhep", "itikadi", "fıkhi", "sınıflandır", "hanefi", "ekol"] },
+      { k: "Kültürümüzdeki tasavvufi yorumlar", kod: "DKAB.7.3.3", a: ["tasavvuf", "ahlak", "kalp", "edebiyat", "musiki", "olgunluk"] },
+      { k: "Alevilik-Bektaşilik kavramları ve cem erkânı", kod: "DKAB.7.3.4", a: ["alevilik", "bektaşilik", "cem", "zakir", "dede", "makâlât", "erkân", "deyiş"] },
+      { k: "Farklı yorumlara karşı tutum", kod: "DKAB.7.3.1", a: ["hoşgörü", "saygı", "birlikte", "dışla", "tutum"] }
+    ],
+    "Peygamber Olarak Hz. Muhammed": [
+      { k: "Mekke dönemi", kod: "DKAB.7.4.1", a: ["mekke", "hira", "ilk vahiy", "kırk", "peygamberlik", "baskı", "zorluk", "tebliğ"] },
+      { k: "Hicret", kod: "DKAB.7.4.2", a: ["hicret", "göç", "medine", "muhacir", "ensar"] },
+      { k: "Medine dönemi", kod: "DKAB.7.4.3", a: ["medine", "mescid-i nebi", "anlaşma", "kardeşlik", "veda hutbesi", "toplum"] },
+      { k: "Hz. Muhammed'in örnekliği", kod: "DKAB.7.4.3", a: ["örnek", "alçak gönüllü", "istişare", "eğitim", "ölçü", "insan"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "DKAB.7.4.4", a: ["nasr", "anlam", "meal"] }
+    ],
+    "Yaşayan Dünya Dinleri": [
+      { k: "Yahudilik", kod: "DKAB.7.5.1", a: ["yahudi", "tevrat", "sinagog", "havra", "haham", "şabat", "cumartesi", "talmud"] },
+      { k: "Hristiyanlık", kod: "DKAB.7.5.1", a: ["hristiyan", "incil", "kilise", "havari", "pazar", "vaftiz", "papaz"] },
+      { k: "Hinduizm", kod: "DKAB.7.5.1", a: ["hinduizm", "veda", "kast", "reenkarnasyon", "karma"] },
+      { k: "Budizm", kod: "DKAB.7.5.1", a: ["budizm", "nirvana", "siddharta", "gautama", "buda"] },
+      { k: "Dinler arası ortak yönler ve saygı", kod: "DKAB.7.5.1", a: ["ortak", "tek tanrı", "ilahi kitap", "saygı", "barış", "birlikte"] }
+    ]
+  },
+  "din-8": {
+    "Kader İnancı": [
+      { k: "Kader ve kaza kavramları", kod: "8.1.1", a: ["kader", "kaza", "ölçü", "takdir", "sünnetullah", "ecel", "rızık"] },
+      { k: "İlim, irade, sorumluluk ile kader ilişkisi", kod: "8.1.2", a: ["irade", "sorumluluk", "akıl", "seçim", "ilişki", "özgür"] },
+      { k: "Tevekkül ve tedbir", kod: "8.1.3", a: ["tevekkül", "tedbir", "çalış", "çaba", "önlem", "bırak"] },
+      { k: "Kaderle ilgili yanlış anlayışlar", kod: "8.1.4", a: ["yanlış", "alın yazısı", "sorumsuz", "gereksiz", "sorgula"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "8.1.6", a: ["ayet el-kürsi", "ayetelkürsi", "anlam", "meal"] }
+    ],
+    "Zekât ve Sadaka": [
+      { k: "Paylaşma ve yardımlaşmanın önemi", kod: "8.2.1", a: ["paylaş", "yardımlaş", "dayanış", "toplumsal", "önem"] },
+      { k: "Zekât ibadeti", kod: "8.2.2", a: ["zekât", "nisap", "farz", "mal", "oran", "beş şart"] },
+      { k: "Sadaka ve çeşitleri", kod: "8.2.2", a: ["sadaka", "cariye", "gönüllü", "gülümse", "karşılık"] },
+      { k: "İnfak kültürü ve fitre", kod: "8.2.3", a: ["infak", "fitre", "ihtiyaç sahibi", "bireysel", "kültür"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "8.2.5", a: ["maun", "maûn", "anlam", "meal"] }
+    ],
+    "Din ve Hayat": [
+      { k: "Din, birey ve toplum ilişkisi", kod: "8.3.1", a: ["birey", "toplum", "ilişki", "sosyal", "güven", "dürüst"] },
+      { k: "Dinin koruduğu temel haklar", kod: "8.3.2", a: ["can", "nesil", "akıl", "mal", "din emniyeti", "hak", "ilke"] },
+      { k: "Emek, helal kazanç ve emanet", kod: "8.3.2", a: ["emek", "helal", "kazanç", "emanet", "ihsan", "çalış", "hak"] },
+      { k: "İsraftan kaçınma ve kanaat", kod: "8.3.1", a: ["israf", "kanaat", "tüketim", "su", "çevre", "emanet"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "8.3.4", a: ["asr", "anlam", "meal"] }
+    ],
+    "Hz. Muhammed'in Örnekliği": [
+      { k: "Doğruluğu ve güvenilirliği", kod: "8.4.1", a: ["doğru", "güvenilir", "el-emin", "söz", "emanet"] },
+      { k: "Merhametli ve affedici oluşu", kod: "8.4.2", a: ["merhamet", "affed", "şefkat", "canlı", "çevre"] },
+      { k: "İstişareye verdiği önem", kod: "8.4.3", a: ["istişare", "danış", "karar", "görüş"] },
+      { k: "Hakkı gözetmesi ve adaleti", kod: "8.4.5", a: ["hak", "adalet", "ayrım", "eşit", "gözet"] },
+      { k: "İnsanlara verdiği değer ve örnekliği", kod: "8.4.6", a: ["değer", "insan", "örnek", "sünnet", "hadis", "üsve", "aile", "komşu", "eğitim"] },
+      { k: "Sure okuma ve anlamını yorumlama", kod: "8.4.9", a: ["kureyş", "anlam", "meal"] }
+    ],
+    "Kur'an-ı Kerim ve Özellikleri": [
+      { k: "İslam dininin temel kaynakları", kod: "8.5.1", a: ["kaynak", "kur'an", "sünnet", "hadis", "temel"] },
+      { k: "Kur'an'ın ana konuları", kod: "8.5.2", a: ["ana konu", "inanç", "ibadet", "ahlak", "sınıflandır"] },
+      { k: "Kur'an'ın temel özellikleri", kod: "8.5.3", a: ["özellik", "korun", "arapça", "yirmi üç", "yazıya", "ezber", "son"] },
+      { k: "Kur'an'ın iç düzeni ve okuma bilgisi", kod: "8.5.3", a: ["sure", "ayet", "cüz", "meal", "tefsir", "hafız", "tecvit", "fatiha", "bakara"] },
+      { k: "İlk emir ve okumaya çağrı", kod: "8.5.3", a: ["ilk emir", "oku", "alak", "öğren", "çağır"] }
+    ]
+  },
+  "din-9": {
+    "Allah-İnsan İlişkisi": [
+      { k: "İnsanın yaratılışı ve özellikleri", kod: "DKAB.9.1.1", a: ["yaratılış", "insan", "özellik", "akıl", "irade", "fıtrat", "halifelik", "sorumlu"] },
+      { k: "Bilgiye ulaşma yolları", kod: "DKAB.9.1.2", a: ["bilgi", "doğru", "ara", "duyu", "akıl", "vahiy", "haber"] },
+      { k: "İbadet ve dua ile iletişim", kod: "DKAB.9.1.3", a: ["dua", "ibadet", "iletişim", "yönel", "şükür", "tövbe", "ihlas", "takva"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.9.1.4", a: ["rum suresi", "ayet", "meal"] }
+    ],
+    "İslam'da İnanç Esasları": [
+      { k: "İmanın mahiyeti", kod: "DKAB.9.2.1", a: ["iman", "tasdik", "ikrar", "kalp", "mahiyet", "şehadet"] },
+      { k: "İslam'ın iman esasları", kod: "DKAB.9.2.2", a: ["esas", "melek", "kitap", "peygamber", "ahiret", "kader", "amentü", "tevhit", "gayb"] },
+      { k: "İmanın bireye ve topluma kazandırdıkları", kod: "DKAB.9.2.3", a: ["kazandır", "birey", "toplum", "hesap", "ahlak", "güven"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.9.2.4", a: ["bakara", "ayet", "meal"] }
+    ],
+    "İslam'da İbadetler": [
+      { k: "İbadet ve temel ilkeleri", kod: "DKAB.9.3.1", a: ["ibadet", "niyet", "ilke", "amaç", "kolaylık", "ruhsat"] },
+      { k: "Temel ibadetlerin sınıflandırılması", kod: "DKAB.9.3.2", a: ["farz", "nafile", "vacip", "sınıflandır", "beden", "mal", "namaz", "oruç", "zekât", "hac"] },
+      { k: "İnsan ve ibadet ilişkisi", kod: "DKAB.9.3.3", a: ["ilişki", "kazandır", "düzen", "irade", "empati", "toplumsal", "cemaat"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.9.3.4", a: ["zariyat", "hicr", "ayet", "meal"] }
+    ],
+    "İslam'da Ahlak İlkeleri": [
+      { k: "Ahlakın mahiyeti", kod: "DKAB.9.4.1", a: ["ahlak", "vicdan", "mahiyet", "ölçüt", "iyilik"] },
+      { k: "Ahlakın temel unsurları", kod: "DKAB.9.4.2", a: ["unsur", "sıdk", "adalet", "sabır", "tevekkül", "takva", "şükür", "itidal", "emanet", "af"] },
+      { k: "Ahlaki tutum ve davranışlar", kod: "DKAB.9.4.3", a: ["tutum", "davranış", "gıybet", "söz", "sorumluluk", "birr", "ana baba", "tutarsız"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.9.4.4", a: ["isra", "ayet", "meal"] }
+    ],
+    "Kur'an'a Göre Hz. Muhammed": [
+      { k: "Beşerî ve peygamberlik yönü", kod: "DKAB.9.5.1", a: ["beşer", "peygamberlik", "insan", "yön", "hatemü", "son peygamber"] },
+      { k: "Görevleri: tebliğ, tebyin ve örneklik", kod: "DKAB.9.5.1", a: ["tebliğ", "tebyin", "örnek", "üsve", "görev", "kandil", "müjde", "uyar"] },
+      { k: "Örnekliğini esas alan bakış açısı", kod: "DKAB.9.5.2", a: ["bakış", "hayata geçir", "şefkat", "rahmet", "âlemin"] },
+      { k: "Kültürümüzde Hz. Muhammed ve Ehlibeyt sevgisi", kod: "DKAB.9.5.3", a: ["ehlibeyt", "kültür", "sevgi", "el-emin", "hılfü"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.9.5.4", a: ["ahzab", "nahl", "ayet", "meal"] }
+    ]
+  },
+  "din-10": {
+    "İslam'da Varlık ve Bilgi": [
+      { k: "Bilginin yeri ve kaynakları", kod: "DKAB.10.1.1", a: ["bilgi", "kaynak", "duyu", "akıl", "vahiy", "mütevatir", "haber", "temellendir"] },
+      { k: "Allah-âlem ilişkisi", kod: "DKAB.10.1.2", a: ["âlem", "yaratan", "yaratılan", "varlık", "ilişki", "yasa"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.10.1.3", a: ["isra", "mülk", "ayet", "meal"] }
+    ],
+    "Allah'ı Tanımak": [
+      { k: "Allah'ın varlığının delilleri", kod: "DKAB.10.2.1", a: ["delil", "düzen", "amaç", "hudus", "fıtrat", "imkân", "akıl yürüt"] },
+      { k: "Allah'ın isim ve sıfatları", kod: "DKAB.10.2.2", a: ["isim", "sıfat", "esmâ", "esma", "ilim", "kudret", "semi", "basar", "tekvin", "rezzak", "hakîm", "alîm", "zatî"] },
+      { k: "Tevhit inancı", kod: "DKAB.10.2.1", a: ["tevhit", "birlik", "ortağı", "benzeri", "iman"] }
+    ],
+    "İslam'ın Evrensel Mesajları": [
+      { k: "Tevhit ilkesi", kod: "DKAB.10.3.1", a: ["tevhit", "birlik", "evrensel", "ilke"] },
+      { k: "Adalet ve eşitlik", kod: "DKAB.10.3.2", a: ["adalet", "eşitlik", "onur", "üstünlük", "ayrım", "hak", "faiz", "haksız"] },
+      { k: "İslam ve barış ilişkisi", kod: "DKAB.10.3.3", a: ["barış", "şiddet", "güven", "birlikte", "hoşgörü"] },
+      { k: "Danışma, emek ve bilgi değeri", kod: "DKAB.10.3.2", a: ["şûra", "danış", "emek", "ilim", "öğren", "kadın", "erkek", "komşu"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.10.3.4", a: ["nahl", "nisa", "bakara", "ayet", "meal"] }
+    ],
+    "Din, Çevre ve Teknoloji": [
+      { k: "İnsan, çevre ve ahlak ilişkisi", kod: "DKAB.10.4.1", a: ["çevre", "doğa", "emanet", "canlı", "merhamet", "israf", "kaynak"] },
+      { k: "Teknoloji ve ahlak ilişkisi", kod: "DKAB.10.4.2", a: ["teknoloji", "dijital", "mahremiyet", "kişilik", "paylaş", "doğrula", "ölçülü", "ekran"] },
+      { k: "Çevre ve teknoloji ilişkisi", kod: "DKAB.10.4.3", a: ["sürdürülebilir", "gelecek nesil", "kirlilik", "geri dönüşüm", "tasarruf"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.10.4.4", a: ["rum suresi", "ayet", "meal"] }
+    ],
+    "İslam Düşüncesinde İtikadi-Siyasi ve Fıkhi Yorumlar": [
+      { k: "Yorum farklılıklarının ortaya çıkış sebepleri", kod: "DKAB.10.5.1", a: ["sebep", "farklılık", "coğrafya", "kültür", "yorum", "ortaya çık"] },
+      { k: "İtikadi-siyasi ve fıkhi yorumlar", kod: "DKAB.10.5.2", a: ["itikadi", "siyasi", "fıkhi", "mezhep", "hanefi", "ebu hanife", "ekol", "inanç mesele"] },
+      { k: "İctihat, icma ve kıyas", kod: "DKAB.10.5.2", a: ["ictihat", "içtihat", "icma", "kıyas", "hüküm", "delil"] },
+      { k: "Farklı yorumlara karşı tutum", kod: "DKAB.10.5.3", a: ["hoşgörü", "saygı", "taassup", "birlik", "dışla", "zenginlik"] }
+    ]
+  },
+  "din-11": {
+    "Kader, İrade ve Sorumluluk": [
+      { k: "Kader ve kaderle ilgili kavramlar", kod: "DKAB.11.1.1", a: ["kader", "kaza", "ecel", "rızık", "sünnetullah", "takdir", "kavram"] },
+      { k: "İnsan, akıl, irade ve sorumluluk ilişkisi", kod: "DKAB.11.1.2", a: ["irade", "akıl", "sorumluluk", "seçim", "özgür", "ilişki", "tedbir", "tevekkül"] },
+      { k: "Kaderle ilgili yanlış anlayışlar", kod: "DKAB.11.1.2", a: ["yanlış", "sorumsuz", "gereksiz", "çalışma", "görüş"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.11.1.3", a: ["bakara", "ayet", "meal"] }
+    ],
+    "Din, Felsefe, Bilim ve Sanat": [
+      { k: "Din tanımları ve disiplinlerin dine yaklaşımı", kod: "DKAB.11.2.1", a: ["tanım", "disiplin", "yaklaşım", "mukayese", "din"] },
+      { k: "Dinin felsefe ve bilimle ilişkisi", kod: "DKAB.11.2.2", a: ["felsefe", "bilim", "yöntem", "akıl yürüt", "sınanabilir", "gözlem", "deney", "kanıt", "farabi"] },
+      { k: "Din ve sanat ilişkisi", kod: "DKAB.11.2.3", a: ["sanat", "hat", "tezhip", "ebru", "musiki", "mimari", "bezeme", "arabesk"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.11.2.4", a: ["al-i imran", "ayet", "meal"] }
+    ],
+    "İslam Medeniyeti ve Gönül Coğrafyamız": [
+      { k: "Medeniyetin oluşumuna etki eden unsurlar", kod: "DKAB.11.3.1", a: ["medeniyet", "unsur", "oluşum", "etkileşim", "kültür", "belirleyici"] },
+      { k: "İslam medeniyetinin izleri ve kurumları", kod: "DKAB.11.3.2", a: ["külliye", "medrese", "darüşşifa", "imaret", "vakıf", "kervansaray", "tekke", "kurum", "eser"] },
+      { k: "Gönül coğrafyamız", kod: "DKAB.11.3.2", a: ["gönül coğrafya", "balkan", "orta asya", "yesevi", "derviş", "yayıl", "bağ"] },
+      { k: "Medeniyetin bugünü ve geleceği", kod: "DKAB.11.3.3", a: ["bugün", "gelecek", "katkı", "çeviri", "avrupa", "aktar"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.11.3.4", a: ["rum suresi", "ayet", "meal"] }
+    ],
+    "İnançla İlgili Meseleler": [
+      { k: "İnançla ilgili felsefi yaklaşımlar", kod: "DKAB.11.4.1", a: ["felsefi", "yaklaşım", "ateizm", "deizm", "agnostik", "sorgula"] },
+      { k: "Kötülük problemi", kod: "DKAB.11.4.2", a: ["kötülük", "problem", "sınama", "adalet", "acı"] },
+      { k: "Din istismarı ve yeni dinî hareketler", kod: "DKAB.11.4.3", a: ["istismar", "çıkar", "hareket", "itaat", "sorgula", "tarikat", "aşırı yorum"] },
+      { k: "Hurafeler ve güvenilir bilgi", kod: "DKAB.11.4.3", a: ["hurafe", "batıl", "fal", "büyü", "muska", "kaynak", "doğrula", "yetkin", "kirlilik"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "DKAB.11.4.4", a: ["hadid", "ayet", "meal"] }
+    ],
+    "Yahudilik ve Hristiyanlık": [
+      { k: "Yahudiliğin tarihi ve temel özellikleri", kod: "DKAB.11.5.1", a: ["yahudi", "tevrat", "talmud", "sinagog", "haham", "şabat", "musevi", "ibrani"] },
+      { k: "Hristiyanlığın tarihi ve temel özellikleri", kod: "DKAB.11.5.1", a: ["hristiyan", "incil", "kilise", "vaftiz", "havari", "kanonik", "papaz"] },
+      { k: "İslam'ın bu dinlere yaklaşımı", kod: "DKAB.11.5.1", a: ["ortak", "tek tanrı", "ilahi kitap", "peygamber gelenek", "tevhit", "saygı", "barış"] }
+    ]
+  },
+  "din-12": {
+    "İslam ve Bilim": [
+      { k: "Din-bilim ilişkisi", kod: "12.1.1", a: ["din", "bilim", "ilişki", "akıl", "vahiy", "çatış", "etik", "kaynak göster"] },
+      { k: "Bilim ve düşüncenin gelişim süreci", kod: "12.1.2", a: ["gelişim", "süreç", "beytü'l-hikme", "çeviri", "teşvik", "ilim"] },
+      { k: "Eğitim ve bilim kurumları", kod: "12.1.3", a: ["medrese", "gözlemevi", "darüşşifa", "kütüphane", "kurum"] },
+      { k: "Müslüman bilim insanlarının çalışmaları", kod: "12.1.4", a: ["harezmî", "ibn sina", "ibn heysem", "biruni", "bilim insanı", "eser", "kanun", "optik", "cebir", "tıp"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "12.1.5", a: ["fâtır", "fatır", "ayet", "meal"] }
+    ],
+    "Anadolu'da İslam": [
+      { k: "Türklerin Müslüman olma süreci", kod: "12.2.1", a: ["türk", "müslüman", "süreç", "selçuklu", "anadolu", "islamlaş"] },
+      { k: "Kültürümüzde etkili şahsiyetler", kod: "12.2.2", a: ["yunus emre", "mevlana", "yesevi", "hacı bektaş", "şahsiyet", "mesnevi", "divan", "hikmet"] },
+      { k: "Kurumlar: ahilik, vakıf, kervansaray", kod: "12.2.2", a: ["ahilik", "vakıf", "kervansaray", "esnaf", "zanaat", "kurum", "hizmet"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "12.2.3", a: ["nisâ", "nisa", "ayet", "meal"] }
+    ],
+    "Tasavvufi Yorumlar": [
+      { k: "Tasavvufi düşüncenin oluşum süreci", kod: "12.3.1", a: ["tasavvuf", "oluşum", "süreç", "nefis", "terbiye", "amaç"] },
+      { k: "Ahlaki boyutun önemi", kod: "12.3.2", a: ["ahlak", "boyut", "gönül", "sevgi", "hoşgörü", "olgunluk", "zikir"] },
+      { k: "Kültürümüzde etkin tasavvufi yorumlar", kod: "12.3.3", a: ["mürşit", "mürit", "makam", "hâl", "tekke", "yol", "ilahi", "nefes"] },
+      { k: "Alevilik-Bektaşilikteki kavram ve erkânlar", kod: "12.3.4", a: ["alevilik", "bektaşilik", "cem", "cemevi", "musahiplik", "razılık", "kul hakkı", "erkân"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "12.3.5", a: ["hucurât", "hucurat", "ayet", "meal"] }
+    ],
+    "Güncel Dinî Meseleler": [
+      { k: "Dinî meselelerin çözümünde ilke ve yöntemler", kod: "12.4.1", a: ["ilke", "yöntem", "çözüm", "fetva", "yetkin", "kaynak", "doğrula", "içtihat"] },
+      { k: "Ekonomik hayatla ilgili ahlaki ölçüler", kod: "12.4.2", a: ["ekonomi", "mülkiyet", "fakirlik", "kazanç", "faiz", "ölçü"] },
+      { k: "Gıda ve bağımlılık konusunda ilkeler", kod: "12.4.3", a: ["gıda", "bağımlılık", "helal", "haram", "yiyecek", "içecek", "sağlık"] },
+      { k: "Sağlık ve tıpla ilgili meseleler", kod: "12.4.4", a: ["sağlık", "tıp", "organ", "nakil", "kan", "bağış", "otopsi", "ötenazi"] },
+      { k: "Din istismarı ve bilgi kirliliği", kod: "12.4.1", a: ["istismar", "batıl", "kirlilik", "paylaş", "asılsız", "hurafe"] },
+      { k: "Ayet okuma ve anlamını yorumlama", kod: "12.4.5", a: ["en'âm", "enam", "ayet", "meal"] }
+    ],
+    "Hint ve Çin Dinleri": [
+      { k: "Hinduizm", kod: "12.5.1", a: ["hinduizm", "veda", "kast", "reenkarnasyon", "karma", "çok tanrı"] },
+      { k: "Budizm", kod: "12.5.2", a: ["budizm", "nirvana", "siddharta", "gautama", "dört yüce", "acı"] },
+      { k: "Konfüçyanizm", kod: "12.5.3", a: ["konfüçyanizm", "konfüçyüs", "aile düzeni", "toplumsal görev", "ahlak"] },
+      { k: "Taoizm", kod: "12.5.4", a: ["taoizm", "tao", "lao tzu", "doğa", "uyum", "wu wei"] }
+    ]
+  }
+};
+
+/* Seçili ünitelerin kapsam maddelerini döndürür. Bir ünitenin KAPSAM kaydı
+   yoksa madde listesi o ünitenin BANKA sorularından türetilir; böylece
+   kapsam dengelemesi her derste çalışır ve resmî bir iddia uydurulmaz. */
+function kapsamFor() {
+  const tablo = KAPSAM[st.subject + "-" + st.grade] || {};
+  const perUnit = UNIT_BANK[st.subject + "-" + st.grade] || {};
+  const out = [];
+  seciliUniteler().map(unitName).forEach(function (ad) {
+    const kayit = tablo[ad];
+    if (kayit && kayit.length) {
+      kayit.forEach(function (m, i) {
+        out.push({ k: m.k, kod: m.kod, a: m.a, unite: ad, sira: i, resmi: true });
+      });
+      return;
+    }
+    kapsamTuret(perUnit[ad] || []).forEach(function (m, i) {
+      out.push({ k: m.k, kod: null, a: m.a, unite: ad, sira: i, resmi: false });
+    });
+  });
+  return out;
+}
+
+/* Bir ünitenin banka sorularından bilgi noktası kümeleri türetir.
+   Yöntem: cevaplardan (boşluk doldurmanın cevabı, çoktan seçmelinin doğru
+   seçeneği) kavram terimleri toplanır, her terim kaç soruda geçiyorsa
+   sayılır ve en çok soruyu kapsayan terimler açgözlü küme kaplamasıyla
+   seçilir. Terimler müfredata göre yazılmış sorulardan geldiği için
+   uydurma içerik oluşmaz; yine de resmî çıktı SAYILMAZ (`resmi: false`). */
+function kapsamTuret(liste) {
+  if (liste.length < 4) return [];
+  const metinler = liste.map(function (q) {
+    return hamMetin([q.q, (q.o || []).join(" "), String(q.a == null ? "" : q.a)].join(" "))
+      .toLocaleLowerCase("tr");
+  });
+  const terimler = new Map();
+  liste.forEach(function (q) {
+    let t = null;
+    if (q.ty === "fb") t = String(q.a || "").trim();
+    else if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) t = String(q.o[q.a] || "").trim();
+    if (!t) return;
+    t = t.toLocaleLowerCase("tr").replace(/[^0-9a-zçğıöşü\s'-]/g, "").trim();
+    /* Madde etiketi olarak kullanılacağı ve açık uçlu soruların kavram
+       yuvasına gireceği için aynı terim kalitesi denetiminden geçer. */
+    if (!terimMi(t)) return;
+    if (!terimler.has(t)) terimler.set(t, metinler.filter(function (m) { return m.indexOf(t) !== -1; }).length);
+  });
+  const sirali = [...terimler.entries()].filter(function (e) { return e[1] >= 1; })
+    .sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0], "tr"); });
+  const secilen = [], kapsanan = new Set();
+  for (const e of sirali) {
+    if (secilen.length >= 7) break;
+    const yeni = metinler.reduce(function (acc, m, i) {
+      if (!kapsanan.has(i) && m.indexOf(e[0]) !== -1) acc.push(i);
+      return acc;
+    }, []);
+    if (!yeni.length) continue;            // yeni soru kapsamıyorsa madde eklemez
+    yeni.forEach(function (i) { kapsanan.add(i); });
+    secilen.push({ k: "Bilgi noktası: " + e[0], a: [e[0]] });
+  }
+  return secilen.length >= 2 ? secilen : [];
+}
+
+/* Bir adayı kapsam maddelerinden birine etiketler. Puan, maddenin anahtar
+   sözcüklerinin sorunun TAM metninde (kök + seçenekler + cevap) kaç kez
+   geçtiğine bakar; en yüksek puanlı madde kazanır, hiçbiri tutmazsa -1. */
+function kapsamEtiketi(q, kapsam) {
+  if (!kapsam.length) return -1;
+  const parcalar = [q.q, (q.o || []).join(" "), String(q.a == null ? "" : q.a),
+    (q.sol || []).join(" "), (q.sag || []).join(" "), (q.ogeler || []).join(" ")];
+  const metin = hamMetin(parcalar.join(" ")).toLocaleLowerCase("tr");
+  let enIyi = -1, enIyiPuan = 0;
+  for (let i = 0; i < kapsam.length; i++) {
+    const m = kapsam[i];
+    if (q.unit && m.unite && q.unit !== m.unite) continue;   // farklı ünitenin maddesi
+    let puan = 0;
+    for (const kelime of m.a) if (metin.indexOf(kelime) !== -1) puan++;
+    if (puan > enIyiPuan) { enIyiPuan = puan; enIyi = i; }
+  }
+  return enIyi;
+}
+
+/* Ölçme boyutu — aynı bilgi noktası farklı boyutlarda ölçülebilir; bu
+   sınıflama, kâğıdın yalnızca ezber ya da yalnızca beceri sorusundan
+   oluşmasını engeller. Açık uçlu kalıplar kendi boyutunu bildirir. */
+const OP_BOYUT = {
+  "op-aciklama": "bilgi", "op-kavram": "kavram", "op-iliski": "iliski",
+  "op-neden-sonuc": "iliski", "op-karsilastirma": "iliski",
+  "op-gunluk": "gunluk", "op-karar": "gunluk",
+  "op-hata": "yorum", "op-soru-kurma": "yorum"
+};
+const BOYUT_IZ = [
+  ["gunluk", /günlük hayat|hayattan|örnek ver|bir durum|karşılaş|davran[ıi]rd[ıi]n/i],
+  ["iliski", /ilişki|neden|sonuç|bağlant|karşılaştır|benzerli|fark[ıi]|arasındaki|etkis/i],
+  ["yorum",  /değerlendir|yorumla|beklen|niçin|çıkarım|hangisi doğrudur|gösterir|amaç/i],
+  ["kavram", /ne denir|ne ad verilir|nedir|kavram|tanımla|anlamı/i]
+];
+function boyutu(q) {
+  if (q.ty === "op") return OP_BOYUT[q.kalip] || "yorum";
+  if (["es", "sira", "veri", "grafik", "sinif", "islem", "hata"].indexOf(q.ty) !== -1) return "beceri";
+  const metin = String(q.q);
+  for (const [ad, re] of BOYUT_IZ) if (re.test(metin)) return ad;
+  return "bilgi";
 }
 
 /* ── Ders bazlı üretim stratejisi ─────────────────────────────────────────
@@ -10974,11 +11477,11 @@ function vocabAdaylari(types, adet) {
   return out;
 }
 
-function acikUcluAdaylari(types, adet) {
+function acikUcluAdaylari(types, adet, kapsam) {
   if (!types.has("op")) return [];
   const out = [];
   for (let i = 0; i < adet; i++) {
-    const q = openQ();   // kalip'i openQ kendi kalıp kimliğiyle verir, ezilmemeli
+    const q = openQ(kapsam);   // kalip'i openQ kendi kalıp kimliğiyle verir, ezilmemeli
     if (q) out.push(Object.assign({}, q, { kaynak: "açık uçlu" }));
   }
   return out;
@@ -10997,11 +11500,53 @@ function genelBankaAdaylari(types) {
    Adaylar puanlanır; her seçimden sonra puanlar yeniden hesaplanır. Böylece
    seçilen her soru, o ana kadar seçilmişlerden ve geçmişten olabildiğince
    uzaklaşır. */
-function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
+/* Bir sorunun cevap METNİ — sızıntı denetiminde kullanılır. Modül düzeyinde
+   tutulur çünkü hem seçim (odevSec) hem kapsam denetimi (kapsamDenetimi) aynı
+   kuralı uygulamak zorundadır; kapsam denetimi kendi kopyasını taşımadığı
+   için bir kâğıda cevabı başka soruda yazılı bir soru sokabiliyordu. */
+function soruCevabi(q) {
+  if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) return sadeMetin(q.o[q.a]);
+  if (q.ty === "fb" || q.ty === "veri" || q.ty === "islem" || q.ty === "grafik" ||
+      q.ty === "hata") return sadeMetin(q.a);
+  return "";
+}
+
+/* Bir adayın, verilen kâğıda eklendiğinde cevap sızıntısı yaratıp
+   yaratmadığını söyler. Dört yön de denetlenir:
+     1) adayın cevabı, kâğıttaki bir eşleştirmenin sağ sütununda yazılı mı,
+     2) aday bir eşleştirmeyse sağ sütunu kâğıttaki bir sorunun cevabını
+        içeriyor mu,
+     3) adayın türetildiği kaynak sorular (`kapsar`) kâğıtta duruyor mu,
+     4) kâğıttaki türetilmiş soruların kaynağı aday mı. */
+function sizintiVarMi(aday, kagit) {
+  const adayCevap = soruCevabi(aday);
+  const adayIz = parmakIzi(aday);
+  for (const q of kagit) {
+    if (q.ty === "es" && Array.isArray(q.sag)) {
+      if (adayCevap && adayCevap.length >= 3 &&
+          q.sag.some(x => sadeMetin(x) === adayCevap)) return true;
+    }
+    if (aday.ty === "es" && Array.isArray(aday.sag)) {
+      const c = soruCevabi(q);
+      if (c && c.length >= 3 && aday.sag.some(x => sadeMetin(x) === c)) return true;
+    }
+    if (Array.isArray(aday.kapsar) && aday.kapsar.indexOf(parmakIzi(q)) !== -1) return true;
+    if (Array.isArray(q.kapsar) && q.kapsar.indexOf(adayIz) !== -1) return true;
+  }
+  return false;
+}
+
+function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
   /* Adil pay: birden fazla soru tipi seçiliyse tek bir tip kâğıdı ele
      geçirmesin. Sert bir yasak değil güçlü bir ceza — başka tip kalmadıysa
      ödev eksik bırakılmaz, yine bu tipten tamamlanır. */
   const adilPay = tipSayisi && tipSayisi > 1 ? Math.max(1, (count / tipSayisi) * 1.5) : Infinity;
+  kapsam = kapsam || [];
+  /* Kapsam sayacı: her kapsam maddesinden kâğıda kaç soru girdiği.
+     Kapsanmamış madde varken kapsanmış maddeye dönmek ağır cezalıdır;
+     hepsi kapsandıktan sonra ceza hafifler ve denge sağlar. */
+  const kapsamSayaci = {}, boyutSayaci = {};
+  let kapsananMadde = 0;
   const gecmis = gecmisiYoksay ? new Set() : new Set(gecmisOku());
   const secilen = [];
   const secilenCekirdek = [];
@@ -11020,15 +11565,11 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
      kapsar listesi yalnızca banka kaynaklı türetmeleri kapsadığı için burada
      cevap metni üzerinden genel bir koruma uygulanır (kelime havuzu dâhil). */
   const ifsaEdilen = new Set();
-  const cevapMetni = function (q) {
-    if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) return sadeMetin(q.o[q.a]);
-    if (q.ty === "fb" || q.ty === "veri" || q.ty === "islem" || q.ty === "grafik" ||
-        q.ty === "hata") return sadeMetin(q.a);
-    return "";
-  };
+  const cevapMetni = soruCevabi;
   const havuz = adaylar.map(function (q) {
     const iz = parmakIzi(q);
-    return { q: q, iz: iz, cek: cekirdek(q), kalip: q.kalip || iz };
+    return { q: q, iz: iz, cek: cekirdek(q), kalip: q.kalip || iz,
+      kx: kapsamEtiketi(q, kapsam), boyut: boyutu(q) };
   });
 
   while (secilen.length < count && havuz.length) {
@@ -11073,6 +11614,37 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
       else puan -= enYakin * 25;
       puan -= (tipSayaci[c.q.ty] || 0) * 3.5;                  // tip dengesi
       if ((tipSayaci[c.q.ty] || 0) >= adilPay) puan -= 40;     // tek tip kâğıdı ele geçirmesin
+      /* ── Kapsam dengesi ──
+         Kâğıdın tamamı konunun aynı bölümünden gelmesin: henüz ölçülmemiş bir
+         kapsam maddesi varken ölçülmüş maddeye dönmek ağır cezalıdır. Hepsi
+         ölçüldükten sonra ceza hafifler, böylece soru sayısı madde sayısını
+         aştığında ödev eksik kalmaz. Maddeler resmî çıktı sırasına göre
+         yazıldığı için ilk maddelere küçük bir öncelik verilir. */
+      /* ÖLÇÜLEN TUZAK: burada bir de "hiçbir maddeye bağlanamayan aday
+         beklesin" cezası vardı. Sıralama, tablo, grafik ve işlem soruları
+         anahtar sözcükle etiketlenemediği için sürekli cezalanıyor, kâğıttan
+         atılıyordu: prosedürel tipler %5'ten %1'e düştü, banka hızla tükendi
+         ve sekiz ödevde gerçek tekrar 0'dan 748'e çıktı. Kapsam önceliği
+         CEZAYLA değil, yalnızca yeni madde ÖDÜLÜYLE sağlanır. */
+      /* Kapsam önceliği, ölçülmemiş maddeye ÖDÜL vermekle değil, ölçülmüş
+         maddeye dönmeyi CEZALANDIRMAKLA sağlanır. Ödül denendi ve ölçüldü:
+         yalnızca anahtar sözcükle etiketlenebilen tipler (banka soruları ve
+         açık uçlu) ödül alıyordu; açık uçlu payı %17'den %22'ye çıktı,
+         sıralama/tablo/grafik %5'ten %1'e indi. Ceza ise tip ayrımı
+         yapmaz: etiketlenemeyen soru ne ödül ne ceza alır, kendi
+         ağırlığıyla yarışır. */
+      if (kapsam.length && c.kx >= 0) {
+        const acikVar = kapsananMadde < kapsam.length;
+        const n = kapsamSayaci[c.kx] || 0;
+        puan -= n * (acikVar ? 34 : 9);        // ölçülmüş maddeye dönmenin bedeli
+        puan -= Math.min(kapsam[c.kx].sira, 6) * 0.8;   // resmî öncelik sırası
+      }
+      /* Ölçme boyutu dengesi. "beceri" boyutu bu cezadan MUAFTIR: eşleştirme,
+         sıralama, tablo, grafik, sınıflandırma, işlem ve hata bulma soruları
+         hepsi tek boyuta düştüğü için ceza onları birbirine karşı eziyordu —
+         prosedürel tipler %5'ten %1'e indi. Bu tiplerin dengesini zaten tip
+         sayacı ve adil pay sınırı kuruyor. */
+      if (c.boyut !== "beceri") puan -= (boyutSayaci[c.boyut] || 0) * 3;
       /* Ünite dengesi yalnızca bir üniteye BAĞLI sorular için işler. Ünitesi
          olmayan türetilmiş sorular (sıralama, sınıflandırma, tablo, grafik)
          tek bir "undefined" sayacında birikiyor ve birbirini cezalandırıyordu;
@@ -11109,6 +11681,13 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
       harfSayaci[q.a] = (harfSayaci[q.a] || 0) + 1;
     }
     if (q.ty === "tf") { tfToplam++; if (q.a === true) tfDogru++; }
+    if (c.kx >= 0) {
+      if (!kapsamSayaci[c.kx]) kapsananMadde++;
+      kapsamSayaci[c.kx] = (kapsamSayaci[c.kx] || 0) + 1;
+      q.kx = c.kx;                       // kapsam denetimi ve rapor için taşınır
+    }
+    boyutSayaci[c.boyut] = (boyutSayaci[c.boyut] || 0) + 1;
+    q.boyut = c.boyut;
     tipSayaci[q.ty] = (tipSayaci[q.ty] || 0) + 1;
     if (q.unit) uniteSayaci[q.unit] = (uniteSayaci[q.unit] || 0) + 1;
     kalipSayaci[c.kalip] = (kalipSayaci[c.kalip] || 0) + 1;
@@ -11121,6 +11700,98 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi) {
     secilenCekirdek.push(c.cek);
   }
   return secilen;
+}
+
+/* ── Kapsam denetimi ──────────────────────────────────────────────────────
+   Seçim bittikten sonra, ölçülmemiş bir kapsam maddesi kaldıysa ve o madde
+   için uygun bir aday varsa, EN ÇOK TEKRAR EDEN maddeden bir soru çıkarılıp
+   yerine eksik maddenin sorusu konur. Değiştirme yalnızca kâğıdı bozmadığı
+   sürece yapılır: yeni soru, kalan sorularla çok benzer olmamalı ve aynı
+   parmak izini taşımamalıdır.
+   Soru sayısı madde sayısından azsa bütün maddeler ölçülemez; bu durumda
+   öncelik sırası (resmî çıktı sırası) korunur ve durum öğretmene bildirilir. */
+function kapsamDenetimi(secilen, havuz, kapsam, count, gecmis) {
+  gecmis = gecmis || new Set();
+  const sonuc = { toplam: kapsam.length, kapsanan: 0, degisen: 0, eksik: [], resmi: false };
+  if (!kapsam.length || !secilen.length) return sonuc;
+  sonuc.resmi = kapsam.some(function (m) { return m.resmi; });
+
+  const sayac = {};
+  secilen.forEach(function (q) { if (q.kx >= 0) sayac[q.kx] = (sayac[q.kx] || 0) + 1; });
+  const izler = new Set(secilen.map(parmakIzi));
+  const cekirdekler = secilen.map(cekirdek);
+
+  /* Eksik maddeler öncelik sırasına göre denenir */
+  const acik = [];
+  for (let i = 0; i < kapsam.length; i++) if (!sayac[i]) acik.push(i);
+  acik.sort(function (a, b) { return kapsam[a].sira - kapsam[b].sira; });
+
+  /* Değiştirme sayısı, kâğıdın yarısını aşmasın: seçim katmanının tip,
+     kalıp ve zorluk dengesi tümüyle bozulmasın. */
+  const enCok = Math.max(1, Math.floor(count / 2));
+  for (const ix of acik) {
+    if (sonuc.degisen >= enCok) break;
+    /* Bu madde için uygun, kâğıtta olmayan adaylar.
+       ÖLÇÜLEN TUZAK: burada `havuz.find` ile İLK uygun aday alınıyordu ve
+       oturum geçmişine bakılmıyordu. Havuz sırası sabit olduğu için sekiz
+       ardışık ödevde aynı soru yeniden ve yeniden sokuluyor, gerçek tekrar
+       0'dan 764'e çıkıyordu. Artık geçmişte çıkmamış adaylar önce gelir ve
+       eşit adaylar arasında kura çekilir. */
+    const uygunlar = havuz.filter(function (q) {
+      if (kapsamEtiketi(q, kapsam) !== ix) return false;
+      if (izler.has(parmakIzi(q))) return false;
+      const c = cekirdek(q);
+      return !cekirdekler.some(function (b) { return benzerlik(c, b) >= AYNI_SAYILIR; });
+    });
+    if (!uygunlar.length) continue;
+    /* Geçmişte çıkmış soru SOKULMAZ. Önce "geçmişte yoksa onu al, yoksa
+       yine de al" deniyordu; bir maddenin taze adayı tükendiğinde eski soru
+       giriyor ve sekiz ardışık ödevde gerçek tekrar 0'dan 565'e çıkıyordu. */
+    const taze = uygunlar.filter(function (q) { return !gecmis.has(parmakIzi(q)); });
+    if (!taze.length) continue;
+    const aday = pick(taze);
+    /* Çıkarılacak soru YALNIZCA aynı maddeyi YİNELEYEN bir sorudur: bir
+       maddeden iki ya da daha çok soru geldiyse fazlası çıkarılır.
+       ÖLÇÜLEN TUZAK: yinelenen madde bulunamadığında "hiçbir maddeye
+       bağlanamayan soruyu çıkar" deniyordu. Sıralama, tablo, grafik ve işlem
+       soruları anahtar sözcükle etiketlenemediği için tam olarak bunlar
+       kurban ediliyordu: prosedürel tipler %5'ten %1'e indi ve yerlerine
+       giren banka soruları havuzu tüketip tekrarı 565'e çıkardı. Bu tipler
+       aynı içeriği farklı bir beceriyle ölçer; kapsam dışı değildir.
+       Yineleme yoksa değiştirme YAPILMAZ — eksik madde öğretmene bildirilir. */
+    let cikarIx = -1, enFazla = 1;
+    for (let i = secilen.length - 1; i >= 0; i--) {
+      const k = secilen[i].kx;
+      if (k >= 0 && (sayac[k] || 0) > enFazla) { enFazla = sayac[k]; cikarIx = i; }
+    }
+    if (cikarIx < 0) continue;                 // yineleyen soru yok, dokunulmaz
+
+    const cikan = secilen[cikarIx];
+    /* SIZINTI DENETİMİ: aday, çıkarılacak soru hariç kalan kâğıtla birlikte
+       cevap sızıntısı yaratmamalı. Bu denetim başta atlanmıştı ve 160
+       kâğıtta 36 sızıntı ölçüldü — eşleştirme sorusunun sağ sütununda yazılı
+       olan bir cevabı soran soru kâğıda giriyordu. */
+    const kalan = secilen.filter(function (_, i) { return i !== cikarIx; });
+    if (sizintiVarMi(aday, kalan)) continue;
+
+    if (cikan.kx >= 0) sayac[cikan.kx]--;
+    izler.delete(parmakIzi(cikan));
+    cekirdekler.splice(cikarIx, 1);
+
+    const yeni = aday.ty === "mc" ? secenekKaristir(aday) : aday;
+    yeni.kx = ix; yeni.boyut = boyutu(yeni);
+    secilen[cikarIx] = yeni;
+    sayac[ix] = 1;
+    izler.add(parmakIzi(yeni));
+    cekirdekler.splice(cikarIx, 0, cekirdek(yeni));
+    sonuc.degisen++;
+  }
+
+  for (let i = 0; i < kapsam.length; i++) {
+    if (sayac[i]) sonuc.kapsanan++;
+    else sonuc.eksik.push(kapsam[i].k);
+  }
+  return sonuc;
 }
 
 /* ── Ödev üretimi ────────────────────────────────────────────────────────── */
@@ -11136,19 +11807,26 @@ function generate() {
   const tani = { istenen: count, toplamAday: 0, elenen: 0, elenenNeden: {}, tekil: 0, gecmistenTekrar: 0, genelBanka: false, tipler: {} };
   const gecmisAnlik = new Set(gecmisOku());   // bu ödev yazılmadan ÖNCEKİ geçmiş
 
-  /* 1) Aday toplama — üreteç ve kelime katmanı istenen sayının katı kadar
-        denenir, böylece süzgeçten sonra da seçecek malzeme kalır. */
+  /* 1) Müfredat kapsamı — seçili ünitelerin öğrenme çıktıları belirlenir.
+        Aday üretiminden ÖNCE hesaplanır: açık uçlu sorular artık ünite
+        adından değil kapsam maddelerinden üretiliyor. */
+  const kapsam = kapsamFor();
+
+  /* 2) Aday toplama — üreteç ve kelime katmanı istenen sayının katı kadar
+        denenir, böylece süzgeçten sonra da seçecek malzeme kalır. Açık uçlu
+        katman, her kapsam maddesine soru düşebilsin diye madde sayısına
+        göre ölçeklenir. */
   let ham = [].concat(
     bankAdaylari(types),
     uretecAdaylari(types, d, count * 8),
     turetilmisAdaylar(types, d, count * 3),
     vocabAdaylari(types, count * 2),
-    acikUcluAdaylari(types, Math.max(3, count))
+    acikUcluAdaylari(types, Math.max(3, count), kapsam)
   );
   if (!ham.length) { ham = genelBankaAdaylari(types); tani.genelBanka = ham.length > 0; }
   tani.toplamAday = ham.length;
 
-  /* 2) Kalite süzgeci — geçersiz cevap anahtarı / bozuk gövde elenir */
+  /* 3) Kalite süzgeci — geçersiz cevap anahtarı / bozuk gövde elenir */
   const gecerli = [];
   ham.forEach(function (q) {
     const sorun = sorunTespit(q);
@@ -11160,7 +11838,7 @@ function generate() {
     gecerli.push(q);
   });
 
-  /* 3) Parmak izine göre tekilleştirme — aynı soru ya da yalnızca sayısı/adı
+  /* 4) Parmak izine göre tekilleştirme — aynı soru ya da yalnızca sayısı/adı
         değişmiş soru havuzda bir kez yer alır */
   const gorulen = new Set(), tekil = [];
   gecerli.forEach(function (q) {
@@ -11171,8 +11849,14 @@ function generate() {
   });
   tani.tekil = tekil.length;
 
-  /* 4) Çeşitlilik seçimi */
-  const secilen = odevSec(tekil, count, d, false, types.size);
+  /* 5) Çeşitlilik + kapsam seçimi — seçim kapsam maddelerine göre
+        dengelenir; kâğıt konunun aynı bölümünden değil farklı
+        bölümlerinden sorular içerir. */
+  const secilen = odevSec(tekil, count, d, false, types.size, kapsam);
+
+  /* 6) Kapsam denetimi — ölçülmemiş madde kaldıysa yinelenen bir soru
+        çıkarılıp eksik maddenin sorusu konur. */
+  tani.kapsam = kapsamDenetimi(secilen, tekil, kapsam, count, gecmisAnlik);
 
   /* Havuz tükendiyse seçim, geçmişte çıkmış soruları da almak zorunda kalır.
      Bu gizlenmez: kaç sorunun tekrar olduğu sayılır ve kâğıtta bildirilir. */
@@ -11182,7 +11866,7 @@ function generate() {
   });
   tani.eksik = Math.max(0, count - secilen.length);
 
-  /* 5) Bu ödevin soruları geçmişe yazılır — sonraki "Yeni Ödev Oluştur"
+  /* 7) Bu ödevin soruları geçmişe yazılır — sonraki "Yeni Ödev Oluştur"
         bu soruları eler. */
   gecmisYaz(secilen.map(parmakIzi));
 
@@ -11204,6 +11888,20 @@ function taniNotu(tani) {
   }
   if (tani.genelBanka) {
     satir.push(`<div class="sheet-note tani-not" style="color:#dc2626;">⚠️ Seçili ünitelerin kendi soru bankası bulunmadığı için sorular sınıf genelindeki bankadan alındı; ünite başlığıyla birebir örtüşmeyebilir.</div>`);
+  }
+  /* Kapsam raporu: kâğıdın konunun kaç ayrı bölümünü ölçtüğünü gösterir.
+     Resmî öğrenme çıktısı listesi olan derslerde "öğrenme çıktısı", kapsamı
+     bankadan türetilen derslerde "bilgi noktası" denir — iddia karıştırılmaz. */
+  const kp = tani.kapsam;
+  if (kp && kp.toplam) {
+    const ad = kp.resmi ? "öğrenme çıktısı" : "bilgi noktası";
+    const eksikMetni = kp.eksik.length
+      ? ` Ölçülmeyen: ${kp.eksik.slice(0, 3).map(x => `“${x}”`).join(", ")}${kp.eksik.length > 3 ? ` ve ${kp.eksik.length - 3} madde daha` : ""}.`
+      : "";
+    const degisim = kp.degisen
+      ? ` Kapsamı genişletmek için ${kp.degisen} soru, aynı bilgiyi yineleyen sorularla değiştirildi.`
+      : "";
+    satir.push(`<div class="sheet-note tani-not">📚 Kapsam: seçili ünitelerin ${kp.toplam} ${ad} maddesinden ${kp.kapsanan} tanesi bu kâğıtta ölçülüyor.${degisim}${eksikMetni}${kp.eksik.length && kp.toplam > st.qs.length ? " Soru sayısını artırırsan kapsam genişler." : ""}</div>`);
   }
   if (tani.elenen) {
     satir.push(`<div class="sheet-note tani-not">🔎 Kalite denetimi: ${tani.elenen} aday soru (cevap anahtarı veya soru gövdesi hatası nedeniyle) kâğıda alınmadı.</div>`);
