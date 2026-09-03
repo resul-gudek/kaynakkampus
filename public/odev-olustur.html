@@ -10255,16 +10255,33 @@ function vocabQ() {
    (resmî öğrenme çıktısı adı), `t` = o maddenin somut kavramları. Böylece soru
    konunun belirli bir bölümünü hedefler. Kavram bulunamazsa madde başlığına,
    o da yoksa ünite adına düşülür — hiçbir durumda uydurma içerik üretilmez. */
+/* Her kalıp, HANGİ ÖLÇME BİÇİMİNİ uyguladığını `o` alanında bildirir. Kalıp
+   ancak o biçim, seçilen kapsam maddesinin içeriğinde GERÇEKTEN destekleniyorsa
+   kullanılır (bkz. kapsamFormlari). `n` gereken kavram sayısıdır.
+
+   ÖLÇÜLEN SORUN: kalıp, maddeye uygunluğuna bakılmadan seçiliyordu. Kavram
+   çıkarılamayan bir madde yalnızca dört başlık kalıbını alıyor ve bunların
+   ikisi günlük hayat/problem senaryosu olduğu için "Orucun insana
+   kazandırdıkları" maddesine gelen 68 sorunun %59'u
+   `op-gunluk` + `op-karar` oluyordu — yani "bu konuyla ilgili bir sorunla
+   karşılaşsanız nasıl davranırdınız?". Ölçüt "uygun mu" değil "teknik olarak
+   uygulanabilir mi" idi. */
 const ACIK_UCLU_KALIPLAR = [
-  { k: "op-aciklama",     n: 0, f: (b, t) => `"${b}" konusunda öğrendiklerinizi üç cümle ile açıklayınız.` },
-  { k: "op-gunluk",       n: 0, f: (b, t) => `"${b}" ile ilgili günlük hayattan iki örnek veriniz ve bu örneklerin konuyla bağlantısını yazınız.` },
-  { k: "op-kavram",       n: 1, f: (b, t) => `"${t[0]}" kavramını tanımlayınız ve günlük hayattan bir örnek veriniz.` },
-  { k: "op-neden-sonuc",  n: 1, f: (b, t) => `"${t[0]}" ile ilgili bir durum düşününüz. Bu durumun nedenini ve sonucunu yazınız.` },
-  { k: "op-karsilastirma",n: 2, f: (b, t) => `"${t[0]}" ile "${t[1]}" kavramlarını karşılaştırınız. Benzerliklerini ve farklarını yazınız.` },
-  { k: "op-iliski",       n: 2, f: (b, t) => `"${t[0]}" ile "${t[1]}" arasında nasıl bir ilişki vardır? Açıklayınız.` },
-  { k: "op-karar",        n: 0, f: (b, t) => `"${b}" konusuyla ilgili bir sorunla karşılaşsanız nasıl davranırdınız? Kararınızın gerekçesini yazınız.` },
-  { k: "op-hata",         n: 1, f: (b, t) => `"${t[0]}" konusunda sık yapılan bir hatayı yazınız ve bu hatanın nasıl düzeltileceğini açıklayınız.` },
-  { k: "op-soru-kurma",   n: 0, f: (b, t) => `"${b}" konusuyla ilgili bir soru kurunuz ve kendi sorunuzu cevaplayınız.` },
+  { k: "op-aciklama",     o: "bilgi",  n: 0, f: (b, t) => `"${b}" konusunda öğrendiklerinizi üç cümle ile açıklayınız.` },
+  { k: "op-soru-kurma",   o: "bilgi",  n: 0, f: (b, t) => `"${b}" konusuyla ilgili bir soru kurunuz ve kendi sorunuzu cevaplayınız.` },
+  { k: "op-ozet",         o: "bilgi",  n: 0, f: (b, t) => `"${b}" konusunun en önemli üç bilgisini yazınız.` },
+  { k: "op-kavram",       o: "kavram", n: 1, f: (b, t) => `"${t[0]}" kavramını tanımlayınız ve bir örnek veriniz.` },
+  { k: "op-hata",         o: "kavram", n: 1, f: (b, t) => `"${t[0]}" konusunda sık yapılan bir hatayı yazınız ve bu hatanın nasıl düzeltileceğini açıklayınız.` },
+  { k: "op-karsilastirma",o: "iliski", n: 2, f: (b, t) => `"${t[0]}" ile "${t[1]}" kavramlarını karşılaştırınız. Benzerliklerini ve farklarını yazınız.` },
+  { k: "op-iliski",       o: "iliski", n: 2, f: (b, t) => `"${t[0]}" ile "${t[1]}" arasında nasıl bir ilişki vardır? Açıklayınız.` },
+  { k: "op-neden-sonuc",  o: "iliski", n: 1, f: (b, t) => `"${t[0]}" konusunda bir neden-sonuç ilişkisi kurunuz ve bu ilişkiyi açıklayınız.` },
+  /* Değer/kazanım maddeleri için: uydurma bir senaryo kurmaz, maddenin kendi
+     içeriğinde SAYILAN özelliklerden birini seçip açıklamayı ister. */
+  { k: "op-deger",        o: "deger",  n: 0, f: (b, t) => `"${b}" arasında sayılan özelliklerden birini yazınız ve bu özelliğin nasıl geliştiğini açıklayınız.` },
+  /* Günlük hayat kalıpları YALNIZCA uygulama boyutu içerikte desteklenen
+     maddelerde kullanılır. */
+  { k: "op-gunluk",       o: "gunluk", n: 0, f: (b, t) => `"${b}" ile ilgili günlük hayattan iki örnek veriniz ve bu örneklerin konuyla bağlantısını yazınız.` },
+  { k: "op-karar",        o: "gunluk", n: 0, f: (b, t) => `"${b}" konusuyla ilgili bir durumla karşılaştığınızda nasıl davranırdınız? Kararınızın gerekçesini yazınız.` },
 ];
 
 /* Bir kapsam maddesinin somut kavramlarını, o maddeye ait BANKA sorularının
@@ -10288,7 +10305,10 @@ const TANIM_KALIBI = /(ne denir|ne ad verilir|nedir)\s*\?\s*$|_{2,}[^_]{0,24}\bd
 const TANIM_DEGIL = /(neden|önem|amaç|sonuc|sonuç|katkı|işlev|rol[üu]|görev|özellik|fark)[ıi]?\s*(nedir|ne olur)|(ad[ıi]|ismi)\s*(nedir|ne)\b|kimdir/i;
 /* Kavram, terim gibi durmalı: en çok üç sözcük ve fiilden türemiş ad
    ekleriyle bitmemeli (bunlar cümle parçasıdır, kavram değil). */
-const TERIM_DEGIL = /(mesi|ması|menin|manın|mek|mak|ilmesi|ulması|tırma|lanması)$/i;
+/* Fiilden türemiş ad ve ÇEKİMLİ FİİL ekleri. Çekimli ekler sonradan eklendi:
+   ölçümde "kesinlikle almamalıyız", "sağa sola bakmalı", "temiz ve özenli"
+   gibi cümle parçaları madde etiketi ve kavram olarak kullanılıyordu. */
+const TERIM_DEGIL = /(mesi|ması|menin|manın|mek|mak|ilmesi|ulması|tırma|lanması|malı|meli|malıyız|meliyiz|mıyor|miyor|yoruz|acak|ecek|dır|dir|tır|tir|dur|dür|tur|tür|ız|iz|uz|üz)$/i;
 /* Kavram olarak kullanılamayacak kadar genel sözcükler. Bunlar bir konuyu
    adlandırmaz; "kural" kavramını tanımlayınız gibi boş bir soru üretirler. */
 const GENEL_SOZ = new Set(["kural", "ortak", "araştırma", "karşılaştırma", "örnek", "durum",
@@ -10328,6 +10348,90 @@ function kapsamKavramlari(madde, perUnit) {
   return out;
 }
 
+/* ── Bir kapsam maddesinin DESTEKLEDİĞİ ölçme biçimleri ───────────────────
+   Akış tersine çevrildi: önce kalıp seçilip içerik ona doldurulmuyor; önce
+   maddenin içeriği inceleniyor, o içerikte gerçekten ölçülebilecek biçimler
+   belirleniyor, kalıp EN SON bu biçimlere göre seçiliyor.
+
+   İki kanıt kaynağı vardır ve ikisi de içerikten gelir:
+     1) Maddenin resmî öğrenme çıktısı başlığındaki ifade. Program metni
+        "kazandırdıkları" diyorsa madde bir DEĞER maddesidir; "kavramlar"
+        diyorsa kavram maddesidir; "ilişki/etki/sebep" diyorsa ilişki
+        maddesidir. Bu eşleme aşağıda açıkça yazılıdır, denetlenebilir.
+     2) Maddeye bağlı BANKA sorularının kendi biçimleri. Müfredata göre
+        yazılmış sorular tanım soruyorsa kavram ölçülebilir; gerekçe
+        soruyorsa ilişki ölçülebilir.
+
+   "gunluk" (günlük hayat / karar durumu) biçimi VARSAYILAN DEĞİLDİR: yalnızca
+   maddenin kendisi bir uygulama/davranış alanıysa ya da banka soruları
+   günlük hayat kurulumu kullanıyorsa açılır. Böylece olgusal bir maddeye
+   ("Orucu bozan ve bozmayan durumlar") "bir sorunla karşılaşsanız nasıl
+   davranırdınız?" sorusu eklenmez. */
+const FORM_IZ = [
+  /* Değer ve kazanım maddeleri — program metninin kendi ifadeleri */
+  ["deger",  /kazandırdık|kazandırdığ|değer|erdem|sevgi|saygı|sorumluluk|ahlak|adap|nezaket|davranış|tutum|bilinç|duyarlı/i],
+  /* Kavram/tanım maddeleri */
+  ["kavram", /kavram|tanım|isimler|isim ve sıfat|sıfat|terim|adlandır|ne denir/i],
+  /* İlişki, gerekçe, karşılaştırma maddeleri */
+  ["iliski", /ilişki|arasındaki|karşılaştır|mukayese|sebep|neden|etki|akıl yürüt|farklılık|çözümle|sentez|yorum/i],
+  /* Uygulama/günlük hayat alanları — programın kendisi uygulamayı öngörür.
+     ÖLÇÜLEN TUZAK: çok anlamlı sözcükler yanlış pozitif üretiyordu —
+     "Doğduğu çevre ve ailesi" (sosyal çevre), "İbadet ve dua ile iletişim"
+     (Allah ile iletişim) ve TDE'de "günlük" (edebî tür) senaryo alanı
+     sanılıyordu. Bu yüzden `çevre` ve `iletişim` yalnız başına kanıt
+     sayılmaz, eş anlamlı bağlamıyla birlikte aranır. */
+  ["gunluk", /günlük hayat|hayatına|uygulama|çevre (ve teknoloji|kirli|koru|duyarl|sorun)|doğal çevre|teknoloji|ekonomi|sağlık|gıda|bağımlılık|güncel|mesele|istismar|hurafe|güvenilir bilgi|adap|nezaket|(kitle|etkili|sosyal) iletişim|güvenlik|tasarruf|tüketim|trafik|afet/i],
+  /* Beceri/işlem maddeleri */
+  ["beceri", /işlem|hesap|ölçme|sıralama|sınıflandır|çizim|grafik|tablo|kroki|deney/i]
+];
+/* Sure/ayet/dua okuma maddeleri: içerik metni okuyup anlamını yorumlamaktır;
+   ne kavram tanımı ne günlük hayat senaryosu ne de neden-sonuç ölçülür. */
+const SADECE_BILGI = /sure okuma|ayet okuma|dua okuma|anlamını yorumlama|suresi|ayetinin|duası/i;
+
+const kapsamFormBellek = {};
+function kapsamFormlari(madde, perUnit) {
+  const anahtar = st.subject + "-" + st.grade + "|" + madde.unite + "|" + madde.k;
+  if (kapsamFormBellek[anahtar]) return kapsamFormBellek[anahtar];
+  const formlar = new Set(["bilgi"]);          // içerik bilgisi her maddede ölçülebilir
+  const baslik = String(madde.k || "");
+  if (SADECE_BILGI.test(baslik)) {
+    kapsamFormBellek[anahtar] = formlar;
+    return formlar;
+  }
+  /* 1) Resmî çıktı başlığından gelen kanıt.
+        `gunluk` biçimi YALNIZCA resmî öğrenme çıktısı başlığından açılabilir.
+        Bankadan türetilen maddelerin başlığı ham bir terimdir ("günlük",
+        "günlük rutini") ve bu terimler senaryo alanı anlamına gelmez;
+        ölçümde TDE'de edebî tür olan "günlük" senaryo sanılıyordu. */
+  FORM_IZ.forEach(function (p) {
+    if (p[0] === "gunluk" && !madde.resmi) return;
+    if (p[1].test(baslik)) formlar.add(p[0]);
+  });
+  /* 2) Maddeye bağlı banka sorularının kendi biçimlerinden gelen kanıt.
+        "gunluk" burada DAHA SIKI eşikle açılır: bir soru kökünde "davran"
+        ya da "bir durum" geçmesi maddeyi senaryo alanı yapmaz. Ölçüldü:
+        "Oruç tutan bir kişinin davranışlarında ne beklenir?" sorusu
+        yüzünden "Orucun insana kazandırdıkları" maddesine `op-karar`
+        uygulanıyordu — tam da düzeltilmesi istenen soru. Yalnızca sorunun
+        kendisi günlük hayat kurulumu kullanıyorsa kanıt sayılır. */
+  const liste = (perUnit && perUnit[madde.unite]) || [];
+  liste.forEach(function (q) {
+    if (kapsamEtiketi(q, [madde]) !== 0) return;
+    const kok = String(q.q);
+    if (TANIM_KALIBI.test(kok) && !TANIM_DEGIL.test(kok)) formlar.add("kavram");
+    if (/nedeni|sonucu|ilişki|neden[ıi]|etkis|katkıs|amacı|niçin|bağlantı/i.test(kok)) formlar.add("iliski");
+    if (/günlük hayat|hayattan bir|günlük yaşam/i.test(kok)) formlar.add("gunluk");
+    if (["es", "sira", "veri", "grafik", "sinif", "islem"].indexOf(q.ty) !== -1) formlar.add("beceri");
+  });
+  /* DEĞER maddelerinde senaryo kalıbı KULLANILMAZ: değer, uydurma bir
+     problem durumu üzerinden değil maddenin kendi içeriğinde sayılan
+     özellikler üzerinden ölçülür (op-deger). İkisi bir arada durduğunda
+     senaryo kalıbı değer kalıbını bastırıyordu. */
+  if (formlar.has("deger")) formlar.delete("gunluk");
+  kapsamFormBellek[anahtar] = formlar;
+  return formlar;
+}
+
 function openQ(kapsam) {
   const us = unitsFor().filter((_, i) => st.units.has(i));
   if (!us.length) return null;
@@ -10338,15 +10442,21 @@ function openQ(kapsam) {
   const unite = madde ? madde.unite : unitName(pick(us));
   const baslik = madde ? madde.k.replace(/^Bilgi noktası:\s*/, "") : unite;
   const kavramlar = madde ? kapsamKavramlari(madde, perUnit) : [];
-  /* Kalıp, elde kaç kavram olduğuna göre seçilir: iki kavram gerektiren
-     karşılaştırma kalıbı tek kavramla kurulamaz.
-     Yabancı dil derslerinde kavram yuvası KULLANILMAZ: oradaki "kavramlar"
+  /* Yabancı dil derslerinde kavram yuvası KULLANILMAZ: oradaki "kavramlar"
      sözcük dağarcığı ögeleridir ve `"Gömlek" kavramını tanımlayınız` gibi
-     bir soru dil öğrenme görevi değildir. Bu derslerde madde başlığını
-     kullanan kalıplarla kalınır. */
+     bir soru dil öğrenme görevi değildir. */
   const yabanciDil = st.subject === "ing" || st.subject === "alm";
-  const uygun = ACIK_UCLU_KALIPLAR.filter(x => x.n <= (yabanciDil ? 0 : kavramlar.length));
-  if (!uygun.length) return null;
+  const eldeki = yabanciDil ? 0 : kavramlar.length;
+  /* Kapsam maddesi yoksa (kapsam kaydı ve bankası olmayan ünite) yalnızca
+     içerik bilgisi ölçülebilir; senaryo kalıpları açılmaz.
+     Yabancı dil derslerinde de yalnızca içerik bilgisi ölçülür: Türkçe
+     yazılmış bir günlük hayat/karar sorusu dil öğrenme görevi değildir. */
+  const formlar = yabanciDil ? new Set(["bilgi"])
+    : (madde ? kapsamFormlari(madde, perUnit) : new Set(["bilgi"]));
+  /* Kalıp EN SON seçilir: hem ölçme biçimi maddede desteklenmeli hem de
+     kalıbın gerektirdiği kavram sayısı elde olmalı. */
+  const uygun = ACIK_UCLU_KALIPLAR.filter(x => formlar.has(x.o) && x.n <= eldeki);
+  if (!uygun.length) return null;              // uygun biçim yok — soru ZORLANMAZ
   const kalip = pick(uygun);
   const t = shuffle(kavramlar).slice(0, 2);
   return {
@@ -10355,7 +10465,7 @@ function openQ(kapsam) {
     /* Kalıp + hedeflenen kavram birlikte kimlik oluşturur; aynı kalıp farklı
        kavramla sorulduğunda tekrar sayılmaz, aynı kavramla sorulduğunda
        sayılır. */
-    kapsamHedef: baslik
+    kapsamHedef: baslik, olcumBicimi: kalip.o
   };
 }
 
@@ -10590,7 +10700,22 @@ function hataBankadan(perUnit, adlar) {
     /* Kökü "ne denir / nedir / hangisidir" biçiminde olan sorular, yanlış
        seçenek yerleştirildiğinde düzgün bir yanlış ifadeye dönüşür. */
     if (q.ty !== "mc" || !Array.isArray(q.o) || !Number.isInteger(q.a)) return;
-    if (!/(ne denir|ne ad verilir|nedir)\?\s*$/i.test(q.q)) return;
+    /* Bu türetme kökün sonuna "<yanlış seçenek> denir." ekler. Bu çerçeve
+       YALNIZCA yönelme durumuyla kurulan tanım sorularında dil bilgisine
+       uygundur ("… kullanmaya ne denir?" → "… kullanmaya saklamak denir.").
+       ÖLÇÜLEN KUSUR: "nedir?" ile biten kökler de kabul ediliyordu ve
+       "Bitkilerin büyümesi için gerekli olan Gürültü denir." ya da
+       "… toplumsal katkısı Yalnızca eğlence sağlaması denir." gibi bozuk
+       ifadeler üretiliyordu. Artık kök "ne denir / ne ad verilir" ile
+       bitmeli ve öncesindeki sözcük yönelme eki taşımalı. */
+    if (!/(ne denir|ne ad verilir)\?\s*$/i.test(q.q)) return;
+    if (TANIM_DEGIL.test(q.q)) return;
+    /* Kökün SON SÖZCÜĞÜ yönelme eki taşımalı. "-ken" ulacı elenir: "…tekrar
+       etmesini isterken" de 'e' ile bitiyor ama yönelme değildir. */
+    const sonSozcuk = String(q.q).replace(/\s*(ne denir|ne ad verilir)\?\s*$/i, "")
+      .replace(/[,:]?\s*$/, "").trim().split(/\s+/).pop()
+      .replace(/[^0-9a-zA-ZçğıöşüÇĞİÖŞÜ]/g, "");
+    if (!/[a-zçğıöşü][ae]$/i.test(sonSozcuk) || /ken$/i.test(sonSozcuk)) return;
     const dogru = String(q.o[q.a]).trim();
     const yanlislar = q.o.filter((_, i) => i !== q.a).map(x => String(x).trim())
       .filter(x => x.length > 1 && x.length <= 40);
@@ -11532,8 +11657,42 @@ function sizintiVarMi(aday, kagit) {
     }
     if (Array.isArray(aday.kapsar) && aday.kapsar.indexOf(parmakIzi(q)) !== -1) return true;
     if (Array.isArray(q.kapsar) && q.kapsar.indexOf(adayIz) !== -1) return true;
+    /* İkisi de AYNI kaynak sorudan türetilmişse aynı olguyu ölçer */
+    if (Array.isArray(aday.kapsar) && Array.isArray(q.kapsar) &&
+        aday.kapsar.some(function (z) { return q.kapsar.indexOf(z) !== -1; })) return true;
   }
   return false;
+}
+
+/* ── Konu uygunluğu denetimi ──────────────────────────────────────────────
+   Üretimden SONRA çalışan bağımsız denetim. Kalıp seçimi artık maddenin
+   desteklediği ölçme biçimine göre yapılıyor (openQ), ama bu denetim o
+   kararı bir daha ve BAĞIMSIZ olarak sınar; kapsam verisi ya da banka
+   değiştiğinde sessizce bozulmasın diye vardır.
+
+   Denetlenenler:
+     • Soru gerçekten bir kapsam maddesini hedefliyor mu (yalnızca konu
+       başlığından mı kurulmuş)?
+     • Kullanılan ölçme biçimi o maddede destekleniyor mu (kalıp konuya
+       zorlanmış mı)?
+     • Kavram yuvası, maddenin kendi içeriğinden gelen bir kavramla mı
+       doldurulmuş?
+   Banka soruları ve türetilmiş tipler bu denetimin dışındadır: onlar
+   müfredata göre yazılmış içerikten gelir, kalıp zorlaması taşımaz. */
+function konuUyumu(q, kapsam, perUnit) {
+  if (!q || q.ty !== "op") return null;
+  if (!kapsam || !kapsam.length) return null;
+  if (!q.kapsamHedef) return "açık uçlu soru bir kapsam maddesi hedeflemiyor";
+  const hedef = sutunAnahtari(q.kapsamHedef);
+  /* Soruyu hangi madde hedefliyor: başlığı ya da kavramı tutan madde */
+  const madde = kapsam.filter(function (m) {
+    if (sutunAnahtari(m.k.replace(/^Bilgi noktası:\s*/, "")) === hedef) return true;
+    return kapsamKavramlari(m, perUnit).some(function (t) { return sutunAnahtari(t) === hedef; });
+  })[0];
+  if (!madde) return "açık uçlu sorunun hedefi seçili kapsamda bulunmuyor";
+  if (q.olcumBicimi && !kapsamFormlari(madde, perUnit).has(q.olcumBicimi))
+    return "soru kalıbı bu kapsam maddesinde desteklenmeyen bir ölçme biçimi kullanıyor";
+  return null;
 }
 
 function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
@@ -11546,6 +11705,15 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
      Kapsanmamış madde varken kapsanmış maddeye dönmek ağır cezalıdır;
      hepsi kapsandıktan sonra ceza hafifler ve denge sağlar. */
   const kapsamSayaci = {}, boyutSayaci = {};
+  /* hedefSayaci: aynı kapsam HEDEFİNİN (madde başlığı ya da kavram) birden
+     çok açık uçlu soruyla ölçülmesini engeller.
+     ÖLÇÜLEN SORUN: kalıp sayacı aynı KALIBIN yinelenmesini engelliyordu ama
+     aynı hedefin farklı kalıplarla ölçülmesini engellemiyordu; kâğıtların
+     %15,5'inde `"Atatürk ve Çocuk" konusunun en önemli üç bilgisini yazınız`
+     ile `"Atatürk ve Çocuk" konusuyla ilgili bir soru kurunuz` bir aradaydı.
+     Çekirdek benzerliği de yakalamıyor: iki kalıbın ortak sözcüğü yalnızca
+     hedefin kendisi. */
+  const hedefSayaci = {};
   let kapsananMadde = 0;
   const gecmis = gecmisiYoksay ? new Set() : new Set(gecmisOku());
   const secilen = [];
@@ -11560,6 +11728,9 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
      izler. Eşleştirme soruları kaynak sorularının cevaplarını sütunda
      gösterdiği için bu iki soru aynı kâğıda birlikte alınmaz. */
   const kapsananIzler = new Set();
+  /* kullanilanKaynak: kâğıda giren TÜRETİLMİŞ soruların kaynak soru izleri.
+     İki türev aynı kaynaktan geliyorsa aynı olguyu ölçer; ikincisi alınmaz. */
+  const kullanilanKaynak = new Set();
   /* ifsaEdilen: seçilmiş eşleştirme sorularının sağ sütununda görünen kavramlar.
      Bir sorunun cevabı bu kümede varsa cevabı kâğıtta zaten yazılı demektir.
      kapsar listesi yalnızca banka kaynaklı türetmeleri kapsadığı için burada
@@ -11569,7 +11740,8 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
   const havuz = adaylar.map(function (q) {
     const iz = parmakIzi(q);
     return { q: q, iz: iz, cek: cekirdek(q), kalip: q.kalip || iz,
-      kx: kapsamEtiketi(q, kapsam), boyut: boyutu(q) };
+      kx: kapsamEtiketi(q, kapsam), boyut: boyutu(q),
+      hedef: q.kapsamHedef ? sutunAnahtari(q.kapsamHedef) : null };
   });
 
   while (secilen.length < count && havuz.length) {
@@ -11591,6 +11763,15 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
       if (kapsananIzler.has(c.iz)) puan -= 200;
       /* Tersi de geçerli: kaynak sorusu zaten seçilmiş bir eşleştirme alınmaz */
       if (c.q.kapsar && c.q.kapsar.some(function (z) { return secilenIzler.has(z); })) puan -= 200;
+      /* AYNI KAYNAKTAN türetilmiş iki soru aynı kâğıda alınmaz.
+         ÖLÇÜLEN KUSUR: "Ramazan ayında iftar davetinin toplumsal katkısı
+         Yalnızca eğlence sağlaması denir." ve "… Zamanı doldurması denir."
+         aynı banka sorusundan üretilip aynı kâğıtta yer alıyordu; ikisi de
+         aynı olguyu ölçüyor. Önceki koruma yalnızca kaynak sorunun KENDİSİ
+         kâğıttaysa devreye giriyordu, iki türevi karşılaştırmıyordu.
+         Çekirdek benzerliği de yakalamıyor: iki ifade yalnızca yanlış
+         seçenekte ayrıldığı için benzerlik eşiğin hemen altında kalıyor. */
+      if (c.q.kapsar && c.q.kapsar.some(function (z) { return kullanilanKaynak.has(z); })) puan -= 200;
       /* Cevabı, seçilmiş bir eşleştirmenin sağ sütununda yazılı olan soru alınmaz */
       const cm = cevapMetni(c.q);
       if (cm && cm.length >= 3 && ifsaEdilen.has(cm)) puan -= 200;
@@ -11645,6 +11826,10 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
          prosedürel tipler %5'ten %1'e indi. Bu tiplerin dengesini zaten tip
          sayacı ve adil pay sınırı kuruyor. */
       if (c.boyut !== "beceri") puan -= (boyutSayaci[c.boyut] || 0) * 3;
+      /* Aynı kapsam hedefi ikinci kez ölçülmesin — kalıp farklı olsa bile
+         ölçülen bilgi aynıdır. Ağır ceza: başka aday kalmadıysa ödev eksik
+         bırakılmaz, ama pratikte ikinci soru gelmez. */
+      if (c.hedef) puan -= (hedefSayaci[c.hedef] || 0) * 80;
       /* Ünite dengesi yalnızca bir üniteye BAĞLI sorular için işler. Ünitesi
          olmayan türetilmiş sorular (sıralama, sınıflandırma, tablo, grafik)
          tek bir "undefined" sayacında birikiyor ve birbirini cezalandırıyordu;
@@ -11688,11 +11873,12 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
     }
     boyutSayaci[c.boyut] = (boyutSayaci[c.boyut] || 0) + 1;
     q.boyut = c.boyut;
+    if (c.hedef) hedefSayaci[c.hedef] = (hedefSayaci[c.hedef] || 0) + 1;
     tipSayaci[q.ty] = (tipSayaci[q.ty] || 0) + 1;
     if (q.unit) uniteSayaci[q.unit] = (uniteSayaci[q.unit] || 0) + 1;
     kalipSayaci[c.kalip] = (kalipSayaci[c.kalip] || 0) + 1;
     secilenIzler.add(c.iz);
-    if (q.kapsar) q.kapsar.forEach(function (z) { kapsananIzler.add(z); });
+    if (q.kapsar) q.kapsar.forEach(function (z) { kapsananIzler.add(z); kullanilanKaynak.add(z); });
     if (q.ty === "es") q.sag.forEach(function (x) { const t = sadeMetin(x); if (t.length >= 3) ifsaEdilen.add(t); });
     const kendiCevap = cevapMetni(q);
     if (kendiCevap && kendiCevap.length >= 3) secilenCevaplar.add(kendiCevap);
@@ -11826,10 +12012,13 @@ function generate() {
   if (!ham.length) { ham = genelBankaAdaylari(types); tani.genelBanka = ham.length > 0; }
   tani.toplamAday = ham.length;
 
-  /* 3) Kalite süzgeci — geçersiz cevap anahtarı / bozuk gövde elenir */
+  /* 3) Kalite süzgeci — geçersiz cevap anahtarı / bozuk gövde elenir,
+        ardından KONU UYGUNLUĞU denetlenir: kalıbı konuya zorlanmış ya da
+        yalnızca konu başlığından kurulmuş soru kâğıda alınmaz. */
+  const perUnitK = UNIT_BANK[st.subject + "-" + st.grade];
   const gecerli = [];
   ham.forEach(function (q) {
-    const sorun = sorunTespit(q);
+    const sorun = sorunTespit(q) || konuUyumu(q, kapsam, perUnitK);
     if (sorun) {
       tani.elenen++;
       tani.elenenNeden[sorun] = (tani.elenenNeden[sorun] || 0) + 1;
