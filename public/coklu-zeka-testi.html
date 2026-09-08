@@ -163,6 +163,15 @@
     .warn-box { background: #FBF0E7; border: 1px solid #EAC9A8; border-left: 4px solid #D98A3A; border-radius: var(--radius); padding: 14px 18px; font-size: .9rem; color: #7A5322; margin: 16px 0; display: none; }
     .warn-box.show { display: block; }
 
+    /* Eksik soruları tamamlama şeridi — kontrol ekranındaki numara görünümünü
+       yeniden kullanır; yalnız tamamlama modunda görünür. */
+    .eksik-serit { background: var(--bg-soft); border: 1px solid #E7DDE0; border-radius: var(--radius); padding: 12px 14px 2px; margin-bottom: 18px; }
+    .eksik-bas { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: .82rem; font-weight: 700; color: var(--blue); }
+    .eksik-sayi { font-weight: 600; color: var(--muted); }
+    .eksik-liste { margin: 10px 0 12px; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 8px; }
+    .eksik-liste .review-chip { padding: 7px 0; font-size: .85rem; }
+    .eksik-liste .review-chip.simdiki { border-color: var(--blue); border-style: solid; box-shadow: 0 0 0 2px rgba(122,32,53,.18); }
+
     /* RESULT */
     .result-title { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 800; }
     .result-sub { color: var(--muted); margin-top: 6px; font-size: .95rem; }
@@ -249,6 +258,10 @@
       .q-text { margin-bottom: 18px; }
       .opt { padding: 13px 14px; gap: 10px; font-size: .92rem; }
     }
+    /* PDF / paylaşım geri bildirimi */
+    #pdfDurum { margin: 12px auto 0; max-width: 620px; text-align: center; font-size: .88rem;
+      line-height: 1.55; color: var(--muted); min-height: 1.2em; }
+
     @media print {
       header, footer, .no-print { display: none !important; }
       .card, .q-card { box-shadow: none; border-color: #ccc; }
@@ -264,6 +277,7 @@
   <script src="assets/cerez-onay.js" defer></script>
   <script src="assets/analitik.js" defer></script>
   <script src="assets/kullanim-sayac.js" data-sayfa="coklu-zeka-testi" defer></script>
+  <script src="assets/rapor-pdf.js" defer></script>
 </head>
 <body>
 
@@ -722,7 +736,7 @@ const SORULAR = {
     { t: "Nesnelerin birbirine benzeyen ve benzemeyen yönlerini bulmak hoşuma gider.", a: "mantik" },
     { t: "Bir yeri anlatırken orayı gözümün önüne getirebilirim.", a: "gorsel" },
     { t: "Öğrenirken hareketli bir şeyler yapmak dikkatimi toplamama yardım eder. 🤸", a: "beden" },
-    { t: "Kelimeleri ritim tutarak tekrar edince daha kolay hatırlarım. 🥁", a: "muzik" },
+    { t: "Kendi kendime yeni bir ritim ya da küçük bir şarkı uydurabilirim. 🥁", a: "muzik" },
     { t: "Arkadaşlarımla birlikte çalışırken işleri paylaşmak bana kolay gelir.", a: "sosyal" },
     { t: "Bir konuda zorlanınca neden zorlandığımı düşünürüm.", a: "icsel" },
     { t: "Bitkilerin, hayvanların ve doğa olaylarının ayrıntılarını merak ederim. 🌱", a: "doga" }
@@ -748,7 +762,7 @@ const SORULAR = {
     { t: "Elimdeki bilgilerden mantıklı sonuçlar çıkarmayı severim.", a: "mantik" },
     { t: "Notlarımı tabloya, şekle ya da zihin haritasına dönüştürmek konuyu anlamamı kolaylaştırır.", a: "gorsel" },
     { t: "Yeni bir beceriyi okuyarak değil, kendim yaparak daha kolay öğrenirim.", a: "beden" },
-    { t: "Ezberlemem gereken bilgileri ritim tutarak ya da vurgulayarak tekrar edebilirim.", a: "muzik" },
+    { t: "Duyduğum bir ritmi doğru biçimde tekrarlayabilir ya da kendim yeni bir ritim oluşturabilirim.", a: "muzik" },
     { t: "Başkasının görüşünü dinlemek, konuya farklı bir açıdan bakmamı sağlar.", a: "sosyal" },
     { t: "Ders çalışırken dikkatimin ne zaman dağıldığını fark edebilirim.", a: "icsel" },
     { t: "Bir konuyu doğadan gerçek örneklerle bağlantı kurarak öğrenmek ilgimi artırır.", a: "doga" }
@@ -774,7 +788,7 @@ const SORULAR = {
     { t: "Veriler arasında örüntü veya tutarsızlık aramak ilgimi çeker.", a: "mantik" },
     { t: "Bir konunun tamamını anlamak için önce görsel bir taslak oluşturmak işime yarar.", a: "gorsel" },
     { t: "Uzun süre pasif dinlemek yerine sürece aktif biçimde katılmayı tercih ederim.", a: "beden" },
-    { t: "Bilginin ritim, vurgu veya ses düzeniyle sunulması hatırlamamı etkiler.", a: "muzik" },
+    { t: "Bir ezgiyi ya da ritmi doğru biçimde tekrarlayabilir, üzerine kendi değişikliklerimi ekleyebilirim.", a: "muzik" },
     { t: "Bir görüşe katılmasam bile o kişinin bakış açısını anlamaya çalışabilirim.", a: "sosyal" },
     { t: "Çalışma biçimimin verimli ve verimsiz yönlerini ayırt edebilirim.", a: "icsel" },
     { t: "Bir teorinin doğada veya gerçek yaşamda nasıl işlediğini araştırmak hoşuma gider.", a: "doga" }
@@ -800,7 +814,7 @@ const SORULAR = {
     { t: "Bir iddianın kanıtlarını ve olası tutarsızlıklarını incelemek hoşuma gider.", a: "mantik" },
     { t: "Bir mekânın veya tasarımın farklı biçimlerde nasıl düzenlenebileceğini zihnimde canlandırabilirim.", a: "gorsel" },
     { t: "Bir işi öğrenirken fiziksel olarak deneme yapabilmek benim için önemlidir.", a: "beden" },
-    { t: "Bilgiyi sesli, ritmik veya vurgulu biçimde tekrar etmek hatırlamamı kolaylaştırır.", a: "muzik" },
+    { t: "Bir ezgiyi ya da ritmi doğru biçimde yeniden üretebilir, gerektiğinde kendim bir ritim kurabilirim.", a: "muzik" },
     { t: "Bir görüş ayrılığında karşımdaki kişinin bakış açısını anlayarak ortak yol ararım.", a: "sosyal" },
     { t: "Hangi koşullarda daha verimli veya daha dağınık çalıştığımı bilirim.", a: "icsel" },
     { t: "Yeni bilgileri doğayla, çevreyle veya gerçek yaşamın işleyişiyle ilişkilendirmek hoşuma gider.", a: "doga" }
@@ -808,7 +822,12 @@ const SORULAR = {
 };
 
 /* ═════════════ DURUM ═════════════ */
-const durum = { ekran: "secim", seviye: null, cevaplar: [], indeks: 0 };
+/* eksikModu: test sonunda boş kalan soruları tamamlama akışı. Bu moddayken
+   "Sonraki" indeks+1 yerine hâlâ boş olan bir sonraki soruya atlar.
+   eksikListesi: moda girildiği andaki boş soru dizinleri; şerit bu listeyi
+   gösterir (cevaplananlar listeden düşmez, "dolu" görünüme geçer). */
+const durum = { ekran: "secim", seviye: null, cevaplar: [], indeks: 0,
+  eksikModu: false, eksikListesi: [] };
 
 /* ═════════════ YARDIMCILAR ═════════════ */
 function yuzdeHesapla(cevaplar, seviye) {
@@ -906,6 +925,25 @@ function radarSVG(sonuclarSirali) {
   </svg>`;
 }
 
+/* Soru geçişlerinde sayfayı en üste (sayfa başlığına) atmak yerine soru kartının
+   üstünü yapışkan başlığın hemen altına hizalar. Kart hâlihazırda rahat okunur
+   konumdaysa hiç kaydırmaz; böylece mobil ve masaüstünde göz soru alanında kalır. */
+function soruyaHizala() {
+  const hedef = document.querySelector(".progress-wrap") || document.querySelector(".q-card");
+  const kart = document.querySelector(".q-card");
+  if (!hedef || !kart) return;
+  const ust = document.querySelector("header");
+  const bosluk = (ust ? ust.getBoundingClientRect().height : 0) + 12;
+  const tepe = hedef.getBoundingClientRect().top;
+  const dip = kart.getBoundingClientRect().bottom;
+  // Zaten hizalıysa ya da soru kartı seçenek ve düğmeleriyle bütün olarak
+  // görünüyorsa kımıldatmaya gerek yok; gereksiz zıplamayı önler.
+  if (Math.abs(tepe - bosluk) <= 4) return;
+  if (tepe >= bosluk && dip <= window.innerHeight) return;
+  const y = Math.max(0, window.scrollY + tepe - bosluk);
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+
 /* ═════════════ EKRANLAR ═════════════ */
 function render() {
   if (durum.ekran === "secim") return ekranSecim();
@@ -972,7 +1010,40 @@ function ekranIntro() {
 
 function testeBasla() {
   durum.cevaplar = new Array(SORULAR[durum.seviye].length).fill(null);
-  durum.indeks = 0; durum.ekran = "test"; render(); window.scrollTo({ top: 0 });
+  durum.indeks = 0; durum.ekran = "test";
+  eksikModunuKapat();
+  render(); window.scrollTo({ top: 0 });
+}
+
+/* ═════════════ EKSİK SORU AKIŞI ═════════════ */
+
+/** O an hâlâ cevaplanmamış soruların dizinleri (küçükten büyüğe). */
+function bosIndeksler() {
+  return durum.cevaplar.map((c, i) => (c == null ? i : -1)).filter(i => i >= 0);
+}
+
+/**
+ * Verilen soruya göre sıradaki boş soru. Listenin sonundaysak başa dönülür;
+ * böylece kullanıcı hangi soruya tıklayarak girdiyse girsin bütün eksikler
+ * toplanır. Hiç boş kalmadıysa null.
+ */
+function sonrakiBos(su) {
+  const boslar = bosIndeksler();
+  if (!boslar.length) return null;
+  const ileri = boslar.find(k => k > su);
+  return ileri !== undefined ? ileri : boslar[0];
+}
+
+/** Boş soru varsa tamamlama modunu açar ve o anki eksik listesini dondurur. */
+function eksikModunuBaslat() {
+  const boslar = bosIndeksler();
+  durum.eksikModu = boslar.length > 0;
+  durum.eksikListesi = boslar;
+}
+
+function eksikModunuKapat() {
+  durum.eksikModu = false;
+  durum.eksikListesi = [];
 }
 
 function ekranTest() {
@@ -990,18 +1061,42 @@ function ekranTest() {
     </button>`;
   }).join("");
 
+  // Eksik tamamlama modunda "Sonraki" sıradaki boş soruya atlar; hepsi
+  // dolduğunda doğrudan sonuca gider. Etiket her seçimden sonra yenilenir.
+  const boslar = bosIndeksler();
+  const hepsiTamam = durum.eksikModu && boslar.length === 0;
+  const sonKalanBu = durum.eksikModu && boslar.length === 1 && boslar[0] === i;
+  const ileriEtiket = !durum.eksikModu
+    ? (i === toplam - 1 ? "Cevapları Kontrol Et →" : "Sonraki →")
+    : hepsiTamam ? "Sonuçlarımı Gör →"
+    : sonKalanBu ? "Cevapları Kontrol Et →"
+    : "Sonraki Boş Soru →";
+
+  const eksikSerit = durum.eksikModu ? `
+    <div class="eksik-serit">
+      <div class="eksik-bas">
+        <span>Tamamlanacak sorular</span>
+        <span class="eksik-sayi">${boslar.length ? boslar.length + " soru kaldı" : "Tamamlandı"}</span>
+      </div>
+      <div class="review-list eksik-liste">${durum.eksikListesi.map(k =>
+        `<div class="review-chip ${durum.cevaplar[k] == null ? "bos" : "dolu"}${k === i ? " simdiki" : ""}"
+          data-eksik="${k}" role="button" tabindex="0"
+          aria-label="Soru ${k + 1}${durum.cevaplar[k] == null ? ", boş" : ", cevaplandı"}">${k + 1}</div>`).join("")}</div>
+    </div>` : "";
+
   $("app").innerHTML = `
     <div class="progress-wrap">
       <div class="progress-top"><span>İlerleme</span><span class="progress-count">${i + 1}/${toplam}</span></div>
       <div class="progress-bar"><div class="progress-fill" style="width:${yuzde}%"></div></div>
     </div>
+    ${eksikSerit}
     <div class="q-card">
       <span class="q-index">Soru ${i + 1}</span>
       <h2 class="q-text">${esc(soru.t)}</h2>
       <div class="options">${secenekler}</div>
       <div class="nav-row">
         <button type="button" class="btn btn-ghost" id="onceki" ${i === 0 ? "disabled" : ""}>← Önceki</button>
-        <button type="button" class="btn btn-primary" id="sonraki">${i === toplam - 1 ? "Cevapları Kontrol Et →" : "Sonraki →"}</button>
+        <button type="button" class="btn btn-primary" id="sonraki">${ileriEtiket}</button>
       </div>
     </div>
   `;
@@ -1009,16 +1104,37 @@ function ekranTest() {
     durum.cevaplar[i] = parseInt(b.dataset.puan, 10);
     render(); // seçimi göster; kullanıcı Sonraki ile ilerler
   }));
-  $("onceki").addEventListener("click", () => { if (i > 0) { durum.indeks--; render(); window.scrollTo({ top: 0 }); } });
+  // Şeritteki numaralara dokunarak eksik sorular arasında serbest gezinme
+  document.querySelectorAll("[data-eksik]").forEach(c => {
+    const git = () => { durum.indeks = parseInt(c.dataset.eksik, 10); render(); soruyaHizala(); };
+    c.addEventListener("click", git);
+    c.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); git(); }
+    });
+  });
+  $("onceki").addEventListener("click", () => { if (i > 0) { durum.indeks--; render(); soruyaHizala(); } });
   $("sonraki").addEventListener("click", () => {
-    if (i < toplam - 1) { durum.indeks++; render(); window.scrollTo({ top: 0 }); }
+    if (durum.eksikModu) {
+      const kalan = bosIndeksler();
+      if (!kalan.length) {                       // eksik kalmadı → doğrudan sonuç
+        eksikModunuKapat();
+        durum.ekran = "sonuc"; render(); window.scrollTo({ top: 0 });
+      } else if (kalan.length === 1 && kalan[0] === i) {
+        // Tek kalan boş soru bu ve hâlâ cevaplanmadı: atlanacak yer yok
+        durum.ekran = "kontrol"; render(); window.scrollTo({ top: 0 });
+      } else {
+        durum.indeks = sonrakiBos(i); render(); soruyaHizala();
+      }
+      return;
+    }
+    if (i < toplam - 1) { durum.indeks++; render(); soruyaHizala(); }
     else { durum.ekran = "kontrol"; render(); window.scrollTo({ top: 0 }); }
   });
 }
 
 function ekranKontrol() {
   const sorular = SORULAR[durum.seviye];
-  const boslar = durum.cevaplar.map((c, i) => c == null ? i : -1).filter(i => i >= 0);
+  const boslar = bosIndeksler();
   const chips = durum.cevaplar.map((c, i) =>
     `<div class="review-chip ${c == null ? "bos" : "dolu"}" data-i="${i}">${i + 1}</div>`).join("");
 
@@ -1028,6 +1144,8 @@ function ekranKontrol() {
       <p style="color:var(--muted);margin-top:6px;font-size:.9rem;">Bir soruya dönmek için numarasına dokunabilirsin. Boş bırakılan sorular kesikli çerçeveyle gösterilir.</p>
       <div class="warn-box ${boslar.length ? "show" : ""}" id="warn">
         <strong>${boslar.length} soru</strong> boş görünüyor. Testi tamamlamak için lütfen bütün soruları cevaplayın.
+        ${boslar.length ? `<br />Boş sorular: <strong>${boslar.map(k => k + 1).join(", ")}</strong>.
+        Bir numaraya dokunduğunuzda yalnızca boş sorular sırayla gösterilir; cevapladığınız sorular tekrar gelmez.` : ""}
       </div>
       <div class="review-list">${chips}</div>
       <div class="btn-row">
@@ -1037,14 +1155,29 @@ function ekranKontrol() {
       ${boslar.length ? `<p style="margin-top:14px;"><button class="btn btn-outline" id="ilkBos">İlk boş soruya git (Soru ${boslar[0] + 1})</button></p>` : ""}
     </div>
   `;
+  // Numaraya dokunmak eksik tamamlama modunu açar (boş soru varsa): buradan
+  // sonra "Sonraki" cevaplanmış soruları atlayıp yalnız boşları gezdirir.
   document.querySelectorAll(".review-chip").forEach(c => c.addEventListener("click", () => {
-    durum.indeks = parseInt(c.dataset.i, 10); durum.ekran = "test"; render(); window.scrollTo({ top: 0 });
+    durum.indeks = parseInt(c.dataset.i, 10);
+    eksikModunuBaslat();
+    durum.ekran = "test"; render(); soruyaHizala();
   }));
-  $("devam").addEventListener("click", () => { durum.indeks = 0; durum.ekran = "test"; render(); window.scrollTo({ top: 0 }); });
+  // "Sorulara Dön" bilinçli bir baştan gözden geçirmedir; sıralı gezinme kalır
+  $("devam").addEventListener("click", () => {
+    durum.indeks = 0; eksikModunuKapat();
+    durum.ekran = "test"; render(); window.scrollTo({ top: 0 });
+  });
   if (boslar.length) {
-    $("ilkBos").addEventListener("click", () => { durum.indeks = boslar[0]; durum.ekran = "test"; render(); window.scrollTo({ top: 0 }); });
+    $("ilkBos").addEventListener("click", () => {
+      durum.indeks = boslar[0];
+      eksikModunuBaslat();
+      durum.ekran = "test"; render(); soruyaHizala();
+    });
   } else {
-    $("bitir").addEventListener("click", () => { durum.ekran = "sonuc"; render(); window.scrollTo({ top: 0 }); });
+    $("bitir").addEventListener("click", () => {
+      eksikModunuKapat();
+      durum.ekran = "sonuc"; render(); window.scrollTo({ top: 0 });
+    });
   }
 }
 
@@ -1155,16 +1288,179 @@ function ekranSonuc() {
     </div>
 
     <div class="no-print btn-row" style="justify-content:center;">
-      <button type="button" class="btn btn-outline" id="yazdir">🖨️ Sonucu Yazdır / PDF</button>
+      <button type="button" class="btn btn-primary" id="pdfIndir">📄 PDF İndir</button>
+      <button type="button" class="btn btn-outline" id="pdfPaylas">📤 Paylaş</button>
+      <button type="button" class="btn btn-outline" id="yazdir">🖨️ Yazdır</button>
       <button type="button" class="btn btn-ghost" id="tekrar2">Testi Yeniden Çöz</button>
     </div>
+    <p class="no-print" id="pdfDurum" role="status" aria-live="polite"></p>
   `;
   $("tekrar").addEventListener("click", yeniden);
   $("tekrar2").addEventListener("click", () => { testeBasla(); });
   $("yazdir").addEventListener("click", () => window.print());
+  pdfKur(sonuclar, seviye);
 }
 
-function yeniden() { durum.ekran = "secim"; durum.seviye = null; durum.cevaplar = []; durum.indeks = 0; render(); window.scrollTo({ top: 0 }); }
+/* ═════════════ PDF: İNDİR / PAYLAŞ ═════════════
+   Rapor içeriği ekrandaki sonuç bloklarından okunur; puanlama ve metinler
+   yeniden üretilmez. Böylece PDF ile ekran her zaman aynı şeyi söyler. */
+
+const PDF_DOSYA = "Kaynak-Kampus-Coklu-Zeka-Testi-Sonucu.pdf";
+
+/** Sonuç ekranındaki DOM'u PDF motorunun anladığı blok listesine çevirir. */
+function pdfBloklariTopla(sonuclar) {
+  const bloklar = [];
+  const metin = el => (el ? el.textContent.replace(/\s+/g, " ").trim() : "");
+
+  const govdeGez = kok => {
+    for (const c of kok.children) {
+      if (c.classList.contains("no-print") || c.hidden) continue;
+      const cl = c.classList, etiket = c.tagName;
+
+      if (cl.contains("radar-wrap")) { bloklar.push({ t: "radar", veri: radarVerisi(sonuclar) }); continue; }
+      if (cl.contains("section-h")) { bloklar.push({ t: "h2", m: metin(c) }); continue; }
+      if (cl.contains("section-note")) { bloklar.push({ t: "not", m: metin(c) }); continue; }
+      if (cl.contains("result-title")) { bloklar.push({ t: "h1", m: metin(c) }); continue; }
+      if (cl.contains("result-sub")) { bloklar.push({ t: "not", m: metin(c) }); continue; }
+      if (cl.contains("balanced-box") || cl.contains("info-box")) {
+        bloklar.push({ t: "kutu", m: metin(c) }); continue;
+      }
+      if (cl.contains("top-card")) {
+        const A = c.querySelector(".top-name");
+        bloklar.push({
+          t: "ust",
+          etiket: metin(c.querySelector(".top-rank")),
+          ad: metin(A),
+          yuzde: parseInt(metin(c.querySelector(".top-pct")).replace(/\D/g, ""), 10) || 0,
+          renk: renkCoz(c.querySelector(".top-pct")),
+          uyari: metin(c.querySelector(".top-flag")),
+          aciklama: metin(c.querySelector(".top-desc")),
+          oneri: metin(c.querySelector(".top-use")),
+        });
+        continue;
+      }
+      if (c.querySelector(":scope > .bar-row")) {
+        const satir = c.querySelector(":scope > .bar-row");
+        bloklar.push({
+          t: "bar",
+          ad: metin(satir.querySelector(".bar-name")),
+          yuzde: parseInt(metin(satir.querySelector(".bar-pct")).replace(/\D/g, ""), 10) || 0,
+          renk: renkCoz(satir.querySelector(".bar-fill")),
+          yorum: metin(c.querySelector(":scope > .bar-interp")),
+        });
+        continue;
+      }
+      if (etiket === "DETAILS" && cl.contains("alan-det")) {
+        bloklar.push({
+          t: "alan",
+          ad: metin(c.querySelector(".alan-ad")),
+          yuzde: parseInt(metin(c.querySelector(".alan-pct")).replace(/\D/g, ""), 10) || 0,
+          renk: renkCoz(c.querySelector(".alan-nokta")),
+        });
+        const govde = c.querySelector(".alan-govde");
+        if (govde) govdeGez(govde);
+        continue;
+      }
+      if (etiket === "UL" || etiket === "OL") {
+        for (const li of c.children) bloklar.push({ t: "li", m: metin(li) });
+        continue;
+      }
+      if (etiket === "H1") { bloklar.push({ t: "h1", m: metin(c) }); continue; }
+      if (etiket === "H2" || etiket === "H3") { bloklar.push({ t: "h2", m: metin(c) }); continue; }
+      if (etiket === "H4") { bloklar.push({ t: "h3", m: metin(c) }); continue; }
+      if (etiket === "H5" || etiket === "H6") { bloklar.push({ t: "h4", m: metin(c) }); continue; }
+      if (etiket === "P") { bloklar.push({ t: "p", m: metin(c) }); continue; }
+      if (cl.contains("card")) { bloklar.push({ t: "bosluk", h: 6 }); govdeGez(c); continue; }
+      // Tanınmayan sarmalayıcı: içine in; yaprak ise metnini paragraf say
+      if (c.children.length) govdeGez(c);
+      else if (metin(c)) bloklar.push({ t: "p", m: metin(c) });
+    }
+  };
+  govdeGez($("app"));
+  return bloklar;
+}
+
+/** Satır içi stildeki rengi (hex ya da rgb) olduğu gibi geri verir. */
+function renkCoz(el) {
+  if (!el) return "";
+  return el.style.background || el.style.backgroundColor || el.style.color || "";
+}
+
+/** Radar için grafik ekseni sırasına göre yüzdeler; yeniden hesap yapılmaz. */
+function radarVerisi(sonuclar) {
+  const harita = {};
+  sonuclar.forEach(r => { harita[r.key] = r.yuzde; });
+  return ALAN_SIRA.map(k => ({ ad: ALANLAR[k].kisaAd, yuzde: harita[k] }));
+}
+
+/** PDF düğmelerini bağlar; blob bir kez üretilip yeniden kullanılır. */
+function pdfKur(sonuclar, seviye) {
+  const durum = $("pdfDurum");
+  const dugmeler = [$("pdfIndir"), $("pdfPaylas")];
+  let onbellek = null;
+
+  const soyle = (metin, hataMi) => {
+    durum.textContent = metin || "";
+    durum.style.color = hataMi ? "#B23A48" : "var(--muted)";
+  };
+  const kilit = acik => dugmeler.forEach(d => { d.disabled = acik; });
+
+  async function blobAl() {
+    if (onbellek) return onbellek;
+    if (!window.RaporPDF) throw new Error("PDF modülü yüklenmedi");
+    const s = SEVIYELER[seviye];
+    const tarih = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
+    onbellek = await RaporPDF.uret({
+      bloklar: pdfBloklariTopla(sonuclar),
+      marka: "Kaynak Kampüs",
+      baslik: "Çoklu Zekâ Testi Sonucu",
+      altBilgi: `${s.ad} düzeyi · ${tarih}`,
+      altCizgi: "Kaynak Kampüs · Çoklu Zekâ Testi · Öğrenme Eğilimleri Envanteri",
+      logo: "assets/kaynak-kampus-logo-192.png",
+    });
+    return onbellek;
+  }
+
+  $("pdfIndir").addEventListener("click", async () => {
+    kilit(true); soyle("PDF hazırlanıyor…");
+    try {
+      const sonuc = await RaporPDF.indir(await blobAl(), PDF_DOSYA);
+      soyle(sonuc === "indirildi"
+        ? "PDF indirildi: " + PDF_DOSYA
+        : "PDF yeni sekmede açıldı; oradan kaydedebilirsiniz.");
+    } catch (e) {
+      console.error(e);
+      soyle("PDF oluşturulamadı. “Yazdır” düğmesiyle deneyebilirsiniz.", true);
+    } finally { kilit(false); }
+  });
+
+  $("pdfPaylas").addEventListener("click", async () => {
+    kilit(true); soyle("PDF hazırlanıyor…");
+    try {
+      const blob = await blobAl();
+      const sonuc = await RaporPDF.paylas(blob, PDF_DOSYA,
+        { baslik: "Çoklu Zekâ Testi Sonucu", metin: "Kaynak Kampüs Çoklu Zekâ Testi sonuç raporum." });
+      if (sonuc === "paylasildi") soyle("Paylaşım penceresi açıldı.");
+      else if (sonuc === "iptal") soyle("");
+      else {
+        // Cihaz dosya paylaşımını desteklemiyor ya da paylaşım açılamadı:
+        // hata vermek yerine PDF'i indirip kullanıcıyı yönlendiriyoruz
+        await RaporPDF.indir(blob, PDF_DOSYA);
+        soyle("Bu tarayıcı dosya paylaşımını desteklemiyor; PDF indirildi. "
+          + "Dosyayı WhatsApp, Telegram ya da e-posta ile gönderebilirsiniz.");
+      }
+    } catch (e) {
+      console.error(e);
+      soyle("Paylaşım tamamlanamadı. “PDF İndir” ile dosyayı alıp gönderebilirsiniz.", true);
+    } finally { kilit(false); }
+  });
+}
+
+function yeniden() {
+  durum.ekran = "secim"; durum.seviye = null; durum.cevaplar = []; durum.indeks = 0;
+  eksikModunuKapat();
+  render(); window.scrollTo({ top: 0 });
+}
 
 /* ═════════════ KİŞİSEL RAPOR (kural tabanlı) ═════════════ */
 function raporUret(sonuclar, seviye) {

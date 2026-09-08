@@ -8,7 +8,7 @@
    kullanıcı "Tümünü Kabul Et" demedikçe çerez yazmaz.
    ------------------------------------------------------------------ */
 (function () {
-  var OLCUM_KIMLIGI = ""; // ← GA4 ölçüm kimliği buraya (örn. "G-AB12CD34EF")
+  var OLCUM_KIMLIGI = "G-K34YBPLRJQ"; // GA4 akışı "kaynak kampus" (8 Eylül 2026)
 
   if (!OLCUM_KIMLIGI) return;
 

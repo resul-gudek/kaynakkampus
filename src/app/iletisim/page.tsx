@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import DuyuruSerit from "@/components/site/DuyuruSerit";
 import SiteBaslik from "@/components/site/SiteBaslik";
 import SiteAltBilgi from "@/components/site/SiteAltBilgi";
+import SiteOlcum from "@/components/site/SiteOlcum";
 import { ILETISIM_EPOSTA } from "@/lib/site";
 import IletisimFormu from "./IletisimFormu";
 import s from "./iletisim.module.css";
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 export default function IletisimSayfasi() {
   return (
     <>
+      <SiteOlcum />
       <DuyuruSerit />
       <SiteBaslik aktif="/iletisim" />
       <main>

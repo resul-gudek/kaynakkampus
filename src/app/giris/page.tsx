@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { ROL_ANASAYFA } from "@/lib/auth.config";
+import SiteOlcum from "@/components/site/SiteOlcum";
 import GirisForm from "./GirisForm";
 import stil from "./giris.module.css";
 
@@ -17,6 +18,7 @@ export default async function GirisPage() {
 
   return (
     <>
+      <SiteOlcum />
       <header className={stil.ustBar}>
         <div className="container">
           <div className={stil.navIc}>

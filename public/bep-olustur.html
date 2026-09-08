@@ -256,8 +256,32 @@
     }
 
     /* PRINT */
+    /* ── Satır araçları: ekle / sil (yalnız ekranda, çıktıya girmez) ── */
+    .ar-th { width: 30px; }
+    td.ar { width: 30px; text-align: center; vertical-align: middle; padding: 2px !important; }
+    .ar-btn {
+      border: 1px solid #E4C4CB; background: #fff; color: var(--blue); cursor: pointer;
+      border-radius: 6px; font-size: .78em; line-height: 1; padding: 3px 6px; font-family: inherit;
+      font-weight: 700; transition: all .15s;
+    }
+    .ar-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .ar-btn.ar-metin { padding: 3px 9px; font-size: .72em; }
+    .ar-bar { margin: 6px 0 14px; }
+    .ar-bar.ar-sag { text-align: right; margin: -2px 0 6px; }
+    .ar-ekle {
+      border: 1px dashed #D8A0AC; background: #FDF7F8; color: var(--blue); cursor: pointer;
+      border-radius: 8px; font-size: .78em; padding: 5px 12px; font-family: inherit; font-weight: 700;
+    }
+    .ar-ekle:hover { background: var(--blue); color: #fff; border-style: solid; }
+    .kaz-kod {
+      font-size: .72em; font-weight: 800; background: #EDF3F3; color: #1F6B6B;
+      border-radius: 5px; padding: 1px 5px; margin-left: 4px; white-space: nowrap;
+    }
+    .muf-kaynak { font-weight: 500; color: var(--muted); font-size: .78em; margin: -8px 0 12px; }
+
     @media print {
-      header, .page-hero, .panel, .toolbar-float, footer, .mobile-nav, .edit-note { display: none !important; }
+      header, .page-hero, .panel, .toolbar-float, footer, .mobile-nav, .edit-note,
+      .no-print, .ar-bar, td.ar, .ar-th { display: none !important; }
       .builder { padding: 0; }
       .builder-grid { display: block; }
       .sheet { box-shadow: none; padding: 0; max-width: none; border-radius: 0; }
@@ -584,6 +608,10 @@
     </div>
   </div>
 </footer>
+
+<!-- Sınıf + ders bazlı resmî MEB müfredatı (ünite/tema ve öğrenme çıktıları).
+     Aşağıdaki motor bu veriyi kullanır; senkron yüklenmesi gerekir. -->
+<script src="assets/mufredat.js"></script>
 
 <script>
 /* ═══════════════ VERİ: TANILAR ═══════════════
@@ -916,6 +944,7 @@ const DERS_BECERI = {
   kim:   ["islem", "problem", "anlama"],
   bio:   ["anlama", "okuma", "yazma"],
   sos:   ["okuma", "anlama", "yazma"],
+  ink:   ["okuma", "anlama", "yazma"],
   tarih: ["okuma", "anlama", "yazma"],
   cog:   ["anlama", "okuma", "islem"],
   ing:   ["dil", "okuma", "yazma", "anlama"],
@@ -924,7 +953,7 @@ const DERS_BECERI = {
 
 /* Dersin kendi bant listesinde daha alt bant yoksa ön koşul amacın
    alınacağı ders (MEB'de o dersin öncülü olan ders). */
-const ONKOSUL_KAYNAK = { tde: "tr", fiz: "fen", kim: "fen", bio: "fen", tarih: "sos", cog: "sos", fen: "hay", sos: "hay" };
+const ONKOSUL_KAYNAK = { tde: "tr", fiz: "fen", kim: "fen", bio: "fen", tarih: "sos", cog: "sos", fen: "hay", sos: "hay", ink: "sos" };
 
 /* Destek düzeyinin programa yansıması: basamak sayısı, ölçüt katsayısı,
    kapsam oranı, ön koşul gereksinimi, tekrar ve hız açıklaması. */
@@ -1160,7 +1189,10 @@ const SUBJECTS = {
           ] },
       ],
     } },
-  sos: { name: "Sosyal Bilgiler", icon: "🌍", grades: [4,5,6,7,8],
+  /* Sosyal Bilgiler programı 4-7. sınıfları kapsar. 8. sınıfta bu dersin yerine
+     T.C. İnkılap Tarihi ve Atatürkçülük okutulur; aşağıda ayrı ders olarak
+     tanımlıdır (ink) ve müfredatı mufredat.js'ten gelir. */
+  sos: { name: "Sosyal Bilgiler", icon: "🌍", grades: [4,5,6,7],
     bands: {
       "4-8": [
         { uda: "Öğrenci, birey ve toplum ilişkilerine yönelik temel becerileri geliştirir.",
@@ -1180,6 +1212,25 @@ const SUBJECTS = {
             { t: "Yön bulma yöntemlerini kullanarak temel yönleri gösterir.", o: "4 yönün 4'ünde", y: "Pusula uygulaması, kroki çizimi" },
             { t: "Harita ve kroki üzerindeki temel sembolleri okur.", o: "10 sembolün 8'inde", y: "Harita inceleme, sembol eşleştirme" },
             { t: "Temel kamu kurumlarını ve görevlerini eşleştirir.", o: "5 kurumun 4'ünde", y: "Eşleştirme kartları, örnek olay" },
+          ] },
+      ],
+    } },
+  /* 8. sınıfın Sosyal Bilgiler yerine okutulan dersi. Ünite adları
+     mufredat.js'ten (önceki öğretim programı) gelir; aşağıdaki bant yalnızca
+     müfredat verisi bulunamazsa devreye giren yedektir. */
+  ink: { name: "T.C. İnkılap Tarihi ve Atatürkçülük", icon: "🇹🇷", grades: [8,12],
+    bands: {
+      "8-12": [
+        { uda: "Öğrenci, Millî Mücadele dönemini kronolojik olarak kavrar.",
+          kda: [
+            { t: "Millî Mücadele'nin başlıca olaylarını oluş sırasına göre sıralar.", o: "Art arda 3 çalışmada", y: "Zaman şeridi, görsel kronoloji" },
+            { t: "Verilen olayın nedenini ve sonucunu eşleştirir.", o: "5 olayın 4'ünde", y: "Neden-sonuç tablosu, örnek olay" },
+            { t: "Dönemin önemli kişilerini rolleriyle eşleştirir.", o: "5 kişinin 4'ünde", y: "Görsel kartlar, eşleştirme çalışması" },
+          ] },
+        { uda: "Öğrenci, Atatürk ilke ve inkılaplarını tanır.",
+          kda: [
+            { t: "Atatürk ilkelerini örnek durumlarla eşleştirir.", o: "6 örneğin 4'ünde", y: "Örnek olay, kavram haritası" },
+            { t: "İnkılapların günlük yaşamdaki karşılığına örnek verir.", o: "3 örnekle", y: "Görsel karşılaştırma, sınıf tartışması" },
           ] },
       ],
     } },
@@ -1341,7 +1392,9 @@ const SUBJECTS = {
           ] },
       ],
     } },
-  tarih: { name: "Tarih", icon: "🏛️", grades: [9,10,11,12],
+  /* Tarih dersi 9, 10 ve 11. sınıflarda okutulur. 12. sınıfta bu dersin
+     yerine T.C. İnkılap Tarihi ve Atatürkçülük vardır (bkz. ink). */
+  tarih: { name: "Tarih", icon: "🏛️", grades: [9,10,11],
     bands: {
       "9-12": [
         { uda: "Öğrenci, tarih bilimine ilişkin temel kavram ve becerileri kullanır.",
@@ -1517,7 +1570,7 @@ function buildBeceriList() {
   });
 }
 
-const SUBJECT_ORDER = ["tr", "tde", "mat", "hay", "fen", "fiz", "kim", "bio", "sos", "tarih", "cog", "ing", "din"];
+const SUBJECT_ORDER = ["tr", "tde", "mat", "hay", "fen", "fiz", "kim", "bio", "sos", "ink", "tarih", "cog", "ing", "din"];
 
 function buildSubjectList() {
   const box = $("subjectList");
@@ -1708,17 +1761,86 @@ function grupAraliklari(startIso, endIso, n) {
   return out;
 }
 
+/* ═══════════════ MÜFREDAT KAYNAĞI (sınıf + ders) ═══════════════
+   BEP içeriği, seçilen sınıf ve dersin resmî MEB müfredatından üretilir.
+   Sınıf bantları ("4-8", "9-12") YALNIZCA müfredat verisi bulunmayan
+   sınıf-ders kombinasyonları için yedek olarak kullanılır.
+
+   İki derinlik vardır:
+     • kazanim : resmî ünite + o ünitenin resmî öğrenme çıktıları (kodlu)
+     • unite   : yalnızca doğrulanmış resmî ünite/tema adı
+   Kazanım metni ASLA türetilmez; doğrulanmamış kazanım varmış gibi kod ya da
+   metin üretilmez (ünite düzeyinde KDA'lar beceri havuzundan gelir ve çıktıda
+   bu durum açıkça yazılır). */
+
+/** Resmî öğrenme çıktısını ölçülebilir KDA ifadesine çevirir.
+    Kazanım metnine DOKUNULMAZ (büyük/küçük harf bile değiştirilmez; aksi hâlde
+    "İslam", "Hz. Muhammed" gibi özel adlar bozulur), yalnızca ölçülebilir bir
+    yüklem eklenir: "<resmî kazanım> becerisini gösterir." */
+function kazanimdanKda(metin) {
+  const t = String(metin || "").trim().replace(/\s+/g, " ").replace(/[.]$/, "");
+  if (!t) return "";
+  return `${t} becerisini gösterir.`;
+}
+
+/** Ders + sınıf için müfredat temelli UDA/KDA blokları. Veri yoksa null. */
+function mufredatBloklari(key, grade, plan) {
+  if (!window.MUFREDAT) return null;
+  const uniteler = MUFREDAT.uniteListesi(key, grade);
+  if (!uniteler.length) return null;
+  const durum = MUFREDAT.kapsamDurumu(key, grade);
+
+  // Yedek beceri havuzu: yalnız ünite düzeyinde kalan derslerde KDA kaynağıdır
+  const bant = (SUBJECTS[key] && SUBJECTS[key].bands) ? SUBJECTS[key].bands[bandFor(key, grade)] : null;
+  const beceriHavuzu = [];
+  if (bant) bant.forEach(g => g.kda.forEach(k => beceriHavuzu.push(k)));
+
+  let hi = 0;
+  const bloklar = uniteler.map((unite, i) => {
+    const kazanimlar = MUFREDAT.kazanimListesi(key, grade, unite);
+    let kda;
+    if (kazanimlar.length) {
+      kda = kazanimlar.map(kz => ({
+        t: kazanimdanKda(kz.k), kod: kz.kod, resmi: true,
+        o: "10 denemenin 8'inde", y: "",
+      }));
+    } else if (beceriHavuzu.length) {
+      // Kazanım metni doğrulanmadığı için ünite kapsamında beceri temelli amaç
+      const adet = Math.min(3, beceriHavuzu.length);
+      kda = Array.from({ length: adet }, () => {
+        const k = beceriHavuzu[hi++ % beceriHavuzu.length];
+        return { t: k.t, o: k.o, y: k.y, resmi: false };
+      });
+    } else {
+      kda = [{ t: "Ünite kapsamındaki hedef davranış (BEP birimince yazılacaktır).",
+        o: "10 denemenin 8'inde", y: "", resmi: false }];
+    }
+    return { uda: `Öğrenci, "${unite}" ünitesindeki kazanımları bireysel performans düzeyine uygun biçimde edinir.`,
+      unite, uniteNo: i + 1, kda, onkosul: false };
+  });
+  return { bloklar, durum };
+}
+
 /* Bir dersin tüm planı: düzey, kapsam, ön koşul, basamaklı KDA grupları. */
 function dersPlani(key, term) {
   const s = SUBJECTS[key];
   const ds = dersSeviyesi(key);
   const plan = PLAN[ds.sev] || PLAN[""];
-  const tumu = s.bands[bandFor(key, state.grade)];
-  const kapsam = Math.max(1, Math.ceil(tumu.length * plan.udaOran));
-  const bloklar = tumu.slice(0, kapsam).map(g => ({ uda: g.uda, kda: g.kda.slice(0, plan.kdaSinir), onkosul: false }));
+  const muf = mufredatBloklari(key, state.grade, plan);
+  // Müfredat verisi varsa yıllık kapsamın TAMAMI kullanılır (1. üniteden
+  // son üniteye); öğretmen fazlasını çıktıda silebilir.
+  const tumu = muf ? muf.bloklar : s.bands[bandFor(key, state.grade)];
+  const kapsam = muf ? tumu.length : Math.max(1, Math.ceil(tumu.length * plan.udaOran));
+  const bloklar = tumu.slice(0, kapsam).map(g => ({ uda: g.uda, kda: muf ? g.kda : g.kda.slice(0, plan.kdaSinir),
+    onkosul: false, unite: g.unite, uniteNo: g.uniteNo }));
   let onk = null;
   if (plan.onkosul) { onk = onkosulAmac(key); if (onk) bloklar.unshift(onk); }
-  const basamaklar = BASAMAK_DIZI[plan.basamak];
+  // Yıllık kapsamın tamamı alındığında basamaklı satırlar belgeyi kullanılamaz
+  // hâle getirebilir; toplam KDA çoksa her amaç tek satır olarak yazılır
+  // (basamak bilgisi ölçüt sütununda korunur).
+  const kdaToplam = bloklar.reduce((a, b) => a + b.kda.length, 0);
+  const basamakSay = kdaToplam > 14 ? 1 : plan.basamak;
+  const basamaklar = BASAMAK_DIZI[basamakSay];
   const ekler = yontemEkleri(key);
   let grupNo = 0;
   bloklar.forEach(b => { b.gruplar = b.kda.map(k => ({ k, satir: basamaklar })); grupNo += b.kda.length; });
@@ -1734,15 +1856,159 @@ function dersPlani(key, term) {
         const ek = ekler.length ? ekler[ei++ % ekler.length] : null;
         return {
           basamak: bkey,
-          etiket: plan.basamak > 1 ? bs.et : "",
+          etiket: basamakSay > 1 ? bs.et : "",
           metin: gr.k.t,
-          olcut: olcutUyarla(gr.k.o, plan.olcut * bs.f) + (plan.basamak > 1 ? ` <i>(${bs.ek})</i>` : ""),
+          kod: gr.k.kod || "",
+          olcut: olcutUyarla(gr.k.o, plan.olcut * bs.f) + (basamakSay > 1 ? ` <i>(${bs.ek})</i>` : ""),
           yontem: [gr.k.y, ek].filter(Boolean).join(", "),
         };
       });
     });
   });
-  return { s, ds, plan, bloklar, kapsam, toplamUda: tumu.length, onkosul: !!onk };
+  return { key, s, ds, plan, bloklar, kapsam, toplamUda: tumu.length, onkosul: !!onk,
+    muf: muf ? muf.durum : null, basamakSay };
+}
+
+/* ═══════════════ SATIR ARAÇLARI (ekle / sil / düzenle) ═══════════════
+   Oluşturulan BEP kilitli değildir: öğretmen metni düzenler (contenteditable),
+   satır ekler ve siler. Araç düğmeleri .no-print olduğundan çıktıya girmez;
+   yazdırma/PDF canlı DOM'dan üretildiği için eklenen satırlar çıktıya gelir,
+   silinenler çıkmaz. Sabit resmî başlıklar (thead, bölüm başlıkları) silinemez. */
+
+/** Tablo satırlarının sonuna eklenen, yazdırılmayan araç hücresi. */
+function arHucre() {
+  return `<td class="ar no-print" contenteditable="false"><button type="button" class="ar-btn" data-ar="sil" title="Bu satırı sil" aria-label="Satırı sil">✕</button></td>`;
+}
+
+/** Liste maddelerine (li) eklenen sil düğmesi. */
+function arMadde() {
+  return ` <button type="button" class="ar-btn no-print" data-ar="li-sil" contenteditable="false" title="Bu maddeyi sil" aria-label="Maddeyi sil">✕</button>`;
+}
+
+function satirEkleBar(tip) {
+  return `<div class="ar-bar no-print" contenteditable="false"><button type="button" class="ar-ekle" data-ar="ekle" data-tip="${tip}">+ Satır Ekle</button></div>`;
+}
+
+function maddeEkleBar() {
+  return `<div class="ar-bar no-print" contenteditable="false"><button type="button" class="ar-ekle" data-ar="li-ekle">+ Madde Ekle</button></div>`;
+}
+
+function udaEkleBar() {
+  return `<div class="ar-bar no-print" contenteditable="false"><button type="button" class="ar-ekle" data-ar="uda-ekle">+ Uzun Dönemli Amaç Ekle</button></div>`;
+}
+
+function satirAracBar(baslik, tur) {
+  return `<div class="ar-bar ar-sag no-print" contenteditable="false"><button type="button" class="ar-btn ar-metin" data-ar="${tur}" title="${baslik}">✕ Amacı sil</button></div>`;
+}
+
+/** Bir tabloya, sütun sayısı kadar boş ve düzenlenebilir hücreyle yeni satır ekler. */
+function yeniSatirEkle(tbody) {
+  const ornek = tbody.querySelector("tr");
+  const sutun = ornek ? ornek.querySelectorAll("td:not(.ar)").length
+    : (tbody.closest("table").querySelectorAll("thead th:not(.ar-th)").length || 2);
+  const tr = document.createElement("tr");
+  // KDA tablolarında ilk hücre numara hücresidir; sınıfı korunmalı ki
+  // ekleme/silme sonrasında yeniden numaralandırma bu satırı da bulsun.
+  const kdaMi = tbody.dataset.satir === "kda";
+  let ic = "";
+  for (let i = 0; i < sutun; i++) {
+    ic += (i === 0 && kdaMi) ? '<td class="kda-no"></td>' : "<td></td>";
+  }
+  tr.innerHTML = ic + (tbody.querySelector("td.ar") || tbody.closest("table").querySelector(".ar-th") ? arHucre() : "");
+  tbody.appendChild(tr);
+  numaralariTazele(tbody);
+  const ilk = tr.querySelector("td");
+  if (ilk) { ilk.focus(); }
+  return tr;
+}
+
+/** KDA tablolarında "UDA no . sıra" numaralandırmasını yeniden kurar. */
+function numaralariTazele(tbody) {
+  if (!tbody || tbody.dataset.satir !== "kda") return;
+  const blok = tbody.closest(".uda-block");
+  const baslik = blok ? blok.querySelector(".uda-title .no") : null;
+  const m = baslik ? baslik.textContent.match(/(ÖK|UDA\s*(\d+))/) : null;
+  const onek = m ? (m[2] ? m[2] : "ÖK") : "";
+  [...tbody.querySelectorAll("tr")].forEach((tr, i) => {
+    const hucre = tr.querySelector(".kda-no");
+    if (hucre) hucre.innerHTML = `<b>${onek}.${i + 1}</b>`;
+  });
+}
+
+/** Bir dersin UDA bloklarını yeniden numaralandırır. */
+function udaNumaralariTazele(liste) {
+  if (!liste) return;
+  let no = 0;
+  [...liste.querySelectorAll(".uda-block")].forEach(blok => {
+    const et = blok.querySelector(".uda-title .no");
+    if (!et) return;
+    if (/ÖK/.test(et.textContent)) { numaralariTazele(blok.querySelector("tbody[data-satir]")); return; }
+    no++;
+    et.textContent = "UDA " + no + ".";
+    numaralariTazele(blok.querySelector("tbody[data-satir]"));
+  });
+}
+
+/** Yeni boş UDA bloğu (ünite/amaç) oluşturur. */
+function yeniUdaBlok(liste) {
+  const ornek = liste.querySelector(".uda-block");
+  const blok = document.createElement("div");
+  blok.className = "uda-block";
+  const basliklar = ornek ? [...ornek.querySelectorAll("thead tr")].map(tr => tr.outerHTML).join("") : "";
+  blok.innerHTML = `
+    <div class="uda-title" contenteditable="true"><span class="no">UDA</span> </div>
+    <div class="uda-plan" contenteditable="true">Planlanan öğretim süresi: … hafta</div>
+    ${satirAracBar("Bu uzun dönemli amacı sil", "uda-sil")}
+    <table class="bep-t" contenteditable="true">
+      <thead>${basliklar}</thead>
+      <tbody data-satir="kda"></tbody>
+    </table>
+    ${satirEkleBar("kda")}`;
+  liste.appendChild(blok);
+  yeniSatirEkle(blok.querySelector("tbody[data-satir]"));
+  udaNumaralariTazele(liste);
+  return blok;
+}
+
+/** Sayfa ömrü boyunca tek kez bağlanan olay dinleyicisi (sheet yeniden çizilir). */
+function satirAraclariniBagla() {
+  const sheet = $("sheet");
+  if (!sheet || sheet.dataset.arBagli) return;
+  sheet.dataset.arBagli = "1";
+  sheet.addEventListener("click", e => {
+    const btn = e.target.closest("[data-ar]");
+    if (!btn) return;
+    e.preventDefault();
+    const is = btn.dataset.ar;
+    if (is === "sil") {
+      const tr = btn.closest("tr"), tbody = tr && tr.parentElement;
+      if (tr) { tr.remove(); numaralariTazele(tbody); }
+    } else if (is === "ekle") {
+      // "+ Satır Ekle" çubuğu her zaman tablosunu içeren kabın içindedir
+      const kap = btn.closest(".uda-block, .ar-kap");
+      const hedef = kap ? kap.querySelector("tbody[data-satir]") : null;
+      if (hedef) yeniSatirEkle(hedef);
+    } else if (is === "li-sil") {
+      const li = btn.closest("li");
+      if (li) li.remove();
+    } else if (is === "li-ekle") {
+      const bar = btn.closest(".ar-bar");
+      const ul = bar && bar.previousElementSibling && bar.previousElementSibling.tagName === "UL"
+        ? bar.previousElementSibling : null;
+      if (ul) {
+        const li = document.createElement("li");
+        li.innerHTML = "&nbsp;" + arMadde();
+        ul.appendChild(li);
+        li.focus && li.focus();
+      }
+    } else if (is === "uda-sil") {
+      const blok = btn.closest(".uda-block"), liste = blok && blok.closest(".uda-liste");
+      if (blok) { blok.remove(); udaNumaralariTazele(liste); }
+    } else if (is === "uda-ekle") {
+      const liste = btn.closest(".ar-bar").previousElementSibling;
+      if (liste && liste.classList.contains("uda-liste")) yeniUdaBlok(liste);
+    }
+  });
 }
 
 /* ═══════════════ UYARLAMA VE DEĞERLENDİRME TOPLAMA ═══════════════ */
@@ -1922,15 +2188,19 @@ function generate() {
     <div class="bep-h">2. EĞİTSEL PERFORMANS DÜZEYİ</div>
     <p class="perf-p" contenteditable="true">${performansMetni(adMetni, ortam, planlar)}</p>
     <div class="alt-h">2.1. Ders Bazlı Performans Profili ve Planlama Kararı</div>
+    <div class="ar-kap">
     <table class="bep-t prof-t" contenteditable="true">
-      <thead><tr><th style="width:22%">Ders</th><th style="width:18%">Destek Düzeyi</th><th style="width:24%">Düzeyin Kaynağı</th><th>Programa Yansıması</th></tr></thead>
-      <tbody>${planlar.map(p => `<tr>
+      <thead><tr><th style="width:22%">Ders</th><th style="width:18%">Destek Düzeyi</th><th style="width:24%">Düzeyin Kaynağı</th><th>Programa Yansıması</th><th class="ar-th no-print"></th></tr></thead>
+      <tbody data-satir="profil">${planlar.map(p => `<tr>
         <td><b>${p.s.icon} ${p.s.name}</b></td>
         <td>${p.ds.sev ? SEV[p.ds.sev].ad : "Sınıf düzeyi (varsayılan)"}</td>
         <td>${KAYNAK_AD[p.ds.kaynak]}${p.ds.alanlar && p.ds.alanlar.length ? ": " + p.ds.alanlar.map(a => esc(BECERI_MAP[a].ad)).join(", ") : ""}</td>
-        <td>${p.plan.hiz}. Kapsam: ${p.kapsam}/${p.toplamUda} uzun dönemli amaç · Basamak: ${p.plan.basamak} · ${p.plan.tekrar}${p.onkosul ? " · Ön koşul beceri eklendi" : ""}</td>
+        <td>${p.plan.hiz}. Kapsam: ${p.kapsam}/${p.toplamUda} uzun dönemli amaç · Basamak: ${p.basamakSay} · ${p.plan.tekrar}${p.onkosul ? " · Ön koşul beceri eklendi" : ""}</td>
+        ${arHucre()}
       </tr>`).join("")}</tbody>
     </table>
+    ${satirEkleBar("profil")}
+    </div>
     <div class="alt-not">Bu tablo, aynı sınıf ve derste bile öğrencinin performansına göre farklı bir program uygulanmasını sağlar. Düzeyi "belirtilmedi" olan derslerde sınıf düzeyi müfredatı korunur.</div>`;
 
   let sec = 2;
@@ -1941,24 +2211,45 @@ function generate() {
     if (!dolu.length) h += `<p contenteditable="true">Uyarlama gerektiren bir alan girilmemiştir.</p>`;
     dolu.forEach(k => {
       h += `<div class="alt-h">${UYAR_BASLIK[k]}</div>
-      <ul class="bep-ul" contenteditable="true">${gruplar[k].map(u => `<li class="uyar-li">${esc(u.t)} <span class="kay">${esc(u.kay)}</span></li>`).join("")}</ul>`;
+      <ul class="bep-ul" contenteditable="true">${gruplar[k].map(u => `<li class="uyar-li">${esc(u.t)} <span class="kay">${esc(u.kay)}</span>${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}`;
     });
   }
 
   sec++;
   h += `
     <div class="bep-h">${sec}. DESTEK EĞİTİM HİZMETLERİ</div>
-    <table class="bep-t" contenteditable="true">
-      <thead><tr><th style="width:38%">Destek Hizmeti</th><th>Açıklama / Uygulama Biçimi</th></tr></thead>
-      <tbody>${sups.length ? sups.map(s => `<tr><td><b>${s.name}</b></td><td>${s.detail}</td></tr>`).join("") : `<tr><td colspan="2">Destek eğitim hizmeti seçilmedi.</td></tr>`}</tbody>
-    </table>`;
+    <div class="ar-kap">
+      <table class="bep-t" contenteditable="true">
+        <thead><tr><th style="width:38%">Destek Hizmeti</th><th>Açıklama / Uygulama Biçimi</th><th class="ar-th no-print"></th></tr></thead>
+        <tbody data-satir="destek">${sups.length
+          ? sups.map(s => `<tr><td><b>${s.name}</b></td><td>${s.detail}</td>${arHucre()}</tr>`).join("")
+          : `<tr><td>Destek eğitim hizmeti seçilmedi.</td><td></td>${arHucre()}</tr>`}</tbody>
+      </table>
+      ${satirEkleBar("destek")}
+    </div>`;
 
   sec++;
   h += `<div class="bep-h page-break">${sec}. UZUN VE KISA DÖNEMLİ AMAÇLAR <small>· UDA: Uzun Dönemli Amaç, KDA: Kısa Dönemli Amaç</small></div>`;
 
   planlar.forEach(p => {
+    const md = p.muf;
+    // Müfredat kaynağı çıktıda açıkça yazılır: hangi programdan, hangi derinlikte
+    let kaynakNot = "";
+    if (md && md.durum === "kazanim") {
+      kaynakNot = `Müfredat kaynağı: ${state.grade}. sınıf ${MUFREDAT.dersAdi(p.key, state.grade)} dersi öğretim programı`
+        + `${md.program === "onceki" ? " (önceki öğretim programı)" : " (Türkiye Yüzyılı Maarif Modeli)"}`
+        + ` · ${md.unite} ünite/tema, ${md.kazanim} resmî öğrenme çıktısı. Kısa dönemli amaçlar resmî kazanımlardan uyarlanmıştır; kazanım kodları korunmuştur.`;
+    } else if (md && md.durum === "unite") {
+      kaynakNot = `Müfredat kaynağı: ${state.grade}. sınıf ${MUFREDAT.dersAdi(p.key, state.grade)} dersinin resmî ${md.unite} ünite/temasıdır`
+        + `${md.program === "onceki" ? " (önceki öğretim programı)" : ""}. `
+        + `<b>Bu ders-sınıf için resmî öğrenme çıktısı metni veri setinde henüz bulunmadığından</b> kısa dönemli amaçlar beceri temelli havuzdan üretilmiştir; BEP birimi bunları ünitenin kazanımlarıyla değiştirmelidir.`;
+    } else {
+      kaynakNot = `Bu ders-sınıf için ünite bazlı müfredat verisi tanımlı olmadığından amaçlar beceri temelli havuzdan üretilmiştir.`;
+    }
     h += `<div class="bep-h ders-h">${p.s.icon} ${p.s.name} <small>· ${state.grade}. Sınıf müfredatı</small></div>
-    <div class="ders-plan">Destek düzeyi: <b>${p.ds.sev ? SEV[p.ds.sev].ad : "Sınıf düzeyi (varsayılan)"}</b> · ${p.plan.hiz} · ${p.plan.tekrar}.</div>`;
+    <div class="ders-plan">Destek düzeyi: <b>${p.ds.sev ? SEV[p.ds.sev].ad : "Sınıf düzeyi (varsayılan)"}</b> · ${p.plan.hiz} · ${p.plan.tekrar}.</div>
+    <div class="ders-plan muf-kaynak">${kaynakNot}</div>
+    <div class="uda-liste" data-ders="${p.key}">`;
     let no = 0;
     p.bloklar.forEach(b => {
       const onk = b.onkosul;
@@ -1966,23 +2257,27 @@ function generate() {
       h += `
       <div class="uda-block">
         <div class="uda-title" contenteditable="true"><span class="no">${onk ? "ÖK." : "UDA " + no + "."}</span> ${b.uda}${onk ? ` <span class="rozet-ok">ÖN KOŞUL · ${esc(b.etiket)}</span>` : ""}</div>
-        <div class="uda-plan">Planlanan öğretim süresi: yaklaşık ${b.hafta} hafta · Amaç basamağı: ${p.plan.basamak} · ${p.plan.tekrar}${onk ? " · Bu amaç tamamlandığında sınıf düzeyi kazanımına geçilir" : ""}</div>
+        <div class="uda-plan">Planlanan öğretim süresi: yaklaşık ${b.hafta} hafta · Amaç basamağı: ${p.basamakSay} · ${p.plan.tekrar}${onk ? " · Bu amaç tamamlandığında sınıf düzeyi kazanımına geçilir" : ""}${b.unite ? ` · Ünite/tema: <b>${esc(b.unite)}</b>` : ""}</div>
+        ${satirAracBar("Bu uzun dönemli amacı sil", "uda-sil")}
         <table class="bep-t" contenteditable="true">
           <thead><tr>
-            <th style="width:5%">No</th><th style="width:34%">Kısa Dönemli Amaç</th>
-            <th style="width:17%">Başarı Ölçütü</th><th style="width:24%">Yöntem / Teknik ve Materyal</th>
-            <th style="width:13%">Tarih Aralığı</th><th style="width:7%">Ulaşıldı mı?</th>
+            <th style="width:5%">No</th><th style="width:32%">Kısa Dönemli Amaç</th>
+            <th style="width:16%">Başarı Ölçütü</th><th style="width:22%">Yöntem / Teknik ve Materyal</th>
+            <th style="width:12%">Tarih Aralığı</th><th style="width:7%">Ulaşıldı mı?</th>
+            <th class="ar-th no-print"></th>
           </tr></thead>
-          <tbody>${b.gruplar.map((gr, ki) => gr.satirlar.map((r, si) => `<tr>
-            <td><b>${onk ? "ÖK" : no}.${ki + 1}${gr.satirlar.length > 1 ? "." + "abc"[si] : ""}</b></td>
-            <td>${r.etiket ? `<i class="bsm">${r.etiket}:</i> ` : ""}${r.metin}</td>
+          <tbody data-satir="kda">${b.gruplar.map((gr, ki) => gr.satirlar.map((r, si) => `<tr>
+            <td class="kda-no"><b>${onk ? "ÖK" : no}.${ki + 1}${gr.satirlar.length > 1 ? "." + "abc"[si] : ""}</b></td>
+            <td>${r.etiket ? `<i class="bsm">${r.etiket}:</i> ` : ""}${r.metin}${r.kod ? ` <span class="kaz-kod">${esc(r.kod)}</span>` : ""}</td>
             <td>${r.olcut}</td><td>${r.yontem}</td>
-            ${si === 0 ? `<td rowspan="${gr.satirlar.length}">${gr.aralik.label}</td>` : ""}
-            <td></td>
+            <td>${gr.aralik.label}</td>
+            <td></td>${arHucre()}
           </tr>`).join("")).join("")}</tbody>
         </table>
+        ${satirEkleBar("kda")}
       </div>`;
     });
+    h += `</div>${udaEkleBar()}`;
   });
 
   if ($("optDegerlendirme").checked) {
@@ -1990,10 +2285,10 @@ function generate() {
     h += `
     <div class="bep-h">${sec}. İZLEME VE DEĞERLENDİRME</div>
     <p contenteditable="true">Kısa dönemli amaçlara ulaşma düzeyi aşağıdaki yöntemlerle izlenir. Başarı ölçütleri, öğrencinin ders bazlı destek düzeyine ve amacın basamağına göre belirlenmiştir; ipuçlu basamaklarda ölçüt daha esnek, bağımsız basamakta hedeflenen düzeydedir. BEP geliştirme birimi programı her dönem sonunda gözden geçirir; amaçlara ulaşılamadığında ölçütler, yöntemler ve süreler güncellenir, beklenenden hızlı ilerlendiğinde kapsam genişletilir.</p>
-    <ul class="bep-ul" contenteditable="true">${ASSESS.map(a => `<li>${a}</li>`).join("")}</ul>`;
+    <ul class="bep-ul" contenteditable="true">${ASSESS.map(a => `<li>${a}${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}`;
     if (deg.length) {
       h += `<div class="alt-h">${sec}.1. Ölçme ve Değerlendirme Uyarlamaları</div>
-      <ul class="bep-ul" contenteditable="true">${deg.map(u => `<li class="uyar-li">${esc(u.t)} <span class="kay">${esc(u.kay)}</span></li>`).join("")}</ul>`;
+      <ul class="bep-ul" contenteditable="true">${deg.map(u => `<li class="uyar-li">${esc(u.t)} <span class="kay">${esc(u.kay)}</span>${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}`;
     }
   }
 
@@ -2009,16 +2304,20 @@ function generate() {
     h += `
     <div class="bep-h">${sec}. BEP GELİŞTİRME BİRİMİ</div>
     <p style="font-size:.85em;" contenteditable="true">Bu Bireyselleştirilmiş Eğitim Programı, ${fmtD(term.start)} tarihinde BEP geliştirme birimi tarafından hazırlanmış olup aşağıdaki üyelerce kabul edilmiştir.</p>
+    <div class="ar-kap">
     <table class="bep-t sign-t" contenteditable="true">
-      <thead><tr><th style="width:40%">Görevi</th><th style="width:35%">Adı Soyadı</th><th>İmza</th></tr></thead>
-      <tbody>${rows.map(r => `<tr><td class="rol">${r[0]}</td><td style="vertical-align:middle;text-align:center;">${dash(r[1])}</td><td></td></tr>`).join("")}</tbody>
-    </table>`;
+      <thead><tr><th style="width:40%">Görevi</th><th style="width:35%">Adı Soyadı</th><th>İmza</th><th class="ar-th no-print"></th></tr></thead>
+      <tbody data-satir="imza">${rows.map(r => `<tr><td class="rol">${r[0]}</td><td style="vertical-align:middle;text-align:center;">${dash(r[1])}</td><td></td>${arHucre()}</tr>`).join("")}</tbody>
+    </table>
+    ${satirEkleBar("imza")}
+    </div>`;
   }
 
   h += `<div class="sheet-footer">Kaynak Kampüs BEP Oluşturucu ile hazırlanmıştır · Müfredat öğrencinin sınıfından, uygulama biçimi öğrencinin bireysel performansından türetilmiştir. Bu belge bir taslaktır; BEP geliştirme birimince gözden geçirilerek kullanılmalıdır.</div>`;
 
   const sheet = $("sheet");
   sheet.innerHTML = h;
+  satirAraclariniBagla();
   sheet.style.setProperty("--sheet-fs", $("fontSize").value);
   sheet.classList.toggle("bw", $("optBW").checked);
   $("previewEmpty").style.display = "none";

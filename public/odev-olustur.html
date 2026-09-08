@@ -140,6 +140,11 @@
     .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; }
     .check-row input { accent-color: var(--blue); width: 15px; height: 15px; }
     .check-row span { font-size: .8rem; font-weight: 600; }
+    /* Bu konu için üretilemeyen soru tipi: pasif ama görünür kalır, böylece
+       öğretmen tipin var olduğunu ama bu konuya uymadığını görür. */
+    .check-row.ty-kapali { opacity: .5; cursor: not-allowed; }
+    .check-row .ty-not { display: none; font-size: .66rem; font-weight: 600; color: var(--muted); }
+    .check-row.ty-kapali .ty-not { display: inline; }
     .hint { font-size: .72rem; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
     .gen-actions { display: flex; flex-direction: column; gap: 10px; }
@@ -408,17 +413,18 @@
             </select>
           </div>
           <div style="font-size:.8rem;font-weight:700;margin:12px 0 8px;">Soru Tipleri</div>
-          <label class="check-row"><input type="checkbox" data-ty="mc" checked /><span>🔘 Çoktan Seçmeli</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="tf" checked /><span>✔️ Doğru – Yanlış</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="fb" checked /><span>➖ Boşluk Doldurma</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="islem" checked /><span>🔢 İşlem / Problem</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="es" checked /><span>🔗 Eşleştirme</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="sira" checked /><span>🔢 Sıralama</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="veri" checked /><span>📊 Tablo / Veri Yorumlama</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="grafik" checked /><span>📈 Grafik Yorumlama</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="sinif" checked /><span>🗂️ Sınıflandırma</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="hata" checked /><span>🔍 Hata Bulma – Düzeltme</span></label>
-          <label class="check-row"><input type="checkbox" data-ty="op" /><span>✍️ Açık Uçlu</span></label>
+          <label class="check-row"><input type="checkbox" data-ty="mc" checked /><span>🔘 Çoktan Seçmeli <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="tf" checked /><span>✔️ Doğru – Yanlış <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="fb" checked /><span>➖ Boşluk Doldurma <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="islem" checked /><span>🔢 İşlem / Problem <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="es" checked /><span>🔗 Eşleştirme <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="sira" checked /><span>🔢 Sıralama <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="veri" checked /><span>📊 Tablo / Veri Yorumlama <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="grafik" checked /><span>📈 Grafik Yorumlama <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="sinif" checked /><span>🗂️ Sınıflandırma <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="hata" checked /><span>🔍 Hata Bulma – Düzeltme <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <label class="check-row"><input type="checkbox" data-ty="op" /><span>✍️ Açık Uçlu <em class="ty-not">— bu konu için uygun değil</em></span></label>
+          <div class="hint" id="kapasiteHint"></div>
           <div class="hint" id="uretimHint"></div>
         </div>
 
@@ -551,7 +557,35 @@
 
 <script>
 /* ═══════════════ YARDIMCILAR ═══════════════ */
-const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+/* ── Tek rastgelelik kaynağı ──────────────────────────────────────────────
+   Motorun BÜTÜN rastgeleliği buradan geçer (R, pick, shuffle ve seçim
+   puanlamasındaki iki çekiliş). Üretimde doğrudan Math.random'a düşer;
+   davranış değişmez.
+
+   NEDEN: 460 ünitelik regresyon taraması deterministik değildi ve aynı kodun
+   iki koşusu arasında tipik olarak üç kadar ±1 fark çıkıyordu. Bu gürültü
+   gerçek gerilemeyi gizliyor, olmayan gerilemeyi de var gösteriyordu.
+   Testte `KKRastgele.tohumla(n)` çağrılınca yerine deterministik bir üreteç
+   (mulberry32) konur: aynı tohum + aynı girdi = birebir aynı kâğıt.
+   `KKRastgele.sifirla()` üretim davranışına döndürür. Kullanıcı arayüzünde
+   bu API'yi çağıran hiçbir yer yoktur. */
+let rastgeleKaynak = Math.random;
+const rastgele = () => rastgeleKaynak();
+window.KKRastgele = {
+  tohumla(n) {
+    let s = (n >>> 0) || 1;
+    rastgeleKaynak = function () {
+      s = (s + 0x6D2B79F5) >>> 0;
+      let t = s;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  },
+  sifirla() { rastgeleKaynak = Math.random; },
+  tohumluMu() { return rastgeleKaynak !== Math.random; },
+};
+const R = (a, b) => a + Math.floor(rastgele() * (b - a + 1));
 const pick = arr => arr[R(0, arr.length - 1)];
 const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = R(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const gcd = (a, b) => b ? gcd(b, a % b) : a;
@@ -574,7 +608,11 @@ const SUBJECTS = {
 };
 
 const LEVELS = {
-  ilkokul:  { name: "🎒 İlkokul",  grades: [1, 2, 3, 4],   subjects: ["tr", "mat", "hay", "fen", "sos", "ing"] },
+  /* Din Kültürü 4. sınıfta başlar (AVAIL.din = 4-12). İlkokul listesinde
+     eksikti: ders 4. sınıfta okutulduğu ve din-4 üniteleri ile soru bankası
+     hazır olduğu hâlde arayüzden seçilemiyordu. 1-3. sınıflarda AVAIL
+     tarafından pasif gösterilir ve AVAIL_NOTE.din gerekçeyi yazar. */
+  ilkokul:  { name: "🎒 İlkokul",  grades: [1, 2, 3, 4],   subjects: ["tr", "mat", "hay", "fen", "sos", "din", "ing"] },
   ortaokul: { name: "🏫 Ortaokul", grades: [5, 6, 7, 8],   subjects: ["tr", "mat", "fen", "sos", "ink", "din", "ing"] },
   lise:     { name: "🎓 Lise",     grades: [9, 10, 11, 12], subjects: ["tde", "mat", "fiz", "kim", "bio", "ing", "alm", "din"] },
 };
@@ -616,7 +654,21 @@ const YAPI_ADI = {
   hay: "Öğrenme Alanı", sos: "Öğrenme Alanı",
   ink: "Ünite", ing: "Theme", alm: "Ünite",
 };
-function yapiAdi() { return YAPI_ADI[st.subject] || "Ünite"; }
+/* KONU TABANLI ders-sınıflar — resmî programında içerik ünitesi/teması YOK.
+   2019 Türkçe Öğretim Programı yalnızca dört beceri alanı (Dinleme/İzleme,
+   Konuşma, Okuma, Yazma) ve bunlara bağlı kazanımlardan oluşur; tema ya da
+   ünite tanımlamaz. 4 ve 8. sınıflar 2026-2027'de bu programla devam ettiği
+   için buradaki başlıklar resmî TEMA DEĞİL, öğretmenin ödev kurmasını
+   kolaylaştıran KAZANIM GRUPLARIDIR. Her biri KAPSAM'da resmî kazanım
+   koduyla eşleştirilmiştir; kod eşleşmesi olmayanlar aşağıda kayıtlı
+   değildir ve kapsamlarını bankadan türetir ("bilgi noktası", resmî çıktı
+   iddiası taşımaz).
+   Türkçe'nin öbür sınıfları (1-3, 5-7) TYMM programındadır ve GERÇEK
+   temaları vardır; bu yüzden işaret ders düzeyinde değil SINIF düzeyinde
+   tutulur. */
+const KONU_TABANLI = new Set(["tr-4", "tr-8"]);
+function konuTabanliMi() { return KONU_TABANLI.has(st.subject + "-" + st.grade); }
+function yapiAdi() { return konuTabanliMi() ? "Konu" : (YAPI_ADI[st.subject] || "Ünite"); }
 
 /* ── 2026-2027'de yürürlükte olan program ─────────────────────────────────
    Türkiye Yüzyılı Maarif Modeli kademeli uygulanır. 2026-2027'de TYMM
@@ -655,7 +707,7 @@ const UNITS = {
     1: [{u:"Sayılar ve Nicelikler (1)",g:"say1"},{u:"Sayılar ve Nicelikler (2)",g:"olc"},{u:"Sayılar ve Nicelikler (3)",g:"para",p:[1,20]},{u:"İşlemlerden Cebirsel Düşünmeye",g:"add",p:[1,20]},{u:"Nesnelerin Geometrisi (1)"},{u:"Nesnelerin Geometrisi (2)",g:"sek"},{u:"Veriye Dayalı Araştırma"}],
     2: [{u:"Sayılar ve Nicelikler (1)",g:"say2"},{u:"Sayılar ve Nicelikler (2)",g:"kesyarim"},{u:"İşlemlerden Cebirsel Düşünmeye",g:"add",p:[1,100]},{u:"Nesnelerin Geometrisi (1)",g:"sek"},{u:"Nesnelerin Geometrisi (2)"},{u:"Veriye Dayalı Araştırma"}],
     3: [{u:"Sayılar ve Nicelikler (1)",g:"say3"},{u:"Sayılar ve Nicelikler (2)",g:"kespay"},{u:"İşlemlerden Cebirsel Düşünmeye",g:"mul",p:[2,10]},{u:"Nesnelerin Geometrisi (1)",g:"cevre",p:[2,20]},{u:"Nesnelerin Geometrisi (2)"},{u:"Veriye Dayalı Araştırma"}],
-    4: [{u:"Doğal Sayılar",g:"say4"},{u:"Doğal Sayılarla Toplama İşlemi",g:"add",p:[100,9999]},{u:"Doğal Sayılarla Çıkarma İşlemi",g:"sub",p:[100,9999]},{u:"Doğal Sayılarla Çarpma İşlemi",g:"mul",p:[2,99]},{u:"Doğal Sayılarla Bölme İşlemi",g:"div",p:[2,12]},{u:"Kesirler",g:"kespay"},{u:"Kesirlerle İşlemler",g:"kesadd"},{u:"Geometrik Cisimler ve Şekiller",g:"sek"},{u:"Geometride Temel Kavramlar",g:"aci"},{u:"Uzunluk Ölçme",g:"olc"},{u:"Çevre Ölçme",g:"cevre",p:[2,30]},{u:"Alan Ölçme",g:"alan",p:[2,20]},{u:"Sıvı Ölçme"},{u:"Tartma"},{u:"Zaman Ölçme",g:"zaman"},{u:"Veri Toplama ve Değerlendirme"}],
+    4: [{u:"Doğal Sayılar",g:"say4"},{u:"Doğal Sayılarla Toplama İşlemi",g:"add",p:[100,9999]},{u:"Doğal Sayılarla Çıkarma İşlemi",g:"sub",p:[100,9999]},{u:"Doğal Sayılarla Çarpma İşlemi",g:"mul",p:[2,99]},{u:"Doğal Sayılarla Bölme İşlemi",g:"div",p:[2,12]},{u:"Kesirler",g:"kespay"},{u:"Kesirlerle İşlemler",g:"kesadd"},{u:"Geometrik Cisimler ve Şekiller",g:"sek"},{u:"Uzamsal İlişkiler"},{u:"Geometride Temel Kavramlar",g:"aci"},{u:"Uzunluk Ölçme",g:"olc"},{u:"Çevre Ölçme",g:"cevre",p:[2,30]},{u:"Alan Ölçme",g:"alan",p:[2,20]},{u:"Sıvı Ölçme"},{u:"Tartma"},{u:"Zaman Ölçme",g:"zaman"},{u:"Veri Toplama ve Değerlendirme"}],
     5: [{u:"Sayılar ve Nicelikler (1)",g:"dort",p:[10,999]},{u:"Sayılar ve Nicelikler (2)",g:"kesadd"},{u:"İşlemlerle Cebirsel Düşünme",g:"cebir"},{u:"Geometrik Şekiller",g:"aci"},{u:"Geometrik Nicelikler",g:"alan",p:[2,20]},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
     6: [{u:"Sayılar ve Nicelikler (1)",g:"carpan"},{u:"Sayılar ve Nicelikler (2)",g:"kesmul"},{u:"İşlemlerle Cebirsel Düşünme ve Değişimler",g:"cebir"},{u:"Geometrik Şekiller",g:"ucgen"},{u:"Geometrik Nicelikler",g:"ucgalan"},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
     7: [{u:"Sayılar ve Nicelikler (1)",g:"tam",p:[1,30]},{u:"Sayılar ve Nicelikler (2)",g:"oran"},{u:"İşlemlerle Cebirsel Düşünme ve Değişimler",g:"denk",p:[1,20]},{u:"Dönüşüm"},{u:"Geometrik Nicelikler (1)",g:"hacim"},{u:"Geometrik Nicelikler (2)",g:"cember"},{u:"Geometrik Şekiller"},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
@@ -663,7 +715,7 @@ const UNITS = {
     9: [{u:"Sayılar",g:"kok"},{u:"Nicelikler ve Değişimler",g:"fonk"},{u:"Geometrik Şekiller",g:"ucgen"},{u:"Eşlik ve Benzerlik",g:"pisagor"},{u:"Algoritma ve Bilişim"},{u:"İstatistiksel Araştırma Süreci"},{u:"Veriden Olasılığa",g:"olasi"}],
     10: [{u:"Geometrik Şekiller",g:"trig"},{u:"İstatistiksel Araştırma Süreci"},{u:"Sayılar",g:"ebob"},{u:"Nicelikler ve Değişimler",g:"fonk"},{u:"Sayma, Algoritma ve Bilişim"},{u:"Analitik İnceleme",g:"analitik"},{u:"Veriden Olasılığa",g:"olasi"}],
     11: [{u:"İstatistiksel Araştırma Süreci"},{u:"Geometrik Şekiller",g:"cokgen"},{u:"Nicelikler ve Değişimler (1)",g:"trig"},{u:"Nicelikler ve Değişimler (2)",g:"log"},{u:"Nicelikler ve Değişimler (3)",g:"fonk"}],
-    12: [{u:"Üstel ve Logaritmik Fonksiyonlar",g:"log"},{u:"Diziler",g:"dizi"},{u:"Trigonometri",g:"trig"},{u:"Dönüşümler"},{u:"Türev",g:"turev"},{u:"İntegral",g:"integral"},{u:"Analitik Geometri",g:"analitik"}],
+    12: [{u:"Üstel ve Logaritmik Fonksiyonlar",g:"log"},{u:"Diziler",g:"dizi"},{u:"Trigonometri",g:"trig12"},{u:"Dönüşümler"},{u:"Türev",g:"turev"},{u:"İntegral",g:"integral"},{u:"Analitik Geometri",g:"analitik"}],
   },
   fen: {
     3: ["Bilimsel Keşif Yolculuğu", "Canlılar Dünyasına Yolculuk", "Yer Bilimciler İş Başında", "Maddeyi Tanıyalım, Karıştırıp Ayıralım", "Hareketi Keşfediyorum", "Yaşamımızı Kolaylaştıran Elektrik", "Toprağı Tanıyorum, Tarımı Keşfediyorum", "Canlıların Yaşam Alanlarına Yolculuk"],
@@ -671,7 +723,7 @@ const UNITS = {
     5: ["Gökyüzündeki Komşularımız ve Biz", "Kuvveti Tanıyalım", "Canlıların Yapısına Yolculuk", "Işığın Dünyası", "Maddenin Doğası", "Yaşamımızdaki Elektrik", "Sürdürülebilir Yaşam ve Geri Dönüşüm"],
     6: [{u:"Güneş Sistemi ve Tutulmalar"},{u:"Kuvvetin Etkisinde Hareket",g:"hiz"},{u:"Canlılarda Sistemler"},{u:"Işığın Yansıması ve Renkler"},{u:"Maddenin Ayırt Edici Özellikleri"},{u:"Elektriğin İletimi ve Direnç"},{u:"Sürdürülebilir Yaşam ve Etkileşim"}],
     7: ["Uzay Çağı", "Kuvvet ve Enerjiyi Keşfedelim", "Vücudumuzdaki Sistemler", "Işığın Kırılması ve Mercekler", "Maddenin Doğasına Yolculuk", "Elektriklenme", "Sürdürülebilir Yaşam ve Enerji"],
-    8: [{u:"Mevsimler ve İklim"},{u:"DNA ve Genetik Kod"},{u:"Basınç",g:"basinc"},{u:"Madde ve Endüstri"},{u:"Basit Makineler"},{u:"Enerji Dönüşümleri"},{u:"Elektrik Yükleri ve Elektrik Enerjisi"}],
+    8: [{u:"Mevsimler ve İklim"},{u:"DNA ve Genetik Kod"},{u:"Basınç",g:"basinc"},{u:"Madde ve Endüstri"},{u:"Basit Makineler"},{u:"Enerji Dönüşümleri ve Çevre Bilimi"},{u:"Elektrik Yükleri ve Elektrik Enerjisi"}],
   },
   sos: {
     4: ["Birey ve Toplum", "Kültür ve Miras", "İnsanlar, Yerler ve Çevreler", "Bilim, Teknoloji ve Toplum", "Üretim, Dağıtım ve Tüketim", "Etkin Vatandaşlık", "Küresel Bağlantılar"],
@@ -700,7 +752,7 @@ const UNITS = {
     9: ["Allah-İnsan İlişkisi", "İslam'da İnanç Esasları", "İslam'da İbadetler", "İslam'da Ahlak İlkeleri", "Kur'an'a Göre Hz. Muhammed"],
     10: ["İslam'da Varlık ve Bilgi", "Allah'ı Tanımak", "İslam'ın Evrensel Mesajları", "Din, Çevre ve Teknoloji", "İslam Düşüncesinde İtikadi-Siyasi ve Fıkhi Yorumlar"],
     11: ["Kader, İrade ve Sorumluluk", "Din, Felsefe, Bilim ve Sanat", "İslam Medeniyeti ve Gönül Coğrafyamız", "İnançla İlgili Meseleler", "Yahudilik ve Hristiyanlık"],
-    12: ["İslam ve Bilim", "Anadolu'da İslam", "Tasavvufi Yorumlar", "Güncel Dinî Meseleler", "Hint ve Çin Dinleri"],
+    12: ["İslam ve Bilim", "Anadolu'da İslam", "İslam Düşüncesinde Tasavvufi Yorumlar", "Güncel Dinî Meseleler", "Hint ve Çin Dinleri"],
   },
   ing: {
     2: ["School Life", "Classroom Life", "Personal Life", "Family Life", "Homes & Houses & Neighbourhoods", "Life in the City & The World"],
@@ -1073,11 +1125,17 @@ const UNIT_BANK = {
     {ty:"mc",q:"cos(2x) ifadelerinden biri hangisidir?",o:["cos²x − sin²x","2 cos x","cos x + sin x","1 + sin x"],a:0},
     {ty:"mc",q:"sin x = 0 denkleminin [0, 2π] aralığındaki çözümleri hangileridir?",o:["0, π, 2π","π/2","π/2, 3π/2","Yalnızca 0"],a:0},
     {ty:"mc",q:"sin(a + b) ifadesi neye eşittir?",o:["sin a cos b + cos a sin b","sin a + sin b","cos a cos b","sin a sin b"],a:0},
-    {ty:"mc",q:"tan x fonksiyonunun periyodu kaçtır?",o:["π","2π","π/2","4π"],a:0},
-    {ty:"tf",q:"sin²x + cos²x = 1 eşitliği her x için doğrudur.",a:true},
     {ty:"tf",q:"sin(2x) = 2 sin x eşitliği doğrudur.",a:false},
-    {ty:"fb",q:"sin x ve cos x fonksiyonlarının periyodu ____ dir.",a:"2π"},
     {ty:"fb",q:"Trigonometrik denklemlerde tüm çözümleri veren ifadeye ____ çözüm denir.",a:"genel"}
+    /* Bu ünite YALNIZCA 12.3 kapsamını ölçer: toplam-fark (12.3.1.1), iki kat
+       açı (12.3.1.2) ve trigonometrik denklemler (12.3.2.1).
+       Buradan üç soru çıkarıldı — periyot ve sin²x + cos²x = 1 temel
+       özdeşliği 12.3 kazanımı değil, ÖN BİLGİDİR. Alt sınıflarda doğru
+       yerlerinde zaten bulunuyorlar, bu yüzden taşınmadılar:
+         · sin/cos periyodu ....... mat-11 "Nicelikler ve Değişimler (1)"
+         · tan periyodu ........... mat-11 "Nicelikler ve Değişimler (1)"
+         · sin²x + cos²x = 1 ...... mat-10 "Geometrik Şekiller"
+       Kalan sorular ve GEN.trig12 üreteci 12.3 dışına çıkmaz. */
   ],
   "Dönüşümler": [
     {ty:"mc",q:"y = f(x) grafiğinin y = f(x) + 3 biçimine dönüşmesi hangi hareketi gösterir?",o:["Yukarı 3 birim öteleme","Aşağı 3 birim öteleme","Sağa 3 birim öteleme","Sola 3 birim öteleme"],a:0},
@@ -2103,7 +2161,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Aşağıdakilerden hangisi bir terim anlam örneğidir?",o:["Yüreği yandı (üzüldü)","Su ısındı","Fiil, dilbilgisinde eylem bildiren sözcüktür","Kafası karıştı"],a:2},
     {ty:"tf",q:"Terim anlam, bir bilim, sanat veya meslek dalında kullanılan özel anlamdır.",a:true},
     {ty:"tf",q:"'Kalbi kırıldı.' cümlesindeki 'kırılmak' kelimesi gerçek anlamda kullanılmıştır.",a:false},
-    {ty:"fb",q:"Bir kelimenin ilk akla gelen, sözlükteki asıl anlamına ____ anlam denir.",a:"gerçek"},,
+    {ty:"fb",q:"Bir kelimenin ilk akla gelen, sözlükteki asıl anlamına ____ anlam denir.",a:"gerçek"},
       {ty:"mc",q:"\"Soğuk bir karşılama\" ifadesinde \"soğuk\" sözcüğü hangi anlamdadır?",o:["Mecaz anlam","Gerçek anlam","Terim anlam","Eş anlam"],a:0},
       {ty:"mc",q:"\"Kök\" sözcüğü dil bilgisinde kullanıldığında hangi anlamdadır?",o:["Terim anlam","Gerçek anlam","Mecaz anlam","Zıt anlam"],a:0},
       {ty:"mc",q:"Aşağıdaki cümlelerden hangisinde altı çizili sözcük gerçek anlamdadır: \"Bardağın ağzı kırıldı\" / \"Ağzını açmadı\"?",o:["Bardağın ağzı kırıldı","Ağzını açmadı","İkisi de mecaz","İkisi de terim"],a:0},
@@ -2120,7 +2178,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Aşağıdakilerden hangisi bir atasözüdür?",o:["Ağzı kulaklarına varmak","Dost kara günde belli olur.","Kafayı yemek","Gözden düşmek"],a:1},
     {ty:"tf",q:"Deyimler genellikle mecaz anlam taşıyan kalıplaşmış söz gruplarıdır.",a:true},
     {ty:"tf",q:"Atasözlerinin söyleyeni bellidir ve sonradan değiştirilebilirler.",a:false},
-    {ty:"fb",q:"Çok üzülmek anlamına gelen '____ yanmak' deyiminde boşluğa gelmesi gereken kelime yürektir.",a:"yüreği"},,
+    {ty:"fb",q:"Çok üzülmek anlamına gelen '____ yanmak' deyiminde boşluğa gelmesi gereken kelime yürektir.",a:"yüreği"},
       {ty:"mc",q:"\"Etekleri zil çalmak\" deyimi ne anlama gelir?",o:["Çok sevinmek","Çok üzülmek","Çok yorulmak","Çok acele etmek"],a:0},
       {ty:"mc",q:"\"Damlaya damlaya göl olur\" atasözü neyi anlatır?",o:["Küçük birikimlerin büyüdüğünü","Suyun taştığını","Yağmurun yararını","Gölün derinliğini"],a:0},
       {ty:"mc",q:"Deyimlerin genel özelliği aşağıdakilerden hangisidir?",o:["Kalıplaşmış ve genellikle mecazlı olması","Her zaman öğüt vermesi","Tek sözcükten oluşması","Değiştirilebilir olması"],a:0},
@@ -2137,7 +2195,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"'Üç kalem aldım.' cümlesinde 'üç' kelimesi ne tür bir sıfattır?",o:["Niteleme sıfatı","Belirtme (sayı) sıfatı","Zamir","Ad"],a:1},
     {ty:"tf",q:"Sıfatlar isimlerin önüne gelerek onları niteler veya belirtir.",a:true},
     {ty:"tf",q:"Zamirler, isimlerin yerini tutan kelimelerdir.",a:true},
-    {ty:"fb",q:"'Ben, sen, o, biz, siz, onlar' kelimelerine ____ zamiri denir.",a:"kişi (şahıs)"},,
+    {ty:"fb",q:"'Ben, sen, o, biz, siz, onlar' kelimelerine ____ zamiri denir.",a:"kişi (şahıs)"},
       {ty:"mc",q:"\"Kalabalık sınıf\" tamlamasında \"kalabalık\" sözcüğünün türü nedir?",o:["Sıfat","Ad","Zamir","Zarf"],a:0},
       {ty:"mc",q:"\"Onlar bahçede oynuyor.\" cümlesinde \"onlar\" sözcüğünün türü nedir?",o:["Zamir","Ad","Sıfat","Bağlaç"],a:0},
       {ty:"mc",q:"Aşağıdakilerden hangisi özel addır?",o:["Ankara","şehir","dağ","ırmak"],a:0},
@@ -2154,7 +2212,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Yapım eki aldığında kelimenin türü ya da anlamı nasıl değişir?",o:["Değişmez","Yeni bir kelime (anlam/tür) oluşur","Sadece çoğul olur","Sadece zaman bildirir"],a:1},
     {ty:"tf",q:"Çekim ekleri kelimenin anlamını ve türünü değiştirmez, sadece cümledeki görevini belirtir.",a:true},
     {ty:"tf",q:"'Tuz-lu' kelimesindeki '-lu' eki bir çekim ekidir.",a:false},
-    {ty:"fb",q:"'Oku-du' kelimesindeki '-du' eki bir ____ ekidir (yapım/çekim).",a:"çekim"},,
+    {ty:"fb",q:"'Oku-du' kelimesindeki '-du' eki bir ____ ekidir (yapım/çekim).",a:"çekim"},
       {ty:"mc",q:"\"Kitaplık\" sözcüğündeki \"-lık\" eki hangi tür ektir?",o:["Yapım eki","Çekim eki","Çoğul eki","Hâl eki"],a:0},
       {ty:"mc",q:"\"Evler\" sözcüğündeki \"-ler\" eki hangi tür ektir?",o:["Çekim eki","Yapım eki","Kök","Gövde"],a:0},
       {ty:"mc",q:"Yapım eki almış sözcüklere ne ad verilir?",o:["Türemiş sözcük","Basit sözcük","Birleşik sözcük","Yansıma"],a:0},
@@ -2171,7 +2229,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Yüklemi cümlenin sonunda olan cümlelere ne ad verilir?",o:["Devrik cümle","Kurallı (düz) cümle","Soru cümlesi","Ünlem cümlesi"],a:1},
     {ty:"tf",q:"Devrik cümlelerde yüklem cümlenin başında veya ortasında yer alır.",a:true},
     {ty:"tf",q:"Her cümlede özne mutlaka açık (görünür) olmak zorundadır, gizli özne olamaz.",a:false},
-    {ty:"fb",q:"'Geldi mi acaba?' cümlesinde yüklem ____ 'dir.",a:"Geldi"},,
+    {ty:"fb",q:"'Geldi mi acaba?' cümlesinde yüklem ____ 'dir.",a:"Geldi"},
       {ty:"mc",q:"\"Ali kitabı okudu.\" cümlesinde \"kitabı\" hangi ögedir?",o:["Nesne","Özne","Yüklem","Zarf tümleci"],a:0},
       {ty:"mc",q:"\"Yarın okula gideceğim.\" cümlesinde \"yarın\" hangi ögedir?",o:["Zarf tümleci","Özne","Nesne","Yüklem"],a:0},
       {ty:"mc",q:"Bir cümlede olmazsa olmaz temel öge hangisidir?",o:["Yüklem","Nesne","Zarf tümleci","Dolaylı tümleç"],a:0},
@@ -2188,7 +2246,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Aşağıdakilerden hangisi doğru yazılmıştır?",o:["Kitab'ı okudum.","Kitabı okudum.","Kitabıı okudum.","Kitab okudum."],a:1},
     {ty:"tf",q:"'de/da' bağlacı kendisinden önceki kelimeye her zaman ayrı yazılır.",a:true},
     {ty:"tf",q:"Kısaltmalarda nokta kullanılması gerekmez.",a:false},
-    {ty:"fb",q:"'Bu kitabı sen mi aldın?' cümlesinde 'mi' soru eki kelimeden ____ yazılır (bitişik/ayrı).",a:"ayrı"},,
+    {ty:"fb",q:"'Bu kitabı sen mi aldın?' cümlesinde 'mi' soru eki kelimeden ____ yazılır (bitişik/ayrı).",a:"ayrı"},
       {ty:"mc",q:"Bir cümle sonunda duyguyu güçlü biçimde belirtmek için hangi işaret kullanılır?",o:["Ünlem işareti","Nokta","Virgül","İki nokta"],a:0},
       {ty:"mc",q:"Eş görevli sözcükleri ayırmak için hangi işaret kullanılır?",o:["Virgül","Nokta","Soru işareti","Kesme işareti"],a:0},
       {ty:"mc",q:"Özel adlara gelen çekim eklerini ayırmak için hangi işaret kullanılır?",o:["Kesme işareti","Virgül","Nokta","Tire"],a:0},
@@ -2205,7 +2263,7 @@ const UNIT_BANK = {
     {ty:"mc",q:"Bir kişiye duygu ve düşünceleri iletmek amacıyla yazılan, başında hitap ve sonunda imza bulunan metin türü hangisidir?",o:["Mektup","Roman","Deneme","Şiir"],a:0},
     {ty:"tf",q:"Hikâyelerde genellikle kısa bir zaman diliminde yaşanan olaylar anlatılır.",a:true},
     {ty:"tf",q:"Masallarda anlatılan olaylar ve kişiler gerçek hayattan alınmıştır, olağanüstü öge içermez.",a:false},
-    {ty:"fb",q:"Dizeler hâlinde, ahenkli ve duygusal bir anlatımla yazılan metin türüne ____ denir.",a:"şiir"},,
+    {ty:"fb",q:"Dizeler hâlinde, ahenkli ve duygusal bir anlatımla yazılan metin türüne ____ denir.",a:"şiir"},
       {ty:"mc",q:"Bir olayın kişi, yer ve zamanla anlatıldığı kurmaca metin türü hangisidir?",o:["Öykü","Makale","Şiir","Dilekçe"],a:0},
       {ty:"mc",q:"Bilgi vermeyi amaçlayan metinlere ne ad verilir?",o:["Bilgilendirici metin","Kurmaca metin","Şiir","Masal"],a:0},
       {ty:"mc",q:"Masalların ortak özelliği aşağıdakilerden hangisidir?",o:["Olağanüstü olay ve kişiler içermesi","Gerçek olması","Belge içermesi","Kanıt sunması"],a:0},
@@ -3295,7 +3353,7 @@ const UNIT_BANK = {
     {ty:"tf",q:"Hareketli makara kuvvetten kazanç sağlamaz.",a:false},
     {ty:"fb",q:"Bir ucuna kuvvet uygulanan ve sabit bir dayanak noktasına göre dönebilen basit makineye ____ denir.",a:"kaldıraç"}
   ],
-  "Enerji Dönüşümleri": [
+  "Enerji Dönüşümleri ve Çevre Bilimi": [
     {ty:"mc",q:"Rüzgar türbinleri temel olarak hangi enerji dönüşümünü gerçekleştirir?",o:["Kimyasal enerjiden ısı enerjisine","Hareket (kinetik) enerjisinden elektrik enerjisine","Işık enerjisinden ses enerjisine","Nükleer enerjiden kimyasal enerjiye"],a:1},
     {ty:"mc",q:"Fotosentez sırasında bitkiler hangi enerji dönüşümünü gerçekleştirir?",o:["Kimyasal enerjiyi ışık enerjisine","Işık enerjisini kimyasal enerjiye","Isı enerjisini elektrik enerjisine","Elektrik enerjisini ışık enerjisine"],a:1},
     {ty:"mc",q:"Aşağıdakilerden hangisi yenilenebilir enerji kaynağıdır?",o:["Kömür","Doğalgaz","Güneş enerjisi","Petrol"],a:2},
@@ -6938,7 +6996,7 @@ const UNIT_BANK = {
       {ty:"fb",q:"Dervişlerin toplandığı yapılara ____ denir.",a:"tekke"},
       {ty:"fb",q:"Yunus Emre'nin şiirlerinin toplandığı esere ____ denir.",a:"Divan"}
     ],
-  "Tasavvufi Yorumlar": [
+  "İslam Düşüncesinde Tasavvufi Yorumlar": [
     {ty:"mc",q:"İslam düşüncesinde kişinin nefsini terbiye ederek manevi olgunluğa ulaşmayı hedefleyen anlayışa ne ad verilir?",o:["Tasavvuf","Fıkıh","Kelam","Tefsir"],a:0},
     {ty:"mc",q:"Tasavvufta bir mürşidin rehberliğinde çıkılan manevi olgunlaşma yoluna ne ad verilir?",o:["Seyr-i sülûk","İçtihat","Kıyas","İcma"],a:0},
     {ty:"mc",q:"Mesnevi adlı eseriyle tanınan ve Anadolu'da tasavvufi düşüncenin gelişmesine katkı sağlayan mutasavvıf aşağıdakilerden hangisidir?",o:["Mevlana Celaleddin Rumi","Harezmi","İbn Sina","Farabi"],a:0},
@@ -9080,6 +9138,25 @@ const UNIT_BANK = {
     {ty:"fb",q:"Bir cismin yüzlerinin birleştiği doğru parçalarına ____ denir.",a:"ayrıt"},
     {ty:"fb",q:"Üç kenarı ve üç açısı olan çokgene ____ denir.",a:"üçgen"}
   ],
+  /* M.4.2.2 Uzamsal İlişkiler — 2018 Matematik Dersi Öğretim Programı (1-8).
+     Kazanımlar: M.4.2.2.1 "Ayna simetrisini, geometrik şekiller ve modeller
+     üzerinde açıklayarak simetri doğrusunu çizer." ve M.4.2.2.2 "Verilen
+     şeklin doğruya göre simetriğini çizer."
+     Terimler ve kavramlar: ayna simetrisi. Programın açıklamasında geçen
+     modeller (kelebek kanadı, çiçek, yaprak, kumaş ve kilim desenleri,
+     harfler) soru bağlamı olarak kullanılmıştır; kapsam dışına çıkılmamıştır. */
+  "Uzamsal İlişkiler": [
+    {ty:"mc",q:"Bir şekil bir doğru boyunca katlandığında iki parçası tam olarak üst üste geliyorsa bu doğruya ne denir?",o:["Simetri doğrusu","Sayı doğrusu","Köşegen","Açıortay"],a:0},
+    {ty:"mc",q:"Kelebeğin kanatları üzerine uygun yere ayna yerleştirildiğinde eş parçalar görülür. Bu tür simetriye ne denir?",o:["Ayna simetrisi","Döndürme","Öteleme","Büyütme"],a:0},
+    {ty:"mc",q:"Aşağıdaki büyük harflerden hangisinin dikey bir simetri doğrusu vardır?",o:["A","F","G","J"],a:0},
+    {ty:"mc",q:"Bir karenin kaç tane simetri doğrusu vardır?",o:["4","1","2","6"],a:0},
+    {ty:"mc",q:"Bir şeklin doğruya göre simetriği çizildiğinde şeklin büyüklüğü nasıl olur?",o:["Değişmez","İki katına çıkar","Yarıya iner","Küçülür"],a:0},
+    {ty:"tf",q:"Ayna simetrisine doğruya göre simetri de denir.",a:true},
+    {ty:"tf",q:"Bir dikdörtgenin köşegeni, dikdörtgenin simetri doğrusudur.",a:false},
+    {ty:"tf",q:"Kilim ve kumaş desenlerinde ayna simetrisi görülebilir.",a:true},
+    {ty:"fb",q:"Kelebek, çiçek ve yaprak gibi nesnelerde görülen simetriye ____ simetrisi denir.",a:"ayna"},
+    {ty:"fb",q:"Bir şeklin katlandığında iki parçasının tam olarak üst üste geldiği doğruya ____ doğrusu denir.",a:"simetri"}
+  ],
   "Geometride Temel Kavramlar": [
     {ty:"mc",q:"Ölçüsü 90° olan açıya ne denir?",o:["Dik açı","Dar açı","Geniş açı","Doğru açı"],a:0},
     {ty:"mc",q:"Ölçüsü 90°'den küçük açılara ne denir?",o:["Dar açı","Geniş açı","Dik açı","Tam açı"],a:0},
@@ -10007,7 +10084,55 @@ const GEN = {
   polin: d => { const a=R(1,5),b=R(1,9),c=R(1,9); return pick([ {q:`P(x) = ${a}x³ + ${b}x − ${c} polinomunun derecesi kaçtır?`, a:3}, {q:`P(x) = ${a}x² + ${b}x + ${c} polinomunun katsayılar toplamı kaçtır? (P(1))`, a:a+b+c} ]); },
   ikinci: d => { const r1=R(-6,6)||1, r2=R(-6,6)||2; return { q: `Kökleri ${r1} ve ${r2} olan ikinci dereceden denklemde kökler toplamı ve çarpımı kaçtır?`, a: `Toplam: ${r1+r2}, Çarpım: ${r1*r2}` }; },
   sistem: d => { const x=R(1,6),y=R(1,6); return { q: `x + y = ${x+y} ve x − y = ${x-y} ise x ve y kaçtır?`, a: `x = ${x}, y = ${y}` }; },
+  /* Özel açıların trigonometrik değerleri. 12. sınıfta KULLANILMAZ — bkz.
+     trig12. Bu üreteç yalnızca temel değerleri sorar; 2018 programının
+     12. sınıf kapsamında (12.3) böyle bir öğrenme çıktısı yoktur. */
   trig: d => { const t=pick([["sin 30°","1/2"],["cos 60°","1/2"],["tan 45°","1"],["sin 90°","1"],["cos 0°","1"],["sin 60°","√3/2"],["cos 30°","√3/2"]]); return { q: `${t[0]} değeri kaçtır?`, a: t[1] }; },
+  /* 12. sınıf Trigonometri (2018 Ortaöğretim Matematik, 12.3). Kapsam
+     RESMÎ PROGRAMLA SINIRLIDIR:
+       12.3.1.1 iki açının toplamı/farkının trigonometrik değerleri,
+       12.3.1.2 iki kat açı formülleri,
+       12.3.2.1 trigonometrik denklemlerin çözüm kümesi.
+     ÖLÇÜLEN KUSUR: bu ünite `trig` üretecine bağlıydı ve "sin 30° değeri
+     kaçtır?" gibi ALT SINIF kazanımına ait sorular 12. sınıf Trigonometri
+     sorusu olarak kâğıda giriyordu. Özel açı değerleri burada yalnızca
+     formülün UYGULANDIĞI ara adım olarak geçer, tek başına sorulmaz. */
+  trig12: d => {
+    const tur = pick(["toplam", "ikikat", "denklem"]);
+    if (tur === "toplam") {
+      /* 12.3.1.1 — toplam/fark formülünün açılımı sorulur */
+      const k = pick([
+        ["sin(x + y)", "sin x · cos y + cos x · sin y"],
+        ["sin(x − y)", "sin x · cos y − cos x · sin y"],
+        ["cos(x + y)", "cos x · cos y − sin x · sin y"],
+        ["cos(x − y)", "cos x · cos y + sin x · sin y"],
+      ]);
+      return { q: `${k[0]} ifadesinin açılımını yazınız.`, a: k[1] };
+    }
+    if (tur === "ikikat") {
+      /* 12.3.1.2 — iki kat açı formülleri */
+      const k = pick([
+        ["sin 2x", "2 · sin x · cos x"],
+        ["cos 2x", "cos²x − sin²x"],
+        ["tan 2x", "(2 · tan x) / (1 − tan²x)"],
+      ]);
+      return { q: `${k[0]} ifadesini iki kat açı formülüyle yazınız.`, a: k[1] };
+    }
+    /* 12.3.2.1 — temel trigonometrik denklemin çözüm kümesi.
+       Kökler [0, 2π) aralığında verilir; katsayılar özel açılara denk
+       gelecek biçimde seçilir ki çözüm kümesi kesin yazılabilsin. */
+    const k = pick([
+      ["sin x = 0", "{0, π}"],
+      ["sin x = 1", "{π/2}"],
+      ["sin x = 1/2", "{π/6, 5π/6}"],
+      ["cos x = 0", "{π/2, 3π/2}"],
+      ["cos x = 1", "{0}"],
+      ["cos x = 1/2", "{π/3, 5π/3}"],
+      ["tan x = 0", "{0, π}"],
+      ["tan x = 1", "{π/4, 5π/4}"],
+    ]);
+    return { q: `${k[0]} denkleminin [0, 2π) aralığındaki çözüm kümesini yazınız.`, a: k[1] };
+  },
   analitik: d => { const x1=R(-5,5),y1=R(-5,5),dx=pick([3,4]),dy=dx===3?4:3; return { q: `A(${x1}, ${y1}) ve B(${x1+dx}, ${y1+dy}) noktaları arasındaki uzaklık kaç birimdir?`, a: 5 }; },
   log: d => { const b=pick([2,3,5,10]), e=R(1,d+2); return { q: `log${b === 10 ? "" : "₍" + b + "₎"}(${Math.pow(b,e)}) kaçtır? ${b===10?"(10 tabanında)":""}`, a: e }; },
   dizi: d => { const a1=R(1,9), f=R(2,6), n=R(5,12); return { q: `İlk terimi ${a1}, ortak farkı ${f} olan aritmetik dizinin ${n}. terimi kaçtır?`, a: a1+(n-1)*f }; },
@@ -10169,8 +10294,11 @@ function renderUnits() {
   const y = yapiAdi();
   st.units = new Set(us.map((_, i) => i));
   /* Başlık dersin resmî programındaki yapı adını kullanır: Türkçe/Matematik
-     "Tema", Hayat Bilgisi/Sosyal Bilgiler "Öğrenme Alanı", Fen/Din "Ünite". */
-  $("unitStepTitle").textContent = `${y} / Konu Seç`;
+     "Tema", Hayat Bilgisi/Sosyal Bilgiler "Öğrenme Alanı", Fen/Din "Ünite".
+     Konu tabanlı sınıflarda (bkz. KONU_TABANLI) resmî bir yapı adı YOKTUR;
+     orada yalnızca "Konu Seç" denir — başlıkları "tema" diye sunmak
+     programda olmayan bir iddia olurdu. */
+  $("unitStepTitle").textContent = konuTabanliMi() ? "Konu Seç" : `${y} / Konu Seç`;
   $("unitList").innerHTML = us.map((u, i) =>
     `<label class="unit-item"><input type="checkbox" data-i="${i}" checked /> ${unitName(u)}</label>`).join("") ||
     `<div class="hint">Bu sınıf için ${y.toLocaleLowerCase("tr")} bulunamadı.</div>`;
@@ -10179,9 +10307,17 @@ function renderUnits() {
   const perUnit = UNIT_BANK[`${st.subject}-${st.grade}`];
   const kendi = perUnit ? us.map(unitName).filter(u => perUnit[u]).length : 0;
   const uretecli = us.filter(u => typeof u !== "string" && u.g && GEN[u.g]).length;
+  /* Konu tabanlı sınıflarda başlıkların resmî tema OLMADIĞI açıkça yazılır;
+     öğretmen listeye bakıp "bunlar MEB üniteleri" diye düşünmemeli. */
+  const konuNotu = konuTabanliMi()
+    ? ` Bu programda içerik teması bulunmaz; aşağıdaki başlıklar dört beceri alanının (Dinleme/İzleme, Konuşma, Okuma, Yazma) <b>resmî kazanımlarına bağlanmış konu gruplarıdır</b>.`
+    : "";
   $("uretimHint").innerHTML =
-    `${st.grade}. sınıfta 2026-2027 için <b>${tymm ? "Türkiye Yüzyılı Maarif Modeli" : "önceki öğretim"}</b> programı yürürlüktedir. ` +
+    `${st.grade}. sınıfta 2026-2027 için <b>${tymm ? "Türkiye Yüzyılı Maarif Modeli" : "önceki öğretim"}</b> programı yürürlüktedir.${konuNotu} ` +
     `Bu seçimde ${us.length} ${y.toLocaleLowerCase("tr")} var; ${kendi} tanesinin kendi soru bankası, ${uretecli} tanesinin sınırsız soru üreteci bulunuyor.`;
+  /* Ünite kümesi değiştiği için hangi soru tiplerinin karşılığı olduğu
+     yeniden ölçülür. */
+  renderTipUygunluk();
 }
 function renderPanel() { renderLevels(); renderGrades(); renderSubjects(); renderUnits(); }
 
@@ -10205,9 +10341,18 @@ $("subjectPills").addEventListener("click", e => {
 $("unitList").addEventListener("change", e => {
   const i = +e.target.dataset.i;
   e.target.checked ? st.units.add(i) : st.units.delete(i);
+  renderTipUygunluk();
 });
 $("selAll").onclick = () => { renderUnits(); };
-$("selNone").onclick = () => { st.units.clear(); document.querySelectorAll("#unitList input").forEach(c => c.checked = false); };
+$("selNone").onclick = () => {
+  st.units.clear();
+  document.querySelectorAll("#unitList input").forEach(c => c.checked = false);
+  renderTipUygunluk();
+};
+/* Soru tipi seçimi değişince gerçekçi soru sayısı tavanı yeniden hesaplanır */
+document.querySelectorAll(".check-row input[data-ty]").forEach(function (c) {
+  c.addEventListener("change", renderKapasite);
+});
 
 /* ═══════════════ SORU ÜRETİMİ ═══════════════
    Motor üç katmandan oluşur:
@@ -10694,20 +10839,25 @@ function sinifBankadan(perUnit, adlar) {
    düzeltmesi istenir. Çoktan seçmeli sorulardan türetilir: yanlış bir seçenek
    ifadeye yerleştirilir, doğru seçenek cevap anahtarı olur. Matematikte ise
    hatalı bir işlem üretilir ve doğru sonuç anahtar olarak hesaplanır. */
-function hataBankadan(perUnit, adlar) {
-  const uygun = [];
+/* "…-e/-a ne denir?" kalıbındaki banka sorularını toplar ve her biri için
+   "<gövde> ____ denir." çerçevesine uygun gövdeyi hazırlar.
+   Bu çerçeve YALNIZCA yönelme durumuyla kurulan tanım sorularında dil
+   bilgisine uygundur ("… kullanmaya ne denir?" → "… kullanmaya saklamak
+   denir.").
+   ÖLÇÜLEN KUSUR: "nedir?" ile biten kökler de kabul ediliyordu ve
+   "Bitkilerin büyümesi için gerekli olan Gürültü denir." ya da
+   "… toplumsal katkısı Yalnızca eğlence sağlaması denir." gibi bozuk
+   ifadeler üretiliyordu. Artık kök "ne denir / ne ad verilir" ile bitmeli ve
+   öncesindeki sözcük yönelme eki taşımalı.
+   Hem hata bulma hem boşluk doldurma türetmesi AYNI listeyi kullanır; kural
+   iki yerde ayrı yazılırsa biri düzeltilip öteki bozuk kalır. */
+const DENIR_ONBELLEK = {};
+function denirAdaylari(perUnit, adlar) {
+  const anahtar = cekirdekAnahtari(adlar);
+  if (DENIR_ONBELLEK[anahtar]) return DENIR_ONBELLEK[anahtar];
+  const uygun = DENIR_ONBELLEK[anahtar] = [];
   adlar.forEach(ad => (perUnit[ad] || []).forEach(q => {
-    /* Kökü "ne denir / nedir / hangisidir" biçiminde olan sorular, yanlış
-       seçenek yerleştirildiğinde düzgün bir yanlış ifadeye dönüşür. */
     if (q.ty !== "mc" || !Array.isArray(q.o) || !Number.isInteger(q.a)) return;
-    /* Bu türetme kökün sonuna "<yanlış seçenek> denir." ekler. Bu çerçeve
-       YALNIZCA yönelme durumuyla kurulan tanım sorularında dil bilgisine
-       uygundur ("… kullanmaya ne denir?" → "… kullanmaya saklamak denir.").
-       ÖLÇÜLEN KUSUR: "nedir?" ile biten kökler de kabul ediliyordu ve
-       "Bitkilerin büyümesi için gerekli olan Gürültü denir." ya da
-       "… toplumsal katkısı Yalnızca eğlence sağlaması denir." gibi bozuk
-       ifadeler üretiliyordu. Artık kök "ne denir / ne ad verilir" ile
-       bitmeli ve öncesindeki sözcük yönelme eki taşımalı. */
     if (!/(ne denir|ne ad verilir)\?\s*$/i.test(q.q)) return;
     if (TANIM_DEGIL.test(q.q)) return;
     /* Kökün SON SÖZCÜĞÜ yönelme eki taşımalı. "-ken" ulacı elenir: "…tekrar
@@ -10717,23 +10867,44 @@ function hataBankadan(perUnit, adlar) {
       .replace(/[^0-9a-zA-ZçğıöşüÇĞİÖŞÜ]/g, "");
     if (!/[a-zçğıöşü][ae]$/i.test(sonSozcuk) || /ken$/i.test(sonSozcuk)) return;
     const dogru = String(q.o[q.a]).trim();
-    const yanlislar = q.o.filter((_, i) => i !== q.a).map(x => String(x).trim())
-      .filter(x => x.length > 1 && x.length <= 40);
-    if (!yanlislar.length || dogru.length > 40) return;
-    uygun.push({ q, ad, dogru, yanlis: pick(yanlislar) });
+    if (!dogru || dogru.length > 40) return;
+    const govde = String(q.q).replace(/(ne denir|ne ad verilir|nedir)\?\s*$/i, "").trim()
+      .replace(/[,:]?\s*$/, "");
+    uygun.push({ q: q, ad: ad, dogru: dogru, govde: govde });
   }));
+  return uygun;
+}
+
+function hataBankadan(perUnit, adlar) {
+  const uygun = [];
+  denirAdaylari(perUnit, adlar).forEach(function (s) {
+    const yanlislar = s.q.o.filter((_, i) => i !== s.q.a).map(x => String(x).trim())
+      .filter(x => x.length > 1 && x.length <= 40);
+    if (yanlislar.length) uygun.push(Object.assign({}, s, { yanlis: pick(yanlislar) }));
+  });
   if (!uygun.length) return null;
   const s = pick(uygun);
-  const govde = String(s.q.q).replace(/(ne denir|ne ad verilir|nedir)\?\s*$/i, "").trim()
-    .replace(/[,:]?\s*$/, "");
   return {
     ty: "hata",
-    q: `Aşağıdaki ifadede bir yanlış vardır. Yanlışı bulup doğrusunu yazınız.\n“${govde} ${s.yanlis} denir.”`,
+    q: `Aşağıdaki ifadede bir yanlış vardır. Yanlışı bulup doğrusunu yazınız.\n“${s.govde} ${s.yanlis} denir.”`,
     a: s.dogru,
     unit: s.ad, kaynak: "türetilmiş", kalip: "hata-kavram",
     kapsar: [parmakIzi(s.q)],
   };
 }
+/* Bir dolgunun/çeldiricinin doğru cevapla AYNI TÜRDEN olup olmadığı.
+   Sayısal bir boşluğa sözcük yerleştirmek ("iç açıları toplamı köşegen
+   derecedir") kategori hatası üretir; öğrenci olgu yanlışını değil anlamsız
+   bir cümleyi görür. Tür eşitliğinin yanında BÜYÜKLÜK yakınlığı da gerekir:
+   180 yerine 10000 yazmak inandırıcı bir hata değildir. Hem hata türetmesi
+   hem çapraz tip türetmesi bu kuralı paylaşır. */
+const sayisalIfade = x => /^[\d.,/%°]+$/.test(String(x).trim());
+const basamakSayisi = x => String(x).replace(/[^\d]/g, "").length;
+function ayniTurde(a, b) {
+  if (sayisalIfade(a) !== sayisalIfade(b)) return false;
+  return !sayisalIfade(b) || basamakSayisi(a) === basamakSayisi(b);
+}
+
 /* Boşluk doldurma sorularından hata bulma türetir: boşluğa AYNI ünitedeki
    başka bir sorunun cevabı yerleştirilir, böylece ifade yanlışlanır; doğru
    cevap zaten bankada yazılı olduğu için anahtar uydurulmaz. Bu türetme
@@ -10762,25 +10933,20 @@ function hataBosluktan(perUnit, adlar) {
      yanlıştır. Önce aynı ünite denenir; ünitede tek soru varsa seçili diğer
      ünitelerin cevaplarına düşülür (yoksa Tarih gibi az boşluk sorusu olan
      derslerde bu tür hiç üretilemiyordu). */
-  /* Dolgu, doğru cevapla AYNI TÜRDEN olmalı: sayısal bir boşluğa sözcük
-     yerleştirmek ("iç açıları toplamı köşegen derecedir") kategori hatası
-     üretir; öğrenci olgu yanlışını değil anlamsız bir cümleyi görür. */
-  const sayisalMi = x => /^[\d.,/%°]+$/.test(String(x).trim());
-  const basamak = x => String(x).replace(/[^\d]/g, "").length;
-  /* Tür eşitliğinin yanında BÜYÜKLÜK yakınlığı da gerekir: 180 yerine 10000
-     yazmak inandırıcı bir hata değil, anlamsız bir cümle üretir. Sayısal
-     dolgunun basamak sayısı doğru cevapla aynı olmalıdır. */
-  const ayniTur = q => sayisalMi(q.a) === sayisalMi(s.a) &&
-    (!sayisalMi(s.a) || basamak(q.a) === basamak(s.a));
-  let adaylar = grup.liste
-    .filter(q => hamMetin(q.a) !== hamMetin(s.a) && ayniTur(q))
-    .map(q => String(q.a).trim());
+  /* Dolgu, doğru cevapla AYNI TÜRDEN ve AYNI YUVA İMZASINDAN olmalı
+     (bkz. yuvaImzasi): tür/basamak uyumu kategori hatasını, imza uyumu
+     "göç çevre denir" gibi bozuk tamlamaları engeller. */
+  const hedef = { q: s, a: String(s.a).trim() };
+  const kendi = grup.liste.map(function (q) { return { q: q, a: String(q.a).trim() }; });
+  let adaylar = dolguAdaylari(hedef, kendi);
   if (!adaylar.length) {
-    adaylar = [];
-    uygun.forEach(g => g.liste.forEach(q => {
-      if (hamMetin(q.a) !== hamMetin(s.a) && ayniTur(q)) adaylar.push(String(q.a).trim());
-    }));
+    /* Ünitede eş yoksa seçili öbür ünitelere düşülür (Tarih gibi az boşluk
+       sorusu olan derslerde bu tür hiç üretilemiyordu). */
+    const hepsi = [];
+    uygun.forEach(g => g.liste.forEach(q => hepsi.push({ q: q, a: String(q.a).trim() })));
+    adaylar = dolguAdaylari(hedef, hepsi);
   }
+  if (!adaylar.length) adaylar = dolguAdaylari(hedef, bosluklaBanka());
   if (!adaylar.length) return null;
   const yanlis = pick(adaylar);
   const govde = String(s.q).replace(/_{2,}/, yanlis).replace(/\s+/g, " ").trim();
@@ -10793,6 +10959,606 @@ function hataBosluktan(perUnit, adlar) {
     kapsar: [parmakIzi(s)],
   };
 }
+/* ═══════════════ ÇAPRAZ TİP TÜRETME ═══════════════
+   Kâğıt istenen soru sayısına ulaşamadığında devreye girer. Kural: kullanıcının
+   seçtiği soru TİPİ kesin kısıttır — eksik yer başka tipten soruyla
+   doldurulmaz. Bunun yerine ünitenin KENDİ banka içeriği, seçilen tipin ölçme
+   biçimine dönüştürülür. Kaynak her zaman müfredata göre yazılmış bir banka
+   sorusudur; yeni bilgi uydurulmaz, yalnızca biçim değişir.
+   `kapsar` alanı kaynağı işaret eder: türev ile kaynağı aynı kâğıda birlikte
+   girmez (biri ötekinin cevabını verir). */
+
+/* Üreteç çıktısının HAM hâli — tip süzgeci uygulanmadan. Yalnızca çapraz tip
+   türetmesine malzeme olmak için kullanılır: kullanıcı "çoktan seçmeli"
+   seçtiyse üreteçten gelen işlem sorusu kâğıda işlem olarak GİRMEZ, çoktan
+   seçmeliye dönüştürülür. Cevap hesaplanarak bulunduğu için anahtar her
+   zaman doğrudur. */
+function uretecHam(d, adet) {
+  const gens = seciliUniteler().filter(function (u) {
+    return typeof u !== "string" && u.g && GEN[u.g];
+  });
+  const out = [];
+  if (!gens.length) return out;
+  for (let i = 0; i < adet; i++) {
+    const u = pick(gens);
+    let r;
+    try { r = GEN[u.g](d, u.p); } catch (e) { continue; }
+    if (!r || r.ty || r.open) continue;      // yalnızca sayısal işlem çıktıları
+    if (!/^-?\d+(?:[.,]\d+)?$/.test(String(r.a).trim())) continue;
+    out.push({ q: r.q, a: String(r.a).trim(), unit: u.u });
+  }
+  return out;
+}
+
+/* Sayısal bir cevabın yakın çeldiricileri. Uydurma değil, hesaplanan değerin
+   çevresindeki tipik öğrenci hataları (bir eksik/fazla, elde unutma, on
+   birim kayma). Doğru cevap hesapla bulunduğu için ondan sapan her değer
+   kesin olarak yanlıştır. */
+function sayiCeldiricileri(a) {
+  const ondalik = /[.,]/.test(a);
+  const n = parseFloat(String(a).replace(",", "."));
+  if (!Number.isFinite(n)) return [];
+  const adimlar = ondalik ? [0.1, -0.1, 0.2, -0.2, 1, -1] : [1, -1, 2, -2, 10, -10, 9, -9, 5, -5];
+  const bicim = function (v) {
+    if (!ondalik) return String(Math.round(v));
+    return String(Math.round(v * 100) / 100).replace(".", ",");
+  };
+  const gorulen = new Set([String(a).trim()]);
+  const out = [];
+  shuffle(adimlar).forEach(function (k) {
+    const v = n + k;
+    if (n >= 0 && v < 0) return;             // negatife düşen çeldirici anlamsız
+    const t = bicim(v);
+    if (gorulen.has(t)) return;
+    gorulen.add(t);
+    out.push(t);
+  });
+  return out;
+}
+
+/* işlem → mc : hesaplama sorusu dört seçenekli hâle getirilir. Ölçülen beceri
+   birebir aynıdır, yalnızca cevabın veriliş biçimi değişir. */
+function mcIslemden(d) {
+  const ham = uretecHam(d, 1);
+  if (!ham.length) return null;
+  const s = ham[0];
+  const celdirici = sayiCeldiricileri(s.a);
+  if (celdirici.length < 3) return null;
+  const secenek = shuffle([s.a].concat(celdirici.slice(0, 3)));
+  return {
+    ty: "mc", q: s.q, o: secenek, a: secenek.indexOf(s.a),
+    unit: s.unit, kaynak: "türetilmiş", yeniden: true, kalip: "mc-islemden",
+  };
+}
+
+/* işlem → tf : "bir öğrenci şu cevabı verdi, doğru mu?" çerçevesi. Bu çerçeve
+   değer ne olursa olsun dil bilgisine uygundur — sayıya ek getirmez, böylece
+   "59'dur / 60'tır" gibi uyum hataları oluşmaz. */
+function tfIslemden(d) {
+  const ham = uretecHam(d, 1);
+  if (!ham.length) return null;
+  const s = ham[0];
+  const dogruOnerme = R(0, 1) === 0;
+  let deger = s.a;
+  if (!dogruOnerme) {
+    const y = sayiCeldiricileri(s.a);
+    if (!y.length) return null;
+    deger = y[0];
+  }
+  const kok = String(s.q).replace(/\s+/g, " ").trim();
+  return {
+    ty: "tf",
+    q: `Bir öğrenci “${kok}” sorusuna “${deger}” cevabını vermiştir. Öğrencinin cevabı doğrudur.`,
+    a: dogruOnerme, unit: s.unit, kaynak: "türetilmiş", yeniden: true, kalip: "tf-islemden",
+  };
+}
+
+/* kelime → tf : yabancı dilde karşılık önermesi. "anlamına gelir" yüklemi
+   sözcüğün son harfinden bağımsız olduğu için ek uyumu sorunu doğmaz. */
+function tfKelimeden() {
+  const pool = vocabFor();
+  if (!pool || pool.length < 4) return null;
+  const c = pick(pool), w = c[0], tr = c[1];
+  const dogruOnerme = R(0, 1) === 0;
+  let karsilik = tr;
+  if (!dogruOnerme) {
+    const baska = pool.filter(function (p) { return p[1] !== tr; });
+    if (!baska.length) return null;
+    karsilik = pick(baska)[1];
+  }
+  const us = seciliUniteler();
+  const dil = st.subject === "alm" ? "Almanca" : "İngilizce";
+  return {
+    ty: "tf", q: `${dil} “${w}” kelimesi Türkçe “${karsilik}” anlamına gelir.`,
+    a: dogruOnerme, unit: us.length ? unitName(pick(us)) : "",
+    kaynak: "kelime", kalip: "tf-kelime",
+  };
+}
+
+/* ── Boşluğun YUVA İMZASI ─────────────────────────────────────────────────
+   Bir boşluk doldurma sorusu düz cümleye çevrileceği zaman (hata bulma ve
+   doğru-yanlış türetmeleri bunu yapar) boşluğa konan dolgunun dil bilgisine
+   uyması gerekir. Belirleyici olan boşluğun KENDİSİ değil, boşluktan SONRA
+   gelen metindir — buna yuva imzası denir:
+
+     "… diziye ____ dizi denir."   → imza "dizi denir"   (SIFAT yuvası)
+     "… yerleşmeye ____ denir."    → imza "denir"        (TERİM yuvası)
+     "Fiilimsiler ____ ekleri alır."→ imza "ekleri alır"  (SIFAT yuvası)
+
+   ÖLÇÜLEN KUSUR ve DOĞRU ÇÖZÜM: "İnsanların oluşturduğu çevreye ____ çevre
+   denir." (doğru cevap "beşerî") sorusuna "göç" dolgusu konunca "göç çevre
+   denir" çıkıyordu. Kusur SIFAT YUVASININ KENDİSİNDE DEĞİL, dolgunun başka
+   bir yuvadan alınmasındadır: aynı imzaya sahip "aritmetik ↔ geometrik dizi"
+   ya da "doğal ↔ beşerî çevre" değişimi her zaman dil bilgisine uygundur.
+   Bu yüzden sıfat yuvalarını YASAKLAMAK yanlıştır — banka bu kalıptan 259
+   soru içeriyor ve yasak, Türkçe dil bilgisi ile Matematik tanımlarını
+   topluca eliyordu (denendi, ölçüldü, geri alındı). Kural şudur:
+     • TERİM yuvasında dolgu, tür ve basamak uyumlu herhangi bir terim olabilir.
+     • SIFAT yuvasında dolgu, AYNI İMZALI başka bir sorudan gelmelidir.
+   Aynı imzalı eş yoksa o kaynaktan soru üretilmez (sayı için bozuk cümle
+   kurulmaz). */
+const YUVA_KUYRUGU = /^(?:(?:d|t)[ıiuü]r\s*)?(?:denir|adı verilir|ad verilir|olarak adlandırılır)?$/;
+function yuvaImzasi(kok) {
+  const sonra = String(kok).split(/_{2,}/)[1] || "";
+  return sadeMetin(sonra).trim();
+}
+/* Terim yuvası: boşluktan sonra yalnızca ek ve/veya "denir" kalıbı var. */
+function terimYuvasiMi(kok) { return YUVA_KUYRUGU.test(yuvaImzasi(kok)); }
+
+/* SIFAT yuvası mı, TAMLAMA yuvası mı? Boşluktan sonra bir baş ad geliyorsa
+   iki durum vardır ve dolgu kuralı farklıdır:
+
+     "…çevreye ____ çevre denir."   → tanım baş adı YALIN biçimde yineliyor;
+                                      yuva bir SIFAT bekler ("doğal/beşerî").
+                                      Ad dolgu koyulursa "göç çevre" çıkar.
+     "…sisteme ____ sistemi denir." → baş ad iyelik eki almış; yuva bir
+                                      TAMLAMA kurar ve her ad geçerlidir
+                                      ("bağışıklık sistemi", "yapım sistemi").
+
+   Ayrımı yüzeyden yapmak güvenilir değil ("dizi" yalın ad, "sistemi" iyelikli
+   ad, ikisi de -i ile bitiyor). Bunun yerine CÜMLENİN KENDİSİNE bakılır:
+   tanım, baş adı daha önce aynı yalın gövdeyle (yalnızca durum eki alarak)
+   anıyorsa yuva sıfat yuvasıdır. Bu ölçüt "çevreye…çevre" ve "diziye…dizi"
+   kalıplarını yakalar, "sisteme…sistemi" ve "eklere…eki" kalıplarını
+   yakalamaz — istenen tam olarak budur. */
+const OBLIK_EK = /^(?:ler|lar)?(?:[ıiuü]|[ae]|y[ae]|d[ae]|t[ae]|[dt][ae]n|s?[ıiuü]n|n[ıiuüae]|y[ıiuü])?$/;
+function sifatYuvasiMi(kok) {
+  const parca = String(kok).split(/_{2,}/);
+  if (parca.length < 2) return false;
+  const bas = sadeMetin(parca[1]).split(" ")[0] || "";
+  if (bas.length < 3 || YUVA_KUYRUGU.test(bas)) return false;
+  return sadeMetin(parca[0]).split(" ").some(function (w) {
+    return w !== bas && w.indexOf(bas) === 0 && OBLIK_EK.test(w.slice(bas.length));
+  });
+}
+
+/* Sınıf+ders genelindeki tek boşluklu sorular — dolgu ararken son çare
+   havuzu. Dolgunun ölçülen bilgiyle ilgisi yoktur, tek görevi önermeyi
+   yanlışlamaktır; yuva imzası eşleştiği sürece cümle dil bilgisine uygun
+   kalır ("____ çevre denir" yuvasına yalnızca başka bir "____ çevre denir"
+   sorusunun cevabı girer). */
+const BANKA_BOSLUK_ONBELLEK = {};
+function bosluklaBanka() {
+  const anahtar = st.subject + "|" + st.grade;
+  if (BANKA_BOSLUK_ONBELLEK[anahtar]) return BANKA_BOSLUK_ONBELLEK[anahtar];
+  return BANKA_BOSLUK_ONBELLEK[anahtar] = bankFor()
+    .filter(function (b) {
+      return b.ty === "fb" && b.a != null &&
+        (String(b.q).match(/_{2,}/g) || []).length === 1;
+    })
+    .map(function (b) { return { q: b, a: String(b.a).trim() }; });
+}
+
+/* Bir boşluğa konabilecek YANLIŞ dolguları verir. `hedef` doldurulacak soru,
+   `havuz` aday kaynaklar ({ q, a } taşıyan kayıtlar). Sıfat yuvasında havuz
+   aynı imzalı kaynaklarla sınırlanır. */
+function dolguAdaylari(hedef, havuz) {
+  /* İmza kısıtı YALNIZCA sıfat yuvasında uygulanır: orada dolgu bir sıfat
+     olmak zorundadır ve bunu garantilemenin tek yolu aynı yuvadan gelen bir
+     cevabı kullanmaktır. Terim ve tamlama yuvalarında her uygun ad çalışır. */
+  const sifat = sifatYuvasiMi(hedef.q.q);
+  const imza = sifat ? yuvaImzasi(hedef.q.q) : null;
+  const hedefKok = hamMetin(hedef.q.q);
+  /* Aynı soru kökü bankada birden çok kez, FARKLI ama yine DOĞRU cevapla
+     bulunabilir. Yalnızca hedefin kendi cevabı dışlanırsa o kökün öbür doğru
+     cevabı "yanlış dolgu" diye seçilir ve önerme doğruyken yanlış
+     işaretlenir. Aynı köke ait BÜTÜN cevaplar dışlanır.
+     KARŞILAŞTIRMA HARF DURUMUNA DUYARLIDIR (hamMetin, sutunAnahtari değil):
+     yazım sorularında harf durumu ANLAMIN KENDİSİDİR — "atatürk kelimesi
+     cümle içinde nasıl yazılır?" sorusunda "Atatürk" doğru, "atatürk"
+     yanlıştır. Harf durumunu yok sayan bir karşılaştırma bu derslerdeki
+     geçerli çeldiricileri eler. */
+  const yasak = new Set([hamMetin(hedef.a)]);
+  havuz.forEach(function (x) {
+    if (hamMetin(x.q.q) === hedefKok) yasak.add(hamMetin(String(x.a).trim()));
+  });
+  const out = [];
+  const gorulen = new Set();
+  havuz.forEach(function (x) {
+    if (imza !== null && yuvaImzasi(x.q.q) !== imza) return;
+    const a = String(x.a).trim();
+    if (!a || a.length < 2 || a.length > 40) return;
+    const k = hamMetin(a);
+    if (yasak.has(k) || gorulen.has(k) || !ayniTurde(a, hedef.a)) return;
+    gorulen.add(k);
+    out.push(a);
+  });
+  return out;
+}
+
+/* Tek boşluklu, cevabı kısa banka sorularının ortak havuzu. Çekirdek gibi
+   bellekte tutulur: yedek üretim ve arayüzdeki uygunluk ölçümü bunu tur
+   başına onlarca kez ister. */
+const BOSLUK_ONBELLEK = {};
+function bosluklular(perUnit, adlar) {
+  const anahtar = cekirdekAnahtari(adlar);
+  if (BOSLUK_ONBELLEK[anahtar]) return BOSLUK_ONBELLEK[anahtar];
+  const out = BOSLUK_ONBELLEK[anahtar] = [];
+  adlar.forEach(function (ad) {
+    (perUnit[ad] || []).forEach(function (q) {
+      if (q.ty !== "fb" || q.a == null) return;
+      if ((String(q.q).match(/_{2,}/g) || []).length !== 1) return;
+      const a = String(q.a).trim();
+      if (a.length < 2 || a.length > 40) return;
+      out.push({ q: q, ad: ad, a: a });
+    });
+  });
+  return out;
+}
+
+/* fb → mc : boşluk doldurma sorusu, dört seçenekli hâle getirilir. Çeldiriciler
+   AYNI seçimin banka cevaplarından gelir; böylece hem konuya ait hem de
+   inandırıcıdır. Ölçülen bilgi kaynak soruyla birebir aynıdır. */
+function mcBosluktan(perUnit, adlar) {
+  const havuz = bosluklular(perUnit, adlar);
+  if (!havuz.length) return null;
+  const s = pick(havuz);
+  /* ÖLÇÜLEN SORUN: çeldiriciler de yalnızca seçili ünitenin boşluk
+     sorularından alınıyordu; iki-üç boşluk sorusu olan ünitelerde dört
+     seçenek hiç toplanamıyor ve türetme boşa çıkıyordu.
+     Çeldirici SORULAN BİLGİ değildir, yanlış olması gereken bir seçenektir;
+     bu yüzden aynı sınıf ve dersin bankasından da alınabilir. Ölçülen bilgi
+     (soru kökü ve doğru cevap) ünitenin kendi içeriğinde KALIR. */
+  /* Çeldiriciler dolgu kuralının aynısından geçer (dolguAdaylari): tür ve
+     basamak uyumu, yuva imzası ve "aynı köke ait başka bir DOĞRU cevap
+     olmama" denetimi burada da zorunludur — yoksa soru iki doğru cevaba
+     açık kalır. */
+  const kok = sadeMetin(s.q.q);
+  const celdirici = dolguAdaylari(s, shuffle(havuz.concat(bosluklaBanka())))
+    /* Kökte zaten geçen bir sözcük çeldirici olamaz: öğrenci onu okuyup eler */
+    .filter(function (a) { return !(sadeMetin(a).length >= 3 && kok.indexOf(sadeMetin(a)) !== -1); })
+    .slice(0, 3);
+  if (celdirici.length < 3) return null;
+  const govde = String(s.q.q).replace(/_{2,}/, "…………").replace(/\s+/g, " ").trim();
+  const secenek = shuffle([s.a].concat(celdirici));
+  return {
+    ty: "mc",
+    q: `Aşağıdaki cümlede boş bırakılan yere hangisi gelmelidir?\n“${govde}”`,
+    o: secenek, a: secenek.indexOf(s.a),
+    unit: s.ad, kaynak: "türetilmiş", kalip: "mc-bosluktan",
+    kapsar: [parmakIzi(s.q)],
+  };
+}
+
+/* fb → tf : boşluk ya doğru cevapla doldurulur (önerme DOĞRU) ya da aynı
+   türden başka bir banka cevabıyla (önerme YANLIŞ). Hata türetmesindeki
+   kısıtlar aynen geçerlidir: kaynak tanım biçiminde olmalı, yoksa boşluğu
+   özel adın parçası olan sorular ("… amcasının adı Ebu ____") bozuk önerme
+   üretir. */
+function tfBosluktan(perUnit, adlar) {
+  const havuz = bosluklular(perUnit, adlar).filter(function (x) {
+    return TANIM_KALIBI.test(String(x.q.q)) && !TANIM_DEGIL.test(String(x.q.q));
+  });
+  if (!havuz.length) return null;
+  const s = pick(havuz);
+  let dogruOnerme = R(0, 1) === 0;
+  let dolgu = s.a;
+  if (!dogruOnerme) {
+    /* Yanlış dolgu yuva imzasına göre seçilir. Terim yuvasında havuz sınıf+ders
+       bankasıyla genişletilir (dolgunun tek görevi önermeyi yanlışlamaktır,
+       ölçülen bilgi ünitede kalır); sıfat yuvasında yalnızca aynı imzalı
+       kaynaklar kullanılır, yoksa cümle bozulur. */
+    const secenek = dolguAdaylari(s, havuz.concat(bosluklular(perUnit, adlar), bosluklaBanka()));
+    if (secenek.length) dolgu = pick(secenek);
+    else dogruOnerme = true;               // yanlışlanamıyorsa doğru önerme kurulur
+  }
+  const govde = String(s.q.q).replace(/_{2,}/, dolgu).replace(/\s+/g, " ").trim();
+  /* Yanlış önermede doğru cevap cümlede hâlâ görünüyorsa önerme yanlışlanmamıştır */
+  if (!dogruOnerme && hamMetin(govde).indexOf(hamMetin(s.a)) !== -1) return null;
+  return {
+    ty: "tf", q: govde, a: dogruOnerme,
+    unit: s.ad, kaynak: "türetilmiş", kalip: "tf-bosluktan",
+    kapsar: [parmakIzi(s.q)],
+  };
+}
+
+/* mc → fb : "…-e ne denir?" kalıbındaki tanım sorusu boşluk doldurmaya
+   çevrilir. Gövde çerçevesi hata türetmesiyle AYNI doğrulamadan geçtiği için
+   dil bilgisi güvencesi de aynıdır. */
+function fbKavramdan(perUnit, adlar) {
+  const uygun = denirAdaylari(perUnit, adlar).filter(function (s) {
+    /* Cevap gövdede zaten geçiyorsa boşluk doldurulacak bir şey kalmaz */
+    return sadeMetin(s.govde).indexOf(sadeMetin(s.dogru)) === -1;
+  });
+  if (!uygun.length) return null;
+  const s = pick(uygun);
+  return {
+    ty: "fb", q: `${s.govde} ____ denir.`, a: s.dogru,
+    unit: s.ad, kaynak: "türetilmiş", kalip: "fb-kavramdan",
+    kapsar: [parmakIzi(s.q)],
+  };
+}
+
+/* ── İÇERİK ÇEKİRDEĞİ ─────────────────────────────────────────────────────
+   Bankadaki her soru aslında bir DOĞRULANMIŞ BİLGİ noktası taşır; soru
+   biçimi bu bilginin yalnızca bir sunumudur. Çekirdek, bilgiyi biçiminden
+   ayırır ki aynı bilgiden — kullanıcının seçtiği tipte — başka biçimde soru
+   kurulabilsin. Yeni bilgi ÜRETİLMEZ; kaynak her maddede `iz` ile işaretlidir
+   ve türev ile kaynağı aynı kâğıda birlikte girmez.
+
+     onerme : doğruluğu bilinen düz cümle (kaynak: tf soruları)
+     secmeli: soru kökü + doğru cevap + gerçek çeldiriciler (kaynak: mc)
+     bosluk : tek boşluklu tanım + terim (kaynak: fb)
+
+   "Aşağıdakilerden/yukarıdakilerden" diye seçeneklere gönderme yapan kökler
+   dışarıda bırakılır: seçenekler olmadan bu kökler anlamını yitirir. */
+const SECENEGE_GONDERME = /aşağıdaki|yukarıdaki|hangisi doğrudur|hangisi yanlıştır/i;
+/* Çekirdek, tur başına onlarca kez istenir (yedek üretim her denemede çağırır)
+   ve arayüzdeki uygunluk ölçümü de aynı yoldan geçer. Seçim değişmedikçe
+   sonuç değişmediği için bellekte tutulur. Dönen dizi PAYLAŞILIR: çağıranlar
+   filter/shuffle gibi kopya üreten işlemler kullanır, diziyi değiştirmez. */
+const CEKIRDEK_ONBELLEK = {};
+function cekirdekAnahtari(adlar) { return st.subject + "|" + st.grade + "|" + adlar.join("¦"); }
+function icerikCekirdegi(perUnit, adlar) {
+  const anahtar = cekirdekAnahtari(adlar);
+  if (CEKIRDEK_ONBELLEK[anahtar]) return CEKIRDEK_ONBELLEK[anahtar];
+  const out = CEKIRDEK_ONBELLEK[anahtar] = [];
+  adlar.forEach(function (ad) {
+    (perUnit[ad] || []).forEach(function (q) {
+      if (q.ty === "tf" && typeof q.a === "boolean") {
+        const g = hamMetin(q.q);
+        if (g.length >= 12) out.push({ tur: "onerme", ifade: g, dogru: q.a, unite: ad, iz: parmakIzi(q) });
+      } else if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) {
+        if (SECENEGE_GONDERME.test(q.q)) return;
+        const dogru = String(q.o[q.a]).trim();
+        const yanlis = q.o.filter(function (_, i) { return i !== q.a; })
+          .map(function (x) { return String(x).trim(); })
+          .filter(function (x) { return x.length > 1 && x.length <= 60; });
+        if (dogru && dogru.length <= 60 && yanlis.length)
+          out.push({ tur: "secmeli", kok: hamMetin(q.q), terim: dogru, yanlis: yanlis, unite: ad, iz: parmakIzi(q) });
+      } else if (q.ty === "fb" && q.a != null &&
+                 (String(q.q).match(/_{2,}/g) || []).length === 1) {
+        const a = String(q.a).trim();
+        if (a.length >= 2 && a.length <= 40)
+          out.push({ tur: "bosluk", kok: hamMetin(q.q), terim: a, unite: ad, iz: parmakIzi(q), ham: q });
+      }
+    });
+  });
+  return out;
+}
+
+/* onerme → mc : üç doğru + bir yanlış önermeden "hangisi yanlıştır?", ya da
+   tersinden "hangisi doğrudur?". Seçeneklerin tamamı bankada doğruluğu
+   yazılı cümlelerdir; ne kök ne çeldirici uydurulur. Tek doğru cevap
+   garantilidir çünkü diğer üçü karşıt doğruluk değerini taşır. */
+function mcOnermeden(perUnit, adlar) {
+  const cek = icerikCekirdegi(perUnit, adlar).filter(function (x) { return x.tur === "onerme"; });
+  /* Ölçülen madde (tek olan) her zaman SEÇİLİ üniteden gelir. Ünitede yeterli
+     karşıt önerme yoksa yol arkadaşları aynı sınıf+dersin bankasından
+     tamamlanır: onlar ölçülen bilgi değil, ayırt etmeyi sağlayan doğruluğu
+     bilinen cümlelerdir (çoktan seçmeli çeldiricisiyle aynı gerekçe). */
+  const genel = bankFor().filter(function (b) { return b.ty === "tf" && typeof b.a === "boolean"; })
+    .map(function (b) { return { ifade: hamMetin(b.q), dogru: b.a, unite: "", iz: parmakIzi(b) }; });
+  const ayikla = function (liste) {
+    const g = new Set(), o = [];
+    liste.forEach(function (x) {
+      const k = sutunAnahtari(x.ifade);
+      if (g.has(k) || x.ifade.length < 12) return;
+      g.add(k); o.push(x);
+    });
+    return o;
+  };
+  const dogrular = shuffle(ayikla(cek.filter(function (x) { return x.dogru; })));
+  const yanlislar = shuffle(ayikla(cek.filter(function (x) { return !x.dogru; })));
+  const genelD = shuffle(ayikla(genel.filter(function (x) { return x.dogru; })));
+  const genelY = shuffle(ayikla(genel.filter(function (x) { return !x.dogru; })));
+  /* En az iki yol arkadaşı gerekir (üç seçenekli soru geçerlidir); dördüncü
+     bulunursa eklenir. */
+  const yeter = function (kendi, ek) { return kendi.length + ek.length >= 2; };
+  const yanlisiBul = yanlislar.length >= 1 && yeter(dogrular, genelD);
+  const dogruyuBul = dogrular.length >= 1 && yeter(yanlislar, genelY);
+  if (!yanlisiBul && !dogruyuBul) return null;
+  const yon = yanlisiBul && dogruyuBul ? R(0, 1) === 0 : yanlisiBul;
+  const tek = yon ? yanlislar[0] : dogrular[0];
+  const arkadas = (yon ? dogrular : yanlislar).concat(yon ? genelD : genelY);
+  const uc = ayikla(arkadas.filter(function (x) {
+    return sutunAnahtari(x.ifade) !== sutunAnahtari(tek.ifade);
+  })).slice(0, 3);
+  if (uc.length < 2) return null;
+  const hepsi = [tek].concat(uc);
+  const metin = hepsi.map(function (x) { return x.ifade; });
+  if (new Set(metin.map(sutunAnahtari)).size !== metin.length) return null;
+  const secenek = shuffle(metin);
+  return {
+    ty: "mc",
+    /* Soru metni SEÇİLEN yöne göre kurulur (`yon`), hangi yönün mümkün
+       olduğuna göre değil: ikisi de mümkünken kura "doğruyu bul" derse
+       kök "yanlıştır" diye sorulamaz — cevap anahtarı ters düşerdi. */
+    q: yon ? "Aşağıdakilerden hangisi yanlıştır?" : "Aşağıdakilerden hangisi doğrudur?",
+    o: secenek, a: secenek.indexOf(tek.ifade),
+    unite: tek.unite, unit: tek.unite, kaynak: "türetilmiş",
+    kalip: yon ? "mc-yanlisi-bul" : "mc-dogruyu-bul",
+    kapsar: hepsi.map(function (x) { return x.iz; }),
+  };
+}
+
+/* bosluk → mc (ters yön) : kavram verilir, seçenekler TANIMLARDIR. Aynı
+   bilgiyi ölçer ama erişim yönü terstir (terimden tanıma), bu yüzden yüzeysel
+   bir varyasyon değildir. */
+function mcTanimYonu(perUnit, adlar) {
+  const cek = icerikCekirdegi(perUnit, adlar).filter(function (x) {
+    return x.tur === "bosluk" && terimYuvasiMi(x.kok);
+  });
+  if (cek.length < 4) return null;
+  const gorulen = new Set(), tekil = [];
+  shuffle(cek).forEach(function (x) {
+    const k = sutunAnahtari(x.terim);
+    if (gorulen.has(k)) return;
+    /* Tanım, aranan terimi metninde barındırmamalı — yoksa cevabı ele verir */
+    const t = sadeMetin(x.terim);
+    if (t.length >= 3 && sadeMetin(x.kok).indexOf(t) !== -1) return;
+    gorulen.add(k); tekil.push(x);
+  });
+  if (tekil.length < 4) return null;
+  const s = tekil[0], celdirici = tekil.slice(1, 4);
+  /* Kök soru "…topluluğa ____ denir." biçimindedir; seçenek olarak
+     kullanılırken sondaki boşluk+"denir" kuyruğu atılır, yoksa seçenekler
+     "… denir" diye yarım kalır. Soru kökü zaten "hangisi … tanımıdır?"
+     dediği için bu kuyruk gereksizdir. */
+  const tanimi = function (x) {
+    return tanimMetni(x.ham).replace(/……/g, "…")
+      .replace(/\s*…\s*['’]?[a-zçğıöşü]{0,8}\s*(?:denir|adı verilir|ad verilir)?\s*[.!]?\s*$/i, "")
+      .trim().replace(/[,;:]$/, "");
+  };
+  const secenek = shuffle([s].concat(celdirici).map(tanimi));
+  if (new Set(secenek.map(sutunAnahtari)).size !== secenek.length) return null;
+  if (secenek.some(function (m) { return m.length < 12; })) return null;
+  return {
+    ty: "mc", q: `Aşağıdakilerden hangisi “${s.terim}” kavramının tanımıdır?`,
+    o: secenek, a: secenek.indexOf(tanimi(s)),
+    unit: s.unite, kaynak: "türetilmiş", kalip: "mc-tanim-yonu",
+    kapsar: [s].concat(celdirici).map(function (x) { return x.iz; }),
+  };
+}
+
+/* secmeli/bosluk → tf : verilen cevabın doğruluğunu değerlendirme. Çerçeve
+   içeriğe bakmadan dil bilgisine uygundur (cevaba ek getirmez) ve düşünme
+   yönü terstir: öğrenci cevabı ÜRETMEZ, DEĞERLENDİRİR. */
+function tfCevaptan(perUnit, adlar) {
+  const cek = icerikCekirdegi(perUnit, adlar).filter(function (x) {
+    return (x.tur === "secmeli" || x.tur === "bosluk") && !SECENEGE_GONDERME.test(x.kok);
+  });
+  if (!cek.length) return null;
+  const s = pick(cek);
+  const dogruOnerme = R(0, 1) === 0;
+  let cevap = s.terim;
+  if (!dogruOnerme) {
+    const yanlis = s.tur === "secmeli"
+      ? s.yanlis
+      : dolguAdaylari({ q: s.ham, a: s.terim }, cek.filter(function (x) { return x.tur === "bosluk"; })
+          .map(function (x) { return { q: x.ham, a: x.terim }; }));
+    if (!yanlis || !yanlis.length) return null;
+    cevap = pick(yanlis);
+  }
+  const kok = s.tur === "bosluk" ? String(s.kok).replace(/_{2,}/, "…………") : s.kok;
+  return {
+    ty: "tf",
+    q: `Bir öğrenci “${kok}” sorusuna “${cevap}” cevabını vermiştir. Öğrencinin cevabı doğrudur.`,
+    a: dogruOnerme, unit: s.unite, kaynak: "türetilmiş", kalip: "tf-cevaptan",
+    kapsar: [s.iz],
+  };
+}
+
+/* mc → tf : "…-e ne denir?" kalıbı düz önermeye çevrilir. Çerçeve
+   `denirAdaylari` ile aynı yönelme denetiminden geçtiği için dil bilgisi
+   güvencesi hata türetmesiyle aynıdır; yanlış önerme bankadaki gerçek bir
+   çeldiriciyle kurulur. */
+function tfDenirden(perUnit, adlar) {
+  const uygun = denirAdaylari(perUnit, adlar);
+  if (!uygun.length) return null;
+  const s = pick(uygun);
+  const dogruOnerme = R(0, 1) === 0;
+  let terim = s.dogru;
+  if (!dogruOnerme) {
+    const yanlis = s.q.o.filter(function (_, i) { return i !== s.q.a; })
+      .map(function (x) { return String(x).trim(); })
+      .filter(function (x) { return x.length > 1 && x.length <= 40 && ayniTurde(x, s.dogru); });
+    if (!yanlis.length) return null;
+    terim = pick(yanlis);
+  }
+  const govde = `${s.govde} ${terim} denir.`;
+  if (!dogruOnerme && sadeMetin(govde).indexOf(sadeMetin(s.dogru)) !== -1) return null;
+  return {
+    ty: "tf", q: govde, a: dogruOnerme,
+    unit: s.ad, kaynak: "türetilmiş", kalip: "tf-denirden", kapsar: [parmakIzi(s.q)],
+  };
+}
+
+/* Yabancı dilde TERS yön: Türkçe karşılık verilir, yabancı sözcük sorulur.
+   Aynı sözcük bilgisini ölçer ama erişim yönü terstir (üretim ↔ tanıma). */
+function mcKelimeTers() {
+  const pool = vocabFor();
+  if (!pool || pool.length < 4) return null;
+  const c = pick(pool);
+  const yanlis = shuffle(pool.filter(function (p) { return p[0] !== c[0]; })).slice(0, 3).map(function (p) { return p[0]; });
+  if (yanlis.length < 3) return null;
+  const secenek = shuffle([c[0]].concat(yanlis));
+  if (new Set(secenek.map(sutunAnahtari)).size !== secenek.length) return null;
+  const us = seciliUniteler();
+  const dil = st.subject === "alm" ? "Almancası" : "İngilizcesi";
+  return {
+    ty: "mc", q: `“${c[1]}” sözcüğünün ${dil} hangisidir?`,
+    o: secenek, a: secenek.indexOf(c[0]),
+    unit: us.length ? unitName(pick(us)) : "", kaynak: "kelime", kalip: "mc-kelime-ters",
+  };
+}
+
+/* Eksik kalan kâğıdı SEÇİLEN TİPLERDE tamamlamak için ek aday üretir.
+   `types` dışına asla çıkılmaz; ünite/ders/sınıf kısıtı `perUnit` ve `adlar`
+   ile zaten sağlanır. */
+function yedekAdaylar(types, d, adet) {
+  const out = [];
+  /* Üreteç ve kelime kaynaklı çapraz türetmeler bankadan bağımsızdır */
+  if (types.has("mc")) {
+    for (let i = 0; i < adet * 4; i++) { const q = mcIslemden(d); if (q) out.push(q); }
+    for (let i = 0; i < adet * 2; i++) { const q = mcKelimeTers(); if (q) out.push(q); }
+  }
+  if (types.has("tf")) {
+    for (let i = 0; i < adet * 4; i++) { const q = tfIslemden(d); if (q) out.push(q); }
+    for (let i = 0; i < adet * 2; i++) { const q = tfKelimeden(); if (q) out.push(q); }
+  }
+
+  const perUnit = UNIT_BANK[st.subject + "-" + st.grade];
+  if (!perUnit) return out;
+  const adlar = seciliUniteler().map(unitName);
+  const dene = function (fn, kez) {
+    for (let i = 0; i < kez; i++) { const q = fn(perUnit, adlar); if (q) out.push(q); }
+  };
+  if (types.has("mc")) {
+    dene(mcBosluktan, adet * 3);
+    dene(mcOnermeden, adet * 3);
+    dene(mcTanimYonu, adet * 2);
+  }
+  if (types.has("tf")) {
+    dene(tfBosluktan, adet * 3);
+    dene(tfDenirden, adet * 3);
+    dene(tfCevaptan, adet * 3);
+  }
+  if (types.has("fb")) dene(fbKavramdan, adet * 3);
+  if (types.has("sinif")) dene(sinifBankadan, adet * 2);
+  if (types.has("hata")) { dene(hataBankadan, adet * 2); dene(hataBosluktan, adet * 2); }
+  /* Eşleştirme normalde ünite başına bir kez deneniyor; her çağrı çiftleri
+     yeniden karıştırdığı için daha çok deneme daha çok farklı sütun verir. */
+  if (types.has("es")) {
+    const uniteCiftleri = adlar.map(function (ad) { return { ad: ad, c: esCiftleri(perUnit[ad] || []) }; });
+    const tumu = [].concat.apply([], uniteCiftleri.map(function (x) { return x.c; }));
+    for (let i = 0; i < adet * 2; i++) {
+      const k = pick(uniteCiftleri);
+      const q = esKur(k.c, k.ad) || esKur(tumu, "");
+      if (q) out.push(q);
+    }
+  }
+  return out;
+}
+
+/* Kısmi eksikte sınıf genelindeki banka: YALNIZCA seçili kapsamla uyuşan
+   sorular alınır (kapsamEtiketi bir maddeye bağlayabiliyorsa). Sırf sayıyı
+   ona tamamlamak için başka ünitenin/konunun sorusu getirilmez. */
+function genelBankaKapsamli(types, kapsam) {
+  if (!kapsam || !kapsam.length) return [];
+  return genelBankaAdaylari(types).filter(function (b) { return kapsamEtiketi(b, kapsam) >= 0; });
+}
+
 function hataIslem(d) {
   const ust = d === 1 ? 20 : d === 2 ? 100 : 500;
   const a = R(2, ust), b = R(2, Math.min(ust, 12));
@@ -10949,6 +11715,99 @@ const KAPSAM = {
   /* Din Kültürü 5-7 ve 9-11: TYMM programı (DKAB kodları).
      Din Kültürü 8 ve 12: 2026-2027'de önceki programla devam ediyor,
      kodlar o programın kazanım numaralarıdır. */
+  /* Matematik 12 — 2018 Ortaöğretim Matematik Dersi Öğretim Programı.
+     2026-2027'de 12. sınıfta YÜRÜRLÜKTEKİ program budur; Türkiye Yüzyılı
+     Maarif Modeli'nin 12. sınıf matematiği yayımlanmış olsa da bu yıl
+     uygulanmaz (TYMM 12'de Trigonometri ünitesi bulunmaz).
+     Yalnızca Trigonometri ünitesi kayıtlıdır: bu ünitenin kapsamı bankadan
+     TÜRETİLEMİYORDU (kapsamTuret yeterli terim çıkaramıyor) ve ünite
+     kapsam dengelemesinin dışında kalıyordu. Öbür mat-12 üniteleri eskisi
+     gibi bankadan türetilmeye devam eder. */
+  "mat-12": {
+    /* Anahtar sözcükler bankadaki ve üreteçteki GERÇEK soru metinlerine göre
+       seçildi; ölçülerek doğrulandı (etiketlenemeyen soru kapsam
+       dengelemesinin dışında kalır). */
+    "Trigonometri": [
+      { k: "Toplam ve fark formülleriyle işlem yapma", kod: "12.3.1.1", a: ["toplam", "fark", "açılım", "sin(x", "cos(x", "sin(a", "cos(a", "sin a", "cos a"] },
+      { k: "İki kat açı formülleriyle işlem yapma", kod: "12.3.1.2", a: ["iki kat", "2x", "çift açı"] },
+      { k: "Trigonometrik denklemlerin çözüm kümesini bulma", kod: "12.3.2.1", a: ["denklem", "çözüm kümesi", "çözümleri", "genel çözüm", "aralığındaki"] }
+    ]
+  },
+  /* Türkçe 4 ve 8 — 2019 Türkçe Dersi Öğretim Programı (1-8).
+     Bu programda içerik ünitesi/teması YOKTUR; kazanımlar dört beceri
+     alanına bağlıdır. Sistemdeki başlıklar bu yüzden resmî tema değil KONU
+     GRUBUDUR (bkz. KONU_TABANLI) ve buradaki kayıtlar her grubu programdaki
+     GERÇEK kazanım koduna bağlar. Madde metni beceri alanıyla başlar ki
+     kapsam raporu hangi beceriyi ölçtüğünü söylesin.
+     KAYITSIZ BIRAKILANLAR — 4. sınıfta programda karşılığı olmayan üç konu:
+     "Adlar, Sıfatlar, Zamirler" (sıfat T.5.3.8 / T.6.3.8-9, zamir T.6.3.12),
+     "Yapım ve Çekim Ekleri" (T.3.3.13 / T.5.3.11) ve "Cümle Bilgisi"
+     (4. sınıf kazanımlarında "cümle" geçmez). Bunlara resmî kod UYDURULMADI;
+     kapsamlarını bankadan türetirler ve "bilgi noktası" diye anılırlar. */
+  /* ANAHTAR SÖZCÜK KURALI: her sözcük AYIRT EDİCİ olmalı. İlk denemede
+     "an" (fiilimsi), "yer"/"kişi"/"zaman" (metin türleri), "ki"/"mi"
+     (yazım) gibi kısa ve genel sözcükler kullanıldı; bunlar "anlam",
+     "yerini", "kitap" gibi alakasız kelimelerin İÇİNDE eşleşip soruları
+     yanlış maddeye bağlıyordu (ölçüldü: 49 yanlış eşleşme). Sözcükler
+     yalnızca o kazanıma özgü olacak biçimde uzun ve belirgin tutulur. */
+  "tr-4": {
+    "Gerçek – Mecaz – Terim Anlam": [
+      { k: "Okuma: gerçek, mecaz ve terim anlamlı sözcükleri belirleme", kod: "T.4.3.10", a: ["gerçek anlam", "mecaz anlam", "terim anlam", "asıl anlam", "sözlükteki"] },
+      { k: "Yazma: kelimeleri gerçek, mecaz ve terim anlamıyla kullanma", kod: "T.4.4.19", a: ["hangi anlamda", "anlamında kullan", "anlamdadır"] }
+    ],
+    "Deyimler ve Atasözleri": [
+      { k: "Okuma: deyim ve atasözlerinin metnin anlamına katkısı", kod: "T.4.3.11", a: ["deyim", "atasöz", "kalıplaş", "öğüt ver", "özlü söz"] }
+    ],
+    "Noktalama ve Yazım": [
+      { k: "Yazma: büyük harfleri ve noktalama işaretlerini uygun yerde kullanma", kod: "T.4.4.10", a: ["büyük harf", "noktalama", "virgül", "soru işareti", "ünlem işareti", "kesme işareti"] },
+      { k: "Yazma: kısaltmaları ve kısaltmalara gelen ekleri doğru yazma", kod: "T.4.4.16", a: ["kısaltma"] },
+      { k: "Yazma: sayıları doğru yazma", kod: "T.4.4.17", a: ["sayıların yazımı", "rakamla", "yazıyla yaz"] },
+      { k: "Yazma: bağlaçları kuralına uygun kullanma", kod: "T.4.4.18", a: ["bağlaç", "ayrı yazılır", "bitişik yazılır"] }
+    ],
+    "Metin Türleri": [
+      { k: "Okuma: metin türlerini ayırt etme", kod: "T.4.3.23", a: ["metin tür", "hikâye", "masal", "şiir", "fabl", "mektup", "tiyatro", "destan"] },
+      { k: "Okuma: hikâye edici ve bilgilendirici metinleri oluşturan ögeleri tanıma", kod: "T.4.3.24", a: ["hikâye edici", "bilgilendirici", "hikâye unsur", "olay örgüsü"] }
+    ]
+  },
+  "tr-8": {
+    "Sözcükte ve Cümlede Anlam": [
+      { k: "Okuma: bağlamdan yararlanarak kelime ve kelime gruplarının anlamını tahmin etme", kod: "T.8.3.5", a: ["bağlam", "hangi anlamda", "anlamı taşır", "anlamına gelir"] },
+      { k: "Konuşma: kelimeleri anlamlarına uygun kullanma", kod: "T.8.2.5", a: ["eş anlam", "zıt anlam", "anlamına uygun", "karşılaştırma anlamı", "genelleme", "öznel", "nesnel"] }
+    ],
+    "Paragraf": [
+      { k: "Okuma: okuduklarını özetleme", kod: "T.8.3.13", a: ["özetle", "özeti"] },
+      { k: "Okuma: metnin konusunu belirleme", kod: "T.8.3.16", a: ["parçanın konusu", "metnin konusu"] },
+      { k: "Okuma: ana fikri/ana duyguyu belirleme", kod: "T.8.3.17", a: ["ana fikir", "ana düşünce", "ana duygu"] },
+      { k: "Okuma: yardımcı fikirleri belirleme", kod: "T.8.3.18", a: ["yardımcı fikir", "yardımcı düşünce"] },
+      { k: "Okuma: düşünceyi geliştirme yollarını ve anlatım biçimlerini belirleme", kod: "T.8.3.34", a: ["düşünceyi geliştirme", "anlatım biçim", "örnekleme", "tanık göster", "benzetmeden yararlan", "paragraf"] }
+    ],
+    "Fiilimsiler": [
+      { k: "Okuma: fiilimsilerin cümledeki işlevlerini kavrama", kod: "T.8.3.9", a: ["fiilimsi", "eylemsi", "isim-fiil", "sıfat-fiil", "zarf-fiil", "isim fiil", "sıfat fiil", "zarf fiil"] }
+    ],
+    "Cümlenin Ögeleri": [
+      { k: "Yazma: cümlenin ögelerini ayırt etme", kod: "T.8.4.18", a: ["hangi ögedir", "temel öge", "özne", "yüklem", "nesne", "tümleç", "belirtili", "belirtisiz"] }
+    ],
+    "Cümle Türleri": [
+      { k: "Yazma: cümle türlerini tanıma", kod: "T.8.4.19", a: ["cümle tür", "kurallı cümle", "devrik cümle", "basit cümle", "birleşik cümle", "sıralı cümle", "bağlı cümle", "isim cümlesi", "fiil cümlesi", "olumsuz cümle"] }
+    ],
+    "Yazım ve Noktalama": [
+      { k: "Yazma: yazdıklarını yazım ve noktalama kuralları yönünden düzenleme", kod: "T.8.4.16", a: ["yazım kural", "noktalama", "virgül", "kesme işareti", "büyük harf", "ayrı yazılır", "bitişik yazılır", "tırnak işareti"] },
+      { k: "Okuma: noktalama işaretlerine dikkat ederek okuma", kod: "T.8.3.1", a: ["noktalama işaret", "duraklama"] }
+    ],
+    "Söz Sanatları": [
+      { k: "Okuma: metindeki söz sanatlarını tespit etme", kod: "T.8.3.7", a: ["söz sanat", "benzetme", "teşbih", "kişileştirme", "teşhis", "konuşturma", "intak", "abartma", "mübalağa", "tezat"] }
+    ]
+  },
+  /* Matematik 4 — 2018 Matematik Dersi Öğretim Programı (1-8), M.4.2.2.
+     Bu ünite programda bulunduğu hâlde sistemde eksikti; eklenirken resmî
+     kazanımlarıyla birlikte kayda geçirildi. Öbür mat-4 üniteleri kapsamını
+     eskisi gibi bankadan türetmeye devam eder. */
+  "mat-4": {
+    "Uzamsal İlişkiler": [
+      { k: "Ayna simetrisini açıklama ve simetri doğrusunu çizme", kod: "M.4.2.2.1", a: ["ayna", "simetri doğrusu", "simetri", "katla", "eş parça", "kelebek", "kilim", "kumaş", "desen", "harf"] },
+      { k: "Verilen şeklin doğruya göre simetriğini çizme", kod: "M.4.2.2.2", a: ["doğruya göre", "simetriğini", "simetriği", "çiz", "büyüklüğü", "eş"] }
+    ]
+  },
   "din-5": {
     "Allah İnancı": [
       { k: "Evrendeki düzenden akıl yürütme", kod: "DKAB.5.1.1", a: ["evren", "düzen", "uyum", "ölçü", "gece", "gündüz", "mevsim", "kâinat"] },
@@ -11202,7 +12061,7 @@ const KAPSAM = {
       { k: "Kurumlar: ahilik, vakıf, kervansaray", kod: "12.2.2", a: ["ahilik", "vakıf", "kervansaray", "esnaf", "zanaat", "kurum", "hizmet"] },
       { k: "Ayet okuma ve anlamını yorumlama", kod: "12.2.3", a: ["nisâ", "nisa", "ayet", "meal"] }
     ],
-    "Tasavvufi Yorumlar": [
+    "İslam Düşüncesinde Tasavvufi Yorumlar": [
       { k: "Tasavvufi düşüncenin oluşum süreci", kod: "12.3.1", a: ["tasavvuf", "oluşum", "süreç", "nefis", "terbiye", "amaç"] },
       { k: "Ahlaki boyutun önemi", kod: "12.3.2", a: ["ahlak", "boyut", "gönül", "sevgi", "hoşgörü", "olgunluk", "zikir"] },
       { k: "Kültürümüzde etkin tasavvufi yorumlar", kod: "12.3.3", a: ["mürşit", "mürit", "makam", "hâl", "tekke", "yol", "ilahi", "nefes"] },
@@ -11365,37 +12224,71 @@ const DURAK = new Set(["aşağıdaki", "aşağıdakilerden", "hangisi", "hangisi
   "boşluğa", "cümlede", "soruyu", "cevaplayınız", "yukarıdaki", "değildir", "değil", "olur",
   "olarak", "gelir", "vardır", "sayısının", "aşağıdakilerin"]);
 
-function sadeMetin(s) {
+/* sayiKoru: sayılar maskelenmez, olduğu gibi jetona katılır. Varsayılan
+   davranış (maskeleme) DEĞİŞMEDİ — sızıntı denetimi ve cevap karşılaştırması
+   bu işlevi bayraksız çağırır. */
+function sadeMetin(s, sayiKoru) {
   return String(s == null ? "" : s)
     .toLocaleLowerCase("tr")
-    .replace(/\d+(?:[.,]\d+)?/g, " # ")
+    .replace(/\d+(?:[.,]\d+)?/g, sayiKoru ? " $& " : " # ")
     .replace(/[^0-9a-zçğıöşü#\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
-function jetonlar(s) {
-  return sadeMetin(s).split(" ").filter(Boolean).map(function (t) {
+function jetonlar(s, sayiKoru) {
+  return sadeMetin(s, sayiKoru).split(" ").filter(Boolean).map(function (t) {
     return AD_HAVUZU.has(t) ? "@" : t;
   });
+}
+
+/* Sayı bu soruda İÇERİK mi, yoksa yalnızca değişken mi?
+   ÖLÇÜLEN SORUN: parmak izi bütün sayıları "#" ile maskeliyordu. "34 + 25"
+   ile "61 + 17", "3, 8, 15'i sıralayınız" ile "7, 2, 19'u sıralayınız" tek
+   ize düşüyor ve tekilleştirme geçerli varyasyonları siliyordu; üretilen
+   otuz sıralama adayından kâğıda bir tanesi giriyordu. Bu tiplerde sayı
+   sorunun kendisidir, ize katılır.
+   Metin sorularında maskeleme SÜRER: "Ali'nin 3 kalemi var" ile "Ali'nin 5
+   kalemi var" aynı sorudur ve tekrar sayılmalıdır. Kişi adı maskesi (@) her
+   durumda korunur — yalnızca adı değişmiş problem hâlâ tekrardır. */
+const SAYI_ICERIK = new Set(["islem", "sira", "veri", "grafik", "sinif", "hata"]);
+function sayiIcerikli(q) {
+  if (SAYI_ICERIK.has(q.ty)) return true;
+  /* Üreteçten gelen sorularda tur başına değişen tek şey sayılardır */
+  return !!q.yeniden;
+}
+
+/* Sorunun kimliğini taşıyan İÇERİK alanları. Eşleştirme, sıralama,
+   sınıflandırma, tablo ve grafik sorularının kökü sabit bir yönergedir
+   ("Aşağıdakileri küçükten büyüğe sıralayınız"); ayırt edici olan öğelerdir.
+   Hem parmak izi hem çekirdek aynı alanları kullanır. */
+function icerikParcalari(q) {
+  if (q.ty === "es") return [].concat(q.sol || [], q.sag || []).join(" ");
+  if (q.ty === "sira") return (q.ogeler || []).join(" ");
+  if (q.ty === "veri") return (q.satirlar || []).map(function (r) { return r.join(" "); }).join(" ");
+  if (q.ty === "sinif") return [].concat(q.gruplar || [], q.ogeler || []).join(" ");
+  if (q.ty === "grafik") return [].concat(q.etiket || [], q.deger || []).join(" ");
+  return "";
 }
 /* Parmak izi: sayı/ad farkları silindikten sonra kalan soru kimliği.
    Eşleştirme/sıralama/tablo sorularının kökü hep aynı kalıptır; bu tiplerde
    ayırt edici olan içeriktir, bu yüzden öğeler de parmak izine katılır. */
 function parmakIzi(q) {
-  let ek = "";
-  if (q.ty === "es") ek = " " + jetonlar([].concat(q.sol || [], q.sag || []).join(" ")).join(" ");
-  else if (q.ty === "sira") ek = " " + jetonlar((q.ogeler || []).join(" ")).join(" ");
-  else if (q.ty === "veri") ek = " " + jetonlar((q.satirlar || []).map(r => r.join(" ")).join(" ")).join(" ");
-  /* Sınıflandırma ve grafikte soru kökü SABİTTİR; kimliği taşıyan şey
-     öğeler/etiketlerdir. Bunlar ize katılmazsa aynı kökü kullanan bütün
-     sorular tek soru sayılır ve tekrar denetimi yanlış çalışır. */
-  else if (q.ty === "sinif") ek = " " + jetonlar([].concat(q.gruplar || [], q.ogeler || []).join(" ")).join(" ");
-  else if (q.ty === "grafik") ek = " " + jetonlar([].concat(q.etiket || [], q.deger || []).join(" ")).join(" ");
-  return jetonlar(q.q).join(" ") + ek;
+  /* Sayılar yalnızca içeriğin kendisi olmadığı tiplerde maskelenir */
+  const sk = sayiIcerikli(q);
+  const ic = icerikParcalari(q);
+  return jetonlar(q.q, sk).join(" ") + (ic ? " " + jetonlar(ic, sk).join(" ") : "");
 }
-/* Çekirdek: kalıp sözcükleri de atılmış anlam çekirdeği. */
+/* Çekirdek: kalıp sözcükleri de atılmış anlam çekirdeği — ÇEŞİTLİLİK puanı
+   bununla hesaplanır.
+   ÖLÇÜLEN SORUN: çekirdek yalnızca soru KÖKÜNDEN kuruluyordu. Sabit kökle
+   çalışan tiplerde (eşleştirme, sıralama, sınıflandırma, tablo, grafik) bütün
+   adaylar birbirinin aynısı görünüyor, benzerlik kilidi otuz geçerli adaydan
+   yalnızca birini kâğıda alıyordu. İçerik alanları çekirdeğe katılır.
+   Sayılar burada maskeli KALIR: aynı biçimdeki yirmi işlem sorusunun kâğıda
+   yığılmasını engelleyen yumuşak çeşitlilik cezası bu maskelemeye dayanır. */
 function cekirdek(q) {
-  return new Set(jetonlar(q.q).filter(function (t) {
+  const ic = icerikParcalari(q);
+  return new Set(jetonlar(q.q + (ic ? " " + ic : "")).filter(function (t) {
     return t !== "#" && t !== "@" && t.length > 2 && !DURAK.has(t);
   }));
 }
@@ -11695,11 +12588,24 @@ function konuUyumu(q, kapsam, perUnit) {
   return null;
 }
 
-function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
+/* ayar.gevsek : TAMAMLAMA turu. Kâğıt istenen sayıya ulaşamadığında ikinci
+                 kez çağrılır. Çeşitlilik kısıtları (benzerlik kilidi, adil
+                 pay, kapsam/hedef cezaları) gevşetilir — bunlar "daha güzel
+                 olsun" kuralıdır, boş satır bırakmaya değmez. Cevap sızıntısı
+                 ve gerçek tekrar kuralları GEVŞEMEZ.
+   ayar.mevcut : kâğıtta hâlihazırda duran sorular. Sayaçlar bunlarla
+                 tohumlanır ve aynı parmak izi bir daha seçilmez. */
+function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam, ayar) {
+  ayar = ayar || {};
+  const gevsek = !!ayar.gevsek;
   /* Adil pay: birden fazla soru tipi seçiliyse tek bir tip kâğıdı ele
      geçirmesin. Sert bir yasak değil güçlü bir ceza — başka tip kalmadıysa
      ödev eksik bırakılmaz, yine bu tipten tamamlanır. */
-  const adilPay = tipSayisi && tipSayisi > 1 ? Math.max(1, (count / tipSayisi) * 1.5) : Infinity;
+  const adilPay = gevsek || !tipSayisi || tipSayisi <= 1
+    ? Infinity : Math.max(1, (count / tipSayisi) * 1.5);
+  /* Çeşitlilik cezalarının ağırlığı. Tamamlama turunda cezalar hâlâ SIRALAR
+     (en az benzeyen aday önce gelir) ama artık ELEMEZ. */
+  const cesitCarpan = gevsek ? 0.2 : 1;
   kapsam = kapsam || [];
   /* Kapsam sayacı: her kapsam maddesinden kâğıda kaç soru girdiği.
      Kapsanmamış madde varken kapsanmış maddeye dönmek ağır cezalıdır;
@@ -11737,12 +12643,43 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
      cevap metni üzerinden genel bir koruma uygulanır (kelime havuzu dâhil). */
   const ifsaEdilen = new Set();
   const cevapMetni = soruCevabi;
+
+  /* Kâğıtta hâlihazırda duran sorular sayaçlara işlenir: tamamlama turu,
+     birinci turun kurduğu dengeyi ve sızıntı korumalarını görmeden karar
+     veremez. */
+  (ayar.mevcut || []).forEach(function (q) {
+    secilenIzler.add(parmakIzi(q));
+    secilenCekirdek.push(cekirdek(q));
+    tipSayaci[q.ty] = (tipSayaci[q.ty] || 0) + 1;
+    if (q.unit) uniteSayaci[q.unit] = (uniteSayaci[q.unit] || 0) + 1;
+    if (q.kalip) kalipSayaci[q.kalip] = (kalipSayaci[q.kalip] || 0) + 1;
+    if (q.kx >= 0) {
+      if (!kapsamSayaci[q.kx]) kapsananMadde++;
+      kapsamSayaci[q.kx] = (kapsamSayaci[q.kx] || 0) + 1;
+    }
+    if (q.boyut) boyutSayaci[q.boyut] = (boyutSayaci[q.boyut] || 0) + 1;
+    if (q.kapsamHedef) {
+      const h = sutunAnahtari(q.kapsamHedef);
+      hedefSayaci[h] = (hedefSayaci[h] || 0) + 1;
+    }
+    if (q.ty === "mc" && Number.isInteger(q.a)) harfSayaci[q.a] = (harfSayaci[q.a] || 0) + 1;
+    if (q.ty === "tf") { tfToplam++; if (q.a === true) tfDogru++; }
+    if (q.kapsar) q.kapsar.forEach(function (z) { kapsananIzler.add(z); kullanilanKaynak.add(z); });
+    if (q.ty === "es" && Array.isArray(q.sag)) q.sag.forEach(function (x) {
+      const t = sadeMetin(x); if (t.length >= 3) ifsaEdilen.add(t);
+    });
+    const c = soruCevabi(q);
+    if (c && c.length >= 3) secilenCevaplar.add(c);
+  });
+
   const havuz = adaylar.map(function (q) {
     const iz = parmakIzi(q);
     return { q: q, iz: iz, cek: cekirdek(q), kalip: q.kalip || iz,
       kx: kapsamEtiketi(q, kapsam), boyut: boyutu(q),
       hedef: q.kapsamHedef ? sutunAnahtari(q.kapsamHedef) : null };
-  });
+  /* Kâğıtta zaten duran soru tamamlama turunda BİR DAHA seçilemez: eksiği
+     kapatmanın yolu aynı soruyu iki kez basmak değildir. */
+  }).filter(function (c) { return !secilenIzler.has(c.iz); });
 
   while (secilen.length < count && havuz.length) {
     let enIyi = -1, enIyiPuan = -Infinity;
@@ -11754,7 +12691,7 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
     const tipSans = {};
     for (let i = 0; i < havuz.length; i++) {
       const t = havuz[i].q.ty;
-      if (tipSans[t] === undefined) tipSans[t] = Math.random() * 2.5;
+      if (tipSans[t] === undefined) tipSans[t] = rastgele() * 2.5;
     }
     for (let i = 0; i < havuz.length; i++) {
       const c = havuz[i];
@@ -11791,9 +12728,9 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
         const b = benzerlik(c.cek, secilenCekirdek[j]);
         if (b > enYakin) enYakin = b;
       }
-      if (enYakin >= AYNI_SAYILIR) puan -= 100;                // aynı kâğıtta çok benzer
-      else puan -= enYakin * 25;
-      puan -= (tipSayaci[c.q.ty] || 0) * 3.5;                  // tip dengesi
+      if (enYakin >= AYNI_SAYILIR) puan -= 100 * cesitCarpan;  // aynı kâğıtta çok benzer
+      else puan -= enYakin * 25 * cesitCarpan;
+      puan -= (tipSayaci[c.q.ty] || 0) * 3.5 * cesitCarpan;    // tip dengesi
       if ((tipSayaci[c.q.ty] || 0) >= adilPay) puan -= 40;     // tek tip kâğıdı ele geçirmesin
       /* ── Kapsam dengesi ──
          Kâğıdın tamamı konunun aynı bölümünden gelmesin: henüz ölçülmemiş bir
@@ -11817,7 +12754,7 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
       if (kapsam.length && c.kx >= 0) {
         const acikVar = kapsananMadde < kapsam.length;
         const n = kapsamSayaci[c.kx] || 0;
-        puan -= n * (acikVar ? 34 : 9);        // ölçülmüş maddeye dönmenin bedeli
+        puan -= n * (acikVar ? 34 : 9) * cesitCarpan;   // ölçülmüş maddeye dönmenin bedeli
         puan -= Math.min(kapsam[c.kx].sira, 6) * 0.8;   // resmî öncelik sırası
       }
       /* Ölçme boyutu dengesi. "beceri" boyutu bu cezadan MUAFTIR: eşleştirme,
@@ -11829,7 +12766,7 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
       /* Aynı kapsam hedefi ikinci kez ölçülmesin — kalıp farklı olsa bile
          ölçülen bilgi aynıdır. Ağır ceza: başka aday kalmadıysa ödev eksik
          bırakılmaz, ama pratikte ikinci soru gelmez. */
-      if (c.hedef) puan -= (hedefSayaci[c.hedef] || 0) * 80;
+      if (c.hedef) puan -= (hedefSayaci[c.hedef] || 0) * 80 * cesitCarpan;
       /* Ünite dengesi yalnızca bir üniteye BAĞLI sorular için işler. Ünitesi
          olmayan türetilmiş sorular (sıralama, sınıflandırma, tablo, grafik)
          tek bir "undefined" sayacında birikiyor ve birbirini cezalandırıyordu;
@@ -11843,16 +12780,22 @@ function odevSec(adaylar, count, d, gecmisiYoksay, tipSayisi, kapsam) {
       if (c.q.kaynak === "üreteç") puan += 4;                   // sınırsız üretilebilen kaynağa hafif öncelik
       if (d === 3 && (c.q.ty === "op" || c.q.ty === "islem")) puan += 3;
       if (d === 1 && (c.q.ty === "tf" || c.q.ty === "fb")) puan += 3;
-      puan += tipSans[c.q.ty] + Math.random() * 0.6;            // eşit puanlarda kararı rastgeleliğe bırak
+      puan += tipSans[c.q.ty] + rastgele() * 0.6;               // eşit puanlarda kararı rastgeleliğe bırak
       if (puan > enIyiPuan) { enIyiPuan = puan; enIyi = i; }
     }
     if (enIyi < 0) break;
     const c = havuz.splice(enIyi, 1)[0];
-    let cokBenzer = false;
-    for (let j = 0; j < secilenCekirdek.length; j++) {
-      if (benzerlik(c.cek, secilenCekirdek[j]) >= AYNI_SAYILIR) { cokBenzer = true; break; }
+    /* Güvenlik kilidi: normal turda çok benzer aday kâğıda alınmaz.
+       Tamamlama turunda BU KİLİT AÇILIR — aynı parmak izi zaten havuzdan
+       süzüldüğü için burada elenen soru gerçek tekrar değil, yalnızca
+       "benzer"dir; onun yüzünden kâğıdı eksik bırakmak daha kötüdür. */
+    if (!gevsek) {
+      let cokBenzer = false;
+      for (let j = 0; j < secilenCekirdek.length; j++) {
+        if (benzerlik(c.cek, secilenCekirdek[j]) >= AYNI_SAYILIR) { cokBenzer = true; break; }
+      }
+      if (cokBenzer) continue;
     }
-    if (cokBenzer) continue;                                    // güvenlik kilidi
     let q = c.q;
     if (q.ty === "mc") {
       /* En az kullanılmış harf seçilir; eşitlik hâlinde KURA çekilir. Sabit
@@ -11981,27 +12924,12 @@ function kapsamDenetimi(secilen, havuz, kapsam, count, gecmis) {
 }
 
 /* ── Ödev üretimi ────────────────────────────────────────────────────────── */
-function generate() {
-  const count = Math.min(30, Math.max(4, +$("qCount").value || 10));
-  const d = +$("difficulty").value;
-  const types = new Set([].slice.call(document.querySelectorAll(".check-row input[data-ty]"))
-    .filter(function (c) { return c.checked; })
-    .map(function (c) { return c.dataset.ty; }));
-  if (!types.size) { alert("En az bir soru tipi seçmelisin."); return; }
-  if (!st.units.size) { alert("En az bir ünite seçmelisin."); return; }
-
-  const tani = { istenen: count, toplamAday: 0, elenen: 0, elenenNeden: {}, tekil: 0, gecmistenTekrar: 0, genelBanka: false, tipler: {} };
-  const gecmisAnlik = new Set(gecmisOku());   // bu ödev yazılmadan ÖNCEKİ geçmiş
-
-  /* 1) Müfredat kapsamı — seçili ünitelerin öğrenme çıktıları belirlenir.
-        Aday üretiminden ÖNCE hesaplanır: açık uçlu sorular artık ünite
-        adından değil kapsam maddelerinden üretiliyor. */
-  const kapsam = kapsamFor();
-
-  /* 2) Aday toplama — üreteç ve kelime katmanı istenen sayının katı kadar
-        denenir, böylece süzgeçten sonra da seçecek malzeme kalır. Açık uçlu
-        katman, her kapsam maddesine soru düşebilsin diye madde sayısına
-        göre ölçeklenir. */
+/* ── Aday havuzu ──────────────────────────────────────────────────────────
+   Toplama → kalite süzgeci → konu uygunluğu → tekilleştirme → (eksikse)
+   yedek üretim → (hâlâ eksikse) kapsam uyumlu genel banka.
+   `tani` isteğe bağlıdır; verilirse elenen/toplam sayaçları oraya işlenir. */
+function adayHavuzu(types, d, count, kapsam, tani) {
+  tani = tani || {};
   let ham = [].concat(
     bankAdaylari(types),
     uretecAdaylari(types, d, count * 8),
@@ -12012,46 +12940,180 @@ function generate() {
   if (!ham.length) { ham = genelBankaAdaylari(types); tani.genelBanka = ham.length > 0; }
   tani.toplamAday = ham.length;
 
-  /* 3) Kalite süzgeci — geçersiz cevap anahtarı / bozuk gövde elenir,
-        ardından KONU UYGUNLUĞU denetlenir: kalıbı konuya zorlanmış ya da
-        yalnızca konu başlığından kurulmuş soru kâğıda alınmaz. */
   const perUnitK = UNIT_BANK[st.subject + "-" + st.grade];
-  const gecerli = [];
-  ham.forEach(function (q) {
-    const sorun = sorunTespit(q) || konuUyumu(q, kapsam, perUnitK);
-    if (sorun) {
-      tani.elenen++;
-      tani.elenenNeden[sorun] = (tani.elenenNeden[sorun] || 0) + 1;
-      return;
-    }
-    gecerli.push(q);
-  });
-
-  /* 4) Parmak izine göre tekilleştirme — aynı soru ya da yalnızca sayısı/adı
-        değişmiş soru havuzda bir kez yer alır */
   const gorulen = new Set(), tekil = [];
-  gecerli.forEach(function (q) {
-    const iz = parmakIzi(q);
-    if (gorulen.has(iz)) return;
-    gorulen.add(iz);
-    tekil.push(q);
-  });
+  const suzVeEkle = function (liste) {
+    liste.forEach(function (q) {
+      const sorun = sorunTespit(q) || konuUyumu(q, kapsam, perUnitK);
+      if (sorun) {
+        tani.elenen = (tani.elenen || 0) + 1;
+        if (tani.elenenNeden) tani.elenenNeden[sorun] = (tani.elenenNeden[sorun] || 0) + 1;
+        return;
+      }
+      const iz = parmakIzi(q);
+      if (gorulen.has(iz)) return;
+      gorulen.add(iz);
+      tekil.push(q);
+    });
+  };
+  suzVeEkle(ham);
+
+  /* KISMİ EKSİK — havuz istenen soru sayısını karşılamıyor. Yedek üretim
+     devreye girer: ünitenin kendi içeriğinden, SEÇİLEN TİPLERDE yeni adaylar
+     türetilir. Sınıf, ders, ünite ve tip kısıtları korunur; eksik yer başka
+     tipten soruyla doldurulmaz.
+     Eşik `ham` üzerinde değil TEKİL havuz üzerinde ölçülür: `ham` süzgeç
+     öncesi sayıdır, elenen adayları da içerdiği için eksiği gizler. */
+  if (tekil.length < count) {
+    const yedek = yedekAdaylar(types, d, count);
+    tani.yedekAday = yedek.length;
+    tani.toplamAday += yedek.length;
+    suzVeEkle(yedek);
+  }
+  /* Hâlâ eksikse sınıf genelindeki bankaya bakılır — ama YALNIZCA seçili
+     kapsamla uyuşan sorulara. Konu dışı soruyla sayı tamamlanmaz. */
+  if (tekil.length < count) suzVeEkle(genelBankaKapsamli(types, kapsam));
   tani.tekil = tekil.length;
+  return tekil;
+}
+
+/* ── Tip yeteneği: UYGUNLUK ve KAPASİTE ───────────────────────────────────
+   Bu ikisi ayrı sorulardır ve karıştırılmamalıdır:
+     • UYGUNLUK — bu konudan bu tipte ANLAMLI bir soru kurulabiliyor mu?
+       Bir tane bile yetiyor. "Altı çoktan seçmeli üretilebiliyor" demek tip
+       uygundur, içerik derinliği sınırlıdır demektir; tipi kapatmak yanlış
+       olurdu. Uygun DEĞİL demek, o konuda o ölçme biçiminin karşılığı yok
+       demektir: Türkçe temasında "işlem", Din ünitesinde "sıralama",
+       yabancı dilde "grafik" gibi. Bunlar için soru üretmek müfredat
+       bilgisini uydurmak olurdu.
+     • KAPASİTE — kaç FARKLI soru kurulabiliyor? Soru sayısı alanına
+       gerçekçi bir tavan koymak için kullanılır.
+   İkisi de `adayHavuzu` üzerinden ölçülür — yani üretimin kendi yolundan.
+   Ayrı bir kural listesi tutulsaydı arayüz "uygun" derken üretim boş
+   dönebilirdi. */
+const YETENEK_ONBELLEK = {};
+function yetenekAnahtari(ek) {
+  return st.subject + "|" + st.grade + "|" +
+    [...st.units].sort(function (a, b) { return a - b; }).join(",") + "|" + ek;
+}
+/* Zorluk kapasiteyi belirlemez (üreteçler her zorlukta soru verir); ölçüm
+   orta zorlukla yapılır. */
+function havuzBuyuklugu(types, tavan) {
+  if (!st.units.size) return 0;
+  return adayHavuzu(types, 2, tavan, kapsamFor(), {}).length;
+}
+function tipUygunMu(ty) {
+  const k = yetenekAnahtari("u:" + ty);
+  if (YETENEK_ONBELLEK[k] === undefined) YETENEK_ONBELLEK[k] = havuzBuyuklugu(new Set([ty]), 4) > 0;
+  return YETENEK_ONBELLEK[k];
+}
+function seciliKapasite(types) {
+  const k = yetenekAnahtari("k:" + [...types].sort().join("+"));
+  if (YETENEK_ONBELLEK[k] === undefined) YETENEK_ONBELLEK[k] = havuzBuyuklugu(types, 30);
+  return YETENEK_ONBELLEK[k];
+}
+
+function seciliTipler() {
+  return new Set([].slice.call(document.querySelectorAll(".check-row input[data-ty]"))
+    .filter(function (c) { return c.checked && !c.disabled; })
+    .map(function (c) { return c.dataset.ty; }));
+}
+
+/* Uygun olmayan tipler pasifleştirilir ve gerekçesi yazılır. Seçim
+   kullanıcıdan alınmaz: yalnızca gerçekten üretilemeyen tip kapanır. */
+function renderTipUygunluk() {
+  const kutular = [].slice.call(document.querySelectorAll(".check-row input[data-ty]"));
+  let acikVar = false;
+  kutular.forEach(function (c) {
+    const satir = c.closest(".check-row");
+    const uygun = !st.units.size || tipUygunMu(c.dataset.ty);
+    c.disabled = !uygun;
+    satir.classList.toggle("ty-kapali", !uygun);
+    if (!uygun) c.checked = false; else if (c.checked) acikVar = true;
+  });
+  /* Bütün seçim kapandıysa uygun olan ilk tip açılır — kullanıcı boş bir
+     seçimle "En az bir soru tipi seçmelisin" uyarısına düşmesin. */
+  if (!acikVar) {
+    const ilk = kutular.filter(function (c) { return !c.disabled; })[0];
+    if (ilk) ilk.checked = true;
+  }
+  renderKapasite();
+}
+
+/* Soru sayısı alanına gerçekçi tavan koyar ve gerekçesini yazar. */
+function renderKapasite() {
+  const not = $("kapasiteHint"), sayi = $("qCount");
+  const types = seciliTipler();
+  if (!types.size || !st.units.size) { not.textContent = ""; sayi.max = "30"; return; }
+  const enCok = seciliKapasite(types);
+  const tavan = Math.max(4, Math.min(30, enCok));
+  sayi.max = String(tavan);
+  if (+sayi.value > tavan) sayi.value = String(tavan);
+  not.textContent = enCok >= 30 ? "" :
+    `Bu konu ve soru tipi seçimiyle en fazla ${enCok} farklı soru üretilebilir.`;
+}
+
+function generate() {
+  const count = Math.min(30, Math.max(4, +$("qCount").value || 10));
+  const d = +$("difficulty").value;
+  const types = new Set([].slice.call(document.querySelectorAll(".check-row input[data-ty]"))
+    .filter(function (c) { return c.checked; })
+    .map(function (c) { return c.dataset.ty; }));
+  if (!types.size) { alert("En az bir soru tipi seçmelisin."); return; }
+  if (!st.units.size) { alert("En az bir ünite seçmelisin."); return; }
+
+  const tani = { istenen: count, toplamAday: 0, elenen: 0, elenenNeden: {}, tekil: 0, gecmistenTekrar: 0, genelBanka: false, kapsamliGenel: 0, tipler: {} };
+  const gecmisAnlik = new Set(gecmisOku());   // bu ödev yazılmadan ÖNCEKİ geçmiş
+
+  /* 1) Müfredat kapsamı — seçili ünitelerin öğrenme çıktıları belirlenir.
+        Aday üretiminden ÖNCE hesaplanır: açık uçlu sorular artık ünite
+        adından değil kapsam maddelerinden üretiliyor. */
+  const kapsam = kapsamFor();
+
+  /* 2-4) Aday havuzu — toplama, kalite süzgeci ve tekilleştirme tek
+        işlevdedir (bkz. adayHavuzu). Yetenek/kapasite ölçümü de AYNI işlevi
+        çağırır: ölçüm ile üretim ayrı kodda dursaydı arayüz "bu tip uygun"
+        derken üretim boş dönebilirdi. */
+  const tekil = adayHavuzu(types, d, count, kapsam, tani);
 
   /* 5) Çeşitlilik + kapsam seçimi — seçim kapsam maddelerine göre
         dengelenir; kâğıt konunun aynı bölümünden değil farklı
         bölümlerinden sorular içerir. */
-  const secilen = odevSec(tekil, count, d, false, types.size, kapsam);
+  let secilen = odevSec(tekil, count, d, false, types.size, kapsam);
+
+  /* 5b) TAMAMLAMA TURU — birinci tur çeşitlilik kurallarına takılıp kâğıdı
+        eksik bıraktıysa kurallar gevşetilip kalan adaylardan tamamlanır.
+        Kâğıtta duran parmak izleri havuzdan süzüldüğü için aynı soru ikinci
+        kez basılmaz; gevşeyen şey yalnızca "benzer olmasın" tercihidir. */
+  const tamamla = function () {
+    if (secilen.length >= count) return;
+    const ek = odevSec(tekil, count - secilen.length, d, true, types.size, kapsam,
+      { gevsek: true, mevcut: secilen });
+    if (ek.length) {
+      secilen = secilen.concat(ek);
+      tani.tamamlanan = (tani.tamamlanan || 0) + ek.length;
+    }
+  };
+  tamamla();
 
   /* 6) Kapsam denetimi — ölçülmemiş madde kaldıysa yinelenen bir soru
         çıkarılıp eksik maddenin sorusu konur. */
   tani.kapsam = kapsamDenetimi(secilen, tekil, kapsam, count, gecmisAnlik);
+
+  /* 6b) Son kontrol — kapsam denetimi kâğıdı değiştirmiş olabilir. Hâlâ
+        eksikse bir tur daha denenir; havuz tükendiyse bu tur boş döner ve
+        eksik dürüstçe bildirilir. */
+  tamamla();
 
   /* Havuz tükendiyse seçim, geçmişte çıkmış soruları da almak zorunda kalır.
      Bu gizlenmez: kaç sorunun tekrar olduğu sayılır ve kâğıtta bildirilir. */
   secilen.forEach(function (q) {
     if (gecmisAnlik.has(parmakIzi(q))) tani.gecmistenTekrar++;
     tani.tipler[q.ty] = (tani.tipler[q.ty] || 0) + 1;
+    /* Ünite bankası yetmediği için sınıf genelinden alınan sorular sayılır;
+       kapsam süzgecinden geçtikleri için konuya aittir ama belirli bir
+       üniteye etiketlenmemişlerdir — bu kâğıtta bildirilir. */
+    if (q.kaynak === "genel banka" && !tani.genelBanka) tani.kapsamliGenel++;
   });
   tani.eksik = Math.max(0, count - secilen.length);
 
@@ -12077,6 +13139,8 @@ function taniNotu(tani) {
   }
   if (tani.genelBanka) {
     satir.push(`<div class="sheet-note tani-not" style="color:#dc2626;">⚠️ Seçili ünitelerin kendi soru bankası bulunmadığı için sorular sınıf genelindeki bankadan alındı; ünite başlığıyla birebir örtüşmeyebilir.</div>`);
+  } else if (tani.kapsamliGenel) {
+    satir.push(`<div class="sheet-note tani-not">📎 Ünite bankası istenen sayıya yetmediği için ${tani.kapsamliGenel} soru sınıf genelindeki bankadan alındı. Bu sorular seçili konunun kapsam süzgecinden geçti, ancak belirli bir ünite başlığıyla etiketlenmemiştir.</div>`);
   }
   /* Kapsam raporu: kâğıdın konunun kaç ayrı bölümünü ölçtüğünü gösterir.
      Resmî öğrenme çıktısı listesi olan derslerde "öğrenme çıktısı", kapsamı

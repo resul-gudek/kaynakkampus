@@ -1,10 +1,12 @@
 import Link from "next/link";
+import SiteOlcum from "@/components/site/SiteOlcum";
 import stil from "./basvuru.module.css";
 
 /* Public başvuru kabuğu — oturum gerektirmez. */
 export default function BasvuruLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <SiteOlcum />
       <header className={stil.ustBar}>
         <div className={`container ${stil.ustBarIc}`}>
           <Link href="/" className={stil.logo}>

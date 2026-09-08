@@ -341,11 +341,13 @@
         </p>
 
         <!-- "Aramıza katıl" şimdilik gizlendi (kullanıcı kararı). Hero'nun birincil
-             düğmesiz kalmaması için "Nasıl çalışır" geçici olarak dolu stile alındı;
-             geri açarken hidden'ı kaldırıp bu düğmeyi btn-cizgili'ye döndürün. -->
+             düğmesiz kalmaması için ikinci düğme geçici olarak dolu stile alındı;
+             geri açarken hidden'ı kaldırıp bu düğmeyi btn-cizgili'ye döndürün.
+             İkinci düğme "#how / Nasıl çalışır" idi; o bölüm gizlendiği için
+             hedefi #araclar'a çevrildi. -->
         <div class="hero-eylemler">
           <a href="/basvuru" class="btn btn-dolu" hidden>Aramıza katıl <span class="ok">→</span></a>
-          <a href="#how" class="btn btn-dolu">Nasıl çalışır</a>
+          <a href="#araclar" class="btn btn-dolu">Ücretsiz araçları keşfet</a>
         </div>
 
         <div class="hero-guven">
@@ -579,7 +581,9 @@
 </section>
 
 <!-- ═══════════════════════════════════════════════════════ NASIL ÇALIŞIR -->
-<section class="bolum bolum-sis" id="how">
+<!-- (kullanıcı kararıyla ana sayfadan gizlendi — hidden kaldırılarak geri açılır;
+     geri açarken hero'daki düğmeyi de "#how / Nasıl çalışır"a döndürün) -->
+<section class="bolum bolum-sis" id="how" hidden>
   <div class="container">
     <div class="bolum-bas fade-up">
       <h2 class="bolum-baslik">4 adımda başla</h2>

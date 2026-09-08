@@ -158,6 +158,10 @@
     .gen-actions .btn { justify-content: center; padding: 12px; font-size: .88rem; }
     .action-row { display: flex; gap: 9px; }
     .action-row .btn { flex: 1; padding: 11px; font-size: .8rem; }
+    /* "Programı gör" yalnız panel alta indiğinde açılır (≤1100px).
+       İki sınıflı seçici: site-tema.css bu <style>'dan sonra yüklenip
+       tek sınıflı .btn { display: flex } ile kuralı eziyor. */
+    .btn.git-sheet { display: none; }
 
     /* SCHEDULE SHEET */
     /* min-width:0 şart: ızgara çocuğu (burada <main>) varsayılan olarak
@@ -269,11 +273,15 @@
     .mini-btn:hover { background: var(--blue); color: #fff; border-style: solid; }
     .mini-btn[hidden] { display: none; }
 
-    @media (max-width: 1100px) { .builder-grid { grid-template-columns: 1fr; } .panel { position: static; max-height: none; overflow: visible; } }
-    @media (max-width: 768px) { nav, .nav-actions { display: none; } .hamburger { display: block; } .sheet { padding: 18px 14px; } }
+    @media (max-width: 1100px) {
+      .builder-grid { grid-template-columns: 1fr; }
+      .panel { position: static; max-height: none; overflow: visible; }
+      .btn.git-sheet { display: inline-flex; }
+    }
+    @media (max-width: 768px) { nav, .nav-actions { display: none; } .hamburger { display: block; } }
 
     /* ── DOKUNMATİK: küçük kontrolleri parmakla kullanılabilir yap ──── */
-    @media (hover: none) and (pointer: coarse) {
+    @media (hover: none) and (pointer: coarse), (max-width: 720px) {
       .step-btn { width: 30px; height: 30px; font-size: .85rem; border-radius: 12px; }
       .step-btn.rst { font-size: .72rem; }
       .dur-in { width: 46px; padding: 5px 3px; font-size: .78rem; }
@@ -292,17 +300,219 @@
       .sheet-wrap { position: relative; }
       .sheet-hint { display: block; }
       .schedule th.time-h, .schedule td.time-cell { position: sticky; left: 0; z-index: 2; }
-      .sheet { padding-left: 12px; }
+      .sheet { padding: 18px 14px 18px 12px; }
+    }
+
+
+    /* ═════════ MOBİL PROGRAM GÖRÜNÜMÜ (temel: masaüstünde gizli) ═════════
+       Telefonda tablo 720px'e sıkışmak yerine "gün gün" kartlara dönüşür;
+       tablo görünümü isteyen için düğmeyle geçiş var. Masaüstü etkilenmez:
+       aşağıdaki parçalar yalnız @media (max-width:720px) içinde açılır. */
+    .day-list, .hours-edit, .view-bar { display: none; }
+    .builder-grid > main { scroll-margin-top: 88px; }
+
+    /* katlanabilir adım kutusu — masaüstünde her zaman açık durur */
+    details.step-box > summary { list-style: none; }
+    details.step-box > summary::-webkit-details-marker { display: none; }
+    details.step-box > summary > .step-head { margin-bottom: 0; }
+    details.step-box[open] > summary { margin-bottom: 12px; }
+
+    /* program oluşunca kısa bir vurgu — "nerede oluştu?" sorusunu bitirir */
+    @keyframes sheetVurgu {
+      0%, 100% { box-shadow: var(--shadow-lg); }
+      30%, 70% { box-shadow: 0 0 0 4px rgba(122,32,53,.30), var(--shadow-lg); }
+    }
+    .sheet.vurgu { animation: sheetVurgu 1.5s ease; }
+    @keyframes paintUyari {
+      0%, 100% { box-shadow: none; }
+      50% { box-shadow: 0 0 0 3px rgba(122,32,53,.28); }
+    }
+    .paint-info.uyari { animation: paintUyari 1s ease; }
+
+    @media (max-width: 720px) {
+      .container { padding: 0 14px; }
+      .builder { padding: 24px 0 52px; }
+      .builder-grid { gap: 18px; }
+
+      /* ── 1) DERS SEÇİM PANELİ: kompakt ama parmakla kullanılabilir ── */
+      .panel { gap: 12px; padding-right: 0; }
+      .step-box { padding: 12px 13px; }
+      details.step-box > summary {
+        display: flex; align-items: center; min-height: 44px; cursor: pointer;
+        margin: -12px -13px; padding: 12px 13px;
+      }
+      details.step-box > summary > .step-head { flex: 1; margin-bottom: 0; }
+      details.step-box > summary > .step-head::after {
+        content: "⌄"; margin-left: auto; font-size: 1.15rem; line-height: 1;
+        font-weight: 700; color: var(--blue); transition: transform .2s;
+      }
+      details.step-box[open] > summary > .step-head::after { transform: rotate(180deg); }
+      details.step-box[open] > summary {
+        border-bottom: 1px solid rgba(122,32,53,.08); margin-bottom: 12px;
+      }
+
+      .pills, .palette, .theme-pills { gap: 8px; }
+      .pill, .theme-pill { min-height: 44px; padding: 10px 15px; font-size: .82rem; }
+      .swatch { min-height: 44px; padding: 10px 13px; font-size: .8rem; }
+      .opt-row { min-height: 44px; margin-bottom: 4px; gap: 12px; }
+      .opt-row label { font-size: .82rem; }
+      .opt-row select, .opt-row input { min-height: 40px; font-size: .85rem; padding: 8px 10px; }
+      .opt-row input[type="text"] { width: 52%; }
+      .opt-row input[type="time"] { width: 116px; }
+      .opt-row input[type="number"] { width: 84px; }
+      .add-lesson input { min-height: 44px; }
+      .add-lesson button { min-height: 44px; padding: 0 15px; }
+      .mini-btn { min-height: 44px; }
+      .hint { font-size: .74rem; }
+
+      .gen-actions .btn { min-height: 48px; }
+      .action-row { flex-wrap: wrap; }
+      .action-row .btn { flex: 1 1 45%; min-height: 48px; padding: 12px 8px; }
+
+      /* ── 2) PROGRAM ALANI: kendi kartı, ekran genişliğini aşmaz ── */
+      .builder-grid > main { display: flex; flex-direction: column; }
+      .paint-info {
+        order: 1; position: sticky; top: 78px; z-index: 6;
+        margin-bottom: 10px; font-size: .76rem; padding: 8px 12px;
+        box-shadow: 0 3px 10px rgba(47,52,61,.08);
+      }
+      .view-bar { order: 2; display: block; margin-bottom: 10px; }
+      .view-bar .btn { width: 100%; min-height: 44px; justify-content: center; font-size: .82rem; padding: 11px; }
+      .sheet-hint { order: 3; }
+      .sheet-wrap { order: 4; }
+      .toolbar-float {
+        order: 5; margin: 14px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      }
+      .toolbar-float .btn { min-height: 48px; justify-content: center; padding: 12px 8px; font-size: .8rem; }
+
+      .sheet { max-width: 100%; min-width: 0; padding: 14px 12px; border-radius: 14px; }
+      .sheet-title { font-size: 1.12rem; }
+      .sheet-sub { font-size: .74rem; }
+      .sheet-info { gap: 4px 16px; font-size: .74rem; padding: 6px 0 12px; }
+      .sheet-footer { font-size: .64rem; }
+
+      /* ── 3) GÜN GÜN GÖRÜNÜM (telefonda varsayılan) ── */
+      main[data-gorunum="gun"] table.schedule,
+      main[data-gorunum="gun"] .legend,
+      main[data-gorunum="gun"] .sheet-hint { display: none; }
+      main[data-gorunum="gun"] .day-list { display: grid; gap: 14px; }
+      /* süre düzenlemesi her iki mobil görünümde de üstteki katlanır listede */
+      main[data-gorunum] .hours-edit { display: block; }
+
+      .day-card {
+        border: 1px solid rgba(122,32,53,.14); border-radius: 14px;
+        overflow: hidden; background: #fff;
+      }
+      .day-card-h {
+        background: var(--sheet-accent, var(--blue)); color: #fff;
+        font-size: .84rem; font-weight: 800; padding: 9px 12px; letter-spacing: .03em;
+      }
+      .day-row {
+        display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px;
+        padding: 7px 10px; border: none; border-top: 1px solid #eef1f5;
+        background: #fff; font-family: inherit; color: var(--text);
+        text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+      }
+      .dr-no {
+        flex: 0 0 22px; height: 22px; border-radius: 8px;
+        background: rgba(122,32,53,.09); color: var(--blue);
+        font-size: .7rem; font-weight: 800;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .dr-time {
+        flex: 0 0 58px; font-size: .67rem; font-weight: 700;
+        color: var(--muted); line-height: 1.35; font-variant-numeric: tabular-nums;
+      }
+      .dr-time i { display: block; font-style: normal; }
+      .dr-les {
+        flex: 1 1 auto; min-width: 0; font-size: .86rem; font-weight: 700;
+        line-height: 1.3; overflow-wrap: break-word;
+      }
+      .day-row.bos .dr-les { color: #b8bec8; font-weight: 600; }
+      .day-brk {
+        font-size: .67rem; font-weight: 700; color: var(--muted);
+        background: var(--bg-soft); padding: 5px 12px; border-top: 1px solid #eef1f5;
+      }
+      .day-brk.lunch { background: #FBF1F3; color: var(--blue); }
+      .sheet.bw .day-card-h { background: #1e293b; }
+      .sheet.bw .day-row.dolu { box-shadow: inset 3px 0 0 #1e293b; }
+
+      /* ── 4) MOBİLDE SÜRE DÜZENLEME (tablo yerine katlanır liste) ── */
+      .hours-edit {
+        margin-bottom: 14px; border: 1px dashed rgba(122,32,53,.25);
+        border-radius: 14px; background: var(--bg-soft);
+      }
+      .hours-edit > summary {
+        list-style: none; cursor: pointer; display: flex; align-items: center;
+        min-height: 44px; padding: 10px 13px; font-size: .78rem; font-weight: 800; color: var(--blue);
+      }
+      .hours-edit > summary::-webkit-details-marker { display: none; }
+      .hours-edit > summary::after { content: "⌄"; margin-left: auto; font-size: 1.15rem; line-height: 1; }
+      .hours-edit[open] > summary::after { transform: rotate(180deg); }
+      .he-body { padding: 2px 13px 12px; display: grid; gap: 8px; }
+      .he-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 44px; font-size: .74rem; font-weight: 800; }
+      .he-row > b { flex: 0 0 46px; }
+      .he-t { flex: 0 0 88px; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+      .he-row > em { font-style: normal; color: var(--muted); font-weight: 700; }
+      .he-brk {
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        font-size: .72rem; font-weight: 700; color: var(--muted); padding-left: 6px;
+      }
+      .he-brk.lunch { color: var(--blue); }
+
+      /* mobil süre listesindeki küçük kontroller parmak ölçüsüne çıkar
+         (pointer:coarse bloğuna güvenmiyoruz; genişlikle de garanti) */
+      .hours-edit .step-btn { width: 36px; height: 36px; font-size: .92rem; border-radius: 10px; }
+      .hours-edit .step-btn.rst { font-size: .76rem; }
+      .hours-edit .dur-in { width: 50px; min-height: 36px; font-size: .82rem; }
+      .hours-edit .dur-ctl { gap: 6px; }
+      .hours-edit .brk-link { min-height: 36px; display: inline-flex; align-items: center; padding: 0 5px; font-size: .72rem; }
+
+      /* ── 5) TABLO GÖRÜNÜMÜ: yalnız program alanı yana kayar ──
+         Süre araçları ve teneffüs satırları tablodan çıkar (üstteki listede
+         duruyor); böylece saat sütunu daralır ve yatay kaydırma kısalır. */
+      /* kaydırma artık tablonun kendi kabında; sayfa/kart ekranı aşmaz */
+      .sheet { min-width: 0; }
+      main[data-gorunum="tablo"] .table-wrap {
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+        margin: 0 -2px; padding: 0 2px;
+      }
+      main[data-gorunum="tablo"] .schedule { min-width: 520px; }
+      main[data-gorunum="tablo"] .schedule { border-spacing: 3px; }
+      main[data-gorunum="tablo"] .schedule th { padding: 8px 4px; font-size: .72rem; }
+      main[data-gorunum="tablo"] .schedule td.slot { font-size: .74rem; padding: 4px; }
+      main[data-gorunum="tablo"] .schedule th.time-h { width: 68px; }
+      main[data-gorunum="tablo"] .schedule td.time-cell { white-space: normal; font-size: .64rem; }
+      main[data-gorunum="tablo"] .schedule td.time-cell b { font-size: .7rem; }
+      main[data-gorunum="tablo"] .schedule .dur-ctl,
+      main[data-gorunum="tablo"] .schedule .lunch-ctl,
+      main[data-gorunum="tablo"] .schedule tr.break-row { display: none; }
+    }
+
+    /* en dar telefonlar (320–380px): birkaç ölçü daha sıkılaşır */
+    @media (max-width: 380px) {
+      .container { padding: 0 12px; }
+      .sheet { padding: 12px 10px; }
+      .day-row { gap: 8px; padding: 7px 8px; }
+      .dr-time { flex: 0 0 52px; font-size: .64rem; }
+      .dr-les { font-size: .82rem; }
+      .toolbar-float { grid-template-columns: 1fr; }
     }
 
     @media print {
       @page { size: A4 landscape; margin: 10mm; }
       header, .page-hero, .panel, .toolbar-float, .paint-info, footer, .mobile-nav,
-      .sheet-hint, .no-print { display: none !important; }
+      .sheet-hint, .view-bar, .day-list, .hours-edit, .no-print { display: none !important; }
+      /* mobilde gün görünümü açıkken bile çıktı haftalık tablodur */
+      main[data-gorunum] table.schedule { display: table !important; }
+      main[data-gorunum] .legend { display: flex !important; }
       .builder { padding: 0; }
       .builder-grid { display: block; }
       .sheet-wrap { overflow: visible; }
       .sheet { box-shadow: none; padding: 0; min-width: 0; border-radius: 0; }
+      /* mobil kaydırma kabı çıktıda kalkar: tablo tam genişlikte basılır */
+      .table-wrap { overflow: visible !important; }
+      .schedule { min-width: 0 !important; }
       .schedule td.slot { cursor: default; }
       /* süre düzenleme araçları çıktıya girmez */
       tr.break-row, .dur-ctl, .lunch-ctl { display: none !important; }
@@ -411,14 +621,14 @@
       <!-- ══════════ PANEL ══════════ -->
       <aside class="panel">
 
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">1</div><div class="step-title">Kademe ve Sınıf</div></div>
+        <details class="step-box" open>
+          <summary><div class="step-head"><div class="step-num">1</div><div class="step-title">Kademe ve Sınıf</div></div></summary>
           <div class="pills" id="levelPills" style="margin-bottom:10px;"></div>
           <div class="pills" id="gradePills"></div>
-        </div>
+        </details>
 
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">2</div><div class="step-title">Zaman Ayarları</div></div>
+        <details class="step-box" open>
+          <summary><div class="step-head"><div class="step-num">2</div><div class="step-title">Zaman Ayarları</div></div></summary>
           <div class="opt-row"><label>Günler</label>
             <select id="dayCount">
               <option value="5" selected>Pazartesi – Cuma</option>
@@ -443,29 +653,31 @@
           <div class="opt-row"><label>Öğle arası süresi (dk)</label><input type="number" id="lunchMin" min="30" max="90" step="5" value="50" /></div>
           <div class="hint">🔧 Tabloda her dersin süresini <b>+ / −</b> ile ayarlayabilir, teneffüs satırından süreyi değiştirebilir ya da <b>blok yap</b> diyerek iki dersi teneffüssüz birleştirebilirsin. Sonraki saatler otomatik kayar.</div>
           <button class="mini-btn" id="resetDurBtn" hidden>↺ Özel süreleri sıfırla (<span id="durCount">0</span>)</button>
-        </div>
+        </details>
 
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">3</div><div class="step-title">Ders Paleti</div></div>
+        <details class="step-box" open>
+          <summary><div class="step-head"><div class="step-num">3</div><div class="step-title">Ders Paleti</div></div></summary>
           <div class="palette" id="palette"></div>
           <div class="add-lesson">
             <input type="text" id="newLesson" placeholder="Özel ders ekle (ör. Satranç)" maxlength="28" />
             <button id="addLessonBtn">+ Ekle</button>
           </div>
           <div class="hint">Bir dersi seç, ardından tablodaki hücrelere tıklayarak (veya basılı tutup sürükleyerek) yerleştir. <b>Silgi</b> ile hücreyi temizle.</div>
-        </div>
+        </details>
 
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">4</div><div class="step-title">Görünüm</div></div>
+        <details class="step-box" open>
+          <summary><div class="step-head"><div class="step-num">4</div><div class="step-title">Görünüm</div></div></summary>
           <div class="theme-pills" id="themePills"></div>
           <div style="height:10px"></div>
           <div class="opt-row"><label>Okul Adı</label><input type="text" id="schoolName" placeholder="....... Okulu" /></div>
           <div class="opt-row"><label>Ad Soyad</label><input type="text" id="studentName" placeholder="Öğrenci / Öğretmen" /></div>
           <div class="opt-row"><label>Şube</label><input type="text" id="branchName" placeholder="ör. 5/A" style="width:70px" /></div>
-        </div>
+        </details>
 
         <div class="gen-actions">
           <button class="btn btn-primary" id="autoBtn">✨ Otomatik Doldur</button>
+          <!-- yalnız panel alta indiğinde (≤1100px) görünür; CSS: .git-sheet -->
+          <button class="btn btn-outline git-sheet" id="goSheetBtn" type="button">📅 Programı gör ↓</button>
           <div class="action-row">
             <button class="btn btn-outline" id="printBtn">🖨 Yazdır / PDF</button>
             <button class="btn btn-outline" id="saveBtn">💾 Kaydet</button>
@@ -477,13 +689,16 @@
       </aside>
 
       <!-- ══════════ SHEET ══════════ -->
-      <main>
+      <main id="sheetMain" data-gorunum="gun">
         <div class="paint-info" id="paintInfo">🖌 Seçili ders: <b>—</b> · Paletten bir ders seçip hücrelere tıkla.</div>
         <div class="toolbar-float">
           <button class="btn btn-outline" id="printBtn2">🖨 Yazdır / PDF İndir</button>
           <button class="btn btn-outline" id="clearBtn">🧹 Tabloyu Temizle</button>
         </div>
-        <div class="sheet-hint no-print">↔ Tabloyu yana kaydırarak tüm günleri görebilirsin.</div>
+        <div class="view-bar no-print">
+          <button class="btn btn-outline" id="viewBtn" type="button">▦ Haftalık tablo görünümü</button>
+        </div>
+        <div class="sheet-hint no-print">↔ Programı görmek için tabloyu sağa/sola kaydırabilirsin.</div>
         <div class="sheet-wrap">
           <div class="sheet" id="sheet"></div>
         </div>
@@ -620,7 +835,12 @@ let st = {
   grid: {},               // "d-s" -> lesson index
   durs: {},               // ders sırası -> özel ders süresi (dk); yoksa genel süre
   brks: {},               // teneffüs sırası (i. dersten sonra) -> özel süre; 0 = blok ders
+  gorunum: "gun",         // telefon görünümü: "gun" (gün gün kartlar) | "tablo"
+  saatAcik: false,        // telefonda "ders saatleri ve süreleri" bölümü açık mı
 };
+/* Telefon ölçüsü: CSS'teki 720px mobil kırılımıyla aynı eşik. */
+const mobil = () => window.matchMedia("(max-width: 720px)").matches;
+const dikeyDizilim = () => window.matchMedia("(max-width: 1100px)").matches;
 let painting = false;
 
 const $ = id => document.getElementById(id);
@@ -727,6 +947,51 @@ function breakRow(i, mins, cols) {
   return `<tr class="break-row"><td colspan="${cols}"><span class="brk-box${block ? " block" : ""}">${body}</span></td></tr>`;
 }
 
+/* ═══════════ TELEFON: GÜN GÜN KARTLAR ═══════════
+   Aynı veriden ikinci bir sunum üretiyoruz: 5-7 sütunlu tablo telefona
+   okunabilir biçimde sığmadığı için mobilde her gün tek sütunluk bir kart
+   olur (yatay kaydırma yok). Hücreler tablodakiyle aynı data-d/data-s
+   anahtarlarını taşır; boyama mantığı ikisinde de aynı kodla çalışır. */
+function dayCards(times, dayN) {
+  const kartlar = DAYS.slice(0, dayN).map((gun, d) => {
+    let satir = "";
+    times.forEach((tm, s) => {
+      const li = st.grid[`${d}-${s}`];
+      const dolu = li !== undefined && st.lessons[li];
+      satir += `<button type="button" class="day-row ${dolu ? "dolu" : "bos"}" data-d="${d}" data-s="${s}"`
+        + `${dolu ? ` style="background:${colorOf(li)}"` : ""}>`
+        + `<span class="dr-no">${s + 1}</span>`
+        + `<span class="dr-time">${tm.from}<i>${tm.to}</i></span>`
+        + `<span class="dr-les">${dolu ? st.lessons[li].n : "— boş —"}</span></button>`;
+      if (tm.lunchNext) satir += `<div class="day-brk lunch">🍽 Öğle arası · ${genLunch()} dk</div>`;
+      else if (tm.brk === 0) satir += `<div class="day-brk">⛓ Blok ders · teneffüs yok</div>`;
+      else if (tm.brk !== null) satir += `<div class="day-brk">☕ Teneffüs · ${tm.brk} dk</div>`;
+    });
+    return `<section class="day-card"><h3 class="day-card-h">${gun}</h3>${satir}</section>`;
+  }).join("");
+  return `<div class="day-list">${kartlar}</div>`;
+}
+
+/* Telefonda saat sütunu yok; süre/teneffüs düzenlemesi katlanır listeye taşınır.
+   Düğmeler tablodakiyle aynı data-act'ları taşır, aynı dinleyici işler. */
+function hoursEdit(times) {
+  let g = "";
+  times.forEach((tm, s) => {
+    g += `<div class="he-row"><b>${s + 1}.</b><span class="he-t">${tm.from} – ${tm.to}</span>`
+      + `${stepper("dur", s, tm.dur, st.durs[s] != null)}<em>dk</em></div>`;
+    if (tm.lunchNext) {
+      g += `<div class="he-brk lunch">🍽 Öğle arası ${stepper("lunch", 0, genLunch(), false)} dk</div>`;
+    } else if (tm.brk === 0) {
+      g += `<div class="he-brk">⛓ Blok ders <button type="button" class="brk-link" data-act="unblock" data-i="${s}">teneffüs ekle</button></div>`;
+    } else if (tm.brk !== null) {
+      g += `<div class="he-brk">☕ Teneffüs ${stepper("brk", s, tm.brk, st.brks[s] != null)} dk`
+        + ` <button type="button" class="brk-link" data-act="block" data-i="${s}">blok yap</button></div>`;
+    }
+  });
+  return `<details class="hours-edit"${st.saatAcik ? " open" : ""}>`
+    + `<summary>⏱ Ders saatleri ve süreleri</summary><div class="he-body">${g}</div></details>`;
+}
+
 /* ═══════════ TABLO ═══════════ */
 function renderSheet() {
   const dayN = +$("dayCount").value;
@@ -756,6 +1021,12 @@ function renderSheet() {
   const used = [...new Set(Object.values(st.grid))].filter(i => st.lessons[i] !== undefined);
   const legend = used.length ? `<div class="legend">${used.map(i => `<span style="background:${colorOf(i)}">${st.lessons[i].n}</span>`).join("")}</div>` : "";
 
+  /* tablo görünümünde yeniden çizim yatay kaydırmayı başa almasın
+     (dar masaüstünde .sheet-wrap, mobilde .table-wrap kaydırır) */
+  const kaydirma = $("sheet").parentElement.scrollLeft;
+  const twEski = $("sheet").querySelector(".table-wrap");
+  const tabloKay = twEski ? twEski.scrollLeft : 0;
+
   $("sheet").innerHTML = `
     <div class="sheet-head">
       <div class="sheet-title" contenteditable="true">📅 Haftalık Ders Programı</div>
@@ -766,12 +1037,19 @@ function renderSheet() {
       ${stu ? `<span>👤 <b>${stu}</b></span>` : ""}
       <span>📆 ${new Date().toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" })}</span>
     </div>
-    <table class="schedule">${head}${rows}</table>
+    ${hoursEdit(times)}
+    <div class="table-wrap"><table class="schedule">${head}${rows}</table></div>
+    ${dayCards(times, dayN)}
     ${legend}
     <div class="sheet-footer">Kaynak Kampüs · Ders Programı Oluşturucu</div>
   `;
   $("sheet").style.setProperty("--sheet-accent", t.accent);
   $("sheet").classList.toggle("bw", st.theme === "sb");
+  $("sheet").parentElement.scrollLeft = kaydirma;
+  const twYeni = $("sheet").querySelector(".table-wrap");
+  if (twYeni) twYeni.scrollLeft = tabloKay;
+  $("sheetMain").dataset.gorunum = st.gorunum;
+  $("viewBtn").textContent = st.gorunum === "gun" ? "▦ Haftalık tablo görünümü" : "📋 Gün gün görünüm";
 
   const c = customCount();
   $("durCount").textContent = c;
@@ -786,15 +1064,42 @@ function paintCell(td) {
   else st.grid[key] = st.sel;
   renderSheet();
 }
+/* tablo hücresi ya da gün kartı satırı — ikisi de aynı anahtarları taşır */
+const HUCRE = "td.slot, button.day-row";
 $("sheet").addEventListener("mousedown", e => {
-  const td = e.target.closest("td.slot"); if (!td) return;
+  const td = e.target.closest(HUCRE); if (!td) return;
+  /* ders seçilmemişse dokunma sessiz kalmasın, kullanıcıyı palete götür */
+  if (st.sel === null) { dersSecUyar(); e.preventDefault(); return; }
   painting = true; paintCell(td); e.preventDefault();
 });
 $("sheet").addEventListener("mouseover", e => {
   if (!painting) return;
-  const td = e.target.closest("td.slot"); if (td) paintCell(td);
+  const td = e.target.closest(HUCRE); if (td) paintCell(td);
 });
 document.addEventListener("mouseup", () => painting = false);
+
+/* ═══════════ PROGRAMA GİT / PALET UYARISI ═══════════
+   Panel alta indiğinde (telefon) program ekranın çok altında kalıyordu;
+   oluşturulduğu anda oraya kayıyor ve kısa bir vurgu veriyoruz. */
+function programaGit() {
+  $("sheetMain").scrollIntoView({ behavior: "smooth", block: "start" });
+  const sh = $("sheet");
+  sh.classList.remove("vurgu");
+  void sh.offsetWidth;                       // animasyonu yeniden tetikle
+  sh.classList.add("vurgu");
+  setTimeout(() => sh.classList.remove("vurgu"), 1600);
+}
+/* Ders seçilmeden hücreye dokunulduğunda sessiz kalmasın: palete götür. */
+function dersSecUyar() {
+  const p = $("paintInfo");
+  p.classList.remove("uyari");
+  void p.offsetWidth;
+  p.classList.add("uyari");
+  setTimeout(() => p.classList.remove("uyari"), 1100);
+  const kutu = $("palette").closest("details");
+  if (kutu) kutu.open = true;
+  if (dikeyDizilim()) $("palette").scrollIntoView({ behavior: "smooth", block: "center" });
+}
 
 /* ═══════════ SATIR BAZLI SÜRE DÜZENLEME ═══════════ */
 function applyVal(kind, i, v) {
@@ -806,6 +1111,9 @@ function currentVal(kind, i) {
   return kind === "dur" ? durOf(i) : kind === "brk" ? brkOf(i) : genLunch();
 }
 $("sheet").addEventListener("click", e => {
+  /* mobil süre bölümünün durumu yeniden çizimde korunsun */
+  const sum = e.target.closest(".hours-edit > summary");
+  if (sum) { setTimeout(() => { st.saatAcik = sum.parentElement.open; }, 0); return; }
   const b = e.target.closest("button[data-act]"); if (!b) return;
   const act = b.dataset.act, k = b.dataset.k, i = +b.dataset.i;
   if (act === "inc" || act === "dec") applyVal(k, i, currentVal(k, i) + (act === "inc" ? 5 : -5));
@@ -916,12 +1224,18 @@ $("themePills").addEventListener("click", e => {
 ["dayCount","slotCount","startTime","lessonMin","breakMin","lunchAfter","lunchMin","schoolName","studentName","branchName"]
   .forEach(id => $(id).addEventListener("input", renderSheet));
 
-$("autoBtn").onclick = autoFill;
+$("autoBtn").onclick = () => { autoFill(); if (dikeyDizilim()) programaGit(); };
+$("goSheetBtn").onclick = programaGit;
+$("viewBtn").onclick = () => {
+  st.gorunum = st.gorunum === "gun" ? "tablo" : "gun";
+  renderSheet();
+};
 $("clearBtn").onclick = () => { st.grid = {}; renderSheet(); };
 $("resetBtn").onclick = () => {
   if (!confirm("Program ve tüm ayarlar sıfırlansın mı?")) return;
   localStorage.removeItem(KEY);
-  st = { level: st.level, grade: st.grade, theme: "renkli", lessons: [], sel: null, grid: {}, durs: {}, brks: {} };
+  st = { level: st.level, grade: st.grade, theme: "renkli", lessons: [], sel: null, grid: {}, durs: {}, brks: {},
+         gorunum: st.gorunum, saatAcik: st.saatAcik };
   loadLessons(); renderLevels(); renderThemes(); renderPalette(); renderSheet();
 };
 $("resetDurBtn").onclick = () => { st.durs = {}; st.brks = {}; renderSheet(); };
@@ -932,6 +1246,18 @@ $("printBtn").onclick = () => { sayac("yazdirildi"); window.print(); };
 $("printBtn2").onclick = () => { sayac("yazdirildi"); window.print(); };
 
 /* Mobil menü davranışı assets/site-header.js içinde */
+
+/* ═══════════ ADIM KUTULARI (telefonda katlanır) ═══════════ */
+const adimlar = [...document.querySelectorAll("details.step-box")];
+adimlar.forEach((d, i) => {
+  d.querySelector("summary").addEventListener("click", e => {
+    if (!mobil()) e.preventDefault();       // masaüstünde hep açık kalır
+  });
+  if (mobil() && (i === 1 || i === 3)) d.open = false;   // Zaman Ayarları + Görünüm
+});
+window.addEventListener("resize", () => {
+  if (!mobil()) adimlar.forEach(d => d.open = true);
+});
 
 /* ═══════════ BAŞLAT ═══════════ */
 if (!load()) loadLessons();
