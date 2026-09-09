@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
       { source: "/koc-panel.html", destination: "/koc", permanent: false },
       { source: "/ogrenci-panel.html", destination: "/ogrenci", permanent: false },
       { source: "/bildirimler.html", destination: "/bildirimler", permanent: false },
+      // Etkinlikler statik sayfası kaldırıldı (PDF arşivi Next rotasına taşındı).
+      // Adres site haritasındaydı ve dizine girmiş olabilir; kalıcı 308 ile
+      // yeni rotaya taşınır ki 404 vermesin.
+      { source: "/etkinlikler.html", destination: "/etkinlikler", permanent: true },
     ];
   },
 };
