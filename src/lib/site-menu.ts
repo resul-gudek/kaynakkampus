@@ -28,11 +28,13 @@ export const SITE_MENU: SiteMenuOgesi[] = [
       { ad: "Ödev Oluştur", href: "/odev-olustur.html" },
       { ad: "BEP Oluştur", href: "/bep-olustur.html" },
       { ad: "Ders Programı", href: "/ders-programi.html" },
-      // Etkinlikler bir blog/haber içeriği değil, indirilebilir eğitim
-      // materyalidir; bu yüzden Araçlar grubunda durur.
-      { ad: "Etkinlikler", href: "/etkinlikler" },
+      { ad: "Kariyer Pusulam", href: "/kariyer-pusulam.html" },
     ],
   },
+  // Etkinlikler bir blog/haber içeriği değil, indirilebilir eğitim
+  // materyalidir; açılır listede kaybolmasın diye Araçlar'ın YANINDA,
+  // üst düzey bir başlık olarak durur (statik sayfalar da böyle).
+  { ad: "Etkinlikler", href: "/etkinlikler" },
   { ad: "Çoklu Zekâ Testi", href: "/coklu-zeka-testi.html" },
   { ad: "Oyunlar", href: "/oyunlar.html" },
   {
