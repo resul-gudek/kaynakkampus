@@ -48,6 +48,7 @@ export default function SiteAltBilgi() {
               <li><a href="/bep-olustur.html">BEP Oluştur</a></li>
               <li><a href="/ders-programi.html">Ders Programı</a></li>
               <li><Link href="/etkinlikler">Etkinlikler</Link></li>
+              <li><a href="/kariyer-pusulam.html">Kariyer Pusulam</a></li>
             </ul>
           </div>
 
