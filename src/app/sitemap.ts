@@ -19,6 +19,7 @@ const SABIT_SAYFALAR: { yol: string; oncelik: number; siklik: MetadataRoute.Site
   { yol: "/etkinlikler.html", oncelik: 0.7, siklik: "weekly" },
   { yol: "/oyunlar.html", oncelik: 0.6, siklik: "monthly" },
   { yol: "/coklu-zeka-testi.html", oncelik: 0.6, siklik: "monthly" },
+  { yol: "/kariyer-pusulam.html", oncelik: 0.6, siklik: "monthly" },
   { yol: "/odev-olustur.html", oncelik: 0.5, siklik: "monthly" },
   { yol: "/bep-olustur.html", oncelik: 0.5, siklik: "monthly" },
   { yol: "/ders-programi.html", oncelik: 0.5, siklik: "monthly" },

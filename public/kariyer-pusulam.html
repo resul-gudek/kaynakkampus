@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kariyer Pusulam – Kaynak Kampüs</title>
+  <meta name="description" content="Kendini sistematik biçimde tanı: ilgi alanlarını, yeteneklerini, çalışma ve yaşam beklentilerini tek ekranda gör; istersen profilini Türkiye'deki doğrulanmış ön lisans ve lisans program alanlarıyla karşılaştır. Ücretsiz, üyeliksiz, yapay zekâsız." />
+  <!-- Arama motoru ve sosyal paylaşım etiketleri -->
+  <link rel="canonical" href="https://kaynakkampus.com/kariyer-pusulam.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kaynak Kampüs" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:title" content="Kariyer Pusulam" />
+  <meta property="og:description" content="Kendini tanı, çalışma hayatından beklentilerini keşfet ve sana yakın üniversite alanlarını incele." />
+  <meta property="og:url" content="https://kaynakkampus.com/kariyer-pusulam.html" />
+  <meta property="og:image" content="https://kaynakkampus.com/assets/sosyal-kart.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#7A2035" />
+  <script>
+    try {
+      if (localStorage.getItem('kk-duyuru-kapali') === '1')
+        document.documentElement.classList.add('duyuru-kapali');
+    } catch (e) { /* depolama kapalıysa duyuru görünür kalır */ }
+  </script>
+  <style>.duyuru-kapali #duyuruSerit { display: none !important; }</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Kariyer Pusulam",
+    "url": "https://kaynakkampus.com/kariyer-pusulam.html",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "inLanguage": "tr-TR",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TRY" },
+    "publisher": { "@type": "Organization", "name": "Kaynak Kampüs", "url": "https://kaynakkampus.com/" },
+    "description": "İlgi, yetenek, çalışma ve yaşam beklentilerini bir arada gösteren; profili Türkiye'deki doğrulanmış üniversite program alanlarıyla karşılaştıran ücretsiz keşif aracı."
+  }
+  </script>
+
+  <style>
+    /* ══════════════════════════════════════════════════════════════
+       KARİYER PUSULAM — sayfaya özgü stiller
+       Tüm sınıflar kp- ön ekiyle korunur; site genelindeki hiçbir
+       seçiciyi ezmez. Ortak ilkeller (buton, kart, kapsayıcı)
+       assets/site-tema.css içinden gelir ve bu blok o dosyadan ÖNCE
+       bağlandığı için tema kazanmaya devam eder.
+       ══════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Figtree', system-ui, sans-serif; color: #1F141A; background: #fff; overflow-x: hidden; }
+    img { display: block; max-width: 100%; }
+
+    .kp-kabuk { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+    .kp-gevsek { max-width: 1080px; }
+
+    /* ── Kıvılcım rehber balonu ─────────────────────────────── */
+    .kp-kivilcim {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--gul-sis, #F6EDEF); border: 1px solid var(--gul-ac, #E8CBD1);
+      border-radius: var(--radius-md, 16px); padding: 14px 16px; margin-bottom: 24px;
+    }
+    .kp-kivilcim img { width: 46px; height: 46px; flex: none; }
+    .kp-kivilcim-metin { font-size: 15px; line-height: 1.55; color: var(--grafit, #55474C); }
+    .kp-kivilcim-ad { display: block; font-weight: 700; font-size: 13px; color: var(--bordo, #7A2035); margin-bottom: 2px; }
+    @media (max-width: 520px) { .kp-kivilcim img { width: 38px; height: 38px; } .kp-kivilcim-metin { font-size: 14px; } }
+
+    /* ── İlerleme ───────────────────────────────────────────── */
+    .kp-ilerleme { margin-bottom: 24px; }
+    .kp-ilerleme-ust {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 13px; color: var(--kursun, #7C6F73); margin-bottom: 8px; gap: 12px;
+    }
+    .kp-ilerleme-sayi { font-weight: 700; color: var(--murekkep, #1F141A); }
+    .kp-cubuk { height: 6px; background: var(--duman, #E4DBD9); border-radius: 999px; overflow: hidden; }
+    .kp-cubuk-dolu { height: 100%; background: var(--bordo, #7A2035); border-radius: 999px; transition: width .25s ease; }
+
+    /* ── Bölüm başlığı ──────────────────────────────────────── */
+    .kp-bolum-bas h2 { font-family: 'Manrope', system-ui, sans-serif; font-size: clamp(24px, 4.2vw, 34px); line-height: 1.18; font-weight: 800; color: var(--murekkep, #1F141A); }
+    .kp-bolum-bas .kp-soru { margin-top: 10px; font-size: 17px; font-weight: 600; color: var(--murekkep, #1F141A); }
+    .kp-bolum-bas .kp-yardim { margin-top: 4px; font-size: 14px; color: var(--kursun, #7C6F73); }
+    .kp-bolum-govde { margin-top: 24px; }
+
+    /* ── Çoklu seçim çipleri ────────────────────────────────── */
+    .kp-cipler { display: flex; flex-wrap: wrap; gap: 10px; }
+    .kp-cip {
+      font: inherit; font-size: 15px; cursor: pointer;
+      border: 1px solid var(--duman, #E4DBD9); background: #fff; color: var(--grafit, #55474C);
+      border-radius: 999px; padding: 10px 16px; transition: background .15s, border-color .15s, color .15s;
+      text-align: left;
+    }
+    .kp-cip:hover { border-color: var(--bordo, #7A2035); }
+    .kp-cip[aria-pressed="true"] {
+      background: var(--bordo, #7A2035); border-color: var(--bordo, #7A2035); color: #fff; font-weight: 600;
+    }
+    .kp-cip[aria-pressed="true"]::before { content: "✓ "; }
+
+    /* ── Satır + seviye grupları (yetenek / ders / önem / kaydıraç) ── */
+    .kp-satirlar { display: grid; gap: 10px; }
+    .kp-satir {
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-md, 16px);
+      padding: 14px 16px; background: #fff;
+    }
+    .kp-satir.kp-secili { border-color: var(--bordo, #7A2035); background: var(--gul-sis, #F6EDEF); }
+    .kp-satir-ad { font-size: 15px; font-weight: 600; color: var(--murekkep, #1F141A); margin-bottom: 10px; }
+    .kp-kutuplar { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--kursun, #7C6F73); margin-bottom: 8px; }
+    .kp-kutuplar b { font-weight: 600; color: var(--grafit, #55474C); }
+
+    /* Radyo girdileri görsel olarak gizlenir; konumları kutunun içinde kalsın
+       diye kap konumlandırılır (klavye odağı label üzerinde görünür). */
+    .kp-secim { position: relative; display: flex; flex-wrap: wrap; gap: 8px; }
+    .kp-secim.kp-esit > * { flex: 1 1 0; min-width: 44px; }
+    .kp-secim input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .kp-secim label {
+      display: block; text-align: center; cursor: pointer; user-select: none;
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px);
+      padding: 9px 12px; font-size: 14px; color: var(--grafit, #55474C); background: #fff;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .kp-secim label:hover { border-color: var(--bordo, #7A2035); }
+    .kp-secim input:checked + label {
+      background: var(--bordo, #7A2035); border-color: var(--bordo, #7A2035); color: #fff; font-weight: 600;
+    }
+    .kp-secim input:focus-visible + label { outline: 3px solid var(--sari, #F5C451); outline-offset: 2px; }
+    .kp-temizle {
+      font: inherit; font-size: 13px; background: none; border: 0; color: var(--kursun, #7C6F73);
+      cursor: pointer; text-decoration: underline; padding: 6px 0 0;
+    }
+    .kp-temizle:hover { color: var(--bordo, #7A2035); }
+
+    /* ── Serbest metin ──────────────────────────────────────── */
+    .kp-serbest { margin-top: 24px; }
+    .kp-serbest label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--murekkep, #1F141A); }
+    .kp-serbest textarea {
+      width: 100%; min-height: 84px; font: inherit; font-size: 15px; padding: 12px 14px;
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px); resize: vertical; color: inherit;
+    }
+    .kp-serbest textarea:focus { outline: 2px solid var(--bordo, #7A2035); outline-offset: 1px; }
+    .kp-sayac { font-size: 12px; color: var(--kursun, #7C6F73); margin-top: 6px; }
+
+    /* ── Gezinme ────────────────────────────────────────────── */
+    /* Yapışkan çubuk akışın son öğesidir: sayfa sonuna inildiğinde kendi
+       yerine oturur, ara kaydırmalarda üstteki içeriği geçici olarak örter. */
+    .kp-gezinme {
+      position: sticky; bottom: 0; z-index: 5; margin-top: 32px;
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      background: rgba(255,255,255,.94); backdrop-filter: blur(8px);
+      border-top: 1px solid var(--duman, #E4DBD9); padding: 14px 0;
+    }
+    .kp-gezinme .kp-bosluk { flex: 1 1 auto; }
+    .kp-gezinme .btn { flex: none; }
+    @media (max-width: 560px) {
+      .kp-gezinme { gap: 8px; }
+      .kp-gezinme .btn { flex: 1 1 auto; justify-content: center; }
+      .kp-gezinme .kp-bosluk { display: none; }
+    }
+
+    /* ── Kartlar ────────────────────────────────────────────── */
+    .kp-kart {
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-md, 16px);
+      padding: 20px; background: #fff;
+    }
+    .kp-kart + .kp-kart { margin-top: 14px; }
+    .kp-kart h3 { font-family: 'Manrope', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--murekkep, #1F141A); }
+    .kp-kart-etiket { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--kursun, #7C6F73); font-weight: 700; }
+    .kp-liste { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+    .kp-liste li {
+      font-size: 14px; background: var(--sis, #F6F1F0); border: 1px solid var(--duman, #E4DBD9);
+      border-radius: 999px; padding: 6px 12px; color: var(--grafit, #55474C);
+    }
+    .kp-liste.kp-duz { display: block; }
+    .kp-liste.kp-duz li { background: none; border: 0; border-radius: 0; padding: 4px 0 4px 18px; position: relative; }
+    .kp-liste.kp-duz li::before { content: "•"; position: absolute; left: 4px; color: var(--gul, #C98792); }
+    .kp-bos { font-size: 14px; color: var(--kursun, #7C6F73); font-style: italic; }
+    .kp-serbest-not {
+      margin-top: 12px; font-size: 14px; color: var(--grafit, #55474C);
+      background: var(--sis, #F6F1F0); border-left: 3px solid var(--gul, #C98792);
+      padding: 10px 12px; border-radius: 0 8px 8px 0; white-space: pre-wrap; word-break: break-word;
+    }
+
+    /* Ölçek satırları (profil kartlarında) */
+    .kp-olcek { display: grid; gap: 8px; margin-top: 10px; }
+    .kp-olcek-satir { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; font-size: 14px; }
+    .kp-olcek-ad { color: var(--grafit, #55474C); }
+    .kp-olcek-deger { font-weight: 700; color: var(--bordo, #7A2035); font-size: 13px; white-space: nowrap; }
+    .kp-mini { height: 6px; background: var(--duman, #E4DBD9); border-radius: 999px; overflow: hidden; grid-column: 1 / -1; }
+    .kp-mini span { display: block; height: 100%; background: var(--gul, #C98792); }
+
+    /* ── Sonuç: aile kartları ───────────────────────────────── */
+    .kp-aile { border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-md, 16px); background: #fff; overflow: hidden; }
+    .kp-aile + .kp-aile { margin-top: 12px; }
+    .kp-aile-bas {
+      display: grid; grid-template-columns: 42px minmax(0,1fr) auto; gap: 14px; align-items: center;
+      padding: 18px 20px; width: 100%; background: none; border: 0; font: inherit; text-align: left; cursor: pointer;
+    }
+    .kp-aile-bas:hover { background: var(--sis, #F6F1F0); }
+    .kp-sira {
+      width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--gul-sis, #F6EDEF); color: var(--bordo, #7A2035); font-weight: 800; font-size: 16px;
+    }
+    /* Ad ve alan satırı span olarak basılır; blok yapılmazsa yan yana akar */
+    .kp-aile-ad { display: block; font-family: 'Manrope', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--murekkep, #1F141A); }
+    .kp-aile-alan { display: block; font-size: 13px; color: var(--kursun, #7C6F73); margin-top: 2px; }
+    .kp-aile-sag { display: flex; align-items: center; gap: 10px; }
+    .kp-rozet {
+      display: inline-block; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px;
+      border: 1px solid; white-space: nowrap;
+    }
+    .kp-rozet.cok-guclu { background: #ECF6F0; border-color: #2F8F5B; color: #226b44; }
+    .kp-rozet.guclu     { background: #F2F7EE; border-color: #6f9c4f; color: #4d7135; }
+    .kp-rozet.orta      { background: #FDF6E6; border-color: #d9a93a; color: #8a6a16; }
+    .kp-rozet.kesif     { background: #F6EDEF; border-color: #C98792; color: #8b4d59; }
+    .kp-rozet.dusuk     { background: #F6F1F0; border-color: #C3B7B4; color: #6b5f5c; }
+    .kp-ok { color: var(--kursun, #7C6F73); font-size: 18px; transition: transform .2s; }
+    .kp-aile.acik .kp-ok { transform: rotate(90deg); }
+    .kp-aile-govde { padding: 0 20px 20px; border-top: 1px solid var(--duman, #E4DBD9); }
+    .kp-aile-govde[hidden] { display: none; }
+    .kp-aile-ozet { font-size: 15px; color: var(--grafit, #55474C); line-height: 1.6; margin: 16px 0 0; }
+    .kp-blok { margin-top: 18px; }
+    .kp-blok h4 { font-size: 14px; font-weight: 700; color: var(--murekkep, #1F141A); margin-bottom: 8px; }
+    .kp-eksenler { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+    .kp-eksen { border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px); padding: 10px 12px; }
+    .kp-eksen-ad { font-size: 12px; color: var(--kursun, #7C6F73); }
+    .kp-eksen-deger { font-size: 20px; font-weight: 800; color: var(--murekkep, #1F141A); font-family: 'Manrope', system-ui, sans-serif; }
+    .kp-uyari {
+      display: flex; gap: 10px; font-size: 14px; line-height: 1.55; color: var(--grafit, #55474C);
+      background: #FDF6E6; border: 1px solid #F0DDAE; border-radius: var(--radius-sm, 12px);
+      padding: 10px 12px; margin-top: 8px;
+    }
+    .kp-uyari.kp-engel { background: #FBEFEF; border-color: #E9C6C6; }
+    .kp-uyari span:first-child { flex: none; }
+    .kp-akademik { font-size: 14px; color: var(--grafit, #55474C); margin-top: 8px; }
+    .kp-akademik b { color: var(--murekkep, #1F141A); }
+    .kp-aile-eylem { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+    /* ── Program listesi ────────────────────────────────────── */
+    .kp-programlar { margin-top: 16px; border-top: 1px dashed var(--duman, #E4DBD9); padding-top: 16px; }
+    .kp-filtre { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+    .kp-filtre input[type="search"] {
+      flex: 1 1 180px; min-width: 0; font: inherit; font-size: 14px; padding: 9px 12px;
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px);
+    }
+    .kp-filtre input[type="search"]:focus { outline: 2px solid var(--bordo, #7A2035); outline-offset: 1px; }
+    .kp-fcip {
+      font: inherit; font-size: 13px; cursor: pointer; padding: 8px 14px; border-radius: 999px;
+      border: 1px solid var(--duman, #E4DBD9); background: #fff; color: var(--grafit, #55474C);
+    }
+    .kp-fcip[aria-pressed="true"] { background: var(--murekkep, #1F141A); border-color: var(--murekkep, #1F141A); color: #fff; }
+    .kp-prg-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 460px; overflow: auto; }
+    .kp-prg {
+      display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center;
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px); padding: 10px 12px;
+    }
+    .kp-prg-ad { font-size: 15px; color: var(--murekkep, #1F141A); font-weight: 600; }
+    .kp-prg-not { font-size: 12px; color: var(--kursun, #7C6F73); margin-top: 2px; }
+    .kp-kalp {
+      font: inherit; font-size: 18px; line-height: 1; background: none; border: 1px solid var(--duman, #E4DBD9);
+      border-radius: 999px; width: 38px; height: 38px; cursor: pointer; color: var(--kursun, #7C6F73);
+    }
+    .kp-kalp[aria-pressed="true"] { color: var(--bordo, #7A2035); border-color: var(--gul, #C98792); background: var(--gul-sis, #F6EDEF); }
+    .kp-kalp:hover { border-color: var(--bordo, #7A2035); }
+
+    /* ── Arama bölümü ───────────────────────────────────────── */
+    .kp-arama-sonuc { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+    .kp-karsilastirma { margin-top: 16px; }
+
+    /* ── Eksik uyarısı ──────────────────────────────────────── */
+    .kp-eksikler { border: 1px solid #E9C6C6; background: #FBEFEF; border-radius: var(--radius-md, 16px); padding: 16px 18px; margin-bottom: 20px; }
+    .kp-eksikler h3 { font-size: 16px; margin-bottom: 8px; color: #8c2f2f; }
+    .kp-eksikler ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .kp-eksikler button {
+      font: inherit; font-size: 14px; background: none; border: 0; padding: 0; color: #8c2f2f;
+      text-decoration: underline; cursor: pointer; text-align: left;
+    }
+
+    /* ── Giriş ekranı ───────────────────────────────────────── */
+    .kp-giris-kutu { border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-lg, 24px); padding: 28px; background: #fff; }
+    .kp-adimlar { display: grid; gap: 10px; margin: 20px 0 0; padding: 0; list-style: none; counter-reset: kpa; }
+    .kp-adimlar li { position: relative; padding-left: 34px; font-size: 15px; color: var(--grafit, #55474C); counter-increment: kpa; }
+    .kp-adimlar li::before {
+      content: counter(kpa); position: absolute; left: 0; top: -1px; width: 24px; height: 24px;
+      border-radius: 50%; background: var(--gul-sis, #F6EDEF); color: var(--bordo, #7A2035);
+      font-size: 13px; font-weight: 700; display: grid; place-items: center;
+    }
+    .kp-sure { font-size: 14px; color: var(--kursun, #7C6F73); margin-top: 12px; }
+    .kp-eylemler { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+    /* ── Durum / bildirim ───────────────────────────────────── */
+    .kp-durum { font-size: 14px; color: var(--kursun, #7C6F73); margin-top: 10px; min-height: 20px; }
+    .kp-durum.kp-hata { color: #B23A48; }
+
+    .kp-ayrac { border: 0; border-top: 1px solid var(--duman, #E4DBD9); margin: 40px 0; }
+    .kp-alt-not { font-size: 13px; line-height: 1.6; color: var(--kursun, #7C6F73); }
+
+    /* ── Yazdırma ───────────────────────────────────────────── */
+    @media print {
+      .site-header, .site-alt, .duyuru-serit, .page-hero, .kp-gezinme,
+      .kp-yazdirma-disi, .kp-kivilcim { display: none !important; }
+      .kp-kart, .kp-aile { break-inside: avoid; border-color: #bbb; }
+      .kp-aile-govde[hidden] { display: block !important; }
+      body { background: #fff; }
+      .kp-prg-liste { max-height: none; overflow: visible; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+
+  <link rel="stylesheet" href="assets/site-tema.css" />
+  <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/site-header.js" defer></script>
+  <script src="assets/duyuru-serit.js" defer></script>
+  <script src="assets/kk-uyari.js" defer></script>
+  <script src="assets/cerez-onay.js" defer></script>
+  <script src="assets/analitik.js" defer></script>
+  <script src="assets/kullanim-sayac.js" data-sayfa="kariyer-pusulam" defer></script>
+  <script src="assets/rapor-pdf.js" defer></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ ÜST DUYURU ŞERİDİ -->
+<div class="duyuru-serit" id="duyuruSerit" hidden>
+  <div class="container">
+    <div class="duyuru-akis" data-duyuru-akis aria-label="Duyurular">🗓️ ÖSYM ve MEB sınav takvimi her gün güncelleniyor — <a href="/sinav-takvimi.html">güncel tarihlere bak</a></div>
+    <button class="duyuru-kapat" data-duyuru-kapat type="button" aria-label="Duyuru şeridini kapat">✕</button>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="sh-inner">
+    <a href="index.html" class="sh-logo">
+      <img src="assets/kaynak-kampus-logo-64.png"
+           srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+           width="64" height="64" alt="Kaynak Kampüs Logosu" />
+      Kaynak <span>Kampüs</span>
+    </a>
+
+    <nav class="sh-nav" aria-label="Ana menü">
+      <a href="index.html">Ana Sayfa</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Araçlar</button>
+        <div class="sh-drop-menu">
+          <a href="odev-olustur.html">Ödev Oluştur</a>
+          <a href="bep-olustur.html">BEP Oluştur</a>
+          <a href="ders-programi.html">Ders Programı</a>
+          <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+          <a href="etkinlikler.html" hidden>Etkinlikler</a>
+        </div>
+      </div>
+      <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+      <a href="oyunlar.html">Oyunlar</a>
+      <div class="sh-drop">
+        <button type="button" aria-expanded="false">Blog &amp; Haberler</button>
+        <div class="sh-drop-menu">
+          <a href="/blog">Blog</a>
+          <a href="haberler.html">Haberler</a>
+          <a href="sinav-takvimi.html">Sınav Takvimi</a>
+        </div>
+      </div>
+      <a href="hakkimizda.html" hidden>Hakkımızda</a>
+    </nav>
+
+    <!-- Giriş / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) — hidden kaldırılınca geri gelir. -->
+    <div class="sh-actions" hidden>
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
+    </div>
+
+    <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="sh-drawer" id="shMobileNav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
+    <a href="oyunlar.html">Oyunlar</a>
+    <a href="hakkimizda.html" hidden>Hakkımızda</a>
+    <div class="sh-drawer-label">Araçlar</div>
+    <a href="odev-olustur.html">Ödev Oluştur</a>
+    <a href="bep-olustur.html">BEP Oluştur</a>
+    <a href="ders-programi.html">Ders Programı</a>
+    <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+    <a href="etkinlikler.html" hidden>Etkinlikler</a>
+    <div class="sh-drawer-label">Blog &amp; Haberler</div>
+    <a href="/blog">Blog</a>
+    <a href="haberler.html">Haberler</a>
+    <a href="sinav-takvimi.html">Sınav Takvimi</a>
+    <div class="sh-drawer-actions" hidden>
+      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero ince">
+  <div class="container">
+    <h1>Kariyer <span>Pusulam</span></h1>
+    <p>Geleceğini tek bir test belirleyemez. Kariyer Pusulam; ilgi alanlarını, yeteneklerini, beklentilerini ve çalışma tercihlerini bir arada görmene yardımcı olur.</p>
+  </div>
+</section>
+
+<main class="bolum" id="kpAna">
+  <div class="kp-kabuk" id="kpApp" aria-live="polite">
+    <!-- Uygulama buraya çizilir; JS kapalıysa aşağıdaki metin kalır. -->
+    <noscript>
+      <p>Kariyer Pusulam tarayıcıda çalışan bir araçtır; kullanabilmek için JavaScript'i açman gerekiyor.</p>
+    </noscript>
+  </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════════ ALT BİLGİ -->
+<footer class="site-alt">
+  <div class="container">
+    <div class="site-alt-izgara">
+
+      <div class="site-alt-marka">
+        <div class="site-alt-ad">
+          <img src="assets/kaynak-kampus-logo-64.png"
+               srcset="assets/kaynak-kampus-logo-64.png 1x, assets/kaynak-kampus-logo-128.webp 2x"
+               width="64" height="64" loading="lazy" alt="Kaynak Kampüs Logosu" />
+          Kaynak <span>Kampüs</span>
+        </div>
+        <p>Güçlü Kaynak, Sağlam Gelecek. Öğrenciye, öğretmene ve ebeveyne yönelik ücretsiz araçlar, rehber yazılar ve güncel sınav takvimi.</p>
+        <div class="site-alt-iletisim">
+          <span>Bize ulaşın</span>
+          <a class="site-alt-eposta" href="mailto:kaynakkampus@gmail.com">kaynakkampus@gmail.com</a>
+          <a class="site-alt-mesaj" href="/iletisim">Formdan mesaj gönder →</a>
+        </div>
+        <div class="sosyal-blok">
+          <span class="sosyal-baslik">Bizi takip edin</span>
+          <div class="sosyal">
+            <a href="https://www.instagram.com/kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@kaynakkampus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a3.3 3.3 0 1 1-2.9-3.3v-3.1a6.4 6.4 0 1 0 6 6.4V9.6a7.3 7.3 0 0 0 4.2 1.3V7.8a4.2 4.2 0 0 1-4.2-4.2Z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1F1ie32qbu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.91h-2.33V22C18.34 21.24 22 17.08 22 12.06Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Araçlar</h4>
+        <ul>
+          <li><a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a></li>
+          <li><a href="oyunlar.html">Eğitim Oyunları</a></li>
+          <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
+          <li><a href="bep-olustur.html">BEP Oluştur</a></li>
+          <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li><a href="kariyer-pusulam.html">Kariyer Pusulam</a></li>
+          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Sınavlar</h4>
+        <ul>
+          <li><a href="sinav-takvimi.html">Sınav Takvimi</a></li>
+          <li><a href="sinav-takvimi.html#2027-lgs-bekleniyor">LGS Hazırlık</a></li>
+          <li><a href="sinav-takvimi.html#2027-yks-bekleniyor">YKS Hazırlık</a></li>
+          <li><a href="haberler.html">Haberler</a></li>
+        </ul>
+      </div>
+
+      <div class="site-alt-kolon">
+        <h4>Kurum</h4>
+        <ul>
+          <li><a href="hakkimizda.html">Hakkımızda</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li hidden><a href="/basvuru">Aramıza Katıl</a></li>
+          <li hidden><a href="/giris">Giriş Yap</a></li>
+          <li><a href="gizlilik.html">Gizlilik ve Çerezler</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="site-alt-not" id="kpKaynakNot">Kariyer Pusulam bir meslek seçme ya da psikolojik değerlendirme testi değildir. Program adları, düzeyleri ve puan türleri YÖK Yükseköğretim Program Atlası ile ÖSYM Yükseköğretim Programları ve Kontenjanları Kılavuzu'ndan alınmıştır.</p>
+    <div class="site-alt-son">
+      <span>© 2026 Kaynak Kampüs · Tüm hakları saklıdır.</span>
+      <span>Türkiye'de 🇹🇷 ile tasarlandı</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════ VERİ VE MOTOR ══════════════════════
+     Sıra önemlidir: ölçek → aileler → programlar → motor.
+     Hepsi klasik betiktir; global ad alanı KP_* ve KariyerMotor
+     ile sınırlıdır, sayfadaki başka hiçbir şeye dokunmaz. -->
+<script src="assets/kariyer-olcek.js"></script>
+<script src="assets/kariyer-aileler.js"></script>
+<script src="assets/kariyer-programlar.js"></script>
+<script src="assets/kariyer-motor.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   KARİYER PUSULAM — ARAYÜZ
+   Tek IIFE; dışarıya hiçbir global sızdırmaz. Tüm hesaplama
+   KariyerMotor üzerinden yapılır, burada yalnız çizim ve durum vardır.
+   ══════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  var OLCEK = window.KP_OLCEK, AILELER = window.KP_AILELER, PRG = window.KP_PROGRAMLAR;
+  var MOTOR = window.KariyerMotor;
+  var app = document.getElementById("kpApp");
+  if (!app || !MOTOR) return;
+
+  var ANAHTAR = "kaynakKampus_kariyerPusulam_v1";
+  var MASKOT = "assets/maskot/kivilcim.svg";
+  var BOLUMLER = OLCEK.BOLUMLER;
+
+  /* ── Durum ───────────────────────────────────────────────── */
+  var durum = {
+    ekran: "giris",          // giris | bolum | profil | sonuc
+    adim: 0,                 // bölüm dizini
+    cevaplar: {},
+    favoriAile: {},
+    favoriProgram: {},
+    incelenen: [],           // öğrencinin kendi arattığı bölüm kimlikleri
+    acikAile: {},
+    tumAileler: false,
+    prgFiltre: {},           // aileId → { duzey, metin }
+  };
+  var sonuclarOnbellek = null;     // profil değişmedikçe yeniden hesaplanmaz
+  var profilOnbellek = null;
+  var pdfOnbellek = { profil: null, rapor: null };
+
+  /* ── Depolama (bozuk veri sessizce yok sayılır) ───────────── */
+  function kaydet() {
+    try {
+      localStorage.setItem(ANAHTAR, JSON.stringify({
+        s: 1, ekran: durum.ekran, adim: durum.adim, cevaplar: durum.cevaplar,
+        favoriAile: durum.favoriAile, favoriProgram: durum.favoriProgram,
+        incelenen: durum.incelenen, t: Date.now(),
+      }));
+    } catch (e) { /* kota dolu ya da depolama kapalı: araç çalışmaya devam eder */ }
+  }
+  function yukle() {
+    try {
+      var ham = localStorage.getItem(ANAHTAR);
+      if (!ham) return null;
+      var v = JSON.parse(ham);
+      if (!v || typeof v !== "object" || !v.cevaplar || typeof v.cevaplar !== "object") return null;
+      return v;
+    } catch (e) { return null; }
+  }
+  function depoyuTemizle() {
+    try { localStorage.removeItem(ANAHTAR); } catch (e) { /* yok sayılır */ }
+  }
+
+  /* ── Küçük yardımcılar ───────────────────────────────────── */
+  function el(etiket, sinif, metin) {
+    var d = document.createElement(etiket);
+    if (sinif) d.className = sinif;
+    if (metin != null) d.textContent = metin;
+    return d;
+  }
+  function kacis(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function cevap(bid) {
+    if (!durum.cevaplar[bid]) durum.cevaplar[bid] = {};
+    return durum.cevaplar[bid];
+  }
+  function onbellegiBosalt() {
+    sonuclarOnbellek = null; profilOnbellek = null;
+    pdfOnbellek.profil = null; pdfOnbellek.rapor = null;
+  }
+  function profil() {
+    if (!profilOnbellek) profilOnbellek = MOTOR.profilCikar(durum.cevaplar);
+    return profilOnbellek;
+  }
+  function sonuclar() {
+    if (!sonuclarOnbellek) sonuclarOnbellek = MOTOR.aileleriPuanla(profil());
+    return sonuclarOnbellek;
+  }
+  function basaGit() { window.scrollTo({ top: 0, behavior: "auto" }); }
+
+  /* ── Kıvılcım balonu ─────────────────────────────────────── */
+  function kivilcim(metin) {
+    var k = el("div", "kp-kivilcim");
+    var img = el("img");
+    img.src = MASKOT; img.alt = ""; img.width = 46; img.height = 46; img.loading = "lazy";
+    img.setAttribute("aria-hidden", "true");
+    var g = el("div", "kp-kivilcim-metin");
+    g.appendChild(el("strong", "kp-kivilcim-ad", "Kıvılcım"));
+    g.appendChild(document.createTextNode(metin));
+    k.appendChild(img); k.appendChild(g);
+    return k;
+  }
+
+  /* ══════════════════════ GİRİŞ EKRANI ══════════════════════ */
+  function girisCiz() {
+    var kayit = yukle();
+    var kutu = el("div", "kp-giris-kutu");
+    kutu.appendChild(kivilcim("Burada doğru ya da yanlış cevap yok. Sana gerçekten uyan seçenekleri düşün; acele etmeden ilerle."));
+
+    var p1 = el("p");
+    p1.style.fontSize = "17px"; p1.style.lineHeight = "1.6"; p1.style.color = "var(--grafit, #55474C)";
+    p1.textContent = "Önce kendini keşfet. Ardından istersen profilini üniversite alanları ve bölümleriyle karşılaştır.";
+    kutu.appendChild(p1);
+
+    var ol = el("ol", "kp-adimlar");
+    [
+      "On kısa bölümde ilgi alanlarını, yeteneklerini ve beklentilerini işaretle.",
+      "Kendi profilini tek ekranda gör, istersen PDF olarak kaydet.",
+      "Hazır hissettiğinde profilini program alanlarıyla karşılaştır.",
+      "Sana yakın alanların altındaki gerçek bölümleri kendin araştır.",
+    ].forEach(function (t) { ol.appendChild(el("li", null, t)); });
+    kutu.appendChild(ol);
+
+    var sure = el("p", "kp-sure", "Yaklaşık 10–15 dakika · üyelik yok · cevapların yalnız bu tarayıcıda saklanır.");
+    kutu.appendChild(sure);
+
+    var eylem = el("div", "kp-eylemler");
+    if (kayit) {
+      var devam = el("button", "btn btn-dolu btn-lg", "Kaldığın yerden devam et");
+      devam.type = "button";
+      devam.addEventListener("click", function () {
+        durum.ekran = kayit.ekran === "giris" ? "bolum" : kayit.ekran;
+        durum.adim = Math.min(Math.max(0, kayit.adim | 0), BOLUMLER.length - 1);
+        durum.cevaplar = kayit.cevaplar || {};
+        durum.favoriAile = kayit.favoriAile || {};
+        durum.favoriProgram = kayit.favoriProgram || {};
+        durum.incelenen = Array.isArray(kayit.incelenen) ? kayit.incelenen : [];
+        onbellegiBosalt(); ciz(); basaGit();
+      });
+      eylem.appendChild(devam);
+
+      var bastan = el("button", "btn btn-cizgili", "Baştan Başla");
+      bastan.type = "button";
+      bastan.addEventListener("click", async function () {
+        var onaylandi = await KKUyari.onay("Kayıtlı bütün cevapların silinecek ve teste baştan başlayacaksın.", {
+          baslik: "Baştan başlansın mı?", onayEtiketi: "Baştan başla", tehlikeli: true
+        });
+        if (!onaylandi) return;
+        depoyuTemizle();
+        durum.cevaplar = {}; durum.favoriAile = {}; durum.favoriProgram = {};
+        durum.incelenen = []; durum.adim = 0; durum.ekran = "bolum";
+        onbellegiBosalt(); ciz(); basaGit();
+      });
+      eylem.appendChild(bastan);
+    } else {
+      var basla = el("button", "btn btn-dolu btn-lg", "Pusulamı Oluşturmaya Başla");
+      basla.type = "button";
+      basla.addEventListener("click", function () {
+        durum.ekran = "bolum"; durum.adim = 0; kaydet(); ciz(); basaGit();
+      });
+      eylem.appendChild(basla);
+    }
+    kutu.appendChild(eylem);
+
+    app.innerHTML = "";
+    app.appendChild(kutu);
+
+    var not = el("p", "kp-alt-not");
+    not.style.marginTop = "24px";
+    not.textContent = "Kariyer Pusulam yapay zekâ kullanmaz. Sonuçlar yalnız senin verdiğin yanıtlardan, "
+      + "önceden tanımlı ve herkes için aynı olan kurallarla hesaplanır. Cevapların hiçbir yere gönderilmez.";
+    app.appendChild(not);
+  }
+
+  /* ══════════════════════ BÖLÜM EKRANI ══════════════════════ */
+  function ilerlemeCiz(b) {
+    var sar = el("div", "kp-ilerleme");
+    var ust = el("div", "kp-ilerleme-ust");
+    var sol = el("span");
+    sol.appendChild(el("span", "kp-ilerleme-sayi", (durum.adim + 1) + " / " + BOLUMLER.length));
+    sol.appendChild(document.createTextNode(" · Kendimi Keşfet"));
+    ust.appendChild(sol);
+    var sag = el("span", null, b.enAz > 0
+      ? "En az " + b.enAz + " madde"
+      : "İstersen boş bırakabilirsin");
+    ust.appendChild(sag);
+    sar.appendChild(ust);
+
+    var cubuk = el("div", "kp-cubuk");
+    cubuk.setAttribute("role", "progressbar");
+    cubuk.setAttribute("aria-valuemin", "1");
+    cubuk.setAttribute("aria-valuemax", String(BOLUMLER.length));
+    cubuk.setAttribute("aria-valuenow", String(durum.adim + 1));
+    cubuk.setAttribute("aria-label", "İlerleme");
+    var dolu = el("div", "kp-cubuk-dolu");
+    dolu.style.width = ((durum.adim + 1) / BOLUMLER.length * 100) + "%";
+    cubuk.appendChild(dolu);
+    sar.appendChild(cubuk);
+    return sar;
+  }
+
+  /** Çoklu seçim: aç/kapa çipler. */
+  function cokluCiz(b) {
+    var c = cevap(b.id);
+    if (!c.secili) c.secili = {};
+    var kap = el("div", "kp-cipler");
+    b.secenekler.forEach(function (s) {
+      var d = el("button", "kp-cip", s.ad);
+      d.type = "button";
+      d.setAttribute("aria-pressed", c.secili[s.id] ? "true" : "false");
+      d.addEventListener("click", function () {
+        if (c.secili[s.id]) delete c.secili[s.id]; else c.secili[s.id] = true;
+        d.setAttribute("aria-pressed", c.secili[s.id] ? "true" : "false");
+        onbellegiBosalt(); kaydet();
+      });
+      kap.appendChild(d);
+    });
+    return kap;
+  }
+
+  /** Seviye grubu: yetenek (3), ders (4), engel (3) — radyo düğmeleri. */
+  function seviyeCiz(b, secKaynagi) {
+    var c = cevap(b.id);
+    if (!c[secKaynagi]) c[secKaynagi] = {};
+    var kap = el("div", "kp-satirlar");
+    b.secenekler.forEach(function (s) {
+      var satir = el("div", "kp-satir");
+      if (c[secKaynagi][s.id]) satir.classList.add("kp-secili");
+      var bas = el("div", "kp-satir-ad", s.ad);
+      var grup = el("div", "kp-secim kp-esit");
+      grup.setAttribute("role", "radiogroup");
+      grup.setAttribute("aria-label", s.ad);
+      var ad = "kp-" + b.id + "-" + s.id;
+      b.duzeyler.forEach(function (d) {
+        var kimlik = ad + "-" + d.id;
+        var giris = document.createElement("input");
+        giris.type = "radio"; giris.name = ad; giris.id = kimlik; giris.value = String(d.id);
+        giris.checked = c[secKaynagi][s.id] === d.id;
+        var etiket = document.createElement("label");
+        etiket.setAttribute("for", kimlik);
+        etiket.textContent = d.ad;
+        giris.addEventListener("change", function () {
+          c[secKaynagi][s.id] = d.id;
+          satir.classList.add("kp-secili");
+          onbellegiBosalt(); kaydet();
+        });
+        grup.appendChild(giris); grup.appendChild(etiket);
+      });
+      satir.appendChild(bas); satir.appendChild(grup);
+
+      var sil = el("button", "kp-temizle", "Bu maddeyi boş bırak");
+      sil.type = "button";
+      sil.addEventListener("click", function () {
+        delete c[secKaynagi][s.id];
+        satir.classList.remove("kp-secili");
+        Array.prototype.forEach.call(grup.querySelectorAll("input"), function (i) { i.checked = false; });
+        onbellegiBosalt(); kaydet();
+      });
+      satir.appendChild(sil);
+      kap.appendChild(satir);
+    });
+    return kap;
+  }
+
+  /** 1–5 ölçek: kaydıraç (kutuplu) ve önem satırları. */
+  function olcekCiz(b) {
+    var c = cevap(b.id);
+    if (!c.deger) c.deger = {};
+    var kap = el("div", "kp-satirlar");
+    var kaydirac = b.tip === "kaydirac";
+    var etiketler = kaydirac
+      ? ["Tamamen solda", "Sola yakın", "İkisi de olur", "Sağa yakın", "Tamamen sağda"]
+      : ["1", "2", "3", "4", "5"];
+
+    b.secenekler.forEach(function (s) {
+      var satir = el("div", "kp-satir");
+      if (c.deger[s.id] != null) satir.classList.add("kp-secili");
+
+      if (kaydirac) {
+        var kut = el("div", "kp-kutuplar");
+        kut.appendChild(el("b", null, s.sol));
+        kut.appendChild(el("b", null, s.sag));
+        satir.appendChild(kut);
+      } else {
+        satir.appendChild(el("div", "kp-satir-ad", s.ad));
+      }
+
+      var grup = el("div", "kp-secim kp-esit");
+      grup.setAttribute("role", "radiogroup");
+      grup.setAttribute("aria-label", kaydirac ? (s.sol + " – " + s.sag) : s.ad);
+      var ad = "kp-" + b.id + "-" + s.id;
+      [1, 2, 3, 4, 5].forEach(function (n, i) {
+        var kimlik = ad + "-" + n;
+        var giris = document.createElement("input");
+        giris.type = "radio"; giris.name = ad; giris.id = kimlik; giris.value = String(n);
+        giris.checked = c.deger[s.id] === n;
+        var etiket = document.createElement("label");
+        etiket.setAttribute("for", kimlik);
+        etiket.textContent = kaydirac ? String(n) : String(n);
+        etiket.title = etiketler[i];
+        etiket.setAttribute("aria-label", etiketler[i]);
+        giris.addEventListener("change", function () {
+          c.deger[s.id] = n; satir.classList.add("kp-secili");
+          onbellegiBosalt(); kaydet();
+        });
+        grup.appendChild(giris); grup.appendChild(etiket);
+      });
+      satir.appendChild(grup);
+
+      if (!kaydirac) {
+        var ipucu = el("div", "kp-kutuplar");
+        ipucu.style.marginTop = "8px"; ipucu.style.marginBottom = "0";
+        ipucu.appendChild(el("span", null, "1 · hiç"));
+        ipucu.appendChild(el("span", null, "5 · çok"));
+        satir.appendChild(ipucu);
+      }
+
+      var sil = el("button", "kp-temizle", "Boş bırak");
+      sil.type = "button";
+      sil.addEventListener("click", function () {
+        delete c.deger[s.id];
+        satir.classList.remove("kp-secili");
+        Array.prototype.forEach.call(grup.querySelectorAll("input"), function (i) { i.checked = false; });
+        onbellegiBosalt(); kaydet();
+      });
+      satir.appendChild(sil);
+      kap.appendChild(satir);
+    });
+    return kap;
+  }
+
+  /** İstemediklerim: sorun değil / tercih etmem / kesin engel. */
+  function engelCiz(b) {
+    var c = cevap(b.id);
+    if (!c.secili) c.secili = {};
+    var secenekDuzeyleri = [{ id: "", ad: "Sorun değil" }].concat(b.duzeyler);
+    var kap = el("div", "kp-satirlar");
+    b.secenekler.forEach(function (s) {
+      var satir = el("div", "kp-satir");
+      if (c.secili[s.id]) satir.classList.add("kp-secili");
+      satir.appendChild(el("div", "kp-satir-ad", s.ad));
+      var grup = el("div", "kp-secim");
+      grup.setAttribute("role", "radiogroup");
+      grup.setAttribute("aria-label", s.ad);
+      var ad = "kp-engel-" + s.id;
+      secenekDuzeyleri.forEach(function (d) {
+        var kimlik = ad + "-" + (d.id || "yok");
+        var giris = document.createElement("input");
+        giris.type = "radio"; giris.name = ad; giris.id = kimlik; giris.value = d.id;
+        giris.checked = (c.secili[s.id] || "") === d.id;
+        var etiket = document.createElement("label");
+        etiket.setAttribute("for", kimlik);
+        etiket.textContent = d.ad;
+        giris.addEventListener("change", function () {
+          if (d.id) { c.secili[s.id] = d.id; satir.classList.add("kp-secili"); }
+          else { delete c.secili[s.id]; satir.classList.remove("kp-secili"); }
+          onbellegiBosalt(); kaydet();
+        });
+        grup.appendChild(giris); grup.appendChild(etiket);
+      });
+      satir.appendChild(grup);
+      kap.appendChild(satir);
+    });
+    return kap;
+  }
+
+  function serbestCiz(b) {
+    var c = cevap(b.id);
+    var sar = el("div", "kp-serbest");
+    var kimlik = "kp-serbest-" + b.id;
+    var etiket = document.createElement("label");
+    etiket.setAttribute("for", kimlik);
+    etiket.textContent = b.serbest;
+    var alan = document.createElement("textarea");
+    alan.id = kimlik; alan.maxLength = 500;
+    alan.value = c.serbest || "";
+    alan.placeholder = "İstersen kendi cümlelerinle yaz (isteğe bağlı)";
+    var sayac = el("div", "kp-sayac", (alan.value.length) + " / 500");
+    alan.addEventListener("input", function () {
+      c.serbest = alan.value;
+      sayac.textContent = alan.value.length + " / 500";
+      onbellegiBosalt(); kaydet();
+    });
+    sar.appendChild(etiket); sar.appendChild(alan); sar.appendChild(sayac);
+    return sar;
+  }
+
+  function bolumCiz() {
+    var b = BOLUMLER[durum.adim];
+    app.innerHTML = "";
+    app.appendChild(ilerlemeCiz(b));
+    app.appendChild(kivilcim(b.kivilcim));
+
+    var bas = el("div", "kp-bolum-bas");
+    bas.appendChild(el("h2", null, b.baslik));
+    bas.appendChild(el("p", "kp-soru", b.soru));
+    if (b.yardim) bas.appendChild(el("p", "kp-yardim", b.yardim));
+    app.appendChild(bas);
+
+    var govde = el("div", "kp-bolum-govde");
+    if (b.tip === "coklu") govde.appendChild(cokluCiz(b));
+    else if (b.tip === "duzey") govde.appendChild(seviyeCiz(b, "secili"));
+    else if (b.tip === "ders") govde.appendChild(olcekDersCiz(b));
+    else if (b.tip === "kaydirac" || b.tip === "onem") govde.appendChild(olcekCiz(b));
+    else if (b.tip === "engel") govde.appendChild(engelCiz(b));
+    app.appendChild(govde);
+
+    if (b.serbest) app.appendChild(serbestCiz(b));
+
+    /* Gezinme */
+    var gez = el("div", "kp-gezinme");
+    var geri = el("button", "btn btn-cizgili", durum.adim === 0 ? "← Başa dön" : "← Geri");
+    geri.type = "button";
+    geri.addEventListener("click", function () {
+      if (durum.adim === 0) { durum.ekran = "giris"; }
+      else durum.adim--;
+      kaydet(); ciz(); basaGit();
+    });
+    gez.appendChild(geri);
+    gez.appendChild(el("span", "kp-bosluk"));
+
+    var sayilan = MOTOR.bolumCevapSayisi(b, durum.cevaplar);
+    var bilgi = el("span", "kp-durum");
+    bilgi.style.marginTop = "0";
+    bilgi.textContent = sayilan + " madde işaretlendi";
+    gez.appendChild(bilgi);
+
+    var ileri = el("button", "btn btn-dolu",
+      durum.adim === BOLUMLER.length - 1 ? "Profilimi Gör →" : "İleri →");
+    ileri.type = "button";
+    ileri.addEventListener("click", function () {
+      if (durum.adim === BOLUMLER.length - 1) { durum.ekran = "profil"; }
+      else durum.adim++;
+      kaydet(); ciz(); basaGit();
+    });
+    gez.appendChild(ileri);
+    app.appendChild(gez);
+
+    /* İşaretleme sayısı canlı kalsın */
+    app.addEventListener("click", function () {
+      bilgi.textContent = MOTOR.bolumCevapSayisi(b, durum.cevaplar) + " madde işaretlendi";
+    });
+    app.addEventListener("change", function () {
+      bilgi.textContent = MOTOR.bolumCevapSayisi(b, durum.cevaplar) + " madde işaretlendi";
+    });
+  }
+
+  /** Ders bölümü 4 seviyelidir; seviyeCiz'in "deger" alanını kullanır. */
+  function olcekDersCiz(b) {
+    var c = cevap(b.id);
+    if (!c.deger) c.deger = {};
+    var kap = el("div", "kp-satirlar");
+    b.secenekler.forEach(function (s) {
+      var satir = el("div", "kp-satir");
+      if (c.deger[s.id] != null) satir.classList.add("kp-secili");
+      satir.appendChild(el("div", "kp-satir-ad", s.ad));
+      var grup = el("div", "kp-secim kp-esit");
+      grup.setAttribute("role", "radiogroup");
+      grup.setAttribute("aria-label", s.ad);
+      var ad = "kp-ders-" + s.id;
+      b.duzeyler.forEach(function (d) {
+        var kimlik = ad + "-" + d.id;
+        var giris = document.createElement("input");
+        giris.type = "radio"; giris.name = ad; giris.id = kimlik; giris.value = String(d.id);
+        giris.checked = c.deger[s.id] === d.id;
+        var etiket = document.createElement("label");
+        etiket.setAttribute("for", kimlik);
+        etiket.textContent = d.ad;
+        giris.addEventListener("change", function () {
+          c.deger[s.id] = d.id; satir.classList.add("kp-secili");
+          onbellegiBosalt(); kaydet();
+        });
+        grup.appendChild(giris); grup.appendChild(etiket);
+      });
+      satir.appendChild(grup);
+      var sil = el("button", "kp-temizle", "Boş bırak");
+      sil.type = "button";
+      sil.addEventListener("click", function () {
+        delete c.deger[s.id]; satir.classList.remove("kp-secili");
+        Array.prototype.forEach.call(grup.querySelectorAll("input"), function (i) { i.checked = false; });
+        onbellegiBosalt(); kaydet();
+      });
+      satir.appendChild(sil);
+      kap.appendChild(satir);
+    });
+    return kap;
+  }
+
+  /* ══════════════════════ PROFİL EKRANI ══════════════════════ */
+
+  /** Bir bölümün seçili maddelerinin adlarını verir. */
+  function seciliAdlar(bid) {
+    var b = null, i;
+    for (i = 0; i < BOLUMLER.length; i++) if (BOLUMLER[i].id === bid) b = BOLUMLER[i];
+    var c = durum.cevaplar[bid] || {};
+    var out = [];
+    b.secenekler.forEach(function (s) {
+      if (b.tip === "coklu" && c.secili && c.secili[s.id]) out.push(s.ad);
+      else if (b.tip === "duzey" && c.secili && c.secili[s.id]) {
+        var d = b.duzeyler.filter(function (x) { return x.id === c.secili[s.id]; })[0];
+        out.push(s.ad + (d ? " · " + d.ad.replace("Bana ", "") : ""));
+      } else if (b.tip === "ders" && c.deger && c.deger[s.id] != null) {
+        var t = b.duzeyler.filter(function (x) { return x.id === c.deger[s.id]; })[0];
+        out.push(s.ad + (t ? " · " + t.ad : ""));
+      } else if (b.tip === "engel" && c.secili && c.secili[s.id]) {
+        out.push(s.ad + (c.secili[s.id] === "kesin" ? " · kesin engel" : " · tercih etmem"));
+      }
+    });
+    return out;
+  }
+
+  function profilKart(baslik, ogeler, serbestMetin, dumduz) {
+    var k = el("div", "kp-kart");
+    k.appendChild(el("h3", null, baslik));
+    if (ogeler.length) {
+      var ul = el("ul", "kp-liste" + (dumduz ? " kp-duz" : ""));
+      ogeler.forEach(function (t) { ul.appendChild(el("li", null, t)); });
+      k.appendChild(ul);
+    } else {
+      k.appendChild(el("p", "kp-bos", "Bu bölümde işaretlenmiş madde yok."));
+    }
+    if (serbestMetin) {
+      var s = el("div", "kp-serbest-not");
+      s.textContent = "Kendi eklediğin: " + serbestMetin;
+      k.appendChild(s);
+    }
+    return k;
+  }
+
+  /** Kaydıraç bölümünün okunur özeti. */
+  function calismaOzeti() {
+    var b = null, i;
+    for (i = 0; i < BOLUMLER.length; i++) if (BOLUMLER[i].id === "calismaHayati") b = BOLUMLER[i];
+    var c = (durum.cevaplar.calismaHayati && durum.cevaplar.calismaHayati.deger) || {};
+    var out = [];
+    b.secenekler.forEach(function (s) {
+      var v = c[s.id];
+      if (v == null) return;
+      var metin = v === 3 ? "İkisi de olabilir: " + s.sol + " / " + s.sag
+        : v < 3 ? s.sol + (v === 1 ? " (belirgin)" : "")
+          : s.sag + (v === 5 ? " (belirgin)" : "");
+      out.push(metin);
+    });
+    return out;
+  }
+
+  /** Önem ölçekli bölümlerin okunur özeti — yalnız 4 ve 5 verilenler. */
+  function onemOzeti(bid, esik) {
+    var b = null, i;
+    for (i = 0; i < BOLUMLER.length; i++) if (BOLUMLER[i].id === bid) b = BOLUMLER[i];
+    var c = (durum.cevaplar[bid] && durum.cevaplar[bid].deger) || {};
+    var yuksek = [], dusuk = [];
+    b.secenekler.forEach(function (s) {
+      var v = c[s.id];
+      if (v == null) return;
+      if (v >= esik) yuksek.push(s.ad + " · " + v + "/5");
+      else if (v <= 2) dusuk.push(s.ad + " · " + v + "/5");
+    });
+    return { yuksek: yuksek, dusuk: dusuk };
+  }
+
+  function profilCiz() {
+    app.innerHTML = "";
+    var p = profil();
+
+    var bas = el("div", "kp-bolum-bas");
+    bas.appendChild(el("h2", null, "Benim Kariyer Profilim"));
+    bas.appendChild(el("p", "kp-soru", "Kendin hakkında verdiğin cevapların bir araya geldiğinde ortaya çıkan tablo bu."));
+    app.appendChild(bas);
+    app.appendChild(kivilcim("Bu ekranda henüz bölüm önerisi yok. Önce kendi tablona bak; hazır hissettiğinde karşılaştırmayı sen başlat."));
+
+    /* Öne çıkan boyutlar */
+    var oneCikan = Object.keys(p.ilgi).map(function (d) { return { d: d, v: p.ilgi[d] }; })
+      .filter(function (x) { return x.v > 0; })
+      .sort(function (a, b2) { return b2.v - a.v || a.d.localeCompare(b2.d); }).slice(0, 8);
+    if (oneCikan.length) {
+      var kOne = el("div", "kp-kart");
+      kOne.appendChild(el("h3", null, "Öne Çıkan Yönlerim"));
+      kOne.appendChild(el("p", "kp-kart-etiket", "Cevaplarından hesaplanan güçlü boyutlar"));
+      var olc = el("div", "kp-olcek");
+      oneCikan.forEach(function (x) {
+        var satir = el("div", "kp-olcek-satir");
+        satir.appendChild(el("span", "kp-olcek-ad", OLCEK.BOYUTLAR.ilgi[x.d]));
+        satir.appendChild(el("span", "kp-olcek-deger", x.v + " / 100"));
+        var mini = el("div", "kp-mini");
+        var ic = el("span"); ic.style.width = x.v + "%";
+        mini.appendChild(ic); satir.appendChild(mini);
+        olc.appendChild(satir);
+      });
+      kOne.appendChild(olc);
+      app.appendChild(kOne);
+    }
+
+    app.appendChild(profilKart("Yapmaktan Hoşlandıklarım", seciliAdlar("hoslandiklarim"),
+      (durum.cevaplar.hoslandiklarim || {}).serbest));
+    app.appendChild(profilKart("Yeteneklerim", seciliAdlar("yeteneklerim"),
+      (durum.cevaplar.yeteneklerim || {}).serbest));
+    app.appendChild(profilKart("Şu Anda İyi Olduğum Alanlar", seciliAdlar("iyiAlanlar"), null));
+    app.appendChild(profilKart("Başkalarının Bende Fark Ettiği Özellikler", seciliAdlar("farkEdilen"),
+      (durum.cevaplar.farkEdilen || {}).serbest));
+    app.appendChild(profilKart("Çalışma Hayatı Tercihlerim", calismaOzeti(), null, true));
+
+    var yasam = onemOzeti("yasamBeklentileri", 4);
+    var kYasam = profilKart("Yaşam Beklentilerim", yasam.yuksek, null);
+    if (yasam.dusuk.length) {
+      kYasam.appendChild(el("p", "kp-kart-etiket", "Benim için daha az önemli"));
+      var ulY = el("ul", "kp-liste");
+      yasam.dusuk.forEach(function (t) { ulY.appendChild(el("li", null, t)); });
+      kYasam.appendChild(ulY);
+    }
+    app.appendChild(kYasam);
+
+    app.appendChild(profilKart("Maddi Beklentilerim", onemOzeti("maddiBeklentiler", 4).yuksek, null));
+    app.appendChild(profilKart("Mesleki Değerlerim", onemOzeti("meslekiDegerler", 4).yuksek, null));
+    app.appendChild(profilKart("Emek Vermeye Hazır Olduğum Alanlar", onemOzeti("emek", 4).yuksek, null));
+    app.appendChild(profilKart("İstemediğim Çalışma Koşulları", seciliAdlar("istemediklerim"), null));
+
+    /* PDF ve yazdırma */
+    var pdfSar = el("div", "kp-eylemler kp-yazdirma-disi");
+    var pdfBtn = el("button", "btn btn-cizgili", "Profilimi PDF Olarak Kaydet");
+    pdfBtn.type = "button";
+    var yazBtn = el("button", "btn btn-cizgili", "Yazdır");
+    yazBtn.type = "button";
+    yazBtn.addEventListener("click", function () { window.print(); });
+    var durumMetni = el("p", "kp-durum");
+    pdfBtn.addEventListener("click", function () {
+      pdfUret(pdfBtn, durumMetni, "profil");
+    });
+    pdfSar.appendChild(pdfBtn); pdfSar.appendChild(yazBtn);
+    app.appendChild(pdfSar);
+    app.appendChild(durumMetni);
+
+    app.appendChild(document.createElement("hr")).className = "kp-ayrac";
+
+    /* Analiz kapısı */
+    var eksik = MOTOR.eksikler(durum.cevaplar);
+    var kutu = el("div", "kp-kart kp-yazdirma-disi");
+    kutu.appendChild(el("h3", null, "Profilimi Analiz Et ve Bana Yakın Alanları Keşfet"));
+    var acik = el("p");
+    acik.style.fontSize = "15px"; acik.style.color = "var(--grafit, #55474C)"; acik.style.marginTop = "6px";
+    acik.textContent = "Cevaplarını üniversite program alanlarının özellikleriyle karşılaştır. "
+      + "Sonuç bir karar değil, araştırma başlangıcıdır.";
+    kutu.appendChild(acik);
+
+    if (eksik.length) {
+      var uy = el("div", "kp-eksikler");
+      uy.style.marginTop = "16px";
+      uy.appendChild(el("h3", null, "Analiz için birkaç bölüm daha gerekiyor"));
+      var ul = el("ul");
+      eksik.forEach(function (e) {
+        var li = document.createElement("li");
+        var g = el("button", null, e.mesaj + " (şu an " + e.mevcut + ") — bu bölüme git");
+        g.type = "button";
+        g.addEventListener("click", function () {
+          var i;
+          for (i = 0; i < BOLUMLER.length; i++) if (BOLUMLER[i].id === e.bolum) durum.adim = i;
+          durum.ekran = "bolum"; kaydet(); ciz(); basaGit();
+        });
+        li.appendChild(g); ul.appendChild(li);
+      });
+      uy.appendChild(ul);
+      kutu.appendChild(uy);
+    } else {
+      var git = el("button", "btn btn-dolu btn-lg", "Profilimi Analiz Et ve Bana Yakın Bölümleri Keşfet");
+      git.type = "button";
+      git.style.marginTop = "18px";
+      git.addEventListener("click", function () {
+        durum.ekran = "sonuc"; kaydet(); ciz(); basaGit();
+      });
+      kutu.appendChild(git);
+    }
+    app.appendChild(kutu);
+
+    app.appendChild(gezinmeAlt("profil"));
+  }
+
+  function gezinmeAlt(nereden) {
+    var gez = el("div", "kp-gezinme kp-yazdirma-disi");
+    var geri = el("button", "btn btn-cizgili",
+      nereden === "sonuc" ? "← Profilime dön" : "← Son bölüme dön");
+    geri.type = "button";
+    geri.addEventListener("click", function () {
+      if (nereden === "sonuc") durum.ekran = "profil";
+      else { durum.ekran = "bolum"; durum.adim = BOLUMLER.length - 1; }
+      kaydet(); ciz(); basaGit();
+    });
+    gez.appendChild(geri);
+    gez.appendChild(el("span", "kp-bosluk"));
+    var sifirla = el("button", "btn btn-cizgili", "Baştan Başla");
+    sifirla.type = "button";
+    sifirla.addEventListener("click", async function () {
+      var onaylandi = await KKUyari.onay("Kayıtlı bütün cevapların, favorilerin ve hazırlanan raporun silinecek.", {
+        baslik: "Baştan başlansın mı?", onayEtiketi: "Baştan başla", tehlikeli: true
+      });
+      if (!onaylandi) return;
+      depoyuTemizle();
+      durum.cevaplar = {}; durum.favoriAile = {}; durum.favoriProgram = {};
+      durum.incelenen = []; durum.adim = 0; durum.ekran = "giris";
+      onbellegiBosalt(); ciz(); basaGit();
+    });
+    gez.appendChild(sifirla);
+    return gez;
+  }
+
+  /* ══════════════════════ SONUÇ EKRANI ══════════════════════ */
+
+  function programSatiri(prg, aileAdiGoster) {
+    var li = el("li", "kp-prg");
+    var sol = el("div");
+    sol.appendChild(el("div", "kp-prg-ad", prg.ad));
+    var notlar = [MOTOR.duzeyMetni(prg)];
+    if (aileAdiGoster) {
+      var a = MOTOR.aileBul(prg.aileId);
+      if (a) notlar.push(a.ad);
+    }
+    sol.appendChild(el("div", "kp-prg-not", notlar.join(" · ")));
+    li.appendChild(sol);
+
+    var kalp = el("button", "kp-kalp", durum.favoriProgram[prg.id] ? "♥" : "♡");
+    kalp.type = "button";
+    kalp.setAttribute("aria-pressed", durum.favoriProgram[prg.id] ? "true" : "false");
+    kalp.setAttribute("aria-label", prg.ad + " bölümünü ilgilendiklerime ekle");
+    kalp.title = "İlgilendiğim bölümlere ekle";
+    kalp.addEventListener("click", function () {
+      if (durum.favoriProgram[prg.id]) delete durum.favoriProgram[prg.id];
+      else durum.favoriProgram[prg.id] = true;
+      kalp.textContent = durum.favoriProgram[prg.id] ? "♥" : "♡";
+      kalp.setAttribute("aria-pressed", durum.favoriProgram[prg.id] ? "true" : "false");
+      pdfOnbellek.rapor = null;
+      kaydet(); favorileriTazele();
+    });
+    li.appendChild(kalp);
+    return li;
+  }
+
+  function programBolumu(aileId) {
+    var f = durum.prgFiltre[aileId] || (durum.prgFiltre[aileId] = { duzey: "", metin: "" });
+    var sar = el("div", "kp-programlar");
+    sar.appendChild(kivilcim("Aynı alandaki bölümlerin dersleri ve çalışma hayatları birbirinden farklı olabilir. "
+      + "İsimlere bakmakla kalma; ders içeriklerine ve mezunların ne yaptığına da göz at."));
+
+    var filtre = el("div", "kp-filtre");
+    var arama = document.createElement("input");
+    arama.type = "search"; arama.placeholder = "Bu alanda bölüm ara"; arama.value = f.metin;
+    arama.setAttribute("aria-label", "Bu alandaki bölümlerde ara");
+    filtre.appendChild(arama);
+
+    [["", "Tümü"], ["lisans", "Lisans"], ["onlisans", "Ön lisans"]].forEach(function (x) {
+      var d = el("button", "kp-fcip", x[1]);
+      d.type = "button";
+      d.setAttribute("aria-pressed", f.duzey === x[0] ? "true" : "false");
+      d.addEventListener("click", function () { f.duzey = x[0]; tazele(); });
+      filtre.appendChild(d);
+    });
+    sar.appendChild(filtre);
+
+    var liste = el("ul", "kp-prg-liste");
+    var sayimEl = el("p", "kp-durum");
+    sar.appendChild(sayimEl);
+    sar.appendChild(liste);
+
+    var zaman = null;
+    arama.addEventListener("input", function () {
+      // Debounce: her tuşta 687 kayıt taranmasın
+      if (zaman) clearTimeout(zaman);
+      zaman = setTimeout(function () { f.metin = arama.value; tazele(); }, 180);
+    });
+
+    function tazele() {
+      var l = MOTOR.programlar(aileId, { duzey: f.duzey, metin: f.metin });
+      liste.innerHTML = "";
+      l.forEach(function (p) { liste.appendChild(programSatiri(p, false)); });
+      sayimEl.textContent = l.length
+        ? l.length + " doğrulanmış program bu alanda listeleniyor."
+        : "Bu filtreyle eşleşen program yok.";
+      Array.prototype.forEach.call(filtre.querySelectorAll(".kp-fcip"), function (d, i) {
+        d.setAttribute("aria-pressed", (["", "lisans", "onlisans"][i] === f.duzey) ? "true" : "false");
+      });
+    }
+    tazele();
+    return sar;
+  }
+
+  function aileKarti(r, sira) {
+    var kart = el("div", "kp-aile");
+    var acikMi = !!durum.acikAile[r.aile.id];
+    if (acikMi) kart.classList.add("acik");
+
+    var govdeId = "kp-aile-" + r.aile.id;
+    var bas = el("button", "kp-aile-bas");
+    bas.type = "button";
+    bas.setAttribute("aria-expanded", acikMi ? "true" : "false");
+    bas.setAttribute("aria-controls", govdeId);
+    bas.appendChild(el("span", "kp-sira", String(sira)));
+    var orta = el("span");
+    orta.appendChild(el("span", "kp-aile-ad", r.aile.ad));
+    orta.appendChild(el("span", "kp-aile-alan", r.aile.alan + " · " + r.programSayisi + " bölüm"));
+    bas.appendChild(orta);
+    var sag = el("span", "kp-aile-sag");
+    sag.appendChild(el("span", "kp-rozet " + r.seviye.sinif, r.seviye.ad));
+    sag.appendChild(el("span", "kp-ok", "›"));
+    bas.appendChild(sag);
+    kart.appendChild(bas);
+
+    var govde = el("div", "kp-aile-govde");
+    govde.id = govdeId;
+    if (!acikMi) govde.hidden = true;
+    govde.appendChild(el("p", "kp-aile-ozet", r.aile.ozet));
+
+    /* Dört eksen */
+    var eks = el("div", "kp-eksenler");
+    [["Uyum skoru", r.genel], ["İlgi ve yetenek", r.eksenler.ilgi], ["Çalışma hayatı", r.eksenler.calisma],
+     ["Değer ve yaşam", r.eksenler.deger], ["Yol ve emek", r.eksenler.yol]].forEach(function (x) {
+      var e = el("div", "kp-eksen");
+      e.appendChild(el("div", "kp-eksen-ad", x[0]));
+      e.appendChild(el("div", "kp-eksen-deger", String(x[1])));
+      eks.appendChild(e);
+    });
+    govde.appendChild(eks);
+
+    /* Neden yakın */
+    var blokN = el("div", "kp-blok");
+    blokN.appendChild(el("h4", null, "Neden sana yakın?"));
+    if (r.gerekceler.length) {
+      blokN.appendChild(el("p", "kp-aile-ozet",
+        r.gerekceler.join(", ") + " yönlerin bu alanın özellikleriyle örtüşüyor."));
+    } else {
+      blokN.appendChild(el("p", "kp-bos",
+        "Bu alanla belirgin biçimde örtüşen bir güçlü yönün öne çıkmadı; yine de inceleyebilirsin."));
+    }
+    govde.appendChild(blokN);
+
+    /* Düşünmen gerekenler */
+    var blokC = el("div", "kp-blok");
+    blokC.appendChild(el("h4", null, "Düşünmen gereken noktalar"));
+    if (r.celiskiler.length) {
+      r.celiskiler.forEach(function (c) {
+        var u = el("div", "kp-uyari" + (c.tur === "engel" ? " kp-engel" : ""));
+        u.appendChild(el("span", null, c.tur === "engel" ? "⛔" : "⚠️"));
+        u.appendChild(el("span", null, c.metin));
+        blokC.appendChild(u);
+      });
+    } else {
+      blokC.appendChild(el("p", "kp-bos", "Cevaplarınla bu alan arasında belirgin bir çatışma görünmüyor."));
+    }
+    govde.appendChild(blokC);
+
+    /* Akademik hazırlık — uyumdan ayrı */
+    if (r.akademik) {
+      var blokA = el("div", "kp-blok");
+      blokA.appendChild(el("h4", null, "Mevcut akademik hazırlığın (uyumdan ayrı)"));
+      var a = el("p", "kp-akademik");
+      a.innerHTML = "Bu alanla ilişkili derslerde kendini <b>" + kacis(r.akademik.etiket.toLocaleLowerCase("tr"))
+        + "</b> olarak değerlendirdin. Bu, alanın sana uygun olup olmadığını belirlemez; "
+        + "bugünkü hazırlığını gösterir ve çalışmayla değişir.";
+      blokA.appendChild(a);
+      var ul = el("ul", "kp-liste");
+      r.akademik.dersler.forEach(function (d) { ul.appendChild(el("li", null, d.ad + " · " + d.puan + "/100")); });
+      blokA.appendChild(ul);
+      govde.appendChild(blokA);
+    }
+
+    /* Araştırma soruları */
+    var blokS = el("div", "kp-blok");
+    blokS.appendChild(el("h4", null, "Araştırırken nelere bakmalısın?"));
+    var ulS = el("ul", "kp-liste kp-duz");
+    r.sorular.forEach(function (s) { ulS.appendChild(el("li", null, s)); });
+    blokS.appendChild(ulS);
+    govde.appendChild(blokS);
+
+    /* Eylemler */
+    var eylem = el("div", "kp-aile-eylem");
+    var fav = el("button", "btn btn-cizgili btn-sm",
+      durum.favoriAile[r.aile.id] ? "♥ İlgilendiğim alanlarda" : "♡ İlgilendiğim Alanlara Ekle");
+    fav.type = "button";
+    fav.setAttribute("aria-pressed", durum.favoriAile[r.aile.id] ? "true" : "false");
+    fav.addEventListener("click", function () {
+      if (durum.favoriAile[r.aile.id]) delete durum.favoriAile[r.aile.id];
+      else durum.favoriAile[r.aile.id] = true;
+      fav.textContent = durum.favoriAile[r.aile.id] ? "♥ İlgilendiğim alanlarda" : "♡ İlgilendiğim Alanlara Ekle";
+      fav.setAttribute("aria-pressed", durum.favoriAile[r.aile.id] ? "true" : "false");
+      pdfOnbellek.rapor = null;
+      kaydet(); favorileriTazele();
+    });
+    eylem.appendChild(fav);
+
+    var prgBtn = el("button", "btn btn-dolu btn-sm", "Bu Alandaki Bölümleri Gör");
+    prgBtn.type = "button";
+    eylem.appendChild(prgBtn);
+    govde.appendChild(eylem);
+
+    var prgYuva = el("div");
+    govde.appendChild(prgYuva);
+    prgBtn.addEventListener("click", function () {
+      if (prgYuva.firstChild) {
+        prgYuva.innerHTML = "";
+        prgBtn.textContent = "Bu Alandaki Bölümleri Gör";
+      } else {
+        prgYuva.appendChild(programBolumu(r.aile.id));
+        prgBtn.textContent = "Bölüm listesini gizle";
+      }
+    });
+
+    kart.appendChild(govde);
+    bas.addEventListener("click", function () {
+      var yeni = govde.hidden;
+      govde.hidden = !yeni;
+      kart.classList.toggle("acik", yeni);
+      bas.setAttribute("aria-expanded", yeni ? "true" : "false");
+      durum.acikAile[r.aile.id] = yeni;
+    });
+    return kart;
+  }
+
+  var favYuva = null;
+  function favorileriTazele() {
+    if (!favYuva) return;
+    favYuva.innerHTML = "";
+
+    var alanlar = Object.keys(durum.favoriAile).filter(function (k) { return durum.favoriAile[k]; });
+    var kA = el("div", "kp-kart");
+    kA.appendChild(el("h3", null, "İlgilendiğim Alanlar"));
+    if (alanlar.length) {
+      var ulA = el("ul", "kp-liste");
+      alanlar.forEach(function (id) {
+        var a = MOTOR.aileBul(id);
+        if (a) ulA.appendChild(el("li", null, a.ad));
+      });
+      kA.appendChild(ulA);
+    } else {
+      kA.appendChild(el("p", "kp-bos", "Henüz alan eklemedin. Kartlardaki ♡ ile ekleyebilirsin."));
+    }
+    favYuva.appendChild(kA);
+
+    var bolumler = Object.keys(durum.favoriProgram).filter(function (k) { return durum.favoriProgram[k]; });
+    var kB = el("div", "kp-kart");
+    kB.appendChild(el("h3", null, "İlgilendiğim Bölümler"));
+    if (bolumler.length) {
+      var ulB = el("ul", "kp-prg-liste");
+      ulB.style.maxHeight = "none";
+      bolumler.forEach(function (id) {
+        var p = MOTOR.programBul(id);
+        if (p) ulB.appendChild(programSatiri(p, true));
+      });
+      kB.appendChild(ulB);
+    } else {
+      kB.appendChild(el("p", "kp-bos", "Henüz bölüm eklemedin. Bölüm listelerindeki ♡ ile ekleyebilirsin."));
+    }
+    favYuva.appendChild(kB);
+  }
+
+  /** "Benim Merak Ettiklerim" — katalogda ara, profille karşılaştır. */
+  function aramaBolumu() {
+    var sar = el("div", "kp-kart");
+    sar.appendChild(el("h3", null, "Benim Merak Ettiklerim"));
+    var acik = el("p", "kp-aile-ozet",
+      "Aklındaki bir bölümü ara ve profilinle karşılaştır. Aradığın bölüm ilk sıralarda çıkmasa da inceleyebilirsin.");
+    sar.appendChild(acik);
+
+    var kimlik = "kp-bolum-ara";
+    var etiket = document.createElement("label");
+    etiket.setAttribute("for", kimlik);
+    etiket.textContent = "Bölüm adı";
+    etiket.style.display = "block";
+    etiket.style.fontSize = "14px";
+    etiket.style.fontWeight = "600";
+    etiket.style.margin = "14px 0 6px";
+    sar.appendChild(etiket);
+
+    var giris = document.createElement("input");
+    giris.type = "search"; giris.id = kimlik; giris.placeholder = "Örnek: Mimarlık";
+    giris.style.width = "100%"; giris.style.font = "inherit"; giris.style.fontSize = "15px";
+    giris.style.padding = "11px 14px"; giris.style.border = "1px solid var(--duman, #E4DBD9)";
+    giris.style.borderRadius = "12px";
+    sar.appendChild(giris);
+
+    var sonucListe = el("ul", "kp-arama-sonuc");
+    sar.appendChild(sonucListe);
+    var karsilastirma = el("div", "kp-karsilastirma");
+    sar.appendChild(karsilastirma);
+
+    var zaman = null;
+    giris.addEventListener("input", function () {
+      if (zaman) clearTimeout(zaman);
+      zaman = setTimeout(calistir, 200);
+    });
+
+    function calistir() {
+      var q = giris.value.trim();
+      sonucListe.innerHTML = "";
+      if (q.length < 2) return;
+      var bulunan = MOTOR.programAra(q, 12);
+      if (!bulunan.length) {
+        var bos = el("li");
+        bos.appendChild(el("p", "kp-bos",
+          "Doğrulanmış katalogda bu adla bir program bulunamadı. Farklı bir yazım deneyebilirsin."));
+        sonucListe.appendChild(bos);
+        return;
+      }
+      bulunan.forEach(function (p) {
+        var li = el("li", "kp-prg");
+        var sol = el("div");
+        sol.appendChild(el("div", "kp-prg-ad", p.ad));
+        var a = MOTOR.aileBul(p.aileId);
+        sol.appendChild(el("div", "kp-prg-not",
+          MOTOR.duzeyMetni(p) + " · " + (a ? a.ad : "")));
+        li.appendChild(sol);
+        var btn = el("button", "btn btn-cizgili btn-sm", "Profilimle Karşılaştır");
+        btn.type = "button";
+        btn.addEventListener("click", function () { karsilastir(p); });
+        li.appendChild(btn);
+        sonucListe.appendChild(li);
+      });
+    }
+
+    function karsilastir(p) {
+      var aile = MOTOR.aileBul(p.aileId);
+      var r = MOTOR.aileyiPuanla(profil(), aile);
+      if (durum.incelenen.indexOf(p.id) < 0) durum.incelenen.push(p.id);
+      pdfOnbellek.rapor = null;
+      kaydet();
+
+      karsilastirma.innerHTML = "";
+      var k = el("div", "kp-kart");
+      k.style.borderColor = "var(--gul, #C98792)";
+      k.appendChild(el("h3", null, p.ad));
+      k.appendChild(el("p", "kp-kart-etiket", MOTOR.duzeyMetni(p)));
+      var ac = el("p", "kp-aile-ozet");
+      ac.textContent = p.ad + ", " + aile.ad + " program ailesinde yer alıyor. Bu alan profilinle "
+        + r.seviye.ad.toLocaleLowerCase("tr") + " gösteriyor (uyum skoru " + r.genel + ").";
+      k.appendChild(ac);
+
+      var b1 = el("div", "kp-blok");
+      b1.appendChild(el("h4", null, "Güçlü örtüşen yönlerin"));
+      if (r.gerekceler.length) b1.appendChild(el("p", "kp-aile-ozet", r.gerekceler.join(", ") + "."));
+      else b1.appendChild(el("p", "kp-bos", "Belirgin biçimde örtüşen bir yön öne çıkmadı."));
+      k.appendChild(b1);
+
+      var b2 = el("div", "kp-blok");
+      b2.appendChild(el("h4", null, "Daha dikkatli düşünmen gereken yönler"));
+      if (r.celiskiler.length) {
+        r.celiskiler.forEach(function (c) {
+          var u = el("div", "kp-uyari" + (c.tur === "engel" ? " kp-engel" : ""));
+          u.appendChild(el("span", null, c.tur === "engel" ? "⛔" : "⚠️"));
+          u.appendChild(el("span", null, c.metin));
+          b2.appendChild(u);
+        });
+      } else b2.appendChild(el("p", "kp-bos", "Belirgin bir çatışma görünmüyor."));
+      k.appendChild(b2);
+
+      var b3 = el("div", "kp-blok");
+      b3.appendChild(el("h4", null, "Bu bölümü araştırırken sorabileceğin sorular"));
+      var ul = el("ul", "kp-liste kp-duz");
+      r.sorular.forEach(function (s) { ul.appendChild(el("li", null, s)); });
+      b3.appendChild(ul);
+      k.appendChild(b3);
+
+      var ekle = el("button", "btn btn-cizgili btn-sm",
+        durum.favoriProgram[p.id] ? "♥ İlgilendiğim bölümlerde" : "♡ İlgilendiğim Bölümlere Ekle");
+      ekle.type = "button";
+      ekle.style.marginTop = "16px";
+      ekle.addEventListener("click", function () {
+        if (durum.favoriProgram[p.id]) delete durum.favoriProgram[p.id];
+        else durum.favoriProgram[p.id] = true;
+        ekle.textContent = durum.favoriProgram[p.id] ? "♥ İlgilendiğim bölümlerde" : "♡ İlgilendiğim Bölümlere Ekle";
+        pdfOnbellek.rapor = null;
+        kaydet(); favorileriTazele();
+      });
+      k.appendChild(ekle);
+      karsilastirma.appendChild(k);
+      k.scrollIntoView({ block: "nearest" });
+    }
+
+    return sar;
+  }
+
+  function sonucCiz() {
+    app.innerHTML = "";
+    var s = sonuclar();
+
+    var bas = el("div", "kp-bolum-bas");
+    bas.appendChild(el("h2", null, "Sana Yakın Program Alanları"));
+    bas.appendChild(el("p", "kp-soru",
+      "Bunlar birer öneri değil, araştırma başlangıcı. Bir alanın üst sırada çıkması, o alandaki her bölümün sana uygun olduğu anlamına gelmez."));
+    app.appendChild(bas);
+    app.appendChild(kivilcim("Bir alanın üst sıralarda çıkması, o alandaki her bölümü seçmen gerektiği anlamına gelmez. Sana ilginç gelenleri aç ve araştır."));
+
+    var yuva = el("div");
+    app.appendChild(yuva);
+
+    var gosterilecek = durum.tumAileler ? s : s.slice(0, OLCEK.PUANLAMA.ilkGosterim);
+    gosterilecek.forEach(function (r, i) { yuva.appendChild(aileKarti(r, i + 1)); });
+
+    if (s.length > OLCEK.PUANLAMA.ilkGosterim) {
+      var tum = el("button", "btn btn-cizgili", durum.tumAileler
+        ? "Yalnız ilk " + OLCEK.PUANLAMA.ilkGosterim + " alanı göster"
+        : "Tüm Alanları Gör (" + s.length + ")");
+      tum.type = "button";
+      tum.style.marginTop = "16px";
+      tum.addEventListener("click", function () { durum.tumAileler = !durum.tumAileler; ciz(); });
+      app.appendChild(tum);
+    }
+
+    app.appendChild(document.createElement("hr")).className = "kp-ayrac";
+    app.appendChild(aramaBolumu());
+
+    app.appendChild(document.createElement("hr")).className = "kp-ayrac";
+    favYuva = el("div");
+    app.appendChild(favYuva);
+    favorileriTazele();
+
+    /* Rapor */
+    app.appendChild(document.createElement("hr")).className = "kp-ayrac";
+    var rapor = el("div", "kp-kart kp-yazdirma-disi");
+    rapor.appendChild(el("h3", null, "Kariyer ve Bölüm Keşif Raporum"));
+    rapor.appendChild(el("p", "kp-aile-ozet",
+      "Profilin, sana yakın alanlar, gerekçeler, dikkat etmen gereken noktalar ve ilgilendiğin bölümler tek dosyada."));
+    var eylem = el("div", "kp-eylemler");
+    var indir = el("button", "btn btn-dolu", "Raporu PDF Olarak Kaydet");
+    indir.type = "button";
+    var paylas = el("button", "btn btn-cizgili", "Paylaş");
+    paylas.type = "button";
+    var yazdir = el("button", "btn btn-cizgili", "Yazdır");
+    yazdir.type = "button";
+    yazdir.addEventListener("click", function () { window.print(); });
+    var durumMetni = el("p", "kp-durum");
+    indir.addEventListener("click", function () { pdfUret(indir, durumMetni, "rapor"); });
+    paylas.addEventListener("click", function () { pdfUret(paylas, durumMetni, "rapor", true); });
+    eylem.appendChild(indir); eylem.appendChild(paylas); eylem.appendChild(yazdir);
+    rapor.appendChild(eylem);
+    rapor.appendChild(durumMetni);
+    app.appendChild(rapor);
+
+    /* Kıvılcım kapanış */
+    app.appendChild(kivilcim("Pusulan sana bir yön gösterebilir; yolu seçen sensin. "
+      + "Merak ettiğin bölümleri araştır, o mesleği yapan insanlarla konuş ve kendi kararını oluştur."));
+
+    var not = el("p", "kp-alt-not");
+    not.textContent = UYARI_METNI + " Program verisi: " + PRG.veri.sinav + " " + PRG.veri.yil
+      + " · " + PRG.liste.length + " doğrulanmış program türü (" + PRG.veri.kaynaklar.map(function (k) { return k.ad; }).join("; ") + ").";
+    app.appendChild(not);
+
+    app.appendChild(gezinmeAlt("sonuc"));
+  }
+
+  var UYARI_METNI = "Kariyer Pusulam bir meslek seçme veya psikolojik değerlendirme testi değildir. "
+    + "Sonuçlar, verdiğin yanıtlar üzerinden kendini ve farklı eğitim seçeneklerini keşfetmene yardımcı olmak "
+    + "amacıyla hazırlanır. Üniversite ve meslek seçerken güncel program koşullarını, akademik durumunu, "
+    + "ilgi alanlarını ve kendi hedeflerini birlikte değerlendir.";
+
+  /* ══════════════════════ PDF ══════════════════════ */
+
+  function bugun() {
+    return new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
+  }
+
+  function profilBloklari() {
+    var b = [], p = profil();
+    b.push({ t: "h1", m: "Benim Kariyer Profilim" });
+    b.push({ t: "not", m: "Kaynak Kampüs · Kariyer Pusulam · " + bugun() });
+    b.push({ t: "p", m: "Kendin hakkında verdiğin cevapların bir araya geldiğinde ortaya çıkan tablo bu." });
+
+    var oneCikan = Object.keys(p.ilgi).map(function (d) { return { d: d, v: p.ilgi[d] }; })
+      .filter(function (x) { return x.v > 0; })
+      .sort(function (a, c) { return c.v - a.v || a.d.localeCompare(c.d); }).slice(0, 8);
+    if (oneCikan.length) {
+      b.push({ t: "h2", m: "Öne Çıkan Yönlerim" });
+      oneCikan.forEach(function (x) {
+        b.push({ t: "bar", ad: OLCEK.BOYUTLAR.ilgi[x.d], yuzde: x.v, renk: "#7A2035" });
+      });
+    }
+
+    function bolumBlok(baslik, ogeler, serbest) {
+      b.push({ t: "h2", m: baslik });
+      if (ogeler.length) ogeler.forEach(function (t) { b.push({ t: "li", m: t }); });
+      else b.push({ t: "p", m: "Bu bölümde işaretlenmiş madde yok." });
+      if (serbest) b.push({ t: "kutu", m: "Kendi eklediğin: " + serbest, renk: "#C98792" });
+    }
+    bolumBlok("Yapmaktan Hoşlandıklarım", seciliAdlar("hoslandiklarim"), (durum.cevaplar.hoslandiklarim || {}).serbest);
+    bolumBlok("Yeteneklerim", seciliAdlar("yeteneklerim"), (durum.cevaplar.yeteneklerim || {}).serbest);
+    bolumBlok("Şu Anda İyi Olduğum Alanlar", seciliAdlar("iyiAlanlar"), null);
+    bolumBlok("Başkalarının Bende Fark Ettiği Özellikler", seciliAdlar("farkEdilen"), (durum.cevaplar.farkEdilen || {}).serbest);
+    bolumBlok("Çalışma Hayatı Tercihlerim", calismaOzeti(), null);
+    bolumBlok("Yaşam Beklentilerim", onemOzeti("yasamBeklentileri", 4).yuksek, null);
+    bolumBlok("Maddi Beklentilerim", onemOzeti("maddiBeklentiler", 4).yuksek, null);
+    bolumBlok("Mesleki Değerlerim", onemOzeti("meslekiDegerler", 4).yuksek, null);
+    bolumBlok("Emek Vermeye Hazır Olduğum Alanlar", onemOzeti("emek", 4).yuksek, null);
+    bolumBlok("İstemediğim Çalışma Koşulları", seciliAdlar("istemediklerim"), null);
+
+    b.push({ t: "bosluk", h: 10 });
+    b.push({ t: "kutu", m: UYARI_METNI, renk: "#C98792" });
+    return b;
+  }
+
+  function raporBloklari() {
+    var b = [], s = sonuclar(), p = profil();
+    b.push({ t: "h1", m: "Kariyer ve Bölüm Keşif Raporum" });
+    b.push({ t: "not", m: "Kaynak Kampüs · Kariyer Pusulam · " + bugun() });
+
+    /* 1. Profil özeti */
+    b.push({ t: "h2", m: "1. Kendimi Keşfet Özeti" });
+    [["Yapmaktan hoşlandıklarım", seciliAdlar("hoslandiklarim")],
+     ["Yeteneklerim", seciliAdlar("yeteneklerim")],
+     ["Fark edildiğim özellikler", seciliAdlar("farkEdilen")],
+     ["Çalışma hayatı tercihlerim", calismaOzeti()],
+     ["İstemediğim koşullar", seciliAdlar("istemediklerim")]].forEach(function (x) {
+      b.push({ t: "h4", m: x[0] });
+      b.push({ t: "p", m: x[1].length ? x[1].join(" · ") : "İşaretlenmedi." });
+    });
+    ["hoslandiklarim", "yeteneklerim", "farkEdilen"].forEach(function (bid) {
+      var t = (durum.cevaplar[bid] || {}).serbest;
+      if (t) b.push({ t: "kutu", m: "Kendi eklediğin (" + bid + "): " + t, renk: "#C98792" });
+    });
+
+    /* 2. Öne çıkan boyutlar */
+    b.push({ t: "h2", m: "2. Öne Çıkan Kariyer Özelliklerim" });
+    Object.keys(p.ilgi).map(function (d) { return { d: d, v: p.ilgi[d] }; })
+      .filter(function (x) { return x.v > 0; })
+      .sort(function (a, c) { return c.v - a.v || a.d.localeCompare(c.d); }).slice(0, 8)
+      .forEach(function (x) { b.push({ t: "bar", ad: OLCEK.BOYUTLAR.ilgi[x.d], yuzde: x.v, renk: "#7A2035" }); });
+
+    /* 3–5. Aileler */
+    b.push({ t: "h2", m: "3. Bana En Yakın Program Alanları" });
+    b.push({ t: "p", m: "Aşağıdaki alanlar bir karar değil, araştırma başlangıcıdır." });
+    s.slice(0, OLCEK.PUANLAMA.ilkGosterim).forEach(function (r, i) {
+      if (i === 0) {
+        b.push({
+          t: "ust", etiket: "1. sırada", ad: r.aile.ad, yuzde: r.genel, renk: "#7A2035",
+          uyari: r.seviye.ad,
+          aciklama: r.aile.ozet,
+          oneri: r.gerekceler.length ? r.gerekceler.join(", ") + " yönlerin bu alanla örtüşüyor." : "",
+        });
+      } else {
+        b.push({ t: "alan", ad: (i + 1) + ". " + r.aile.ad + " — " + r.seviye.ad, yuzde: r.genel, renk: "#C98792" });
+      }
+      b.push({ t: "h4", m: "Neden yakın?" });
+      b.push({ t: "p", m: r.gerekceler.length
+        ? r.gerekceler.join(", ") + " yönlerin bu alanın özellikleriyle örtüşüyor."
+        : "Belirgin biçimde örtüşen bir güçlü yön öne çıkmadı." });
+      if (r.celiskiler.length) {
+        b.push({ t: "h4", m: "Düşünmen gereken noktalar" });
+        r.celiskiler.slice(0, 4).forEach(function (c) { b.push({ t: "li", m: c.metin }); });
+      }
+      if (r.akademik) {
+        b.push({ t: "not", m: "Mevcut akademik hazırlığın: " + r.akademik.etiket
+          + " (uyum puanına dâhil değildir)." });
+      }
+      b.push({ t: "bosluk", h: 6 });
+    });
+
+    /* 6. Favoriler */
+    b.push({ t: "h2", m: "4. İlgilendiğim Alanlar ve Bölümler" });
+    var alanlar = Object.keys(durum.favoriAile).filter(function (k) { return durum.favoriAile[k]; })
+      .map(function (id) { var a = MOTOR.aileBul(id); return a ? a.ad : null; }).filter(Boolean);
+    b.push({ t: "h4", m: "İlgilendiğim alanlar" });
+    if (alanlar.length) alanlar.forEach(function (t) { b.push({ t: "li", m: t }); });
+    else b.push({ t: "p", m: "Henüz alan eklenmedi." });
+
+    var bolumler = Object.keys(durum.favoriProgram).filter(function (k) { return durum.favoriProgram[k]; })
+      .map(function (id) { return MOTOR.programBul(id); }).filter(Boolean);
+    b.push({ t: "h4", m: "İlgilendiğim bölümler" });
+    if (bolumler.length) {
+      bolumler.forEach(function (p2) {
+        var a = MOTOR.aileBul(p2.aileId);
+        b.push({ t: "li", m: p2.ad + " — " + (a ? a.ad : "") + " · " + MOTOR.duzeyMetni(p2) });
+      });
+    } else b.push({ t: "p", m: "Henüz bölüm eklenmedi." });
+
+    /* 7. Kendi araştırdıkları */
+    b.push({ t: "h2", m: "5. Kendim Arayıp Karşılaştırdığım Bölümler" });
+    var incelenen = durum.incelenen.map(function (id) { return MOTOR.programBul(id); }).filter(Boolean);
+    if (incelenen.length) {
+      incelenen.forEach(function (p2) {
+        var a = MOTOR.aileBul(p2.aileId);
+        var r = MOTOR.aileyiPuanla(p, a);
+        b.push({ t: "li", m: p2.ad + " — " + a.ad + " · " + r.seviye.ad });
+      });
+    } else b.push({ t: "p", m: "Kendi aramanı henüz yapmadın." });
+
+    /* 8. Çatışmalar */
+    b.push({ t: "h2", m: "6. Dikkat Etmem Gereken Tercih Çatışmaları" });
+    var engelli = s.slice(0, 8).filter(function (r) { return r.engel.kesin.length; });
+    if (engelli.length) {
+      engelli.forEach(function (r) {
+        b.push({ t: "li", m: r.aile.ad + ": " + r.engel.kesin.map(function (k) { return OLCEK.KOSULLAR[k]; }).join(", ")
+          + " — kesin engel olarak işaretledin." });
+      });
+    } else b.push({ t: "p", m: "Üst sıradaki alanlarla kesin engellerin arasında çakışma görünmüyor." });
+
+    /* 9. Karar rehberi */
+    b.push({ t: "h2", m: "7. Kısa Karar Verme Rehberi" });
+    [
+      "Üst sıradaki alanlardan iki tanesini seç ve o alanlardaki bölümlerin ders listelerini oku.",
+      "Her bölüm için mezunların gerçekte hangi işleri yaptığını araştır.",
+      "O mesleği yapan en az bir kişiyle konuş; günün nasıl geçtiğini sor.",
+      "İstemediğin koşulları hatırla ve bu bölümlerde ne sıklıkta karşına çıkacağını öğren.",
+      "Puan türü, süre ve yerleşme koşullarını güncel ÖSYM/YÖK kaynaklarından doğrula.",
+      "Kararını tek bir listeye değil, araştırmanın tamamına dayandır.",
+    ].forEach(function (t) { b.push({ t: "li", m: t }); });
+
+    b.push({ t: "bosluk", h: 10 });
+    b.push({ t: "kutu", m: UYARI_METNI, renk: "#C98792" });
+    b.push({ t: "not", m: "Program verisi: " + PRG.veri.sinav + " " + PRG.veri.yil + " · "
+      + PRG.liste.length + " doğrulanmış program türü · Kaynaklar: "
+      + PRG.veri.kaynaklar.map(function (k) { return k.ad; }).join("; ") + "." });
+    return b;
+  }
+
+  function pdfUret(dugme, durumMetni, tur, paylasMi) {
+    var dosya = tur === "profil" ? "kariyer-profilim.pdf" : "kariyer-kesif-raporum.pdf";
+    var baslik = tur === "profil" ? "Benim Kariyer Profilim" : "Kariyer ve Bölüm Keşif Raporum";
+    function soyle(m, hataMi) {
+      durumMetni.textContent = m || "";
+      durumMetni.classList.toggle("kp-hata", !!hataMi);
+    }
+    if (!window.RaporPDF) {
+      soyle("PDF modülü yüklenemedi. “Yazdır” düğmesiyle kaydedebilirsin.", true);
+      return;
+    }
+    dugme.disabled = true;
+    soyle("PDF hazırlanıyor…");
+    var hazir = pdfOnbellek[tur]
+      ? Promise.resolve(pdfOnbellek[tur])
+      : window.RaporPDF.uret({
+        bloklar: tur === "profil" ? profilBloklari() : raporBloklari(),
+        marka: "Kaynak Kampüs",
+        baslik: baslik,
+        altBilgi: "Kariyer Pusulam · " + bugun(),
+        altCizgi: "Kaynak Kampüs · Kariyer Pusulam · meslek seçme testi değildir",
+        logo: "assets/kaynak-kampus-logo-192.png",
+      }).then(function (blob) { pdfOnbellek[tur] = blob; return blob; });
+
+    hazir.then(function (blob) {
+      if (paylasMi && window.RaporPDF.paylasilabilirMi(blob, dosya)) {
+        return window.RaporPDF.paylas(blob, dosya, { baslik: baslik, metin: "Kariyer Pusulam raporum." })
+          .then(function (s) {
+            if (s === "paylasildi") soyle("Paylaşım penceresi açıldı.");
+            else if (s === "iptal") soyle("");
+            else return window.RaporPDF.indir(blob, dosya).then(function () {
+              soyle("Bu tarayıcı dosya paylaşımını desteklemiyor; PDF indirildi.");
+            });
+          });
+      }
+      return window.RaporPDF.indir(blob, dosya).then(function (s) {
+        soyle(s === "indirildi" ? "PDF indirildi: " + dosya
+          : "PDF yeni sekmede açıldı; oradan kaydedebilirsin.");
+      });
+    }).catch(function (e) {
+      console.error(e);
+      soyle("PDF oluşturulamadı. “Yazdır” düğmesiyle deneyebilirsin.", true);
+    }).then(function () { dugme.disabled = false; });
+  }
+
+  /* ══════════════════════ ÇİZİM ══════════════════════ */
+  function ciz() {
+    favYuva = null;
+    if (durum.ekran === "giris") girisCiz();
+    else if (durum.ekran === "bolum") bolumCiz();
+    else if (durum.ekran === "profil") profilCiz();
+    else sonucCiz();
+  }
+
+  /* Açılış: kayıt varsa giriş ekranında "devam et" sunulur. */
+  ciz();
+})();
+</script>
+</body>
+</html>

@@ -7,6 +7,7 @@
 - [Eğitim Oyunları](https://kaynakkampus.com/oyunlar.html): İlkokuldan liseye Türkçe, matematik, hayat bilgisi ve İngilizce oyunları; sınıfın ilk haftası için oryantasyon etkinlikleri; mikrofonla ölçülen sınıf ses düzeyine göre çalışan sınıf ses oyunları; akıllı tahta ve Öğretmen Modu desteği
 - [Güncel Sınav Takvimi](https://kaynakkampus.com/sinav-takvimi.html): YKS, LGS, KPSS, ALES dâhil tüm ÖSYM ve MEB sınavlarının başvuru, sınav ve sonuç tarihleri
 - [Çoklu Zekâ Testi](https://kaynakkampus.com/coklu-zeka-testi.html): Gardner'ın kuramına dayalı öğrenme eğilimleri envanteri, dört yaş düzeyi
+- [Kariyer Pusulam](https://kaynakkampus.com/kariyer-pusulam.html): İlgi, yetenek, çalışma ve yaşam beklentilerini ölçen; profili YÖK/ÖSYM kaynaklı doğrulanmış ön lisans ve lisans program alanlarıyla karşılaştıran kariyer keşif aracı (yapay zekâ kullanmaz)
 - [Ödev Oluştur](https://kaynakkampus.com/odev-olustur.html): MEB öğretim programlarına uygun sorularla ödev ve çalışma kâğıdı üretici
 - [BEP Oluştur](https://kaynakkampus.com/bep-olustur.html): Bireyselleştirilmiş Eğitim Programı taslağı hazırlama aracı
 - [Ders Programı Oluştur](https://kaynakkampus.com/ders-programi.html): Zil saatlerini otomatik hesaplayan haftalık program oluşturucu
