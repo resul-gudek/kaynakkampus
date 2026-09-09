@@ -13,6 +13,7 @@ import { tarihStr } from "@/lib/hesap";
 import { sureEtiketi } from "@/lib/sureli-test";
 import { testAktiflik, testAta, testAtamaSil, testOlustur, testSil } from "@/actions/sureli-test";
 import { TEST_DURUM_ETIKETLERI, type KocTestS, type OgrenciSecenek } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./test.module.css";
 
 /** Formdaki tek soru satırı */
@@ -64,7 +65,7 @@ export default function TestYonetim({
 
   /** Soru sayısı alanı: blok sayısını girilen değere çeker.
       Alan boşaltıldığında bloklar korunur; dolu soru silinecekse onay istenir. */
-  function soruSayisiDegis(deger: string) {
+  async function soruSayisiDegis(deger: string) {
     const ham = Number(deger);
     if (!Number.isFinite(ham) || ham < 1) return;
     const n = Math.min(TEST_MAX_SORU, Math.floor(ham));
@@ -76,13 +77,15 @@ export default function TestYonetim({
     const doluVar = sorular
       .slice(n)
       .some((x) => x.metin.trim() !== "" || x.secenekler.some((sc) => sc.trim() !== ""));
-    if (
-      doluVar &&
-      !confirm(`Soru sayısını ${n}'e düşürmek son ${sorular.length - n} soruyu silecek. Devam edilsin mi?`)
-    ) {
-      return;
+    if (doluVar) {
+      const kabul = await Uyari.onay(
+        `Soru sayısını ${n}'e düşürmek, doldurduğun son ${sorular.length - n} soruyu silecek.`,
+        { baslik: "Soru sayısı azaltılsın mı?", onayEtiketi: "Azalt ve sil", tehlikeli: true }
+      );
+      if (!kabul) return;
     }
-    setSorular(sorular.slice(0, n));
+    /* Onay beklenirken başka bir düzenleme olabilir: güncel listeden kırp */
+    setSorular((mevcut) => mevcut.slice(0, n));
   }
 
   function soruDegis(i: number, yama: Partial<SoruTaslak>) {
@@ -153,14 +156,17 @@ export default function TestYonetim({
     });
   }
 
-  function sil(t: KocTestS) {
-    const uyari = t.cozenSayisi
-      ? `"${t.ad}" testi ve ${t.cozenSayisi} öğrenci sonucu silinsin mi? Bu işlem geri alınamaz.`
-      : `"${t.ad}" testi silinsin mi?`;
-    if (!confirm(uyari)) return;
+  async function sil(t: KocTestS) {
+    const metin = t.cozenSayisi
+      ? `"${t.ad}" testi ve ${t.cozenSayisi} öğrencinin sonucu silinecek. Bu işlem geri alınamaz.`
+      : `"${t.ad}" testi silinecek. Bu işlem geri alınamaz.`;
+    const kabul = await Uyari.onay(metin, {
+      baslik: "Test silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await testSil(t.id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
@@ -168,7 +174,7 @@ export default function TestYonetim({
   function aktiflikDegis(t: KocTestS) {
     baslat(async () => {
       const sonuc = await testAktiflik(t.id, !t.aktif);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
@@ -453,7 +459,7 @@ function AtamaBolumu({
     baslat(async () => {
       const sonuc = await testAta({ testId: test.id, ogrenciIdler: secilenler, sonTarih: sonTarih || null });
       if (sonuc.hata) {
-        alert(sonuc.hata);
+        Uyari.hata(sonuc.hata);
         return;
       }
       setSecilenler([]);
@@ -463,11 +469,14 @@ function AtamaBolumu({
     });
   }
 
-  function atamayiKaldir(atamaId: string, ogrenciAd: string) {
-    if (!confirm(`${ogrenciAd} için bu test ataması kaldırılsın mı?`)) return;
+  async function atamayiKaldir(atamaId: string, ogrenciAd: string) {
+    const kabul = await Uyari.onay(`${ogrenciAd} için bu test ataması kaldırılacak; öğrenci testi göremez.`, {
+      baslik: "Atama kaldırılsın mı?", onayEtiketi: "Kaldır", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await testAtamaSil(atamaId);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }

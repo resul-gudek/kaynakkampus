@@ -24,6 +24,7 @@ import {
   okumaSuresi,
   ozetUret,
 } from "@/lib/blog";
+import { blogIcerikNormalle } from "@/lib/blog-icerik";
 import { benzersizSlug } from "@/lib/blog-sunucu";
 import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
 
@@ -39,13 +40,18 @@ function blogTazele(slug?: string, eskiSlug?: string) {
   revalidatePath("/sitemap.xml");
 }
 
-/** FormData → BlogYaziSemasi girdisi */
+/** FormData → BlogYaziSemasi girdisi.
+
+   Gövde ŞEMADAN ÖNCE normalleştirilir: içerik Word'den, Google Docs'tan,
+   WhatsApp'tan ya da düz metin olarak gelse de veri tabanına hep aynı dar
+   HTML yazılır (p, h2, h3, strong, em, ul, ol, li, a, blockquote, br).
+   Böylece uzunluk sınırı da saklanacak metne uygulanmış olur. */
 function formVerisi(formData: FormData) {
   return {
     baslik: formData.get("baslik"),
     slug: formData.get("slug") ?? "",
     ozet: formData.get("ozet") ?? "",
-    icerik: formData.get("icerik"),
+    icerik: blogIcerikNormalle(String(formData.get("icerik") ?? "")),
     kategori: formData.get("kategori"),
     etiketler: etiketleriAyir(String(formData.get("etiketler") ?? "")),
     seoAciklama: formData.get("seoAciklama") ?? "",

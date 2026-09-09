@@ -213,6 +213,71 @@
     /* Alt bilgi (bülten + sosyal) artık assets/site-tema.css'te —
        markup tüm sayfalarda birebir aynı olduğu için stil de ortak. */
 
+    /* ── ETKİNLİK BANDI ───────────────────────────────────────────
+       Hero'nun hemen altında duran tek satırlık tanıtım. Bilerek KISA:
+       araç kataloğunu aşağı itmesin ama ziyaretçi ilk ekranda görsün.
+       Blog/haber kartı gibi durmasın diye kart ızgarası değil, tek bant;
+       görsel de klasör + PDF sayfası (indirilebilir materyal işareti). */
+    .etkinlik-bant-alan { padding: 26px 0 0; }
+    .etkinlik-bant {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas: "gorsel metin eylem";
+      align-items: center; gap: 20px 22px;
+      padding: 18px 22px;
+      background: linear-gradient(115deg, var(--gul-sis) 0%, var(--beyaz) 58%);
+      border: 1px solid var(--duman); border-radius: var(--radius-lg);
+      color: inherit; transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .etkinlik-bant:hover {
+      border-color: var(--gul); box-shadow: var(--golge-yumusak); transform: translateY(-2px);
+    }
+    .etkinlik-bant:focus-visible { outline: 2px solid var(--murekkep); outline-offset: 3px; }
+
+    /* Görsel: bordo kare içinde klasör + üstünde PDF sayfası */
+    .etkinlik-bant-gorsel {
+      grid-area: gorsel; position: relative; flex: none;
+      width: 66px; height: 66px; border-radius: var(--radius-md);
+      background: linear-gradient(150deg, var(--bordo) 0%, var(--bordo-ac, #A85462) 100%);
+      display: grid; place-items: center; color: #fff;
+    }
+    .etkinlik-bant-gorsel svg { width: 38px; height: 38px; }
+    .etkinlik-bant-rozet {
+      position: absolute; right: -7px; bottom: -7px;
+      background: var(--beyaz); color: var(--bordo);
+      border: 1px solid var(--duman); border-radius: 8px;
+      font-size: 9px; font-weight: 800; letter-spacing: .6px;
+      padding: 3px 6px; line-height: 1;
+    }
+
+    .etkinlik-bant-metin { grid-area: metin; min-width: 0; }
+    .etkinlik-bant-metin b {
+      display: block; font-family: var(--font-baslik); font-weight: 700;
+      font-size: var(--text-h4, 1.15rem); color: var(--murekkep); line-height: 1.25;
+    }
+    .etkinlik-bant-metin p {
+      margin-top: 4px; color: var(--kursun); font-size: var(--text-small);
+      line-height: 1.55; max-width: 62ch;
+    }
+    .etkinlik-bant-eylem { grid-area: eylem; }
+    /* Bandın TAMAMI bağlantı; içteki düğme yalnız görsel bir işaret */
+    .etkinlik-bant .btn { pointer-events: none; white-space: nowrap; }
+
+    @media (max-width: 860px) {
+      .etkinlik-bant {
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas: "gorsel metin" "eylem eylem";
+        gap: 16px 16px; padding: 16px;
+      }
+      /* Açıklama birkaç satıra indiğinde ikon ortada asılı kalmasın */
+      .etkinlik-bant-gorsel { align-self: start; }
+      .etkinlik-bant-eylem { justify-self: stretch; }
+      .etkinlik-bant .btn { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 420px) {
+      .etkinlik-bant-gorsel { width: 54px; height: 54px; }
+      .etkinlik-bant-gorsel svg { width: 30px; height: 30px; }
+    }
+
     /* ── Gizli bölümler (kurslar) yeniden açılırsa tutarlı görünsün ── */
     .kurs-izgara { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bosluk-16); }
     .kurs-gorsel { height: 150px; display: grid; place-items: center; font-size: 44px; background: var(--sis); border-bottom: 1px solid var(--duman); }
@@ -277,7 +342,7 @@
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
           <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
-          <a href="etkinlikler.html" hidden>Etkinlikler</a>
+          <a href="/etkinlikler">Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -314,7 +379,7 @@
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
     <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
-    <a href="etkinlikler.html" hidden>Etkinlikler</a>
+    <a href="/etkinlikler">Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -390,6 +455,46 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ ETKİNLİK BANDI
+     Hero'nun hemen altında, araç kataloğundan ÖNCE duran bağımsız giriş.
+     Etkinlikler bir blog/haber içeriği değildir; bu yüzden "Blog &
+     Haberler" grubundan çıkarılıp buraya alındı. Bandın tamamı
+     /etkinlikler adresine gider (içteki düğme yalnız görsel işaret). -->
+<section class="etkinlik-bant-alan">
+  <div class="container">
+    <a class="etkinlik-bant fade-up" href="/etkinlikler"
+       aria-label="Etkinlikler: sınıf seviyelerine göre indirilebilir PDF etkinlikleri">
+      <span class="etkinlik-bant-gorsel" aria-hidden="true">
+        <!-- Klasör + içinden çıkan sayfa: indirilebilir materyal işareti -->
+        <svg viewBox="0 0 48 48" fill="none">
+          <path d="M4 12a3 3 0 0 1 3-3h9.9a3 3 0 0 1 2.2.95l2.5 2.6a3 3 0 0 0 2.2.95H41a3 3 0 0 1 3 3v4H4v-8.5Z"
+                fill="currentColor" opacity=".55" />
+          <rect x="15" y="6" width="18" height="22" rx="2.5" fill="#fff" opacity=".95" />
+          <rect x="18.5" y="11" width="11" height="2" rx="1" fill="#7A2035" opacity=".55" />
+          <rect x="18.5" y="15.5" width="8" height="2" rx="1" fill="#7A2035" opacity=".4" />
+          <rect x="18.5" y="20" width="6" height="2" rx="1" fill="#7A2035" opacity=".3" />
+          <path d="M4 20a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v17a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V20Z"
+                fill="currentColor" />
+          <rect x="4" y="20" width="40" height="2.4" rx="1.2" fill="#fff" opacity=".22" />
+        </svg>
+        <span class="etkinlik-bant-rozet">PDF</span>
+      </span>
+
+      <span class="etkinlik-bant-metin">
+        <b>Etkinlikler</b>
+        <p>
+          Öğrencileriniz için sınıf seviyelerine göre hazırlanmış, indirilebilir
+          PDF etkinliklerini keşfedin. Üyeliksiz ve ücretsiz.
+        </p>
+      </span>
+
+      <span class="etkinlik-bant-eylem">
+        <span class="btn btn-primary">Etkinliklere Göz At →</span>
+      </span>
+    </a>
   </div>
 </section>
 
@@ -492,11 +597,11 @@
         </span>
         <span class="katalog-sevron">›</span>
       </a>
-      <a class="katalog-kart fade-up" href="etkinlikler.html" hidden>
-        <span class="katalog-ikon">🎨</span>
+      <a class="katalog-kart fade-up" href="/etkinlikler">
+        <span class="katalog-ikon">🗂</span>
         <span class="katalog-govde">
           <span class="kart-baslik">Etkinlikler</span>
-          <span class="kart-not">Sınıf içi etkinlik önerileri</span>
+          <span class="kart-not">Sınıf sınıf PDF çalışma kâğıtları</span>
         </span>
         <span class="katalog-sevron">›</span>
       </a>
@@ -837,8 +942,8 @@
           <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
           <li><a href="bep-olustur.html">BEP Oluştur</a></li>
           <li><a href="ders-programi.html">Ders Programı</a></li>
+          <li><a href="/etkinlikler">Etkinlikler</a></li>
           <li><a href="kariyer-pusulam.html">Kariyer Pusulam</a></li>
-          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
         </ul>
       </div>
 
@@ -874,6 +979,7 @@
 <!-- ═══════════════════════════════════════════════════════ SCRIPTS -->
 <script src="assets/site-header.js" defer></script>
 <script src="assets/duyuru-serit.js" defer></script>
+<script src="assets/kk-uyari.js" defer></script>
 <script src="assets/cerez-onay.js" defer></script>
 <script src="assets/analitik.js" defer></script>
 <script src="assets/kullanim-sayac.js" data-sayfa="anasayfa" defer></script>

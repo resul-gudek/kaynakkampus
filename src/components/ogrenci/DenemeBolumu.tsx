@@ -14,6 +14,7 @@ import {
 import { DENEME_DERSLERI, DENEME_TURLERI } from "@/lib/sabitler";
 import BosDurum from "@/components/maskot/BosDurum";
 import { konulariAyir, type DenemeKaydi } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./panel.module.css";
 
 interface SatirGirdi {
@@ -69,7 +70,9 @@ export default function DenemeBolumu({
       const g = satir(d.ders);
       const toplam = (+g.dogru || 0) + (+g.yanlis || 0) + (+g.bos || 0);
       if (toplam > d.soru) {
-        alert(`${d.ders}: Doğru + Yanlış + Boş toplamı ${d.soru} soruyu aşamaz.`);
+        Uyari.uyari(`${d.ders}: Doğru + Yanlış + Boş toplamı ${d.soru} soruyu aşamaz.`, {
+          baslik: "Soru sayısı tutmuyor"
+        });
         return;
       }
     }
@@ -91,7 +94,7 @@ export default function DenemeBolumu({
         }),
       });
       if (sonuc.hata) {
-        alert(sonuc.hata);
+        Uyari.hata(sonuc.hata);
         return;
       }
       setAd("");

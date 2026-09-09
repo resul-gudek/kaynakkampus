@@ -47,8 +47,7 @@ export default function SiteAltBilgi() {
               <li><a href="/odev-olustur.html">Ödev Oluştur</a></li>
               <li><a href="/bep-olustur.html">BEP Oluştur</a></li>
               <li><a href="/ders-programi.html">Ders Programı</a></li>
-              {/* Etkinlikler menüden gizli (kullanıcı kararı) — statik alt bilgide de hidden */}
-              <li hidden><a href="/etkinlikler.html">Etkinlikler</a></li>
+              <li><Link href="/etkinlikler">Etkinlikler</Link></li>
             </ul>
           </div>
 

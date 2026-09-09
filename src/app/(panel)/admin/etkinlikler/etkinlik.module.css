@@ -1,0 +1,222 @@
+/* Etkinlik arşivi yönetimi — dosya yöneticisi görünümü.
+   Kare kartlar, kırıntı yolu, üstte araç çubuğu. Panelin genel dili
+   (yüzey, kenarlık, gölge, köşe) blog/etkinlik modülleriyle aynıdır. */
+
+/* ── Araç çubuğu ── */
+.cubuk {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 12px 14px; margin: 24px 0 12px;
+}
+.aracDugme {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 38px; padding: 0 14px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--bg-soft); color: var(--text);
+  font-family: inherit; font-size: .82rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: all .18s;
+}
+.aracDugme:hover:not(:disabled) { border-color: var(--bordo); color: var(--bordo); background: var(--tint); }
+.aracDugme:disabled { opacity: .45; cursor: default; }
+.aracDugme.birincil { background: var(--murekkep); border-color: var(--murekkep); color: #fff; }
+.aracDugme.birincil:hover:not(:disabled) { background: var(--bordo); border-color: var(--bordo); color: #fff; }
+
+.aramaKutu {
+  flex: 1 1 200px; min-width: 160px; max-width: 320px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0 12px; min-height: 38px;
+}
+.aramaKutu:focus-within { border-color: var(--bordo); }
+.aramaKutu input {
+  flex: 1; min-width: 0; border: none; background: none; outline: none;
+  font-family: inherit; font-size: .82rem; color: var(--text);
+}
+.aramaKutu button {
+  border: none; background: none; cursor: pointer; color: var(--muted);
+  font-size: .9rem; line-height: 1; padding: 4px;
+}
+.aracBaglanti {
+  margin-left: auto; display: inline-flex; align-items: center; min-height: 34px;
+  padding: 0 10px; border-radius: 10px;
+  color: var(--bordo); font-size: .78rem; font-weight: 700; text-decoration: underline;
+}
+.aracBaglanti:hover { background: var(--tint); }
+
+/* ── Kırıntı yolu ── */
+.kirinti {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: .82rem; color: var(--muted); margin-bottom: 16px;
+}
+.kirinti button {
+  border: none; background: none; cursor: pointer; color: var(--bordo);
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  padding: 6px 6px; min-height: 30px; border-radius: 8px;
+}
+.kirinti button:hover:not(:disabled) { background: var(--tint); text-decoration: underline; }
+.kirintiParca { display: inline-flex; align-items: center; gap: 6px; }
+.kirintiParca > span { opacity: .45; }
+.kirinti b { color: var(--text); font-weight: 800; padding: 0 4px; }
+
+/* ── Kart ızgarası ── */
+.izgara {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px; margin-bottom: 50px;
+}
+
+.kart {
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.kart:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--gul); }
+/* Taslak kayıt listede görsel olarak geri planda durur */
+.taslakKart { border-style: dashed; }
+.taslakKart .kartAc { opacity: .72; }
+
+/* Kartın tıklanabilir gövdesi — klasörde <button>, PDF'te <a> */
+.kartAc {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 12px 12px; text-align: center; flex: 1;
+  border: none; background: none; cursor: pointer;
+  font-family: inherit; color: var(--text); text-decoration: none;
+}
+.klasorKart .kartAc { justify-content: center; }
+/* SVG ikon panelde marka bordosunda */
+.klasorIkon { color: var(--bordo); }
+
+/* PDF ön izleme — kare; kartların boyu birbirini bozmasın */
+.onizleme {
+  width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden;
+  background: linear-gradient(140deg, var(--gul-sis), var(--sis));
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+}
+.onizleme img { width: 100%; height: 100%; object-fit: cover; }
+.pdfIkon {
+  font-size: .95rem; font-weight: 800; letter-spacing: 1px;
+  color: var(--bordo); background: var(--surface);
+  padding: 10px 14px; border-radius: 10px; box-shadow: var(--shadow);
+}
+
+/* Başlık iki satırla sınırlı: uzun ad kart boyunu bozmasın */
+.kartBaslik {
+  font-size: .86rem; font-weight: 700; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+  overflow-wrap: anywhere; min-height: 2.4em;
+}
+.kartNot { font-size: .7rem; color: var(--muted); font-weight: 600; }
+.kartYol {
+  font-size: .66rem; color: var(--muted); opacity: .85;
+  display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* ── Kart eylem şeridi ── */
+.pdfEylem, .kartAlt {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  padding: 8px 10px; border-top: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.pdfEylem { justify-content: center; background: none; }
+.siraGrup { display: inline-flex; gap: 2px; margin-right: auto; }
+
+.mini {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 30px; min-height: 30px; padding: 0 6px;
+  border: 1px solid transparent; border-radius: 8px;
+  background: none; color: var(--text); text-decoration: none;
+  font-family: inherit; font-size: .82rem; line-height: 1; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.mini:hover:not(:disabled) { background: var(--tint); color: var(--bordo); border-color: var(--gul); }
+.mini:disabled { opacity: .3; cursor: default; }
+.mini.tehlike:hover { background: #fef2f2; color: var(--kirmizi); border-color: var(--kirmizi); }
+
+.durumSecim {
+  margin-left: auto; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); color: var(--text);
+  font-family: inherit; font-size: .68rem; font-weight: 700;
+  padding: 5px 4px; min-height: 30px; max-width: 92px; cursor: pointer;
+}
+
+/* ── Boş durum ── */
+.bos {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 56px 20px; margin-bottom: 50px; color: var(--muted);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.bos span { font-size: 2.2rem; margin-bottom: 8px; }
+.bos b { color: var(--text); font-size: 1rem; }
+.bos p { font-size: .84rem; margin-top: 4px; max-width: 46ch; line-height: 1.6; }
+
+/* ── Kip pencere (PDF ekle/düzenle, taşı) ── */
+.kipZemin {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid; place-items: center; padding: 20px;
+  background: rgba(31, 20, 26, .45); backdrop-filter: blur(3px);
+  overflow-y: auto;
+}
+.kip {
+  width: min(560px, 100%); max-height: 90vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  padding: 20px 22px;
+}
+.kipBas { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.kipBas h2 { font-size: 1.05rem; }
+.kipKonum { font-size: .76rem; color: var(--muted); margin-top: -6px; }
+.kipKonum b { color: var(--text); }
+.kipAlt { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+
+.alan { display: flex; flex-direction: column; gap: 6px; }
+.alan > span { font-size: .74rem; font-weight: 700; color: var(--muted); }
+.alan > small { color: var(--muted); font-size: .7rem; line-height: 1.5; }
+.alan input, .alan select {
+  width: 100%; border: 1px solid var(--border); background: var(--bg-soft); color: var(--text);
+  border-radius: 10px; padding: 10px 12px; outline: none;
+  font-size: .86rem; font-family: inherit; min-height: 42px;
+}
+.alan input:focus, .alan select:focus { border-color: var(--bordo); }
+.alan input[type="file"] { padding: 8px 10px; font-size: .78rem; }
+
+.kapakAlan { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: start; }
+.kapakOnizleme {
+  width: 96px; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden;
+  background: linear-gradient(140deg, var(--gul-sis), var(--sis));
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+  font-size: .8rem; font-weight: 800; color: var(--bordo); letter-spacing: 1px;
+}
+.kapakOnizleme img { width: 100%; height: 100%; object-fit: cover; }
+
+.hata {
+  padding: 10px 13px; border-radius: 10px;
+  background: rgba(220, 38, 38, .08); color: var(--kirmizi);
+  font-size: .8rem; line-height: 1.5;
+}
+
+/* ── Mobil ────────────────────────────────────────────────────
+   Telefonda iki kart yan yana; araç çubuğu düğmeleri tam genişliğe
+   yayılır ve dokunma hedefleri büyür. */
+@media (max-width: 640px) {
+  .izgara { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .cubuk { padding: 10px; gap: 6px; }
+  .aracDugme { flex: 1 1 auto; justify-content: center; min-height: 42px; font-size: .78rem; }
+  .aramaKutu { flex: 1 1 100%; max-width: none; min-height: 42px; }
+  .aracBaglanti { margin-left: 0; flex: 1 1 100%; justify-content: center; }
+  .mini { min-width: 36px; min-height: 36px; }
+  /* Kırıntı yolu telefonda parmakla isabet edilebilir olsun */
+  .kirinti button { min-height: 36px; padding: 6px 8px; }
+  .durumSecim { max-width: 84px; min-height: 36px; }
+  .klasorIkon { width: 44px; height: 44px; }
+  .kartAc { padding: 12px 8px 10px; }
+  .kapakAlan { grid-template-columns: 1fr; }
+  .kapakOnizleme { width: 100%; max-width: 160px; }
+  .kip { padding: 16px; }
+}

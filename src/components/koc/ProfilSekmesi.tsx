@@ -11,6 +11,7 @@ import { profilKaydet } from "@/actions/ogrenci";
 import { odevEkle } from "@/actions/odev";
 import { yolEkle } from "@/actions/yol";
 import type { ZayifS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./koc.module.css";
 
 function konulariAyir(v: FormDataEntryValue | null): string[] {
@@ -79,9 +80,9 @@ export default function ProfilSekmesi({ ogrenciId, sinif, profil, zayif }: Props
           "Eksik konu: tekrar + soru çözümü" + (z.kez > 1 ? ` (${z.kez} kez yanlış yapıldı)` : ""),
         xp: 60,
       });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
-        alert(`"${z.ders} – ${z.konu}" yol haritasına adım olarak eklendi. 🗺️`);
+        Uyari.bildir(`"${z.ders} – ${z.konu}" yol haritasına adım olarak eklendi. 🗺️`, { tur: "basari" });
         router.refresh();
       }
     });
@@ -102,9 +103,9 @@ export default function ProfilSekmesi({ ogrenciId, sinif, profil, zayif }: Props
           "Eksik konu çalışması: konu tekrarı yap, ardından 40 soru çöz ve yanlışlarını analiz et." +
           (z.kez > 1 ? ` (Bu konudan ${z.kez} kez yanlış yaptın.)` : ""),
       });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
-        alert(`"${z.ders} – ${z.konu}" konusundan ödev oluşturuldu (son tarih: ${tarihStr(sonTarih)}). 📘`);
+        Uyari.bildir(`"${z.ders} – ${z.konu}" konusundan ödev oluşturuldu (son tarih: ${tarihStr(sonTarih)}). 📘`, { tur: "basari" });
         router.refresh();
       }
     });

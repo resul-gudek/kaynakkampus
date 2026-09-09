@@ -297,6 +297,7 @@
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
+  <script src="assets/kk-uyari.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
   <script src="assets/analitik.js" defer></script>
   <script src="assets/kullanim-sayac.js" data-sayfa="bep-olustur" defer></script>
@@ -331,8 +332,8 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html" hidden>Etkinlikler</a>
           <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+          <a href="/etkinlikler">Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -368,8 +369,8 @@
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+    <a href="/etkinlikler">Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -577,7 +578,7 @@
           <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
           <li><a href="bep-olustur.html">BEP Oluştur</a></li>
           <li><a href="ders-programi.html">Ders Programı</a></li>
-          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+          <li><a href="/etkinlikler">Etkinlikler</a></li>
           <li><a href="kariyer-pusulam.html">Kariyer Pusulam</a></li>
         </ul>
       </div>
@@ -2146,9 +2147,9 @@ function performansMetni(ad, ortam, dersDurum) {
 
 /* ═══════════════ BEP OLUŞTURMA ═══════════════ */
 function generate() {
-  if (!state.grade) { alert("Lütfen önce sınıf seçin."); return; }
+  if (!state.grade) { KKUyari.uyari("Plan oluşturmadan önce öğrencinin sınıf düzeyini seçmelisin.", { baslik: "Sınıf seçilmedi" }); return; }
   const subs = seciliDersler();
-  if (!subs.length) { alert("En az bir ders seçmelisin."); return; }
+  if (!subs.length) { KKUyari.uyari("BEP'e girecek en az bir ders seçmelisin.", { baslik: "Ders seçilmedi" }); return; }
 
   const term = { start: $("termStart").value || defaultTerm().start, end: $("termEnd").value || defaultTerm().end };
   const yilLabel = `${new Date(term.start).getFullYear()} – ${new Date(term.end).getFullYear()} Eğitim Öğretim Yılı`;
@@ -2367,8 +2368,11 @@ function loadDraft() {
   buildDersPerf();
 }
 
-function clearAll() {
-  if (!confirm("Tüm form alanları ve kayıtlı taslak silinsin mi?")) return;
+async function clearAll() {
+  const onaylandi = await KKUyari.onay("Tüm form alanları ve bu cihazda saklanan taslak silinecek. Bu işlem geri alınamaz.", {
+    baslik: "Form sıfırlansın mı?", onayEtiketi: "Sıfırla", tehlikeli: true
+  });
+  if (!onaylandi) return;
   try { localStorage.removeItem("bepDraft"); } catch (e) {}
   location.reload();
 }

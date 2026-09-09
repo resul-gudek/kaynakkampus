@@ -15,6 +15,7 @@ import {
   mailKuyrukTemizle,
 } from "@/actions/mail";
 import stil from "../admin.module.css";
+import { Uyari } from "@/components/ui/uyari";
 import ek from "./mail.module.css";
 
 export interface AyarGorunum {
@@ -187,8 +188,10 @@ export default function MailYonetimi({
               type="button"
               className="btn btn-outline btn-kucuk"
               disabled={bekliyor}
-              onClick={() => {
-                const adres = prompt("Test maili gönderilecek adres:");
+              onClick={async () => {
+                const adres = await Uyari.sor("Test maili gönderilecek adres:", {
+                  baslik: "Test maili", yerTutucu: "ornek@site.com", onayEtiketi: "Gönder",
+                });
                 if (!adres) return;
                 calistir(() => mailTestGonder(adres), "Test maili gönderildi. ✓", setAyarMesaj);
               }}
@@ -297,8 +300,11 @@ export default function MailYonetimi({
             type="button"
             className="btn btn-outline btn-kucuk"
             disabled={bekliyor}
-            onClick={() => {
-              if (!confirm("Sonuçlanmış (gönderildi/hatalı) tüm kayıtlar silinsin mi?")) return;
+            onClick={async () => {
+              const kabul = await Uyari.onay("Gönderilmiş ve hatalı biten tüm kuyruk kayıtları silinecek. Bekleyen kayıtlara dokunulmaz.", {
+                baslik: "Sonuçlananlar temizlensin mi?", onayEtiketi: "Temizle", tehlikeli: true,
+              });
+              if (!kabul) return;
               calistir(() => mailKuyrukTemizle(), "Sonuçlanmış kayıtlar temizlendi.", setKuyrukMesaj);
             }}
           >
@@ -367,8 +373,11 @@ export default function MailYonetimi({
                         className="btn btn-outline btn-kucuk"
                         style={{ borderColor: "#b91c1c", color: "#b91c1c" }}
                         disabled={bekliyor}
-                        onClick={() => {
-                          if (!confirm("Bu kuyruk kaydı silinsin mi?")) return;
+                        onClick={async () => {
+                          const kabul = await Uyari.onay("Kuyruk kaydı silinecek; mail gönderilmemişse bir daha denenmez.", {
+                            baslik: "Kayıt silinsin mi?", onayEtiketi: "Sil", tehlikeli: true,
+                          });
+                          if (!kabul) return;
                           calistir(() => mailKuyrukSil(m.id), "Kayıt silindi.", setKuyrukMesaj);
                         }}
                       >

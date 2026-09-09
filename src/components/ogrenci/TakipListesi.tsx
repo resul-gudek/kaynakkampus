@@ -7,6 +7,7 @@ import { takipDurum } from "@/actions/takip";
 import { GUNLER } from "@/lib/sabitler";
 import BosDurum from "@/components/maskot/BosDurum";
 import type { TakipKaydi } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./panel.module.css";
 
 export default function TakipListesi({ takip }: { takip: TakipKaydi[] }) {
@@ -26,7 +27,7 @@ export default function TakipListesi({ takip }: { takip: TakipKaydi[] }) {
     startTransition(async () => {
       isaretleOptimistik({ id, tamamlandi });
       const sonuc = await takipDurum(id, tamamlandi);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 

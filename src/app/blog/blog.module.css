@@ -173,40 +173,11 @@
 }
 .yaziKapak img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ── İçerik tipografisi ──────────────────────────────────────────────
-   Okuma sütunu ortalıdır; gövde 17px'tir. Başlık hiyerarşisi belirgindir:
-   h2 ana ara başlık, h3 alt başlık — ikisi de paragraftan net ayrışır. */
-.icerik {
-  max-width: 740px; margin: 0 auto; padding: 12px 0 48px;
-  overflow-wrap: break-word;
-}
-.icerik p { font-size: 1.1875rem; line-height: 1.8; margin: 0 0 24px; }
-.icerik h2 {
-  font-size: 1.75rem; line-height: 1.3; font-weight: 800;
-  letter-spacing: -.3px; color: var(--murekkep);
-  margin: 44px 0 16px;
-}
-.icerik h3 {
-  font-size: 1.4rem; line-height: 1.35; font-weight: 700;
-  color: var(--murekkep);
-  margin: 34px 0 12px;
-}
-/* Yazı başlıkla açılıyorsa üstte gereksiz boşluk kalmasın */
-.icerik h2:first-child, .icerik h3:first-child { margin-top: 0; }
-.icerik strong { font-weight: 700; color: var(--murekkep); }
-.icerik a { color: var(--bordo); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.icerik ul, .icerik ol { margin: 0 0 22px; padding-left: 26px; }
-.icerik ul { list-style: disc; }
-.icerik ol { list-style: decimal; }
-.icerik li { font-size: 1.1875rem; line-height: 1.75; margin-bottom: 10px; }
-.icerik li::marker { color: var(--bordo); }
-.icerik blockquote {
-  margin: 28px 0; padding: 16px 22px;
-  border-left: 3px solid var(--gul); background: var(--tint);
-  border-radius: 0 16px 16px 0;
-  font-size: 1.125rem; line-height: 1.75; color: var(--text);
-}
-.icerik hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+/* ── İçerik alanı ────────────────────────────────────────────────────
+   Yazı gövdesinin TİPOGRAFİSİ burada değil, src/app/blog-content.css
+   içindeki .blog-content sınıfındadır (editörle ortak tek kaynak).
+   Burada yalnız sayfadaki yerleşimi kalır. */
+.govdeAlan { padding: 12px 0 48px; }
 
 .etiketler {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;

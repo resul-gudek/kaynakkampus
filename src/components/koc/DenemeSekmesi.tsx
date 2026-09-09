@@ -9,6 +9,7 @@ import { useTransition } from "react";
 import { tarihStr } from "@/lib/hesap";
 import { denemeSil } from "@/actions/deneme";
 import type { DenemeS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./koc.module.css";
 
 /* ── Net gelişim grafiği (SVG, tek seri + tür filtresi) ── */
@@ -168,11 +169,14 @@ export default function DenemeSekmesi({ denemeler }: { denemeler: DenemeS[] }) {
   const router = useRouter();
   const [bekliyor, baslat] = useTransition();
 
-  function sil(id: string) {
-    if (!confirm("Bu deneme sonucu silinsin mi?")) return;
+  async function sil(id: string) {
+    const kabul = await Uyari.onay("Deneme sonucu ve net hesabı silinecek. Bu işlem geri alınamaz.", {
+      baslik: "Deneme sonucu silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await denemeSil(id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }

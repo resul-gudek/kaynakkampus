@@ -107,16 +107,38 @@ export function etiketleriBirlestir(etiketler: readonly string[]): string {
 
 /* ── Metin yardımcıları ─────────────────────────────────────── */
 
+/**
+ * HTML gövdeden düz metin. İçerik artık HTML olarak saklanır (bkz.
+ * blog-icerik.ts); okuma süresi ve özet sözcükleri saymadan önce
+ * etiketlerden arındırmak gerekir. Düz metin girdide etkisizdir.
+ */
+export function htmlDuzMetin(icerik: string): string {
+  return String(icerik ?? "")
+    .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ")
+    // Blok etiketleri sözcükleri birbirine yapıştırmasın
+    .replace(/<\/?(?:p|h[1-6]|li|ul|ol|blockquote|br|div|tr|td)\b[^>]*>/gi, "\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#0*39;|&apos;/gi, "'")
+    .replace(/[ \t ]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 /** İçerikten tahmini okuma süresi (dakika, en az 1) */
 export function okumaSuresi(icerik: string): number {
-  const kelime = String(icerik ?? "").trim().split(/\s+/).filter(Boolean).length;
+  const kelime = htmlDuzMetin(icerik).split(/\s+/).filter(Boolean).length;
   if (!kelime) return 0;
   return Math.max(1, Math.round(kelime / DAKIKADA_KELIME));
 }
 
 /** Özet boş bırakıldığında içerikten üretilen kısa açıklama */
 export function ozetUret(icerik: string, uzunluk = 180): string {
-  const duz = String(icerik ?? "")
+  const duz = htmlDuzMetin(icerik)
     .replace(/^#{1,6}\s+/gm, "")
     .replace(/^>\s+/gm, "")
     .replace(/^[-*]\s+/gm, "")
@@ -193,16 +215,22 @@ export function yazilariSuz<T extends AranabilirYazi>(
 }
 
 /* ── İçerik ayrıştırma (markdown-lite) ───────────────────────
-   Yönetici içeriği düz metin olarak girer; HTML kabul EDİLMEZ (XSS
-   yüzeyi açmamak için). Desteklenen işaretler:
+   DÜZ METİN girdiyi blok listesine çevirir. Yazılar artık zengin
+   editörle yazılır ve dar bir HTML olarak saklanır (bkz. blog-icerik.ts);
+   bu ayrıştırıcı iki yerde yaşamayı sürdürür:
+     • eski kayıtlar — düz metin olarak saklanmış yazılar
+     • düz metin yapıştırmaları — WhatsApp, ChatGPT, not defteri…
+   İkisi de blogIcerikNormalle() içinden geçip aynı HTML'e iner.
+
+   Desteklenen işaretler:
      ## Başlık          → h2        ### Başlık → h3
      - madde            → sırasız liste
      1. madde           → sıralı liste
      > alıntı           → blockquote
      ---                → ayırıcı
      **kalın** *eğik* [metin](https://…)
-   Çıktı React tarafından render edilen veri yapısıdır; hiçbir yerde
-   dangerouslySetInnerHTML kullanılmaz. */
+   Girdideki HTML burada etiket sayılmaz, düz metin olarak taşınır ve
+   sonra kaçırılır — bu yoldan enjeksiyon mümkün değildir. */
 
 export type MetinParcasi =
   | { tur: "metin"; deger: string }

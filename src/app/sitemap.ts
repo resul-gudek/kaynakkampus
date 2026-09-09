@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { blogYaziUrl } from "@/lib/blog";
 import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
+import { etkinlikYolUrl } from "@/lib/etkinlik";
+import { yayindakiAgac } from "@/lib/etkinlik-sunucu";
 import { mutlakAdres as tam } from "@/lib/site";
 
 /* Site haritası — herkese açık sayfalar ve yayındaki blog yazıları.
@@ -16,7 +18,7 @@ const SABIT_SAYFALAR: { yol: string; oncelik: number; siklik: MetadataRoute.Site
   { yol: "/sinav-takvimi.html", oncelik: 0.9, siklik: "daily" },
   { yol: "/haberler.html", oncelik: 0.7, siklik: "daily" },
   { yol: "/hakkimizda.html", oncelik: 0.7, siklik: "monthly" },
-  { yol: "/etkinlikler.html", oncelik: 0.7, siklik: "weekly" },
+  { yol: "/etkinlikler", oncelik: 0.8, siklik: "weekly" },
   { yol: "/oyunlar.html", oncelik: 0.6, siklik: "monthly" },
   { yol: "/coklu-zeka-testi.html", oncelik: 0.6, siklik: "monthly" },
   { yol: "/kariyer-pusulam.html", oncelik: 0.6, siklik: "monthly" },
@@ -34,12 +36,31 @@ export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let yazilar: { slug: string; guncelleme: Date; yayinTarihi: Date | null }[] = [];
+  /* Etkinlik arşivinde adreslenebilir olan KLASÖRLERDİR; PDF'ler sayfa
+     değil dosyadır (/api/etkinlik/pdf/<id>) ve haritaya girmez. */
+  let klasorYollari: string[] = [];
   try {
-    yazilar = await prisma.blogYazi.findMany({
-      where: YAYINDA_KOSUL,
-      orderBy: { yayinTarihi: "desc" },
-      select: { slug: true, guncelleme: true, yayinTarihi: true },
-    });
+    const [blogYazilari, agac] = await Promise.all([
+      prisma.blogYazi.findMany({
+        where: YAYINDA_KOSUL,
+        orderBy: { yayinTarihi: "desc" },
+        select: { slug: true, guncelleme: true, yayinTarihi: true },
+      }),
+      yayindakiAgac(),
+    ]);
+    yazilar = blogYazilari;
+
+    const indeks = new Map(agac.map((d) => [d.id, d]));
+    const slugYolu = (id: string): string[] => {
+      const yol: string[] = [];
+      let simdiki = indeks.get(id);
+      for (let n = 0; simdiki && n < 32; n++) {
+        yol.unshift(simdiki.slug);
+        simdiki = simdiki.ustId ? indeks.get(simdiki.ustId) : undefined;
+      }
+      return yol;
+    };
+    klasorYollari = agac.filter((d) => d.tur === "klasor").map((d) => etkinlikYolUrl(slugYolu(d.id)));
   } catch {
     // Veritabanına ulaşılamazsa site haritası statik sayfalarla üretilir
   }
@@ -55,6 +76,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: y.guncelleme,
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    })),
+    ...klasorYollari.map((yol) => ({
+      url: tam(yol),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
   ];
 }

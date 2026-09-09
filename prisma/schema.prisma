@@ -733,6 +733,46 @@ model VideoIzleme {
   @@index([ogrenciId])
 }
 
+/* ── Etkinlikler: PDF arşivi + klasör ağacı ───────────────────
+   Bu bir etkinlik TAKVİMİ değildir — tarih, saat, yer, kategori yoktur.
+   Sınıf/ders/ünite klasörleri altında PDF çalışma kâğıtları tutulur.
+
+   TEK TABLOLU AĞAÇ: klasör de PDF de aynı tabloda bir "düğüm"dür (tur).
+   Böylece bir klasörün içindeki karışık liste (klasörler + PDF'ler) tek
+   sorguyla, tek sıralamayla (sira) gelir; taşıma ve silme tek yerden
+   yürür. PDF'e özel alanlar klasörde boş kalır.
+
+   ustId null = kök klasör. Kendine dönük FK'de CASCADE YOKTUR: SQL Server
+   döngüsel cascade'i reddeder — alt ağaç uygulama tarafında özyinelemeli
+   silinir (bkz. actions/etkinlik.ts).
+
+   Adres: /etkinlikler/<slug>/<slug>/… ; slug KARDEŞLER arasında benzersiz.
+
+   PDF ve kapak dosyaları public DIŞI dizinde saklanır (dosya-saklama.ts),
+   /api/etkinlik/pdf/[id] ve /api/etkinlik/kapak/[id] üzerinden sunulur. */
+model EtkinlikDugum {
+  id         String          @id @default(cuid())
+  ustId      String? // null = kök klasör
+  ust        EtkinlikDugum?  @relation("EtkinlikAgaci", fields: [ustId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  altlar     EtkinlikDugum[] @relation("EtkinlikAgaci")
+  tur        String // "klasor" | "pdf"
+  ad         String // klasör adı ya da etkinlik başlığı
+  slug       String // adres bileşeni; kardeşler arasında benzersiz
+  sira       Int             @default(0) // klasör içi el ile sıralama
+  durum      String          @default("yayinda") // "taslak" | "yayinda"
+  dosyaYol   String?         @db.NVarChar(1000) // PDF — saklama köküne göreli
+  dosyaAd    String          @default("") // orijinal dosya adı (indirme adı)
+  dosyaBoyut Int             @default(0) // bayt
+  kapakYol   String?         @db.NVarChar(1000) // ön izleme görseli
+  kapakTur   String          @default("") // MIME
+  olusturma  DateTime        @default(now())
+  guncelleme DateTime        @default(now()) @updatedAt
+
+  @@unique([ustId, slug])
+  @@index([ustId, sira])
+  @@index([tur, durum])
+}
+
 /* ── Blog ─────────────────────────────────────────────────────
    Herkese açık içerik modülü. Kullanıcı sistemine BAĞLI DEĞİLDİR:
    yazar serbest metindir (yazarAd), Kullanici'ye FK yoktur — böylece

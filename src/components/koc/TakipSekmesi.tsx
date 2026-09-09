@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { GUNLER } from "@/lib/sabitler";
 import { takipEkle, takipSil, takipDurum } from "@/actions/takip";
 import type { TakipS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./koc.module.css";
 
 interface Props {
@@ -33,7 +34,7 @@ export default function TakipSekmesi({ ogrenciId, gorevler }: Props) {
         gun: String(fd.get("gun") ?? ""),
         gorev: String(fd.get("gorev") ?? "").trim(),
       });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
         form.reset();
         router.refresh();
@@ -41,11 +42,14 @@ export default function TakipSekmesi({ ogrenciId, gorevler }: Props) {
     });
   }
 
-  function sil(id: string) {
-    if (!confirm("Bu görev silinsin mi?")) return;
+  async function sil(id: string) {
+    const kabul = await Uyari.onay("Takip görevi listeden silinecek. Bu işlem geri alınamaz.", {
+      baslik: "Görev silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await takipSil(id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
@@ -53,7 +57,7 @@ export default function TakipSekmesi({ ogrenciId, gorevler }: Props) {
   function durumDegis(t: TakipS) {
     baslat(async () => {
       const sonuc = await takipDurum(t.id, !t.tamamlandi);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }

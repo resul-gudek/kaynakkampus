@@ -7,6 +7,7 @@ import { profilKaydet } from "@/actions/ogrenci";
 import { bugun, tarihStr, type Profil } from "@/lib/hesap";
 import { PROFIL_DERSLERI, SEVIYELER } from "@/lib/sabitler";
 import { konulariAyir } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./panel.module.css";
 
 interface DersGirdi {
@@ -81,7 +82,7 @@ export default function ProfilBolumu({ ogrenciId, profil }: { ogrenciId: string;
         }),
       });
       if (sonuc.hata) {
-        alert(sonuc.hata);
+        Uyari.hata(sonuc.hata);
         return;
       }
       setAcik(false);

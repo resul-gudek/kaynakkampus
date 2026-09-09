@@ -61,6 +61,7 @@ export const NAVIGASYON: NavKalemi[] = [
   { grup: "Kullanıcılar", ad: "Değerlendirmeler", href: "/admin/degerlendirmeler", ikon: "yildiz", yetki: "panel:admin" },
   { grup: "Finans", ad: "Ödemeler", href: "/admin/odemeler", ikon: "odeme", yetki: "odeme:yonet" },
   { grup: "İçerik", ad: "Blog", href: "/admin/blog", ikon: "blog", yetki: "blog:yonet" },
+  { grup: "İçerik", ad: "Etkinlikler", href: "/admin/etkinlikler", ikon: "etkinlik", yetki: "etkinlik:yonet" },
   { grup: "İçerik", ad: "Video Dersler", href: "/video-dersler", ikon: "video", yetki: "video:yonet", roller: ["admin"] },
 
   /* ── İletişim (roller kesişir; E-posta yalnız yönetici) ── */

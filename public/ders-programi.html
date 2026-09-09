@@ -523,6 +523,7 @@
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
+  <script src="assets/kk-uyari.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
   <script src="assets/analitik.js" defer></script>
   <script src="assets/kullanim-sayac.js" data-sayfa="ders-programi" defer></script>
@@ -557,8 +558,8 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html" hidden>Etkinlikler</a>
           <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+          <a href="/etkinlikler">Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -594,8 +595,8 @@
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+    <a href="/etkinlikler">Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -754,7 +755,7 @@
           <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
           <li><a href="bep-olustur.html">BEP Oluştur</a></li>
           <li><a href="ders-programi.html">Ders Programı</a></li>
-          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+          <li><a href="/etkinlikler">Etkinlikler</a></li>
           <li><a href="kariyer-pusulam.html">Kariyer Pusulam</a></li>
         </ul>
       </div>
@@ -1234,8 +1235,11 @@ $("viewBtn").onclick = () => {
   renderSheet();
 };
 $("clearBtn").onclick = () => { st.grid = {}; renderSheet(); };
-$("resetBtn").onclick = () => {
-  if (!confirm("Program ve tüm ayarlar sıfırlansın mı?")) return;
+$("resetBtn").onclick = async () => {
+  const onaylandi = await KKUyari.onay("Yerleştirdiğin dersler, teneffüsler ve tüm ayarlar silinecek. Bu işlem geri alınamaz.", {
+    baslik: "Program sıfırlansın mı?", onayEtiketi: "Sıfırla", tehlikeli: true
+  });
+  if (!onaylandi) return;
   localStorage.removeItem(KEY);
   st = { level: st.level, grade: st.grade, theme: "renkli", lessons: [], sel: null, grid: {}, durs: {}, brks: {},
          gorunum: st.gorunum, saatAcik: st.saatAcik };

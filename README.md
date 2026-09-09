@@ -20,7 +20,8 @@ veri erişimi Prisma ile doğrudan bu repo içinden yapılır. Ayrı bir API pro
 | `/bildirimler` | Bildirim kutusu (koç + öğrenci), kayda deep-link |
 | `/admin` | Yönetici: kullanıcı/koç hesapları (ekle / pasifleştir / şifre sıfırla / sil), mail, aktivite |
 | `/sinav-takvimi.html` | Güncel sınav takvimi: ÖSYM + MEB sınavları, filtre ve sınav detayları |
-| `/odev-olustur.html`, `/bep-olustur.html`, `/ders-programi.html`, `/etkinlikler.html`, `/haberler.html` | Bağımsız statik araçlar (`public/`) |
+| `/odev-olustur.html`, `/bep-olustur.html`, `/ders-programi.html`, `/haberler.html` | Bağımsız statik araçlar (`public/`) |
+| `/etkinlikler`, `/etkinlikler/<klasör>/…` | Etkinlik arşivi: klasör ağacı + indirilebilir PDF çalışma kâğıtları (yönetimi `/admin/etkinlikler`) |
 
 `legacy/` klasörü eski localStorage tabanlı demo sayfalarını port referansı olarak saklar; sunulmaz.
 

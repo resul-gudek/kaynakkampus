@@ -35,6 +35,7 @@ import {
   videoDersSil,
   videoEkSil,
 } from "@/actions/video-ders";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./video-dersler.module.css";
 
 export interface VideoSatir {
@@ -98,7 +99,7 @@ export default function VideoYonetim({
   function calistir(islem: () => Promise<{ hata?: string; tamam?: boolean }>) {
     baslat(async () => {
       const sonuc = await islem();
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
@@ -285,10 +286,13 @@ function Satir({
           type="button"
           className={`${s.metinButon} ${s.tehlike}`}
           disabled={bekliyor}
-          onClick={() => {
-            if (confirm(`“${video.baslik}” videosu ve tüm dosyaları silinsin mi?`)) {
-              calistir(() => videoDersSil(video.id));
-            }
+          onClick={async () => {
+            const kabul = await Uyari.onay("Video, ek dosyaları ve izleme kayıtları silinecek. Bu işlem geri alınamaz.", {
+              baslik: `“${video.baslik}” silinsin mi?`,
+              onayEtiketi: "Sil",
+              tehlikeli: true,
+            });
+            if (kabul) calistir(() => videoDersSil(video.id));
           }}
         >
           Sil
@@ -604,11 +608,16 @@ function VideoFormu({
                   type="button"
                   title="Dosyayı sil"
                   disabled={ekBekliyor || kilitli}
-                  onClick={() => {
-                    if (!confirm(`“${ek.ad}” silinsin mi?`)) return;
+                  onClick={async () => {
+                    const kabul = await Uyari.onay("Ek dosya sunucudan kalıcı olarak silinecek.", {
+                      baslik: `“${ek.ad}” silinsin mi?`,
+                      onayEtiketi: "Sil",
+                      tehlikeli: true,
+                    });
+                    if (!kabul) return;
                     baslatEk(async () => {
                       const sonuc = await videoEkSil(ek.id);
-                      if (sonuc.hata) alert(sonuc.hata);
+                      if (sonuc.hata) Uyari.hata(sonuc.hata);
                       else router.refresh();
                     });
                   }}

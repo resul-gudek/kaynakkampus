@@ -11,6 +11,7 @@ import { sureMetni } from "@/lib/sureli-test";
 import { testSonucSil } from "@/actions/sureli-test";
 import { useVurgu } from "@/components/koc/vurgu";
 import type { KocSonucS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./test.module.css";
 
 export default function TestSonuclari({
@@ -28,17 +29,15 @@ export default function TestSonuclari({
   const [bekliyor, baslat] = useTransition();
   const vurgu = useVurgu(vurguId);
 
-  function sil(x: KocSonucS) {
-    if (
-      !confirm(
-        `${x.ogrenciAd} – "${x.testAd}" sonucu silinsin mi?\n\nSonuç silinirse öğrenci testi yeniden çözebilir.`
-      )
-    ) {
-      return;
-    }
+  async function sil(x: KocSonucS) {
+    const kabul = await Uyari.onay(
+      `${x.ogrenciAd} – "${x.testAd}" sonucu silinecek.\n\nSonuç silinirse öğrenci testi yeniden çözebilir.`,
+      { baslik: "Sonuç silinsin mi?", onayEtiketi: "Sil", tehlikeli: true }
+    );
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await testSonucSil(x.oturumId);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }

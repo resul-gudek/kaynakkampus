@@ -170,6 +170,29 @@ export const BLOG_DURUM_ETIKETLERI: Record<BlogDurum, string> = {
 /** Bir yazıya eklenebilecek azami etiket sayısı */
 export const BLOG_MAX_ETIKET = 10;
 
+/* ── Etkinlikler: PDF arşivi ──────────────────────────────────
+   Klasör ağacı + PDF çalışma kâğıtları. Takvim DEĞİLDİR: tarih, saat,
+   yer, kategori yoktur (bkz. lib/etkinlik.ts).
+
+   Düğüm türü:  "klasor" (içinde klasör ve PDF olabilir) | "pdf"
+   Yayın durumu: "taslak" (yalnız panelde) | "yayinda" (herkese açık).
+   Klasör taslağa alınırsa alt ağacın tamamı ziyaretçiden gizlenir. */
+export const ETKINLIK_TURLERI = ["klasor", "pdf"] as const;
+export const ETKINLIK_DURUMLARI = ["taslak", "yayinda"] as const;
+
+export type EtkinlikTuru = (typeof ETKINLIK_TURLERI)[number];
+export type EtkinlikDurum = (typeof ETKINLIK_DURUMLARI)[number];
+
+export const ETKINLIK_DURUM_ETIKETLERI: Record<EtkinlikDurum, string> = {
+  taslak: "Taslak",
+  yayinda: "Yayında",
+};
+
+/** Klasör adı / etkinlik başlığı üst sınırı */
+export const ETKINLIK_AD_MAX = 120;
+/** Ağacın azami derinliği — sonsuz iç içe klasör kazara oluşmasın */
+export const ETKINLIK_MAX_DERINLIK = 8;
+
 /* ── Ödemeler ─────────────────────────────────────────────────
    Ödeme kaleminin iki bacağı ayrı durum yürütür:
      · öğrenci bacağı  → "bekliyor" (tahsil edilmedi) | "odendi" | "iptal"

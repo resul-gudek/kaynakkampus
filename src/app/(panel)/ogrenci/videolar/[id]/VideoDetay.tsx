@@ -24,6 +24,7 @@ import {
 } from "@/lib/video-ders";
 import { VIDEO_IZLEME_ETIKETLERI, type VideoIzlemeDurum } from "@/lib/sabitler";
 import { videoIlerlemeKaydet, videoNotKaydet, videoTamamlandi } from "@/actions/video-ders";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./detay.module.css";
 
 interface Video {
@@ -293,7 +294,7 @@ function TamamlaDugmesi({
   function degistir() {
     baslat(async () => {
       const sonuc = await videoTamamlandi(videoId, !tamam);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else onDegisti(tamam ? "izlenmedi" : "tamamlandi");
     });
   }

@@ -15,12 +15,14 @@ import {
   blogKapakUrl,
   blogYaziUrl,
   etiketleriAyir,
+  htmlDuzMetin,
   kategoriEtiketi,
   kategoriIkonu,
   okumaSuresi,
   ozetUret,
   slugla,
 } from "@/lib/blog";
+import { blogIcerikNormalle } from "@/lib/blog-icerik";
 import {
   BLOG_DURUMLARI,
   BLOG_DURUM_ETIKETLERI,
@@ -35,6 +37,8 @@ import {
   blogYaziGuncelle,
   blogYaziSil,
 } from "@/actions/blog";
+import { Uyari } from "@/components/ui/uyari";
+import BlogEditor from "@/components/blog/BlogEditor";
 import s from "./blog.module.css";
 
 export interface BlogSatir {
@@ -53,6 +57,14 @@ export interface BlogSatir {
   kapakVar: boolean;
   kapakAd: string;
   guncelleme: string;
+}
+
+/** Başlık karşılaştırması için: küçük harf, yalnız harf/rakam */
+function sadeMetin(metin: string): string {
+  return metin
+    .toLocaleLowerCase("tr-TR")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
 }
 
 const KAPAK_MB = Math.round(MAX_DOSYA_BOYUT / 1024 / 1024);
@@ -91,7 +103,7 @@ export default function BlogYonetim({
   function calistir(islem: () => Promise<{ hata?: string; tamam?: boolean }>) {
     baslat(async () => {
       const sonuc = await islem();
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
@@ -288,8 +300,11 @@ function Satir({
           <button
             className={s.metinButon}
             disabled={bekliyor}
-            onClick={() => {
-              if (!confirm("Kapak görseli kaldırılsın mı?")) return;
+            onClick={async () => {
+              const kabul = await Uyari.onay("Yazının kapak görseli kaldırılacak; dosya sunucudan silinir.", {
+                baslik: "Kapak kaldırılsın mı?", onayEtiketi: "Kaldır", tehlikeli: true,
+              });
+              if (!kabul) return;
               calistir(() => blogKapakSil(yazi.id));
             }}
           >
@@ -299,8 +314,11 @@ function Satir({
         <button
           className={`${s.metinButon} ${s.tehlike}`}
           disabled={bekliyor}
-          onClick={() => {
-            if (!confirm(`“${yazi.baslik}” kalıcı olarak silinsin mi?`)) return;
+          onClick={async () => {
+            const kabul = await Uyari.onay("Yazı ve görselleri kalıcı olarak silinecek. Bu işlem geri alınamaz.", {
+              baslik: `“${yazi.baslik}” silinsin mi?`, onayEtiketi: "Sil", tehlikeli: true,
+            });
+            if (!kabul) return;
             calistir(() => blogYaziSil(yazi.id));
           }}
         >
@@ -326,7 +344,9 @@ function YaziFormu({
 
   const [baslik, setBaslik] = useState(mevcut?.baslik ?? "");
   const [slug, setSlug] = useState(mevcut?.slug ?? "");
-  const [icerik, setIcerik] = useState(mevcut?.icerik ?? "");
+  /* Editörden gelen normalleştirilmiş HTML (sayaç ve özet önizlemesi için;
+     forma giden değeri BlogEditor kendi gizli alanıyla taşır) */
+  const [icerik, setIcerik] = useState(() => blogIcerikNormalle(mevcut?.icerik ?? ""));
   const [ozet, setOzet] = useState(mevcut?.ozet ?? "");
   const [seoAciklama, setSeoAciklama] = useState(mevcut?.seoAciklama ?? "");
   const [etiketler, setEtiketler] = useState(mevcut?.etiketler ?? "");
@@ -339,6 +359,13 @@ function YaziFormu({
   const etkinSlug = slug.trim() || slugla(baslik);
   const etiketListesi = etiketleriAyir(etiketler);
   const okuma = okumaSuresi(icerik);
+  /* Sayaç işaretlemeyi değil, okurun gördüğü metni sayar */
+  const duzIcerik = htmlDuzMetin(icerik);
+  const harfSayisi = duzIcerik.length;
+  /* Ana başlık içeriğe de yazılmışsa sayfada iki kez görünür (başlık
+     alanı zaten H1 basar) — yazara söylenir, içeriğe dokunulmaz. */
+  const baslikTekrari =
+    !!baslik.trim() && sadeMetin(duzIcerik.split("\n")[0] ?? "") === sadeMetin(baslik);
 
   function kapakSecildi(e: React.ChangeEvent<HTMLInputElement>) {
     const dosya = e.target.files?.[0] ?? null;
@@ -367,6 +394,10 @@ function YaziFormu({
     setHata("");
     const fd = new FormData(e.currentTarget);
 
+    if (!blogIcerikNormalle(String(fd.get("icerik") ?? ""))) {
+      setHata("Yazı içeriği boş olamaz.");
+      return;
+    }
     if (etiketListesi.length > BLOG_MAX_ETIKET) {
       setHata(`En çok ${BLOG_MAX_ETIKET} etiket girebilirsiniz.`);
       return;
@@ -447,35 +478,39 @@ function YaziFormu({
           <div className={`${s.sayacMetni} ${ozet.length > 400 ? s.tasti : ""}`}>
             {ozet.length}/400
           </div>
-          {!ozet.trim() && !!icerik.trim() && (
+          {!ozet.trim() && !!duzIcerik && (
             <small>Boş bırakılırsa içerikten üretilir: “{ozetUret(icerik, 110)}”</small>
           )}
         </label>
 
-        <label className={s.genis}>
-          <span>İçerik *</span>
-          <textarea
-            name="icerik"
-            required
-            rows={16}
-            maxLength={60000}
-            value={icerik}
-            onChange={(e) => setIcerik(e.target.value)}
-            placeholder={"## Ara başlık\n\nParagraf metni…\n\n- Madde bir\n- Madde iki\n\n> Öne çıkan alıntı"}
+        <div className={`${s.genis} ${s.icerikAlani}`}>
+          <span className={s.alanBasligi}>İçerik *</span>
+          {/* Ana başlık buraya YAZILMAZ: yukarıdaki "Başlık" alanından gelir
+              ve sayfada tek H1 olarak basılır. */}
+          <BlogEditor
+            ad="icerik"
+            baslangic={mevcut?.icerik ?? ""}
+            onDegisim={setIcerik}
           />
           <div className={s.sayacMetni}>
-            {icerik.length.toLocaleString("tr-TR")} karakter
+            {harfSayisi.toLocaleString("tr-TR")} karakter
             {okuma ? ` · ~${okuma} dk okuma` : ""}
           </div>
-        </label>
+          {baslikTekrari && (
+            <div className={s.ipucu}>
+              İçeriğin ilk satırı başlıkla aynı. Başlık sayfada zaten büyük punto ile
+              basılıyor; bu satırı içerikten silersen yazı iki kez başlamaz.
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={s.yardim}>
-        <b>Biçimlendirme:</b> <code>## Ara başlık</code> · <code>### Alt başlık</code> ·{" "}
-        <code>- madde</code> · <code>1. sıralı madde</code> · <code>&gt; alıntı</code> ·{" "}
-        <code>---</code> ayırıcı · <code>**kalın**</code> · <code>*eğik*</code> ·{" "}
-        <code>[bağlantı metni](https://…)</code>. Boş satır yeni paragraf başlatır. Güvenlik
-        gereği HTML etiketleri kabul edilmez, düz metin olarak gösterilir.
+        <b>Tek biçim:</b> Yazının görünümü kurumsaldır — punto, yazı tipi ve renk seçilmez.
+        Word, Google Docs, WhatsApp ya da başka bir yerden yapıştırdığın metnin biçimi
+        otomatik temizlenir; yalnız <b>paragraf, H2, H3, kalın, italik, liste, bağlantı
+        ve alıntı</b> korunur. <b>Ana başlığı içeriğe yazma:</b> yukarıdaki “Başlık”
+        alanına yaz, sayfada büyük başlık olarak kendisi çıkar.
       </div>
 
       <div className={s.kapakAlan}>

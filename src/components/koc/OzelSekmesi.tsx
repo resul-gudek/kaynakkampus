@@ -14,6 +14,7 @@ import dg from "@/components/degerlendirme/degerlendirme.module.css";
 import { waGonder, waNumaraAl } from "./wa";
 import { useVurgu } from "./vurgu";
 import type { OzelS, OzelOzetS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./koc.module.css";
 
 /* Gizlilik: öğretmen yalnızca kendi değerlendirmesini görür; öğrencinin
@@ -44,7 +45,7 @@ export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, ders
   function calistir(islem: () => Promise<{ hata?: string; tamam?: boolean }>, sonra?: () => void) {
     baslat(async () => {
       const sonuc = await islem();
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
         sonra?.();
         router.refresh();
@@ -74,38 +75,54 @@ export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, ders
     );
   }
 
-  function onayla(x: OzelS) {
-    const u = prompt("Ders ücreti (₺, boş bırakılabilir):", x.ucret ? String(x.ucret) : "");
+  async function onayla(x: OzelS) {
+    const u = await Uyari.sor("Ders ücreti (₺, boş bırakılabilir):", {
+      baslik: "Ders talebini onayla", varsayilan: x.ucret ? String(x.ucret) : "",
+      yerTutucu: "örn. 350", onayEtiketi: "Onayla"
+    });
     if (u === null) return;
     calistir(() => ozelDersGuncelle(x.id, { durum: "planlandi", ucret: +u || 0 }));
   }
 
-  function reddet(x: OzelS) {
-    const neden = prompt("Ret nedeni (öğrenciye gösterilir):", "");
+  async function reddet(x: OzelS) {
+    const neden = await Uyari.sor("Ret nedeni (öğrenciye gösterilir):", {
+      baslik: "Ders talebini reddet", cokSatir: true, onayEtiketi: "Reddet", tehlikeli: true
+    });
     if (neden === null) return;
     calistir(() => ozelDersGuncelle(x.id, { durum: "reddedildi", redNotu: neden.trim() }));
   }
 
-  function yapildi(x: OzelS) {
-    const not = prompt("Ders değerlendirme notu (öğrencinin panelinde görünür):", "");
+  async function yapildi(x: OzelS) {
+    const not = await Uyari.sor("Ders değerlendirme notu (öğrencinin panelinde görünür):", {
+      baslik: "Ders yapıldı", cokSatir: true, onayEtiketi: "Devam et"
+    });
     if (not === null) return;
-    const odev = prompt("Derste verilen ödev (boş bırakılabilir):", "");
+    const odev = await Uyari.sor("Derste verilen ödev (boş bırakılabilir):", {
+      baslik: "Ders yapıldı", cokSatir: true, onayEtiketi: "Kaydet"
+    });
     calistir(() =>
       ozelDersGuncelle(x.id, { durum: "yapildi", not_: not.trim(), odev: (odev ?? "").trim() })
     );
   }
 
-  function notDuzenle(x: OzelS) {
-    const not = prompt("Ders değerlendirme notu:", x.not_ || "");
+  async function notDuzenle(x: OzelS) {
+    const not = await Uyari.sor("Ders değerlendirme notu:", {
+      baslik: "Değerlendirmeyi düzenle", varsayilan: x.not_ || "", cokSatir: true, onayEtiketi: "Devam et"
+    });
     if (not === null) return;
-    const odev = prompt("Derste verilen ödev:", x.odev || "");
+    const odev = await Uyari.sor("Derste verilen ödev:", {
+      baslik: "Değerlendirmeyi düzenle", varsayilan: x.odev || "", cokSatir: true, onayEtiketi: "Kaydet"
+    });
     calistir(() =>
       ozelDersGuncelle(x.id, { not_: not.trim(), odev: odev === null ? x.odev : odev.trim() })
     );
   }
 
-  function iptal(x: OzelS) {
-    if (!confirm("Bu ders iptal edilsin mi? (Kayıt silinmez, iptal olarak işaretlenir.)")) return;
+  async function iptal(x: OzelS) {
+    const kabul = await Uyari.onay("Ders iptal olarak işaretlenecek. Kayıt silinmez, listede iptal olarak görünür.", {
+      baslik: "Ders iptal edilsin mi?", onayEtiketi: "İptal et", tehlikeli: true
+    });
+    if (!kabul) return;
     calistir(() => ozelDersGuncelle(x.id, { durum: "iptal" }));
   }
 
@@ -113,8 +130,11 @@ export default function OzelSekmesi({ ogrenciId, ogrenciAd, telefon, kocAd, ders
     calistir(() => ozelDersGuncelle(x.id, { odendi: !x.odendi }));
   }
 
-  function sil(x: OzelS) {
-    if (!confirm("Bu ders kaydı tamamen silinsin mi?")) return;
+  async function sil(x: OzelS) {
+    const kabul = await Uyari.onay("Ders kaydı tamamen silinecek. Bu işlem geri alınamaz.", {
+      baslik: "Ders kaydı silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     calistir(() => ozelDersSil(x.id));
   }
 

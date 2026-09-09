@@ -6,6 +6,8 @@ import {
   BLOG_MAX_ETIKET,
   DENEME_TURLERI,
   EGITMEN_ROLLERI,
+  ETKINLIK_AD_MAX,
+  ETKINLIK_DURUMLARI,
   GUNLER,
   KOC_ODEME_DURUMLARI,
   ODEME_MAX_TUTAR,
@@ -241,7 +243,9 @@ export const BlogYaziSemasi = z.object({
     .refine((s) => s === "" || slugGecerli(s), "Adres yalnız küçük harf, rakam ve tire içerebilir")
     .default(""),
   ozet: z.string().trim().max(400, "Kısa açıklama en çok 400 karakter").default(""),
-  icerik: z.string().trim().min(1, "Yazı içeriği gerekli").max(60000, "İçerik çok uzun"),
+  /** Kaydedilmeden önce blogIcerikNormalle ile HTML'e indirgenir; sınır o
+      HTML üzerinden işler (işaretleme düz metinden uzundur) */
+  icerik: z.string().trim().min(1, "Yazı içeriği gerekli").max(120000, "İçerik çok uzun"),
   kategori: z.enum(BLOG_KATEGORILERI, { error: "Kategori seçin" }),
   etiketler: z
     .array(z.string().trim().min(1).max(40))
@@ -255,6 +259,25 @@ export const BlogYaziSemasi = z.object({
 });
 
 export const BlogDurumSemasi = z.enum(BLOG_DURUMLARI);
+
+/* ── Etkinlikler: PDF arşivi ──────────────────────────────────
+   Klasör ve PDF aynı düğüm tablosunda durur; ad ve durum ikisinde de
+   ortaktır. Takvim alanları (tarih/saat/yer/kategori) YOKTUR. */
+
+/** Klasör adı ya da etkinlik başlığı */
+export const EtkinlikAdSemasi = z
+  .string()
+  .trim()
+  .min(1, "Ad gerekli")
+  .max(ETKINLIK_AD_MAX, `Ad en çok ${ETKINLIK_AD_MAX} karakter olabilir`);
+
+export const EtkinlikDurumSemasi = z.enum(ETKINLIK_DURUMLARI);
+export const EtkinlikYonSemasi = z.enum(["yukari", "asagi"]);
+
+export const EtkinlikPdfSemasi = z.object({
+  ad: EtkinlikAdSemasi,
+  durum: EtkinlikDurumSemasi.default("taslak"),
+});
 
 /* ── Ders sonrası karşılıklı değerlendirme ─────────────────────
    Yapılandırılmış cevaplar DersDegerlendirme.veri içinde JSON tutulur;

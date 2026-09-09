@@ -16,7 +16,7 @@ const OGRETIM_YETKILERI = [
 ] as const;
 
 const ROL_YETKILERI: Record<Rol, readonly string[]> = {
-  admin: ["panel:admin", "koc:yonet", "mail:yonet", "basvuru:yonet", "bildirim:goruntule", "video:yonet", "blog:yonet", "odeme:yonet"],
+  admin: ["panel:admin", "koc:yonet", "mail:yonet", "basvuru:yonet", "bildirim:goruntule", "video:yonet", "blog:yonet", "etkinlik:yonet", "odeme:yonet"],
   koc: OGRETIM_YETKILERI,
   ogretmen: OGRETIM_YETKILERI,
   ogrenci: ["panel:ogrenci", "sinif:goruntule", "bildirim:goruntule", "mesaj:goruntule", "odeme:ogrenci"],

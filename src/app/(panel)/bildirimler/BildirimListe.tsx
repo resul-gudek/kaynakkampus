@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { bildirimOkundu, bildirimSil, bildirimTumunuOkundu, bildirimTemizle } from "@/actions/bildirim";
 import { egitmenMi } from "@/lib/sabitler";
 import BosDurum from "@/components/maskot/BosDurum";
+import { Uyari } from "@/components/ui/uyari";
 import stil from "./bildirimler.module.css";
 
 export interface BildirimGorunum {
@@ -112,8 +113,13 @@ export default function BildirimListe({
           <button
             className="btn btn-outline btn-kucuk"
             style={{ borderColor: "#b91c1c", color: "#b91c1c" }}
-            onClick={() => {
-              if (!confirm("Tüm bildirimlerin silinsin mi?")) return;
+            onClick={async () => {
+              const kabul = await Uyari.onay("Listedeki tüm bildirimlerin silinecek. Bu işlem geri alınamaz.", {
+                baslik: "Bildirimler temizlensin mi?",
+                onayEtiketi: "Temizle",
+                tehlikeli: true,
+              });
+              if (!kabul) return;
               baslat(async () => { await bildirimTemizle(); router.refresh(); });
             }}
           >

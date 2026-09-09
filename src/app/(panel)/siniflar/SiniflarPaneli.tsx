@@ -11,6 +11,7 @@ import {
   sinifaOgrenciEkle,
   siniftanOgrenciCikar,
 } from "@/actions/sinif";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./siniflar.module.css";
 
 export interface OturumGorunum {
@@ -61,7 +62,7 @@ export default function SiniflarPaneli({ rol, siniflar, ogrenciler }: Props) {
   function calistir(islem: () => Promise<{ hata?: string; tamam?: boolean }>, sonra?: () => void) {
     baslat(async () => {
       const sonuc = await islem();
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
         sonra?.();
         router.refresh();
@@ -249,10 +250,13 @@ function SinifKarti({
                     type="button"
                     title="Sınıftan çıkar"
                     disabled={bekliyor}
-                    onClick={() => {
-                      if (confirm(`${uye.ad} sınıftan çıkarılsın mı?`)) {
-                        calistir(() => siniftanOgrenciCikar(sinif.id, uye.id));
-                      }
+                    onClick={async () => {
+                      const kabul = await Uyari.onay("Öğrenci sınıf listesinden çıkarılacak; dilediğinde yeniden ekleyebilirsin.", {
+                        baslik: `${uye.ad} sınıftan çıkarılsın mı?`,
+                        onayEtiketi: "Çıkar",
+                        tehlikeli: true,
+                      });
+                      if (kabul) calistir(() => siniftanOgrenciCikar(sinif.id, uye.id));
                     }}
                   >×</button>
                 )}
@@ -328,10 +332,13 @@ function SinifKarti({
                     <button
                       className={s.metinButon}
                       disabled={bekliyor}
-                      onClick={() => {
-                        if (confirm("Bu canlı ders iptal edilsin mi?")) {
-                          calistir(() => dersOturumuIptal(oturum.id));
-                        }
+                      onClick={async () => {
+                        const kabul = await Uyari.onay("Planlanan canlı ders iptal edilecek; sınıftaki öğrenciler derse giremez.", {
+                          baslik: "Canlı ders iptal edilsin mi?",
+                          onayEtiketi: "İptal et",
+                          tehlikeli: true,
+                        });
+                        if (kabul) calistir(() => dersOturumuIptal(oturum.id));
                       }}
                     >İptal et</button>
                   )}
@@ -343,10 +350,12 @@ function SinifKarti({
                         className={s.metinButon}
                         disabled={bekliyor}
                         style={{ color: "var(--yesil)" }}
-                        onClick={() => {
-                          if (confirm("Ders tamamlandı olarak kapatılsın mı?")) {
-                            calistir(() => dersOturumuTamamla(oturum.id));
-                          }
+                        onClick={async () => {
+                          const kabul = await Uyari.onay("Ders tamamlandı olarak kapatılacak ve katılım kaydı kesinleşir.", {
+                            baslik: "Ders kapatılsın mı?",
+                            onayEtiketi: "Tamamla",
+                          });
+                          if (kabul) calistir(() => dersOturumuTamamla(oturum.id));
                         }}
                       >Tamamla</button>
                     )}

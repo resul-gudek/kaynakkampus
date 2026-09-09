@@ -129,9 +129,9 @@
       12: ["Music", "Friendship", "Human Rights", "Coming Soon", "Psychology", "Favors", "News Stories", "Alternative Energy", "Technology", "Manners"],
     },
     alm: {
-      9: ["Hallo! – Tanışma", "Kennenlernen – Kendini Tanıtma", "Familie – Aile", "Schule – Okul", "Zahlen und Uhrzeit – Sayılar ve Saat"],
-      10: ["Einkaufen – Alışveriş", "Essen und Trinken – Yiyecek İçecek", "Wohnen – Ev ve Yaşam", "Tagesablauf – Günlük Rutin", "Freizeit – Boş Zaman"],
-      11: ["Reisen – Seyahat", "Gesundheit – Sağlık", "Kleidung – Kıyafetler", "Wetter – Hava Durumu", "Feste – Bayramlar ve Kutlamalar"],
+      9: ["Hallo! – Tanışma", "Kennenlernen – Kendini Tanıtma", "Die Gesellschaft", "Die Schule", "Zahlen und Uhrzeit – Sayılar ve Saat"],
+      10: ["Einkaufen – Alışveriş", "Essen und Trinken – Yiyecek İçecek", "Unterkunft", "Tägliches Leben", "Freizeitaktivitäten"],
+      11: ["Reisen – Seyahat", "Gesundheit – Sağlık", "Kleidung – Kıyafetler", "Wetter – Hava Durumu", "Besondere Tage"],
       12: ["Berufe – Meslekler", "Medien – Medya", "Umwelt – Çevre", "Zukunftspläne – Gelecek Planları", "Kultur – Kültür"],
     },
     fiz: {
@@ -5628,6 +5628,17 @@
     "tr-6": { programTuru: "tymm", programAdi: "Ortaokul Türkçe Dersi Öğretim Programı", programYili: 2026, uygulamaEgitimYili: "2026-2027", kaynakPdf: "ortaokul-turkce-dersi", kaynakUrl: "https://tymm.meb.gov.tr/assets/pdf/ortaokul-turkce-dersi.pdf", kaynakKapsami: "tam_program", veriDerinligi: "kodlu_kazanim" },
     "tr-7": { programTuru: "tymm", programAdi: "Ortaokul Türkçe Dersi Öğretim Programı", programYili: 2026, uygulamaEgitimYili: "2026-2027", kaynakPdf: "ortaokul-turkce-dersi", kaynakUrl: "https://tymm.meb.gov.tr/assets/pdf/ortaokul-turkce-dersi.pdf", kaynakKapsami: "tam_program", veriDerinligi: "kodlu_kazanim" },
     "tr-8": { programTuru: "onceki", programAdi: "Türkçe Dersi Öğretim Programı (1-8)", programYili: 2019, uygulamaEgitimYili: "2026-2027", kaynakPdf: "20195716392253-02-Türkçe Öğretim Programı 2019.pdf", kaynakUrl: "https://mufredat.meb.gov.tr/Dosyalar/20195716392253-02-T%C3%BCrk%C3%A7e%20%C3%96%C4%9Fretim%20Program%C4%B1%202019.pdf", kaynakKapsami: "tam_program", veriDerinligi: "kodlu_kazanim" },
+    /* Almanca — künyesi olmayan tek dersti; TTKB PID 333 kaydı eklendi.
+       Program Almanca dilinde yazılmış bir Lehrplan'dır ve metninde yıl
+       satırı yoktur; `programYili` MEB dosya kimliğinden (2018-12-02) gelir
+       ve 2018 lise program ailesiyle tutarlıdır.
+       `veriDerinligi: "unite"` — bu dosyada Almanca için KAZANIMLAR kaydı
+       yoktur, yalnız ünite listesi vardır (program kazanımı kodla
+       numaralamaz; birimi Niveaustufe + Themenkreis'tir). */
+    "alm-9":  { programTuru: "onceki", programAdi: "Almanca Dersi Öğretim Programı (Ortaöğretim)", programYili: 2018, uygulamaEgitimYili: "2026-2027", kaynakPdf: "2018120203443473-almanca dOp.pdf", kaynakUrl: "https://mufredat.meb.gov.tr/Dosyalar/2018120203443473-almanca%20dOp.pdf", kaynakKapsami: "tam_program", veriDerinligi: "unite" },
+    "alm-10": { programTuru: "onceki", programAdi: "Almanca Dersi Öğretim Programı (Ortaöğretim)", programYili: 2018, uygulamaEgitimYili: "2026-2027", kaynakPdf: "2018120203443473-almanca dOp.pdf", kaynakUrl: "https://mufredat.meb.gov.tr/Dosyalar/2018120203443473-almanca%20dOp.pdf", kaynakKapsami: "tam_program", veriDerinligi: "unite" },
+    "alm-11": { programTuru: "onceki", programAdi: "Almanca Dersi Öğretim Programı (Ortaöğretim)", programYili: 2018, uygulamaEgitimYili: "2026-2027", kaynakPdf: "2018120203443473-almanca dOp.pdf", kaynakUrl: "https://mufredat.meb.gov.tr/Dosyalar/2018120203443473-almanca%20dOp.pdf", kaynakKapsami: "tam_program", veriDerinligi: "unite" },
+    "alm-12": { programTuru: "onceki", programAdi: "Almanca Dersi Öğretim Programı (Ortaöğretim)", programYili: 2018, uygulamaEgitimYili: "2026-2027", kaynakPdf: "2018120203443473-almanca dOp.pdf", kaynakUrl: "https://mufredat.meb.gov.tr/Dosyalar/2018120203443473-almanca%20dOp.pdf", kaynakKapsami: "tam_program", veriDerinligi: "unite" },
   };
 
   /* Ders bazlı program istisnaları: yeni TYMM programı yayımlanmış olsa da
@@ -5635,14 +5646,29 @@
      geçerlidir. "PDF yeni tarihli" ≠ "bu yıl yürürlükte". */
   const PROGRAM_ISTISNA = {
     "ink-12": { program: "onceki", gerekce: "TYMM 12. sınıf T.C. İnkılap Tarihi ve Atatürkçülük programı 2027-2028'den itibaren uygulanacaktır" },
+    /* Almanca 9-11: sınıf düzeyi kuralına göre TYMM görünürler ama TYMM'nin
+       ortaöğretim Almanca programı HİÇ YAYIMLANMAMIŞTIR (TYMM Almanca yalnız
+       5-8 içindir). İstisna olmadan programDurumu()/tymmMi() bu sınıflar için
+       "tymm" döndürüp BEP'i yanlış programa yönlendiriyordu. 12. sınıf zaten
+       PROGRAM_DURUMU üzerinden "onceki" olduğu için istisna gerektirmez. */
+    "alm-9":  { program: "onceki", gerekce: "TYMM ortaöğretim Almanca programı yayımlanmamıştır; TTKB Ortaöğretim Almanca Öğretim Programı (PID 333) yürürlüktedir" },
+    "alm-10": { program: "onceki", gerekce: "TYMM ortaöğretim Almanca programı yayımlanmamıştır; TTKB Ortaöğretim Almanca Öğretim Programı (PID 333) yürürlüktedir" },
+    "alm-11": { program: "onceki", gerekce: "TYMM ortaöğretim Almanca programı yayımlanmamıştır; TTKB Ortaöğretim Almanca Öğretim Programı (PID 333) yürürlüktedir" },
   };
 
   /* Hangi sınıf-ders hangi programın ünite listesini kullanıyor */
   const PROGRAM = {
-    "alm-10": "tymm",
-    "alm-11": "tymm",
+    /* Almanca 9-12: TYMM'nin ORTAÖĞRETİM ALMANCA programı YAYIMLANMAMIŞTIR.
+       TTKB program listesinde 9-12 için tek Almanca kaydı vardır (PID 333) ve
+       o da önceki programdır; TYMM Almanca yalnızca 5-8 için çıkmıştır
+       (PID 2023, Çoklu Yabancı Dil Eğitim Modeli). Bu yüzden dört sınıf da
+       "onceki"dir. Önceden 9/10/11 sınıf düzeyi kuralına bakılarak "tymm"
+       işaretlenmişti; bu yanlıştı ve BEP'te yanlış program rozeti ile
+       yanlış kazanım/program seçimine yol açıyordu. */
+    "alm-10": "onceki",
+    "alm-11": "onceki",
     "alm-12": "onceki",
-    "alm-9": "tymm",
+    "alm-9": "onceki",
     "bio-10": "tymm",
     "bio-11": "tymm",
     "bio-12": "onceki",

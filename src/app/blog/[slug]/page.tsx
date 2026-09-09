@@ -55,11 +55,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const yazi = await yaziGetir(slug);
-  /* 404 KARARI BURADA VERİLİR. Kök src/app/loading.tsx bir Suspense sınırı
-     kurduğu için sayfa gövdesinde çağrılan notFound() kabuk akıtıldıktan
-     sonra çalışır ve yanıt 200 kalır (yumuşak 404 → arama motorları
-     olmayan adresi indeksler). generateMetadata akıştan ÖNCE çalıştığından
-     durum kodu buradan doğru şekilde 404 olur. */
+  /* Kayıt yoksa 404 sayfası basılır. DİKKAT — durum kodu 200 kalır:
+     kök src/app/loading.tsx her rotaya bir Suspense sınırı koyduğu için
+     kabuk akıtılırken yanıt başlıkları çoktan gönderilmiş olur; bu
+     sürümde generateMetadata da akıştan önce koşmuyor (ölçüldü, Eyl 2026 —
+     /etkinlikler aynı davranışta). Yani bu "yumuşak 404"tür. Gerçek 404 kodu
+     istenirse kök loading.tsx'in kaldırılması gerekir; bu, tüm sitedeki
+     geçiş animasyonunu etkileyen ayrı bir karardır. */
   if (!yazi) notFound();
 
   const aciklama = yazi.seoAciklama || yazi.ozet || ozetUret(yazi.icerik, 155);

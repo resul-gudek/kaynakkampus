@@ -28,9 +28,9 @@ export const SITE_MENU: SiteMenuOgesi[] = [
       { ad: "Ödev Oluştur", href: "/odev-olustur.html" },
       { ad: "BEP Oluştur", href: "/bep-olustur.html" },
       { ad: "Ders Programı", href: "/ders-programi.html" },
-      // Etkinlikler menüden gizlendi (kullanıcı kararı) — sayfa ve kod
-      // duruyor; geri açmak için yorumu kaldırmak yeterli.
-      // { ad: "Etkinlikler", href: "/etkinlikler.html" },
+      // Etkinlikler bir blog/haber içeriği değil, indirilebilir eğitim
+      // materyalidir; bu yüzden Araçlar grubunda durur.
+      { ad: "Etkinlikler", href: "/etkinlikler" },
     ],
   },
   { ad: "Çoklu Zekâ Testi", href: "/coklu-zeka-testi.html" },

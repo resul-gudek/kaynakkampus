@@ -1,0 +1,165 @@
+/* ── ETKİNLİK ARŞİVİ · public sayfalar ────────────────────────────────
+   Kare kartlı, dosya listesi gibi değil galeri gibi duran bir ızgara.
+   Tasarım dili blog ve statik sayfalarla aynı: yumuşak bordo gradyan
+   sayfa başlığı, yuvarlatılmış beyaz kartlar, hafif gölge, hover'da
+   yükselme. Yeni bir görsel dil KURULMAZ.
+
+   Kart boyları birbirini bozmaz: ön izleme kutusu 1/1 kare, başlık iki
+   satırla sınırlı, alt eylem şeridi kartın dibine yapışık. */
+
+/* ── Sayfa başlığı ─────────────────────────────────────────────────── */
+.sahneBas {
+  background: linear-gradient(140deg, #F3ECEE 0%, #FAF7F5 50%, #FBF1F3 100%);
+  padding: 46px 0 38px;
+}
+[data-theme="dark"] .sahneBas {
+  background: linear-gradient(140deg, #241A20 0%, #16131A 55%, #2A1A22 100%);
+}
+.sahneBas h1 {
+  font-size: var(--text-display); line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display); font-weight: 800;
+}
+.sahneBas h1 span { color: var(--gul); }
+.sahneBas p { color: var(--muted); margin-top: 10px; max-width: 68ch; font-size: .95rem; line-height: 1.7; }
+.rozet {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface); padding: 7px 16px; border-radius: 10px;
+  font-size: .78rem; font-weight: 700; color: var(--bordo);
+  box-shadow: var(--shadow); margin-bottom: 14px;
+}
+
+.govde { padding: 28px 0 48px; }
+
+/* ── Kırıntı yolu ──────────────────────────────────────────────────── */
+.kirinti {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: .84rem; color: var(--muted); margin-bottom: 12px;
+}
+.kirinti a {
+  display: inline-flex; align-items: center; min-height: 32px;
+  padding: 4px 6px; border-radius: 8px;
+  color: var(--bordo); font-weight: 600;
+}
+.kirinti a:hover { background: var(--tint); text-decoration: underline; }
+.kirintiParca { display: inline-flex; align-items: center; gap: 6px; }
+.kirintiParca > span { opacity: .45; }
+.kirinti b { color: var(--text); font-weight: 800; padding: 0 4px; }
+
+.ustKlasor {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 0 14px; margin-bottom: 20px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--surface); color: var(--text);
+  font-size: .82rem; font-weight: 700; box-shadow: var(--shadow);
+  transition: all .18s;
+}
+.ustKlasor:hover { border-color: var(--bordo); color: var(--bordo); background: var(--tint); }
+
+/* ── Kart ızgarası ─────────────────────────────────────────────────
+   auto-fill + minmax: masaüstünde 4-5, tablette 2-3, telefonda 2 kart. */
+.izgara {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
+}
+
+.kart {
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .22s, box-shadow .22s, border-color .22s;
+  text-decoration: none; color: inherit;
+}
+.kart:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--gul); }
+
+/* Kare ön izleme alanı — tüm kartlarda aynı yükseklik */
+.kare {
+  position: relative; display: grid; place-items: center;
+  width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
+  background: linear-gradient(150deg, var(--gul-sis) 0%, var(--sis) 100%);
+  border-bottom: 1px solid var(--border);
+}
+.kare img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Klasör kartı: PDF'ten görsel olarak ayrılsın — dolu bordo zemin */
+.klasorKart .kare {
+  background: linear-gradient(150deg, var(--bordo) 0%, var(--bordo-ac) 100%);
+  border-bottom-color: transparent;
+}
+/* SVG ikon rengini currentColor ile alır; bordo kartta beyaz durur */
+.klasorIkon { color: #fff; filter: drop-shadow(0 3px 8px rgba(0, 0, 0, .22)); }
+
+/* Kapaksız PDF için sade, kurumsal varsayılan görsel (saf CSS) */
+.pdfGorsel { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.pdfSayfa {
+  position: relative; width: 62px; height: 80px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(122, 32, 53, .14);
+  display: flex; flex-direction: column; justify-content: center; gap: 7px;
+  padding: 0 12px;
+}
+/* Kâğıdın kıvrık köşesi */
+.pdfSayfa::after {
+  content: ""; position: absolute; top: 0; right: 0;
+  border-width: 0 14px 14px 0; border-style: solid;
+  border-color: transparent var(--gul-sis) transparent transparent;
+}
+.pdfSatir { display: block; height: 3px; border-radius: 2px; background: var(--gul-ac); }
+.pdfSatir:nth-child(2) { width: 78%; }
+.pdfSatir:nth-child(3) { width: 55%; }
+.pdfEtiket {
+  font-size: .68rem; font-weight: 800; letter-spacing: 1.6px; color: var(--bordo);
+}
+
+/* ── Kart gövdesi ──────────────────────────────────────────────────── */
+.kartGovde {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 15px 15px; flex: 1;
+}
+/* Uzun başlık kartın boyunu bozmasın: en çok iki satır */
+.kartBaslik {
+  font-size: .95rem; font-weight: 700; line-height: 1.35; color: var(--text);
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+  overflow-wrap: anywhere; min-height: 2.55em;
+}
+.klasorKart:hover .kartBaslik { color: var(--bordo); }
+.kartNot { font-size: .74rem; color: var(--muted); font-weight: 600; }
+
+/* ── PDF eylemleri ─────────────────────────────────────────────────── */
+.pdfEylem { display: flex; gap: 8px; margin-top: auto; padding-top: 10px; }
+.gorButon, .indirButon {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 36px; padding: 0 10px; border-radius: 10px;
+  font-size: .76rem; font-weight: 700; white-space: nowrap;
+  transition: all .18s;
+}
+.gorButon { flex: 1 1 auto; background: var(--murekkep); color: #fff; }
+.gorButon:hover { background: var(--bordo); }
+.indirButon { flex: 0 0 auto; background: var(--tint); color: var(--bordo); }
+.indirButon:hover { background: var(--gul-sis); }
+
+/* ── Boş durum ─────────────────────────────────────────────────────── */
+.bos {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 60px 20px; color: var(--muted);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.bos span { font-size: 2.4rem; margin-bottom: 10px; }
+.bos b { color: var(--text); font-size: 1.05rem; }
+.bos p { font-size: .86rem; margin-top: 6px; margin-bottom: 16px; max-width: 46ch; line-height: 1.6; }
+
+/* ── Duyarlı ───────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .izgara { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+}
+@media (max-width: 640px) {
+  /* Telefonda iki kart yan yana; çok darda tek sütuna iner */
+  .izgara { grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 12px; }
+  .kartGovde { padding: 12px; }
+  .kartBaslik { font-size: .88rem; }
+  .pdfEylem { flex-direction: column; gap: 6px; }
+  .gorButon, .indirButon { width: 100%; min-height: 38px; }
+  .klasorIkon { width: 56px; height: 56px; }
+}

@@ -127,3 +127,14 @@
   .kapakOnizleme { width:100%; }
   .eylem { grid-column:span 1; }
 }
+
+/* ── İçerik editörü alanı ─────────────────────────────────────
+   Zengin editör bir <label> içinde durmaz (contenteditable etiketle
+   eşleşmez); başlık ayrı bir satır olarak yazılır. */
+.icerikAlani { display:flex; flex-direction:column; gap:6px; }
+.alanBasligi { font-size:.74rem; font-weight:700; color:var(--muted); }
+.ipucu {
+  padding:8px 12px; border-radius:8px;
+  background:var(--tint); color:var(--bordo);
+  font-size:.74rem; line-height:1.5; font-weight:600;
+}

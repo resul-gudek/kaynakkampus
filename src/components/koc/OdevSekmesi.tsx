@@ -10,6 +10,7 @@ import { kanitUrl } from "@/lib/odev-kanit";
 import { odevEkle, odevSil, odevDurum } from "@/actions/odev";
 import { useVurgu } from "./vurgu";
 import type { OdevS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./koc.module.css";
 
 interface Props {
@@ -43,7 +44,7 @@ export default function OdevSekmesi({ ogrenciId, odevler, vurguId }: Props) {
         sonTarih: String(fd.get("tarih") ?? ""),
         aciklama: String(fd.get("aciklama") ?? "").trim(),
       });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
         form.reset();
         router.refresh();
@@ -51,11 +52,14 @@ export default function OdevSekmesi({ ogrenciId, odevler, vurguId }: Props) {
     });
   }
 
-  function sil(id: string) {
-    if (!confirm("Bu ödev silinsin mi?")) return;
+  async function sil(id: string) {
+    const kabul = await Uyari.onay("Ödev öğrencinin listesinden silinecek. Bu işlem geri alınamaz.", {
+      baslik: "Ödev silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await odevSil(id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
@@ -63,7 +67,7 @@ export default function OdevSekmesi({ ogrenciId, odevler, vurguId }: Props) {
   function durumDegis(o: OdevS) {
     baslat(async () => {
       const sonuc = await odevDurum(o.id, o.durum === "tamamlandi" ? "bekliyor" : "tamamlandi");
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }

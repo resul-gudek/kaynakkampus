@@ -157,8 +157,9 @@ describe("yazilariSuz", () => {
   });
 });
 
-/* İçerik markdown-lite olarak saklanır; HTML kabul edilmez (XSS yüzeyi
-   açmamak için) — ayrıştırıcı düz metin olarak taşır. */
+/* Düz metin (markdown-lite) ayrıştırıcısı: eski kayıtlar ve düz metin
+   yapıştırmaları bu yoldan geçer. Girdideki HTML etiket sayılmaz, düz metin
+   olarak taşınır — HTML'den HTML'e yol lib/blog-icerik.ts'tedir. */
 describe("icerigiAyristir", () => {
   it("boş satırla ayrılan paragrafları böler", () => {
     const bloklar = icerigiAyristir("Birinci paragraf.\n\nİkinci paragraf.");

@@ -37,6 +37,7 @@ import {
   odemeSil,
 } from "@/actions/odeme";
 import { KocDurumRozeti, OgrenciDurumRozeti } from "@/components/odeme/OdemeRozeti";
+import { Uyari } from "@/components/ui/uyari";
 import stil from "@/components/odeme/odeme.module.css";
 
 export interface TarafSecenegi {
@@ -621,15 +622,15 @@ export default function OdemeYonetimi({
                         className="btn btn-outline btn-kucuk"
                         style={{ borderColor: "var(--kirmizi)", color: "var(--kirmizi)" }}
                         disabled={bekliyor}
-                        onClick={() => {
-                          if (
-                            !confirm(
-                              `${o.ogrenciAd} · ${tarihStr(o.tarih)} · ${tutarStr(
-                                o.ogrenciTutar
-                              )} kaydı silinsin mi?\n\nBu işlem geri alınamaz. Ödeme geçmişinden de kalkar.`
-                            )
-                          )
-                            return;
+                        onClick={async () => {
+                          const kabul = await Uyari.onay("Bu işlem geri alınamaz; kayıt ödeme geçmişinden de kalkar.", {
+                            baslik: `${o.ogrenciAd} · ${tarihStr(o.tarih)} · ${tutarStr(
+                              o.ogrenciTutar
+                            )} kaydı silinsin mi?`,
+                            onayEtiketi: "Sil",
+                            tehlikeli: true,
+                          });
+                          if (!kabul) return;
                           calistir(() => odemeSil(o.id), "Ödeme kaydı silindi.");
                         }}
                       >

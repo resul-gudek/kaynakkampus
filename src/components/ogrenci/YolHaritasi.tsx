@@ -7,6 +7,7 @@ import { yolTamamla } from "@/actions/yol";
 import { xpOzet, yolDurumlu } from "@/lib/hesap";
 import BosDurum from "@/components/maskot/BosDurum";
 import type { YolKaydi } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./panel.module.css";
 
 export default function YolHaritasi({ adimlar }: { adimlar: YolKaydi[] }) {
@@ -33,7 +34,7 @@ export default function YolHaritasi({ adimlar }: { adimlar: YolKaydi[] }) {
       const sonuc = await yolTamamla(id, true);
       if (sonuc.hata) {
         setKutla("");
-        alert(sonuc.hata);
+        Uyari.hata(sonuc.hata);
       }
     });
   }
@@ -43,7 +44,7 @@ export default function YolHaritasi({ adimlar }: { adimlar: YolKaydi[] }) {
       isaretle({ id, tamamlandi: false });
       setKutla("");
       const sonuc = await yolTamamla(id, false);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 

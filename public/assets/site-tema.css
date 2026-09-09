@@ -614,14 +614,6 @@ strong, b { font-weight: var(--agirlik-orta); }
   font-family: var(--font-govde); font-weight: 400; color: var(--kursun);
 }
 
-/* Eski 4 sütunlu koyu alt bilgi (etkinlikler.html) */
-footer .footer-grid { gap: var(--bosluk-32); }
-footer .footer-col h4 {
-  font-family: var(--font-govde); font-size: var(--text-small); font-weight: 600;
-  letter-spacing: .06em; text-transform: uppercase; color: #fff;
-}
-footer .footer-col ul a { font-size: var(--text-small); }
-footer .social-btn { border-radius: var(--radius-sm); }
-
-/* Eski dört sütunlu alt bilgi artık kullanılmıyor: tüm sayfalar
-   .site-alt bloğunu taşır (yukarıdaki ALT BİLGİ bölümü). */
+/* Eski dört sütunlu koyu alt bilgi kaldırıldı: onu taşıyan tek sayfa
+   (sahte veriyle dolu etkinlikler.html çalışma kâğıdı kataloğu) silindi.
+   Tüm sayfalar artık .site-alt bloğunu taşır (yukarıdaki ALT BİLGİ). */

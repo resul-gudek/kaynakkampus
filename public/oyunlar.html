@@ -12699,6 +12699,7 @@
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
+  <script src="assets/kk-uyari.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
   <script src="assets/analitik.js" defer></script>
   <script src="assets/kullanim-sayac.js" data-sayfa="oyunlar" defer></script>
@@ -12733,8 +12734,8 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html" hidden>Etkinlikler</a>
           <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+          <a href="/etkinlikler">Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -12770,8 +12771,8 @@
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html" hidden>Etkinlikler</a>
     <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+    <a href="/etkinlikler">Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -12845,7 +12846,7 @@
           <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
           <li><a href="bep-olustur.html">BEP Oluştur</a></li>
           <li><a href="ders-programi.html">Ders Programı</a></li>
-          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+          <li><a href="/etkinlikler">Etkinlikler</a></li>
           <li><a href="kariyer-pusulam.html">Kariyer Pusulam</a></li>
         </ul>
       </div>
@@ -22054,6 +22055,9 @@ const VARSAYILAN_AYAR = {
   seriBonus: 20,
   ekHarfler: "",
   ses: true, muzik: false, konusma: true,
+  /* Seslendirme ses düzeyi (0-100). Arayüzde denetimi yok; ortak ses
+     katmanı bu değeri hem konuşmaya hem hazır ses dosyalarına uygular. */
+  sesSeviye: 100,
   /* Öğretmen modu — oyun başlamadan ayarlanır, tüm oyunlara birlikte uygulanır */
   tema: "bordo",       // bordo | okyanus | orman | gunbatimi | kontrast
   animasyon: true,     // kapalıysa tüm animasyon/geçişler durur
@@ -23471,7 +23475,11 @@ function dersiBitir(){
       <div class="btn-row"><button class="btn btn-primary" id="dbOnay">Raporu oluştur</button>
         <button class="btn btn-outline" data-kapat>Vazgeç</button></div>`);
     p.querySelector("#dbOnay").addEventListener("click", onay);
-  } else if (confirm("Ders bitirilsin ve ders sonu raporu oluşturulsun mu?")) onay();
+  } else {
+    KKUyari.onay("Oturum kapatılıp ders sonu raporu oluşturulacak. Rapor arşive kaydedilir; sonra da açabilirsiniz.", {
+      baslik: "Dersi bitir", ikon: "🏁", onayEtiketi: "Raporu oluştur"
+    }).then(kabul => { if (kabul) onay(); });
+  }
 }
 
 /* ═════════════ ORTAK OYUN ARAYÜZÜ (HUD + maskot şeridi) ═════════════
@@ -23613,34 +23621,69 @@ function efektUcanPuan(kap, el, metin){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   KIVILCIM'IN SESİ — SİTE GENELİ TEK SES KİMLİĞİ
+   KIVILCIM'IN SESİ — SİTE GENELİ ORTAK SESLENDİRME KATMANI (KKSes)
    ───────────────────────────────────────────────────────────────────────────
-   Kıvılcım, Kaynak Kampüs'teki BÜTÜN oyunlarda aynı karaktere aitmiş gibi
-   duyulmalı. Bu blok tek doğruluk kaynağıdır: seslendirme yapan her oyun
-   (Türkçe, İngilizce, Almanca ve ileride eklenecek diller) buradan geçer.
-   Yeni bir oyun eklerken kendi utterance'ını KURMA — `kvSoyle()` çağır.
+   Seslendirme yapan HER oyun (Türkçe, İngilizce, Almanca ve ileride eklenecek
+   diller) yalnızca bu katmandan geçer. Yeni bir oyun eklerken kendi
+   utterance'ını KURMA — `kvSoyle()` çağır. Sayfada tek bir
+   SpeechSynthesisUtterance kurucusu vardır ve o da burada.
 
-   SES PROFİLİ: 12-13 yaş hissi veren kız çocuğu · doğal · sıcak · aşırı tiz
-   DEĞİL · bebeksi değil · yetişkin kadın gibi değil · net telaffuz · orta hız.
+   ── NEDEN BU KATMAN VAR: ÖLÇÜLEN ÜÇ KÖK NEDEN ────────────────────────────
+   Şikâyet: «bilgisayarda başka ses, Android'de başka ses, iPhone'da bazı
+   oyunlarda hiç ses yok». Cihaz ses envanterleri taklit edilerek ölçüldü:
 
-   EN ÖNEMLİ KURAL — ANLAŞILABİLİRLİK KARAKTER EFEKTİNDEN ÖNCE GELİR.
-   Tarayıcı seslerinde perdeyi yükseltmek belli bir noktadan sonra telaffuzu
-   bozar ("chipmunk" etkisi, yutulan kelime sonları, robotik vurgu). Bu yüzden:
+   1) SES SEÇİMİ CİHAZA GÖRE SAVRULUYORDU. Seçim yalnız ad kalıbına bakıyordu;
+      envanterler farklı olduğu için sonuç da farklı çıkıyordu:
+        · Windows 10 (yalnız «Microsoft Tolga») → ERKEK ses, perde 1.46
+        · macOS → Yelda / Samantha (en-US!), perde 1.30
+        · Android → Google TTS sesleri, perde 1.30
+      Yani aynı metin bir cihazda erkek sesin tizleştirilmişi, ötekinde kadın
+      sesi olarak duyuluyordu. İngilizcede macOS en-US'e düşerken Windows ve
+      Android en-GB okuyordu — telaffuz da değişiyordu.
+
+   2) iOS'TA SES HİÇ DENENMİYORDU. Safari `getVoices()` listesini ilk
+      kullanıcı hareketinden sonra doldurur. Hazırlık «listede bu dilin sesi
+      var mı?» sorusuna bağlı olduğu için iPhone'da `konusmaHazir()` false
+      dönüyordu; `speak()` bir kez bile çağrılmıyordu. Dahası dört oyun bu
+      değere bakıp «dinle» görevlerini havuzdan çıkarıyordu — iPhone'da ses
+      susmakla kalmıyor, İÇERİK de eksiliyordu.
+
+   3) İLK SESLENDİRME KULLANICI HAREKETİ DIŞINDA BAŞLIYORDU. Görev ekranı
+      sesi `setTimeout(..., 400)` ile başlatır; iOS bunu hareket bağlamı
+      saymaz ve sessizce düşürür.
+      Ayrıca Chrome'da `cancel()` ile hemen ardından gelen `speak()` yarışa
+      giriyor ve seslendirme kayboluyordu; uzun metinlerde `onend` hiç
+      gelmiyordu.
+
+   ── ÇÖZÜM: TEK KAPI + KAYNAK ZİNCİRİ ─────────────────────────────────────
+   Her seslendirme sırayla şu kaynaklardan denenir:
+     1. HAZIR KAYIT  — metin için önceden üretilmiş ses dosyası varsa o çalar.
+                       Aynı metin BÜTÜN cihazlarda birebir aynı sesle duyulur.
+     2. MERKEZİ TTS  — `KKSES_UZAK.adres` yapılandırılmışsa sunucudan ses
+                       istenir, sonuç önbelleğe alınır (cihazdan bağımsız).
+     3. CİHAZ TTS    — hiçbiri yoksa tarayıcının sesi; artık cihazlar arası
+                       savrulmayı en aza indiren SIRALI TERCİH tablosuyla.
+   1 ve 2 varsayılan olarak BOŞTUR: dosya/uç eklenmedikçe katman bugünkü gibi
+   cihaz sesiyle çalışır, hiçbir oyun bozulmaz, çevrimdışı kullanım sürer.
+   Kapsam dosya eklendikçe kendiliğinden büyür (bkz. KKSES_KAYIT).
+
+   DÜRÜST SINIR: oyun metinlerinin ezici çoğunluğu çalışma anında üretilir
+   (331 doğrudan çağrının yalnız 40'ı düz metin sabiti; geri kalanı şablon).
+   Tek bir oyunun tek bir cümle şablonu bile 11 kişi × 15 etkinlik × 6 oda ×
+   4 zaman ifadesi = binlerce varyant üretir. Bu yüzden «her metni önceden
+   sese dök» yolu tek başına yeterli olamaz; kaynak zinciri de bu yüzden var.
+
+   ── SES PROFİLİ ──────────────────────────────────────────────────────────
+   12-13 yaş hissi veren kız çocuğu · doğal · sıcak · aşırı tiz DEĞİL ·
+   bebeksi değil · yetişkin kadın gibi değil · net telaffuz · orta hız.
+   EN ÖNEMLİ KURAL — ANLAŞILABİLİRLİK KARAKTER EFEKTİNDEN ÖNCE GELİR:
      · perde ölçülü tutulur (kadın seste 1.30) ve KV.sinir ile tavanlanır,
-     · yabancı dilde ve tek sözcük okumada hız düşürülür (kelime ayırt edilsin),
+     · yabancı dilde ve tek sözcük okumada hız düşürülür,
      · duygu tonları telaffuzu bozmayacak KÜÇÜK sapmalarla verilir,
      · hiçbir yolla robotik yavaşlığa (< 0.70) inilmez.
 
-   SES SEÇİMİ: her dil için önce KADIN ve doğal/nöral (Natural/Online/Neural/
-   Google) ses aranır; bulunamazsa kadın ses, sonra cinsiyeti belirsiz doğal
-   ses, en son o dilin herhangi bir sesi. Yalnızca erkek ses varsa (ör. bazı
-   Windows kurulumlarında sadece "Microsoft Tolga") perde bir miktar daha
-   yükseğe çekilir — ama şrilleşmeden, tavanın altında kalarak. Timbre
-   işletim sistemindeki sese bağlıdır; hazır ses DOSYASI taşınmadığı için
-   telif riski yoktur ve çevrimdışı da çalışır.
-
-   Metin okunamıyorsa (ses yok / konuşma kapalı) oyunlar metni ekranda
-   göstermeye devam eder — yönerge hiçbir koşulda kaybolmaz. */
+   Metin okunamıyorsa oyunlar metni ekranda göstermeye devam eder — yönerge
+   hiçbir koşulda kaybolmaz. */
 
 const KV = {
   /* Perde: 1.00 = sesin kendi perdesi. Kadın seste 1.30 çocuk hissi verirken
@@ -23667,36 +23710,102 @@ const KV = {
 const KV_LANG = { tr: "tr-TR", en: "en-GB", de: "de-DE" };
 const KV_DIL  = { tr: /^tr/i, en: /^en/i, de: /^de/i };
 const KV_YEREL = { tr: /^tr[-_]?TR/i, en: /^en[-_]?GB/i, de: /^de[-_]?DE/i };
+
+/* ── SIRALI SES TERCİHİ ────────────────────────────────────────────────────
+   Cihazlar arası savrulmanın asıl çözümü budur: her dil için hangi sesin
+   önce geleceği ADIYLA ve SIRAYLA yazılır. Böylece Windows, macOS, Android
+   ve iOS aynı karaktere en yakın sesi seçer ve seçim rastgele olmaktan çıkar.
+   Sıra: aynı lehçede kadın/nöral sesler → o dilin kadın sesleri → erkek ses
+   (perde telafili). Yeni bir işletim sistemi sesi çıktığında yapılacak tek
+   iş bu listeye adını doğru sıraya eklemektir. */
+const KV_TERCIH = {
+  /* Windows: Emel (Natural, kadın) · Apple: Yelda · Chrome/Android: Google
+     Türkçe ve tr-tr-x-* · yalnız Tolga/Ahmet varsa erkek ses en sonda. */
+  tr: [/\bemel\b/i, /\byelda\b/i, /google\s*t[üu]rk/i, /^tr-tr-x-/i,
+       /\bfiliz\b/i, /\bseda\b/i, /\bzeynep\b/i, /\baylin\b/i,
+       /\btolga\b/i, /\bahmet\b/i],
+  /* İngilizcede LEHÇE de tutulur: hepsi en-GB'ye yönlenir, yoksa en-US.
+     Böylece bir cihaz «colour» derken öteki «color» demez. */
+  en: [/\blibby\b/i, /\bsonia\b/i, /\bserena\b/i, /\bhazel\b/i, /\bkate\b/i,
+       /\bmartha\b/i, /google uk english female/i, /^en-gb-x-/i,
+       /\baria\b/i, /\bjenny\b/i, /\bzira\b/i, /\bsamantha\b/i,
+       /google us english/i, /^en-us-x-/i],
+  de: [/\bkatja\b/i, /\bamala\b/i, /\banna\b/i, /\bhelena\b/i,
+       /google deutsch/i, /^de-de-x-/i, /\bhedda\b/i],
+};
 /* Ses adı kalıpları — "female" içinde "male" geçtiği için erkek testi
    \bmale\b kullanır ve kadın testi HER ZAMAN önce çalışır. */
-const KV_KADIN = /emel|filiz|yelda|seda|zeynep|aylin|ay[şs]e|zira|aria|jenny|michelle|libby|sonia|hazel|susan|samantha|karen|moira|tessa|fiona|serena|nicky|katja|hedda|amala|katharina|female|kad[ıi]n|woman|frau/i;
-const KV_ERKEK = /tolga|ahmet|david|mark|\bguy\b|ryan|daniel|george|alex|james|brian|christopher|eric|roger|steffan|stefan|conrad|killian|hans|thomas|\bmale\b|erkek|\bman\b|mann/i;
+const KV_KADIN = /emel|filiz|yelda|seda|zeynep|aylin|ay[şs]e|zira|aria|jenny|michelle|libby|sonia|hazel|susan|samantha|karen|moira|tessa|fiona|serena|nicky|kate|martha|shelley|katja|hedda|amala|katharina|anna|helena|female|kad[ıi]n|woman|frau/i;
+const KV_ERKEK = /tolga|ahmet|david|mark|\bguy\b|ryan|daniel|george|alex|james|brian|christopher|eric|roger|steffan|stefan|conrad|killian|hans|thomas|martin|yannick|oliver|fred|arthur|gordon|rishi|\bmale\b|erkek|\bman\b|mann/i;
 const KV_KALITE = /natural|neural|online|premium|enhanced|wavenet|siri|google/i;
 
 const KV_SESLER = { tr: null, en: null, de: null };
 const KV_ERKEKMI = { tr: false, en: false, de: false };
 
+/* ── KAYNAK 1: HAZIR SES KAYITLARI ────────────────────────────────────────
+   Anahtar: "dil|sadeleştirilmiş metin" → ses dosyası adresi.
+   Örnek bir satır (dosya eklendiğinde):
+     "tr|kutuya dogru harfi tasi": "assets/ses/tr/kutuya-dogru-harfi-tasi.mp3"
+   Boş kaldığı sürece katman doğrudan cihaz TTS'ine düşer. Sabit metinli
+   yönergeler buraya eklendikçe o metinler bütün cihazlarda AYNI sesle duyulur
+   ve hiçbir oyun kodu değişmez. */
+const KKSES_KAYIT = {};
+/* ── KAYNAK 2: MERKEZİ TTS UCU ────────────────────────────────────────────
+   adres verilirse dinamik metinler de cihazdan bağımsız okunur:
+     KKSES_UZAK.adres = "/api/ses";     // { metin, dil } → audio/mpeg
+   Yanıtlar bellekte önbelleğe alınır. Yapılandırılmadıkça hiç ağ isteği
+   yapılmaz; çevrimdışı sınıf kullanımı bu yüzden bozulmaz. */
+const KKSES_UZAK = { adres: "", bellek: new Map(), enFazla: 80 };
+
+/* ── ORTAK DURUM ──────────────────────────────────────────────────────────
+   calisti: null = bilinmiyor · true = bu cihazda seslendirme gerçekten
+   başladı · false = denendi ve olmadı (o zaman oyunlar metne döner). */
+const KKSes = {
+  destek: typeof window !== "undefined" && "speechSynthesis" in window,
+  jeton: 0, aktif: null, calgi: null, calisti: null, hataSayisi: 0,
+  kilitAcildi: false, yoklandi: false, seviye: 1,
+};
+/* Sessiz 1 örneklik WAV: iOS'ta <audio> ögesini ilk dokunuşta uyandırır. */
+const KKSES_SESSIZ = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+
 function kvKis(v, a, b){ return Math.max(a, Math.min(b, v)); }
 /* Tek/iki kelimelik kısa okuma mu? (sözcük öğretimi hızına geçilir) */
 function kvKisaMi(m){ return m.split(/\s+/).length <= 2 && m.length <= 26; }
+/* Öğretmenin genel ses düzeyi (0-100). Anahtar yoksa tam ses. */
+function kkSeviye(){
+  const v = AYAR && AYAR.genel && AYAR.genel.sesSeviye;
+  return v == null ? 1 : kvKis(+v / 100, 0, 1);
+}
+function kkSesListesi(){
+  if (!KKSes.destek) return [];
+  try { return speechSynthesis.getVoices() || []; } catch (e) { return []; }
+}
 
 function kvSesSec(dil){
-  if (!("speechSynthesis" in window)) return null;
-  let l = [];
-  try { l = speechSynthesis.getVoices() || []; } catch (e) { return null; }
+  if (!KKSes.destek) return null;
+  const l = kkSesListesi();
   const kalip = KV_DIL[dil] || KV_DIL.tr;
   const hepsi = l.filter(v => v && kalip.test(v.lang || ""));
   if (!hepsi.length){ KV_SESLER[dil] = null; KV_ERKEKMI[dil] = false; return null; }
-  const kadinMi = v => KV_KADIN.test(v.name || "");
-  const erkekMi = v => !kadinMi(v) && KV_ERKEK.test(v.name || "");
-  const kaliteliMi = v => KV_KALITE.test(v.name || "");
+  const ad = v => (v.name || "") + " " + (v.voiceURI || "");
+  const kadinMi = v => KV_KADIN.test(ad(v));
+  const erkekMi = v => !kadinMi(v) && KV_ERKEK.test(ad(v));
+  const kaliteliMi = v => KV_KALITE.test(ad(v));
   const yerel = KV_YEREL[dil];
   /* Önce ülke lehçesi (tr-TR / en-GB / de-DE), sonra dilin tamamı */
   const kumeler = [yerel ? hepsi.filter(v => yerel.test(v.lang || "")) : [], hepsi];
   let secim = null;
   for (const g of kumeler){
     if (!g.length) continue;
-    secim = g.find(v => kadinMi(v) && kaliteliMi(v))
+    /* 1) SIRALI TERCİH: adı listede geçen ilk ses. Cihazlar arası tutarlılık
+          buradan gelir — seçim artık envanterin sırasına bağlı değil. */
+    for (const kalipAd of (KV_TERCIH[dil] || [])){
+      secim = g.find(v => kalipAd.test(ad(v)));
+      if (secim) break;
+    }
+    /* 2) Tercih listesinde yoksa: kadın + nöral → kadın → cinsiyetsiz → herhangi */
+    secim = secim
+         || g.find(v => kadinMi(v) && kaliteliMi(v))
          || g.find(v => kadinMi(v))
          || g.find(v => !erkekMi(v) && kaliteliMi(v))
          || g.find(v => !erkekMi(v))
@@ -23711,19 +23820,252 @@ function kvSesSec(dil){
 function kvSes(dil){ return KV_SESLER[dil] || kvSesSec(dil); }
 function kvErkekSes(dil){ if (!KV_SESLER[dil]) kvSesSec(dil); return !!KV_ERKEKMI[dil]; }
 function kvSesleriTazele(){ ["tr", "en", "de"].forEach(kvSesSec); }
-if ("speechSynthesis" in window){
-  kvSesleriTazele();
-  /* Sesler tarayıcıya geç yüklenebiliyor; liste değişince yeniden seçilir. */
-  try { speechSynthesis.addEventListener("voiceschanged", kvSesleriTazele); } catch (e) {}
+
+/* ── HAZIRLIK: «bu dil bu cihazda okunabilir mi?» ─────────────────────────
+   Ses LİSTESİNE değil YETENEĞE bakar. iOS listeyi ilk dokunuşa kadar boş
+   verdiği için eski davranış orada her şeyi sessize alıyordu.
+     · liste doluysa gerçeği söyler (o dilin sesi yoksa false),
+     · liste boşsa (iOS'un ilk hâli) yoklama sonucuna güvenir,
+     · seslendirme denenip kanıtlanmış biçimde başarısızsa false. */
+function kkDilHazir(dil){
+  if (!KKSes.destek) return false;
+  if (kkKayitVarMi(dil) || KKSES_UZAK.adres) return true;
+  const l = kkSesListesi();
+  /* Liste DOLUYSA gerçeği liste söyler: o dilin sesi varsa denemeye devam
+     edilir. Çalışma anındaki geçici hatalar hazırlığı kapatmaz — yoksa tek
+     bir aksaklık bütün oturumu susturur. */
+  if (l.length) return !!kvSes(dil);
+  /* Liste BOŞ: iOS henüz doldurmamış olabilir. Yoklama «hiç olay yok +
+     liste hâlâ boş» dediyse gerçekten ses yoktur, oyunlar metne döner. */
+  return KKSes.calisti !== false;
 }
-/* Öğretmen paneli ve denetim için: hangi dilde hangi ses kullanılıyor */
+function kvSesVar(dil){
+  return !!(AYAR.genel.konusma && kkDilHazir(dil || "tr"));
+}
+/* Öğretmen/denetim için: hangi dilde hangi ses kullanılıyor. Konsoldan
+   `KKSesTani()` ile okunur — cihaz cihaz karşılaştırmanın en hızlı yolu. */
 function kvSesKimlik(){
-  return ["tr", "en", "de"].map(d => {
-    const v = kvSes(d);
-    return d + "=" + (v ? v.name + (KV_ERKEKMI[d] ? " ⚠erkek(perde telafili)" : "") : "yok");
-  }).join(" · ");
+  const kaynak = Object.keys(KKSES_KAYIT).length ? "hazır kayıt"
+    : KKSES_UZAK.adres ? "merkezi TTS" : "cihaz TTS";
+  return "kaynak=" + kaynak + " · çalıştı=" + KKSes.calisti
+    + " · kilit=" + (KKSes.kilitAcildi ? "açık" : "kapalı") + " · "
+    + ["tr", "en", "de"].map(d => {
+      const v = kvSes(d);
+      return d + "=" + (v ? v.name + " [" + v.lang + "]"
+        + (KV_ERKEKMI[d] ? " ⚠erkek(perde telafili)" : "") : "yok");
+    }).join(" · ");
 }
-function kvSesVar(dil){ return !!(AYAR.genel.konusma && "speechSynthesis" in window && kvSes(dil || "tr")); }
+if (typeof window !== "undefined") window.KKSesTani = kvSesKimlik;
+
+/* ── İLK DOKUNUŞTA SES SİSTEMİNİ AÇ ───────────────────────────────────────
+   iOS/Safari kullanıcı hareketi olmadan ses başlatmaz ve ses listesini
+   doldurmaz. Sayfadaki İLK dokunuş/tuş (kategori kartı, «Oyuna Başla», her
+   neyse) hem WebAudio bağlamını hem konuşma motorunu uyandırır; duyulabilir
+   hiçbir şey çalınmaz (yoklama sesi volume=0).
+   Gerçek bir seslendirme başlayana kadar dinleyici KALDIRILMAZ: ilk dokunuş
+   yetmezse ikincisi açar. */
+function kkYoklama(){
+  if (!KKSes.destek || KKSes.yoklandi) return;
+  KKSes.yoklandi = true;
+  try {
+    const u = new SpeechSynthesisUtterance("a");
+    u.volume = 0; u.rate = 1; u.lang = KV_LANG.tr;
+    u.onstart = () => { KKSes.calisti = true; };
+    u.onend = () => { if (KKSes.calisti === null) KKSes.calisti = true; };
+    u.onerror = () => { if (KKSes.calisti === null){ KKSes.calisti = false; } };
+    speechSynthesis.speak(u);
+    /* Hiç olay gelmediyse karar SES LİSTESİNE bakılarak verilir: çalışan bir
+       motor (iOS) ilk speak()'ten sonra listeyi doldurur; hiç TTS'i olmayan
+       makinede liste boş kalır. İyimser varsayım orada oyunları sessiz bir
+       ▶ düğmesiyle bırakırdı, karamsar varsayım ise iOS'u susturuyordu. */
+    setTimeout(() => {
+      if (KKSes.calisti !== null) return;
+      KKSes.calisti = kkSesListesi().length > 0;
+    }, 1800);
+  } catch (e) { KKSes.calisti = false; }
+}
+function kkKilitAc(){
+  try { sesMotor(); } catch (e) {}
+  if (!KKSes.calgi){
+    try {
+      KKSes.calgi = new Audio();
+      KKSes.calgi.preload = "auto";
+      KKSes.calgi.src = KKSES_SESSIZ;
+      const p = KKSes.calgi.play();
+      if (p && p.catch) p.catch(() => {});
+    } catch (e) { KKSes.calgi = null; }
+  }
+  if (KKSes.destek){
+    try { speechSynthesis.resume(); } catch (e) {}
+    kvSesleriTazele();
+    kkYoklama();
+  }
+  KKSes.kilitAcildi = true;
+}
+if (typeof document !== "undefined"){
+  const ac = () => {
+    kkKilitAc();
+    /* Gerçek seslendirme kanıtlanınca dinleyicileri bırak. */
+    if (KKSes.calisti === true) kapat();
+  };
+  const kapat = () => ["pointerdown", "touchend", "keydown"].forEach(t =>
+    document.removeEventListener(t, ac, true));
+  ["pointerdown", "touchend", "keydown"].forEach(t =>
+    document.addEventListener(t, ac, { capture: true, passive: true }));
+  /* Sesler tarayıcıya geç yüklenebiliyor; liste değişince yeniden seçilir. */
+  if (KKSes.destek){
+    kvSesleriTazele();
+    try { speechSynthesis.addEventListener("voiceschanged", kvSesleriTazele); } catch (e) {}
+  }
+  /* Sekme/sayfa değişince ses PEŞİMİZDEN GELMESİN. iOS arka plandan dönünce
+     motoru yeniden kilitlediği için dönüşte yoklama tekrar açılır. */
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) konusmaDur();
+    else { KKSes.yoklandi = false; KKSes.kilitAcildi = false;
+      ["pointerdown", "touchend", "keydown"].forEach(t =>
+        document.addEventListener(t, ac, { capture: true, passive: true })); }
+  });
+  window.addEventListener("pagehide", () => konusmaDur());
+}
+
+/* ── METİN İŞLEME ─────────────────────────────────────────────────────────
+   Uzun metin parçalanır: Chrome uzun seslendirmeyi ~15 saniyede kesiyor ve
+   `end` olayını hiç göndermiyor. Kısa metinler (oyunların ezici çoğunluğu)
+   tek parça kalır, yani mevcut zamanlama değişmez. */
+function kkParcala(metin){
+  const m = String(metin).trim();
+  if (m.length <= 200) return [m];
+  const cumleler = m.match(/[^.!?…]+[.!?…]*\s*/g) || [m];
+  const cikan = []; let bir = "";
+  cumleler.forEach(c => {
+    if (bir && (bir + c).length > 170){ cikan.push(bir.trim()); bir = c; }
+    else bir += c;
+  });
+  if (bir.trim()) cikan.push(bir.trim());
+  return cikan;
+}
+/* Bekçi süresi: `end` olayı hiç gelmezse çağrının askıda kalmaması için. */
+function kkTahminSure(metin, hiz){
+  const sn = String(metin).length / (12 * Math.max(0.5, hiz || 1));
+  return Math.min(30000, Math.round((sn + 2.4) * 1000));
+}
+/* Hazır kayıt anahtarı: büyük/küçük harf, Türkçe harfler, noktalama ve fazla
+   boşluk yok sayılır. Anahtar da dosya adı da ASCII kalsın diye harfler
+   sadeleştirilir — «taşı» ile «tasi» aynı kaydı bulur. */
+const KKSES_HARF = { "ı": "i", "İ": "i", "ş": "s", "Ş": "s", "ğ": "g", "Ğ": "g",
+  "ü": "u", "Ü": "u", "ö": "o", "Ö": "o", "ç": "c", "Ç": "c", "â": "a", "î": "i", "û": "u",
+  "ä": "a", "Ä": "a", "ß": "ss" };
+function kkAnahtar(dil, metin){
+  const duz = String(metin || "").replace(/[ıİşŞğĞüÜöÖçÇâîûäÄß]/g, c => KKSES_HARF[c] || c);
+  return dil + "|" + duz.toLowerCase()
+    .replace(/[.,!?;:…"'()»«]/g, " ").replace(/\s+/g, " ").trim();
+}
+function kkKayitAdres(dil, metin){
+  if (metin == null) return null;
+  return KKSES_KAYIT[kkAnahtar(dil, metin)] || null;
+}
+/* Bu dil için hazır kayıt var mı? (hazırlık kararında kullanılır) */
+function kkKayitVarMi(dil){
+  const on = dil + "|";
+  for (const k in KKSES_KAYIT) if (k.indexOf(on) === 0) return true;
+  return false;
+}
+
+/* ── ÇALMA: HAZIR/UZAK SES DOSYASI ────────────────────────────────────────
+   Tek bir <audio> ögesi kullanılır (iOS'ta ilk dokunuşta uyandırılan öge).
+   Ses düzeyi ve durdurma konuşmayla aynı kapıdan yönetilir. */
+function kkDosyaOku(adres, g, jeton){
+  try {
+    const a = KKSes.calgi || (KKSes.calgi = new Audio());
+    a.onended = null; a.onerror = null; a.onplaying = null;
+    a.pause();
+    a.src = adres;
+    a.volume = kkSeviye();
+    a.onended = () => { if (jeton === KKSes.jeton){ KKSes.calisti = true; g.bit(true); } };
+    a.onerror = () => { if (jeton === KKSes.jeton) kkCihazOku(g, jeton); };   /* dosya yoksa TTS'e düş */
+    if (g.baslayinca) a.onplaying = () => { try { g.baslayinca(); } catch (e) {} };
+    const p = a.play();
+    if (p && p.catch) p.catch(() => { if (jeton === KKSes.jeton) kkCihazOku(g, jeton); });
+    return true;
+  } catch (e) { kkCihazOku(g, jeton); return true; }
+}
+function kkUzakOku(g, jeton){
+  const anahtar = kkAnahtar(g.dil, g.duz);
+  const onbellek = KKSES_UZAK.bellek.get(anahtar);
+  if (onbellek) return kkDosyaOku(onbellek, g, jeton);
+  fetch(KKSES_UZAK.adres, {
+    method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ metin: g.duz, dil: g.dil }),
+  }).then(r => (r.ok ? r.blob() : Promise.reject(new Error("ses yok"))))
+    .then(b => {
+      if (jeton !== KKSes.jeton) return;
+      const url = URL.createObjectURL(b);
+      if (KKSES_UZAK.bellek.size >= KKSES_UZAK.enFazla){
+        const ilk = KKSES_UZAK.bellek.keys().next().value;
+        const eski = KKSES_UZAK.bellek.get(ilk);
+        KKSES_UZAK.bellek.delete(ilk);
+        try { URL.revokeObjectURL(eski); } catch (e) {}
+      }
+      KKSES_UZAK.bellek.set(anahtar, url);
+      kkDosyaOku(url, g, jeton);
+    })
+    .catch(() => { if (jeton === KKSes.jeton) kkCihazOku(g, jeton); });
+  return true;
+}
+
+/* ── ÇALMA: CİHAZ TTS ─────────────────────────────────────────────────────
+   Parçalar SIRAYLA okunur; `bitince` yalnız SON parçadan sonra çağrılır.
+   Her parçanın bir bekçisi var: `end` gelmezse çağrı askıda kalmaz. */
+function kkCihazOku(g, jeton){
+  if (!KKSes.destek){ g.bit(false); return; }
+  const parcalar = kkParcala(g.duz);
+  const ses = kvSes(g.dil);
+  const t = KV.ton[g.ton] || KV.ton.normal;
+  const taban = KV.hiz[g.dil][kvKisaMi(g.duz) ? "sozcuk" : "cumle"];
+  const perde = kvKis((kvErkekSes(g.dil) ? KV.perde.erkek : KV.perde.taban) + t.p,
+                      KV.sinir.pMin, KV.sinir.pMax);
+  const hiz = kvKis(+g.hiz > 0 ? +g.hiz : taban * t.h, KV.sinir.hMin, KV.sinir.hMax);
+  let ix = 0;
+  const sonraki = () => {
+    if (jeton !== KKSes.jeton) return;              /* eskimiş çağrı — sus */
+    if (ix >= parcalar.length){ g.bit(true); return; }
+    const p = parcalar[ix++];
+    let kapandi = false, bekci = 0;
+    try {
+      const u = new SpeechSynthesisUtterance(p);
+      /* Dil etiketi HER ZAMAN yazılır; ses nesnesinin atanması ayrı korunur.
+         Bazı tarayıcılarda bayat/geçersiz ses nesnesi atama hatası veriyor —
+         o durumda seslendirme iptal edilmez, tarayıcı dile göre okur. */
+      u.lang = (ses && ses.lang) || KV_LANG[g.dil];
+      if (ses){ try { u.voice = ses; } catch (e) { kvSesSec(g.dil); } }
+      u.pitch = perde; u.rate = hiz; u.volume = kkSeviye();
+      const kapat = ok => {
+        if (kapandi) return; kapandi = true;
+        clearTimeout(bekci);
+        if (!ok){ g.bit(false); return; }
+        if (jeton !== KKSes.jeton) return;   /* eskimiş: yeni ses devraldı */
+        sonraki();
+      };
+      u.onstart = () => {
+        KKSes.calisti = true; KKSes.hataSayisi = 0;
+        if (ix === 1 && g.baslayinca){ try { g.baslayinca(); } catch (e) {} }
+      };
+      u.onend = () => kapat(true);
+      u.onerror = ev => {
+        /* «interrupted» / «canceled» bizim kendi kesmemizdir — arıza değil.
+         * Gerçek hatalar yalnız SAYILIR; hazırlığı kapatmazlar. Kapatmak
+         * geçici bir aksaklıkta bütün sitenin sesini kesiyordu. */
+        const iptal = ev && (ev.error === "interrupted" || ev.error === "canceled");
+        if (!iptal) KKSes.hataSayisi++;
+        kapat(false);
+      };
+      KKSes.aktif = u;
+      speechSynthesis.speak(u);
+      bekci = setTimeout(() => kapat(true), kkTahminSure(p, hiz));
+    } catch (e) { g.bit(false); }
+  };
+  sonraki();
+}
 
 /* ── Kıvılcım'ın konuşma tek kapısı ──────────────────────────────────────
    kvSoyle(metin, {
@@ -23735,39 +24077,61 @@ function kvSesVar(dil){ return !!(AYAR.genel.konusma && "speechSynthesis" in win
      emniyetMs: bazı tarayıcılar «end» olayını hiç göndermez — bu süre
                 dolunca bitince() bir kez çağrılır
    })
-   Dönüş: seslendirme başlatıldı mı (false ise metin yalnız ekranda kalır). */
+   Dönüş: seslendirme başlatıldı mı (false ise metin yalnız ekranda kalır).
+   Karar EŞZAMANLI verilir (oyunlar dönüşe bakıp metni gösterip gizliyor),
+   sesin kendisi ise sıraya alınıp hemen ardından başlatılır. */
 function kvSoyle(metin, ayar){
   const a = ayar || {};
   const dil = KV.hiz[a.dil] ? a.dil : "tr";
   let bitti = false;
-  const bit = ok => { if (bitti) return; bitti = true; if (a.bitince) a.bitince(!!ok); };
-  if (!("speechSynthesis" in window) || !AYAR.genel.konusma){ bit(false); return false; }
-  const ses = kvSes(dil);
+  const bit = ok => {
+    if (bitti) return; bitti = true;
+    if (a.bitince){ try { a.bitince(!!ok); } catch (e) {} }
+  };
   const duz = String(metin == null ? "" : metin).trim();
-  if (!ses || !duz){ bit(false); return false; }
-  try {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(duz);
-    /* Dil etiketi HER ZAMAN yazılır; ses nesnesinin atanması ayrı korunur.
-       Bazı tarayıcılarda bayat/geçersiz ses nesnesi atama hatası veriyor —
-       o durumda seslendirme iptal edilmez, tarayıcı dile göre okur. */
-    u.lang = ses.lang || KV_LANG[dil];
-    try { u.voice = ses; } catch (e) { kvSesSec(dil); }
-    const t = KV.ton[a.ton] || KV.ton.normal;
-    const taban = KV.hiz[dil][kvKisaMi(duz) ? "sozcuk" : "cumle"];
-    u.pitch = kvKis((kvErkekSes(dil) ? KV.perde.erkek : KV.perde.taban) + t.p,
-                    KV.sinir.pMin, KV.sinir.pMax);
-    u.rate = kvKis(+a.hiz > 0 ? +a.hiz : taban * t.h, KV.sinir.hMin, KV.sinir.hMax);
-    u.volume = 1;
-    if (a.baslayinca) u.onstart = () => { try { a.baslayinca(); } catch (e) {} };
-    u.onend = () => bit(true);
-    u.onerror = () => bit(false);
-    speechSynthesis.speak(u);
-    if (a.emniyetMs > 0) setTimeout(() => bit(true), a.emniyetMs);
-    return true;
-  } catch (e) { bit(false); return false; }
+  if (!duz || !kvSesVar(dil)){ bit(false); return false; }
+
+  /* Tek akış kuralı: yeni ses başlamadan önce çalan ses KONTROLLÜ durdurulur.
+     Jeton artışı eski çağrıların geri dönüşlerini de geçersiz kılar. */
+  const jeton = ++KKSes.jeton;
+  const g = { dil, duz, ton: a.ton, hiz: a.hiz, baslayinca: a.baslayinca, bit };
+  const calanVarMi = kkSusturHazirla();
+
+  const basla = () => {
+    if (jeton !== KKSes.jeton) return;
+    const hazir = kkKayitAdres(dil, duz);
+    if (hazir) return kkDosyaOku(hazir, g, jeton);
+    if (KKSES_UZAK.adres) return kkUzakOku(g, jeton);
+    return kkCihazOku(g, jeton);
+  };
+  /* Chrome'da cancel() ile aynı görevde çağrılan speak() yutuluyor; ses
+     çalıyorduysa kısa bir soluk bırakılır, çalmıyorduysa beklenmez. */
+  if (calanVarMi) setTimeout(basla, 70); else basla();
+  if (a.emniyetMs > 0) setTimeout(() => bit(true), a.emniyetMs);
+  return true;
 }
-function konusmaDur(){ try { if ("speechSynthesis" in window) speechSynthesis.cancel(); } catch (e) {} }
+/* Çalan her şeyi durdurur (konuşma + hazır/uzak ses dosyası) ve çalan bir şey
+   olup olmadığını söyler. */
+function kkSusturHazirla(){
+  let calan = false;
+  if (KKSes.destek){
+    try {
+      calan = !!(speechSynthesis.speaking || speechSynthesis.pending);
+      speechSynthesis.cancel();
+    } catch (e) {}
+  }
+  const a = KKSes.calgi;
+  if (a && !a.paused){
+    calan = true;
+    try { a.pause(); } catch (e) {}
+  }
+  KKSes.aktif = null;
+  return calan;
+}
+function konusmaDur(){
+  KKSes.jeton++;
+  kkSusturHazirla();
+}
 
 /* ── Dil sarmalayıcıları ─────────────────────────────────────────────────
    Mevcut oyunlar bu adları kullanıyor; imzalar korundu, hepsi artık aynı
@@ -23809,7 +24173,6 @@ function konusDeSonra(metin, sonra, hiz){
     emniyetMs: Math.min(30000, 2500 + String(metin || "").length * 95),
   });
 }
-
 /* ═════════════ PUANLAMA MOTORU ═════════════ */
 function puanHesapla({ dogru, yanlis, sure, hedefSure, zorluk }){
   const zorlukKat = { 1: 1.0, 2: 1.25, 3: 1.5 }[zorluk] || 1;
@@ -41323,8 +41686,11 @@ const TUR_ISLEYICI = {
         $("kvyEkle").addEventListener("click", () => $("kvyListe").appendChild(kelimeKarti(null)));
         $("kvyKaydet").addEventListener("click", ayarlariKaydet);
         $("kvySifirla").addEventListener("click", () => { oyunAyarSil(oyun.id); hazirEkran(); });
-        $("kvySandikSil").addEventListener("click", () => {
-          if (!confirm("Bu cihazdaki kelime sandığı boşaltılsın mı? Öğrencinin biriktirdiği sözcükler silinir.")) return;
+        $("kvySandikSil").addEventListener("click", async () => {
+          const kabul = await KKUyari.onay("Bu cihazda biriken kelime sandığı boşaltılacak; öğrencinin topladığı sözcükler silinir.", {
+            baslik: "Kelime sandığı boşaltılsın mı?", onayEtiketi: "Boşalt", tehlikeli: true
+          });
+          if (!kabul) return;
           sandikYaz({}); hazirEkran(); $("kvAyarAc").click();
         });
         $("kvBasla").addEventListener("click", basla);
@@ -107017,7 +107383,7 @@ function ogretmenBagla(){
       if (alanEl){ AYAR.genel.sinif = alanEl.value.trim(); ayarYaz(); }
       const adlar = sinifListesi();
       if (KURULUM.mod === "turnuva" && adlar.length < 2)
-        return alert("Turnuva için sınıf listesine en az iki öğrenci adı girin.");
+        return KKUyari.uyari("Turnuva iki öğrenci arasında oynanır; sınıf listesine en az iki ad girmelisin.", { baslik: "Sınıf listesi yetersiz" });
       KURULUM.ad = (($("ogrOturumAd") || {}).value || "").trim();
       oturumBaslat({
         mod: KURULUM.mod, boyut: KURULUM.boyut, adlar,
@@ -107033,14 +107399,20 @@ function ogretmenBagla(){
     if (sr) sr.addEventListener("click", () => { siraIlerlet(); sesEfekt("ipucu"); render(); });
     $("ogrRastgele").addEventListener("click", tahtaOgrenciSec);
     $("ogrDersBitir").addEventListener("click", dersiBitir);
-    $("ogrOturumIptal").addEventListener("click", () => {
-      if (confirm("Oturum rapor oluşturulmadan kapatılsın mı? Bu oturumun puanları silinir.")){ oturumIptal(); render(); }
+    $("ogrOturumIptal").addEventListener("click", async () => {
+      const kabul = await KKUyari.onay("Oturum rapor oluşturulmadan kapatılacak; bu dersin puanları silinir.", {
+        baslik: "Oturum iptal edilsin mi?", onayEtiketi: "Oturumu iptal et", tehlikeli: true
+      });
+      if (kabul){ oturumIptal(); render(); }
     });
   }
 
   const sil = $("ogrArsivSil");
-  if (sil) sil.addEventListener("click", () => {
-    if (confirm("Tüm ders raporları ve rozet kayıtları silinsin mi? Bu işlem geri alınamaz.")){
+  if (sil) sil.addEventListener("click", async () => {
+    const kabul = await KKUyari.onay("Arşivdeki tüm ders raporları ve rozet kayıtları silinecek. Bu işlem geri alınamaz.", {
+      baslik: "Arşiv silinsin mi?", onayEtiketi: "Arşivi sil", tehlikeli: true
+    });
+    if (kabul){
       RAPORLAR = []; raporlarYaz(); ROZETLER = {}; rozetlerYaz(); render();
     }
   });
@@ -107081,12 +107453,12 @@ function raporPaylas(r){
     const ta = document.createElement("textarea");
     ta.value = metin; ta.style.position = "fixed"; ta.style.opacity = "0";
     document.body.appendChild(ta); ta.select();
-    try { document.execCommand("copy"); alert("Rapor özeti panoya kopyalandı."); }
-    catch (e) { alert("Kopyalanamadı. Raporu yazdırıp PDF olarak kaydedebilirsiniz."); }
+    try { document.execCommand("copy"); KKUyari.bildir("Rapor özeti panoya kopyalandı.", { tur: "basari" }); }
+    catch (e) { KKUyari.uyari("Rapor panoya kopyalanamadı. Raporu yazdırıp PDF olarak kaydedebilirsiniz.", { baslik: "Kopyalanamadı" }); }
     ta.remove();
   };
   if (navigator.clipboard && navigator.clipboard.writeText)
-    navigator.clipboard.writeText(metin).then(() => alert("Rapor özeti panoya kopyalandı."), yedek);
+    navigator.clipboard.writeText(metin).then(() => KKUyari.bildir("Rapor özeti panoya kopyalandı.", { tur: "basari" }), yedek);
   else yedek();
 }
 
@@ -107191,7 +107563,7 @@ function raporBagla(){
       oyuncular: r.oyuncular.map(o => ({ ad: o.ad, puan: o.puan, yuzde: o.yuzde })),
       rozetler: r.rozetler });
     jsonYaz("ka-paylasilan-raporlar", liste.slice(0, 60));
-    alert("Rapor öğrenci ve veli panelinde görünecek şekilde işaretlendi.");
+    KKUyari.bildir("Rapor öğrenci ve veli panelinde görünecek şekilde işaretlendi.", { tur: "basari" });
     render();
   });
 }
@@ -107314,7 +107686,11 @@ $("app").addEventListener("click", e => {
     case "ogretmen": durum.ekran = "ogretmen"; render(); break;
     case "rapor": durum.raporId = arg; durum.ekran = "rapor"; render(); break;
     case "rozetler": durum.ekran = "rozetler"; render(); break;
-    case "sil": if (confirm("Tüm puanların ve oyun geçmişin silinsin mi? Bu işlem geri alınamaz.")){ VERI = bosVeri(); veriYaz(); durum.ekran = "panel"; render(); } break;
+    case "sil":
+      KKUyari.onay("Topladığın tüm puanlar ve oyun geçmişin silinecek. Bu işlem geri alınamaz.", {
+        baslik: "Geçmiş silinsin mi?", onayEtiketi: "Hepsini sil", tehlikeli: true
+      }).then(kabul => { if (kabul){ VERI = bosVeri(); veriYaz(); durum.ekran = "panel"; render(); } });
+      break;
   }
 });
 

@@ -11,6 +11,7 @@ import { IZINLI_TURLER, MAX_DOSYA_BOYUT } from "@/lib/dosya-tanim";
 import { KANIT_ACCEPT, MAX_KANIT, kanitUrl } from "@/lib/odev-kanit";
 import BosDurum from "@/components/maskot/BosDurum";
 import type { OdevListeKaydi } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./panel.module.css";
 
 const MB = Math.round(MAX_DOSYA_BOYUT / 1024 / 1024);
@@ -42,7 +43,7 @@ export default function OdevListesi({ odevler }: { odevler: OdevListeKaydi[] }) 
     startTransition(async () => {
       isaretleOptimistik({ id, durum });
       const sonuc = await odevDurum(id, durum);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 
@@ -154,11 +155,14 @@ export default function OdevListesi({ odevler }: { odevler: OdevListeKaydi[] }) 
 function KanitKart({ id, ad }: { id: string; ad: string }) {
   const [bekliyor, baslat] = useTransition();
 
-  function sil() {
-    if (!confirm("Bu fotoğraf silinsin mi? Son fotoğrafı silersen ödev yeniden bekliyor olur.")) return;
+  async function sil() {
+    const kabul = await Uyari.onay("Kanıt fotoğrafı silinecek. Son fotoğrafı silersen ödev yeniden \"bekliyor\" durumuna döner.", {
+      baslik: "Fotoğraf silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await odevKanitSil(id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 

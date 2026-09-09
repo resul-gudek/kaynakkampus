@@ -10,6 +10,7 @@ import {
   egitmenRolDegistir,
 } from "@/actions/admin";
 import type { EgitmenRol } from "@/lib/sabitler";
+import { Uyari } from "@/components/ui/uyari";
 import stil from "./admin.module.css";
 
 export interface KocGorunum {
@@ -169,8 +170,12 @@ export default function KocYonetimi({
                       <button
                         className="btn btn-outline btn-kucuk"
                         disabled={bekliyor}
-                        onClick={() => {
-                          const yeni = prompt(`${k.ad} için yeni şifre (en az 4 karakter):`);
+                        onClick={async () => {
+                          const yeni = await Uyari.sor(`${k.ad} için yeni şifre:`, {
+                            baslik: "Şifre sıfırla",
+                            altBaslik: "En az 4 karakter",
+                            onayEtiketi: "Şifreyi güncelle",
+                          });
                           if (!yeni) return;
                           calistir(() => kocSifreSifirla(k.id, yeni, rol), "Şifre güncellendi.");
                         }}
@@ -180,13 +185,15 @@ export default function KocYonetimi({
                       <button
                         className="btn btn-outline btn-kucuk"
                         disabled={bekliyor}
-                        onClick={() => {
-                          if (
-                            !confirm(
-                              `${k.ad} hesabı "${karsi.tekil}" rolüne taşınsın mı?\n\nÖğrencileri, dersleri ve ödeme kayıtları korunur; yalnız rolü değişir. Bundan sonra giriş ekranında "${karsi.tekil}" sekmesini seçmelidir.`
-                            )
-                          )
-                            return;
+                        onClick={async () => {
+                          const kabul = await Uyari.onay(
+                            `Öğrencileri, dersleri ve ödeme kayıtları korunur; yalnız rolü değişir. Bundan sonra giriş ekranında "${karsi.tekil}" sekmesini seçmelidir.`,
+                            {
+                              baslik: `${k.ad} hesabı "${karsi.tekil}" rolüne taşınsın mı?`,
+                              onayEtiketi: "Rolü değiştir",
+                            }
+                          );
+                          if (!kabul) return;
                           calistir(
                             () => egitmenRolDegistir(k.id, karsiRol),
                             `${k.ad} artık ${karsi.tekil} rolünde.`
@@ -199,13 +206,12 @@ export default function KocYonetimi({
                         className="btn btn-outline btn-kucuk"
                         style={{ borderColor: "#b91c1c", color: "#b91c1c" }}
                         disabled={bekliyor}
-                        onClick={() => {
-                          if (
-                            !confirm(
-                              `${k.ad} silinsin mi?\n\nHesaba ait ödev/takip/yol/özel ders kayıtları silinir; öğrencileri "atanmamış" duruma geçer. Bu işlem geri alınamaz.`
-                            )
-                          )
-                            return;
+                        onClick={async () => {
+                          const kabul = await Uyari.onay(
+                            `Hesaba ait ödev/takip/yol/özel ders kayıtları silinir; öğrencileri "atanmamış" duruma geçer. Bu işlem geri alınamaz.`,
+                            { baslik: `${k.ad} silinsin mi?`, onayEtiketi: "Sil", tehlikeli: true }
+                          );
+                          if (!kabul) return;
                           calistir(() => kocSil(k.id, rol), `${m.tekil} silindi.`);
                         }}
                       >

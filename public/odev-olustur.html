@@ -275,6 +275,7 @@
   <link rel="stylesheet" href="assets/site-header.css" />
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
+  <script src="assets/kk-uyari.js" defer></script>
   <script src="assets/cerez-onay.js" defer></script>
   <script src="assets/analitik.js" defer></script>
   <script src="assets/kullanim-sayac.js" data-sayfa="odev-olustur" defer></script>
@@ -309,7 +310,8 @@
           <a href="odev-olustur.html">Ödev Oluştur</a>
           <a href="bep-olustur.html">BEP Oluştur</a>
           <a href="ders-programi.html">Ders Programı</a>
-          <a href="etkinlikler.html" hidden>Etkinlikler</a>
+          <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+          <a href="/etkinlikler">Etkinlikler</a>
         </div>
       </div>
       <a href="coklu-zeka-testi.html">Çoklu Zekâ Testi</a>
@@ -345,7 +347,8 @@
     <a href="odev-olustur.html">Ödev Oluştur</a>
     <a href="bep-olustur.html">BEP Oluştur</a>
     <a href="ders-programi.html">Ders Programı</a>
-    <a href="etkinlikler.html" hidden>Etkinlikler</a>
+    <a href="kariyer-pusulam.html">Kariyer Pusulam</a>
+    <a href="/etkinlikler">Etkinlikler</a>
     <div class="sh-drawer-label">Blog &amp; Haberler</div>
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
@@ -521,7 +524,8 @@
           <li><a href="odev-olustur.html">Ödev Oluştur</a></li>
           <li><a href="bep-olustur.html">BEP Oluştur</a></li>
           <li><a href="ders-programi.html">Ders Programı</a></li>
-          <li hidden><a href="etkinlikler.html" hidden>Etkinlikler</a></li>
+          <li><a href="/etkinlikler">Etkinlikler</a></li>
+          <li><a href="kariyer-pusulam.html">Kariyer Pusulam</a></li>
         </ul>
       </div>
 
@@ -679,6 +683,39 @@ const TYMM_SINIFLARI = new Set([1, 2, 3, 5, 6, 7, 9, 10, 11]);
 
 /* ═══════════════ MEB GÜNCEL MÜFREDAT ÜNİTELERİ ═══════════════
    u: ünite adı — g: işlem/problem üreteci etiketi (varsa) */
+/* ── Almanca program hattı ─────────────────────────────────────────────
+   Ortaöğretim Almanca Öğretim Programı temaları SINIFA değil NIVEAUSTUFE'ye
+   bağlar; sınıf↔seviye eşlemesi okul türüne göre değişir. Kaynak Kampüs'ün
+   varsayılan hattı: 2. yabancı dil, hazırlık sınıfı YOK. Hazırlık sınıflı
+   hat (A2.1'den başlar) ileride buraya İKİNCİ BİR KAYIT olarak eklenebilir;
+   o yüzden eşleme sabit sayı değil tablodur. */
+const ALM_HAT = {
+  varsayilan: {
+    ad: "2. yabancı dil – hazırlık sınıfı yok",
+    seviye: { 9: "A1.1", 10: "A1.1", 11: "A1.2", 12: "A1.2" },
+  },
+};
+const ALM_AKTIF_HAT = "varsayilan";
+function almSeviye(grade) { return ALM_HAT[ALM_AKTIF_HAT].seviye[grade] || null; }
+
+/* Resmî Themenkreis kütüğü. Görünen sınıf listesi BURADAN türetilir; elle
+   yazılmış bir sınıf listesi yoktur, böylece tema ile seviyesi ayrışamaz.
+   `tk` yalnız KAPSAM kaydında resmî kodu bulunan temalarda doludur —
+   doğrulanmamış Themenkreis numarası uydurulmaz. Hat dışı kalan üst seviye
+   temalar burada değil PROGRAM_DISI_BANK içindedir. */
+const ALM_TEMA = [
+  { u: "Informationen zur Person", tr: "Kişisel Bilgiler",       ns: "A1.1", tk: "TK1" },
+  { u: "Die Schule",               tr: "Okul",                   ns: "A1.1", tk: "TK2" },
+  { u: "Die Gesellschaft",         tr: "Toplum ve Aile",         ns: "A1.1", tk: "TK3" },
+  { u: "Tägliches Leben",          tr: "Günlük Yaşam",           ns: "A1.1", tk: "TK4" },
+  { u: "Essen und Trinken",        tr: "Yeme ve İçme",           ns: "A1.1", tk: null  },
+  { u: "Besondere Tage",           tr: "Özel Günler",            ns: "A1.1", tk: "TK6" },
+  { u: "Freizeitaktivitäten",      tr: "Boş Zaman Etkinlikleri", ns: "A1.1", tk: "TK7" },
+  { u: "Einkaufen",                tr: "Alışveriş",              ns: "A1.1", tk: "TK8" },
+  { u: "Unterkunft",               tr: "Konaklama",              ns: "A1.2", tk: "TK1" },
+  { u: "Urlaub und Reisen",        tr: "Tatil ve Seyahat",       ns: "A1.2", tk: "TK4" },
+  { u: "Gesundheit",               tr: "Sağlık",                 ns: "A1.2", tk: null  },
+];
 const UNITS = {
   /* Türkçe: 1, 2, 3 ve 5, 6, 7. sınıflarda TYMM'nin resmî tema adları kullanılır.
      4 ve 8. sınıflar 2026-2027'de önceki programla devam eder; ancak 2019
@@ -691,11 +728,16 @@ const UNITS = {
     1: [{u:"Güzel Davranışlarımız",g:"sesgrup"},{u:"Mustafa Kemal'den Atatürk'e",g:"sesgrup"},{u:"Çevremizdeki Yaşam",g:"sesgrup"},{u:"Yol Arkadaşımız Kitaplar",g:"sesgrup"},{u:"Yeteneklerimizi Keşfediyoruz"},{u:"Minik Kâşifler"},{u:"Atalarımızın İzleri"},{u:"Sorumluluklarımızın Farkındayız"}],
     2: ["Değerlerimizle Varız", "Atatürk ve Çocuk", "Doğada Neler Oluyor?", "Okuma Serüvenimiz", "Yeteneklerimizi Tanıyoruz", "Mucit Çocuk", "Kültür Hazinemiz", "Haklarımızı Biliyoruz"],
     3: ["Değerlerimizle Yaşıyoruz", "Atatürk ve Kahramanlarımız", "Doğayı Tanıyoruz", "Bilgi Hazinemiz", "Yeteneklerimizi Kullanıyoruz", "Bilim Yolculuğu", "Millî Kültürümüz", "Hak ve Sorumluluklarımız"],
-    4: ["Gerçek – Mecaz – Terim Anlam", "Deyimler ve Atasözleri", "Adlar, Sıfatlar, Zamirler", "Yapım ve Çekim Ekleri", "Cümle Bilgisi", "Noktalama ve Yazım", "Metin Türleri"],
+    /* "Adlar, Sıfatlar, Zamirler", "Yapım ve Çekim Ekleri" ve "Cümle Bilgisi"
+       BU LİSTEDEN ÇIKARILDI: 2019 Türkçe programının 4. sınıf kazanımlarında
+       karşılıkları yok. Soruları silinmedi, ARSIV_BANK'a taşındı. */
+    4: ["Gerçek – Mecaz – Terim Anlam", "Deyimler ve Atasözleri", "Noktalama ve Yazım", "Metin Türleri"],
     5: ["Oyun Dünyası", "Atatürk'ü Tanımak", "Duygularımı Tanıyorum", "Geleneklerimiz", "İletişim ve Sosyal İlişkiler", "Sağlıklı Yaşıyorum"],
     6: ["Dilimizin Zenginliği", "Bağımsızlık Yolu", "Farklı Dünyalar", "İletişim ve Sosyal İlişkiler", "Bilim ve Teknoloji", "Lider Ruhlar"],
     7: ["Hayat Boyu Gelişim", "Bir Hilal Uğruna", "İletişim ve Sosyal İlişkiler", "Türk Sanatı", "Okuma Kültürü", "Hak ve Sorumluluklar"],
-    8: ["Sözcükte ve Cümlede Anlam", "Paragraf", "Fiilimsiler", "Cümlenin Ögeleri", "Cümle Türleri", "Yazım ve Noktalama", "Söz Sanatları"],
+    /* "Anlatım Bozuklukları" (T.8.3.8) ve "Fiillerin Çatısı" (T.8.4.20)
+       programda 8. sınıfta yer aldığı hâlde sistemde karşılıksızdı; eklendi. */
+    8: ["Sözcükte ve Cümlede Anlam", "Paragraf", "Fiilimsiler", "Cümlenin Ögeleri", "Cümle Türleri", "Anlatım Bozuklukları", "Fiillerin Çatısı", "Yazım ve Noktalama", "Söz Sanatları"],
   },
   tde: {
     9:  ["Sözün İnceliği", "Anlam Arayışı", "Anlamın Yapı Taşları", "Dilin Zenginliği"],
@@ -767,12 +809,24 @@ const UNITS = {
     11: ["School Life & Education", "Classroom Life & Learning", "Personal Life & Well-being", "Family Life & Home", "Life in the Neighbourhood, City & Social Life", "Life in the World & Culture", "Life in Nature & Global Problems", "Life in the Universe & Future"],
     12: ["Music", "Friendship", "Human Rights", "Coming Soon", "Psychology", "Favors", "News Stories", "Alternative Energy", "Technology", "Manners"],
   },
-  alm: {
-    9:  ["Hallo! – Tanışma", "Kennenlernen – Kendini Tanıtma", "Familie – Aile", "Schule – Okul", "Zahlen und Uhrzeit – Sayılar ve Saat"],
-    10: ["Einkaufen – Alışveriş", "Essen und Trinken – Yiyecek İçecek", "Wohnen – Ev ve Yaşam", "Tagesablauf – Günlük Rutin", "Freizeit – Boş Zaman"],
-    11: ["Reisen – Seyahat", "Gesundheit – Sağlık", "Kleidung – Kıyafetler", "Wetter – Hava Durumu", "Feste – Bayramlar ve Kutlamalar"],
-    12: ["Berufe – Meslekler", "Medien – Medya", "Umwelt – Çevre", "Zukunftspläne – Gelecek Planları", "Kultur – Kültür"],
-  },
+  /* Almanca tema adları resmî Themenkreis adlarıdır (Ortaöğretim Almanca
+     Öğretim Programı, TTKB PID 333 — Almanca dilinde Lehrplan). Program
+     temaları SINIFA değil NIVEAUSTUFE'ye (A1.1–B2.2) bağlar; sınıf↔seviye
+     eşlemesi okul türüne göre değişir (bkz. programın §9). Sınıf yerleşimi
+     bu turda DEĞİŞTİRİLMEDİ; seviye hattı kararı ayrı bir iştir.
+     Bu turda yapılanlar: altı tema resmî adına çevrildi ve dört çift
+     birleştirildi (iki sistem başlığı tek resmî Themenkreis'e düşüyordu).
+     Dokunulmayanlar bilinçlidir: "Zahlen und Uhrzeit" (TK değil, bölünecek),
+     "Medien"/"Umwelt"/"Kultur" (seviye kararı bekliyor), "Einkaufen",
+     "Essen und Trinken", "Gesundheit" (adları zaten resmî). */
+  /* `u` KANONİK ADDIR: resmî Themenkreis adı; UNIT_BANK ve KAPSAM anahtarı
+     budur. `tr` yalnızca öğretmene gösterilen yardımcı etikettir (bkz.
+     unitEtiket) — veri anahtarı DEĞİLDİR, çevirisi serbestçe düzeltilebilir.
+     Karma görünümü kaldırmak için on altı temanın hepsinde `tr` vardır. */
+  /* Sınıf listesi ALM_TEMA + ALM_HAT'tan türetilir (aşağıda). Elle liste
+     tutulsaydı tema ile Niveaustufe'si sessizce ayrışabilirdi; A2.1–B1
+     temalarının 12. sınıfta görünmesi tam olarak böyle olmuştu. */
+  alm: {},
   fiz: {
     9:  [{u:"Fizik Bilimi ve Kariyer Keşfi"},{u:"Kuvvet ve Hareket",g:"hiz"},{u:"Akışkanlar",g:"basinc"},{u:"Enerji",g:"isi"}],
     10: [{u:"Kuvvet ve Hareket",g:"hiz"},{u:"Enerji",g:"is"},{u:"Elektrik",g:"ohm"},{u:"Dalgalar",g:"dalga"}],
@@ -792,6 +846,15 @@ const UNITS = {
     12: ["Genden Proteine", "Canlılarda Enerji Dönüşümleri", "Bitki Biyolojisi", "Canlılar ve Çevre"],
   },
 };
+
+/* Almanca sınıf listesini kütükten kurar: bir sınıfın aktif Niveaustufe'si
+   ne ise yalnız o seviyenin temaları görünür. Üst seviye bir tema listeye
+   ancak ALM_TEMA'ya yanlış `ns` ile yazılırsa girebilir — birim test bunu
+   yakalar. */
+for (const g of AVAIL.alm) {
+  const ns = almSeviye(g);
+  UNITS.alm[g] = ALM_TEMA.filter((t) => t.ns === ns).map((t) => ({ u: t.u, tr: t.tr }));
+}
 
 /* ═══════════════ SORU BANKASI (MEB kazanımlarına uygun) ═══════════════
    ty: mc (o: seçenekler, a: doğru indeks) | tf (a: true/false) | fb (a: metin) */
@@ -1094,6 +1157,279 @@ const BANK = {
    Türkçe soru bankası/fasikül kitaplarındaki soru kalıpları örnek alınarak
    (hece bölme, büyük/küçük harf, noktalama, okuduğunu anlama mini metni vb.)
    hazırlanmıştır. */
+/* ═══════════════ ARŞİV ═══════════════
+   Müfredat denetiminde SINIF DIŞI çıkan ama SİLİNMEYEN soru blokları.
+   Bu nesne üretime hiç girmez: bankFor / bankAdaylari / icerikCekirdegi
+   yalnızca UNIT_BANK'a bakar, ARSIV_BANK hiçbir yerden okunmaz. Amaç veriyi
+   yitirmeden park etmektir; doğru sınıfa taşıma ayrı bir karardır ve
+   kendiliğinden yapılmaz.
+
+   tr-4'ten çıkarılan üç konu — 2019 Türkçe programının 4. sınıf
+   kazanımlarında karşılıkları YOKTUR:
+     - "Adlar, Sıfatlar, Zamirler" → içerik 5-6. sınıfa ait
+       (sıfat T.5.3.8 / T.6.3.8-9, zamir T.6.3.12). Konu tr-6
+       "Dilimizin Zenginliği" bankasında ZATEN karşılanıyor.
+     - "Yapım ve Çekim Ekleri" → içerik 3 ve 5. sınıfa ait
+       (T.3.3.13 / T.5.3.11). tr-5'te yalnızca iki soruyla temsil ediliyor;
+       buradaki soruların çoğunun doğru sınıfta karşılığı YOK.
+     - "Cümle Bilgisi" → içerik 8. sınıfa ait (T.8.4.18 / T.8.4.19).
+       tr-8 "Cümlenin Ögeleri" ve "Cümle Türleri" bu kazanımları kendi
+       sorularıyla karşılıyor. */
+const ARSIV_BANK = {
+  "tr-4": {
+    "Adlar, Sıfatlar, Zamirler": [
+      {ty:"mc",q:"'Kırmızı elbise' tamlamasında 'kırmızı' kelimesi ne görevindedir?",o:["Ad (isim)","Sıfat","Zamir","Zarf"],a:1},
+      {ty:"mc",q:"Aşağıdakilerden hangisi bir zamirdir?",o:["Kitap","O","Güzel","Koşmak"],a:1},
+      {ty:"mc",q:"'Üç kalem aldım.' cümlesinde 'üç' kelimesi ne tür bir sıfattır?",o:["Niteleme sıfatı","Belirtme (sayı) sıfatı","Zamir","Ad"],a:1},
+      {ty:"tf",q:"Sıfatlar isimlerin önüne gelerek onları niteler veya belirtir.",a:true},
+      {ty:"tf",q:"Zamirler, isimlerin yerini tutan kelimelerdir.",a:true},
+      {ty:"fb",q:"'Ben, sen, o, biz, siz, onlar' kelimelerine ____ zamiri denir.",a:"kişi (şahıs)"},
+        {ty:"mc",q:"\"Kalabalık sınıf\" tamlamasında \"kalabalık\" sözcüğünün türü nedir?",o:["Sıfat","Ad","Zamir","Zarf"],a:0},
+        {ty:"mc",q:"\"Onlar bahçede oynuyor.\" cümlesinde \"onlar\" sözcüğünün türü nedir?",o:["Zamir","Ad","Sıfat","Bağlaç"],a:0},
+        {ty:"mc",q:"Aşağıdakilerden hangisi özel addır?",o:["Ankara","şehir","dağ","ırmak"],a:0},
+        {ty:"mc",q:"\"Üç kalem\" tamlamasında \"üç\" hangi tür sıfattır?",o:["Sayı sıfatı","Niteleme sıfatı","İşaret sıfatı","Belgisiz sıfat"],a:0},
+        {ty:"tf",q:"Özel adlar büyük harfle başlar.",a:true},
+        {ty:"tf",q:"Sıfatlar adları niteler ya da belirtir.",a:true},
+        {ty:"tf",q:"Zamirler adların yerini tutmaz.",a:false},
+        {ty:"fb",q:"Adların yerini tutan sözcüklere ____ denir.",a:"zamir"},
+        {ty:"fb",q:"\"Bu kitap\" tamlamasındaki \"bu\" sözcüğü ____ sıfatıdır.",a:"işaret"}
+      ],
+    "Yapım ve Çekim Ekleri": [
+      {ty:"mc",q:"'Göz-lük' kelimesindeki '-lük' eki ne tür bir ektir?",o:["Çekim eki","Yapım eki","Kök","Bağlaç"],a:1},
+      {ty:"mc",q:"'Kalem-ler' kelimesindeki '-ler' eki hangi tür ektir?",o:["Yapım eki","Çekim eki (çoğul eki)","Kök","Bağlaç"],a:1},
+      {ty:"mc",q:"Yapım eki aldığında kelimenin türü ya da anlamı nasıl değişir?",o:["Değişmez","Yeni bir kelime (anlam/tür) oluşur","Sadece çoğul olur","Sadece zaman bildirir"],a:1},
+      {ty:"tf",q:"Çekim ekleri kelimenin anlamını ve türünü değiştirmez, sadece cümledeki görevini belirtir.",a:true},
+      {ty:"tf",q:"'Tuz-lu' kelimesindeki '-lu' eki bir çekim ekidir.",a:false},
+      {ty:"fb",q:"'Oku-du' kelimesindeki '-du' eki bir ____ ekidir (yapım/çekim).",a:"çekim"},
+        {ty:"mc",q:"\"Kitaplık\" sözcüğündeki \"-lık\" eki hangi tür ektir?",o:["Yapım eki","Çekim eki","Çoğul eki","Hâl eki"],a:0},
+        {ty:"mc",q:"\"Evler\" sözcüğündeki \"-ler\" eki hangi tür ektir?",o:["Çekim eki","Yapım eki","Kök","Gövde"],a:0},
+        {ty:"mc",q:"Yapım eki almış sözcüklere ne ad verilir?",o:["Türemiş sözcük","Basit sözcük","Birleşik sözcük","Yansıma"],a:0},
+        {ty:"mc",q:"\"Buzdolabı\" sözcüğü hangi tür sözcüktür?",o:["Birleşik sözcük","Basit sözcük","Türemiş sözcük","Yansıma"],a:0},
+        {ty:"tf",q:"Çekim ekleri sözcüğün cümledeki görevini belirler.",a:true},
+        {ty:"tf",q:"Yapım ekleri sözcüğe yeni anlam kazandırır.",a:true},
+        {ty:"tf",q:"Hiç ek almamış sözcüklere türemiş sözcük denir.",a:false},
+        {ty:"fb",q:"Ek almamış sözcüklere ____ sözcük denir.",a:"basit"},
+        {ty:"fb",q:"İki sözcüğün birleşmesiyle oluşan sözcüklere ____ sözcük denir.",a:"birleşik"}
+      ],
+    "Cümle Bilgisi": [
+      {ty:"mc",q:"'Ali topu attı.' cümlesinde yüklem hangisidir?",o:["Ali","Topu","Attı","Hiçbiri"],a:2},
+      {ty:"mc",q:"'Öğrenciler bahçede oynadı.' cümlesinde özne hangisidir?",o:["Bahçede","Öğrenciler","Oynadı","Hiçbiri"],a:1},
+      {ty:"mc",q:"Yüklemi cümlenin sonunda olan cümlelere ne ad verilir?",o:["Devrik cümle","Kurallı (düz) cümle","Soru cümlesi","Ünlem cümlesi"],a:1},
+      {ty:"tf",q:"Devrik cümlelerde yüklem cümlenin başında veya ortasında yer alır.",a:true},
+      {ty:"tf",q:"Her cümlede özne mutlaka açık (görünür) olmak zorundadır, gizli özne olamaz.",a:false},
+      {ty:"fb",q:"'Geldi mi acaba?' cümlesinde yüklem ____ 'dir.",a:"Geldi"},
+        {ty:"mc",q:"\"Ali kitabı okudu.\" cümlesinde \"kitabı\" hangi ögedir?",o:["Nesne","Özne","Yüklem","Zarf tümleci"],a:0},
+        {ty:"mc",q:"\"Yarın okula gideceğim.\" cümlesinde \"yarın\" hangi ögedir?",o:["Zarf tümleci","Özne","Nesne","Yüklem"],a:0},
+        {ty:"mc",q:"Bir cümlede olmazsa olmaz temel öge hangisidir?",o:["Yüklem","Nesne","Zarf tümleci","Dolaylı tümleç"],a:0},
+        {ty:"mc",q:"\"Kardeşim bahçede oynuyor.\" cümlesinde \"bahçede\" hangi ögedir?",o:["Dolaylı tümleç","Nesne","Özne","Yüklem"],a:0},
+        {ty:"tf",q:"Cümlede yüklemi bulmak için işi soran soru sorulur.",a:true},
+        {ty:"tf",q:"Bir cümlede özne bulunmayabilir.",a:true},
+        {ty:"tf",q:"Yüklemsiz cümle kurulabilir.",a:false},
+        {ty:"fb",q:"Cümlede işi, oluşu bildiren temel ögeye ____ denir.",a:"yüklem"},
+        {ty:"fb",q:"\"Neyi, kimi\" sorularının yanıtı olan ögeye ____ denir.",a:"nesne"}
+      ],
+  },
+  /* Almanca 12 — "Zukunftspläne – Gelecek Planları" temasından, resmî
+     A2.1 Themenkreis 4 "Arbeit und Berufe" ile BİRLEŞMEYEN sorular.
+     O temanın Sprachhandlung'u "über Berufspläne und -wünsche sprechen"tir;
+     aşağıdakiler meslek planı DEĞİL, iki ayrı öbektir:
+       (a) genel gelecek/planlama sözcükleri (Zukunft, Plan, Ziel, hoffen,
+           Entscheidung, Erfolg, vorhaben) — A seviyesinde karşılık gelen
+           bir Themenkreis yok, B2.2 TK1 "Die Zukunft" üst seviyedir;
+       (b) öğrenim/eğitim sözcükleri (Universität, Studium, Ausland) —
+           bunlar resmî A2.1 Themenkreis 6 "Ausbildung" konusudur, o tema
+           sistemde HENÜZ YOK.
+     Otomatik taşınmadılar; silinmediler. */
+  /* Almanca 9 — kaldırılan "Zahlen und Uhrzeit" temasından, GÜVENLE bir
+     resmî Themenkreis'e bağlanamayan sorular. Hepsi 20 ÜSTÜ sayı sorar;
+     A1.1/TK1'in Kompetenz'i ise açıkça "Zahlen bis 20" ile sınırlıdır.
+     Büyük sayılar programda yalnız FİYAT/MİKTAR bağlamında geçer
+     (A1.1/TK5 "Preise nennen, Mengen angeben" ve A1.1/TK8 "Zahlen, Preise
+     und Mengenangaben verstehen"); bu sorularda öyle bir bağlam yoktur,
+     bu yüzden oraya da zorlanmadı. Silinmediler. */
+  "alm-9": {
+    "Zahlen und Uhrzeit": [
+        {ty:"tf",q:"\"fünfzig\" sayısı Almancada 15 anlamına gelir.",a:false},
+        {ty:"fb",q:"\"hundert\" sayısının rakamla yazılışı ____ 'dür.",a:"100"},
+        {ty:"mc",q:"\"vierzig\" sayısının rakamla karşılığı nedir?",o:["40","14","44","4"],a:0},
+        {ty:"tf",q:"\"sechzig\" sayısı 60 anlamına gelir.",a:true},
+        {ty:"tf",q:"\"vierzig\" sayısı 14 anlamına gelir.",a:false},
+    ],
+  },
+  "alm-12": {
+    "Zukunftspläne – Gelecek Planları": [
+      {ty:"mc",q:"\"die Zukunft\" kelimesinin Türkçe anlamı nedir?",o:["Geçmiş","Gelecek","Şimdi","Hafta sonu"],a:1},
+      {ty:"tf",q:"\"Ich werde studieren.\" cümlesi Almancada gelecekle ilgili bir planı ifade eder.",a:true},
+      {ty:"fb",q:"\"Nach der Schule möchte ich an der ____ studieren.\" (üniversite anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Universität"},
+        {ty:"mc",q:"\"Ich will studieren.\" cümlesi neyi anlatır?",o:["Üniversite okuma isteğini","Çalışma zorunluluğunu","Seyahat planını","Taşınma kararını"],a:0},
+        {ty:"mc",q:"\"die Universität\" kelimesi neyi ifade eder?",o:["Üniversite","Lise","İlkokul","Kurs"],a:0},
+        {ty:"mc",q:"\"Ich werde nächstes Jahr nach Deutschland fahren.\" cümlesinde hangi zaman anlatılır?",o:["Gelecek","Geçmiş","Şimdiki","Geniş"],a:0},
+        {ty:"tf",q:"\"der Plan\" kelimesi plan anlamındadır.",a:true},
+        {ty:"tf",q:"\"das Ziel\" kelimesi Almancada \"başlangıç\" anlamına gelir.",a:false},
+        {ty:"tf",q:"\"hoffen\" fiili ummak anlamındadır.",a:true},
+        {ty:"fb",q:"Almancada \"karar\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Entscheidung"},
+        {ty:"fb",q:"Almancada \"başarı\" anlamına gelen kelime ____ 'tir.",a:"Erfolg"},
+        {ty:"mc",q:"\"das Studium\" kelimesinin Türkçe anlamı nedir?",o:["Üniversite öğrenimi","Lise öğrenimi","Kurs","Staj"],a:0},
+        {ty:"mc",q:"\"Ich habe vor, im Ausland zu studieren.\" cümlesi neyi bildirir?",o:["Bir planı","Bir yasağı","Bir zorunluluğu","Bir izni"],a:0},
+        {ty:"tf",q:"\"vorhaben\" fiili plan yapmak anlamındadır.",a:true},
+        {ty:"tf",q:"\"das Studium\" kelimesi ilkokul anlamına gelir.",a:false},
+        {ty:"fb",q:"Almancada \"üniversite öğrenimi\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Studium"},
+        {ty:"fb",q:"Almancada \"yurt dışı\" anlamına gelen kelime ____ tır.",a:"Ausland"},
+    ],
+  },
+};
+
+/* ── Program hattı dışı Almanca içerik ────────────────────────────────
+   Varsayılan hat "2. yabancı dil – hazırlık sınıfı yok" ve A1.1–A1.2 ile
+   sınırlıdır. Aşağıdaki dört tema resmî programda ÜST seviyelerde yer alır;
+   varsayılan hatta 12. sınıfta gösteriliyorlardı, oradan kaldırıldılar.
+   SİLİNMEDİLER: hazırlık sınıflı hat (A2.1 girişli) açıldığında yeniden
+   kullanılabilsinler diye Niveaustufe ve varsa resmî kapsam maddeleriyle
+   birlikte saklanırlar. ARSIV_BANK gibi bu yapı da ÜRETİMDE HİÇ OKUNMAZ. */
+const PROGRAM_DISI_BANK = {
+  alm: {
+    "Arbeit und Berufe": {
+      ns: "A2.1", tk: "TK4", tr: "İş ve Meslekler",
+      kapsam: [
+        { k: "über Berufspläne und -wünsche sprechen", kod: "A2.1/TK4", a: ["werden", "möchte", "will", "berufsplan", "olmak iste", "praktikum", "staj"] },
+        { k: "Berufe und ihre Arbeitsbereiche nennen", kod: "A2.1/TK4", a: ["beruf", "meslek", "ingenieur", "arzt", "ärztin", "lehrer", "anwalt", "krankenschwester", "arbeite als", "firma"] },
+        { k: "mit Arbeitskollegen kommunizieren", kod: "A2.1/TK4", a: ["bewerbung", "lebenslauf", "vorstellungsgespräch", "gehalt", "erfahrung", "bewerben", "başvuru", "öz geçmiş", "maaş"] }
+      ],
+      sorular: [
+        {ty:"mc",q:"\"der Ingenieur\" kelimesinin Türkçe anlamı nedir?",o:["Doktor","Mühendis","Avukat","Öğretmen"],a:1},
+        {ty:"mc",q:"\"Was bist du von Beruf?\" sorusu neyi sormaktadır?",o:["Yaşını","Mesleğini","Adresini","Hobilerini"],a:1},
+        {ty:"mc",q:"\"Ich arbeite als Krankenschwester.\" cümlesinin Türkçe anlamı nedir?",o:["Hemşire olarak çalışıyorum","Doktor olarak çalışıyorum","Öğretmen olarak çalışıyorum","İşsizim"],a:0},
+        {ty:"tf",q:"\"der Anwalt\" kelimesi Almancada \"avukat\" anlamına gelir.",a:true},
+        {ty:"fb",q:"\"Meine Mutter ist ____.\" (kadın öğretmen anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Lehrerin"},
+          {ty:"mc",q:"\"der Beruf\" kelimesinin Türkçe anlamı nedir?",o:["Meslek","İş yeri","Maaş","Görev"],a:0},
+          {ty:"mc",q:"\"Was sind Sie von Beruf?\" sorusu neyi öğrenmek için sorulur?",o:["Mesleği","Adı","Yaşı","Adresi"],a:0},
+          {ty:"mc",q:"\"die Ärztin\" kelimesi kimi ifade eder?",o:["Kadın doktor","Erkek doktor","Hemşire","Hasta"],a:0},
+          {ty:"mc",q:"\"Ich arbeite als Ingenieur.\" cümlesi neyi bildirir?",o:["Çalışılan mesleği","Çalışma saatini","Maaş tutarını","İş yerinin adını"],a:0},
+          {ty:"mc",q:"\"die Bewerbung\" kelimesi neyi ifade eder?",o:["İş başvurusu","İş sözleşmesi","İzin belgesi","Diploma"],a:0},
+          {ty:"tf",q:"\"der Lehrer\" kelimesi öğretmen anlamındadır.",a:true},
+          {ty:"tf",q:"\"arbeitslos\" kelimesi Almancada \"çalışkan\" anlamına gelir.",a:false},
+          {ty:"tf",q:"\"das Vorstellungsgespräch\" ifadesi iş görüşmesini belirtir.",a:true},
+          {ty:"fb",q:"Almancada \"şirket\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Firma"},
+          {ty:"fb",q:"\"Ich ____ bei einer Bank.\" (çalışmak anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"arbeite"},
+          {ty:"fb",q:"Almancada \"deneyim\" anlamına gelen kelime ____ 'dir.",a:"Erfahrung"},
+          {ty:"mc",q:"\"das Gehalt\" kelimesinin Türkçe anlamı nedir?",o:["Maaş","Görev","Sözleşme","İzin"],a:0},
+          {ty:"mc",q:"\"Ich habe drei Jahre Erfahrung.\" cümlesi neyi bildirir?",o:["Deneyim süresini","Maaşı","Görev tanımını","Çalışma saatini"],a:0},
+          {ty:"mc",q:"\"der Lebenslauf\" kelimesi neyi ifade eder?",o:["Öz geçmiş","İş sözleşmesi","Diploma","Referans"],a:0},
+          {ty:"mc",q:"\"Ich möchte mich bewerben.\" cümlesi neyi ifade eder?",o:["Başvurma isteğini","İstifa etmeyi","İzin istemeyi","Terfi istemeyi"],a:0},
+          {ty:"tf",q:"\"der Lebenslauf\" öz geçmiş anlamındadır.",a:true},
+          {ty:"tf",q:"\"das Gehalt\" maaş anlamına gelir.",a:true},
+          {ty:"tf",q:"\"sich bewerben\" fiili istifa etmek anlamına gelir.",a:false},
+          {ty:"fb",q:"Almancada \"öz geçmiş\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Lebenslauf"},
+          {ty:"fb",q:"Almancada \"maaş\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Gehalt"},
+          {ty:"fb",q:"Almancada \"meslek eğitimi\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Ausbildung"},
+        {ty:"mc",q:"\"Was willst du werden?\" sorusu neyi sormaktadır?",o:["Gelecekte ne olmak istediğini","Bugün ne yaptığını","Nerede yaşadığını","Kaç kardeşi olduğunu"],a:0},
+        {ty:"mc",q:"\"Ich möchte Arzt werden.\" cümlesinin Türkçe anlamı nedir?",o:["Doktor olmak istiyorum","Doktora gidiyorum","Doktordan korkuyorum","Doktor değilim"],a:0},
+          {ty:"mc",q:"\"Was möchtest du werden?\" sorusu neyi öğrenmek için sorulur?",o:["Gelecekteki mesleği","Bugünkü sınıfı","Doğum yerini","Sevilen dersi"],a:0},
+          {ty:"fb",q:"\"Ich ____ Arzt werden.\" (istemek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"möchte"},
+          {ty:"mc",q:"\"das Praktikum\" kelimesi neyi ifade eder?",o:["Staj","Sınav","Diploma","Ders"],a:0},
+          {ty:"mc",q:"\"Ich werde Lehrer.\" cümlesi hangi zamanı bildirir?",o:["Gelecek","Geçmiş","Şimdiki","Geniş"],a:0},
+          {ty:"tf",q:"\"das Praktikum\" staj anlamına gelir.",a:true},
+          {ty:"fb",q:"Almancada \"staj\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Praktikum"},
+        ],
+    },
+    "Medien": {
+      ns: "A2.2", tk: null, tr: "Medya",
+      kapsam: [],
+      sorular: [
+        {ty:"mc",q:"\"das Handy\" kelimesinin Türkçe anlamı nedir?",o:["Bilgisayar","Cep telefonu","Televizyon","Radyo"],a:1},
+        {ty:"mc",q:"\"Ich surfe im Internet.\" cümlesinin Türkçe anlamı nedir?",o:["İnternette geziniyorum","Deniz kenarında sörf yapıyorum","Bilgisayarımı tamir ediyorum","Televizyon izliyorum"],a:0},
+        {ty:"mc",q:"\"die Nachrichten\" kelimesi neyi ifade eder?",o:["Mesajlar","Haberler","Filmler","Oyunlar"],a:1},
+        {ty:"tf",q:"\"der Computer\" kelimesi Almancada \"bilgisayar\" anlamına gelir.",a:true},
+        {ty:"fb",q:"\"Ich schaue gern ____.\" (filmler anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Filme"},
+          {ty:"mc",q:"\"die Zeitung\" kelimesinin Türkçe anlamı nedir?",o:["Gazete","Dergi","Kitap","Broşür"],a:0},
+          {ty:"mc",q:"\"Ich surfe im Internet.\" cümlesi neyi anlatır?",o:["İnternette gezindiğini","Radyo dinlediğini","Gazete okuduğunu","Televizyon izlediğini"],a:0},
+          {ty:"mc",q:"\"soziale Medien\" ifadesi neyi belirtir?",o:["Sosyal medyayı","Basılı yayınları","Sinema salonlarını","Radyo kanallarını"],a:0},
+          {ty:"mc",q:"\"der Bildschirm\" kelimesi neyi ifade eder?",o:["Ekran","Klavye","Hoparlör","Kablo"],a:0},
+          {ty:"tf",q:"\"der Fernseher\" kelimesi televizyon aygıtını belirtir.",a:true},
+          {ty:"tf",q:"\"die Werbung\" kelimesi Almancada \"haber\" anlamına gelir.",a:false},
+          {ty:"tf",q:"\"herunterladen\" fiili indirmek anlamındadır.",a:true},
+          {ty:"fb",q:"Almancada \"dergi\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Zeitschrift"},
+          {ty:"fb",q:"\"Ich ____ jeden Abend Nachrichten.\" (izlemek/seyretmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"sehe"},
+          {ty:"fb",q:"Almancada \"bilgi\" anlamına gelen kelime ____ 'dir.",a:"Information"},
+          {ty:"mc",q:"\"der Artikel\" kelimesi medya bağlamında neyi ifade eder?",o:["Makale/haber yazısı","Reklam","Program","Kanal"],a:0},
+          {ty:"mc",q:"\"Ich lese jeden Tag Nachrichten online.\" cümlesi neyi anlatır?",o:["Düzenli bir alışkanlığı","Bir planı","Bir yasağı","Bir isteği"],a:0},
+          {ty:"mc",q:"\"die Quelle\" kelimesi bilgi bağlamında neyi ifade eder?",o:["Kaynak","Başlık","Yorum","Paylaşım"],a:0},
+          {ty:"mc",q:"\"posten\" fiilinin Türkçe karşılığı nedir?",o:["Paylaşım yapmak","Silmek","İndirmek","Kaydetmek"],a:0},
+          {ty:"tf",q:"\"die Quelle\" kaynak anlamına gelir.",a:true},
+          {ty:"tf",q:"\"der Artikel\" haber yazısı için kullanılabilir.",a:true},
+          {ty:"tf",q:"\"posten\" fiili silmek anlamına gelir.",a:false},
+          {ty:"fb",q:"Almancada \"kaynak\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Quelle"},
+          {ty:"fb",q:"Almancada \"kullanıcı\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Nutzer"},
+          {ty:"fb",q:"Almancada \"gizlilik\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Privatsphäre"}
+        ],
+    },
+    "Kultur": {
+      ns: "B1.1", tk: null, tr: "Kültür",
+      kapsam: [],
+      sorular: [
+        {ty:"mc",q:"\"das Museum\" kelimesinin Türkçe anlamı nedir?",o:["Tiyatro","Müze","Kütüphane","Sinema"],a:1},
+        {ty:"mc",q:"\"Wir besuchen ein Theater.\" cümlesinin Türkçe anlamı nedir?",o:["Bir tiyatroyu ziyaret ediyoruz","Bir müzeyi inşa ediyoruz","Bir konsere gidiyoruz","Bir sergi açıyoruz"],a:0},
+        {ty:"mc",q:"\"die Tradition\" kelimesinin Türkçe anlamı nedir?",o:["Moda","Gelenek","Teknoloji","Spor"],a:1},
+        {ty:"tf",q:"\"das Konzert\" kelimesi Almancada \"konser\" anlamına gelir.",a:true},
+        {ty:"fb",q:"\"In Deutschland gibt es viele ____.\" (müzeler anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Museen"},
+          {ty:"mc",q:"\"die Kultur\" kelimesinin Türkçe anlamı nedir?",o:["Kültür","Sanat","Tarih","Dil"],a:0},
+          {ty:"mc",q:"\"das Museum\" kelimesi neyi ifade eder?",o:["Müze","Tiyatro","Kütüphane","Galeri"],a:0},
+          {ty:"mc",q:"\"Ich interessiere mich für Literatur.\" cümlesi neyi anlatır?",o:["Edebiyata ilgi duyulduğunu","Edebiyat dersi alındığını","Kitap satıldığını","Yazar olunduğunu"],a:0},
+          {ty:"mc",q:"\"die Sprache\" kelimesi neyi ifade eder?",o:["Dil","Ülke","Halk","Yazı"],a:0},
+          {ty:"mc",q:"\"das Theater\" kelimesi neyi belirtir?",o:["Tiyatro","Sinema","Konser","Sergi"],a:0},
+          {ty:"tf",q:"\"die Musik\" kelimesi müzik anlamındadır.",a:true},
+          {ty:"tf",q:"\"fremd\" kelimesi Almancada \"tanıdık\" anlamına gelir.",a:false},
+          {ty:"tf",q:"\"die Sitte\" kelimesi gelenek ve görenek anlamında kullanılır.",a:true},
+          {ty:"fb",q:"Almancada \"sanat\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Kunst"},
+          {ty:"fb",q:"\"Ich ____ Deutsch und Englisch.\" (konuşmak anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"spreche"},
+          {ty:"fb",q:"Almancada \"tarih\" (bilim dalı) anlamına gelen kelime ____ 'tir.",a:"Geschichte"},
+          {ty:"mc",q:"\"die Ausstellung\" kelimesinin Türkçe anlamı nedir?",o:["Sergi","Konser","Gösteri","Fuar"],a:0},
+          {ty:"mc",q:"\"Ich interessiere mich für Geschichte.\" cümlesi neyi bildirir?",o:["İlgi alanını","Mesleği","Yaşı","Adresi"],a:0},
+          {ty:"mc",q:"\"der Roman\" kelimesi edebiyat bağlamında neyi ifade eder?",o:["Roman","Şiir","Öykü","Tiyatro"],a:0},
+          {ty:"mc",q:"\"die Vielfalt\" kelimesinin Türkçe anlamı nedir?",o:["Çeşitlilik","Benzerlik","Birlik","Ayrım"],a:0},
+          {ty:"tf",q:"\"die Ausstellung\" sergi anlamına gelir.",a:true},
+          {ty:"tf",q:"\"die Vielfalt\" çeşitlilik anlamına gelir.",a:true},
+          {ty:"tf",q:"\"der Roman\" kelimesi şiir anlamına gelir.",a:false},
+          {ty:"fb",q:"Almancada \"sergi\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Ausstellung"},
+          {ty:"fb",q:"Almancada \"çeşitlilik\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Vielfalt"},
+          {ty:"fb",q:"\"Ich interessiere mich ____ Musik.\" cümlesindeki boşluğa gelen edat ____ dür.",a:"für"}
+        ],
+    },
+    "Umwelt": {
+      ns: "B1.2", tk: null, tr: "Çevre",
+      kapsam: [],
+      sorular: [
+        {ty:"mc",q:"\"der Müll\" kelimesinin Türkçe anlamı nedir?",o:["Orman","Çöp","Su","Hava"],a:1},
+        {ty:"mc",q:"\"Wir müssen die Umwelt schützen.\" cümlesinin Türkçe anlamı nedir?",o:["Çevreyi korumalıyız","Çevreyi kirletmeliyiz","Çevre önemli değil","Doğada yürüyüş yapmalıyız"],a:0},
+        {ty:"mc",q:"\"recyceln\" fiilinin Türkçe anlamı nedir?",o:["Yakmak","Geri dönüştürmek","Gömmek","Atmak"],a:1},
+        {ty:"tf",q:"\"die Umweltverschmutzung\" kelimesi Almancada \"çevre kirliliği\" anlamına gelir.",a:true},
+        {ty:"fb",q:"\"Wir sollen Wasser ____.\" (tasarruf etmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"sparen"},
+          {ty:"mc",q:"\"die Umwelt\" kelimesinin Türkçe anlamı nedir?",o:["Çevre","Dünya","Doğa olayı","İklim"],a:0},
+          {ty:"mc",q:"\"der Müll\" kelimesi neyi ifade eder?",o:["Çöp","Su","Toprak","Hava"],a:0},
+          {ty:"mc",q:"\"Wir müssen Energie sparen.\" cümlesi neyi anlatır?",o:["Enerji tasarrufu gerektiğini","Enerjinin ucuz olduğunu","Enerjinin bittiğini","Enerjinin üretildiğini"],a:0},
+          {ty:"mc",q:"\"die Luftverschmutzung\" kelimesi hangi sorunu belirtir?",o:["Hava kirliliğini","Su kıtlığını","Gürültüyü","Erozyonu"],a:0},
+          {ty:"mc",q:"\"das Recycling\" kelimesi neyi ifade eder?",o:["Geri dönüşümü","Çöp toplamayı","Ağaç kesmeyi","Su arıtmayı"],a:0},
+          {ty:"tf",q:"\"der Klimawandel\" ifadesi iklim değişikliğini belirtir.",a:true},
+          {ty:"tf",q:"\"sauber\" kelimesi Almancada \"kirli\" anlamına gelir.",a:false},
+          {ty:"tf",q:"\"schützen\" fiili korumak anlamındadır.",a:true},
+          {ty:"fb",q:"Almancada \"su\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Wasser"},
+          {ty:"fb",q:"\"Wir ____ die Natur schützen.\" (zorunda olmak anlamında) cümlesindeki boşluğa gelen kelime ____ 'tür.",a:"müssen"},
+          {ty:"fb",q:"Almancada \"enerji\" anlamına gelen kelime ____ 'dir.",a:"Energie"},
+          {ty:"mc",q:"\"der Abfall\" kelimesinin Türkçe anlamı nedir?",o:["Atık","Kaynak","Enerji","Hava"],a:0},
+          {ty:"mc",q:"\"Wir sollten Plastik vermeiden.\" cümlesinde \"sollten\" neyi bildirir?",o:["Öneri","Zorunluluk","Yasak","Yetenek"],a:0},
+          {ty:"mc",q:"\"die Erneuerbare Energie\" ifadesi neyi belirtir?",o:["Yenilenebilir enerjiyi","Fosil yakıtı","Nükleer enerjiyi","Kömürü"],a:0},
+          {ty:"mc",q:"\"trennen\" fiili atık bağlamında neyi ifade eder?",o:["Ayrıştırmak","Yakmak","Gömmek","Taşımak"],a:0},
+          {ty:"tf",q:"\"vermeiden\" fiili kaçınmak anlamındadır.",a:true},
+          {ty:"tf",q:"\"der Abfall\" atık anlamına gelir.",a:true},
+          {ty:"tf",q:"\"trennen\" fiili birleştirmek anlamına gelir.",a:false},
+          {ty:"fb",q:"Almancada \"atık\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Abfall"},
+          {ty:"fb",q:"\"Wir ____ Plastik vermeiden.\" (öneri) boşluğa gelen kelime ____ dir.",a:"sollten"},
+          {ty:"fb",q:"Almancada \"iklim\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Klima"}
+        ],
+    },
+  },
+};
+
 const UNIT_BANK = {
 "mat-12": {
   /* 12. sınıf 2026-2027'de TYMM'ye geçmedi; 2018 Ortaöğretim Matematik
@@ -2189,57 +2525,6 @@ const UNIT_BANK = {
       {ty:"fb",q:"Öğüt veren, kalıplaşmış özlü sözlere ____ denir.",a:"atasözü"},
       {ty:"fb",q:"\"Ağzı kulaklarına varmak\" deyimi çok ____ anlamındadır.",a:"sevinmek"}
     ],
-  "Adlar, Sıfatlar, Zamirler": [
-    {ty:"mc",q:"'Kırmızı elbise' tamlamasında 'kırmızı' kelimesi ne görevindedir?",o:["Ad (isim)","Sıfat","Zamir","Zarf"],a:1},
-    {ty:"mc",q:"Aşağıdakilerden hangisi bir zamirdir?",o:["Kitap","O","Güzel","Koşmak"],a:1},
-    {ty:"mc",q:"'Üç kalem aldım.' cümlesinde 'üç' kelimesi ne tür bir sıfattır?",o:["Niteleme sıfatı","Belirtme (sayı) sıfatı","Zamir","Ad"],a:1},
-    {ty:"tf",q:"Sıfatlar isimlerin önüne gelerek onları niteler veya belirtir.",a:true},
-    {ty:"tf",q:"Zamirler, isimlerin yerini tutan kelimelerdir.",a:true},
-    {ty:"fb",q:"'Ben, sen, o, biz, siz, onlar' kelimelerine ____ zamiri denir.",a:"kişi (şahıs)"},
-      {ty:"mc",q:"\"Kalabalık sınıf\" tamlamasında \"kalabalık\" sözcüğünün türü nedir?",o:["Sıfat","Ad","Zamir","Zarf"],a:0},
-      {ty:"mc",q:"\"Onlar bahçede oynuyor.\" cümlesinde \"onlar\" sözcüğünün türü nedir?",o:["Zamir","Ad","Sıfat","Bağlaç"],a:0},
-      {ty:"mc",q:"Aşağıdakilerden hangisi özel addır?",o:["Ankara","şehir","dağ","ırmak"],a:0},
-      {ty:"mc",q:"\"Üç kalem\" tamlamasında \"üç\" hangi tür sıfattır?",o:["Sayı sıfatı","Niteleme sıfatı","İşaret sıfatı","Belgisiz sıfat"],a:0},
-      {ty:"tf",q:"Özel adlar büyük harfle başlar.",a:true},
-      {ty:"tf",q:"Sıfatlar adları niteler ya da belirtir.",a:true},
-      {ty:"tf",q:"Zamirler adların yerini tutmaz.",a:false},
-      {ty:"fb",q:"Adların yerini tutan sözcüklere ____ denir.",a:"zamir"},
-      {ty:"fb",q:"\"Bu kitap\" tamlamasındaki \"bu\" sözcüğü ____ sıfatıdır.",a:"işaret"}
-    ],
-  "Yapım ve Çekim Ekleri": [
-    {ty:"mc",q:"'Göz-lük' kelimesindeki '-lük' eki ne tür bir ektir?",o:["Çekim eki","Yapım eki","Kök","Bağlaç"],a:1},
-    {ty:"mc",q:"'Kalem-ler' kelimesindeki '-ler' eki hangi tür ektir?",o:["Yapım eki","Çekim eki (çoğul eki)","Kök","Bağlaç"],a:1},
-    {ty:"mc",q:"Yapım eki aldığında kelimenin türü ya da anlamı nasıl değişir?",o:["Değişmez","Yeni bir kelime (anlam/tür) oluşur","Sadece çoğul olur","Sadece zaman bildirir"],a:1},
-    {ty:"tf",q:"Çekim ekleri kelimenin anlamını ve türünü değiştirmez, sadece cümledeki görevini belirtir.",a:true},
-    {ty:"tf",q:"'Tuz-lu' kelimesindeki '-lu' eki bir çekim ekidir.",a:false},
-    {ty:"fb",q:"'Oku-du' kelimesindeki '-du' eki bir ____ ekidir (yapım/çekim).",a:"çekim"},
-      {ty:"mc",q:"\"Kitaplık\" sözcüğündeki \"-lık\" eki hangi tür ektir?",o:["Yapım eki","Çekim eki","Çoğul eki","Hâl eki"],a:0},
-      {ty:"mc",q:"\"Evler\" sözcüğündeki \"-ler\" eki hangi tür ektir?",o:["Çekim eki","Yapım eki","Kök","Gövde"],a:0},
-      {ty:"mc",q:"Yapım eki almış sözcüklere ne ad verilir?",o:["Türemiş sözcük","Basit sözcük","Birleşik sözcük","Yansıma"],a:0},
-      {ty:"mc",q:"\"Buzdolabı\" sözcüğü hangi tür sözcüktür?",o:["Birleşik sözcük","Basit sözcük","Türemiş sözcük","Yansıma"],a:0},
-      {ty:"tf",q:"Çekim ekleri sözcüğün cümledeki görevini belirler.",a:true},
-      {ty:"tf",q:"Yapım ekleri sözcüğe yeni anlam kazandırır.",a:true},
-      {ty:"tf",q:"Hiç ek almamış sözcüklere türemiş sözcük denir.",a:false},
-      {ty:"fb",q:"Ek almamış sözcüklere ____ sözcük denir.",a:"basit"},
-      {ty:"fb",q:"İki sözcüğün birleşmesiyle oluşan sözcüklere ____ sözcük denir.",a:"birleşik"}
-    ],
-  "Cümle Bilgisi": [
-    {ty:"mc",q:"'Ali topu attı.' cümlesinde yüklem hangisidir?",o:["Ali","Topu","Attı","Hiçbiri"],a:2},
-    {ty:"mc",q:"'Öğrenciler bahçede oynadı.' cümlesinde özne hangisidir?",o:["Bahçede","Öğrenciler","Oynadı","Hiçbiri"],a:1},
-    {ty:"mc",q:"Yüklemi cümlenin sonunda olan cümlelere ne ad verilir?",o:["Devrik cümle","Kurallı (düz) cümle","Soru cümlesi","Ünlem cümlesi"],a:1},
-    {ty:"tf",q:"Devrik cümlelerde yüklem cümlenin başında veya ortasında yer alır.",a:true},
-    {ty:"tf",q:"Her cümlede özne mutlaka açık (görünür) olmak zorundadır, gizli özne olamaz.",a:false},
-    {ty:"fb",q:"'Geldi mi acaba?' cümlesinde yüklem ____ 'dir.",a:"Geldi"},
-      {ty:"mc",q:"\"Ali kitabı okudu.\" cümlesinde \"kitabı\" hangi ögedir?",o:["Nesne","Özne","Yüklem","Zarf tümleci"],a:0},
-      {ty:"mc",q:"\"Yarın okula gideceğim.\" cümlesinde \"yarın\" hangi ögedir?",o:["Zarf tümleci","Özne","Nesne","Yüklem"],a:0},
-      {ty:"mc",q:"Bir cümlede olmazsa olmaz temel öge hangisidir?",o:["Yüklem","Nesne","Zarf tümleci","Dolaylı tümleç"],a:0},
-      {ty:"mc",q:"\"Kardeşim bahçede oynuyor.\" cümlesinde \"bahçede\" hangi ögedir?",o:["Dolaylı tümleç","Nesne","Özne","Yüklem"],a:0},
-      {ty:"tf",q:"Cümlede yüklemi bulmak için işi soran soru sorulur.",a:true},
-      {ty:"tf",q:"Bir cümlede özne bulunmayabilir.",a:true},
-      {ty:"tf",q:"Yüklemsiz cümle kurulabilir.",a:false},
-      {ty:"fb",q:"Cümlede işi, oluşu bildiren temel ögeye ____ denir.",a:"yüklem"},
-      {ty:"fb",q:"\"Neyi, kimi\" sorularının yanıtı olan ögeye ____ denir.",a:"nesne"}
-    ],
   "Noktalama ve Yazım": [
     {ty:"mc",q:"Cümle içinde ara sözleri ayırmak için hangi noktalama işareti kullanılır?",o:["Nokta (.)","Virgül (,)","Soru işareti (?)","Kesme işareti (')"],a:1},
     {ty:"mc",q:"'Öğretmenimiz, yarın sınav olduğunu söyledi.' gibi söylenen bir sözü doğrudan aktarırken kullanılan iki nokta (:) hangi amaçla kullanılır?",o:["Sıralamayı belirtmek için","Alıntıyı/söylenen sözü bildirmek için","Kısaltma yapmak için","Sayıyı ayırmak için"],a:1},
@@ -2734,6 +3019,50 @@ const UNIT_BANK = {
       {ty:"fb",q:"Bağlaç olan \"da/de\" ____ yazılır.",a:"ayrı"},
       {ty:"fb",q:"Alıntıları belirtmek için ____ işareti kullanılır.",a:"tırnak"}
     ],
+  /* T.8.3.8 "Metindeki anlatım bozukluklarını belirler."
+     Programın açıklaması kapsamı SINIRLAR: "Dil bilgisi yönünden anlatım
+     bozuklukları üzerinde durulur." Bu yüzden buradaki sorular yalnızca
+     DİL BİLGİSİ kaynaklı bozuklukları ölçer: özne-yüklem uyumsuzluğu, öge
+     eksikliği, ek yanlışlığı, tamlama yanlışlığı. Anlam kaynaklı bozukluklar
+     (gereksiz sözcük, çelişen ifade) 7. sınıfın T.7.3.13 kazanımına aittir ve
+     tr-7 bankasında zaten bulunur; oradan kopyalanmadı. */
+  "Anlatım Bozuklukları": [
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde özne ile yüklem arasındaki uyumsuzluktan kaynaklanan anlatım bozukluğu vardır?",o:["Ağaçlar rüzgârda sallanıyorlar.","Öğrenciler sınava hazırlandı.","Kuşlar güneye göç etti.","Yağmur sabaha kadar yağdı."],a:0},
+    {ty:"mc",q:"\"Kardeşimi çok severim ve güvenirim.\" cümlesindeki anlatım bozukluğunun nedeni nedir?",o:["Nesne eksikliği","Yüklem eksikliği","Gereksiz sözcük kullanımı","Yanlış noktalama"],a:0},
+    {ty:"mc",q:"\"Bu konuyu iyi biliyor ve çok ilgileniyorum.\" cümlesindeki bozukluk nasıl giderilir?",o:["\"bu konuyla\" ifadesi eklenerek","Yüklem değiştirilerek","Virgül konularak","Özne çoğul yapılarak"],a:0},
+    {ty:"mc",q:"\"Türk ve Yunan halkı bu konuda anlaştı.\" cümlesindeki anlatım bozukluğu hangi türdendir?",o:["Tamlama yanlışlığı","Özne eksikliği","Ek fazlalığı","Yüklem uyumsuzluğu"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde anlatım bozukluğu YOKTUR?",o:["Öğrenciler bahçede oyun oynadı.","Masalar salona taşındılar.","Onu tanırım ve güvenirim.","Kitabı okudu ve rafa koydu, sonra tozunu aldı."],a:0},
+    {ty:"mc",q:"\"Kitapları rafa dizdi, sonra da tozunu aldı.\" cümlesinde hangi öge eksiktir?",o:["Nesne","Özne","Yüklem","Zarf tümleci"],a:0},
+    {ty:"tf",q:"Cansız varlıkları ya da hayvanları bildiren çoğul öznelerde yüklemin tekil olması gerekir.",a:true},
+    {ty:"tf",q:"\"Ağaçlar rüzgârda sallanıyorlar.\" cümlesi anlatım bakımından doğrudur.",a:false},
+    {ty:"tf",q:"Cümlede gerekli olan ekin kullanılmaması anlatım bozukluğuna yol açar.",a:true},
+    {ty:"tf",q:"Anlatım bozukluğu yalnızca noktalama yanlışlarından doğar.",a:false},
+    {ty:"tf",q:"Birden çok yükleme bağlanan ortak öge, yüklemlerin hepsine uygun olmalıdır.",a:true},
+    {ty:"fb",q:"Yüklemin bildirdiği işi yapanın cümlede bulunmamasından doğan bozukluğa ____ eksikliği denir.",a:"özne"},
+    {ty:"fb",q:"Cümlede gerekli ekin kullanılmamasından doğan bozukluğa ____ yanlışlığı denir.",a:"ek"},
+    {ty:"fb",q:"Tekil ve çoğul kullanımın birbirine uymamasından doğan bozukluğa özne-yüklem ____ denir.",a:"uyumsuzluğu"}
+  ],
+  /* T.8.4.20 "Fiillerin çatı özelliklerinin anlama olan katkısını kavrar."
+     Programın açıklaması: "Kavram tanımlarına girilmeden anlamsal farklılıklara
+     değinilir." Bu yüzden sorular TERİM TANIMI SORMAZ ("edilgen fiil nedir?"
+     gibi); işi yapanın belli olup olmadığı, işin kimin üzerinde ya da kaç kişi
+     arasında gerçekleştiği gibi ANLAM farkını ölçer. */
+  "Fiillerin Çatısı": [
+    {ty:"mc",q:"\"Cam kırıldı.\" cümlesinde camı kimin kırdığı belli midir?",o:["Belli değildir","Ali'dir","Rüzgârdır","Cümlede açıkça yazılmıştır"],a:0},
+    {ty:"mc",q:"\"Ali camı kırdı.\" ile \"Cam kırıldı.\" cümleleri arasındaki anlam farkı nedir?",o:["İkincisinde işi yapan belirtilmemiştir","İkincisinde iş tamamlanmamıştır","İkisi aynı anlamdadır","İkincisinde iş gelecekte olacaktır"],a:0},
+    {ty:"mc",q:"\"Çocuk yıkandı.\" cümlesinde çocuk işi kimin üzerinde yapmıştır?",o:["Kendi üzerinde","Kardeşinin üzerinde","Annesinin üzerinde","Belli değildir"],a:0},
+    {ty:"mc",q:"\"Kardeşimle mektuplaştık.\" cümlesinde iş nasıl gerçekleşmiştir?",o:["İki kişi arasında karşılıklı","Tek kişi tarafından","Kimse tarafından","Bir topluluk adına"],a:0},
+    {ty:"mc",q:"Aşağıdaki cümlelerin hangisinde işi yapan belli DEĞİLDİR?",o:["Duvarlar yeniden boyandı.","Babam duvarları boyadı.","Ustalar duvarı boyuyor.","Ben duvarı boyayacağım."],a:0},
+    {ty:"mc",q:"\"Öğrenciler koridorda koşuştular.\" cümlesinde iş nasıl yapılmıştır?",o:["Birden çok kişi tarafından birlikte","Yalnız bir kişi tarafından","Hiç kimse tarafından","Karşılıklı iki kişi tarafından"],a:0},
+    {ty:"tf",q:"\"Ev boyandı.\" cümlesinde evi kimin boyadığı belirtilmemiştir.",a:true},
+    {ty:"tf",q:"\"Ayşe saçını taradı.\" cümlesinde Ayşe işi kendi üzerinde yapmıştır.",a:true},
+    {ty:"tf",q:"\"Kapı açıldı.\" cümlesinde işi yapan açıkça bellidir.",a:false},
+    {ty:"tf",q:"\"Arkadaşımla selamlaştık.\" cümlesinde iş karşılıklı yapılmıştır.",a:true},
+    {ty:"tf",q:"Bir cümlede işi yapanın belirtilmemesi, cümlenin anlamını değiştirmez.",a:false},
+    {ty:"fb",q:"Bir işin iki kişi arasında karşılıklı yapıldığını bildiren cümlelerde eylem ____ anlamı taşır.",a:"işteş"},
+    {ty:"fb",q:"Öznenin işi kendi üzerinde yaptığını bildiren cümlelerde eylem ____ anlamı taşır.",a:"dönüşlü"},
+    {ty:"fb",q:"İşi yapanın belirtilmediği cümlelerde eylem ____ anlamı taşır.",a:"edilgen"}
+  ],
   "Söz Sanatları": [
     {ty:"mc",q:"'Dağlar bana dert ortağı oldu.' cümlesinde hangi söz sanatı vardır?",o:["Teşbih (benzetme)","Kişileştirme (teşhis)","Mübalağa (abartma)","Tezat (karşıtlık)"],a:1},
     {ty:"mc",q:"'Gözlerinden yaşlar sel gibi aktı.' cümlesinde hangi söz sanatına başvurulmuştur?",o:["Kişileştirme","Konuşturma (intak)","Teşbih (benzetme)","Tezat"],a:2},
@@ -7081,8 +7410,13 @@ const UNIT_BANK = {
       {ty:"fb",q:"Taoizmin kurucusu kabul edilen kişi ____ 'dur.",a:"Lao Tzu"}
     ]
 },
-"alm-9": {
-  "Hallo! – Tanışma": [
+/* Almanca içerik SINIFA değil NIVEAUSTUFE'ye bağlıdır: resmî program
+   temaları seviyeye yerleştirir, sınıfa değil (bkz. ALM_TEMA / ALM_HAT).
+   Banka anahtarı da bu yüzden seviyedir — aynı tema iki sınıfta birden
+   görünürken tek bankayı paylaşır ve sınıf↔seviye eşlemesi tek yerden,
+   program hattından yönetilir. */
+"alm-A1.1": {
+  "Informationen zur Person": [
     {ty:"mc",q:"\"Guten Morgen\" ifadesinin Türkçe karşılığı nedir?",o:["İyi akşamlar","Günaydın","İyi geceler","Hoşça kal"],a:1},
     {ty:"mc",q:"Almancada günün her saatinde kullanılabilecek selamlaşma kelimesi hangisidir?",o:["Tschüss","Hallo","Gute Nacht","Auf Wiedersehen"],a:1},
     {ty:"mc",q:"\"Auf Wiedersehen\" ifadesinin Türkçe anlamı nedir?",o:["Günaydın","Teşekkürler","Görüşmek üzere","Nasılsın"],a:2},
@@ -7108,9 +7442,7 @@ const UNIT_BANK = {
       {ty:"tf",q:"\"Entschuldigung\" bir selamlaşma ifadesidir.",a:false},
       {ty:"fb",q:"\"Wie ____ Sie?\" (adınız nedir) resmî sorusundaki boşluğa gelen kelime ____ dir.",a:"heißen"},
       {ty:"fb",q:"Almancada \"lütfen\" anlamına gelen kelime ____ dir.",a:"bitte"},
-      {ty:"fb",q:"Almancada \"evet\" anlamına gelen kelime ____ dır.",a:"ja"}
-    ],
-  "Kennenlernen – Kendini Tanıtma": [
+      {ty:"fb",q:"Almancada \"evet\" anlamına gelen kelime ____ dır.",a:"ja"},
     {ty:"mc",q:"\"Ich heiße Ayşe.\" cümlesinin Türkçe anlamı nedir?",o:["Ben Ayşe'den geliyorum","Benim adım Ayşe","Ayşe on dört yaşında","Ayşe okulda"],a:1},
     {ty:"mc",q:"\"Woher kommst du?\" sorusu neyi sormaktadır?",o:["Yaşını","Adını","Nereli olduğunu","Okulunu"],a:2},
     {ty:"mc",q:"\"Ich komme aus der Türkei.\" cümlesinin Türkçe anlamı nedir?",o:["Ben Türkiye'den geliyorum","Ben Türkçe biliyorum","Ben Türkiye'ye gidiyorum","Ben Türk değilim"],a:0},
@@ -7136,9 +7468,46 @@ const UNIT_BANK = {
       {ty:"tf",q:"\"er\" zamiri \"biz\" anlamına gelir.",a:false},
       {ty:"fb",q:"Almancada \"biz\" anlamına gelen şahıs zamiri ____ dir.",a:"wir"},
       {ty:"fb",q:"\"Ich ____ Schüler.\" (olmak fiili) cümlesindeki boşluğa gelen kelime ____ dir.",a:"bin"},
-      {ty:"fb",q:"Almancada \"hayır\" anlamına gelen kelime ____ dir.",a:"nein"}
+      {ty:"fb",q:"Almancada \"hayır\" anlamına gelen kelime ____ dir.",a:"nein"},
+    {ty:"mc",q:"\"zwölf\" sayısının rakamla karşılığı nedir?",o:["10","11","12","13"],a:2},
+    {ty:"tf",q:"Almancada \"zwanzig\" sayısı 20 anlamına gelir.",a:true},
+    {ty:"fb",q:"\"neunzehn\" sayısının rakamla yazılışı ____ 'dir.",a:"19"},
+      {ty:"mc",q:"\"sieben\" sayısının rakamla karşılığı nedir?",o:["7","6","8","9"],a:0},
+      {ty:"mc",q:"\"zwanzig\" sayısının rakamla karşılığı nedir?",o:["20","12","30","22"],a:0},
+      {ty:"mc",q:"\"dreizehn\" sayısı hangi rakamla yazılır?",o:["13","30","3","33"],a:0},
+      {ty:"tf",q:"\"elf\" sayısı Almancada 11 anlamına gelir.",a:true},
+      {ty:"fb",q:"\"____\" (on anlamındaki sayı) kelimesinin rakamla yazılışı 10'dur.",a:"zehn"},
+      {ty:"mc",q:"\"achtzehn\" sayısının rakamla karşılığı nedir?",o:["18","80","8","88"],a:0},
+      {ty:"fb",q:"\"fünfzehn\" sayısının rakamla yazılışı ____ tir.",a:"15"},
     ],
-  "Familie – Aile": [
+  "Die Schule": [
+    {ty:"mc",q:"\"der Lehrer\" kelimesinin Türkçe anlamı nedir?",o:["Öğrenci","Öğretmen (erkek)","Müdür","Sınıf arkadaşı"],a:1},
+    {ty:"mc",q:"\"die Hausaufgabe\" kelimesi neyi ifade eder?",o:["Ev ödevi","Sınav","Tatil","Ders programı"],a:0},
+    {ty:"mc",q:"\"Ich habe heute Mathe und Deutsch.\" cümlesinde hangi bilgi verilmektedir?",o:["Öğrencinin yaşı","Bugünkü dersler","Okulun adı","Sınav sonucu"],a:1},
+    {ty:"tf",q:"\"das Buch\" kelimesi Almancada \"kitap\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"die ____\" (okul çantası anlamında) kelimesindeki boşluğa gelen kelime ____ 'dir.",a:"Schultasche"},
+      {ty:"mc",q:"\"die Schule\" kelimesinin Türkçe anlamı nedir?",o:["Okul","Sınıf","Ders","Öğrenci"],a:0},
+      {ty:"mc",q:"\"das Heft\" kelimesi neyi ifade eder?",o:["Defter","Kalem","Kitap","Çanta"],a:0},
+      {ty:"mc",q:"\"Wann beginnt der Unterricht?\" sorusu neyi öğrenmek için sorulur?",o:["Dersin başlama zamanını","Dersin adını","Öğretmenin adını","Sınıfın numarasını"],a:0},
+      {ty:"mc",q:"\"die Pause\" kelimesinin karşılığı hangisidir?",o:["Teneffüs","Sınav","Ödev","Tatil"],a:0},
+      {ty:"mc",q:"\"Mein Lieblingsfach ist Deutsch.\" cümlesi neyi anlatır?",o:["En sevilen dersi","Ders programını","Sınav notunu","Okulun adını"],a:0},
+      {ty:"tf",q:"\"der Schüler\" kelimesi erkek öğrenci için kullanılır.",a:true},
+      {ty:"tf",q:"\"die Tafel\" kelimesi Almancada \"masa\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"das Klassenzimmer\" ifadesi sınıf odasını belirtir.",a:true},
+      {ty:"fb",q:"\"der ____\" (kalem anlamında) kelimesindeki boşluğa gelen kelime ____ 'dir.",a:"Bleistift"},
+      {ty:"fb",q:"Almancada \"kitap\" anlamına gelen kelimenin tanımlığıyla birlikte yazılışı \"____ Buch\" biçimindedir.",a:"das"},
+      {ty:"mc",q:"\"Welche Fächer hast du heute?\" sorusu neyi öğrenmek için sorulur?",o:["Bugünkü dersleri","Okulun adını","Sınıf mevcudunu","Öğretmenin adını"],a:0},
+      {ty:"mc",q:"\"die Note\" kelimesi okul bağlamında neyi ifade eder?",o:["Notu","Defteri","Dersi","Sınavı"],a:0},
+      {ty:"mc",q:"\"Mathematik\" dersinin Türkçe karşılığı nedir?",o:["Matematik","Müzik","Beden eğitimi","Coğrafya"],a:0},
+      {ty:"mc",q:"\"Ich gehe in die neunte Klasse.\" cümlesi neyi bildirir?",o:["Kaçıncı sınıfta olduğunu","Yaşını","Adresini","Okulun adını"],a:0},
+      {ty:"tf",q:"\"die Prüfung\" kelimesi sınav anlamına gelir.",a:true},
+      {ty:"tf",q:"\"das Fach\" kelimesi ders anlamına gelir.",a:true},
+      {ty:"tf",q:"\"die Note\" kelimesi defter anlamına gelir.",a:false},
+      {ty:"fb",q:"Almancada \"sınav\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Prüfung"},
+      {ty:"fb",q:"Almancada \"sınıf\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Klasse"},
+      {ty:"fb",q:"Almancada \"müzik\" dersinin adı ____ tir.",a:"Musik"}
+    ],
+  "Die Gesellschaft": [
     {ty:"mc",q:"\"die Mutter\" kelimesinin Türkçe anlamı nedir?",o:["Baba","Anne","Kardeş","Teyze"],a:1},
     {ty:"mc",q:"\"der Bruder\" kelimesi kimi ifade eder?",o:["Kız kardeş","Erkek kardeş","Dede","Anneanne"],a:1},
     {ty:"mc",q:"\"Ich habe zwei Schwestern.\" cümlesinin Türkçe anlamı nedir?",o:["İki erkek kardeşim var","İki kız kardeşim var","İki çocuğum var","İki kuzenim var"],a:1},
@@ -7166,92 +7535,46 @@ const UNIT_BANK = {
       {ty:"fb",q:"\"____ Vater ist Arzt.\" (benim) cümlesindeki boşluğa gelen kelime ____ dir.",a:"Mein"},
       {ty:"fb",q:"Almancada \"çocuk\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Kind"}
     ],
-  "Schule – Okul": [
-    {ty:"mc",q:"\"der Lehrer\" kelimesinin Türkçe anlamı nedir?",o:["Öğrenci","Öğretmen (erkek)","Müdür","Sınıf arkadaşı"],a:1},
-    {ty:"mc",q:"\"die Hausaufgabe\" kelimesi neyi ifade eder?",o:["Ev ödevi","Sınav","Tatil","Ders programı"],a:0},
-    {ty:"mc",q:"\"Ich habe heute Mathe und Deutsch.\" cümlesinde hangi bilgi verilmektedir?",o:["Öğrencinin yaşı","Bugünkü dersler","Okulun adı","Sınav sonucu"],a:1},
-    {ty:"tf",q:"\"das Buch\" kelimesi Almancada \"kitap\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"die ____\" (okul çantası anlamında) kelimesindeki boşluğa gelen kelime ____ 'dir.",a:"Schultasche"},
-      {ty:"mc",q:"\"die Schule\" kelimesinin Türkçe anlamı nedir?",o:["Okul","Sınıf","Ders","Öğrenci"],a:0},
-      {ty:"mc",q:"\"das Heft\" kelimesi neyi ifade eder?",o:["Defter","Kalem","Kitap","Çanta"],a:0},
-      {ty:"mc",q:"\"Wann beginnt der Unterricht?\" sorusu neyi öğrenmek için sorulur?",o:["Dersin başlama zamanını","Dersin adını","Öğretmenin adını","Sınıfın numarasını"],a:0},
-      {ty:"mc",q:"\"die Pause\" kelimesinin karşılığı hangisidir?",o:["Teneffüs","Sınav","Ödev","Tatil"],a:0},
-      {ty:"mc",q:"\"Mein Lieblingsfach ist Deutsch.\" cümlesi neyi anlatır?",o:["En sevilen dersi","Ders programını","Sınav notunu","Okulun adını"],a:0},
-      {ty:"tf",q:"\"der Schüler\" kelimesi erkek öğrenci için kullanılır.",a:true},
-      {ty:"tf",q:"\"die Tafel\" kelimesi Almancada \"masa\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"das Klassenzimmer\" ifadesi sınıf odasını belirtir.",a:true},
-      {ty:"fb",q:"\"der ____\" (kalem anlamında) kelimesindeki boşluğa gelen kelime ____ 'dir.",a:"Bleistift"},
-      {ty:"fb",q:"Almancada \"kitap\" anlamına gelen kelimenin tanımlığıyla birlikte yazılışı \"____ Buch\" biçimindedir.",a:"das"},
-      {ty:"mc",q:"\"Welche Fächer hast du heute?\" sorusu neyi öğrenmek için sorulur?",o:["Bugünkü dersleri","Okulun adını","Sınıf mevcudunu","Öğretmenin adını"],a:0},
-      {ty:"mc",q:"\"die Note\" kelimesi okul bağlamında neyi ifade eder?",o:["Notu","Defteri","Dersi","Sınavı"],a:0},
-      {ty:"mc",q:"\"Mathematik\" dersinin Türkçe karşılığı nedir?",o:["Matematik","Müzik","Beden eğitimi","Coğrafya"],a:0},
-      {ty:"mc",q:"\"Ich gehe in die neunte Klasse.\" cümlesi neyi bildirir?",o:["Kaçıncı sınıfta olduğunu","Yaşını","Adresini","Okulun adını"],a:0},
-      {ty:"tf",q:"\"die Prüfung\" kelimesi sınav anlamına gelir.",a:true},
-      {ty:"tf",q:"\"das Fach\" kelimesi ders anlamına gelir.",a:true},
-      {ty:"tf",q:"\"die Note\" kelimesi defter anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"sınav\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Prüfung"},
-      {ty:"fb",q:"Almancada \"sınıf\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Klasse"},
-      {ty:"fb",q:"Almancada \"müzik\" dersinin adı ____ tir.",a:"Musik"}
-    ],
-  "Zahlen und Uhrzeit – Sayılar ve Saat": [
-    {ty:"mc",q:"\"zwölf\" sayısının rakamla karşılığı nedir?",o:["10","11","12","13"],a:2},
+  "Tägliches Leben": [
+    {ty:"mc",q:"\"Ich stehe um sieben Uhr auf.\" cümlesinin Türkçe anlamı nedir?",o:["Saat yedide uyanıyorum/kalkıyorum","Saat yedide yatıyorum","Saat yedide yemek yiyorum","Saat yedide okula gidiyorum"],a:0},
+    {ty:"mc",q:"\"frühstücken\" fiilinin Türkçe anlamı nedir?",o:["Akşam yemeği yemek","Kahvaltı yapmak","Uyumak","Duş almak"],a:1},
+    {ty:"mc",q:"\"Am Abend sehe ich fern.\" cümlesinin Türkçe anlamı nedir?",o:["Akşamları televizyon izlerim","Sabahları koşarım","Öğleden sonra ders çalışırım","Gece kitap okurum"],a:0},
+    {ty:"tf",q:"\"schlafen gehen\" ifadesi Almancada \"yatmaya gitmek\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"Ich gehe um acht Uhr ins ____.\" (yatak anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Bett"},
+      {ty:"mc",q:"\"Ich stehe um sieben Uhr auf.\" cümlesi neyi anlatır?",o:["Kalkma saatini","Yatma saatini","Ders saatini","Yemek saatini"],a:0},
+      {ty:"mc",q:"\"aufstehen\" fiilinin Türkçe karşılığı nedir?",o:["Kalkmak","Uyumak","Yürümek","Beklemek"],a:0},
+      {ty:"mc",q:"\"Wann gehst du zur Schule?\" sorusu neyi öğrenmek için sorulur?",o:["Okula gidiş zamanını","Okulun adını","Sınıf mevcudunu","Ders sayısını"],a:0},
+      {ty:"mc",q:"\"am Nachmittag\" ifadesi günün hangi bölümünü belirtir?",o:["Öğleden sonra","Sabah erken","Gece yarısı","Öğle vakti"],a:0},
+      {ty:"mc",q:"\"Ich mache meine Hausaufgaben.\" cümlesi neyi anlatır?",o:["Ödev yapıldığını","Ödevin verildiğini","Ödevin bittiğini","Ödevin zor olduğunu"],a:0},
+      {ty:"tf",q:"\"frühstücken\" fiili kahvaltı yapmak anlamındadır.",a:true},
+      {ty:"tf",q:"\"immer\" kelimesi Almancada \"asla\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"jeden Tag\" ifadesi \"her gün\" anlamındadır.",a:true},
+      {ty:"fb",q:"Almancada \"uyumak\" anlamına gelen fiil ____ 'tir.",a:"schlafen"},
+      {ty:"fb",q:"\"Ich gehe ____ Fuß zur Schule.\" (yürüyerek anlamında) cümlesindeki boşluğa gelen kelime ____ 'tur.",a:"zu"},
+      {ty:"fb",q:"\"____ Morgen trinke ich Tee.\" (sabahleyin anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Am"},
+      {ty:"mc",q:"\"Ich dusche mich morgens.\" cümlesindeki fiil hangi türdendir?",o:["Dönüşlü fiil","Ayrılabilen fiil","Yardımcı fiil","Kip fiili"],a:0},
+      {ty:"mc",q:"\"Wie lange dauert der Weg?\" sorusu neyi öğrenmek için sorulur?",o:["Süreyi","Mesafeyi","Aracı","Ücreti"],a:0},
+      {ty:"mc",q:"\"aufräumen\" fiilinin Türkçe karşılığı nedir?",o:["Toplamak, düzenlemek","Dağıtmak","Yemek","Uyumak"],a:0},
+      {ty:"mc",q:"\"Ich stehe früh auf.\" cümlesinde \"aufstehen\" fiili nasıl kullanılmıştır?",o:["Ayrılabilen fiil olarak","Dönüşlü fiil olarak","Yardımcı fiil olarak","Kip fiili olarak"],a:0},
+      {ty:"tf",q:"\"aufstehen\" ayrılabilen fiillerdendir.",a:true},
+      {ty:"tf",q:"\"abends\" kelimesi akşamları anlamına gelir.",a:true},
+      {ty:"tf",q:"\"aufräumen\" fiili yemek yemek anlamına gelir.",a:false},
+      {ty:"fb",q:"Almancada \"öğleden sonra\" anlamına gelen kelime ____ tır.",a:"nachmittags"},
+      {ty:"fb",q:"\"Ich räume mein Zimmer ____.\" (ayrılabilen fiilin eki) boşluğa gelen kelime ____ tır.",a:"auf"},
+      {ty:"fb",q:"Almancada \"her zaman\" anlamına gelen kelime ____ dir.",a:"immer"},
     {ty:"mc",q:"\"Wie spät ist es?\" sorusunun Türkçe anlamı nedir?",o:["Saat kaç?","Bugün günlerden ne?","Kaç yaşındasın?","Nereye gidiyorsun?"],a:0},
     {ty:"mc",q:"\"Es ist drei Uhr.\" cümlesinin Türkçe anlamı nedir?",o:["Saat üç","Üç gün sonra","Üçüncü sınıf","Üç kişi var"],a:0},
-    {ty:"tf",q:"Almancada \"zwanzig\" sayısı 20 anlamına gelir.",a:true},
-    {ty:"fb",q:"\"neunzehn\" sayısının rakamla yazılışı ____ 'dir.",a:"19"},
-      {ty:"mc",q:"\"sieben\" sayısının rakamla karşılığı nedir?",o:["7","6","8","9"],a:0},
-      {ty:"mc",q:"\"zwanzig\" sayısının rakamla karşılığı nedir?",o:["20","12","30","22"],a:0},
       {ty:"mc",q:"\"Es ist halb acht.\" ifadesi hangi saati belirtir?",o:["Yedi buçuk","Sekiz buçuk","Sekize çeyrek","Yediye çeyrek"],a:0},
       {ty:"mc",q:"\"Wie viel Uhr ist es?\" sorusuna uygun yanıt hangisidir?",o:["Es ist neun Uhr.","Ich bin neun.","Ich komme um neun.","Neun Schüler."],a:0},
-      {ty:"mc",q:"\"dreizehn\" sayısı hangi rakamla yazılır?",o:["13","30","3","33"],a:0},
-      {ty:"tf",q:"\"elf\" sayısı Almancada 11 anlamına gelir.",a:true},
-      {ty:"tf",q:"\"fünfzig\" sayısı Almancada 15 anlamına gelir.",a:false},
       {ty:"tf",q:"\"Viertel nach drei\" ifadesi üçü çeyrek geçe anlamındadır.",a:true},
-      {ty:"fb",q:"\"____\" (on anlamındaki sayı) kelimesinin rakamla yazılışı 10'dur.",a:"zehn"},
-      {ty:"fb",q:"\"hundert\" sayısının rakamla yazılışı ____ 'dür.",a:"100"},
       {ty:"fb",q:"\"Es ist ____ vor sechs.\" (çeyrek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Viertel"},
-      {ty:"mc",q:"\"vierzig\" sayısının rakamla karşılığı nedir?",o:["40","14","44","4"],a:0},
       {ty:"mc",q:"\"Es ist zehn nach acht.\" ifadesi hangi saati belirtir?",o:["Sekizi on geçe","Sekize on kala","On buçuk","Sekiz buçuk"],a:0},
       {ty:"mc",q:"\"Wann beginnt der Unterricht?\" sorusuna uygun yanıt hangisidir?",o:["Um acht Uhr.","Ich bin acht.","Es ist gut.","In Ankara."],a:0},
-      {ty:"mc",q:"\"achtzehn\" sayısının rakamla karşılığı nedir?",o:["18","80","8","88"],a:0},
-      {ty:"tf",q:"\"sechzig\" sayısı 60 anlamına gelir.",a:true},
+      {ty:"fb",q:"Almancada \"saat\" (aygıt ve zaman) anlamına gelen kelime ____ dir.",a:"Uhr"},
       {ty:"tf",q:"\"Mittwoch\" haftanın günlerinden biridir.",a:true},
-      {ty:"tf",q:"\"vierzig\" sayısı 14 anlamına gelir.",a:false},
       {ty:"fb",q:"Almancada \"pazartesi\" anlamına gelen kelime ____ tır.",a:"Montag"},
-      {ty:"fb",q:"\"fünfzehn\" sayısının rakamla yazılışı ____ tir.",a:"15"},
-      {ty:"fb",q:"Almancada \"saat\" (aygıt ve zaman) anlamına gelen kelime ____ dir.",a:"Uhr"}
-    ]
-},
-"alm-10": {
-  "Einkaufen – Alışveriş": [
-    {ty:"mc",q:"\"Was kostet das?\" sorusunun Türkçe anlamı nedir?",o:["Bu ne zaman satılır?","Bunun fiyatı nedir?","Bu nereden alınır?","Bu kaç tane?"],a:1},
-    {ty:"mc",q:"\"der Supermarkt\" kelimesi neyi ifade eder?",o:["Eczane","Süpermarket","Fırın","Kütüphane"],a:1},
-    {ty:"mc",q:"\"Ich möchte einen Apfel kaufen.\" cümlesinin Türkçe anlamı nedir?",o:["Bir elma satmak istiyorum","Bir elma almak istiyorum","Bir elma yedim","Elmayı sevmiyorum"],a:1},
-    {ty:"tf",q:"\"billig\" kelimesi Almancada \"ucuz\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Das kostet zehn ____.\" (Almanya'da kullanılan para biriminin adı)",a:"Euro"},
-      {ty:"mc",q:"\"Was kostet das?\" sorusu neyi öğrenmek için sorulur?",o:["Fiyatı","Rengi","Bedeni","Markayı"],a:0},
-      {ty:"mc",q:"\"der Supermarkt\" kelimesinin Türkçe anlamı nedir?",o:["Süpermarket","Eczane","Pazar yeri","Kırtasiye"],a:0},
-      {ty:"mc",q:"Satıcının \"Kann ich Ihnen helfen?\" sorusu ne anlama gelir?",o:["Yardımcı olabilir miyim?","Ne kadar ödediniz?","Nereden geliyorsunuz?","Kaç tane istiyorsunuz?"],a:0},
-      {ty:"mc",q:"\"Ich möchte zwei Kilo Äpfel.\" cümlesinde ne ifade edilir?",o:["İstenen ürün ve miktar","Ürünün fiyatı","Mağazanın adresi","Ödeme biçimi"],a:0},
-      {ty:"mc",q:"\"zu teuer\" ifadesi hangi durumu anlatır?",o:["Fiyatın çok yüksek olduğunu","Ürünün bittiğini","Ürünün indirimde olduğunu","Ürünün küçük olduğunu"],a:0},
-      {ty:"tf",q:"\"die Kasse\" kelimesi mağazadaki kasa bölümünü ifade eder.",a:true},
-      {ty:"tf",q:"\"billig\" kelimesi Almancada \"pahalı\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"Ich nehme das.\" ifadesi bir ürünü almaya karar verildiğini belirtir.",a:true},
-      {ty:"fb",q:"\"Was ____ das?\" (etmek/tutmak anlamında) fiyat sorusundaki boşluğa gelen kelime ____ 'tir.",a:"kostet"},
-      {ty:"fb",q:"Almancada \"para\" anlamına gelen kelime ____ 'dir.",a:"Geld"},
-      {ty:"fb",q:"\"Ich ____ eine Tasche kaufen.\" (istemek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"möchte"},
-      {ty:"mc",q:"\"Haben Sie das in Größe M?\" sorusu neyi öğrenmek için sorulur?",o:["Bedenin bulunup bulunmadığını","Fiyatı","Rengi","Markayı"],a:0},
-      {ty:"mc",q:"\"der Preis\" kelimesinin Türkçe anlamı nedir?",o:["Fiyat","Ürün","Mağaza","Kasa"],a:0},
-      {ty:"mc",q:"\"Ich zahle mit Karte.\" cümlesi neyi bildirir?",o:["Ödeme biçimini","Ürün miktarını","Ürünün rengini","Mağazanın adını"],a:0},
-      {ty:"mc",q:"\"der Rabatt\" kelimesi ne anlama gelir?",o:["İndirim","Fatura","Kasa","Poşet"],a:0},
-      {ty:"tf",q:"\"die Quittung\" kelimesi fiş anlamına gelir.",a:true},
-      {ty:"tf",q:"\"teuer\" kelimesi pahalı anlamına gelir.",a:true},
-      {ty:"tf",q:"\"der Rabatt\" kelimesi zam anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"fiyat\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Preis"},
-      {ty:"fb",q:"Almancada \"indirim\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Rabatt"},
-      {ty:"fb",q:"\"Ich ____ mit Karte.\" (ödemek) cümlesindeki boşluğa gelen kelime ____ dir.",a:"zahle"}
     ],
-  "Essen und Trinken – Yiyecek İçecek": [
+  "Essen und Trinken": [
     {ty:"mc",q:"\"das Brot\" kelimesinin Türkçe anlamı nedir?",o:["Süt","Ekmek","Peynir","Su"],a:1},
     {ty:"mc",q:"\"Ich trinke gern Wasser.\" cümlesinin Türkçe anlamı nedir?",o:["Su içmeyi severim","Suyu sevmiyorum","Su satın alıyorum","Su döktüm"],a:0},
     {ty:"mc",q:"\"der Käse\" kelimesi neyi ifade eder?",o:["Peynir","Yumurta","Et","Balık"],a:0},
@@ -7279,7 +7602,118 @@ const UNIT_BANK = {
       {ty:"fb",q:"Almancada \"meyve\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Obst"},
       {ty:"fb",q:"\"Ich ____ kein Fleisch.\" (yemek) cümlesindeki boşluğa gelen kelime ____ dir.",a:"esse"}
     ],
-  "Wohnen – Ev ve Yaşam": [
+  "Besondere Tage": [
+    {ty:"mc",q:"\"Frohe Weihnachten!\" ifadesinin Türkçe anlamı nedir?",o:["Mutlu Yıllar!","İyi Noeller!","Doğum günün kutlu olsun!","Bayramın kutlu olsun!"],a:1},
+    {ty:"mc",q:"\"der Geburtstag\" kelimesinin Türkçe anlamı nedir?",o:["Yıldönümü","Doğum günü","Bayram","Tatil"],a:1},
+    {ty:"mc",q:"\"Wir feiern das Fest zusammen.\" cümlesinin Türkçe anlamı nedir?",o:["Bayramı birlikte kutluyoruz","Bayramı unuttuk","Bayram için hediye alıyoruz","Bayramda tatile gidiyoruz"],a:0},
+    {ty:"tf",q:"\"das Geschenk\" kelimesi Almancada \"hediye\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"Herzlichen ____ zum Geburtstag!\" (tebrikler anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Glückwunsch"},
+      {ty:"mc",q:"\"Herzlichen Glückwunsch!\" ifadesi hangi durumda kullanılır?",o:["Tebrik ederken","Vedalaşırken","Özür dilerken","Yol sorarken"],a:0},
+      {ty:"mc",q:"\"das Geschenk\" kelimesi neyi ifade eder?",o:["Hediye","Davetiye","Pasta","Süs"],a:0},
+      {ty:"mc",q:"\"Wir feiern zusammen.\" cümlesi neyi anlatır?",o:["Birlikte kutlandığını","Ayrı ayrı gidildiğini","Davetin iptal olduğunu","Hazırlık yapıldığını"],a:0},
+      {ty:"mc",q:"\"die Einladung\" kelimesi neyi ifade eder?",o:["Davet","Kutlama","Tatil","Tören"],a:0},
+      {ty:"tf",q:"\"feiern\" fiili kutlamak anlamındadır.",a:true},
+      {ty:"tf",q:"\"das Fest\" kelimesi Almancada \"hediye\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"Frohe Feiertage!\" ifadesi bayram kutlaması için kullanılır.",a:true},
+      {ty:"fb",q:"Almancada \"misafir\" anlamına gelen kelime ____ 'tir.",a:"Gast"},
+      {ty:"fb",q:"\"Ich ____ dich zu meinem Geburtstag ein.\" (davet etmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"lade"},
+      {ty:"fb",q:"Almancada \"gelenek\" anlamına gelen kelime ____ 'tir.",a:"Tradition"},
+      {ty:"mc",q:"\"die Feier\" kelimesinin Türkçe anlamı nedir?",o:["Kutlama","Davetiye","Hediye","Misafir"],a:0},
+      {ty:"mc",q:"\"Alles Gute!\" ifadesi hangi durumda kullanılır?",o:["İyi dilekte bulunurken","Yol sorarken","Özür dilerken","Şikâyet ederken"],a:0},
+      {ty:"mc",q:"\"Ich gratuliere dir!\" cümlesi neyi ifade eder?",o:["Tebrik etmeyi","Davet etmeyi","Reddetmeyi","Teşekkür etmeyi"],a:0},
+      {ty:"mc",q:"\"der Feiertag\" kelimesi neyi ifade eder?",o:["Resmî tatil günü","Doğum günü","Hafta sonu","Yılbaşı gecesi"],a:0},
+      {ty:"tf",q:"\"gratulieren\" fiili tebrik etmek anlamındadır.",a:true},
+      {ty:"tf",q:"\"der Feiertag\" resmî tatil gününü belirtir.",a:true},
+      {ty:"tf",q:"\"die Feier\" kelimesi hediye anlamına gelir.",a:false},
+      {ty:"fb",q:"Almancada \"kutlama\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Feier"},
+      {ty:"fb",q:"Almancada \"resmî tatil günü\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Feiertag"},
+      {ty:"fb",q:"\"Ich ____ dir zum Geburtstag!\" (tebrik etmek) boşluğa gelen kelime ____ dir.",a:"gratuliere"}
+    ],
+  "Freizeitaktivitäten": [
+    {ty:"mc",q:"\"Ich spiele gern Fußball.\" cümlesinin Türkçe anlamı nedir?",o:["Futbol oynamayı severim","Futbol izlemeyi severim","Yüzmeyi severim","Müzik dinlemeyi severim"],a:0},
+    {ty:"mc",q:"\"lesen\" fiilinin Türkçe anlamı nedir?",o:["Yazmak","Okumak","Koşmak","Yüzmek"],a:1},
+    {ty:"mc",q:"\"Was machst du in deiner Freizeit?\" sorusu neyi sormaktadır?",o:["Okul programını","Boş zamanda yapılan aktiviteleri","Aile üyelerini","Yemek tercihlerini"],a:1},
+    {ty:"tf",q:"\"schwimmen\" fiili Almancada \"yüzmek\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"Ich höre gern ____.\" (müzik anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Musik"},
+      {ty:"mc",q:"\"die Freizeit\" kelimesinin Türkçe anlamı nedir?",o:["Boş zaman","Çalışma saati","Ders saati","Tatil günü"],a:0},
+      {ty:"mc",q:"\"Ich spiele gern Fußball.\" cümlesi neyi anlatır?",o:["Sevilen bir etkinliği","Bir kuralı","Bir yasağı","Bir randevuyu"],a:0},
+      {ty:"mc",q:"\"Was machst du am Wochenende?\" sorusu neyi öğrenmek için sorulur?",o:["Hafta sonu yapılan etkinlikleri","Haftanın gün sayısını","Okulun tatilini","Doğum tarihini"],a:0},
+      {ty:"mc",q:"\"das Hobby\" kelimesi neyi ifade eder?",o:["Uğraş","Meslek","Ders","Ödev"],a:0},
+      {ty:"mc",q:"\"Ich gehe ins Kino.\" cümlesinde nereye gidildiği belirtilir?",o:["Sinemaya","Kütüphaneye","Müzeye","Stadyuma"],a:0},
+      {ty:"tf",q:"\"lesen\" fiili Almancada \"okumak\" anlamına gelir.",a:true},
+      {ty:"tf",q:"\"schwimmen\" fiili Almancada \"koşmak\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"gern\" kelimesi bir işi severek yapmayı anlatır.",a:true},
+      {ty:"fb",q:"Almancada \"müzik\" anlamına gelen kelime ____ 'tir.",a:"Musik"},
+      {ty:"fb",q:"\"Ich ____ gern Fahrrad.\" (sürmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"fahre"},
+      {ty:"fb",q:"Almancada \"hafta sonu\" anlamına gelen kelime ____ 'dir.",a:"Wochenende"},
+      {ty:"mc",q:"\"Was machst du in deiner Freizeit?\" sorusuna uygun yanıt hangisidir?",o:["Ich spiele Gitarre.","Ich bin sechzehn.","Es ist acht Uhr.","In Ankara."],a:0},
+      {ty:"mc",q:"\"das Konzert\" kelimesinin Türkçe anlamı nedir?",o:["Konser","Tiyatro","Sergi","Maç"],a:0},
+      {ty:"mc",q:"\"Ich treffe meine Freunde.\" cümlesi neyi anlatır?",o:["Arkadaşlarla buluşmayı","Arkadaşları aramayı","Arkadaşları beklemeyi","Arkadaşları tanımayı"],a:0},
+      {ty:"mc",q:"\"Ich mag Sport.\" cümlesindeki \"mag\" fiili hangi anlamı verir?",o:["Hoşuna gitmek","Zorunda olmak","Yapabilmek","İstemek"],a:0},
+      {ty:"tf",q:"\"treffen\" fiili buluşmak anlamındadır.",a:true},
+      {ty:"tf",q:"\"das Konzert\" kelimesi konser anlamına gelir.",a:true},
+      {ty:"tf",q:"\"mögen\" fiili zorunluluk bildirir.",a:false},
+      {ty:"fb",q:"Almancada \"tiyatro\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Theater"},
+      {ty:"fb",q:"\"Ich ____ meine Freunde am Wochenende.\" (buluşmak) boşluğa gelen kelime ____ dir.",a:"treffe"},
+      {ty:"fb",q:"Almancada \"spor\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Sport"}
+    ],
+  "Einkaufen": [
+    {ty:"mc",q:"\"Was kostet das?\" sorusunun Türkçe anlamı nedir?",o:["Bu ne zaman satılır?","Bunun fiyatı nedir?","Bu nereden alınır?","Bu kaç tane?"],a:1},
+    {ty:"mc",q:"\"der Supermarkt\" kelimesi neyi ifade eder?",o:["Eczane","Süpermarket","Fırın","Kütüphane"],a:1},
+    {ty:"mc",q:"\"Ich möchte einen Apfel kaufen.\" cümlesinin Türkçe anlamı nedir?",o:["Bir elma satmak istiyorum","Bir elma almak istiyorum","Bir elma yedim","Elmayı sevmiyorum"],a:1},
+    {ty:"tf",q:"\"billig\" kelimesi Almancada \"ucuz\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"Das kostet zehn ____.\" (Almanya'da kullanılan para biriminin adı)",a:"Euro"},
+      {ty:"mc",q:"\"Was kostet das?\" sorusu neyi öğrenmek için sorulur?",o:["Fiyatı","Rengi","Bedeni","Markayı"],a:0},
+      {ty:"mc",q:"\"der Supermarkt\" kelimesinin Türkçe anlamı nedir?",o:["Süpermarket","Eczane","Pazar yeri","Kırtasiye"],a:0},
+      {ty:"mc",q:"Satıcının \"Kann ich Ihnen helfen?\" sorusu ne anlama gelir?",o:["Yardımcı olabilir miyim?","Ne kadar ödediniz?","Nereden geliyorsunuz?","Kaç tane istiyorsunuz?"],a:0},
+      {ty:"mc",q:"\"Ich möchte zwei Kilo Äpfel.\" cümlesinde ne ifade edilir?",o:["İstenen ürün ve miktar","Ürünün fiyatı","Mağazanın adresi","Ödeme biçimi"],a:0},
+      {ty:"mc",q:"\"zu teuer\" ifadesi hangi durumu anlatır?",o:["Fiyatın çok yüksek olduğunu","Ürünün bittiğini","Ürünün indirimde olduğunu","Ürünün küçük olduğunu"],a:0},
+      {ty:"tf",q:"\"die Kasse\" kelimesi mağazadaki kasa bölümünü ifade eder.",a:true},
+      {ty:"tf",q:"\"billig\" kelimesi Almancada \"pahalı\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"Ich nehme das.\" ifadesi bir ürünü almaya karar verildiğini belirtir.",a:true},
+      {ty:"fb",q:"\"Was ____ das?\" (etmek/tutmak anlamında) fiyat sorusundaki boşluğa gelen kelime ____ 'tir.",a:"kostet"},
+      {ty:"fb",q:"Almancada \"para\" anlamına gelen kelime ____ 'dir.",a:"Geld"},
+      {ty:"fb",q:"\"Ich ____ eine Tasche kaufen.\" (istemek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"möchte"},
+      {ty:"mc",q:"\"Haben Sie das in Größe M?\" sorusu neyi öğrenmek için sorulur?",o:["Bedenin bulunup bulunmadığını","Fiyatı","Rengi","Markayı"],a:0},
+      {ty:"mc",q:"\"der Preis\" kelimesinin Türkçe anlamı nedir?",o:["Fiyat","Ürün","Mağaza","Kasa"],a:0},
+      {ty:"mc",q:"\"Ich zahle mit Karte.\" cümlesi neyi bildirir?",o:["Ödeme biçimini","Ürün miktarını","Ürünün rengini","Mağazanın adını"],a:0},
+      {ty:"mc",q:"\"der Rabatt\" kelimesi ne anlama gelir?",o:["İndirim","Fatura","Kasa","Poşet"],a:0},
+      {ty:"tf",q:"\"die Quittung\" kelimesi fiş anlamına gelir.",a:true},
+      {ty:"tf",q:"\"teuer\" kelimesi pahalı anlamına gelir.",a:true},
+      {ty:"tf",q:"\"der Rabatt\" kelimesi zam anlamına gelir.",a:false},
+      {ty:"fb",q:"Almancada \"fiyat\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Preis"},
+      {ty:"fb",q:"Almancada \"indirim\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Rabatt"},
+      {ty:"fb",q:"\"Ich ____ mit Karte.\" (ödemek) cümlesindeki boşluğa gelen kelime ____ dir.",a:"zahle"},
+    {ty:"mc",q:"\"das Hemd\" kelimesinin Türkçe anlamı nedir?",o:["Pantolon","Gömlek","Ayakkabı","Şapka"],a:1},
+    {ty:"mc",q:"\"Ich trage heute eine Jacke.\" cümlesinin Türkçe anlamı nedir?",o:["Bugün bir ceket giyiyorum","Bugün bir ceket satın alıyorum","Bugün ceketimi kaybettim","Bugün ceket yıkıyorum"],a:0},
+    {ty:"mc",q:"\"die Schuhe\" kelimesi neyi ifade eder?",o:["Çoraplar","Ayakkabılar","Eldivenler","Gözlükler"],a:1},
+    {ty:"tf",q:"\"der Rock\" kelimesi Almancada \"etek\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"Die Hose ist zu ____.\" (uzun anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"lang"},
+      {ty:"mc",q:"\"die Hose\" kelimesinin Türkçe anlamı nedir?",o:["Pantolon","Gömlek","Ceket","Etek"],a:0},
+      {ty:"mc",q:"\"Welche Größe haben Sie?\" sorusu neyi öğrenmek için sorulur?",o:["Beden ölçüsünü","Rengi","Fiyatı","Markayı"],a:0},
+      {ty:"mc",q:"\"Ich probiere den Mantel an.\" cümlesi neyi anlatır?",o:["Bir kıyafetin denendiğini","Bir kıyafetin satıldığını","Bir kıyafetin yıkandığını","Bir kıyafetin dikildiğini"],a:0},
+      {ty:"mc",q:"\"der Schuh\" kelimesi neyi ifade eder?",o:["Ayakkabı","Çorap","Şapka","Eldiven"],a:0},
+      {ty:"mc",q:"\"Das passt mir gut.\" cümlesi neyi bildirir?",o:["Kıyafetin uygun olduğunu","Kıyafetin pahalı olduğunu","Kıyafetin eski olduğunu","Kıyafetin bulunmadığını"],a:0},
+      {ty:"tf",q:"\"das Hemd\" kelimesi gömlek anlamındadır.",a:true},
+      {ty:"tf",q:"\"die Jacke\" kelimesi Almancada \"ayakkabı\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"anziehen\" fiili bir kıyafeti giymek anlamındadır.",a:true},
+      {ty:"fb",q:"Almancada \"elbise\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Kleid"},
+      {ty:"fb",q:"\"Diese Hose ist zu ____.\" (dar anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"eng"},
+      {ty:"fb",q:"Almancada \"renk\" anlamına gelen kelime ____ 'dir.",a:"Farbe"},
+      {ty:"mc",q:"\"der Pullover\" kelimesinin Türkçe anlamı nedir?",o:["Kazak","Gömlek","Pantolon","Ceket"],a:0},
+      {ty:"mc",q:"\"Kann ich das umtauschen?\" sorusu neyi ifade eder?",o:["Değişim isteğini","İndirim isteğini","Fiyat sorusunu","Beden sorusunu"],a:0},
+      {ty:"mc",q:"\"die Umkleidekabine\" kelimesi neyi ifade eder?",o:["Soyunma kabini","Kasa","Vitrin","Depo"],a:0},
+      {ty:"mc",q:"\"Das steht dir gut.\" cümlesi neyi bildirir?",o:["Kıyafetin yakıştığını","Kıyafetin pahalı olduğunu","Kıyafetin bittiğini","Kıyafetin dar olduğunu"],a:0},
+      {ty:"tf",q:"\"die Socken\" kelimesi çorap anlamına gelir.",a:true},
+      {ty:"tf",q:"\"umtauschen\" fiili değiştirmek anlamındadır.",a:true},
+      {ty:"tf",q:"\"der Pullover\" kelimesi ayakkabı anlamına gelir.",a:false},
+      {ty:"fb",q:"Almancada \"kazak\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Pullover"},
+      {ty:"fb",q:"Almancada \"çorap\" (çoğul) anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Socken"},
+      {ty:"fb",q:"\"Diese Jacke ist zu ____.\" (büyük) cümlesindeki boşluğa gelen kelime ____ tir.",a:"groß"},
+    ],
+},
+"alm-A1.2": {
+  "Unterkunft": [
     {ty:"mc",q:"\"das Wohnzimmer\" kelimesinin Türkçe anlamı nedir?",o:["Mutfak","Oturma odası","Banyo","Bahçe"],a:1},
     {ty:"mc",q:"\"Ich wohne in einer Wohnung.\" cümlesinin Türkçe anlamı nedir?",o:["Bir evde oturuyorum","Bir apartman dairesinde oturuyorum","Bir okulda çalışıyorum","Bir şehirde tatildeyim"],a:1},
     {ty:"mc",q:"\"der Garten\" kelimesi neyi ifade eder?",o:["Bahçe","Çatı","Merdiven","Balkon"],a:0},
@@ -7307,65 +7741,7 @@ const UNIT_BANK = {
       {ty:"fb",q:"Almancada \"sandalye\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Stuhl"},
       {ty:"fb",q:"\"Das Bild hängt ____ der Wand.\" (duvarda) cümlesindeki boşluğa gelen edat ____ dir.",a:"an"}
     ],
-  "Tagesablauf – Günlük Rutin": [
-    {ty:"mc",q:"\"Ich stehe um sieben Uhr auf.\" cümlesinin Türkçe anlamı nedir?",o:["Saat yedide uyanıyorum/kalkıyorum","Saat yedide yatıyorum","Saat yedide yemek yiyorum","Saat yedide okula gidiyorum"],a:0},
-    {ty:"mc",q:"\"frühstücken\" fiilinin Türkçe anlamı nedir?",o:["Akşam yemeği yemek","Kahvaltı yapmak","Uyumak","Duş almak"],a:1},
-    {ty:"mc",q:"\"Am Abend sehe ich fern.\" cümlesinin Türkçe anlamı nedir?",o:["Akşamları televizyon izlerim","Sabahları koşarım","Öğleden sonra ders çalışırım","Gece kitap okurum"],a:0},
-    {ty:"tf",q:"\"schlafen gehen\" ifadesi Almancada \"yatmaya gitmek\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Ich gehe um acht Uhr ins ____.\" (yatak anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Bett"},
-      {ty:"mc",q:"\"Ich stehe um sieben Uhr auf.\" cümlesi neyi anlatır?",o:["Kalkma saatini","Yatma saatini","Ders saatini","Yemek saatini"],a:0},
-      {ty:"mc",q:"\"aufstehen\" fiilinin Türkçe karşılığı nedir?",o:["Kalkmak","Uyumak","Yürümek","Beklemek"],a:0},
-      {ty:"mc",q:"\"Wann gehst du zur Schule?\" sorusu neyi öğrenmek için sorulur?",o:["Okula gidiş zamanını","Okulun adını","Sınıf mevcudunu","Ders sayısını"],a:0},
-      {ty:"mc",q:"\"am Nachmittag\" ifadesi günün hangi bölümünü belirtir?",o:["Öğleden sonra","Sabah erken","Gece yarısı","Öğle vakti"],a:0},
-      {ty:"mc",q:"\"Ich mache meine Hausaufgaben.\" cümlesi neyi anlatır?",o:["Ödev yapıldığını","Ödevin verildiğini","Ödevin bittiğini","Ödevin zor olduğunu"],a:0},
-      {ty:"tf",q:"\"frühstücken\" fiili kahvaltı yapmak anlamındadır.",a:true},
-      {ty:"tf",q:"\"immer\" kelimesi Almancada \"asla\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"jeden Tag\" ifadesi \"her gün\" anlamındadır.",a:true},
-      {ty:"fb",q:"Almancada \"uyumak\" anlamına gelen fiil ____ 'tir.",a:"schlafen"},
-      {ty:"fb",q:"\"Ich gehe ____ Fuß zur Schule.\" (yürüyerek anlamında) cümlesindeki boşluğa gelen kelime ____ 'tur.",a:"zu"},
-      {ty:"fb",q:"\"____ Morgen trinke ich Tee.\" (sabahleyin anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Am"},
-      {ty:"mc",q:"\"Ich dusche mich morgens.\" cümlesindeki fiil hangi türdendir?",o:["Dönüşlü fiil","Ayrılabilen fiil","Yardımcı fiil","Kip fiili"],a:0},
-      {ty:"mc",q:"\"Wie lange dauert der Weg?\" sorusu neyi öğrenmek için sorulur?",o:["Süreyi","Mesafeyi","Aracı","Ücreti"],a:0},
-      {ty:"mc",q:"\"aufräumen\" fiilinin Türkçe karşılığı nedir?",o:["Toplamak, düzenlemek","Dağıtmak","Yemek","Uyumak"],a:0},
-      {ty:"mc",q:"\"Ich stehe früh auf.\" cümlesinde \"aufstehen\" fiili nasıl kullanılmıştır?",o:["Ayrılabilen fiil olarak","Dönüşlü fiil olarak","Yardımcı fiil olarak","Kip fiili olarak"],a:0},
-      {ty:"tf",q:"\"aufstehen\" ayrılabilen fiillerdendir.",a:true},
-      {ty:"tf",q:"\"abends\" kelimesi akşamları anlamına gelir.",a:true},
-      {ty:"tf",q:"\"aufräumen\" fiili yemek yemek anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"öğleden sonra\" anlamına gelen kelime ____ tır.",a:"nachmittags"},
-      {ty:"fb",q:"\"Ich räume mein Zimmer ____.\" (ayrılabilen fiilin eki) boşluğa gelen kelime ____ tır.",a:"auf"},
-      {ty:"fb",q:"Almancada \"her zaman\" anlamına gelen kelime ____ dir.",a:"immer"}
-    ],
-  "Freizeit – Boş Zaman": [
-    {ty:"mc",q:"\"Ich spiele gern Fußball.\" cümlesinin Türkçe anlamı nedir?",o:["Futbol oynamayı severim","Futbol izlemeyi severim","Yüzmeyi severim","Müzik dinlemeyi severim"],a:0},
-    {ty:"mc",q:"\"lesen\" fiilinin Türkçe anlamı nedir?",o:["Yazmak","Okumak","Koşmak","Yüzmek"],a:1},
-    {ty:"mc",q:"\"Was machst du in deiner Freizeit?\" sorusu neyi sormaktadır?",o:["Okul programını","Boş zamanda yapılan aktiviteleri","Aile üyelerini","Yemek tercihlerini"],a:1},
-    {ty:"tf",q:"\"schwimmen\" fiili Almancada \"yüzmek\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Ich höre gern ____.\" (müzik anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Musik"},
-      {ty:"mc",q:"\"die Freizeit\" kelimesinin Türkçe anlamı nedir?",o:["Boş zaman","Çalışma saati","Ders saati","Tatil günü"],a:0},
-      {ty:"mc",q:"\"Ich spiele gern Fußball.\" cümlesi neyi anlatır?",o:["Sevilen bir etkinliği","Bir kuralı","Bir yasağı","Bir randevuyu"],a:0},
-      {ty:"mc",q:"\"Was machst du am Wochenende?\" sorusu neyi öğrenmek için sorulur?",o:["Hafta sonu yapılan etkinlikleri","Haftanın gün sayısını","Okulun tatilini","Doğum tarihini"],a:0},
-      {ty:"mc",q:"\"das Hobby\" kelimesi neyi ifade eder?",o:["Uğraş","Meslek","Ders","Ödev"],a:0},
-      {ty:"mc",q:"\"Ich gehe ins Kino.\" cümlesinde nereye gidildiği belirtilir?",o:["Sinemaya","Kütüphaneye","Müzeye","Stadyuma"],a:0},
-      {ty:"tf",q:"\"lesen\" fiili Almancada \"okumak\" anlamına gelir.",a:true},
-      {ty:"tf",q:"\"schwimmen\" fiili Almancada \"koşmak\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"gern\" kelimesi bir işi severek yapmayı anlatır.",a:true},
-      {ty:"fb",q:"Almancada \"müzik\" anlamına gelen kelime ____ 'tir.",a:"Musik"},
-      {ty:"fb",q:"\"Ich ____ gern Fahrrad.\" (sürmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"fahre"},
-      {ty:"fb",q:"Almancada \"hafta sonu\" anlamına gelen kelime ____ 'dir.",a:"Wochenende"},
-      {ty:"mc",q:"\"Was machst du in deiner Freizeit?\" sorusuna uygun yanıt hangisidir?",o:["Ich spiele Gitarre.","Ich bin sechzehn.","Es ist acht Uhr.","In Ankara."],a:0},
-      {ty:"mc",q:"\"das Konzert\" kelimesinin Türkçe anlamı nedir?",o:["Konser","Tiyatro","Sergi","Maç"],a:0},
-      {ty:"mc",q:"\"Ich treffe meine Freunde.\" cümlesi neyi anlatır?",o:["Arkadaşlarla buluşmayı","Arkadaşları aramayı","Arkadaşları beklemeyi","Arkadaşları tanımayı"],a:0},
-      {ty:"mc",q:"\"Ich mag Sport.\" cümlesindeki \"mag\" fiili hangi anlamı verir?",o:["Hoşuna gitmek","Zorunda olmak","Yapabilmek","İstemek"],a:0},
-      {ty:"tf",q:"\"treffen\" fiili buluşmak anlamındadır.",a:true},
-      {ty:"tf",q:"\"das Konzert\" kelimesi konser anlamına gelir.",a:true},
-      {ty:"tf",q:"\"mögen\" fiili zorunluluk bildirir.",a:false},
-      {ty:"fb",q:"Almancada \"tiyatro\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Theater"},
-      {ty:"fb",q:"\"Ich ____ meine Freunde am Wochenende.\" (buluşmak) boşluğa gelen kelime ____ dir.",a:"treffe"},
-      {ty:"fb",q:"Almancada \"spor\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Sport"}
-    ]
-},
-"alm-11": {
-  "Reisen – Seyahat": [
+  "Urlaub und Reisen": [
     {ty:"mc",q:"\"der Flughafen\" kelimesinin Türkçe anlamı nedir?",o:["Tren istasyonu","Havaalanı","Otobüs durağı","Liman"],a:1},
     {ty:"mc",q:"\"Ich fahre mit dem Zug nach Berlin.\" cümlesinin Türkçe anlamı nedir?",o:["Berlin'e trenle gidiyorum","Berlin'den geliyorum","Berlin'de yaşıyorum","Berlin'i seviyorum"],a:0},
     {ty:"mc",q:"\"das Hotel\" kelimesi neyi ifade eder?",o:["Otel","Hastane","Okul","Market"],a:0},
@@ -7391,9 +7767,35 @@ const UNIT_BANK = {
       {ty:"tf",q:"\"die Abfahrt\" kelimesi varış anlamına gelir.",a:false},
       {ty:"fb",q:"Almancada \"peron\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Bahnsteig"},
       {ty:"fb",q:"Almancada \"gecikme\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Verspätung"},
-      {ty:"fb",q:"Almancada \"pasaport\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Pass"}
+      {ty:"fb",q:"Almancada \"pasaport\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Pass"},
+    {ty:"mc",q:"\"Es regnet.\" cümlesinin Türkçe anlamı nedir?",o:["Kar yağıyor","Yağmur yağıyor","Rüzgar esiyor","Hava güneşli"],a:1},
+    {ty:"mc",q:"\"Die Sonne scheint.\" ifadesinin Türkçe anlamı nedir?",o:["Güneş açıyor/parlıyor","Hava soğuk","Bulutlu bir gün","Fırtına var"],a:0},
+    {ty:"mc",q:"\"Wie ist das Wetter heute?\" sorusu neyi sormaktadır?",o:["Bugünün tarihini","Bugünkü hava durumunu","Bugünkü dersleri","Bugünkü yemeği"],a:1},
+    {ty:"tf",q:"\"kalt\" kelimesi Almancada \"soğuk\" anlamına gelir.",a:true},
+    {ty:"fb",q:"\"Im Winter ist es sehr ____.\" (soğuk anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"kalt"},
+      {ty:"mc",q:"\"Es regnet.\" cümlesi hangi hava durumunu bildirir?",o:["Yağmur yağdığını","Kar yağdığını","Güneşli olduğunu","Rüzgârlı olduğunu"],a:0},
+      {ty:"mc",q:"\"Wie ist das Wetter heute?\" sorusu neyi öğrenmek için sorulur?",o:["Bugünkü hava durumunu","Bugünün tarihini","Saati","Mevsimi"],a:0},
+      {ty:"mc",q:"\"der Schnee\" kelimesinin Türkçe anlamı nedir?",o:["Kar","Yağmur","Bulut","Sis"],a:0},
+      {ty:"mc",q:"\"Es ist windig.\" cümlesi neyi anlatır?",o:["Rüzgârlı olduğunu","Sıcak olduğunu","Karlı olduğunu","Açık olduğunu"],a:0},
+      {ty:"mc",q:"\"die Temperatur\" kelimesi neyi ifade eder?",o:["Sıcaklık","Nem","Basınç","Rüzgâr hızı"],a:0},
+      {ty:"tf",q:"\"die Sonne\" kelimesi güneş anlamındadır.",a:true},
+      {ty:"tf",q:"\"kalt\" kelimesi Almancada \"sıcak\" anlamına gelir.",a:false},
+      {ty:"tf",q:"\"der Frühling\" kelimesi ilkbahar mevsimini belirtir.",a:true},
+      {ty:"fb",q:"Almancada \"bulut\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Wolke"},
+      {ty:"fb",q:"\"Im ____ schneit es oft.\" (kış anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Winter"},
+      {ty:"fb",q:"Almancada \"sonbahar\" anlamına gelen kelime ____ 'tür.",a:"Herbst"},
+      {ty:"mc",q:"\"Es ist bewölkt.\" cümlesi hangi hava durumunu bildirir?",o:["Bulutlu olduğunu","Güneşli olduğunu","Karlı olduğunu","Yağmurlu olduğunu"],a:0},
+      {ty:"mc",q:"\"der Nebel\" kelimesinin Türkçe anlamı nedir?",o:["Sis","Kar","Dolu","Rüzgâr"],a:0},
+      {ty:"mc",q:"\"Wie wird das Wetter morgen?\" sorusu neyi öğrenmek için sorulur?",o:["Yarınki hava durumunu","Bugünkü sıcaklığı","Mevsimi","Tarihi"],a:0},
+      {ty:"mc",q:"\"Es sind zwanzig Grad.\" cümlesi neyi bildirir?",o:["Sıcaklığı","Nemi","Rüzgâr hızını","Basıncı"],a:0},
+      {ty:"tf",q:"\"der Sommer\" kelimesi yaz anlamına gelir.",a:true},
+      {ty:"tf",q:"\"warm\" kelimesi sıcak anlamına gelir.",a:true},
+      {ty:"tf",q:"\"der Nebel\" kelimesi kar anlamına gelir.",a:false},
+      {ty:"fb",q:"Almancada \"sis\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Nebel"},
+      {ty:"fb",q:"Almancada \"yaz\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Sommer"},
+      {ty:"fb",q:"Almancada \"derece\" anlamına gelen kelime ____ tir.",a:"Grad"},
     ],
-  "Gesundheit – Sağlık": [
+  "Gesundheit": [
     {ty:"mc",q:"\"Ich habe Kopfschmerzen.\" cümlesinin Türkçe anlamı nedir?",o:["Başım ağrıyor","Karnım ağrıyor","Hastayım","Ateşim var"],a:0},
     {ty:"mc",q:"\"der Arzt\" kelimesinin Türkçe anlamı nedir?",o:["Hemşire","Doktor","Eczacı","Hasta"],a:1},
     {ty:"mc",q:"\"Mir geht es nicht gut.\" cümlesinin Türkçe anlamı nedir?",o:["İyi hissetmiyorum","Çok mutluyum","Yorgunum ama iyiyim","Hiçbir şeyim yok"],a:0},
@@ -7420,229 +7822,6 @@ const UNIT_BANK = {
       {ty:"fb",q:"Almancada \"muayene\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Untersuchung"},
       {ty:"fb",q:"\"Ich ____ zum Arzt gehen.\" (zorunda olmak) boşluğa gelen kelime ____ tir.",a:"muss"}
     ],
-  "Kleidung – Kıyafetler": [
-    {ty:"mc",q:"\"das Hemd\" kelimesinin Türkçe anlamı nedir?",o:["Pantolon","Gömlek","Ayakkabı","Şapka"],a:1},
-    {ty:"mc",q:"\"Ich trage heute eine Jacke.\" cümlesinin Türkçe anlamı nedir?",o:["Bugün bir ceket giyiyorum","Bugün bir ceket satın alıyorum","Bugün ceketimi kaybettim","Bugün ceket yıkıyorum"],a:0},
-    {ty:"mc",q:"\"die Schuhe\" kelimesi neyi ifade eder?",o:["Çoraplar","Ayakkabılar","Eldivenler","Gözlükler"],a:1},
-    {ty:"tf",q:"\"der Rock\" kelimesi Almancada \"etek\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Die Hose ist zu ____.\" (uzun anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"lang"},
-      {ty:"mc",q:"\"die Hose\" kelimesinin Türkçe anlamı nedir?",o:["Pantolon","Gömlek","Ceket","Etek"],a:0},
-      {ty:"mc",q:"\"Welche Größe haben Sie?\" sorusu neyi öğrenmek için sorulur?",o:["Beden ölçüsünü","Rengi","Fiyatı","Markayı"],a:0},
-      {ty:"mc",q:"\"Ich probiere den Mantel an.\" cümlesi neyi anlatır?",o:["Bir kıyafetin denendiğini","Bir kıyafetin satıldığını","Bir kıyafetin yıkandığını","Bir kıyafetin dikildiğini"],a:0},
-      {ty:"mc",q:"\"der Schuh\" kelimesi neyi ifade eder?",o:["Ayakkabı","Çorap","Şapka","Eldiven"],a:0},
-      {ty:"mc",q:"\"Das passt mir gut.\" cümlesi neyi bildirir?",o:["Kıyafetin uygun olduğunu","Kıyafetin pahalı olduğunu","Kıyafetin eski olduğunu","Kıyafetin bulunmadığını"],a:0},
-      {ty:"tf",q:"\"das Hemd\" kelimesi gömlek anlamındadır.",a:true},
-      {ty:"tf",q:"\"die Jacke\" kelimesi Almancada \"ayakkabı\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"anziehen\" fiili bir kıyafeti giymek anlamındadır.",a:true},
-      {ty:"fb",q:"Almancada \"elbise\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Kleid"},
-      {ty:"fb",q:"\"Diese Hose ist zu ____.\" (dar anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"eng"},
-      {ty:"fb",q:"Almancada \"renk\" anlamına gelen kelime ____ 'dir.",a:"Farbe"},
-      {ty:"mc",q:"\"der Pullover\" kelimesinin Türkçe anlamı nedir?",o:["Kazak","Gömlek","Pantolon","Ceket"],a:0},
-      {ty:"mc",q:"\"Kann ich das umtauschen?\" sorusu neyi ifade eder?",o:["Değişim isteğini","İndirim isteğini","Fiyat sorusunu","Beden sorusunu"],a:0},
-      {ty:"mc",q:"\"die Umkleidekabine\" kelimesi neyi ifade eder?",o:["Soyunma kabini","Kasa","Vitrin","Depo"],a:0},
-      {ty:"mc",q:"\"Das steht dir gut.\" cümlesi neyi bildirir?",o:["Kıyafetin yakıştığını","Kıyafetin pahalı olduğunu","Kıyafetin bittiğini","Kıyafetin dar olduğunu"],a:0},
-      {ty:"tf",q:"\"die Socken\" kelimesi çorap anlamına gelir.",a:true},
-      {ty:"tf",q:"\"umtauschen\" fiili değiştirmek anlamındadır.",a:true},
-      {ty:"tf",q:"\"der Pullover\" kelimesi ayakkabı anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"kazak\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Pullover"},
-      {ty:"fb",q:"Almancada \"çorap\" (çoğul) anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Socken"},
-      {ty:"fb",q:"\"Diese Jacke ist zu ____.\" (büyük) cümlesindeki boşluğa gelen kelime ____ tir.",a:"groß"}
-    ],
-  "Wetter – Hava Durumu": [
-    {ty:"mc",q:"\"Es regnet.\" cümlesinin Türkçe anlamı nedir?",o:["Kar yağıyor","Yağmur yağıyor","Rüzgar esiyor","Hava güneşli"],a:1},
-    {ty:"mc",q:"\"Die Sonne scheint.\" ifadesinin Türkçe anlamı nedir?",o:["Güneş açıyor/parlıyor","Hava soğuk","Bulutlu bir gün","Fırtına var"],a:0},
-    {ty:"mc",q:"\"Wie ist das Wetter heute?\" sorusu neyi sormaktadır?",o:["Bugünün tarihini","Bugünkü hava durumunu","Bugünkü dersleri","Bugünkü yemeği"],a:1},
-    {ty:"tf",q:"\"kalt\" kelimesi Almancada \"soğuk\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Im Winter ist es sehr ____.\" (soğuk anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"kalt"},
-      {ty:"mc",q:"\"Es regnet.\" cümlesi hangi hava durumunu bildirir?",o:["Yağmur yağdığını","Kar yağdığını","Güneşli olduğunu","Rüzgârlı olduğunu"],a:0},
-      {ty:"mc",q:"\"Wie ist das Wetter heute?\" sorusu neyi öğrenmek için sorulur?",o:["Bugünkü hava durumunu","Bugünün tarihini","Saati","Mevsimi"],a:0},
-      {ty:"mc",q:"\"der Schnee\" kelimesinin Türkçe anlamı nedir?",o:["Kar","Yağmur","Bulut","Sis"],a:0},
-      {ty:"mc",q:"\"Es ist windig.\" cümlesi neyi anlatır?",o:["Rüzgârlı olduğunu","Sıcak olduğunu","Karlı olduğunu","Açık olduğunu"],a:0},
-      {ty:"mc",q:"\"die Temperatur\" kelimesi neyi ifade eder?",o:["Sıcaklık","Nem","Basınç","Rüzgâr hızı"],a:0},
-      {ty:"tf",q:"\"die Sonne\" kelimesi güneş anlamındadır.",a:true},
-      {ty:"tf",q:"\"kalt\" kelimesi Almancada \"sıcak\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"der Frühling\" kelimesi ilkbahar mevsimini belirtir.",a:true},
-      {ty:"fb",q:"Almancada \"bulut\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Wolke"},
-      {ty:"fb",q:"\"Im ____ schneit es oft.\" (kış anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Winter"},
-      {ty:"fb",q:"Almancada \"sonbahar\" anlamına gelen kelime ____ 'tür.",a:"Herbst"},
-      {ty:"mc",q:"\"Es ist bewölkt.\" cümlesi hangi hava durumunu bildirir?",o:["Bulutlu olduğunu","Güneşli olduğunu","Karlı olduğunu","Yağmurlu olduğunu"],a:0},
-      {ty:"mc",q:"\"der Nebel\" kelimesinin Türkçe anlamı nedir?",o:["Sis","Kar","Dolu","Rüzgâr"],a:0},
-      {ty:"mc",q:"\"Wie wird das Wetter morgen?\" sorusu neyi öğrenmek için sorulur?",o:["Yarınki hava durumunu","Bugünkü sıcaklığı","Mevsimi","Tarihi"],a:0},
-      {ty:"mc",q:"\"Es sind zwanzig Grad.\" cümlesi neyi bildirir?",o:["Sıcaklığı","Nemi","Rüzgâr hızını","Basıncı"],a:0},
-      {ty:"tf",q:"\"der Sommer\" kelimesi yaz anlamına gelir.",a:true},
-      {ty:"tf",q:"\"warm\" kelimesi sıcak anlamına gelir.",a:true},
-      {ty:"tf",q:"\"der Nebel\" kelimesi kar anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"sis\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Nebel"},
-      {ty:"fb",q:"Almancada \"yaz\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Sommer"},
-      {ty:"fb",q:"Almancada \"derece\" anlamına gelen kelime ____ tir.",a:"Grad"}
-    ],
-  "Feste – Bayramlar ve Kutlamalar": [
-    {ty:"mc",q:"\"Frohe Weihnachten!\" ifadesinin Türkçe anlamı nedir?",o:["Mutlu Yıllar!","İyi Noeller!","Doğum günün kutlu olsun!","Bayramın kutlu olsun!"],a:1},
-    {ty:"mc",q:"\"der Geburtstag\" kelimesinin Türkçe anlamı nedir?",o:["Yıldönümü","Doğum günü","Bayram","Tatil"],a:1},
-    {ty:"mc",q:"\"Wir feiern das Fest zusammen.\" cümlesinin Türkçe anlamı nedir?",o:["Bayramı birlikte kutluyoruz","Bayramı unuttuk","Bayram için hediye alıyoruz","Bayramda tatile gidiyoruz"],a:0},
-    {ty:"tf",q:"\"das Geschenk\" kelimesi Almancada \"hediye\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Herzlichen ____ zum Geburtstag!\" (tebrikler anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Glückwunsch"},
-      {ty:"mc",q:"\"Herzlichen Glückwunsch!\" ifadesi hangi durumda kullanılır?",o:["Tebrik ederken","Vedalaşırken","Özür dilerken","Yol sorarken"],a:0},
-      {ty:"mc",q:"\"das Geschenk\" kelimesi neyi ifade eder?",o:["Hediye","Davetiye","Pasta","Süs"],a:0},
-      {ty:"mc",q:"\"Wir feiern zusammen.\" cümlesi neyi anlatır?",o:["Birlikte kutlandığını","Ayrı ayrı gidildiğini","Davetin iptal olduğunu","Hazırlık yapıldığını"],a:0},
-      {ty:"mc",q:"\"die Einladung\" kelimesi neyi ifade eder?",o:["Davet","Kutlama","Tatil","Tören"],a:0},
-      {ty:"tf",q:"\"feiern\" fiili kutlamak anlamındadır.",a:true},
-      {ty:"tf",q:"\"das Fest\" kelimesi Almancada \"hediye\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"Frohe Feiertage!\" ifadesi bayram kutlaması için kullanılır.",a:true},
-      {ty:"fb",q:"Almancada \"misafir\" anlamına gelen kelime ____ 'tir.",a:"Gast"},
-      {ty:"fb",q:"\"Ich ____ dich zu meinem Geburtstag ein.\" (davet etmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"lade"},
-      {ty:"fb",q:"Almancada \"gelenek\" anlamına gelen kelime ____ 'tir.",a:"Tradition"},
-      {ty:"mc",q:"\"die Feier\" kelimesinin Türkçe anlamı nedir?",o:["Kutlama","Davetiye","Hediye","Misafir"],a:0},
-      {ty:"mc",q:"\"Alles Gute!\" ifadesi hangi durumda kullanılır?",o:["İyi dilekte bulunurken","Yol sorarken","Özür dilerken","Şikâyet ederken"],a:0},
-      {ty:"mc",q:"\"Ich gratuliere dir!\" cümlesi neyi ifade eder?",o:["Tebrik etmeyi","Davet etmeyi","Reddetmeyi","Teşekkür etmeyi"],a:0},
-      {ty:"mc",q:"\"der Feiertag\" kelimesi neyi ifade eder?",o:["Resmî tatil günü","Doğum günü","Hafta sonu","Yılbaşı gecesi"],a:0},
-      {ty:"tf",q:"\"gratulieren\" fiili tebrik etmek anlamındadır.",a:true},
-      {ty:"tf",q:"\"der Feiertag\" resmî tatil gününü belirtir.",a:true},
-      {ty:"tf",q:"\"die Feier\" kelimesi hediye anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"kutlama\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Feier"},
-      {ty:"fb",q:"Almancada \"resmî tatil günü\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Feiertag"},
-      {ty:"fb",q:"\"Ich ____ dir zum Geburtstag!\" (tebrik etmek) boşluğa gelen kelime ____ dir.",a:"gratuliere"}
-    ]
-},
-"alm-12": {
-  "Berufe – Meslekler": [
-    {ty:"mc",q:"\"der Ingenieur\" kelimesinin Türkçe anlamı nedir?",o:["Doktor","Mühendis","Avukat","Öğretmen"],a:1},
-    {ty:"mc",q:"\"Was bist du von Beruf?\" sorusu neyi sormaktadır?",o:["Yaşını","Mesleğini","Adresini","Hobilerini"],a:1},
-    {ty:"mc",q:"\"Ich arbeite als Krankenschwester.\" cümlesinin Türkçe anlamı nedir?",o:["Hemşire olarak çalışıyorum","Doktor olarak çalışıyorum","Öğretmen olarak çalışıyorum","İşsizim"],a:0},
-    {ty:"tf",q:"\"der Anwalt\" kelimesi Almancada \"avukat\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Meine Mutter ist ____.\" (kadın öğretmen anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Lehrerin"},
-      {ty:"mc",q:"\"der Beruf\" kelimesinin Türkçe anlamı nedir?",o:["Meslek","İş yeri","Maaş","Görev"],a:0},
-      {ty:"mc",q:"\"Was sind Sie von Beruf?\" sorusu neyi öğrenmek için sorulur?",o:["Mesleği","Adı","Yaşı","Adresi"],a:0},
-      {ty:"mc",q:"\"die Ärztin\" kelimesi kimi ifade eder?",o:["Kadın doktor","Erkek doktor","Hemşire","Hasta"],a:0},
-      {ty:"mc",q:"\"Ich arbeite als Ingenieur.\" cümlesi neyi bildirir?",o:["Çalışılan mesleği","Çalışma saatini","Maaş tutarını","İş yerinin adını"],a:0},
-      {ty:"mc",q:"\"die Bewerbung\" kelimesi neyi ifade eder?",o:["İş başvurusu","İş sözleşmesi","İzin belgesi","Diploma"],a:0},
-      {ty:"tf",q:"\"der Lehrer\" kelimesi öğretmen anlamındadır.",a:true},
-      {ty:"tf",q:"\"arbeitslos\" kelimesi Almancada \"çalışkan\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"das Vorstellungsgespräch\" ifadesi iş görüşmesini belirtir.",a:true},
-      {ty:"fb",q:"Almancada \"şirket\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Firma"},
-      {ty:"fb",q:"\"Ich ____ bei einer Bank.\" (çalışmak anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"arbeite"},
-      {ty:"fb",q:"Almancada \"deneyim\" anlamına gelen kelime ____ 'dir.",a:"Erfahrung"},
-      {ty:"mc",q:"\"das Gehalt\" kelimesinin Türkçe anlamı nedir?",o:["Maaş","Görev","Sözleşme","İzin"],a:0},
-      {ty:"mc",q:"\"Ich habe drei Jahre Erfahrung.\" cümlesi neyi bildirir?",o:["Deneyim süresini","Maaşı","Görev tanımını","Çalışma saatini"],a:0},
-      {ty:"mc",q:"\"der Lebenslauf\" kelimesi neyi ifade eder?",o:["Öz geçmiş","İş sözleşmesi","Diploma","Referans"],a:0},
-      {ty:"mc",q:"\"Ich möchte mich bewerben.\" cümlesi neyi ifade eder?",o:["Başvurma isteğini","İstifa etmeyi","İzin istemeyi","Terfi istemeyi"],a:0},
-      {ty:"tf",q:"\"der Lebenslauf\" öz geçmiş anlamındadır.",a:true},
-      {ty:"tf",q:"\"das Gehalt\" maaş anlamına gelir.",a:true},
-      {ty:"tf",q:"\"sich bewerben\" fiili istifa etmek anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"öz geçmiş\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Lebenslauf"},
-      {ty:"fb",q:"Almancada \"maaş\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Gehalt"},
-      {ty:"fb",q:"Almancada \"meslek eğitimi\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Ausbildung"}
-    ],
-  "Medien – Medya": [
-    {ty:"mc",q:"\"das Handy\" kelimesinin Türkçe anlamı nedir?",o:["Bilgisayar","Cep telefonu","Televizyon","Radyo"],a:1},
-    {ty:"mc",q:"\"Ich surfe im Internet.\" cümlesinin Türkçe anlamı nedir?",o:["İnternette geziniyorum","Deniz kenarında sörf yapıyorum","Bilgisayarımı tamir ediyorum","Televizyon izliyorum"],a:0},
-    {ty:"mc",q:"\"die Nachrichten\" kelimesi neyi ifade eder?",o:["Mesajlar","Haberler","Filmler","Oyunlar"],a:1},
-    {ty:"tf",q:"\"der Computer\" kelimesi Almancada \"bilgisayar\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Ich schaue gern ____.\" (filmler anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Filme"},
-      {ty:"mc",q:"\"die Zeitung\" kelimesinin Türkçe anlamı nedir?",o:["Gazete","Dergi","Kitap","Broşür"],a:0},
-      {ty:"mc",q:"\"Ich surfe im Internet.\" cümlesi neyi anlatır?",o:["İnternette gezindiğini","Radyo dinlediğini","Gazete okuduğunu","Televizyon izlediğini"],a:0},
-      {ty:"mc",q:"\"soziale Medien\" ifadesi neyi belirtir?",o:["Sosyal medyayı","Basılı yayınları","Sinema salonlarını","Radyo kanallarını"],a:0},
-      {ty:"mc",q:"\"der Bildschirm\" kelimesi neyi ifade eder?",o:["Ekran","Klavye","Hoparlör","Kablo"],a:0},
-      {ty:"tf",q:"\"der Fernseher\" kelimesi televizyon aygıtını belirtir.",a:true},
-      {ty:"tf",q:"\"die Werbung\" kelimesi Almancada \"haber\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"herunterladen\" fiili indirmek anlamındadır.",a:true},
-      {ty:"fb",q:"Almancada \"dergi\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Zeitschrift"},
-      {ty:"fb",q:"\"Ich ____ jeden Abend Nachrichten.\" (izlemek/seyretmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"sehe"},
-      {ty:"fb",q:"Almancada \"bilgi\" anlamına gelen kelime ____ 'dir.",a:"Information"},
-      {ty:"mc",q:"\"der Artikel\" kelimesi medya bağlamında neyi ifade eder?",o:["Makale/haber yazısı","Reklam","Program","Kanal"],a:0},
-      {ty:"mc",q:"\"Ich lese jeden Tag Nachrichten online.\" cümlesi neyi anlatır?",o:["Düzenli bir alışkanlığı","Bir planı","Bir yasağı","Bir isteği"],a:0},
-      {ty:"mc",q:"\"die Quelle\" kelimesi bilgi bağlamında neyi ifade eder?",o:["Kaynak","Başlık","Yorum","Paylaşım"],a:0},
-      {ty:"mc",q:"\"posten\" fiilinin Türkçe karşılığı nedir?",o:["Paylaşım yapmak","Silmek","İndirmek","Kaydetmek"],a:0},
-      {ty:"tf",q:"\"die Quelle\" kaynak anlamına gelir.",a:true},
-      {ty:"tf",q:"\"der Artikel\" haber yazısı için kullanılabilir.",a:true},
-      {ty:"tf",q:"\"posten\" fiili silmek anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"kaynak\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Quelle"},
-      {ty:"fb",q:"Almancada \"kullanıcı\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Nutzer"},
-      {ty:"fb",q:"Almancada \"gizlilik\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Privatsphäre"}
-    ],
-  "Umwelt – Çevre": [
-    {ty:"mc",q:"\"der Müll\" kelimesinin Türkçe anlamı nedir?",o:["Orman","Çöp","Su","Hava"],a:1},
-    {ty:"mc",q:"\"Wir müssen die Umwelt schützen.\" cümlesinin Türkçe anlamı nedir?",o:["Çevreyi korumalıyız","Çevreyi kirletmeliyiz","Çevre önemli değil","Doğada yürüyüş yapmalıyız"],a:0},
-    {ty:"mc",q:"\"recyceln\" fiilinin Türkçe anlamı nedir?",o:["Yakmak","Geri dönüştürmek","Gömmek","Atmak"],a:1},
-    {ty:"tf",q:"\"die Umweltverschmutzung\" kelimesi Almancada \"çevre kirliliği\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"Wir sollen Wasser ____.\" (tasarruf etmek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"sparen"},
-      {ty:"mc",q:"\"die Umwelt\" kelimesinin Türkçe anlamı nedir?",o:["Çevre","Dünya","Doğa olayı","İklim"],a:0},
-      {ty:"mc",q:"\"der Müll\" kelimesi neyi ifade eder?",o:["Çöp","Su","Toprak","Hava"],a:0},
-      {ty:"mc",q:"\"Wir müssen Energie sparen.\" cümlesi neyi anlatır?",o:["Enerji tasarrufu gerektiğini","Enerjinin ucuz olduğunu","Enerjinin bittiğini","Enerjinin üretildiğini"],a:0},
-      {ty:"mc",q:"\"die Luftverschmutzung\" kelimesi hangi sorunu belirtir?",o:["Hava kirliliğini","Su kıtlığını","Gürültüyü","Erozyonu"],a:0},
-      {ty:"mc",q:"\"das Recycling\" kelimesi neyi ifade eder?",o:["Geri dönüşümü","Çöp toplamayı","Ağaç kesmeyi","Su arıtmayı"],a:0},
-      {ty:"tf",q:"\"der Klimawandel\" ifadesi iklim değişikliğini belirtir.",a:true},
-      {ty:"tf",q:"\"sauber\" kelimesi Almancada \"kirli\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"schützen\" fiili korumak anlamındadır.",a:true},
-      {ty:"fb",q:"Almancada \"su\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Wasser"},
-      {ty:"fb",q:"\"Wir ____ die Natur schützen.\" (zorunda olmak anlamında) cümlesindeki boşluğa gelen kelime ____ 'tür.",a:"müssen"},
-      {ty:"fb",q:"Almancada \"enerji\" anlamına gelen kelime ____ 'dir.",a:"Energie"},
-      {ty:"mc",q:"\"der Abfall\" kelimesinin Türkçe anlamı nedir?",o:["Atık","Kaynak","Enerji","Hava"],a:0},
-      {ty:"mc",q:"\"Wir sollten Plastik vermeiden.\" cümlesinde \"sollten\" neyi bildirir?",o:["Öneri","Zorunluluk","Yasak","Yetenek"],a:0},
-      {ty:"mc",q:"\"die Erneuerbare Energie\" ifadesi neyi belirtir?",o:["Yenilenebilir enerjiyi","Fosil yakıtı","Nükleer enerjiyi","Kömürü"],a:0},
-      {ty:"mc",q:"\"trennen\" fiili atık bağlamında neyi ifade eder?",o:["Ayrıştırmak","Yakmak","Gömmek","Taşımak"],a:0},
-      {ty:"tf",q:"\"vermeiden\" fiili kaçınmak anlamındadır.",a:true},
-      {ty:"tf",q:"\"der Abfall\" atık anlamına gelir.",a:true},
-      {ty:"tf",q:"\"trennen\" fiili birleştirmek anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"atık\" anlamına gelen kelime \"der ____\" biçiminde yazılır.",a:"Abfall"},
-      {ty:"fb",q:"\"Wir ____ Plastik vermeiden.\" (öneri) boşluğa gelen kelime ____ dir.",a:"sollten"},
-      {ty:"fb",q:"Almancada \"iklim\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Klima"}
-    ],
-  "Zukunftspläne – Gelecek Planları": [
-    {ty:"mc",q:"\"Was willst du werden?\" sorusu neyi sormaktadır?",o:["Gelecekte ne olmak istediğini","Bugün ne yaptığını","Nerede yaşadığını","Kaç kardeşi olduğunu"],a:0},
-    {ty:"mc",q:"\"Ich möchte Arzt werden.\" cümlesinin Türkçe anlamı nedir?",o:["Doktor olmak istiyorum","Doktora gidiyorum","Doktordan korkuyorum","Doktor değilim"],a:0},
-    {ty:"mc",q:"\"die Zukunft\" kelimesinin Türkçe anlamı nedir?",o:["Geçmiş","Gelecek","Şimdi","Hafta sonu"],a:1},
-    {ty:"tf",q:"\"Ich werde studieren.\" cümlesi Almancada gelecekle ilgili bir planı ifade eder.",a:true},
-    {ty:"fb",q:"\"Nach der Schule möchte ich an der ____ studieren.\" (üniversite anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Universität"},
-      {ty:"mc",q:"\"Ich will studieren.\" cümlesi neyi anlatır?",o:["Üniversite okuma isteğini","Çalışma zorunluluğunu","Seyahat planını","Taşınma kararını"],a:0},
-      {ty:"mc",q:"\"Was möchtest du werden?\" sorusu neyi öğrenmek için sorulur?",o:["Gelecekteki mesleği","Bugünkü sınıfı","Doğum yerini","Sevilen dersi"],a:0},
-      {ty:"mc",q:"\"die Universität\" kelimesi neyi ifade eder?",o:["Üniversite","Lise","İlkokul","Kurs"],a:0},
-      {ty:"mc",q:"\"Ich werde nächstes Jahr nach Deutschland fahren.\" cümlesinde hangi zaman anlatılır?",o:["Gelecek","Geçmiş","Şimdiki","Geniş"],a:0},
-      {ty:"tf",q:"\"der Plan\" kelimesi plan anlamındadır.",a:true},
-      {ty:"tf",q:"\"das Ziel\" kelimesi Almancada \"başlangıç\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"hoffen\" fiili ummak anlamındadır.",a:true},
-      {ty:"fb",q:"Almancada \"karar\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Entscheidung"},
-      {ty:"fb",q:"\"Ich ____ Arzt werden.\" (istemek anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"möchte"},
-      {ty:"fb",q:"Almancada \"başarı\" anlamına gelen kelime ____ 'tir.",a:"Erfolg"},
-      {ty:"mc",q:"\"das Studium\" kelimesinin Türkçe anlamı nedir?",o:["Üniversite öğrenimi","Lise öğrenimi","Kurs","Staj"],a:0},
-      {ty:"mc",q:"\"Ich habe vor, im Ausland zu studieren.\" cümlesi neyi bildirir?",o:["Bir planı","Bir yasağı","Bir zorunluluğu","Bir izni"],a:0},
-      {ty:"mc",q:"\"das Praktikum\" kelimesi neyi ifade eder?",o:["Staj","Sınav","Diploma","Ders"],a:0},
-      {ty:"mc",q:"\"Ich werde Lehrer.\" cümlesi hangi zamanı bildirir?",o:["Gelecek","Geçmiş","Şimdiki","Geniş"],a:0},
-      {ty:"tf",q:"\"vorhaben\" fiili plan yapmak anlamındadır.",a:true},
-      {ty:"tf",q:"\"das Praktikum\" staj anlamına gelir.",a:true},
-      {ty:"tf",q:"\"das Studium\" kelimesi ilkokul anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"staj\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Praktikum"},
-      {ty:"fb",q:"Almancada \"üniversite öğrenimi\" anlamına gelen kelime \"das ____\" biçiminde yazılır.",a:"Studium"},
-      {ty:"fb",q:"Almancada \"yurt dışı\" anlamına gelen kelime ____ tır.",a:"Ausland"}
-    ],
-  "Kultur – Kültür": [
-    {ty:"mc",q:"\"das Museum\" kelimesinin Türkçe anlamı nedir?",o:["Tiyatro","Müze","Kütüphane","Sinema"],a:1},
-    {ty:"mc",q:"\"Wir besuchen ein Theater.\" cümlesinin Türkçe anlamı nedir?",o:["Bir tiyatroyu ziyaret ediyoruz","Bir müzeyi inşa ediyoruz","Bir konsere gidiyoruz","Bir sergi açıyoruz"],a:0},
-    {ty:"mc",q:"\"die Tradition\" kelimesinin Türkçe anlamı nedir?",o:["Moda","Gelenek","Teknoloji","Spor"],a:1},
-    {ty:"tf",q:"\"das Konzert\" kelimesi Almancada \"konser\" anlamına gelir.",a:true},
-    {ty:"fb",q:"\"In Deutschland gibt es viele ____.\" (müzeler anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"Museen"},
-      {ty:"mc",q:"\"die Kultur\" kelimesinin Türkçe anlamı nedir?",o:["Kültür","Sanat","Tarih","Dil"],a:0},
-      {ty:"mc",q:"\"das Museum\" kelimesi neyi ifade eder?",o:["Müze","Tiyatro","Kütüphane","Galeri"],a:0},
-      {ty:"mc",q:"\"Ich interessiere mich für Literatur.\" cümlesi neyi anlatır?",o:["Edebiyata ilgi duyulduğunu","Edebiyat dersi alındığını","Kitap satıldığını","Yazar olunduğunu"],a:0},
-      {ty:"mc",q:"\"die Sprache\" kelimesi neyi ifade eder?",o:["Dil","Ülke","Halk","Yazı"],a:0},
-      {ty:"mc",q:"\"das Theater\" kelimesi neyi belirtir?",o:["Tiyatro","Sinema","Konser","Sergi"],a:0},
-      {ty:"tf",q:"\"die Musik\" kelimesi müzik anlamındadır.",a:true},
-      {ty:"tf",q:"\"fremd\" kelimesi Almancada \"tanıdık\" anlamına gelir.",a:false},
-      {ty:"tf",q:"\"die Sitte\" kelimesi gelenek ve görenek anlamında kullanılır.",a:true},
-      {ty:"fb",q:"Almancada \"sanat\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Kunst"},
-      {ty:"fb",q:"\"Ich ____ Deutsch und Englisch.\" (konuşmak anlamında) cümlesindeki boşluğa gelen kelime ____ 'dir.",a:"spreche"},
-      {ty:"fb",q:"Almancada \"tarih\" (bilim dalı) anlamına gelen kelime ____ 'tir.",a:"Geschichte"},
-      {ty:"mc",q:"\"die Ausstellung\" kelimesinin Türkçe anlamı nedir?",o:["Sergi","Konser","Gösteri","Fuar"],a:0},
-      {ty:"mc",q:"\"Ich interessiere mich für Geschichte.\" cümlesi neyi bildirir?",o:["İlgi alanını","Mesleği","Yaşı","Adresi"],a:0},
-      {ty:"mc",q:"\"der Roman\" kelimesi edebiyat bağlamında neyi ifade eder?",o:["Roman","Şiir","Öykü","Tiyatro"],a:0},
-      {ty:"mc",q:"\"die Vielfalt\" kelimesinin Türkçe anlamı nedir?",o:["Çeşitlilik","Benzerlik","Birlik","Ayrım"],a:0},
-      {ty:"tf",q:"\"die Ausstellung\" sergi anlamına gelir.",a:true},
-      {ty:"tf",q:"\"die Vielfalt\" çeşitlilik anlamına gelir.",a:true},
-      {ty:"tf",q:"\"der Roman\" kelimesi şiir anlamına gelir.",a:false},
-      {ty:"fb",q:"Almancada \"sergi\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Ausstellung"},
-      {ty:"fb",q:"Almancada \"çeşitlilik\" anlamına gelen kelime \"die ____\" biçiminde yazılır.",a:"Vielfalt"},
-      {ty:"fb",q:"\"Ich interessiere mich ____ Musik.\" cümlesindeki boşluğa gelen edat ____ dür.",a:"für"}
-    ]
 },
 "ing-5": {
   /* Resmî temalar (THEME 1-8). Sorular 5. sınıf düzeyinde (A1) tutulmuştur. */
@@ -10270,7 +10449,28 @@ let st = { level: "ilkokul", grade: 1, subject: "tr", units: new Set(), qs: [] }
 const $ = id => document.getElementById(id);
 
 /* ═══════════════ PANEL ÇİZİMİ ═══════════════ */
+/* KANONİK ANAHTAR — veri eşleşmesi hep bununla yapılır: UNIT_BANK ve KAPSAM
+   anahtarları, `q.unit` etiketi, kapsam/ünite sayaçları. */
 function unitName(u) { return typeof u === "string" ? u : u.u; }
+/* GÖRÜNEN ETİKET — yalnızca ekranda ve kâğıtta kullanılır.
+   Yabancı dil derslerinde resmî tema adı Almanca/İngilizcedir; öğretmene
+   yardımcı olsun diye yanına Türkçe karşılık yazılır (`tr` alanı). Türkçe
+   karşılık VERİ ANAHTARI DEĞİLDİR: çevirisi değişse bile UNIT_BANK/KAPSAM
+   eşleşmeleri bozulmaz. `tr` yoksa kanonik ad olduğu gibi gösterilir. */
+function unitEtiket(u) {
+  return (typeof u !== "string" && u.tr) ? u.u + " – " + u.tr : unitName(u);
+}
+/* Banka/kapsam arama anahtarı. Çoğu derste bu "ders-sınıf"tır; Almancada
+   içerik seviyeye bağlı saklandığı için "alm-A1.1" gibi SEVİYE anahtarıdır.
+   Tek yerden çözülür ki üretim, arayüz sayacı ve kapsam katmanı aynı veriye
+   baksın. */
+function veriAnahtari() {
+  if (st.subject === "alm") {
+    const ns = almSeviye(st.grade);
+    return ns ? "alm-" + ns : "alm-yok";
+  }
+  return st.subject + "-" + st.grade;
+}
 function unitsFor() { return (UNITS[st.subject] && UNITS[st.subject][st.grade]) || []; }
 
 function renderLevels() {
@@ -10300,11 +10500,11 @@ function renderUnits() {
      programda olmayan bir iddia olurdu. */
   $("unitStepTitle").textContent = konuTabanliMi() ? "Konu Seç" : `${y} / Konu Seç`;
   $("unitList").innerHTML = us.map((u, i) =>
-    `<label class="unit-item"><input type="checkbox" data-i="${i}" checked /> ${unitName(u)}</label>`).join("") ||
+    `<label class="unit-item"><input type="checkbox" data-i="${i}" checked /> ${unitEtiket(u)}</label>`).join("") ||
     `<div class="hint">Bu sınıf için ${y.toLocaleLowerCase("tr")} bulunamadı.</div>`;
   /* Üretim kaynağı ve yürürlükteki program bilgisi */
   const tymm = TYMM_SINIFLARI.has(st.grade);
-  const perUnit = UNIT_BANK[`${st.subject}-${st.grade}`];
+  const perUnit = UNIT_BANK[veriAnahtari()];
   const kendi = perUnit ? us.map(unitName).filter(u => perUnit[u]).length : 0;
   const uretecli = us.filter(u => typeof u !== "string" && u.g && GEN[u.g]).length;
   /* Konu tabanlı sınıflarda başlıkların resmî tema OLMADIĞI açıkça yazılır;
@@ -10580,7 +10780,7 @@ function kapsamFormlari(madde, perUnit) {
 function openQ(kapsam) {
   const us = unitsFor().filter((_, i) => st.units.has(i));
   if (!us.length) return null;
-  const perUnit = UNIT_BANK[st.subject + "-" + st.grade];
+  const perUnit = UNIT_BANK[veriAnahtari()];
   /* Kapsam maddesi varsa soru o maddeyi hedefler; yoksa eski davranışa
      (ünite adı) düşülür ki kapsam kaydı olmayan dersler bozulmasın. */
   const madde = kapsam && kapsam.length ? pick(kapsam) : null;
@@ -11518,7 +11718,7 @@ function yedekAdaylar(types, d, adet) {
     for (let i = 0; i < adet * 2; i++) { const q = tfKelimeden(); if (q) out.push(q); }
   }
 
-  const perUnit = UNIT_BANK[st.subject + "-" + st.grade];
+  const perUnit = UNIT_BANK[veriAnahtari()];
   if (!perUnit) return out;
   const adlar = seciliUniteler().map(unitName);
   const dene = function (fn, kez) {
@@ -11629,7 +11829,7 @@ function sutunGrafik(q) {
 /* Seçili ünitelerden türetilmiş tip adayları toplar. */
 function turetilmisAdaylar(types, d, adet) {
   const out = [];
-  const perUnit = UNIT_BANK[`${st.subject}-${st.grade}`];
+  const perUnit = UNIT_BANK[veriAnahtari()];
   const adlar = seciliUniteler().map(unitName);
   if (types.has("es")) {
     if (perUnit) {
@@ -11712,6 +11912,74 @@ function turetilmisAdaylar(types, d, adet) {
    sorularından TÜRETİLİR (`kapsamTuret`) — böylece hiçbir ders kapsam
    dengelemesinden yoksun kalmaz ve müfredat iddiası uydurulmaz. */
 const KAPSAM = {
+  /* ── Almanca ──────────────────────────────────────────────────────────────
+     Ortaöğretim Almanca Öğretim Programı (TTKB PID 333). Bu program kazanımı
+     "kod" ile numaralamaz; birimi NIVEAUSTUFE + THEMENKREIS'tir, o yüzden kod
+     alanı "A1.1/TK1" biçiminde yazılır ve madde metni programın kendi
+     `Sprachhandlungen` satırıdır (birebir, çevrilmeden).
+     Yalnızca BU TURDA dokunulan temalar kayıtlıdır. "Zahlen und Uhrzeit",
+     "Essen und Trinken", "Gesundheit", "Medien", "Umwelt" ve "Kultur" bilinçli
+     olarak dışarıdadır: ilki bölünecek, son üçü seviye kararı bekliyor,
+     ortadaki ikisinin adı zaten resmîdir ama kapsamı bu turun kapsamı değil.
+     `Syntaktische Mittel` (gramer) BU AŞAMADA KULLANILMAZ — soru üretimine
+     gramer sokmak ayrı bir karardır. */
+    "alm-A1.1": {
+    "Informationen zur Person": [
+      { k: "sich begrüßen und verabschieden", kod: "A1.1/TK1", a: ["selamlaş", "vedalaş", "guten morgen", "guten tag", "hallo", "tschüss", "wiedersehen", "bis bald"] },
+      { k: "sich und andere vorstellen", kod: "A1.1/TK1", a: ["ich heiße", "mein name", "kendini tanıt", "tanıştır", "wie heißt", "wer bist"] },
+      { k: "die Telefonnummer nennen / Namen und Adressen buchstabieren", kod: "A1.1/TK1", a: ["telefonnummer", "telefon numara", "buchstab", "harf harf", "adresse"] },
+      { k: "über Nationalitäten sprechen", kod: "A1.1/TK1", a: ["woher", "komme aus", "nationalität", "uyruk", "türkei", "nereli"] },
+      /* A1.1/TK1 Kompetenz alanı sayıları da kapsar ("Zahlen bis 20"); bu madde
+         kaldırılan "Zahlen und Uhrzeit" temasından taşınan 20'ye kadar sayı
+         sorularının resmî karşılığıdır. Anahtarlar bilerek tırnaklı kalıba
+         bağlıdır; yalın "sayısı" sözcüğü "kişi sayısı / oda sayısı" gibi
+         seçeneklere sızıyordu. */
+      { k: "Kompetenz: Zahlen bis 20", kod: "A1.1/TK1", a: ["rakamla karşılığı", "rakamla yazılışı", "hangi rakamla", "anlamındaki sayı", "sayısı almancada", "\" sayısı"] }
+    ],
+    "Die Schule": [
+      { k: "die Schulsachen nennen", kod: "A1.1/TK2", a: ["heft", "kuli", "tafel", "schultasche", "radiergummi", "okul eşya", "kalem", "defter"] },
+      { k: "über den Stundenplan sprechen", kod: "A1.1/TK2", a: ["stundenplan", "ders programı", "mathe", "deutsch", "unterricht", "pause"] },
+      { k: "die Farben nennen", kod: "A1.1/TK2", a: ["farbe", "renk", "rot", "blau", "grün", "gelb"] },
+      { k: "Vorlieben ausdrücken und Meinungen sagen", kod: "A1.1/TK2", a: ["mag", "lieblings", "sevdiği", "langweilig", "spannend", "interessant"] }
+    ],
+    "Die Gesellschaft": [
+      { k: "über die Familienmitglieder sprechen (Alter, Berufe)", kod: "A1.1/TK3", a: ["mutter", "vater", "bruder", "schwester", "eltern", "großvater", "großmutter", "aile", "kardeş"] },
+      { k: "das Aussehen beschreiben", kod: "A1.1/TK3", a: ["aussehen", "blond", "schlank", "görünüş", "saç", "boy"] }
+    ],
+    "Tägliches Leben": [
+      { k: "Uhrzeit und Tageszeit angeben", kod: "A1.1/TK4", a: ["uhr", "uhrzeit", "saat", "wie spät", "morgens", "abends", "viertel"] },
+      { k: "über Tagesabläufe sprechen", kod: "A1.1/TK4", a: ["aufstehen", "aufwachen", "frühstück", "tagesablauf", "günlük rutin", "schlafen gehen", "fernsehen", "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "pazartesi", "haftanın gün"] },
+      { k: "etwas im Café bestellen", kod: "A1.1/TK4", a: ["bestellen", "café", "sipariş"] }
+    ],
+    "Besondere Tage": [
+      { k: "die Jahreszeiten und die Monate nennen", kod: "A1.1/TK6", a: ["jahreszeit", "monat", "mevsim", "sommer", "winter", "frühling", "herbst"] },
+      { k: "das Datum angeben", kod: "A1.1/TK6", a: ["datum", "tarih", "am ersten", "geburtstag"] },
+      { k: "einen Wunsch äußern", kod: "A1.1/TK6", a: ["frohe", "herzlichen glückwunsch", "wunsch", "dilek", "kutlama"] },
+      { k: "über Feste sprechen", kod: "A1.1/TK6", a: ["fest", "feiern", "geschenk", "weihnachten", "bayram", "hediye"] }
+    ],
+    "Freizeitaktivitäten": [
+      { k: "von Hobbys erzählen", kod: "A1.1/TK7", a: ["hobby", "freizeit", "boş zaman", "gern", "lesen", "spielen"] },
+      { k: "nach Fähigkeiten fragen", kod: "A1.1/TK7", a: ["kann", "können", "fähigkeit", "yapabil"] },
+      { k: "die Sportarten nennen", kod: "A1.1/TK7", a: ["sport", "fußball", "schwimmen", "basketball", "radfahren", "spor"] }
+    ],
+    "Einkaufen": [
+      { k: "Geschäftsnamen und Kleidungen (Sing./Pl.) nennen", kod: "A1.1/TK8", a: ["supermarkt", "geschäft", "laden", "hemd", "hose", "jacke", "rock", "schuhe", "pullover", "kleidung", "kıyafet", "giy"] },
+      { k: "Zahlen, Preise und Mengenangaben verstehen", kod: "A1.1/TK8", a: ["kostet", "preis", "fiyat", "teuer", "billig", "euro", "größe"] },
+      { k: "ein Wochenendprogramm planen", kod: "A1.1/TK8", a: ["wochenende", "hafta sonu", "planen"] }
+    ],
+  },
+  "alm-A1.2": {
+    "Unterkunft": [
+      { k: "Unterkunftsmöglichkeiten nennen", kod: "A1.2/TK1", a: ["wohnung", "haus", "unterkunft", "daire", "konut"] },
+      { k: "ein Zimmer, eine Wohnung beschreiben", kod: "A1.2/TK1", a: ["zimmer", "wohnzimmer", "küche", "bad", "flur", "oda", "mutfak", "banyo"] },
+      { k: "Möbelstücke und Gegenstände nennen", kod: "A1.2/TK1", a: ["möbel", "tisch", "stuhl", "bett", "schrank", "sofa", "mobilya", "masa"] }
+    ],
+    "Urlaub und Reisen": [
+      { k: "eine Region beschreiben", kod: "A1.2/TK4", a: ["region", "stadt", "land", "berg", "meer", "bölge"] },
+      { k: "Verkehrsmittel nennen", kod: "A1.2/TK4", a: ["zug", "flugzeug", "flughafen", "bahnhof", "bus", "koffer", "hotel", "ticket", "bilet", "tren", "uçak"] },
+      { k: "über das Wetter sprechen", kod: "A1.2/TK4", a: ["wetter", "hava durumu", "regnet", "sonne", "schnee", "wolke", "nebel", "kalt", "warm", "sonnig"] }
+    ],
+  },
   /* Din Kültürü 5-7 ve 9-11: TYMM programı (DKAB kodları).
      Din Kültürü 8 ve 12: 2026-2027'de önceki programla devam ediyor,
      kodlar o programın kazanım numaralarıdır. */
@@ -11789,6 +12057,15 @@ const KAPSAM = {
     ],
     "Cümle Türleri": [
       { k: "Yazma: cümle türlerini tanıma", kod: "T.8.4.19", a: ["cümle tür", "kurallı cümle", "devrik cümle", "basit cümle", "birleşik cümle", "sıralı cümle", "bağlı cümle", "isim cümlesi", "fiil cümlesi", "olumsuz cümle"] }
+    ],
+    "Anlatım Bozuklukları": [
+      /* "anlatım" tek başına KULLANILMAZ: Paragraf konusundaki "anlatım
+         biçimleri" maddesiyle çakışır. Bunun yerine bu kazanıma özgü
+         birleşimler alınır. */
+      { k: "Okuma: metindeki anlatım bozukluklarını belirleme (dil bilgisi yönünden)", kod: "T.8.3.8", a: ["anlatım bozuk", "anlatım bakımından", "bozukluk", "bozukluğa", "bozukluğun", "uyumsuzluk", "çoğul özne", "ortak öge", "öge eksik", "nesne eksik", "özne eksik", "ek yanlış", "tamlama yanlış"] }
+    ],
+    "Fiillerin Çatısı": [
+      { k: "Yazma: fiillerin çatı özelliklerinin anlama katkısını kavrama", kod: "T.8.4.20", a: ["işi yapan", "kendi üzerinde", "karşılıklı", "belirtilmemiş", "belli değildir", "işteş", "dönüşlü", "edilgen"] }
     ],
     "Yazım ve Noktalama": [
       { k: "Yazma: yazdıklarını yazım ve noktalama kuralları yönünden düzenleme", kod: "T.8.4.16", a: ["yazım kural", "noktalama", "virgül", "kesme işareti", "büyük harf", "ayrı yazılır", "bitişik yazılır", "tırnak işareti"] },
@@ -12085,12 +12362,50 @@ const KAPSAM = {
   }
 };
 
+/* ── Karşılaştırma dili ──────────────────────────────────────────────
+   Türkçe küçültme büyük "I" harfini "ı"ya çevirir. Türkçe metinde bu
+   DOĞRUDUR ("IŞIK" → "ışık") ama Latin alfabeli yabancı dil derslerinde
+   yanlıştır: "Ich heiße" → "ıch heiße" olduğu için KAPSAM'ın "ich heiße"
+   anahtarı hiç tutmuyordu ve Almanca/İngilizce sorular resmî kazanımla
+   etiketlenmeden kalıyordu. Ders diline göre küçültme yapılır; Türkçe
+   dersler eski davranışı aynen sürdürür. */
+const YABANCI_DIL_DERSI = new Set(["ing", "alm"]);
+function karsilastirmaDili(subject) {
+  return YABANCI_DIL_DERSI.has(subject === undefined ? st.subject : subject) ? "und" : "tr";
+}
+
+/* Karşılaştırma metni üretir: Unicode biçimini birleştirir (NFC), boşlukları
+   teke indirir, harf durumunu DİLE GÖRE düşürür. Aksanlar ve Almanca harfler
+   (ä ö ü ß) KORUNUR — silinseydi "über" ile "uber" aynı sayılır, yanlış
+   kapsam maddesi kazanırdı. Görünen metne dokunmaz: yalnız eşleştirme için. */
+function normalMetin(s, dil) {
+  const t = String(s == null ? "" : s).normalize("NFC").replace(/\s+/g, " ").trim();
+  if (dil === "tr") return t.toLocaleLowerCase("tr");
+  /* Yabancı dil ünitelerinin soruları Türkçe yazılıdır, yalnız hedef dil
+     örnekleri Almanca/İngilizcedir. Bu yüzden Türkçe büyük "İ" de geçer:
+     Unicode küçültmesi onu "i" + BİRLEŞEN NOKTA (U+0307) olarak iki kod
+     noktasına açar. Nokta bazı süzgeçlerde düşüp iki taraf ayrıştığı için
+     ("İzin verme" terimi metindeki "i̇zin" ile buluşamıyordu) doğrudan
+     "i"ye indirilir, artakalan nokta da atılır. ä ö ü ß ve ı ş ğ ç korunur. */
+  return t.replace(/\u0130/g, "i").toLowerCase().replace(/\u0307/g, "");
+}
+
+/* Anahtar sözcükler her aday için yeniden normalleştirilmesin diye küçük
+   bir bellek; kapsam listesi her çağrıda yeniden kurulduğu için anahtarı
+   dil + sözcük çiftidir. */
+const normalBellek = new Map();
+function normalAnahtar(kelime, dil) {
+  const k = dil + "\u0000" + kelime;
+  let v = normalBellek.get(k);
+  if (v === undefined) { v = normalMetin(kelime, dil); normalBellek.set(k, v); }
+  return v;
+}
 /* Seçili ünitelerin kapsam maddelerini döndürür. Bir ünitenin KAPSAM kaydı
    yoksa madde listesi o ünitenin BANKA sorularından türetilir; böylece
    kapsam dengelemesi her derste çalışır ve resmî bir iddia uydurulmaz. */
 function kapsamFor() {
-  const tablo = KAPSAM[st.subject + "-" + st.grade] || {};
-  const perUnit = UNIT_BANK[st.subject + "-" + st.grade] || {};
+  const tablo = KAPSAM[veriAnahtari()] || {};
+  const perUnit = UNIT_BANK[veriAnahtari()] || {};
   const out = [];
   seciliUniteler().map(unitName).forEach(function (ad) {
     const kayit = tablo[ad];
@@ -12115,9 +12430,9 @@ function kapsamFor() {
    uydurma içerik oluşmaz; yine de resmî çıktı SAYILMAZ (`resmi: false`). */
 function kapsamTuret(liste) {
   if (liste.length < 4) return [];
+  const dil = karsilastirmaDili();
   const metinler = liste.map(function (q) {
-    return hamMetin([q.q, (q.o || []).join(" "), String(q.a == null ? "" : q.a)].join(" "))
-      .toLocaleLowerCase("tr");
+    return normalMetin([q.q, (q.o || []).join(" "), String(q.a == null ? "" : q.a)].join(" "), dil);
   });
   const terimler = new Map();
   liste.forEach(function (q) {
@@ -12125,7 +12440,10 @@ function kapsamTuret(liste) {
     if (q.ty === "fb") t = String(q.a || "").trim();
     else if (q.ty === "mc" && Array.isArray(q.o) && Number.isInteger(q.a)) t = String(q.o[q.a] || "").trim();
     if (!t) return;
-    t = t.toLocaleLowerCase("tr").replace(/[^0-9a-zçğıöşü\s'-]/g, "").trim();
+    /* Süzgeç noktalamayı atar ama HARFİ atmaz. Eski sürüm yalnız Türkçe
+       alfabeyi tanıdığı için "Getränk" → "getrnk", "kâğıt" → "kğıt" oluyor,
+       terim kendi metninde bile bulunamayıp eleniyordu. */
+    t = normalMetin(t, dil).replace(/[^\p{L}\p{N}\s'-]/gu, "").trim();
     /* Madde etiketi olarak kullanılacağı ve açık uçlu soruların kavram
        yuvasına gireceği için aynı terim kalitesi denetiminden geçer. */
     if (!terimMi(t)) return;
@@ -12154,13 +12472,16 @@ function kapsamEtiketi(q, kapsam) {
   if (!kapsam.length) return -1;
   const parcalar = [q.q, (q.o || []).join(" "), String(q.a == null ? "" : q.a),
     (q.sol || []).join(" "), (q.sag || []).join(" "), (q.ogeler || []).join(" ")];
-  const metin = hamMetin(parcalar.join(" ")).toLocaleLowerCase("tr");
+  const dil = karsilastirmaDili();
+  const metin = normalMetin(parcalar.join(" "), dil);
   let enIyi = -1, enIyiPuan = 0;
   for (let i = 0; i < kapsam.length; i++) {
     const m = kapsam[i];
     if (q.unit && m.unite && q.unit !== m.unite) continue;   // farklı ünitenin maddesi
     let puan = 0;
-    for (const kelime of m.a) if (metin.indexOf(kelime) !== -1) puan++;
+    /* Anahtar da metinle AYNI yoldan geçer; yoksa veri dosyasında "ich"
+       yazan anahtar ile metinden gelen "ıch" bir daha buluşmaz. */
+    for (const kelime of m.a) if (metin.indexOf(normalAnahtar(kelime, dil)) !== -1) puan++;
     if (puan > enIyiPuan) { enIyiPuan = puan; enIyi = i; }
   }
   return enIyi;
@@ -12451,7 +12772,7 @@ function secenekKaristir(q, hedefIndeks) {
 function seciliUniteler() { return unitsFor().filter(function (_, i) { return st.units.has(i); }); }
 
 function bankAdaylari(types) {
-  const perUnit = UNIT_BANK[st.subject + "-" + st.grade];
+  const perUnit = UNIT_BANK[veriAnahtari()];
   const out = [];
   if (!perUnit) return out;
   seciliUniteler().map(unitName).forEach(function (ad) {
@@ -12940,7 +13261,7 @@ function adayHavuzu(types, d, count, kapsam, tani) {
   if (!ham.length) { ham = genelBankaAdaylari(types); tani.genelBanka = ham.length > 0; }
   tani.toplamAday = ham.length;
 
-  const perUnitK = UNIT_BANK[st.subject + "-" + st.grade];
+  const perUnitK = UNIT_BANK[veriAnahtari()];
   const gorulen = new Set(), tekil = [];
   const suzVeEkle = function (liste) {
     liste.forEach(function (q) {
@@ -13059,8 +13380,8 @@ function generate() {
   const types = new Set([].slice.call(document.querySelectorAll(".check-row input[data-ty]"))
     .filter(function (c) { return c.checked; })
     .map(function (c) { return c.dataset.ty; }));
-  if (!types.size) { alert("En az bir soru tipi seçmelisin."); return; }
-  if (!st.units.size) { alert("En az bir ünite seçmelisin."); return; }
+  if (!types.size) { KKUyari.uyari("Ödevde yer alacak en az bir soru tipi seçmelisin.", { baslik: "Soru tipi seçilmedi" }); return; }
+  if (!st.units.size) { KKUyari.uyari("Sorular seçili ünitelerin kazanımlarından üretilir; en az bir ünite seçmelisin.", { baslik: "Ünite seçilmedi" }); return; }
 
   const tani = { istenen: count, toplamAday: 0, elenen: 0, elenenNeden: {}, tekil: 0, gecmistenTekrar: 0, genelBanka: false, kapsamliGenel: 0, tipler: {} };
   const gecmisAnlik = new Set(gecmisOku());   // bu ödev yazılmadan ÖNCEKİ geçmiş
@@ -13169,7 +13490,9 @@ function renderSheet(tani) {
   const title = $("hwTitle").value.trim() || autoTitle;
   const school = $("schoolName").value.trim() || "................................................ Okulu";
   const teacher = $("teacherName").value.trim();
-  const selUnits = unitsFor().filter((_, i) => st.units.has(i)).map(unitName);
+  /* Kâğıttaki "Konular" satırı öğretmene gösterildiği için kanonik ad değil
+     GÖRÜNEN ETİKET kullanır (yabancı dilde Türkçe karşılığıyla birlikte). */
+  const selUnits = unitsFor().filter((_, i) => st.units.has(i)).map(unitEtiket);
   const grupNotu = [...new Set(st.qs.map(q => q.grup).filter(Boolean))];
 
   const letters = ["A", "B", "C", "D"];

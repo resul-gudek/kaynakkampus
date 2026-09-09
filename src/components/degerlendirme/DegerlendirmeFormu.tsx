@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { degerlendirmeKaydet } from "@/actions/degerlendirme";
 import { alanlarByYon, genelPuanEtiketi, type DegerlendirmeS } from "./alanlar";
 import Yildiz from "./Yildiz";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./degerlendirme.module.css";
 
 type Cevaplar = Record<string, string | number>;
@@ -48,7 +49,7 @@ export default function DegerlendirmeFormu({
     baslat(async () => {
       const sonuc = await degerlendirmeKaydet(ozelDersId, cevaplar);
       if (sonuc.hata) {
-        alert(sonuc.hata);
+        Uyari.hata(sonuc.hata);
         return;
       }
       onKapat?.();

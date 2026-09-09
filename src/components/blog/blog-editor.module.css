@@ -1,0 +1,70 @@
+/* Blog içerik editörü — araç çubuğu ve yazı alanı kabuğu.
+   Yazının TİPOGRAFİSİ burada tanımlanmaz: yazı alanı yayındaki gövdeyle
+   aynı .blog-content sınıfını kullanır (src/app/blog-content.css). */
+
+.sarmal { display: flex; flex-direction: column; gap: 0; width: 100%; }
+
+/* ── Araç çubuğu ──────────────────────────────────────────── */
+.cubuk {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  padding: 8px 10px;
+  background: var(--sis);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: var(--radius) var(--radius) 0 0;
+  position: sticky; top: 0; z-index: 2;
+}
+.ayrac {
+  width: 1px; height: 20px; margin: 0 4px;
+  background: var(--border); flex: none;
+}
+
+.dugme {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 32px; padding: 0 10px;
+  border: 1px solid transparent; border-radius: 8px;
+  background: transparent; color: var(--text);
+  font-family: inherit; font-size: .8rem; font-weight: 600;
+  line-height: 1; cursor: pointer; white-space: nowrap;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.dugme:hover { background: var(--surface); border-color: var(--border); }
+.dugme:focus-visible { outline: 2px solid var(--murekkep); outline-offset: 1px; }
+.etkin, .etkin:hover {
+  background: var(--bordo); border-color: var(--bordo); color: #fff;
+}
+
+/* Düğmeler yaptıkları işi göstersin */
+.kalin { font-weight: 800; font-size: .92rem; }
+.egik { font-style: italic; font-family: Georgia, "Times New Roman", serif; font-size: .95rem; }
+.baslik2 { font-weight: 800; }
+.baslik3 { font-weight: 700; font-size: .74rem; }
+
+/* ── Yazı alanı ───────────────────────────────────────────── */
+.kutu {
+  border: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--surface);
+  cursor: text;
+  transition: border-color .2s, box-shadow .2s;
+}
+.kutu:focus-within { border-color: var(--bordo); box-shadow: var(--shadow); }
+
+.alan {
+  min-height: 340px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 22px 20px;
+  outline: none;
+}
+.alan:empty::before {
+  content: attr(data-yer-tutucu);
+  color: var(--muted);
+  font-size: 1.0625rem;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .dugme { padding: 0 8px; font-size: .74rem; min-width: 40px; min-height: 40px; }
+  .alan { min-height: 260px; padding: 16px 14px; }
+}

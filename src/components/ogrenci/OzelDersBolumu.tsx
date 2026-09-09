@@ -10,6 +10,7 @@ import DegerlendirmeGoster from "@/components/degerlendirme/DegerlendirmeGoster"
 import type { DegerlendirmeS } from "@/components/degerlendirme/alanlar";
 import dg from "@/components/degerlendirme/degerlendirme.module.css";
 import type { OzelDersKaydi } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./panel.module.css";
 
 /* Gizlilik: öğrenci yalnızca kendi değerlendirmesini görür; öğretmenin
@@ -44,7 +45,9 @@ export default function OzelDersBolumu({
   function talepGonder(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!kocVar) {
-      alert("Henüz bir öğretmene atanmadığın için talep gönderemezsin.");
+      Uyari.uyari("Henüz bir öğretmene atanmadığın için özel ders talebi gönderemezsin.", {
+        baslik: "Öğretmen atanmamış"
+      });
       return;
     }
     const form = e.currentTarget;
@@ -60,7 +63,7 @@ export default function OzelDersBolumu({
         mesaj: String(f.get("mesaj") || "").trim(),
       });
       if (sonuc.hata) {
-        alert(sonuc.hata);
+        Uyari.hata(sonuc.hata);
         return;
       }
       form.reset();
@@ -71,24 +74,29 @@ export default function OzelDersBolumu({
   function teklifOnayla(id: string) {
     startTransition(async () => {
       const sonuc = await ozelDersGuncelle(id, { durum: "planlandi" });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 
-  function teklifReddet(id: string) {
-    const neden = prompt("Neden uygun değil? (öğretmenine iletilir)", "");
+  async function teklifReddet(id: string) {
+    const neden = await Uyari.sor("Neden uygun değil? (öğretmenine iletilir)", {
+      baslik: "Ders teklifini reddet", cokSatir: true, onayEtiketi: "Reddet", tehlikeli: true
+    });
     if (neden === null) return;
     startTransition(async () => {
       const sonuc = await ozelDersGuncelle(id, { durum: "reddedildi", redNotu: neden.trim() });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 
-  function talepVazgec(id: string) {
-    if (!confirm("Bu ders talebinden vazgeçilsin mi?")) return;
+  async function talepVazgec(id: string) {
+    const kabul = await Uyari.onay("Ders talebi silinecek; öğretmenine iletilmiş olsa da geri çekilir.", {
+      baslik: "Talepten vazgeçilsin mi?", onayEtiketi: "Vazgeçtim, sil", tehlikeli: true
+    });
+    if (!kabul) return;
     startTransition(async () => {
       const sonuc = await ozelDersSil(id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
     });
   }
 

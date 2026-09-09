@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Manrope, Figtree } from "next/font/google";
 import TemaSaglayici from "@/components/TemaSaglayici";
+import UyariKatmani from "@/components/ui/UyariKatmani";
 import { SITE_KOKU } from "@/lib/site";
 import "./globals.css";
+import "./blog-content.css";
 
 /* DESIGN.md: başlıklar için Platform'un yerini Manrope (iri, sıkı, yüksek
    kontrastlı display), gövde/arayüz için Figtree tutar. */
@@ -57,7 +59,11 @@ export default function RootLayout({
        data-theme yazdığı için gerekli */
     <html lang="tr" className={`${manrope.variable} ${figtree.variable}`} suppressHydrationWarning>
       <body>
-        <TemaSaglayici>{children}</TemaSaglayici>
+        <TemaSaglayici>
+          {children}
+          {/* alert/confirm/prompt yerine ortak pencere — @/components/ui/uyari */}
+          <UyariKatmani />
+        </TemaSaglayici>
       </body>
     </html>
   );

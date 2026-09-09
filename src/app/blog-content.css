@@ -1,0 +1,146 @@
+/* ═══════════════════════════════════════════════════════════════
+   .blog-content — BLOG YAZISI TİPOGRAFİSİ (TEK KAYNAK)
+
+   Yayınlanan yazı gövdesi ile yönetici editörünün içi AYNI sınıfı
+   kullanır: yazar editörde ne görüyorsa yayında da onu görür.
+
+   Kurallar burada tanımlanır; başka yerde blog gövdesi biçimlendirmesi
+   YAZILMAZ. Her seçici .blog-content ile başlar — sitenin geri kalanının
+   tipografisi bu dosyadan etkilenmez.
+
+   Yazının ana başlığı (h1) bu kabın İÇİNDE değildir: ayrı "Başlık"
+   alanından gelir ve sayfada blog.module.css'teki .yaziBas h1 ile
+   basılır. Gövdeye h1 yazılamaz; kaydederken h2'ye indirilir
+   (bkz. lib/blog-icerik.ts).
+   ═══════════════════════════════════════════════════════════════ */
+
+.blog-content {
+  /* Okuma sütunu: satır uzunluğu 65-75 karakteri geçmesin */
+  max-width: 740px;
+  margin: 0 auto;
+  color: var(--text);
+  font-family: var(--font-govde);
+  font-size: 1.1875rem;
+  line-height: 1.8;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ── Paragraf ─────────────────────────────────────────────── */
+.blog-content p {
+  font-size: 1.1875rem;
+  line-height: 1.8;
+  margin: 0 0 24px;
+  color: var(--text);
+}
+
+/* ── Ara başlıklar ────────────────────────────────────────────
+   h2 ana ara başlık: iri ve kalın. h3 alt başlık: h2'den küçük ama
+   paragraftan net ayrışır. İkisi de üstündeki metinden boşlukla
+   kopar, altındaki metne yakın durur (bağ, üstte değil altta). */
+.blog-content h2 {
+  font-family: var(--font-baslik);
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.85rem);
+  line-height: 1.28;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--murekkep);
+  margin: 44px 0 16px;
+}
+.blog-content h3 {
+  font-family: var(--font-baslik);
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.4rem);
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--murekkep);
+  margin: 34px 0 12px;
+}
+/* Gövde başlıkla açılıyorsa üstte gereksiz boşluk kalmasın */
+.blog-content > :first-child { margin-top: 0; }
+.blog-content > :last-child { margin-bottom: 0; }
+
+/* ── Vurgular ─────────────────────────────────────────────── */
+.blog-content strong { font-weight: 700; color: var(--murekkep); }
+.blog-content em { font-style: italic; }
+
+/* ── Bağlantı ─────────────────────────────────────────────── */
+.blog-content a {
+  color: var(--bordo);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.blog-content a:hover { text-decoration-thickness: 2px; }
+
+/* ── Listeler ─────────────────────────────────────────────── */
+.blog-content ul,
+.blog-content ol {
+  margin: 0 0 22px;
+  padding-left: 26px;
+}
+.blog-content ul { list-style: disc; }
+.blog-content ol { list-style: decimal; }
+.blog-content li {
+  font-size: 1.1875rem;
+  line-height: 1.75;
+  margin-bottom: 10px;
+}
+.blog-content li::marker { color: var(--bordo); font-weight: 600; }
+.blog-content li:last-child { margin-bottom: 0; }
+
+/* ── Alıntı ───────────────────────────────────────────────── */
+.blog-content blockquote {
+  margin: 28px 0;
+  padding: 16px 22px;
+  border-left: 3px solid var(--gul);
+  background: var(--tint);
+  border-radius: 0 16px 16px 0;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+.blog-content blockquote p { font-size: inherit; line-height: inherit; margin: 0 0 12px; }
+.blog-content blockquote p:last-child { margin-bottom: 0; }
+
+/* ── Mobil ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .blog-content,
+  .blog-content p,
+  .blog-content li { font-size: 1.0625rem; line-height: 1.75; }
+  .blog-content p { margin-bottom: 20px; }
+  .blog-content h2 { margin-top: 34px; }
+  .blog-content h3 { margin-top: 26px; }
+  .blog-content blockquote { padding: 14px 16px; font-size: 1.0625rem; }
+  .blog-content ul,
+  .blog-content ol { padding-left: 22px; }
+}
+
+/* ── Dışarıdan sızmış biçime karşı emniyet kemeri ─────────────
+   İçerik zaten kaydedilirken temizlenir (style/font/renk atılır), bu
+   yüzden normalde eşleşen bir düğüm yoktur. Yine de elle düzenlenmiş
+   ya da temizlikten önce kaydedilmiş bir kalıntı olursa yazı tipini,
+   puntoyu ve rengi kuruma standardının dışına çıkaramaz. */
+.blog-content [style] {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  color: inherit !important;
+  background: none !important;
+  border: 0 !important;
+  margin: revert !important;
+  padding: revert !important;
+  width: auto !important;
+}
+/* Gövdeye h1 girmiş olsa bile ara başlık gibi görünür (sayfada tek h1
+   vardır: yazının başlığı) */
+.blog-content h1 {
+  font-family: var(--font-baslik);
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.85rem);
+  line-height: 1.28;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--murekkep);
+  margin: 44px 0 16px;
+}

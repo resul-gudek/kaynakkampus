@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import type { XpOzet } from "@/lib/hesap";
 import { yolEkle, yolSil } from "@/actions/yol";
 import type { YolS } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 import s from "./koc.module.css";
 
 const ADIM_SINIF = {
@@ -37,7 +38,7 @@ export default function YolSekmesi({ ogrenciId, adimlar, ozet }: Props) {
         hedef: String(fd.get("hedef") ?? "").trim(),
         xp: +String(fd.get("xp") ?? "") || 50,
       });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else {
         form.reset();
         router.refresh();
@@ -45,11 +46,14 @@ export default function YolSekmesi({ ogrenciId, adimlar, ozet }: Props) {
     });
   }
 
-  function sil(id: string) {
-    if (!confirm("Bu adım silinsin mi?")) return;
+  async function sil(id: string) {
+    const kabul = await Uyari.onay("Yol haritasındaki adım silinecek. Bu işlem geri alınamaz.", {
+      baslik: "Adım silinsin mi?", onayEtiketi: "Sil", tehlikeli: true
+    });
+    if (!kabul) return;
     baslat(async () => {
       const sonuc = await yolSil(id);
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }

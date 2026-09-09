@@ -9,6 +9,7 @@ import { bugun, tarihStr, telefonDuzelt } from "@/lib/hesap";
 import { telefonGuncelle } from "@/actions/ogrenci";
 import { waGonder, waNumaraAl } from "./wa";
 import type { WaVeri } from "./tipler";
+import { Uyari } from "@/components/ui/uyari";
 
 export default function WaButonlar({ veri }: { veri: WaVeri }) {
   const router = useRouter();
@@ -69,16 +70,20 @@ export default function WaButonlar({ veri }: { veri: WaVeri }) {
     waGonder(num, mesaj);
   }
 
-  function telefonDuzenle() {
-    const yeniTel = window.prompt("Öğrenci telefonu (WhatsApp):", veri.telefon);
-    const yeniVeli = window.prompt("Veli telefonu (WhatsApp):", veri.veliTelefon);
+  async function telefonDuzenle() {
+    const yeniTel = await Uyari.sor("Öğrenci telefonu (WhatsApp):", {
+      baslik: "Telefon numaraları", varsayilan: veri.telefon, yerTutucu: "05xx xxx xx xx", onayEtiketi: "Devam et"
+    });
+    const yeniVeli = await Uyari.sor("Veli telefonu (WhatsApp):", {
+      baslik: "Telefon numaraları", varsayilan: veri.veliTelefon, yerTutucu: "05xx xxx xx xx", onayEtiketi: "Kaydet"
+    });
     if (yeniTel === null && yeniVeli === null) return;
     baslat(async () => {
       const sonuc = await telefonGuncelle(veri.ogrenciId, {
         ...(yeniTel !== null && { telefon: telefonDuzelt(yeniTel) }),
         ...(yeniVeli !== null && { veliTelefon: telefonDuzelt(yeniVeli) }),
       });
-      if (sonuc.hata) alert(sonuc.hata);
+      if (sonuc.hata) Uyari.hata(sonuc.hata);
       else router.refresh();
     });
   }
