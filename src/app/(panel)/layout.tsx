@@ -10,10 +10,11 @@ import PushKur from "@/components/panel/PushKur";
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const kullanici = await aktifKullanici();
   const rol = kullanici.rol as Rol;
-  /* Bildirim: eğitmen (koç/öğretmen), öğrenci ve yönetici (yöneticiye ders
-     değerlendirmeleri düşer). Cihaz push'u bildirim alan her rolde açıktır;
-     mesajlaşma yalnız eğitmen/öğrenci. */
-  const bildirimliRol = egitmenMi(rol) || rol === "ogrenci" || rol === "admin";
+  /* Bildirim: her rol alır — eğitmen/öğrenci ders akışından, yönetici ders
+     değerlendirmelerinden, veli ise panelden gönderilen duyurulardan
+     (bkz. lib/bildirim-gonder.ts). Cihaz push'u bildirim alan her rolde
+     açıktır; mesajlaşma yalnız eğitmen/öğrenci. */
+  const bildirimliRol = egitmenMi(rol) || rol === "ogrenci" || rol === "admin" || rol === "veli";
   const dersRolu = egitmenMi(rol) || rol === "ogrenci";
   const [okunmamis, okunmamisMesaj, sonBildirimler] = await Promise.all([
     bildirimliRol

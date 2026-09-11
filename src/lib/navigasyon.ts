@@ -68,6 +68,7 @@ export const NAVIGASYON: NavKalemi[] = [
   { grup: "İletişim", ad: "Mesajlar", href: "/mesajlar", ikon: "mesaj", yetki: "mesaj:goruntule", mesaj: true },
   { grup: "İletişim", ad: "E-posta", href: "/admin/mail", ikon: "mail", yetki: "mail:yonet" },
   { grup: "İletişim", ad: "Bildirimler", href: "/bildirimler", ikon: "zil", yetki: "bildirim:goruntule", bildirim: true },
+  { grup: "İletişim", ad: "Bildirim Gönder", href: "/bildirim-gonder", ikon: "duyuru", yetki: "bildirim:gonder" },
 
   /* ── Hesap/ödeme her rolde en alttadır ── */
   { grup: "Hesabım", ad: "Ödemeler", href: "/koc/odemeler", ikon: "odeme", yetki: "odeme:koc" },

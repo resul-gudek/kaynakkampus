@@ -18,6 +18,7 @@ import {
   ListChecks,
   Mail,
   Map,
+  Megaphone,
   MessageSquare,
   MonitorPlay,
   Newspaper,
@@ -66,6 +67,7 @@ const IKONLAR: Record<string, LucideIcon> = {
   bep: ClipboardList,
   mesaj: MessageSquare,
   zil: Bell,
+  duyuru: Megaphone,
 };
 
 export default function PanelIkon({

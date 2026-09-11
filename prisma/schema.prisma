@@ -59,6 +59,7 @@ model Kullanici {
   sinifUyelikleri OnlineSinifUye[]
   dersKatilimlari DersKatilim[]
   bildirimler     Bildirim[]
+  bildirimGonderimleri BildirimGonderim[] @relation("BildirimGonderen")
   girisKayitlari  GirisKaydi[]
   mesajGonderilen Mesaj[]          @relation("MesajGonderen")
   mesajAlinan     Mesaj[]          @relation("MesajAlici")
@@ -521,11 +522,16 @@ model Bildirim {
   alici          Kullanici @relation(fields: [aliciId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ikon           String
   metin          String    @db.NVarChar(Max)
-  hedefTur       String? // "ozel" | "odev" | "sinif" | "oturum" | "test"
+  hedefTur       String? // "ozel" | "odev" | "sinif" | "oturum" | "test" | "video" | "duyuru" (CK_Bildirim_hedefTur)
   hedefOgrenciId String?
   hedefKayitId   String?
   tarih          DateTime  @default(now())
   okundu         Boolean   @default(false)
+
+  // Panelden elle gönderilen bildirim (hedefTur="duyuru") hangi gönderime ait?
+  // Gönderim kaydı silinmez; bildirim satırı alıcı tarafından silinebilir.
+  gonderimId String?
+  gonderim   BildirimGonderim? @relation(fields: [gonderimId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   // Cihaz push'u durumu: bildirim transaction içinde yazılır, push'u
   // mail işleyicisi commit sonrası kuyruktan gönderir (bkz. lib/push-kuyruk.ts).
@@ -534,6 +540,28 @@ model Bildirim {
 
   @@index([aliciId, okundu])
   @@index([pushDurum, tarih])
+  @@index([gonderimId])
+}
+
+// ── Elle bildirim gönderimi ──────────────────────────────────
+// Yönetici ya da eğitmenin panelden veli/öğrenci/öğretmenlere gönderdiği
+// tek bir "duyuru" işleminin kaydı. Alıcı başına Bildirim satırı ayrıca
+// yazılır (uygulama içi liste + push kuyruğu); bu tablo gönderim geçmişi,
+// alıcı sayısı ve okunma oranı için tutulur. hedefOzet, ekranda gösterilen
+// kısa hedef tanımıdır ("Tüm veliler", "3 kişi" gibi).
+model BildirimGonderim {
+  id          String    @id @default(cuid())
+  gonderenId  String
+  gonderen    Kullanici @relation("BildirimGonderen", fields: [gonderenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ikon        String
+  metin       String    @db.NVarChar(Max)
+  hedefOzet   String    @default("")
+  aliciSayisi Int       @default(0)
+  tarih       DateTime  @default(now())
+
+  bildirimler Bildirim[]
+
+  @@index([gonderenId, tarih])
 }
 
 // ── Ön mülakat / başvuru sistemi ─────────────────────────────

@@ -253,6 +253,123 @@ describe("BEP müfredat kaynağı: geçmişte yaşanan hatalar", () => {
     }
   });
 
+  it("REGRESYON — mat-4 kazanımları kendi alt öğrenme alanı başlığının altında", () => {
+    /* Bir kez 4. sınıf Matematik kazanımları DÖRT öbeğe toplanmış, ama bu
+       öbeklere alt öğrenme alanı adlarının ilk dördü verilmişti:
+         "Doğal Sayılar"                  ← bütün M.4.1.* (çarpma, bölme, kesirler dâhil)
+         "Doğal Sayılarla Toplama İşlemi" ← M.4.2.* (geometri)
+         "Doğal Sayılarla Çıkarma İşlemi" ← M.4.3.* (ölçme)
+         "Doğal Sayılarla Çarpma İşlemi"  ← M.4.4.* (veri işleme)
+       Sonuç: tanımlı 16 ünitenin 12'si boş dönüyor, dolu 4'ü de yanlış
+       kazanımları veriyordu. Ünite adına göre filtreleyen her yer (BEP
+       ekranı, ödev kapsamı) sessizce yanlış kazanım listesi alıyordu.
+
+       Test 8 bunu YAKALAYAMAZ: oradaki kural "KAZANIMLAR anahtarı UNITELER'de
+       var mı" diye sorar; yanlış etiketler de listede bulunduğu için geçerdi.
+       Burada KOD ile BAŞLIK arasındaki eşleşme kilitlenir.
+
+       Dosya `ops/mufredat-veri/mat4-unite-duzelt.js` ile üretilir; tablo
+       değişecekse önce orası güncellenmelidir. */
+    const BEKLENEN: Record<string, string> = {
+      "M.4.1.1": "Doğal Sayılar",
+      "M.4.1.2": "Doğal Sayılarla Toplama İşlemi",
+      "M.4.1.3": "Doğal Sayılarla Çıkarma İşlemi",
+      "M.4.1.4": "Doğal Sayılarla Çarpma İşlemi",
+      "M.4.1.5": "Doğal Sayılarla Bölme İşlemi",
+      "M.4.1.6": "Kesirler",
+      "M.4.1.7": "Kesirlerle İşlemler",
+      "M.4.2.1": "Geometrik Cisimler ve Şekiller",
+      "M.4.2.2": "Uzamsal İlişkiler",
+      "M.4.2.3": "Geometride Temel Kavramlar",
+      "M.4.3.1": "Uzunluk Ölçme",
+      "M.4.3.2": "Çevre Ölçme",
+      "M.4.3.3": "Alan Ölçme",
+      "M.4.3.4": "Zaman Ölçme",
+      "M.4.3.5": "Tartma",
+      "M.4.3.6": "Sıvı Ölçme",
+      "M.4.4.1": "Veri Toplama ve Değerlendirme",
+    };
+    const uniteler = M.uniteListesi("mat", 4);
+    const sorun: string[] = [];
+
+    /* 1) Her beklenen başlık listede var ve hiçbiri boş dönmüyor. */
+    for (const baslik of Object.values(BEKLENEN)) {
+      if (!uniteler.includes(baslik)) sorun.push(`"${baslik}" UNITELER.mat[4] listesinde yok`);
+    }
+    for (const u of uniteler) {
+      if (!M.kazanimListesi("mat", 4, u).length) sorun.push(`"${u}" ünitesi boş dönüyor`);
+    }
+
+    /* 2) Her kazanım, kodunun gösterdiği alt öğrenme alanının altında. */
+    const gorulenOnek = new Set<string>();
+    let toplam = 0;
+    for (const u of uniteler) {
+      for (const kz of M.kazanimListesi("mat", 4, u)) {
+        toplam++;
+        const m = /^(M\.4\.\d+\.\d+)\.\d+$/.exec(String(kz.kod ?? ""));
+        if (!m) { sorun.push(`"${u}" › beklenmeyen kod: "${kz.kod}"`); continue; }
+        gorulenOnek.add(m[1]);
+        if (BEKLENEN[m[1]] !== u) {
+          sorun.push(`${kz.kod} "${u}" altında, oysa "${BEKLENEN[m[1]] ?? "(tabloda yok)"}" olmalı`);
+        }
+      }
+    }
+
+    /* 3) Kazanım sayısı ve alt alan kapsamı eksilmemiş. */
+    for (const onek of Object.keys(BEKLENEN)) {
+      if (!gorulenOnek.has(onek)) sorun.push(`${onek} alt öğrenme alanının hiç kazanımı yok`);
+    }
+    expect(sorun, sorun.join(" | ")).toEqual([]);
+    expect(toplam, "mat-4 kazanım sayısı değişti").toBe(71);
+    expect(uniteler.length, "mat-4 ünite sayısı değişti").toBe(17);
+  });
+
+  it("REGRESYON — Türkçe kazanım metinlerinde PDF ayrıştırma artığı yok", () => {
+    /* TYMM Türkçe PDF-inden veri çıkarılırken bir kazanımın metnine, PDF-te
+       hemen ardından gelen satır yapışmıştı: bölüm başlığı («… çözümleme
+       yapabilme Okuma»), programın açıklama paragrafı («kapsamında yapılır.
+       Öğrencilerin …») ya da alt madde («… oluşturabilme ı) …»). Bu metinler
+       BEP çıktısına oldukları gibi yazılıyordu.
+       Düzeltme: ops/mufredat-veri/tr-kazanim-artik-temizle.js */
+    const BOLUM_BASLIGI = /\s+(Dinleme\/İzleme|Dinleme|İzleme|Okuma|Yazma|Konuşma)\s*$/;
+    const sorun: string[] = [];
+    for (const sinif of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      for (const unite of M.uniteListesi("tr", sinif)) {
+        for (const kz of M.kazanimListesi("tr", sinif, unite)) {
+          const metin = String((kz as { k?: string }).k ?? "");
+          const kod = String((kz as { kod?: string }).kod ?? "");
+          if (BOLUM_BASLIGI.test(metin)) sorun.push(`tr-${sinif} ${kod}: sonuna bölüm başlığı yapışmış`);
+          if (/kapsamında yapılır/.test(metin)) sorun.push(`tr-${sinif} ${kod}: kazanım değil, açıklama paragrafı`);
+          if (/^[a-zçğıöşü]/.test(metin)) sorun.push(`tr-${sinif} ${kod}: cümle ortasından başlıyor`);
+          if (/\s[a-zçğıöşü]\)\s/.test(metin)) sorun.push(`tr-${sinif} ${kod}: alt madde yapışmış`);
+        }
+      }
+    }
+    expect(sorun, sorun.slice(0, 8).join(" | ")).toEqual([]);
+  });
+
+  it("REGRESYON — aynı Türkçe kazanım kodu her temada aynı metni taşıyor", () => {
+    /* Artıklar yüzünden aynı kod kimi temada artıklı, kimi temada temiz
+       görünüyordu; kod metni Türkçe-de temadan bağımsızdır. */
+    const sorun: string[] = [];
+    for (const sinif of [3, 5, 6, 7]) {
+      const koda = new Map<string, Set<string>>();
+      for (const unite of M.uniteListesi("tr", sinif)) {
+        for (const kz of M.kazanimListesi("tr", sinif, unite)) {
+          const kod = String((kz as { kod?: string }).kod ?? "");
+          const metin = String((kz as { k?: string }).k ?? "");
+          if (!kod) continue;
+          if (!koda.has(kod)) koda.set(kod, new Set());
+          koda.get(kod)!.add(metin);
+        }
+      }
+      for (const [kod, metinler] of koda) {
+        if (metinler.size > 1) sorun.push(`tr-${sinif} ${kod}: ${metinler.size} farklı metin`);
+      }
+    }
+    expect(sorun, sorun.slice(0, 8).join(" | ")).toEqual([]);
+  });
+
   it("REGRESYON — Almanca 9-12 TTKB PID 333 kaynağına bağlı", () => {
     for (const sinif of [9, 10, 11, 12]) {
       const kn = M.kaynakKunyesi("alm", sinif);

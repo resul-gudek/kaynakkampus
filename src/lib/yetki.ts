@@ -12,15 +12,16 @@ import type { Rol } from "@/lib/sabitler";
    "panel:koc" anahtarı geçmişe dönük uyumluluk için korunmuştur. */
 const OGRETIM_YETKILERI = [
   "panel:koc", "sinif:goruntule", "odev:olustur", "bep:olustur",
-  "bildirim:goruntule", "mesaj:goruntule", "video:yonet", "odeme:koc",
+  "bildirim:goruntule", "bildirim:gonder", "mesaj:goruntule", "video:yonet", "odeme:koc",
 ] as const;
 
 const ROL_YETKILERI: Record<Rol, readonly string[]> = {
-  admin: ["panel:admin", "koc:yonet", "mail:yonet", "basvuru:yonet", "bildirim:goruntule", "video:yonet", "blog:yonet", "etkinlik:yonet", "odeme:yonet"],
+  admin: ["panel:admin", "koc:yonet", "mail:yonet", "basvuru:yonet", "bildirim:goruntule", "bildirim:gonder", "video:yonet", "blog:yonet", "etkinlik:yonet", "odeme:yonet"],
   koc: OGRETIM_YETKILERI,
   ogretmen: OGRETIM_YETKILERI,
   ogrenci: ["panel:ogrenci", "sinif:goruntule", "bildirim:goruntule", "mesaj:goruntule", "odeme:ogrenci"],
-  veli: ["panel:veli"],
+  // Veli bildirim alır (yönetim/eğitmen duyuruları) ama mesajlaşma dışındadır
+  veli: ["panel:veli", "bildirim:goruntule"],
 };
 
 /** yetki null ise oturum açmış herkes erişir */

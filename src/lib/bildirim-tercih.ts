@@ -22,6 +22,7 @@ export const BILDIRIM_TURLERI = [
   "video",
   "ozel",
   "sinif",
+  "duyuru",
   "genel",
 ] as const;
 
@@ -81,11 +82,18 @@ export const TUR_TANIMLARI: TurTanim[] = [
     roller: [...EGITMEN_ROLLERI, "ogrenci"],
   },
   {
+    tur: "duyuru",
+    ad: "Duyurular",
+    aciklama: "Yönetim ya da öğretmeniniz size panelden doğrudan bildirim gönderdiğinde.",
+    ikon: "📢",
+    roller: [...EGITMEN_ROLLERI, "ogrenci", "veli", "admin"],
+  },
+  {
     tur: "genel",
     ad: "Diğer bildirimler",
-    aciklama: "Değerlendirme sonuçları ve yukarıdaki başlıklara girmeyen duyurular.",
+    aciklama: "Değerlendirme sonuçları ve yukarıdaki başlıklara girmeyen bildirimler.",
     ikon: "🔔",
-    roller: [...EGITMEN_ROLLERI, "ogrenci", "admin"],
+    roller: [...EGITMEN_ROLLERI, "ogrenci", "veli", "admin"],
   },
 ];
 
@@ -135,6 +143,7 @@ const BASLIKLAR: Record<BildirimTuru, string> = {
   video: "Yeni ders videosu 🎬",
   ozel: "Özel ders 🎓",
   sinif: "Online sınıf 🏫",
+  duyuru: "Duyuru 📢",
   genel: "Kaynak Kampüs 🔔",
 };
 
@@ -149,7 +158,8 @@ export function bildirimYolu(
   rol: string
 ): string {
   const { hedefTur, hedefKayitId, hedefOgrenciId } = b;
-  if (!hedefTur || !hedefKayitId) return "/bildirimler";
+  // "duyuru" (panelden elle gönderilen) bildirimlerin gidilecek kaydı yoktur
+  if (!hedefTur || !hedefKayitId || hedefTur === "duyuru") return "/bildirimler";
   const kayit = encodeURIComponent(hedefKayitId);
 
   if (hedefTur === "oturum") return `/canli-ders/${kayit}`;

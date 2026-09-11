@@ -98,11 +98,11 @@ describe("rolTurleri", () => {
   });
 
   it("yöneticiye yalnız genel bildirimleri gösterir", () => {
-    expect(rolTurleri("admin").map((t) => t.tur)).toEqual(["genel"]);
+    expect(rolTurleri("admin").map((t) => t.tur)).toEqual(["duyuru", "genel"]);
   });
 
   it("tanımsız rol için boş liste döner", () => {
-    expect(rolTurleri("veli")).toEqual([]);
+    expect(rolTurleri("veli").map((t) => t.tur)).toEqual(["duyuru", "genel"]);
   });
 });
 

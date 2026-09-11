@@ -235,6 +235,10 @@ h1, h2, h3, h4, h5, h6, .baslik-serif {
 }
 .ustbar-buton:hover { background: var(--sis); color: var(--murekkep); }
 .hamburger { display: none; }
+/* Menüyü daralt/genişlet: masaüstünde üst barda durur. Daraltılmış kipte
+   sidebar yalnız ikon gösterdiği için geri açma düğmesi hep görünür olmalı;
+   mobilde yerini hamburger alır. */
+.daralt-dugme { display: inline-flex; }
 .zil-rozet { position: absolute; top: 2px; right: 0; }
 
 /* ── Bildirim zili açılırı ── */
@@ -442,6 +446,7 @@ h1, h2, h3, h4, h5, h6, .baslik-serif {
   .sidebar-daralt { display: none; }
   .panel-icerik, .panel-kabuk.dar .panel-icerik { margin-left: 0; }
   .hamburger { display: inline-flex; }
+  .daralt-dugme { display: none; }
   .kullanici-ad, .kullanici-ok { display: none; }
   .ustbar-logo-yazi small { display: none; }
   .kullanici-rozet { padding: 3px; border: none; }

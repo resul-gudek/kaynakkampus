@@ -18,7 +18,7 @@ const TercihSemasi = z.object({
 /** Tek bir türün cihaz bildirimini açar/kapatır. */
 export async function bildirimTercihiKaydet(girdi: unknown): Promise<EylemSonuc> {
   try {
-    const kim = await oturumGerekli("koc", "ogrenci", "admin");
+    const kim = await oturumGerekli();
     const { tur, push } = TercihSemasi.parse(girdi);
     await prisma.bildirimTercih.upsert({
       where: { kullaniciId_tur: { kullaniciId: kim.id, tur } },
@@ -35,7 +35,7 @@ export async function bildirimTercihiKaydet(girdi: unknown): Promise<EylemSonuc>
 /** Tüm türleri birlikte açar/kapatır ("tümünü aç/kapat"). */
 export async function tumBildirimTercihleriniKaydet(push: unknown): Promise<EylemSonuc> {
   try {
-    const kim = await oturumGerekli("koc", "ogrenci", "admin");
+    const kim = await oturumGerekli();
     const deger = z.boolean().parse(push);
     await prisma.$transaction(
       BILDIRIM_TURLERI.map((tur) =>
@@ -56,7 +56,7 @@ export async function tumBildirimTercihleriniKaydet(push: unknown): Promise<Eyle
 /** Kullanıcının kayıtlı bir cihazını (push aboneliğini) kaldırır. */
 export async function cihazKaldir(abonelikId: unknown): Promise<EylemSonuc> {
   try {
-    const kim = await oturumGerekli("koc", "ogrenci", "admin");
+    const kim = await oturumGerekli();
     const id = z.string().min(1).parse(abonelikId);
     // kullaniciId koşulu: başkasının cihazı silinemez
     const sonuc = await prisma.pushAbonelik.deleteMany({

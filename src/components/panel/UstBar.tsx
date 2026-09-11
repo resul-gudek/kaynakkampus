@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, LogOut, Menu, X } from "lucide-react";
+import { ChevronDown, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import TemaDugmesi from "./TemaDugmesi";
 import BildirimZili, { type ZilBildirim } from "./BildirimZili";
 
@@ -14,9 +14,11 @@ interface Props {
   cikisAction: () => Promise<void>;
   mobilAcik: boolean;
   onMenuAc: () => void;
+  dar: boolean;
+  onDarDegistir: () => void;
 }
 
-export default function UstBar({ kullanici, okunmamis, bildirimHref, bildirimler, cikisAction, mobilAcik, onMenuAc }: Props) {
+export default function UstBar({ kullanici, okunmamis, bildirimHref, bildirimler, cikisAction, mobilAcik, onMenuAc, dar, onDarDegistir }: Props) {
   const [menuAcik, setMenuAcik] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -41,6 +43,19 @@ export default function UstBar({ kullanici, okunmamis, bildirimHref, bildirimler
     <header className="ustbar">
       <button type="button" className="ustbar-buton hamburger" onClick={onMenuAc} aria-label="Menüyü aç">
         {mobilAcik ? <X size={20} /> : <Menu size={20} />}
+      </button>
+
+      {/* Masaüstünde menüyü daraltma/genişletme burada durur: daraltılmış
+          kipte sidebar yalnız ikon gösterdiği için geri açma düğmesinin
+          menünün dibinde saklı kalmaması gerekir. */}
+      <button
+        type="button"
+        className="ustbar-buton daralt-dugme"
+        onClick={onDarDegistir}
+        aria-label={dar ? "Menüyü genişlet" : "Menüyü daralt"}
+        title={dar ? "Menüyü genişlet" : "Menüyü daralt"}
+      >
+        {dar ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
       </button>
 
       <Link href="/" className="ustbar-logo">

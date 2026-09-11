@@ -206,6 +206,13 @@ export default async function OgrencilerSayfasi({
               {secili.sinif || "—"} · {secili.hedef || "—"}
             </span>
             {secili.veliId && secili.veli?.eposta && <VeliRaporButonu ogrenciId={secili.id} />}
+            <Link
+              href={`/bildirim-gonder?kisi=${encodeURIComponent(secili.id)}${secili.veliId ? "," + encodeURIComponent(secili.veliId) : ""}`}
+              className="btn btn-outline btn-kucuk"
+              title={secili.veliId ? "Öğrenciye ve velisine panel bildirimi gönder" : "Öğrenciye panel bildirimi gönder"}
+            >
+              🔔 Bildirim Gönder
+            </Link>
             <WaButonlar veri={waVeri} />
           </div>
         </div>

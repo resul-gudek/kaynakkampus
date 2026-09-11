@@ -38,8 +38,9 @@ export default auth((req) => {
   if (yol.startsWith("/mesajlar") && !(egitmenMi(rol) || rol === "ogrenci")) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
-  // Bildirimler: eğitmen, öğrenci ve yönetici (değerlendirme bildirimleri); veli dışarıda
-  if (yol.startsWith("/bildirimler") && !(egitmenMi(rol) || rol === "ogrenci" || rol === "admin")) {
+  // Bildirimler: oturum açan her rol (veli de yönetim/eğitmen duyurusu alır)
+  // Bildirim gönderme: yönetici ve eğitmen (yetki "bildirim:gonder")
+  if (yol.startsWith("/bildirim-gonder") && !(egitmenMi(rol) || rol === "admin")) {
     return NextResponse.redirect(new URL(anasayfa, req.nextUrl));
   }
   // Video ders yönetimi: eğitmen ve yönetici (yetki "video:yonet")
@@ -60,6 +61,7 @@ export const config = {
     "/canli-ders/:path*",
     "/mesajlar/:path*",
     "/bildirimler",
+    "/bildirim-gonder",
     "/video-dersler/:path*",
   ],
 };

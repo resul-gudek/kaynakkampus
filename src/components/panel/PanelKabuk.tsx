@@ -47,6 +47,8 @@ export default function PanelKabuk({ kullanici, kalemler, okunmamis, okunmamisMe
         cikisAction={cikisAction}
         mobilAcik={mobilAcik}
         onMenuAc={() => setMobilAcik((a) => !a)}
+        dar={dar}
+        onDarDegistir={darDegistir}
       />
 
       {/* Mobil çekmece her zaman tam menü gösterir; daraltma masaüstü tercihi */}
