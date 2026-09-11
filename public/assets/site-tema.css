@@ -133,7 +133,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 /* [hidden], display kuralı olan sınıflarla (ör. .duyuru-serit) çakışmasın */
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Yapışkan başlığın altına hizalama payı. Değeri assets/kk-kaydir.js
+     her yerleşimde ÖLÇEREK yazar (telefon/tablet/akıllı tahta ve duyuru
+     şeridi açık-kapalı hâllerinde doğru kalsın; sabit pixel yok).
+     Bu tek satır sayesinde #bağlantı sıçramaları ve scrollIntoView
+     çağrıları da başlığın altına oturur — başlık içeriği örtmez. */
+  scroll-padding-top: var(--kk-yapiskan-ust, 0px);
+}
 body {
   font-family: var(--font-govde);
   font-size: var(--text-body);

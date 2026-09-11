@@ -10,11 +10,47 @@
      deger    → alanın öğrenciye tipik olarak sunabildiği değerler
      yol      → alana giden yolun talep ettiği emek
 
+   cekirdek → ailenin ÇEKİRDEK KRİTERLERİ: onu komşu ailelerden
+              gerçekten ayıran, üniversitedeki eğitim yapısı ya da
+              mesleğin günlük işleyişiyle doğrudan ilişkili özellikler.
+              Ana eşleşmeden SONRA çalışan ikinci kontrol katmanı
+              bunları kullanır (motorda bölüm 3b).
+
+              Yazım kuralları — hepsini
+              `node ops/kariyer-veri/cekirdek-denetle.js` ölçer;
+              yeni aile eklerken ya da çekirdek değiştirirken çalıştır:
+              · Genel özellik yazılmaz. Sözel beceri, iletişim,
+                hitabet, insanlara yardım etme gibi onlarca alanla
+                uyuşan nitelikler çekirdeğe girmez; onlar ana
+                eşleşmede zaten karşılığını bulur. Çekirdek AYIRT
+                EDİCİ olanı tutar.
+              · Biçimler:
+                  { ilgi: "arastirma", w: 3 }
+                  { calisma: "hareketlilik" }   → hedef, ailenin kendi
+                    calisma profilinden okunur; ayrıca yazılmaz
+                  { yol: "egitimSonrasiEgitim" }
+                  { deger: "bilgiUretme" }
+                  { kosul: "yogunOkumaYazma" }  → o koşula açıklık
+                w (1–4) kriterin ağırlığıdır, yazılmazsa 1'dir.
+              · "kosul" kriterlerinin toplam ağırlığı çekirdeğin
+                üçte birini geçmemeli: işaretlenmemiş koşul tam
+                karşılama sayıldığı için aksi hâlde aile haksız
+                destek toplar.
+              · "calisma" kriteri ailenin kendi profilinde kutupta
+                olmalı (≤35 ya da ≥65); orta değer ayırt edici değildir.
+
    kosullar → Bölüm 10'daki "istemediğim koşullar" etiketlerinden
               bu alanda gerçekten sık karşılaşılanlar. Eleme için değil,
               öğrenciye açık uyarı göstermek için kullanılır.
    dersler  → yalnız "mevcut akademik hazırlık" göstergesi içindir;
               kariyer uyum puanına KATILMAZ.
+
+   alan     → üst aile. YALNIZ gruplama ve sunum katmanıdır; hiçbir
+              puana girmez. Aynı üst ailedeki aileler birbirinin
+              kopyası gibi puanlanmaz: her biri kendi ilgi/çalışma/
+              değer/yol profili ve kendi çekirdek kriterleriyle ayrı
+              ayrı ölçülür. Üst ailenin yüksek eşleşmesi, içindeki
+              her ailenin yüksek eşleştiği anlamına gelmez.
 
    Değerler tek tek okunabilir olsun diye elle yazılmıştır; profil
    güncellemek için yalnız bu dosyayı değiştirmek yeterlidir.
@@ -33,6 +69,10 @@
       calisma: { hareketlilik: 25, insanEtkilesimi: 45, gorevDegiskenligi: 45, uygulamalilik: 35, saatEsnekligi: 60, seyahat: 40 },
       deger: { surekliOgrenme: 85, bilgiUretme: 75, yaraticiOzgurluk: 65, ozelHayat: 65, bagimsizlik: 60, isGuvencesi: 45, yuksekGelir: 35 },
       yol: { uzunEgitim: 55, egitimSonrasiEgitim: 60, yogunTempo: 45, dusukBaslangic: 60, belirsizlik: 55, yurtdisi: 45 },
+      cekirdek: [
+        { ilgi: "dilYatkinligi", w: 3 }, { ilgi: "yaziliIfade", w: 2 },
+        { kosul: "yogunOkumaYazma", w: 2 }, { calisma: "hareketlilik" },
+      ],
       kosullar: ["yogunOkumaYazma", "surekliMasa"],
       dersler: ["yabanciDil", "edebiyat", "turkce", "yaziYazma", "arastirma"],
     },
@@ -43,6 +83,11 @@
       calisma: { hareketlilik: 70, yerCesitliligi: 70, insanEtkilesimi: 80, gorevDegiskenligi: 80, saatEsnekligi: 75, ortamCanliligi: 75, uygulamalilik: 75, seyahat: 65 },
       deger: { yaraticiOzgurluk: 80, surekliOgrenme: 70, toplumsalFayda: 65, kariyerYukselme: 55, ozelHayat: 35, isGuvencesi: 35 },
       yol: { yogunTempo: 80, rekabetOrtami: 75, dusukBaslangic: 75, belirsizlik: 75, sehirDegisimi: 60 },
+      cekirdek: [
+        { ilgi: "yaraticilik", w: 2 }, { ilgi: "arastirma" },
+        { calisma: "gorevDegiskenligi", w: 2 }, { yol: "yogunTempo", w: 2 },
+        { kosul: "belirsizGelir" },
+      ],
       kosullar: ["yuksekStres", "surekliDegisen", "belirsizGelir", "geceNobet", "cokRekabetci"],
       dersler: ["turkce", "yaziYazma", "sunum", "arastirma", "gorselSanatlar"],
     },
@@ -53,6 +98,11 @@
       calisma: { hareketlilik: 60, insanEtkilesimi: 90, gorevDegiskenligi: 75, ortamCanliligi: 80, uygulamalilik: 75, girisimcilik: 65, ekipYonetimi: 65, riskAcikligi: 60 },
       deger: { kariyerYukselme: 75, yaraticiOzgurluk: 70, yuksekGelir: 60, bagimsizlik: 55, surekliOgrenme: 60, isGuvencesi: 35 },
       yol: { yogunTempo: 75, rekabetOrtami: 80, dusukBaslangic: 65, belirsizlik: 60 },
+      cekirdek: [
+        { ilgi: "ikna", w: 3 }, { ilgi: "yaraticilik", w: 2 },
+        { kosul: "surekliSatis", w: 2 }, { calisma: "insanEtkilesimi" },
+        { yol: "rekabetOrtami" },
+      ],
       kosullar: ["surekliSatis", "yogunInsan", "musteriIliskisi", "cokRekabetci", "yuksekStres"],
       dersler: ["turkce", "sunum", "gorselSanatlar", "grupCalismasi", "yaziYazma"],
     },
@@ -63,6 +113,11 @@
       calisma: { hareketlilik: 55, yerCesitliligi: 60, insanEtkilesimi: 35, gorevDegiskenligi: 40, uygulamalilik: 70, seyahat: 60 },
       deger: { bilgiUretme: 90, toplumsalFayda: 70, surekliOgrenme: 80, duzen: 60, ozelHayat: 55, yuksekGelir: 25, isGuvencesi: 45 },
       yol: { uzunEgitim: 60, egitimSonrasiEgitim: 70, dusukBaslangic: 80, belirsizlik: 70, sehirDegisimi: 65 },
+      cekirdek: [
+        { ilgi: "arastirma", w: 3 }, { ilgi: "detayOdaklilik", w: 2 },
+        { ilgi: "elBecerisi" }, { calisma: "insanEtkilesimi" },
+        { yol: "dusukBaslangic" },
+      ],
       kosullar: ["belirsizGelir", "fizikselYorucu", "cokRutin"],
       dersler: ["tarih", "cografya", "arastirma", "yabanciDil", "elBecerileri"],
     },
@@ -75,6 +130,11 @@
       calisma: { hareketlilik: 55, yerCesitliligi: 25, insanEtkilesimi: 90, gorevDegiskenligi: 45, saatEsnekligi: 25, ortamCanliligi: 75, uygulamalilik: 70, yontemOzgurlugu: 55 },
       deger: { insanlaraYardim: 90, toplumsalFayda: 90, isGuvencesi: 80, ozelHayat: 70, duzen: 75, surekliOgrenme: 65, yuksekGelir: 30 },
       yol: { uzunEgitim: 50, zorSinav: 70, egitimSonrasiEgitim: 55, yogunTempo: 55, sehirDegisimi: 75 },
+      cekirdek: [
+        { ilgi: "ogretme", w: 3 }, { calisma: "insanEtkilesimi", w: 2 },
+        { kosul: "cocuklarla", w: 2 }, { yol: "zorSinav" },
+        { yol: "sehirDegisimi" },
+      ],
       kosullar: ["cocuklarla", "yogunInsan", "surekliAyakta"],
       dersler: ["turkce", "sunum", "grupCalismasi", "proje", "arastirma"],
     },
@@ -85,6 +145,11 @@
       calisma: { hareketlilik: 65, insanEtkilesimi: 90, gorevDegiskenligi: 55, saatEsnekligi: 35, ortamCanliligi: 80, uygulamalilik: 80 },
       deger: { insanlaraYardim: 95, toplumsalFayda: 85, isGuvencesi: 60, duzen: 60, ozelHayat: 60, yuksekGelir: 25 },
       yol: { uzunEgitim: 35, yogunTempo: 50, dusukBaslangic: 70 },
+      cekirdek: [
+        { ilgi: "empati", w: 2 }, { ilgi: "ogretme" },
+        { ilgi: "aktifDinleme" }, { kosul: "cocuklarla", w: 2 },
+        { calisma: "uygulamalilik" },
+      ],
       kosullar: ["cocuklarla", "yogunInsan", "surekliAyakta", "belirsizGelir"],
       dersler: ["turkce", "biyoloji", "grupCalismasi", "sunum", "gorselSanatlar"],
     },
@@ -95,6 +160,11 @@
       calisma: { hareketlilik: 30, insanEtkilesimi: 80, gorevDegiskenligi: 50, saatEsnekligi: 55, ortamCanliligi: 35, uygulamalilik: 55, girisimcilik: 55 },
       deger: { insanlaraYardim: 95, bilgiUretme: 80, toplumsalFayda: 80, surekliOgrenme: 85, bagimsizlik: 60, prestij: 55, isGuvencesi: 45 },
       yol: { uzunEgitim: 70, egitimSonrasiEgitim: 90, zorSinav: 75, yogunTempo: 60, rekabetOrtami: 65, dusukBaslangic: 70 },
+      cekirdek: [
+        { ilgi: "aktifDinleme", w: 2 }, { ilgi: "arastirma", w: 2 },
+        { ilgi: "analitikDusunme", w: 2 }, { yol: "egitimSonrasiEgitim", w: 2 },
+        { calisma: "hareketlilik" }, { kosul: "cokUzunEgitim" },
+      ],
       kosullar: ["yogunInsan", "yuksekStres", "cokUzunEgitim", "surekliMasa"],
       dersler: ["biyoloji", "matematik", "turkce", "felsefe", "arastirma"],
     },
@@ -105,6 +175,11 @@
       calisma: { hareketlilik: 70, yerCesitliligi: 70, insanEtkilesimi: 95, gorevDegiskenligi: 70, saatEsnekligi: 40, uygulamalilik: 85, seyahat: 55 },
       deger: { insanlaraYardim: 100, toplumsalFayda: 95, isGuvencesi: 70, duzen: 50, ozelHayat: 45, yuksekGelir: 25 },
       yol: { uzunEgitim: 45, yogunTempo: 70, sehirDegisimi: 75, dusukBaslangic: 65 },
+      cekirdek: [
+        { ilgi: "empati", w: 2 }, { ilgi: "krizCozme", w: 2 },
+        { calisma: "uygulamalilik", w: 2 }, { kosul: "yogunInsan", w: 2 },
+        { yol: "sehirDegisimi" },
+      ],
       kosullar: ["yogunInsan", "yuksekStres", "hastalarla"],
       dersler: ["turkce", "felsefe", "grupCalismasi", "arastirma", "sunum"],
     },
@@ -117,6 +192,11 @@
       calisma: { hareketlilik: 35, insanEtkilesimi: 75, gorevDegiskenligi: 55, saatEsnekligi: 45, uygulamalilik: 55, girisimcilik: 60, riskAcikligi: 50 },
       deger: { prestij: 85, isGuvencesi: 70, yuksekGelir: 70, toplumsalFayda: 75, bagimsizlik: 70, surekliOgrenme: 75, duzen: 65 },
       yol: { uzunEgitim: 75, egitimSonrasiEgitim: 80, zorSinav: 90, yogunTempo: 85, rekabetOrtami: 85, dusukBaslangic: 70 },
+      cekirdek: [
+        { ilgi: "analitikDusunme", w: 2 }, { ilgi: "mantiksalDusunme", w: 2 },
+        { kosul: "yogunOkumaYazma", w: 2 }, { yol: "zorSinav", w: 2 },
+        { yol: "rekabetOrtami" }, { calisma: "hareketlilik" },
+      ],
       kosullar: ["yogunOkumaYazma", "yuksekStres", "cokRekabetci", "surekliMasa"],
       dersler: ["turkce", "edebiyat", "tarih", "felsefe", "yaziYazma"],
     },
@@ -127,6 +207,11 @@
       calisma: { hareketlilik: 30, insanEtkilesimi: 70, gorevDegiskenligi: 50, saatEsnekligi: 35, uygulamalilik: 45, seyahat: 55, ekipYonetimi: 60 },
       deger: { isGuvencesi: 80, toplumsalFayda: 80, prestij: 70, duzen: 75, surekliOgrenme: 70, kariyerYukselme: 60, yuksekGelir: 45 },
       yol: { uzunEgitim: 55, zorSinav: 85, yogunTempo: 55, sehirDegisimi: 75, rekabetOrtami: 70 },
+      cekirdek: [
+        { ilgi: "analitikDusunme", w: 2 }, { ilgi: "arastirma", w: 2 },
+        { ilgi: "yaziliIfade" }, { yol: "zorSinav", w: 2 },
+        { calisma: "hareketlilik" }, { kosul: "yogunOkumaYazma" },
+      ],
       kosullar: ["surekliMasa", "yogunOkumaYazma", "cokRekabetci"],
       dersler: ["tarih", "cografya", "turkce", "yabanciDil", "arastirma"],
     },
@@ -137,6 +222,11 @@
       calisma: { hareketlilik: 35, insanEtkilesimi: 80, gorevDegiskenligi: 60, saatEsnekligi: 45, uygulamalilik: 60, girisimcilik: 70, ekipYonetimi: 85, riskAcikligi: 60 },
       deger: { kariyerYukselme: 85, yuksekGelir: 75, bagimsizlik: 65, duzen: 65, isGuvencesi: 55, prestij: 60, surekliOgrenme: 60 },
       yol: { uzunEgitim: 45, yogunTempo: 75, rekabetOrtami: 80, sehirDegisimi: 65, belirsizlik: 55 },
+      cekirdek: [
+        { ilgi: "organizasyon", w: 2 }, { ilgi: "planlama", w: 2 },
+        { ilgi: "liderlik", w: 2 }, { calisma: "ekipYonetimi", w: 2 },
+        { yol: "rekabetOrtami" },
+      ],
       kosullar: ["surekliMasa", "buyukEkipYonetimi", "cokRekabetci", "yuksekStres"],
       dersler: ["matematik", "turkce", "sunum", "organizasyon", "grupCalismasi"],
     },
@@ -147,6 +237,11 @@
       calisma: { hareketlilik: 20, insanEtkilesimi: 60, gorevDegiskenligi: 50, saatEsnekligi: 35, uygulamalilik: 55, riskAcikligi: 60, ekipYonetimi: 55 },
       deger: { yuksekGelir: 85, kariyerYukselme: 80, duzen: 70, isGuvencesi: 60, prestij: 60, surekliOgrenme: 65 },
       yol: { uzunEgitim: 50, zorSinav: 70, yogunTempo: 80, rekabetOrtami: 80, sehirDegisimi: 65 },
+      cekirdek: [
+        { ilgi: "sayisalDusunme", w: 3 }, { ilgi: "analitikDusunme", w: 2 },
+        { kosul: "yogunMatematik", w: 2 }, { calisma: "hareketlilik" },
+        { yol: "yogunTempo" },
+      ],
       kosullar: ["surekliMasa", "yogunMatematik", "cokRekabetci", "yuksekStres"],
       dersler: ["matematik", "geometri", "turkce", "cografya", "bilgisayar"],
     },
@@ -157,6 +252,11 @@
       calisma: { hareketlilik: 15, insanEtkilesimi: 70, gorevDegiskenligi: 35, saatEsnekligi: 20, uygulamalilik: 65, yontemOzgurlugu: 25 },
       deger: { duzen: 90, isGuvencesi: 75, ozelHayat: 70, insanlaraYardim: 50, yuksekGelir: 30, kariyerYukselme: 40 },
       yol: { uzunEgitim: 20, yogunTempo: 40, dusukBaslangic: 60 },
+      cekirdek: [
+        { ilgi: "organizasyon", w: 2 }, { ilgi: "detayOdaklilik", w: 2 },
+        { calisma: "hareketlilik", w: 2 }, { calisma: "gorevDegiskenligi", w: 2 },
+        { kosul: "cokRutin" },
+      ],
       kosullar: ["surekliMasa", "cokRutin", "musteriIliskisi"],
       dersler: ["turkce", "bilgisayar", "organizasyon", "yaziYazma"],
     },
@@ -169,6 +269,11 @@
       calisma: { hareketlilik: 45, insanEtkilesimi: 40, gorevDegiskenligi: 70, saatEsnekligi: 80, uygulamalilik: 90, yontemOzgurlugu: 90, girisimcilik: 70, riskAcikligi: 70 },
       deger: { yaraticiOzgurluk: 100, bagimsizlik: 85, somutUretim: 85, surekliOgrenme: 65, isGuvencesi: 25, yuksekGelir: 35 },
       yol: { uzunEgitim: 45, dusukBaslangic: 85, belirsizlik: 85, rekabetOrtami: 70 },
+      cekirdek: [
+        { ilgi: "gorselDusunme", w: 3 }, { ilgi: "yaraticilik", w: 2 },
+        { calisma: "yontemOzgurlugu" }, { yol: "belirsizlik", w: 2 },
+        { yol: "dusukBaslangic" },
+      ],
       kosullar: ["belirsizGelir", "cokRekabetci", "yalnizCalisma"],
       dersler: ["gorselSanatlar", "elBecerileri", "proje", "bilgisayar"],
     },
@@ -179,6 +284,11 @@
       calisma: { hareketlilik: 35, insanEtkilesimi: 60, gorevDegiskenligi: 70, saatEsnekligi: 70, uygulamalilik: 80, yontemOzgurlugu: 80, girisimcilik: 65 },
       deger: { yaraticiOzgurluk: 90, somutUretim: 85, surekliOgrenme: 75, bagimsizlik: 70, kariyerYukselme: 60, yuksekGelir: 55 },
       yol: { uzunEgitim: 45, yogunTempo: 65, rekabetOrtami: 70, dusukBaslangic: 65, belirsizlik: 60 },
+      cekirdek: [
+        { ilgi: "tasarim", w: 3 }, { ilgi: "gorselDusunme", w: 2 },
+        { ilgi: "problemCozme" }, { calisma: "uygulamalilik" },
+        { yol: "rekabetOrtami" },
+      ],
       kosullar: ["surekliMasa", "cokRekabetci", "yuksekStres"],
       dersler: ["gorselSanatlar", "geometri", "bilgisayar", "proje", "matematik"],
     },
@@ -189,6 +299,11 @@
       calisma: { hareketlilik: 50, yerCesitliligi: 60, insanEtkilesimi: 60, gorevDegiskenligi: 60, saatEsnekligi: 60, uygulamalilik: 80, girisimcilik: 65, seyahat: 50 },
       deger: { yaraticiOzgurluk: 85, somutUretim: 95, prestij: 65, bagimsizlik: 70, kariyerYukselme: 60, yuksekGelir: 55, ozelHayat: 35 },
       yol: { uzunEgitim: 70, yogunTempo: 85, rekabetOrtami: 70, dusukBaslangic: 70, sehirDegisimi: 60 },
+      cekirdek: [
+        { ilgi: "mekansalDusunme", w: 3 }, { ilgi: "tasarim", w: 2 },
+        { yol: "yogunTempo", w: 2 }, { calisma: "uygulamalilik" },
+        { kosul: "yogunMatematik" },
+      ],
       kosullar: ["yuksekStres", "yogunMatematik", "cokRekabetci"],
       dersler: ["geometri", "matematik", "gorselSanatlar", "fizik", "proje"],
     },
@@ -199,6 +314,11 @@
       calisma: { hareketlilik: 55, insanEtkilesimi: 30, gorevDegiskenligi: 45, saatEsnekligi: 70, uygulamalilik: 95, yontemOzgurlugu: 75, girisimcilik: 75 },
       deger: { somutUretim: 100, yaraticiOzgurluk: 85, bagimsizlik: 80, duzen: 55, isGuvencesi: 30, yuksekGelir: 35 },
       yol: { uzunEgitim: 25, dusukBaslangic: 80, belirsizlik: 75 },
+      cekirdek: [
+        { ilgi: "elBecerisi", w: 3 }, { ilgi: "detayOdaklilik", w: 2 },
+        { calisma: "uygulamalilik", w: 2 }, { calisma: "insanEtkilesimi" },
+        { yol: "dusukBaslangic" },
+      ],
       kosullar: ["belirsizGelir", "yalnizCalisma", "cokRutin"],
       dersler: ["elBecerileri", "gorselSanatlar", "proje"],
     },
@@ -209,6 +329,11 @@
       calisma: { hareketlilik: 55, insanEtkilesimi: 55, gorevDegiskenligi: 65, saatEsnekligi: 60, uygulamalilik: 90, girisimcilik: 70, riskAcikligi: 60 },
       deger: { yaraticiOzgurluk: 85, somutUretim: 90, bagimsizlik: 65, kariyerYukselme: 55, yuksekGelir: 45, isGuvencesi: 40 },
       yol: { uzunEgitim: 40, yogunTempo: 70, rekabetOrtami: 70, dusukBaslangic: 70, belirsizlik: 65 },
+      cekirdek: [
+        { ilgi: "tasarim", w: 2 }, { ilgi: "elBecerisi", w: 2 },
+        { ilgi: "gorselDusunme", w: 2 }, { calisma: "uygulamalilik", w: 2 },
+        { yol: "rekabetOrtami" },
+      ],
       kosullar: ["cokRekabetci", "yuksekStres"],
       dersler: ["gorselSanatlar", "elBecerileri", "proje", "matematik"],
     },
@@ -219,6 +344,11 @@
       calisma: { hareketlilik: 90, yerCesitliligi: 75, insanEtkilesimi: 85, gorevDegiskenligi: 85, saatEsnekligi: 85, ortamCanliligi: 90, uygulamalilik: 95, seyahat: 70, riskAcikligi: 80 },
       deger: { yaraticiOzgurluk: 100, somutUretim: 70, bagimsizlik: 75, prestij: 55, isGuvencesi: 20, yuksekGelir: 30 },
       yol: { uzunEgitim: 45, yogunTempo: 85, rekabetOrtami: 90, dusukBaslangic: 90, belirsizlik: 95, sehirDegisimi: 75 },
+      cekirdek: [
+        { ilgi: "bedenselBeceri", w: 2 }, { ilgi: "yaraticilik", w: 2 },
+        { calisma: "ortamCanliligi", w: 2 }, { yol: "belirsizlik", w: 2 },
+        { kosul: "belirsizGelir" },
+      ],
       kosullar: ["belirsizGelir", "cokRekabetci", "geceNobet", "fizikselYorucu", "surekliDegisen"],
       dersler: ["turkce", "sunum", "muzik", "spor", "gorselSanatlar"],
     },
@@ -229,6 +359,11 @@
       calisma: { hareketlilik: 50, yerCesitliligi: 65, insanEtkilesimi: 55, gorevDegiskenligi: 60, saatEsnekligi: 85, ortamCanliligi: 65, uygulamalilik: 95, yontemOzgurlugu: 75, seyahat: 60 },
       deger: { yaraticiOzgurluk: 95, somutUretim: 70, bagimsizlik: 75, surekliOgrenme: 80, isGuvencesi: 30, yuksekGelir: 30 },
       yol: { uzunEgitim: 60, egitimSonrasiEgitim: 70, yogunTempo: 85, rekabetOrtami: 85, dusukBaslangic: 85, belirsizlik: 85 },
+      cekirdek: [
+        { ilgi: "muzikRitim", w: 4 }, { ilgi: "detayOdaklilik", w: 2 },
+        { calisma: "uygulamalilik" }, { yol: "belirsizlik", w: 2 },
+        { kosul: "belirsizGelir" },
+      ],
       kosullar: ["belirsizGelir", "cokRekabetci", "geceNobet", "yalnizCalisma"],
       dersler: ["muzik", "elBecerileri", "matematik", "yabanciDil"],
     },
@@ -241,6 +376,11 @@
       calisma: { hareketlilik: 10, yerCesitliligi: 35, insanEtkilesimi: 40, gorevDegiskenligi: 60, saatEsnekligi: 75, ortamCanliligi: 30, uygulamalilik: 75, yontemOzgurlugu: 70, girisimcilik: 65 },
       deger: { yuksekGelir: 85, surekliOgrenme: 95, kariyerYukselme: 80, bagimsizlik: 75, somutUretim: 80, ozelHayat: 60, isGuvencesi: 60 },
       yol: { uzunEgitim: 50, egitimSonrasiEgitim: 75, zorSinav: 65, yogunTempo: 70, rekabetOrtami: 70, yurtdisi: 55 },
+      cekirdek: [
+        { ilgi: "teknoloji", w: 3 }, { ilgi: "mantiksalDusunme", w: 2 },
+        { ilgi: "problemCozme", w: 2 }, { calisma: "hareketlilik" },
+        { kosul: "surekliMasa", w: 2 },
+      ],
       kosullar: ["surekliMasa", "yogunMatematik", "yalnizCalisma"],
       dersler: ["matematik", "bilgisayar", "fizik", "geometri", "yabanciDil"],
     },
@@ -251,6 +391,11 @@
       calisma: { hareketlilik: 45, yerCesitliligi: 60, insanEtkilesimi: 45, gorevDegiskenligi: 55, saatEsnekligi: 40, uygulamalilik: 80, seyahat: 50 },
       deger: { somutUretim: 85, yuksekGelir: 70, isGuvencesi: 65, kariyerYukselme: 70, surekliOgrenme: 90, duzen: 60 },
       yol: { uzunEgitim: 55, zorSinav: 70, yogunTempo: 70, sehirDegisimi: 65 },
+      cekirdek: [
+        { ilgi: "teknoloji", w: 3 }, { ilgi: "mantiksalDusunme", w: 2 },
+        { ilgi: "sayisalDusunme", w: 2 }, { calisma: "uygulamalilik" },
+        { kosul: "yogunMatematik", w: 2 },
+      ],
       kosullar: ["yogunMatematik", "fizikselYorucu", "geceNobet"],
       dersler: ["fizik", "matematik", "bilgisayar", "elBecerileri", "geometri"],
     },
@@ -261,6 +406,11 @@
       calisma: { hareketlilik: 75, yerCesitliligi: 55, insanEtkilesimi: 45, gorevDegiskenligi: 45, saatEsnekligi: 25, uygulamalilik: 95, ekipYonetimi: 60 },
       deger: { somutUretim: 95, isGuvencesi: 70, yuksekGelir: 65, kariyerYukselme: 65, duzen: 65, surekliOgrenme: 60 },
       yol: { uzunEgitim: 55, zorSinav: 70, yogunTempo: 70, sehirDegisimi: 70 },
+      cekirdek: [
+        { ilgi: "mekansalDusunme", w: 2 }, { ilgi: "elBecerisi", w: 2 },
+        { ilgi: "problemCozme", w: 2 }, { calisma: "uygulamalilik", w: 2 },
+        { kosul: "yogunMatematik" }, { kosul: "fizikselYorucu" },
+      ],
       kosullar: ["yogunMatematik", "fizikselYorucu", "geceNobet", "surekliAyakta"],
       dersler: ["fizik", "matematik", "geometri", "elBecerileri", "bilgisayar"],
     },
@@ -271,6 +421,11 @@
       calisma: { hareketlilik: 75, yerCesitliligi: 80, insanEtkilesimi: 65, gorevDegiskenligi: 60, saatEsnekligi: 35, uygulamalilik: 90, seyahat: 70, ekipYonetimi: 70 },
       deger: { somutUretim: 100, yuksekGelir: 65, kariyerYukselme: 65, isGuvencesi: 55, duzen: 55, ozelHayat: 35 },
       yol: { uzunEgitim: 55, zorSinav: 70, yogunTempo: 80, sehirDegisimi: 85, belirsizlik: 55 },
+      cekirdek: [
+        { ilgi: "mekansalDusunme", w: 2 }, { ilgi: "planlama", w: 2 },
+        { calisma: "hareketlilik", w: 2 }, { calisma: "yerCesitliligi" },
+        { yol: "sehirDegisimi", w: 2 }, { kosul: "fizikselYorucu" },
+      ],
       kosullar: ["fizikselYorucu", "surekliAyakta", "surekliSeyahat", "yogunMatematik"],
       dersler: ["matematik", "geometri", "fizik", "cografya", "proje"],
     },
@@ -281,6 +436,11 @@
       calisma: { hareketlilik: 40, insanEtkilesimi: 70, gorevDegiskenligi: 60, saatEsnekligi: 45, uygulamalilik: 70, ekipYonetimi: 80 },
       deger: { kariyerYukselme: 85, yuksekGelir: 75, somutUretim: 70, duzen: 75, surekliOgrenme: 70, isGuvencesi: 60 },
       yol: { uzunEgitim: 55, zorSinav: 75, yogunTempo: 75, rekabetOrtami: 70, sehirDegisimi: 65 },
+      cekirdek: [
+        { ilgi: "analitikDusunme", w: 2 }, { ilgi: "planlama", w: 2 },
+        { ilgi: "sayisalDusunme", w: 2 }, { calisma: "ekipYonetimi" },
+        { kosul: "yogunMatematik", w: 2 },
+      ],
       kosullar: ["yogunMatematik", "surekliMasa", "buyukEkipYonetimi"],
       dersler: ["matematik", "geometri", "fizik", "organizasyon", "bilgisayar"],
     },
@@ -291,6 +451,11 @@
       calisma: { hareketlilik: 80, yerCesitliligi: 85, insanEtkilesimi: 45, gorevDegiskenligi: 60, saatEsnekligi: 35, uygulamalilik: 90, seyahat: 80 },
       deger: { yuksekGelir: 75, somutUretim: 85, isGuvencesi: 55, kariyerYukselme: 65, duzen: 45, ozelHayat: 30 },
       yol: { uzunEgitim: 55, yogunTempo: 80, sehirDegisimi: 90, dusukBaslangic: 55, belirsizlik: 60 },
+      cekirdek: [
+        { ilgi: "dogaIlgisi", w: 2 }, { ilgi: "sayisalDusunme", w: 2 },
+        { calisma: "yerCesitliligi", w: 2 }, { yol: "sehirDegisimi", w: 2 },
+        { kosul: "fizikselYorucu" }, { kosul: "surekliSeyahat" },
+      ],
       kosullar: ["fizikselYorucu", "surekliSeyahat", "geceNobet", "yogunMatematik", "surekliAyakta"],
       dersler: ["fizik", "kimya", "matematik", "cografya", "biyoloji"],
     },
@@ -301,6 +466,11 @@
       calisma: { hareketlilik: 70, yerCesitliligi: 70, insanEtkilesimi: 60, gorevDegiskenligi: 55, saatEsnekligi: 60, ortamCanliligi: 55, uygulamalilik: 90, seyahat: 85 },
       deger: { prestij: 80, yuksekGelir: 75, somutUretim: 75, kariyerYukselme: 70, duzen: 70, ozelHayat: 35 },
       yol: { uzunEgitim: 60, egitimSonrasiEgitim: 70, zorSinav: 80, yogunTempo: 80, sehirDegisimi: 80, rekabetOrtami: 75 },
+      cekirdek: [
+        { ilgi: "detayOdaklilik", w: 2 }, { ilgi: "krizCozme", w: 2 },
+        { ilgi: "teknoloji", w: 2 }, { calisma: "seyahat" },
+        { kosul: "geceNobet", w: 2 }, { yol: "zorSinav" },
+      ],
       kosullar: ["geceNobet", "surekliSeyahat", "yuksekStres", "cokRekabetci"],
       dersler: ["fizik", "matematik", "yabanciDil", "geometri", "bilgisayar"],
     },
@@ -311,6 +481,11 @@
       calisma: { hareketlilik: 85, yerCesitliligi: 95, insanEtkilesimi: 60, gorevDegiskenligi: 60, saatEsnekligi: 55, uygulamalilik: 95, seyahat: 100, ekipYonetimi: 70 },
       deger: { yuksekGelir: 85, somutUretim: 70, kariyerYukselme: 70, prestij: 55, ozelHayat: 15, isGuvencesi: 55 },
       yol: { uzunEgitim: 50, zorSinav: 60, yogunTempo: 90, sehirDegisimi: 95, yurtdisi: 85 },
+      cekirdek: [
+        { ilgi: "krizCozme", w: 2 }, { ilgi: "mekansalDusunme" },
+        { calisma: "seyahat", w: 3 }, { yol: "sehirDegisimi", w: 2 },
+        { kosul: "surekliSeyahat", w: 2 },
+      ],
       kosullar: ["surekliSeyahat", "geceNobet", "fizikselYorucu", "yalnizCalisma", "yuksekStres"],
       dersler: ["fizik", "matematik", "yabanciDil", "cografya", "spor"],
     },
@@ -325,6 +500,11 @@
       calisma: { hareketlilik: 70, insanEtkilesimi: 40, gorevDegiskenligi: 45, uygulamalilik: 95, saatEsnekligi: 35 },
       deger: { somutUretim: 90, isGuvencesi: 60, duzen: 60, yuksekGelir: 45 },
       yol: { uzunEgitim: 20, yogunTempo: 60, dusukBaslangic: 60 },
+      cekirdek: [
+        { ilgi: "elBecerisi", w: 3 }, { ilgi: "teknoloji" },
+        { ilgi: "problemCozme" }, { calisma: "uygulamalilik", w: 2 },
+        { kosul: "fizikselYorucu", w: 2 },
+      ],
       kosullar: ["fizikselYorucu", "surekliAyakta", "cokRutin"],
       dersler: ["fizik", "matematik", "elBecerileri", "bilgisayar"],
     },
@@ -337,6 +517,11 @@
       calisma: { hareketlilik: 10, insanEtkilesimi: 30, gorevDegiskenligi: 40, saatEsnekligi: 70, ortamCanliligi: 20, uygulamalilik: 20 },
       deger: { bilgiUretme: 95, surekliOgrenme: 90, duzen: 70, bagimsizlik: 65, isGuvencesi: 50, yuksekGelir: 55 },
       yol: { uzunEgitim: 65, egitimSonrasiEgitim: 85, zorSinav: 70, yogunTempo: 65, dusukBaslangic: 65, belirsizlik: 60 },
+      cekirdek: [
+        { ilgi: "sayisalDusunme", w: 3 }, { ilgi: "mantiksalDusunme", w: 2 },
+        { calisma: "uygulamalilik", w: 2 }, { kosul: "yogunMatematik", w: 2 },
+        { yol: "egitimSonrasiEgitim" },
+      ],
       kosullar: ["yogunMatematik", "surekliMasa", "yalnizCalisma"],
       dersler: ["matematik", "geometri", "fizik", "bilgisayar"],
     },
@@ -347,6 +532,11 @@
       calisma: { hareketlilik: 35, insanEtkilesimi: 35, gorevDegiskenligi: 45, saatEsnekligi: 65, ortamCanliligi: 25, uygulamalilik: 65 },
       deger: { bilgiUretme: 100, surekliOgrenme: 95, prestij: 55, bagimsizlik: 65, isGuvencesi: 45, yuksekGelir: 40 },
       yol: { uzunEgitim: 70, egitimSonrasiEgitim: 95, zorSinav: 70, yogunTempo: 70, dusukBaslangic: 80, belirsizlik: 70, yurtdisi: 60 },
+      cekirdek: [
+        { ilgi: "arastirma", w: 2 }, { ilgi: "sayisalDusunme", w: 2 },
+        { ilgi: "analitikDusunme" }, { yol: "egitimSonrasiEgitim", w: 3 },
+        { kosul: "yogunMatematik", w: 2 },
+      ],
       kosullar: ["yogunMatematik", "cokUzunEgitim", "belirsizGelir", "surekliMasa"],
       dersler: ["fizik", "matematik", "geometri", "kimya"],
     },
@@ -357,6 +547,11 @@
       calisma: { hareketlilik: 40, insanEtkilesimi: 35, gorevDegiskenligi: 40, saatEsnekligi: 35, ortamCanliligi: 30, uygulamalilik: 80 },
       deger: { bilgiUretme: 85, somutUretim: 75, surekliOgrenme: 80, isGuvencesi: 55, duzen: 70, yuksekGelir: 45 },
       yol: { uzunEgitim: 60, egitimSonrasiEgitim: 75, zorSinav: 65, yogunTempo: 65, dusukBaslangic: 65 },
+      cekirdek: [
+        { ilgi: "arastirma", w: 2 }, { ilgi: "detayOdaklilik", w: 2 },
+        { ilgi: "analitikDusunme" }, { calisma: "uygulamalilik", w: 2 },
+        { yol: "egitimSonrasiEgitim", w: 2 },
+      ],
       kosullar: ["cokRutin"],
       dersler: ["kimya", "matematik", "fizik", "biyoloji"],
     },
@@ -367,6 +562,11 @@
       calisma: { hareketlilik: 40, insanEtkilesimi: 35, gorevDegiskenligi: 45, saatEsnekligi: 50, ortamCanliligi: 25, uygulamalilik: 75 },
       deger: { bilgiUretme: 95, surekliOgrenme: 90, toplumsalFayda: 70, somutUretim: 60, isGuvencesi: 45, yuksekGelir: 40 },
       yol: { uzunEgitim: 65, egitimSonrasiEgitim: 90, zorSinav: 65, yogunTempo: 70, dusukBaslangic: 80, belirsizlik: 70 },
+      cekirdek: [
+        { ilgi: "canliBilimleri", w: 3 }, { ilgi: "arastirma", w: 2 },
+        { calisma: "uygulamalilik" }, { yol: "egitimSonrasiEgitim", w: 2 },
+        { kosul: "cokUzunEgitim" },
+      ],
       kosullar: ["cokUzunEgitim", "belirsizGelir", "cokRutin"],
       dersler: ["biyoloji", "kimya", "matematik", "arastirma"],
     },
@@ -379,6 +579,12 @@
       calisma: { hareketlilik: 70, insanEtkilesimi: 90, gorevDegiskenligi: 70, saatEsnekligi: 30, ortamCanliligi: 70, uygulamalilik: 90 },
       deger: { insanlaraYardim: 100, prestij: 90, toplumsalFayda: 95, yuksekGelir: 75, isGuvencesi: 85, surekliOgrenme: 90, ozelHayat: 20 },
       yol: { uzunEgitim: 100, egitimSonrasiEgitim: 100, zorSinav: 100, yogunTempo: 100, rekabetOrtami: 90, sehirDegisimi: 85 },
+      cekirdek: [
+        { ilgi: "canliBilimleri", w: 3 }, { ilgi: "krizCozme", w: 2 },
+        { calisma: "uygulamalilik" }, { yol: "uzunEgitim", w: 2 },
+        { yol: "zorSinav", w: 2 }, { kosul: "kanHastalik", w: 2 },
+        { kosul: "geceNobet" },
+      ],
       kosullar: ["kanHastalik", "hastalarla", "geceNobet", "yuksekStres", "cokUzunEgitim", "yogunInsan", "surekliAyakta"],
       dersler: ["biyoloji", "kimya", "matematik", "fizik", "turkce"],
     },
@@ -389,6 +595,11 @@
       calisma: { hareketlilik: 40, insanEtkilesimi: 85, gorevDegiskenligi: 40, saatEsnekligi: 55, uygulamalilik: 95, girisimcilik: 70 },
       deger: { insanlaraYardim: 85, yuksekGelir: 85, prestij: 80, bagimsizlik: 75, isGuvencesi: 75, ozelHayat: 55 },
       yol: { uzunEgitim: 90, egitimSonrasiEgitim: 70, zorSinav: 95, yogunTempo: 80, rekabetOrtami: 80 },
+      cekirdek: [
+        { ilgi: "elBecerisi", w: 3 }, { ilgi: "detayOdaklilik", w: 2 },
+        { ilgi: "canliBilimleri", w: 2 }, { calisma: "uygulamalilik" },
+        { yol: "zorSinav", w: 2 }, { kosul: "kanHastalik", w: 2 },
+      ],
       kosullar: ["kanHastalik", "hastalarla", "cokUzunEgitim", "cokRutin"],
       dersler: ["biyoloji", "kimya", "elBecerileri", "matematik", "fizik"],
     },
@@ -399,6 +610,11 @@
       calisma: { hareketlilik: 45, insanEtkilesimi: 75, gorevDegiskenligi: 35, saatEsnekligi: 40, uygulamalilik: 80, girisimcilik: 70 },
       deger: { insanlaraYardim: 80, isGuvencesi: 80, yuksekGelir: 70, duzen: 80, bagimsizlik: 70, prestij: 65 },
       yol: { uzunEgitim: 80, zorSinav: 90, egitimSonrasiEgitim: 60, yogunTempo: 70 },
+      cekirdek: [
+        { ilgi: "detayOdaklilik", w: 3 }, { ilgi: "canliBilimleri", w: 2 },
+        { yol: "zorSinav", w: 2 }, { yol: "uzunEgitim" },
+        { kosul: "cokRutin" }, { kosul: "surekliAyakta" },
+      ],
       kosullar: ["cokUzunEgitim", "surekliAyakta", "musteriIliskisi", "cokRutin"],
       dersler: ["kimya", "biyoloji", "matematik", "fizik"],
     },
@@ -409,6 +625,11 @@
       calisma: { hareketlilik: 90, insanEtkilesimi: 95, gorevDegiskenligi: 70, saatEsnekligi: 40, ortamCanliligi: 80, uygulamalilik: 95 },
       deger: { insanlaraYardim: 100, toplumsalFayda: 90, isGuvencesi: 85, duzen: 55, ozelHayat: 25, yuksekGelir: 40 },
       yol: { uzunEgitim: 45, zorSinav: 65, yogunTempo: 90, sehirDegisimi: 75, egitimSonrasiEgitim: 55 },
+      cekirdek: [
+        { ilgi: "empati", w: 2 }, { ilgi: "krizCozme", w: 2 },
+        { ilgi: "canliBilimleri", w: 2 }, { calisma: "hareketlilik", w: 2 },
+        { kosul: "kanHastalik", w: 2 }, { kosul: "geceNobet" },
+      ],
       kosullar: ["kanHastalik", "hastalarla", "geceNobet", "surekliAyakta", "fizikselYorucu", "yuksekStres", "yogunInsan"],
       dersler: ["biyoloji", "kimya", "turkce", "grupCalismasi"],
     },
@@ -419,6 +640,11 @@
       calisma: { hareketlilik: 75, insanEtkilesimi: 90, gorevDegiskenligi: 55, saatEsnekligi: 55, uygulamalilik: 95, girisimcilik: 60 },
       deger: { insanlaraYardim: 100, toplumsalFayda: 85, isGuvencesi: 70, bagimsizlik: 60, ozelHayat: 55, yuksekGelir: 50 },
       yol: { uzunEgitim: 50, zorSinav: 75, yogunTempo: 65, egitimSonrasiEgitim: 60 },
+      cekirdek: [
+        { ilgi: "empati", w: 2 }, { ilgi: "bedenselBeceri", w: 2 },
+        { ilgi: "canliBilimleri", w: 2 }, { calisma: "uygulamalilik", w: 2 },
+        { kosul: "hastalarla", w: 2 },
+      ],
       kosullar: ["hastalarla", "surekliAyakta", "fizikselYorucu", "yogunInsan"],
       dersler: ["biyoloji", "fizik", "spor", "turkce"],
     },
@@ -429,6 +655,11 @@
       calisma: { hareketlilik: 55, insanEtkilesimi: 60, gorevDegiskenligi: 40, saatEsnekligi: 35, uygulamalilik: 90, yontemOzgurlugu: 25 },
       deger: { insanlaraYardim: 75, isGuvencesi: 75, duzen: 80, somutUretim: 60, yuksekGelir: 45, ozelHayat: 50 },
       yol: { uzunEgitim: 30, yogunTempo: 60, zorSinav: 45, sehirDegisimi: 60 },
+      cekirdek: [
+        { ilgi: "detayOdaklilik", w: 2 }, { ilgi: "teknoloji", w: 2 },
+        { calisma: "uygulamalilik", w: 2 }, { calisma: "yontemOzgurlugu", w: 2 },
+        { kosul: "kanHastalik" }, { kosul: "cokRutin" },
+      ],
       kosullar: ["kanHastalik", "hastalarla", "geceNobet", "cokRutin", "surekliAyakta"],
       dersler: ["biyoloji", "fizik", "kimya", "bilgisayar", "matematik"],
     },
@@ -439,6 +670,11 @@
       calisma: { hareketlilik: 85, yerCesitliligi: 75, insanEtkilesimi: 60, gorevDegiskenligi: 70, saatEsnekligi: 45, uygulamalilik: 95, girisimcilik: 65, seyahat: 60 },
       deger: { insanlaraYardim: 75, somutUretim: 70, bagimsizlik: 70, isGuvencesi: 65, toplumsalFayda: 75, yuksekGelir: 50 },
       yol: { uzunEgitim: 80, zorSinav: 80, yogunTempo: 80, sehirDegisimi: 75 },
+      cekirdek: [
+        { ilgi: "canliBilimleri", w: 3 }, { ilgi: "dogaIlgisi", w: 2 },
+        { calisma: "hareketlilik", w: 2 }, { yol: "uzunEgitim" },
+        { kosul: "kanHastalik", w: 2 },
+      ],
       kosullar: ["kanHastalik", "geceNobet", "fizikselYorucu", "surekliAyakta", "cokUzunEgitim"],
       dersler: ["biyoloji", "kimya", "matematik", "elBecerileri"],
     },
@@ -449,6 +685,11 @@
       calisma: { hareketlilik: 50, insanEtkilesimi: 60, gorevDegiskenligi: 45, saatEsnekligi: 45, uygulamalilik: 85, girisimcilik: 60 },
       deger: { insanlaraYardim: 75, toplumsalFayda: 75, somutUretim: 70, isGuvencesi: 60, duzen: 70, yuksekGelir: 45 },
       yol: { uzunEgitim: 45, zorSinav: 60, yogunTempo: 60, dusukBaslangic: 60 },
+      cekirdek: [
+        { ilgi: "canliBilimleri", w: 3 }, { ilgi: "detayOdaklilik", w: 2 },
+        { ilgi: "arastirma", w: 2 }, { calisma: "uygulamalilik" },
+        { kosul: "cokRutin" },
+      ],
       kosullar: ["cokRutin", "musteriIliskisi"],
       dersler: ["biyoloji", "kimya", "matematik", "arastirma"],
     },
@@ -461,6 +702,11 @@
       calisma: { hareketlilik: 85, yerCesitliligi: 70, insanEtkilesimi: 45, gorevDegiskenligi: 65, saatEsnekligi: 55, uygulamalilik: 95, girisimcilik: 70, seyahat: 55 },
       deger: { somutUretim: 95, bagimsizlik: 75, toplumsalFayda: 75, duzen: 50, isGuvencesi: 50, yuksekGelir: 40 },
       yol: { uzunEgitim: 45, yogunTempo: 70, sehirDegisimi: 85, dusukBaslangic: 70, belirsizlik: 60 },
+      cekirdek: [
+        { ilgi: "dogaIlgisi", w: 3 }, { ilgi: "canliBilimleri", w: 2 },
+        { ilgi: "elBecerisi", w: 2 }, { calisma: "uygulamalilik", w: 2 },
+        { kosul: "fizikselYorucu", w: 2 },
+      ],
       kosullar: ["fizikselYorucu", "surekliAyakta", "belirsizGelir"],
       dersler: ["biyoloji", "kimya", "cografya", "matematik", "elBecerileri"],
     },
@@ -471,6 +717,11 @@
       calisma: { hareketlilik: 95, yerCesitliligi: 85, insanEtkilesimi: 45, gorevDegiskenligi: 60, saatEsnekligi: 50, uygulamalilik: 95, seyahat: 80 },
       deger: { toplumsalFayda: 85, somutUretim: 80, isGuvencesi: 70, bagimsizlik: 65, duzen: 55, yuksekGelir: 40 },
       yol: { uzunEgitim: 50, zorSinav: 65, yogunTempo: 65, sehirDegisimi: 90 },
+      cekirdek: [
+        { ilgi: "dogaIlgisi", w: 3 }, { ilgi: "canliBilimleri", w: 2 },
+        { ilgi: "mekansalDusunme", w: 2 }, { calisma: "hareketlilik", w: 2 },
+        { yol: "sehirDegisimi", w: 2 }, { kosul: "fizikselYorucu" },
+      ],
       kosullar: ["fizikselYorucu", "surekliAyakta", "surekliSeyahat"],
       dersler: ["biyoloji", "cografya", "kimya", "matematik", "spor"],
     },
@@ -481,6 +732,11 @@
       calisma: { hareketlilik: 65, yerCesitliligi: 70, insanEtkilesimi: 50, gorevDegiskenligi: 55, saatEsnekligi: 45, uygulamalilik: 80, seyahat: 65 },
       deger: { toplumsalFayda: 95, bilgiUretme: 75, somutUretim: 65, isGuvencesi: 55, surekliOgrenme: 75, yuksekGelir: 40 },
       yol: { uzunEgitim: 55, egitimSonrasiEgitim: 70, zorSinav: 65, yogunTempo: 60, sehirDegisimi: 70 },
+      cekirdek: [
+        { ilgi: "dogaIlgisi", w: 2 }, { ilgi: "arastirma", w: 2 },
+        { ilgi: "analitikDusunme", w: 2 }, { calisma: "yerCesitliligi" },
+        { kosul: "yogunMatematik" },
+      ],
       kosullar: ["fizikselYorucu", "surekliSeyahat", "yogunMatematik"],
       dersler: ["biyoloji", "kimya", "fizik", "cografya", "matematik"],
     },
@@ -493,6 +749,11 @@
       calisma: { hareketlilik: 95, insanEtkilesimi: 70, gorevDegiskenligi: 70, saatEsnekligi: 55, ortamCanliligi: 90, uygulamalilik: 100, girisimcilik: 80, ekipYonetimi: 70 },
       deger: { somutUretim: 100, yaraticiOzgurluk: 80, bagimsizlik: 75, kariyerYukselme: 60, ozelHayat: 20, isGuvencesi: 40 },
       yol: { uzunEgitim: 30, yogunTempo: 95, dusukBaslangic: 80, sehirDegisimi: 70, belirsizlik: 60 },
+      cekirdek: [
+        { ilgi: "elBecerisi", w: 3 }, { ilgi: "yaraticilik" },
+        { ilgi: "krizCozme" }, { calisma: "uygulamalilik", w: 2 },
+        { yol: "yogunTempo", w: 2 }, { kosul: "surekliAyakta", w: 2 },
+      ],
       kosullar: ["surekliAyakta", "fizikselYorucu", "geceNobet", "yuksekStres", "musteriIliskisi"],
       dersler: ["elBecerileri", "kimya", "organizasyon", "gorselSanatlar"],
     },
@@ -503,6 +764,11 @@
       calisma: { hareketlilik: 85, yerCesitliligi: 85, insanEtkilesimi: 95, gorevDegiskenligi: 75, saatEsnekligi: 60, ortamCanliligi: 90, uygulamalilik: 90, seyahat: 85 },
       deger: { insanlaraYardim: 65, kariyerYukselme: 60, bagimsizlik: 60, somutUretim: 50, ozelHayat: 30, isGuvencesi: 40 },
       yol: { uzunEgitim: 35, yogunTempo: 80, sehirDegisimi: 85, yurtdisi: 70, dusukBaslangic: 75, belirsizlik: 65 },
+      cekirdek: [
+        { ilgi: "dilYatkinligi", w: 2 }, { ilgi: "sosyalEtkilesim", w: 2 },
+        { calisma: "seyahat", w: 2 }, { yol: "sehirDegisimi" },
+        { kosul: "musteriIliskisi", w: 2 },
+      ],
       kosullar: ["musteriIliskisi", "yogunInsan", "surekliSeyahat", "geceNobet", "surekliAyakta", "belirsizGelir"],
       dersler: ["yabanciDil", "cografya", "tarih", "sunum", "organizasyon"],
     },
@@ -513,6 +779,11 @@
       calisma: { hareketlilik: 60, yerCesitliligi: 70, insanEtkilesimi: 65, gorevDegiskenligi: 65, saatEsnekligi: 40, uygulamalilik: 80, seyahat: 70, ekipYonetimi: 65 },
       deger: { kariyerYukselme: 70, somutUretim: 65, isGuvencesi: 60, duzen: 70, yuksekGelir: 60, ozelHayat: 40 },
       yol: { uzunEgitim: 35, yogunTempo: 80, sehirDegisimi: 75, rekabetOrtami: 65 },
+      cekirdek: [
+        { ilgi: "planlama", w: 3 }, { ilgi: "organizasyon", w: 2 },
+        { ilgi: "krizCozme" }, { calisma: "yerCesitliligi" },
+        { yol: "yogunTempo", w: 2 }, { kosul: "surekliSeyahat" },
+      ],
       kosullar: ["surekliSeyahat", "geceNobet", "yuksekStres", "surekliMasa"],
       dersler: ["matematik", "cografya", "bilgisayar", "organizasyon"],
     },
@@ -523,6 +794,11 @@
       calisma: { hareketlilik: 95, yerCesitliligi: 80, insanEtkilesimi: 80, gorevDegiskenligi: 85, saatEsnekligi: 45, ortamCanliligi: 85, uygulamalilik: 95, ekipYonetimi: 65 },
       deger: { toplumsalFayda: 95, insanlaraYardim: 95, isGuvencesi: 75, somutUretim: 55, ozelHayat: 25, yuksekGelir: 40 },
       yol: { uzunEgitim: 30, zorSinav: 60, yogunTempo: 90, sehirDegisimi: 80 },
+      cekirdek: [
+        { ilgi: "krizCozme", w: 3 }, { ilgi: "bedenselBeceri", w: 2 },
+        { calisma: "gorevDegiskenligi", w: 2 }, { kosul: "geceNobet", w: 2 },
+        { kosul: "fizikselYorucu" },
+      ],
       kosullar: ["geceNobet", "kanHastalik", "yuksekStres", "fizikselYorucu", "surekliAyakta", "surekliDegisen"],
       dersler: ["biyoloji", "spor", "cografya", "grupCalismasi"],
     },
@@ -533,28 +809,43 @@
       calisma: { hareketlilik: 100, yerCesitliligi: 70, insanEtkilesimi: 90, gorevDegiskenligi: 65, saatEsnekligi: 65, ortamCanliligi: 90, uygulamalilik: 100, seyahat: 65 },
       deger: { insanlaraYardim: 75, somutUretim: 60, bagimsizlik: 65, toplumsalFayda: 70, isGuvencesi: 40, yuksekGelir: 40 },
       yol: { uzunEgitim: 40, yogunTempo: 75, rekabetOrtami: 80, dusukBaslangic: 75, belirsizlik: 70, sehirDegisimi: 70 },
+      cekirdek: [
+        { ilgi: "bedenselBeceri", w: 3 }, { ilgi: "ogretme", w: 2 },
+        { calisma: "hareketlilik", w: 2 }, { yol: "belirsizlik" },
+        { kosul: "fizikselYorucu", w: 2 },
+      ],
       kosullar: ["fizikselYorucu", "surekliAyakta", "belirsizGelir", "cokRekabetci", "yogunInsan"],
       dersler: ["spor", "biyoloji", "grupCalismasi", "organizasyon"],
     },
 
-    /* ───────────────────────── TOPLUM VE DÜŞÜNCE ─────────────── */
+    /* ────────────── İNSAN, TOPLUM VE DÜŞÜNCE BİLİMLERİ ───────── */
     {
-      id: "sosyal-beseri", ad: "Sosyal ve Beşerî Bilimler", alan: "Toplum ve Düşünce",
+      id: "sosyal-beseri", ad: "Sosyal ve Beşerî Bilimler", alan: "İnsan, Toplum ve Düşünce Bilimleri",
       ozet: "Toplumun, tarihin, mekânın ve düşüncenin nasıl şekillendiğini araştıran alan.",
       ilgi: { arastirma: 95, analitikDusunme: 85, yaziliIfade: 85, sozelIfade: 75, detayOdaklilik: 75, empati: 65, dogaIlgisi: 50 },
       calisma: { hareketlilik: 30, insanEtkilesimi: 50, gorevDegiskenligi: 45, saatEsnekligi: 65, ortamCanliligi: 30, uygulamalilik: 35 },
       deger: { bilgiUretme: 95, surekliOgrenme: 90, toplumsalFayda: 75, bagimsizlik: 65, ozelHayat: 60, yuksekGelir: 30, isGuvencesi: 45 },
       yol: { uzunEgitim: 60, egitimSonrasiEgitim: 85, zorSinav: 65, dusukBaslangic: 80, belirsizlik: 75 },
+      cekirdek: [
+        { ilgi: "arastirma", w: 3 }, { ilgi: "yaziliIfade", w: 2 },
+        { ilgi: "analitikDusunme", w: 2 }, { calisma: "uygulamalilik" },
+        { yol: "egitimSonrasiEgitim", w: 2 }, { kosul: "yogunOkumaYazma", w: 2 },
+      ],
       kosullar: ["yogunOkumaYazma", "surekliMasa", "belirsizGelir"],
       dersler: ["tarih", "cografya", "felsefe", "turkce", "arastirma"],
     },
     {
-      id: "din-ilahiyat", ad: "İlahiyat ve Din Bilimleri", alan: "Toplum ve Düşünce",
+      id: "din-ilahiyat", ad: "İlahiyat ve Din Bilimleri", alan: "İnsan, Toplum ve Düşünce Bilimleri",
       ozet: "Dinî metin, tarih ve düşünce geleneğini inceleyen; öğretim ve rehberlik yollarına açılan alan.",
       ilgi: { arastirma: 95, yaziliIfade: 85, detayOdaklilik: 85, dilYatkinligi: 80, sozelIfade: 75, ogretme: 70, empati: 65, aktifDinleme: 65 },
       calisma: { hareketlilik: 35, insanEtkilesimi: 75, gorevDegiskenligi: 40, saatEsnekligi: 40, uygulamalilik: 55 },
       deger: { toplumsalFayda: 85, bilgiUretme: 80, insanlaraYardim: 80, isGuvencesi: 75, duzen: 70, surekliOgrenme: 75, yuksekGelir: 30 },
       yol: { uzunEgitim: 50, zorSinav: 60, egitimSonrasiEgitim: 60, sehirDegisimi: 75 },
+      cekirdek: [
+        { ilgi: "arastirma", w: 3 }, { ilgi: "yaziliIfade", w: 2 },
+        { ilgi: "detayOdaklilik", w: 2 }, { ilgi: "dilYatkinligi" },
+        { calisma: "hareketlilik" }, { kosul: "yogunOkumaYazma", w: 2 },
+      ],
       kosullar: ["yogunOkumaYazma", "yogunInsan"],
       dersler: ["turkce", "tarih", "felsefe", "yabanciDil", "arastirma"],
     },
@@ -572,7 +863,7 @@
     "Sağlık",
     "Doğa, Tarım ve Çevre",
     "Hizmet ve Uygulama",
-    "Toplum ve Düşünce",
+    "İnsan, Toplum ve Düşünce Bilimleri",
   ];
 
   kok.KP_AILELER = { surum: 1, liste: AILELER, alanlar: ALANLAR };

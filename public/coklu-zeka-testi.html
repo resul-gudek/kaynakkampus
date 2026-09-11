@@ -272,6 +272,7 @@
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/kk-kaydir.js" defer></script>
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/kk-uyari.js" defer></script>
@@ -932,20 +933,18 @@ function radarSVG(sonuclarSirali) {
 /* Soru geçişlerinde sayfayı en üste (sayfa başlığına) atmak yerine soru kartının
    üstünü yapışkan başlığın hemen altına hizalar. Kart hâlihazırda rahat okunur
    konumdaysa hiç kaydırmaz; böylece mobil ve masaüstünde göz soru alanında kalır. */
+/* Kaydırma davranışı site genelinde ortaktır: assets/kk-kaydir.js.
+   Test bir "çalışma alanı" (#app) içinde ilerler; ekran değişiminde
+   kullanıcı sayfanın tepesine değil bu alanın başına hizalanır ve
+   alan zaten görünüyorsa hiç kımıldanmaz. */
+function alanaHizala() {
+  if (window.KKKaydir) KKKaydir.hizala("#app");
+}
 function soruyaHizala() {
-  const hedef = document.querySelector(".progress-wrap") || document.querySelector(".q-card");
-  const kart = document.querySelector(".q-card");
-  if (!hedef || !kart) return;
-  const ust = document.querySelector("header");
-  const bosluk = (ust ? ust.getBoundingClientRect().height : 0) + 12;
-  const tepe = hedef.getBoundingClientRect().top;
-  const dip = kart.getBoundingClientRect().bottom;
-  // Zaten hizalıysa ya da soru kartı seçenek ve düğmeleriyle bütün olarak
-  // görünüyorsa kımıldatmaya gerek yok; gereksiz zıplamayı önler.
-  if (Math.abs(tepe - bosluk) <= 4) return;
-  if (tepe >= bosluk && dip <= window.innerHeight) return;
-  const y = Math.max(0, window.scrollY + tepe - bosluk);
-  window.scrollTo({ top: y, behavior: "smooth" });
+  if (!window.KKKaydir) return;
+  // Soru kartı bütünüyle görünüyorsa kımıldanmaz; değilse ilerleme
+  // şeridinin başı yapışkan başlığın altına hizalanır.
+  KKKaydir.hizala(document.querySelector(".progress-wrap") || ".q-card");
 }
 
 /* ═════════════ EKRANLAR ═════════════ */
@@ -989,7 +988,7 @@ function ekranSecim() {
   document.querySelectorAll(".lvl-card.aktif").forEach(c => c.addEventListener("click", () => seviyeSec(c.dataset.sev)));
 }
 
-function seviyeSec(sev) { durum.seviye = sev; durum.ekran = "intro"; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+function seviyeSec(sev) { durum.seviye = sev; durum.ekran = "intro"; render(); alanaHizala(); }
 
 function ekranIntro() {
   const s = SEVIYELER[durum.seviye];
@@ -1009,14 +1008,14 @@ function ekranIntro() {
     </div>
   `;
   $("basla").addEventListener("click", testeBasla);
-  $("geri").addEventListener("click", () => { durum.ekran = "secim"; render(); window.scrollTo({ top: 0 }); });
+  $("geri").addEventListener("click", () => { durum.ekran = "secim"; render(); alanaHizala(); });
 }
 
 function testeBasla() {
   durum.cevaplar = new Array(SORULAR[durum.seviye].length).fill(null);
   durum.indeks = 0; durum.ekran = "test";
   eksikModunuKapat();
-  render(); window.scrollTo({ top: 0 });
+  render(); alanaHizala();
 }
 
 /* ═════════════ EKSİK SORU AKIŞI ═════════════ */
@@ -1122,17 +1121,17 @@ function ekranTest() {
       const kalan = bosIndeksler();
       if (!kalan.length) {                       // eksik kalmadı → doğrudan sonuç
         eksikModunuKapat();
-        durum.ekran = "sonuc"; render(); window.scrollTo({ top: 0 });
+        durum.ekran = "sonuc"; render(); alanaHizala();
       } else if (kalan.length === 1 && kalan[0] === i) {
         // Tek kalan boş soru bu ve hâlâ cevaplanmadı: atlanacak yer yok
-        durum.ekran = "kontrol"; render(); window.scrollTo({ top: 0 });
+        durum.ekran = "kontrol"; render(); alanaHizala();
       } else {
         durum.indeks = sonrakiBos(i); render(); soruyaHizala();
       }
       return;
     }
     if (i < toplam - 1) { durum.indeks++; render(); soruyaHizala(); }
-    else { durum.ekran = "kontrol"; render(); window.scrollTo({ top: 0 }); }
+    else { durum.ekran = "kontrol"; render(); alanaHizala(); }
   });
 }
 
@@ -1169,7 +1168,7 @@ function ekranKontrol() {
   // "Sorulara Dön" bilinçli bir baştan gözden geçirmedir; sıralı gezinme kalır
   $("devam").addEventListener("click", () => {
     durum.indeks = 0; eksikModunuKapat();
-    durum.ekran = "test"; render(); window.scrollTo({ top: 0 });
+    durum.ekran = "test"; render(); alanaHizala();
   });
   if (boslar.length) {
     $("ilkBos").addEventListener("click", () => {
@@ -1180,7 +1179,7 @@ function ekranKontrol() {
   } else {
     $("bitir").addEventListener("click", () => {
       eksikModunuKapat();
-      durum.ekran = "sonuc"; render(); window.scrollTo({ top: 0 });
+      durum.ekran = "sonuc"; render(); alanaHizala();
     });
   }
 }
@@ -1463,7 +1462,7 @@ function pdfKur(sonuclar, seviye) {
 function yeniden() {
   durum.ekran = "secim"; durum.seviye = null; durum.cevaplar = []; durum.indeks = 0;
   eksikModunuKapat();
-  render(); window.scrollTo({ top: 0 });
+  render(); alanaHizala();
 }
 
 /* ═════════════ KİŞİSEL RAPOR (kural tabanlı) ═════════════ */

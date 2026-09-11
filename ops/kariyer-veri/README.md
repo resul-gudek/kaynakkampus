@@ -40,7 +40,27 @@ bilgisi bu araca bilinçli olarak dâhil edilmez.
 | `programlari-guncelle.js` | Hasat + birleştirme + aile ataması + dosya üretimi |
 | `aile-kurallari.js` | Program adı → program ailesi eşleme kuralları (sıralı) |
 | `pdf-metin.js` | ÖSYM kılavuz PDF'inden düz metin çıkarır |
+| `cekirdek-denetle.js` | Aile **çekirdek kriterlerinin** ayırt ediciliğini ölçer (üretim betiği değil) |
 
 Program ailelerinin kariyer profilleri ayrı dosyadadır ve elle yazılır:
 `public/assets/kariyer-aileler.js`. Program listesi güncellendiğinde skor
 motoruna dokunmak gerekmez.
+
+## Çekirdek kriter denetimi
+
+```sh
+node ops/kariyer-veri/cekirdek-denetle.js
+```
+
+Her ailenin `cekirdek` alanı, eşleştirmenin **ikinci kontrol katmanını**
+besler: aileyi komşularından gerçekten ayıran özellikler. Bu betik veri
+kurallarını ölçer — en önemlisi **yaygınlık**: bir kriter ailelerin
+%40'ından fazlasında geçiyorsa artık ayırt edici değil, genel özelliktir
+ve çekirdekten çıkarılmalıdır. Ayrıca iki ailenin çekirdek kümesinin
+birebir aynı olmadığını, koşul kriterlerinin ağırlığının üçte biri
+geçmediğini ve `calisma` kriterlerinin ailenin kendi profilinde kutupta
+durduğunu doğrular.
+
+**Yeni aile eklerken ya da çekirdek değiştirirken çalıştırın**; hata varsa
+çıkış kodu 1'dir. İlk yazımda iki gerçek kusuru bu betik yakaladı: Tarım
+ile Orman ailelerinin çekirdek kümeleri birebir aynıydı.

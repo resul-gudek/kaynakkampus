@@ -11,9 +11,10 @@
 
    Bu modül bir takvim DEĞİLDİR: tarih, saat, yer, kategori yoktur. */
 
-import { useMemo, useState, useTransition, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { hizala } from "@/lib/kaydirma";
 import { MAX_DOSYA_BOYUT, IZINLI_TURLER } from "@/lib/dosya-tanim";
 import {
   altlari,
@@ -58,11 +59,24 @@ export default function EtkinlikYonetim({
   acikKlasor: string | null;
 }) {
   const router = useRouter();
+  /* Klasör geçişinde hizalanacak çalışma alanı (araç çubuğundan aşağısı) */
+  const alanRef = useRef<HTMLDivElement>(null);
+  /* Klasöre girme isteği; yeni içerik geldiğinde (acikKlasor değişince) uygulanır */
+  const hizalanacak = useRef(false);
   const [arama, setArama] = useState("");
   const [kip, setKip] = useState<Kip>(null);
   const [bekliyor, baslat] = useTransition();
 
   const kirinti = useMemo(() => kirintiYolu(dugumler, acikKlasor), [dugumler, acikKlasor]);
+
+  /* Klasör içeriği geldikten sonra çalışma alanına hizala: kullanıcı sayfa
+     başlığına değil dosya yöneticisinin başına gelir, alan görünüyorsa hiç
+     kımıldanmaz (lib/kaydirma.ts). */
+  useEffect(() => {
+    if (!hizalanacak.current) return;
+    hizalanacak.current = false;
+    hizala(alanRef.current);
+  }, [acikKlasor]);
   const ustKlasor = kirinti.length > 1 ? kirinti[kirinti.length - 2].id : null;
 
   /* Arama varsa TÜM ağaçta arar (klasör sınırı aşılır); yoksa yalnız
@@ -88,7 +102,9 @@ export default function EtkinlikYonetim({
 
   function git(klasorId: string | null) {
     setArama("");
-    router.push(etkinlikPanelUrl(klasorId));
+    // scroll: false — Next'in tepeye çekmesi kapalı; hizalamayı biz yaparız
+    router.push(etkinlikPanelUrl(klasorId), { scroll: false });
+    hizalanacak.current = true;   // hizalama yeni içerik gelince yapılır
   }
 
   async function yeniKlasor() {
@@ -176,7 +192,7 @@ export default function EtkinlikYonetim({
       </div>
 
       {/* ── Araç çubuğu ── */}
-      <div className={s.cubuk}>
+      <div className={s.cubuk} ref={alanRef}>
         <button
           type="button"
           className={s.aracDugme}

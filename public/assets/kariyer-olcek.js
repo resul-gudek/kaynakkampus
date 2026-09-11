@@ -304,7 +304,7 @@
       tip: "kaydirac",
       eksen: "calisma",
       soru: "Her satırda kendini nerede görüyorsun?",
-      yardim: "Ortayı da seçebilirsin; ikisi de sana uyuyorsa ortada bırak.",
+      yardim: "Her satırda kendini iki seçenek arasında değerlendir: 1 soldaki seçeneğe en yakın, 5 sağdaki seçeneğe en yakın, 3 ise ikisinin ortasıdır. 2 ve 4 ara dereceleri ifade eder.",
       kivilcim: "Bir mesleğin adı kadar, o mesleği her gün hangi koşullarda yaptığın da önemlidir.",
       enAz: 6,
       secenekler: [
@@ -495,6 +495,62 @@
     gerekceEsigi: 55,
     // Ailenin o boyuta verdiği önem en az bu olmalı
     aileOnemEsigi: 60,
+
+    /* ── ÇEKİRDEK KRİTER KONTROLÜ (ikinci katman) ─────────────────
+       Ana eşleşme dört eksenle hesaplandıktan SONRA çalışan
+       doğrulama katmanı. Yeni bir puanlama sistemi DEĞİLDİR:
+       yalnız "genel eşleşme, alanın ayırt edici yapısıyla da
+       destekleniyor mu?" sorusunu sorar ve sıralamayı sınırlı
+       ölçüde hassaslaştırır.
+
+       Ölçek: çekirdek karşılama (0–100) ile ana puanın FARKI alınır.
+       Fark sıfıra yakınsa hiçbir şey olmaz — yani ana eşleşme zaten
+       ayırt edici yanlarla örtüşüyorsa katman sessiz kalır. Katman
+       ancak ikisi AYRIŞTIĞINDA konuşur.
+
+       Eleme yoktur, tavanlar bilinçli olarak küçüktür: tek bir
+       çekirdek kriterin düşük olması bir aileyi listenin dibine
+       atamaz; birden çok kriter birlikte düşükse fark büyüdüğü için
+       etkisi doğal olarak artar ama yine tavanda durur. */
+    cekirdek: {
+      agirlikVarsayilan: 1,
+
+      // Karşılama eşikleri: sunumda ve uyarı üretiminde kullanılır
+      zayifEsigi: 45,
+      gucluEsigi: 70,
+
+      // "İstemediğim koşullar" bir çekirdek kriterse karşılama böyle okunur.
+      // İşaretlenmemiş koşul = "bende sorun değil" → tam karşılama.
+      kosulKarsilama: { kesin: 0, esnek: 40, yok: 100 },
+
+      // Çekirdek ana puanın GERİSİNDE kaldığında farkın bu kadarı düşülür.
+      cezaKatsayisi: 0.35,
+
+      // Cezanın tavanı iki kademelidir ve KAÇ çekirdek kriterin zayıf
+      // olduğuna bağlıdır. Amaç iki kuralı birlikte tutmak:
+      //   · tek bir zayıf çekirdek kriter bir aileyi aşağı süpürmesin
+      //     → o durumda tavan yalnız zayifBasinaTavan kadardır,
+      //   · ama alanın ayırt edici yanlarının çoğu boşsa etki artsın
+      //     → her zayıf kriter tavanı bir kademe açar, cezaTavani'na dek.
+      // Böylece "genel özellikler yüzünden yükselen" aile durur,
+      // "genel olarak çok uyumlu ama bir yanı eksik" aile durmaz.
+      zayifBasinaTavan: 5,
+      cezaTavani: 15,
+
+      // Çekirdek ana puanı DESTEKLİYORSA verilen küçük artı.
+      // Bilerek cezadan zayıftır: doğrulama katmanı bir aileyi
+      // yukarı taşımak için değil, hak etmediği yükseklikte
+      // durmasını engellemek için vardır.
+      destekKatsayisi: 0.15,
+      destekTavani: 4,
+
+      // Bu sayıdan az kriter ölçülebiliyorsa (öğrenci ilgili bölümleri
+      // boş bırakmışsa) düzeltme yapılmaz: az veriyle sıralama oynatmayız.
+      enAzOlculen: 2,
+
+      // Çekirdekten üretilecek en fazla uyarı sayısı
+      uyariEnFazla: 2,
+    },
   };
 
   /* ── 6. GEÇERLİLİK KURALLARI ───────────────────────────────────

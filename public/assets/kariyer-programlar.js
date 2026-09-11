@@ -65,7 +65,7 @@
     {"id":"anestezi","ad":"Anestezi","duzey":["onlisans"],"puanTuru":["TYT"],"duzeyPuan":{"onlisans":["TYT"]},"aileId":"hemsirelik-bakim","ozelYetenek":false,"programAdet":193},
     {"id":"animasyon-ve-video-uretimi","ad":"Animasyon ve Video Üretimi","duzey":["lisans"],"puanTuru":["SÖZ"],"duzeyPuan":{"lisans":["SÖZ"]},"aileId":"gorsel-sanatlar","ozelYetenek":false,"programAdet":2},
     {"id":"antrenorluk-egitimi","ad":"Antrenörlük Eğitimi","duzey":["lisans"],"puanTuru":["EA","ÖZEL YETENEK"],"duzeyPuan":{"lisans":["EA","ÖZEL YETENEK"]},"aileId":"spor-hareket","ozelYetenek":true,"programAdet":123},
-    {"id":"antropoloji","ad":"Antropoloji","duzey":["lisans"],"puanTuru":["EA"],"duzeyPuan":{"lisans":["EA"]},"aileId":"psikoloji-davranis","ozelYetenek":false,"programAdet":16},
+    {"id":"antropoloji","ad":"Antropoloji","duzey":["lisans"],"puanTuru":["EA"],"duzeyPuan":{"lisans":["EA"]},"aileId":"sosyal-beseri","ozelYetenek":false,"programAdet":16},
     {"id":"arap-dili-ve-edebiyati","ad":"Arap Dili ve Edebiyatı","duzey":["lisans"],"puanTuru":["DİL"],"duzeyPuan":{"lisans":["DİL"]},"aileId":"dil-edebiyat-ceviri","ozelYetenek":false,"programAdet":13},
     {"id":"arapca-mutercim-ve-tercumanlik","ad":"Arapça Mütercim ve Tercümanlık","duzey":["lisans"],"puanTuru":["DİL"],"duzeyPuan":{"lisans":["DİL"]},"aileId":"dil-edebiyat-ceviri","ozelYetenek":false,"programAdet":21},
     {"id":"arapca-ogretmenligi","ad":"Arapça Öğretmenliği","duzey":["lisans"],"puanTuru":["DİL"],"duzeyPuan":{"lisans":["DİL"]},"aileId":"egitim-ogretmenlik","ozelYetenek":false,"programAdet":12},

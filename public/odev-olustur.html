@@ -273,6 +273,7 @@
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/kk-kaydir.js" defer></script>
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/kk-uyari.js" defer></script>
@@ -13586,7 +13587,9 @@ function renderSheet(tani) {
   $("sheet").classList.toggle("bw", $("optBW").checked);
   $("previewEmpty").style.display = "none";
   $("sheetArea").style.display = "block";
-  $("sheetArea").scrollIntoView({ behavior: "smooth", block: "start" });
+  /* Çıktı görünmüyorsa çalışma alanına hizalanır; zaten ekrandaysa
+     kımıldanmaz (assets/kk-kaydir.js). */
+  if (window.KKKaydir) KKKaydir.hizala("#sheetArea");
 }
 
 /* Anonim kullanım sayacı (assets/kullanim-sayac.js) — yalnızca adet tutar */

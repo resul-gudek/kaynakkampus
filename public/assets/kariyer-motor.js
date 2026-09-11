@@ -9,11 +9,20 @@
      profil   → aileleriPuanla() → program ailesi uyumları
      aile     → programlar()    → o ailedeki doğrulanmış bölümler
 
-   Puanlama kuralları (ağırlıklar assets/kariyer-olcek.js içindedir)
-     ilgi    : ailenin önem verdiği boyutlarda öğrencinin ağırlıklı ortalaması
-     calisma : ailenin tipik konumu ile öğrenci tercihi arasındaki uzaklık
-     deger   : öğrencinin önemsediği ama alanın sunmadığı değerlerin açığı
-     yol     : alanın talep ettiği emeğin öğrencinin toleransını aşan kısmı
+   Puanlama iki katmanlıdır:
+
+     1. ANA EŞLEŞME (ağırlıklar assets/kariyer-olcek.js içindedir)
+        ilgi    : ailenin önem verdiği boyutlarda öğrencinin ağırlıklı ortalaması
+        calisma : ailenin tipik konumu ile öğrenci tercihi arasındaki uzaklık
+        deger   : öğrencinin önemsediği ama alanın sunmadığı değerlerin açığı
+        yol     : alanın talep ettiği emeğin öğrencinin toleransını aşan kısmı
+        eksi    : "kesin engel" işaretlenmiş koşullar için sınırlı ceza
+
+     2. ÇEKİRDEK KRİTER DOĞRULAMASI (ikinci kontrol)
+        Ana eşleşme, ailenin AYIRT EDİCİ yapısıyla da destekleniyor mu?
+        Ana puan ile çekirdek karşılamanın farkından ölçülü bir
+        düzeltme üretir. Eleme değildir, ana motorun yerine geçmez;
+        ikisi ayrışmadıkça sessiz kalır. Ayrıntı: bölüm 3b.
 
    Bölüm 3 (ders başarısı) hiçbir uyum puanına girmez; ayrı bir
    "akademik hazırlık" göstergesi olarak döner.
@@ -227,6 +236,134 @@
     return adet ? 100 - asim / adet : A.yansizPuan;
   }
 
+  /* ══════════ 3b. ÇEKİRDEK KRİTER KONTROLÜ ══════════
+     Ana eşleşme (dört eksen) hesaplandıktan SONRA çalışan ikinci
+     katman. Kendi başına bir puanlama sistemi değildir; ana puanla
+     ailenin AYIRT EDİCİ yapısı arasındaki farkı ölçer.
+
+     Bir çekirdek kriter, aileyi komşularından gerçekten ayıran ve
+     üniversitedeki eğitim yapısı ya da mesleğin günlük işleyişiyle
+     doğrudan ilişkili bir özelliktir. "Sözel becerisi güçlü",
+     "iletişimi iyi", "insanlara yardım etmeyi sever" gibi pek çok
+     alanla uyuşan genel özellikler bilerek çekirdeğe yazılmaz —
+     onlar ana eşleşmede zaten karşılığını bulur.
+
+     Kriter biçimleri (assets/kariyer-aileler.js):
+       { ilgi: "arastirma", w: 3 }   öğrencinin o ilgi boyutundaki düzeyi
+       { calisma: "hareketlilik" }   ailenin kendi bildirdiği kutba yakınlık
+       { yol: "egitimSonrasiEgitim" } o emeği göze alma toleransı
+       { deger: "bilgiUretme" }      o değeri isteme düzeyi
+       { kosul: "yogunOkumaYazma" }  o koşula açıklık
+     w (1–4) kriterin ağırlığıdır; yazılmazsa 1'dir. */
+
+  /** Kaydıraç boyutunun ailenin bildirdiği konuma göre okunabilir adı. */
+  function kutupAdi(boyut, hedef) {
+    var s = bolum("calismaHayati").secenekler.filter(function (o) { return o.id === boyut; })[0];
+    if (!s) return OLCEK.BOYUTLAR.calisma[boyut] || boyut;
+    return hedef <= 50 ? s.sol : s.sag;
+  }
+
+  /** Tek bir çekirdek kriterin öğrenci profilindeki karşılanma düzeyi. */
+  function kriterKarsilama(profil, aile, k) {
+    var C = A.cekirdek, deg;
+    if (k.ilgi) {
+      return { tur: "ilgi", id: k.ilgi, ad: k.ad || OLCEK.BOYUTLAR.ilgi[k.ilgi],
+        karsilama: profil.ilgi[k.ilgi] == null ? null : profil.ilgi[k.ilgi] };
+    }
+    // deger ve yol'da karşılama, ilgili eksenin kendi formülüyle AYNI
+    // biçimde yazılır (karşılanmayan istek / aşılan tolerans). Aksi hâlde
+    // kriter ile eksen farklı ölçeklerde olur ve aşağıdaki karşılaştırma
+    // ailelerin çekirdek bileşimine göre sistematik sapar.
+    if (k.deger) {
+      var istek = profil.deger[k.deger];
+      var sunum = aile.deger[k.deger] == null ? A.degerVarsayilan : aile.deger[k.deger];
+      return { tur: "deger", id: k.deger, ad: k.ad || OLCEK.BOYUTLAR.deger[k.deger],
+        karsilama: istek == null ? null : 100 - Math.max(0, istek - sunum) };
+    }
+    if (k.yol) {
+      var tolerans = profil.yol[k.yol], talep = aile.yol[k.yol] || 0;
+      return { tur: "yol", id: k.yol, ad: k.ad || OLCEK.BOYUTLAR.yol[k.yol],
+        karsilama: tolerans == null ? null : 100 - Math.max(0, talep - tolerans) };
+    }
+    if (k.calisma) {
+      // Hedef ayrıca yazılmaz: ailenin kendi çalışma profilinden okunur,
+      // böylece iki yerde çelişen değer tutmak imkânsız olur.
+      var hedef = aile.calisma[k.calisma], v = profil.calisma[k.calisma];
+      return { tur: "calisma", id: k.calisma, ad: k.ad || kutupAdi(k.calisma, hedef),
+        karsilama: (hedef == null || v == null) ? null : 100 - Math.abs(hedef - v) };
+    }
+    if (k.kosul) {
+      deg = profil.kosullar[k.kosul];
+      return { tur: "kosul", id: k.kosul,
+        ad: k.ad || OLCEK.KOSULLAR[k.kosul] + " koşuluna açıklık",
+        karsilama: deg === "kesin" ? C.kosulKarsilama.kesin
+          : deg === "esnek" ? C.kosulKarsilama.esnek : C.kosulKarsilama.yok };
+    }
+    return null;
+  }
+
+  /** Ailenin çekirdek kriterlerinin toplu karşılanma düzeyi.
+
+     Her kriter, KENDİ EKSENİNİN ana uyum puanıyla karşılaştırılır —
+     bileşik genel puanla değil. Sebebi ölçülerek bulundu: ilgi profili
+     "en yüksek üç boyutun ortalaması = 100" diye ölçeklendiği için
+     doğal tabanı düşüktür; koşul ve yol karşılamaları ise yüksekte
+     durur. Çekirdeği ağırlıkla ilgi boyutlarından kurulu aileler
+     (İşletme, Tasarım, Beslenme…) bileşik puanla kıyaslandığında
+     ÖĞRENCİDEN BAĞIMSIZ olarak ortalama 8–13 puan ceza alıyordu.
+     Eksen bazında kıyas bu sapmayı kaynağında keser ve sorulan soruyu
+     da netleştirir: "öğrenci bu eksende genel olarak ne kadar uyuyorsa,
+     alanın AYIRT EDİCİ boyutlarında ondan iyi mi yoksa kötü mü?"
+
+     Koşul kriterlerinin referansı 100'dür: işaretlenmemiş koşul tam
+     karşılama olduğundan katkı sıfır (nötr) olur; ancak öğrenci o
+     koşulu sorun olarak işaretlemişse eksiye düşer. */
+  function cekirdekKarsilama(profil, aile, eksenler) {
+    var C = A.cekirdek, kriterler = [], sapmaToplam = 0, agirlik = 0, karToplam = 0;
+    (aile.cekirdek || []).forEach(function (k) {
+      var r = kriterKarsilama(profil, aile, k);
+      if (!r) return;
+      r.w = k.w || C.agirlikVarsayilan;
+      if (r.karsilama == null) {
+        r.durum = "olculemedi";
+      } else {
+        r.karsilama = sayi(r.karsilama);
+        r.durum = r.karsilama >= C.gucluEsigi ? "guclu" : r.karsilama >= C.zayifEsigi ? "orta" : "zayif";
+        r.dayanak = r.tur === "kosul" ? 100 : eksenler[r.tur];
+        r.sapma = r.karsilama - r.dayanak;
+        sapmaToplam += r.w * r.sapma;
+        karToplam += r.w * r.karsilama;
+        agirlik += r.w;
+      }
+      kriterler.push(r);
+    });
+    var olculen = kriterler.filter(function (r) { return r.karsilama != null; });
+    return {
+      kriterler: kriterler,
+      olculen: olculen.length,
+      // puan: öğrenciye gösterilen "çekirdek karşılama" (0–100)
+      puan: agirlik ? sayi(karToplam / agirlik) : null,
+      // sapma: düzeltmeyi üreten ölçü — eksen bazında ağırlıklı fark
+      sapma: agirlik ? sapmaToplam / agirlik : null,
+      zayif: olculen.filter(function (r) { return r.durum === "zayif"; })
+        .sort(function (a, b) { return b.w - a.w || a.karsilama - b.karsilama || a.id.localeCompare(b.id); }),
+    };
+  }
+
+  /** Çekirdek sapmasından ölçülü düzeltme.
+     Sapma sıfıra yakınsa katman sessizdir; ancak ana eşleşme ile
+     ailenin ayırt edici yapısı ayrıştığında devreye girer. Tavanlar
+     küçüktür: bu bir eleme değil, hassaslaştırmadır. */
+  function cekirdekDuzeltmesi(cek) {
+    var C = A.cekirdek;
+    if (cek.sapma == null || cek.olculen < C.enAzOlculen) return 0;
+    if (cek.sapma >= 0) return Math.min(C.destekTavani, cek.sapma * C.destekKatsayisi);
+    // Tavan, zayıf çekirdek kriter sayısıyla kademelenir: tek eksik bir
+    // yan aileyi süpürmez, çoğu eksikse etki doğal olarak büyür.
+    var tavan = Math.min(C.cezaTavani, C.zayifBasinaTavan * Math.max(1, cek.zayif.length));
+    return -Math.min(tavan, -cek.sapma * C.cezaKatsayisi);
+  }
+
   /** "Kesin engel" işaretli koşullar: eleme değil, sınırlı ceza + uyarı. */
   function engelCezasi(profil, aile) {
     var kesin = [], esnek = [];
@@ -257,8 +394,25 @@
     return adaylar.slice(0, A.gerekceBoyutSayisi).map(function (x) { return x.ad; });
   }
 
-  function celiskiler(profil, aile, engel) {
+  function celiskiler(profil, aile, engel, cek) {
     var liste = [];
+
+    // 0) Çekirdek kriter açıkları — ikinci kontrolün öğrenciye söylediği.
+    // Kesin bir yargı ("bu alan sana uygun değil") ASLA üretilmez; söylenen
+    // şey, genel eşleşmenin alanın ayırt edici yanıyla desteklenmediğidir.
+    if (cek && cek.zayif.length) {
+      var zayifAdlar = cek.zayif.slice(0, A.cekirdek.uyariEnFazla).map(function (r) {
+        return "“" + r.ad.toLocaleLowerCase("tr") + "”";
+      });
+      var coklu = zayifAdlar.length > 1;
+      liste.push({
+        tur: "cekirdek",
+        metin: "Bu alanı benzerlerinden ayıran yanlardan " + zayifAdlar.join(" ve ") +
+          " senin profilinde şu an zayıf görünüyor. Genel eşleşmen iyi olsa bile alanın " +
+          "günlük eğitim ve çalışma yapısında bu " + (coklu ? "yanlar" : "yan") +
+          " önemli yer tutar; alanı araştırırken buraya özellikle bak.",
+      });
+    }
 
     // 1) Çalışma koşulu farkları
     var calismaFark = [];
@@ -350,10 +504,17 @@
     };
   }
 
-  /** Araştırma soruları — ailenin profilinden kurallı biçimde seçilir. */
-  function arastirmaSorulari(aile) {
+  /** Araştırma soruları — ailenin profilinden kurallı biçimde seçilir.
+     Çekirdek kontrolü zayıf bir yan bulduysa ilk sorulardan biri
+     doğrudan o yanı hedefler: öğrenci alanın gerçek yapısını orada
+     sınasın. */
+  function arastirmaSorulari(aile, cek) {
     var s = ["Bu alandaki bölümlerin ders içerikleri birbirinden ne kadar farklı?",
       "Mezunlar hangi işleri yapıyor, ilk iş genelde nerede bulunuyor?"];
+    if (cek && cek.zayif.length) {
+      s.push("Bu alanın eğitiminde ve günlük çalışmasında “" +
+        cek.zayif[0].ad.toLocaleLowerCase("tr") + "” ne kadar yer tutuyor?");
+    }
     if ((aile.yol.uzunEgitim || 0) >= 70) s.push("Eğitim kaç yıl sürüyor, sonrasında uzmanlık ya da ek sınav gerekiyor mu?");
     if ((aile.yol.zorSinav || 0) >= 75) s.push("Bu alana girmek ve alanda ilerlemek için hangi sınavlar gerekiyor?");
     if ((aile.calisma.seyahat || 0) >= 70 || (aile.yol.sehirDegisimi || 0) >= 80) s.push("Çalışma hayatı hangi şehirlerde ve ne kadar seyahatle geçiyor?");
@@ -363,7 +524,11 @@
     return s.slice(0, 5);
   }
 
-  /** Bir aileyi öğrenci profiline karşı puanlar. */
+  /** Bir aileyi öğrenci profiline karşı puanlar.
+     İki katmanlı: önce mevcut ana eşleşme (dört eksen + engel cezası),
+     sonra ailenin çekirdek kriterleriyle ikinci kontrol. Ana katman
+     olduğu gibi korunur; ikinci katman yalnız sınırlı bir düzeltme
+     üretir ve her iki puan da ayrı ayrı raporlanır. */
   function aileyiPuanla(profil, aile) {
     var e = {
       ilgi: ilgiUyumu(profil, aile),
@@ -372,19 +537,30 @@
       yol: yolUyumu(profil, aile),
     };
     var engel = engelCezasi(profil, aile);
-    var genel = e.ilgi * A.eksenAgirlik.ilgi + e.calisma * A.eksenAgirlik.calisma
-      + e.deger * A.eksenAgirlik.deger + e.yol * A.eksenAgirlik.yol - engel.ceza;
-    var puan = sayi(genel);
+
+    /* 1. katman — ANA EŞLEŞME (değişmedi) */
+    var anaPuan = sayi(e.ilgi * A.eksenAgirlik.ilgi + e.calisma * A.eksenAgirlik.calisma
+      + e.deger * A.eksenAgirlik.deger + e.yol * A.eksenAgirlik.yol - engel.ceza);
+
+    /* 2. katman — ÇEKİRDEK KRİTER DOĞRULAMASI */
+    var cek = cekirdekKarsilama(profil, aile, e);
+    var puan = sayi(anaPuan + cekirdekDuzeltmesi(cek));
+    // Gösterilen düzeltme her zaman iki puanın farkıdır; yuvarlama
+    // yüzünden ekranda tutmayan bir sayı çıkmaz.
+    cek.duzeltme = puan - anaPuan;
+
     return {
       aile: aile,
       genel: puan,
+      anaPuan: anaPuan,
+      cekirdek: cek,
       seviye: seviye(puan),
       eksenler: { ilgi: sayi(e.ilgi), calisma: sayi(e.calisma), deger: sayi(e.deger), yol: sayi(e.yol) },
       engel: engel,
       gerekceler: gerekceler(profil, aile),
-      celiskiler: celiskiler(profil, aile, engel),
+      celiskiler: celiskiler(profil, aile, engel, cek),
       akademik: akademikHazirlik(profil, aile),
-      sorular: arastirmaSorulari(aile),
+      sorular: arastirmaSorulari(aile, cek),
       programSayisi: (AILE_PROGRAM[aile.id] || []).length,
     };
   }

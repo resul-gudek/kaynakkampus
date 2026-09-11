@@ -9,7 +9,7 @@
    Süzme istemcide yapılır; yazma işlemleri actions/odeme.ts server
    action'larına gider ve orada rol yeniden doğrulanır. */
 
-import { useMemo, useState, useTransition, type FormEvent } from "react";
+import { useMemo, useRef, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { bugun, tarihStr } from "@/lib/hesap";
 import {
@@ -38,6 +38,7 @@ import {
 } from "@/actions/odeme";
 import { KocDurumRozeti, OgrenciDurumRozeti } from "@/components/odeme/OdemeRozeti";
 import { Uyari } from "@/components/ui/uyari";
+import { hizala } from "@/lib/kaydirma";
 import stil from "@/components/odeme/odeme.module.css";
 
 export interface TarafSecenegi {
@@ -103,6 +104,8 @@ export default function OdemeYonetimi({
   koclar: TarafSecenegi[];
 }) {
   const [form, setForm] = useState<FormDurumu>(bosForm);
+  /* "Düzenle" sonrası hizalanacak çalışma alanı */
+  const formRef = useRef<HTMLFormElement>(null);
   const [mesaj, setMesaj] = useState<{ hata?: string; tamam?: string }>({});
   const [suzgec, setSuzgec] = useState({ ogrenciId: "", kocId: "", ogrenciDurum: "", kocDurum: "" });
   const [bekliyor, baslat] = useTransition();
@@ -190,7 +193,7 @@ export default function OdemeYonetimi({
           ayrılır. Platforma kalan tutar otomatik hesaplanır ve saklanmaz. Ödeme tarihleri
           durum “Ödendi”ye geçtiği gün damgalanır.
         </p>
-        <form className={stil.form} onSubmit={gonder}>
+        <form className={stil.form} onSubmit={gonder} ref={formRef}>
           <div className={stil.alan}>
             <label htmlFor="ogrenciId">Öğrenci</label>
             <select
@@ -612,7 +615,8 @@ export default function OdemeYonetimi({
                         onClick={() => {
                           setForm(satirdanForm(o));
                           setMesaj({});
-                          window.scrollTo({ top: 0, behavior: "smooth" });
+                          // Form ekrandaysa kımıldanmaz (lib/kaydirma.ts)
+                          hizala(formRef.current);
                         }}
                       >
                         Düzenle

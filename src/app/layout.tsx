@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Figtree } from "next/font/google";
 import TemaSaglayici from "@/components/TemaSaglayici";
+import KaydirmaKatmani from "@/components/ui/KaydirmaKatmani";
 import UyariKatmani from "@/components/ui/UyariKatmani";
 import { SITE_KOKU } from "@/lib/site";
 import "./globals.css";
@@ -63,6 +64,8 @@ export default function RootLayout({
           {children}
           {/* alert/confirm/prompt yerine ortak pencere — @/components/ui/uyari */}
           <UyariKatmani />
+          {/* yapışkan başlık payını ölçer + href="#" sıçramasını keser — @/lib/kaydirma */}
+          <KaydirmaKatmani />
         </TemaSaglayici>
       </body>
     </html>

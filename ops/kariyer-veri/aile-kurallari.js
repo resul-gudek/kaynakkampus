@@ -89,10 +89,10 @@ module.exports = [
   { aile: "iletisim-medya", tam: ["İletişim", "İletişim Bilimleri", "Kültür ve İletişim Bilimleri", "Gazetecilik", "Basın ve Yayın", "Yeni Medya", "Yeni Medya ve İletişim", "Yeni Medya ve Gazetecilik", "Medya ve İletişim", "Medya ve Görsel Sanatlar", "Radyo, Televizyon ve Sinema", "Radyo ve Televizyon Teknolojisi", "Sinema ve Televizyon", "Sinema ve Dijital Medya", "Televizyon Haberciliği ve Programcılığı", "Film Tasarımı ve Yönetimi", "Kurgu, Ses ve Görüntü Yönetimi"] },
 
   // ── İnsan ve toplum ──
-  { aile: "psikoloji-davranis", tam: ["Psikoloji", "Rehberlik ve Psikolojik Danışmanlık", "Antropoloji"] },
+  { aile: "psikoloji-davranis", tam: ["Psikoloji", "Rehberlik ve Psikolojik Danışmanlık"] },
   { aile: "sosyal-hizmet", tam: ["Sosyal Hizmet", "Sosyal Hizmetler", "Gerontoloji"] },
   { aile: "cocuk-aile", tam: ["Çocuk Gelişimi", "Çocuk Koruma ve Bakım Hizmetleri"] },
-  { aile: "sosyal-beseri", tam: ["Tarih ve Yapay Zeka", "Felsefe ve Yapay Zeka", "Sosyoloji", "Tarih", "Coğrafya", "Felsefe", "Bilim Tarihi", "Halkbilimi", "Türk Halkbilimi", "Sanat ve Sosyal Bilimler Programları"] },
+  { aile: "sosyal-beseri", tam: ["Antropoloji", "Tarih ve Yapay Zeka", "Felsefe ve Yapay Zeka", "Sosyoloji", "Tarih", "Coğrafya", "Felsefe", "Bilim Tarihi", "Halkbilimi", "Türk Halkbilimi", "Sanat ve Sosyal Bilimler Programları"] },
 
   // ── Ulaşım ve hizmet ──
   { aile: "havacilik", tam: ["Pilotaj", "Uçak Mühendisliği", "Havacılık ve Uzay Mühendisliği", "Uzay Mühendisliği", "Havacılık Elektrik ve Elektroniği", "Havacılık Elektroniği Teknolojileri", "Uçak Bakım ve Onarım", "Uçak Elektrik ve Elektroniği", "Uçak Gövde ve Motor Bakımı", "Uçak Teknolojisi", "Hava Aracı İmalat Teknolojileri", "Hava Trafik Kontrolü", "Uçuş Harekat Yöneticiliği", "Sivil Hava Ulaştırma İşletmeciliği", "Sivil Havacılık Kabin Hizmetleri", "Hava Lojistiği", "İnsansız Hava Aracı Teknolojisi ve Operatörlüğü", "Havacılık Yönetimi"] },

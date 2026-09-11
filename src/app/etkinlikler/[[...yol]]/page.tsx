@@ -113,21 +113,29 @@ export default async function EtkinlikArsivSayfasi({
         </div>
       </section>
 
-      <section className={s.govde}>
+      <section className={s.govde} data-kk-alan>
         <div className="container">
           {/* ── Kırıntı yolu ── */}
           <nav className={s.kirinti} aria-label="Konum">
-            <Link href="/etkinlikler">Etkinlikler</Link>
+            <Link href="/etkinlikler" scroll={false}>
+              Etkinlikler
+            </Link>
             {kirinti.map((k, i) => (
               <span key={k.adres} className={s.kirintiParca}>
                 <span aria-hidden>›</span>
-                {i === kirinti.length - 1 ? <b>{k.ad}</b> : <Link href={k.adres}>{k.ad}</Link>}
+                {i === kirinti.length - 1 ? (
+                  <b>{k.ad}</b>
+                ) : (
+                  <Link href={k.adres} scroll={false}>
+                    {k.ad}
+                  </Link>
+                )}
               </span>
             ))}
           </nav>
 
           {!!parcalar.length && (
-            <Link href={ustAdres} className={s.ustKlasor}>
+            <Link href={ustAdres} className={s.ustKlasor} scroll={false}>
               ← Üst klasöre dön
             </Link>
           )}
@@ -148,6 +156,7 @@ export default async function EtkinlikArsivSayfasi({
                   key={k.id}
                   href={etkinlikYolUrl([...parcalar, k.slug])}
                   className={`${s.kart} ${s.klasorKart}`}
+                  scroll={false}
                 >
                   <span className={s.kare}>
                     <KlasorIkonu className={s.klasorIkon} boyut={72} />

@@ -309,7 +309,6 @@
        tablo görünümü isteyen için düğmeyle geçiş var. Masaüstü etkilenmez:
        aşağıdaki parçalar yalnız @media (max-width:720px) içinde açılır. */
     .day-list, .hours-edit, .view-bar { display: none; }
-    .builder-grid > main { scroll-margin-top: 88px; }
 
     /* katlanabilir adım kutusu — masaüstünde her zaman açık durur */
     details.step-box > summary { list-style: none; }
@@ -521,6 +520,7 @@
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/kk-kaydir.js" defer></script>
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/kk-uyari.js" defer></script>
@@ -1086,7 +1086,7 @@ document.addEventListener("mouseup", () => painting = false);
    Panel alta indiğinde (telefon) program ekranın çok altında kalıyordu;
    oluşturulduğu anda oraya kayıyor ve kısa bir vurgu veriyoruz. */
 function programaGit() {
-  $("sheetMain").scrollIntoView({ behavior: "smooth", block: "start" });
+  if (window.KKKaydir) KKKaydir.hizala("#sheetMain");   /* görünüyorsa kımıldamaz */
   const sh = $("sheet");
   sh.classList.remove("vurgu");
   void sh.offsetWidth;                       // animasyonu yeniden tetikle
@@ -1102,7 +1102,8 @@ function dersSecUyar() {
   setTimeout(() => p.classList.remove("uyari"), 1100);
   const kutu = $("palette").closest("details");
   if (kutu) kutu.open = true;
-  if (dikeyDizilim()) $("palette").scrollIntoView({ behavior: "smooth", block: "center" });
+  /* Palet ekran dışındaysa yalnız gerektiği kadar kaydırılır. */
+  if (window.KKKaydir) KKKaydir.gorunurKil("#palette");
 }
 
 /* ═══════════ SATIR BAZLI SÜRE DÜZENLEME ═══════════ */

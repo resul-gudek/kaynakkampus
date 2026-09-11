@@ -118,13 +118,25 @@
     /* Radyo girdileri görsel olarak gizlenir; konumları kutunun içinde kalsın
        diye kap konumlandırılır (klavye odağı label üzerinde görünür). */
     .kp-secim { position: relative; display: flex; flex-wrap: wrap; gap: 8px; }
-    .kp-secim.kp-esit > * { flex: 1 1 0; min-width: 44px; }
+    /* Eşit bölmeli gruplar (1–5 ölçeği ve ders seviyeleri) TEK SATIRDA kalır.
+       Radyo girdileri position:absolute olduğu için ızgarada sütun açmaz;
+       sütun sayısı böylece etiket sayısına eşittir ve JS'ten sayı almaya
+       gerek kalmaz. minmax(0,1fr) her sütunun 0'a kadar daralmasına izin
+       verir — sabit bir min-width bırakılırsa dar ekranda alt satıra düşer
+       (eski flex kuralındaki 44px tabanı 320px'te tam olarak buna yol
+       açıyordu: 5×44 + 4×8 = 252px > 246px kullanılabilir genişlik). */
+    .kp-secim.kp-esit { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+    .kp-secim.kp-esit > label { min-width: 0; }
     .kp-secim input { position: absolute; opacity: 0; width: 1px; height: 1px; }
     .kp-secim label {
       display: block; text-align: center; cursor: pointer; user-select: none;
       border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px);
       padding: 9px 12px; font-size: 14px; color: var(--grafit, #55474C); background: #fff;
       transition: background .15s, border-color .15s, color .15s;
+      /* Emniyet ağı: hangi genişlikte olursa olsun metin kutudan taşmaz.
+         Normal düzende sözcük bölünmesi tetiklenmez; yalnız kutu gerçekten
+         yetmediğinde devreye girer. */
+      overflow-wrap: break-word;
     }
     .kp-secim label:hover { border-color: var(--bordo, #7A2035); }
     .kp-secim input:checked + label {
@@ -240,6 +252,22 @@
     .kp-uyari span:first-child { flex: none; }
     .kp-akademik { font-size: 14px; color: var(--grafit, #55474C); margin-top: 8px; }
     .kp-akademik b { color: var(--murekkep, #1F141A); }
+    /* İkinci kontrol — çekirdek kriterler */
+    .kp-cek-ozet { font-size: 14px; color: var(--grafit, #55474C); line-height: 1.6; margin: 0 0 10px; }
+    .kp-cek-ozet b { color: var(--murekkep, #1F141A); }
+    .kp-cek { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .kp-cek li {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center;
+      font-size: 14px; color: var(--grafit, #55474C);
+      border: 1px solid var(--duman, #E4DBD9); border-radius: var(--radius-sm, 12px); padding: 8px 12px;
+    }
+    .kp-cek-im { font-weight: 800; font-size: 13px; }
+    .kp-cek-im.guclu { color: #2F6B4F; }
+    .kp-cek-im.orta { color: #A9761E; }
+    .kp-cek-im.zayif { color: var(--bordo, #7A2035); }
+    .kp-cek-im.olculemedi { color: var(--kursun, #7C6F73); }
+    .kp-cek-puan { font-size: 13px; color: var(--kursun, #7C6F73); font-variant-numeric: tabular-nums; }
+    .kp-cek-not { font-size: 13px; color: var(--kursun, #7C6F73); line-height: 1.55; margin: 10px 0 0; }
     .kp-aile-eylem { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 
     /* ── Program listesi ────────────────────────────────────── */
@@ -314,10 +342,68 @@
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; animation: none !important; }
     }
+
+    /* ── Dar ekran düzeltmeleri ─────────────────────────────────
+       Yalnız responsive katman: renk, font ailesi ve tasarım dili
+       değişmez, masaüstü/tablet düzeni olduğu gibi kalır. Cihaz
+       markasına göre değil, gerçek kullanılabilir genişliğe göre
+       yazılmıştır. Ölçülen kırılma noktaları:
+         · ders seçenekleri 4 sütun hâlinde ancak ~486px viewport'tan
+           itibaren sığıyor ("Zorlanıyorum" etiketi 97px istiyor),
+         · 1–5 ölçeği eski flex kuralıyla 320px'te ikinci satıra
+           düşüyordu (artık ızgara olduğu için düşmez).            */
+
+    /* Uzun etiketli DERS seçenekleri: 4 sütun sığmadığı genişlikte
+       2×2 dizilir. Metin kısaltılmaz, kesilmez; kutu içerikle büyür. */
+    @media (max-width: 500px) {
+      .kp-secim.kp-esit-ders {
+        grid-auto-flow: row;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* 1–5 ölçeği her telefonda tek satırda kalır; dar ekranda dokunma
+       hedefini 44px'in altına düşürmemek için boşluk ve yatay iç
+       dolgu kontrollü biçimde küçülür (yükseklik korunur). */
+    @media (max-width: 380px) {
+      .kp-secim.kp-esit { gap: 6px; }
+      .kp-secim.kp-esit > label { padding-left: 4px; padding-right: 4px; }
+      .kp-satir { padding: 14px 12px; }
+      .kp-kutuplar { gap: 8px; font-size: 12px; }
+    }
+
+    /* site-tema.css bu satır içi stilden SONRA yüklendiği için tek
+       sınıflı bir kural (.btn) onu ezemez; id + sınıf ile yazılır.
+       .btn'in nowrap'i uzun etiketli butonu 456px'te sabitliyor ve
+       bütün telefonlarda yatay kaydırma üretiyordu. */
+    #kpApp .btn { white-space: normal; }
+
+    /* Sonuç kartı başlığı: rozet sütunu "auto" olduğu için dar ekranda
+       ad sütununu 48px'e kadar eziyordu. Sayı ve rozet küçülür, ad
+       sarmalanır; kart düzeni ve renkleri aynı kalır. */
+    .kp-aile-ad, .kp-aile-alan { overflow-wrap: break-word; }
+    .kp-aile-sag { min-width: 0; }
+    @media (max-width: 430px) {
+      /* Rozet "auto" sütunu, ad sütununu 320px'te 48px'e kadar eziyordu.
+         Dar ekranda rozet kendi satırına iner: ad tam genişliği kullanır,
+         sıra numarası ve ok yerinde kalır. Sütun/satır düzeni dışında
+         hiçbir görsel değer değişmez. */
+      .kp-aile-bas {
+        grid-template-columns: 34px minmax(0, 1fr);
+        column-gap: 10px; row-gap: 8px; padding: 16px 14px;
+      }
+      .kp-sira { width: 34px; height: 34px; font-size: 14px; }
+      .kp-aile-ad { font-size: 16px; }
+      /* İkinci satır: ad sütununun altı. Ok sağ kenarda kalsın diye
+         iki uca yaslanır. */
+      .kp-aile-sag { grid-column: 2; justify-content: space-between; gap: 6px; }
+      .kp-rozet { font-size: 11px; padding: 4px 8px; }
+    }
   </style>
 
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
+  <script src="assets/kk-kaydir.js" defer></script>
   <script src="assets/site-header.js" defer></script>
   <script src="assets/duyuru-serit.js" defer></script>
   <script src="assets/kk-uyari.js" defer></script>
@@ -590,7 +676,13 @@
     if (!sonuclarOnbellek) sonuclarOnbellek = MOTOR.aileleriPuanla(profil());
     return sonuclarOnbellek;
   }
-  function basaGit() { window.scrollTo({ top: 0, behavior: "auto" }); }
+  /* Akış içi geçişlerde (bölüm → bölüm, soru → sonraki, profil, sonuç)
+     kullanıcı sayfanın tepesine değil çalışma alanının (#kpApp) başına
+     hizalanır: hero ve navbar geri gelmez, alan zaten görünüyorsa hiç
+     kımıldanmaz. Ortak davranış assets/kk-kaydir.js içinde. */
+  function basaGit() {
+    if (window.KKKaydir) KKKaydir.hizala("#kpApp");
+  }
 
   /* ── Kıvılcım balonu ─────────────────────────────────────── */
   function kivilcim(metin) {
@@ -958,7 +1050,9 @@
       var satir = el("div", "kp-satir");
       if (c.deger[s.id] != null) satir.classList.add("kp-secili");
       satir.appendChild(el("div", "kp-satir-ad", s.ad));
-      var grup = el("div", "kp-secim kp-esit");
+      // kp-esit-ders yalnız bir CSS kancasıdır: ders seçenekleri ("Zorlanıyorum"
+      // gibi uzun sözcükler) dar ekranda 2×2 dizilir. Ölçek ve mantık aynıdır.
+      var grup = el("div", "kp-secim kp-esit kp-esit-ders");
       grup.setAttribute("role", "radiogroup");
       grup.setAttribute("aria-label", s.ad);
       var ad = "kp-ders-" + s.id;
@@ -1334,6 +1428,42 @@
     }
     govde.appendChild(blokN);
 
+    /* İkinci kontrol — alanın ayırt edici yapısıyla uyum.
+       Ana eşleşmeden sonra çalışır; kesin bir yargı üretmez, genel
+       eşleşmenin alanın gerçek yapısıyla desteklenip desteklenmediğini
+       gösterir ve sıralamayı sınırlı ölçüde hassaslaştırır. */
+    if (r.cekirdek && r.cekirdek.olculen) {
+      var blokK = el("div", "kp-blok");
+      blokK.appendChild(el("h4", null, "Alanı ayıran yanlarla uyum (ikinci kontrol)"));
+      var dz = r.cekirdek.duzeltme;
+      var ozet = el("p", "kp-cek-ozet");
+      ozet.innerHTML = (dz > 0
+        ? "Genel eşleşmen, bu alanı benzerlerinden ayıran yanlarla da <b>destekleniyor</b>."
+        : dz < 0
+          ? "Genel eşleşmen daha çok alanın <b>genel yanlarından</b> geliyor; alanı ayıran yanlarda örtüşme daha az."
+          : "Genel eşleşmen ile alanı ayıran yanlar <b>aynı yönde</b>; bu kontrol sıralamayı değiştirmedi.")
+        + " Çekirdek karşılama <b>" + r.cekirdek.puan + "/100</b>"
+        + (dz ? " · uyum skoru " + r.anaPuan + " → <b>" + r.genel + "</b>" : "") + ".";
+      blokK.appendChild(ozet);
+
+      var ulK = el("ul", "kp-cek");
+      var IM = { guclu: "✓", orta: "•", zayif: "!", olculemedi: "–" };
+      r.cekirdek.kriterler.forEach(function (k) {
+        var li = el("li");
+        li.appendChild(el("span", "kp-cek-im " + k.durum, IM[k.durum]));
+        li.appendChild(el("span", null, k.ad));
+        li.appendChild(el("span", "kp-cek-puan",
+          k.karsilama == null ? "değerlendirilmedi" : k.karsilama + "/100"));
+        ulK.appendChild(li);
+      });
+      blokK.appendChild(ulK);
+      blokK.appendChild(el("p", "kp-cek-not",
+        "Bu bir eleme değildir. Buradaki bir eksik, alanın sana uygun olmadığı anlamına gelmez; " +
+        "alanın üniversitedeki eğitim yapısında ve günlük çalışmasında hangi yanların ağır bastığını " +
+        "gösterir. Kararı araştırarak sen verirsin."));
+      govde.appendChild(blokK);
+    }
+
     /* Düşünmen gerekenler */
     var blokC = el("div", "kp-blok");
     blokC.appendChild(el("h4", null, "Düşünmen gereken noktalar"));
@@ -1540,6 +1670,30 @@
       else b1.appendChild(el("p", "kp-bos", "Belirgin biçimde örtüşen bir yön öne çıkmadı."));
       k.appendChild(b1);
 
+      /* İkinci kontrol — bu bölümün ailesini ayıran yanlar.
+         Aynı üst ailedeki bölümler burada da kendi çekirdek
+         kriterleriyle ayrı ayrı okunur. */
+      if (r.cekirdek && r.cekirdek.olculen) {
+        var bK = el("div", "kp-blok");
+        bK.appendChild(el("h4", null, "Alanı ayıran yanlarla uyum (ikinci kontrol)"));
+        var oz = el("p", "kp-cek-ozet");
+        oz.textContent = "Çekirdek karşılama " + r.cekirdek.puan + "/100"
+          + (r.cekirdek.duzeltme ? " · uyum skoru " + r.anaPuan + " → " + r.genel : "") + ".";
+        bK.appendChild(oz);
+        var ulC = el("ul", "kp-cek");
+        var IMK = { guclu: "✓", orta: "•", zayif: "!", olculemedi: "–" };
+        r.cekirdek.kriterler.forEach(function (kr) {
+          var li2 = el("li");
+          li2.appendChild(el("span", "kp-cek-im " + kr.durum, IMK[kr.durum]));
+          li2.appendChild(el("span", null, kr.ad));
+          li2.appendChild(el("span", "kp-cek-puan",
+            kr.karsilama == null ? "değerlendirilmedi" : kr.karsilama + "/100"));
+          ulC.appendChild(li2);
+        });
+        bK.appendChild(ulC);
+        k.appendChild(bK);
+      }
+
       var b2 = el("div", "kp-blok");
       b2.appendChild(el("h4", null, "Daha dikkatli düşünmen gereken yönler"));
       if (r.celiskiler.length) {
@@ -1741,6 +1895,19 @@
       b.push({ t: "p", m: r.gerekceler.length
         ? r.gerekceler.join(", ") + " yönlerin bu alanın özellikleriyle örtüşüyor."
         : "Belirgin biçimde örtüşen bir güçlü yön öne çıkmadı." });
+      if (r.cekirdek && r.cekirdek.olculen) {
+        b.push({ t: "h4", m: "Alanı ayıran yanlarla uyum (ikinci kontrol)" });
+        b.push({ t: "p", m: (r.cekirdek.duzeltme > 0
+          ? "Genel eşleşme, alanı benzerlerinden ayıran yanlarla da destekleniyor."
+          : r.cekirdek.duzeltme < 0
+            ? "Genel eşleşme daha çok alanın genel yanlarından geliyor; alanı ayıran yanlarda örtüşme daha az."
+            : "Genel eşleşme ile alanı ayıran yanlar aynı yönde.")
+          + " Çekirdek karşılama " + r.cekirdek.puan + "/100"
+          + (r.cekirdek.duzeltme ? " · uyum skoru " + r.anaPuan + " → " + r.genel : "") + "." });
+        r.cekirdek.kriterler.forEach(function (k) {
+          b.push({ t: "li", m: k.ad + " — " + (k.karsilama == null ? "değerlendirilmedi" : k.karsilama + "/100") });
+        });
+      }
       if (r.celiskiler.length) {
         b.push({ t: "h4", m: "Düşünmen gereken noktalar" });
         r.celiskiler.slice(0, 4).forEach(function (c) { b.push({ t: "li", m: c.metin }); });

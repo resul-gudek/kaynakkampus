@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { basvuruGonder } from "@/actions/basvuru";
 import { alanAccept, MAX_DOSYA_BOYUT } from "@/lib/basvuru-dosya-tanim";
+import { gorunurKil, hizala } from "@/lib/kaydirma";
 import { FORMLAR } from "./formlar";
 import type { Adim, Alan, FormTanimi } from "./tipler";
 import stil from "./basvuru.module.css";
@@ -34,9 +35,18 @@ export default function BasvuruSihirbazi({ tur }: { tur: FormTanimi["tur"] }) {
   const [gonderiliyor, setGonderiliyor] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const honeypot = useRef<HTMLInputElement>(null);
+  /* Adım değiştiğinde hizalama isteği; çizimden SONRA effect'te uygulanır. */
+  const hizalanacak = useRef(false);
 
   const adimlar = form.adimlar;
   const sonAdim = adimIx === adimlar.length - 1;
+
+  /* Adım/ekran değiştikten SONRA hizala (yalnız kaydir() istediyse) */
+  useEffect(() => {
+    if (!hizalanacak.current) return;
+    hizalanacak.current = false;
+    hizala("[data-kk-alan]");
+  }, [adimIx, token]);
 
   function alanGorunur(a: Alan): boolean {
     return a.gorunur ? a.gorunur(deger) : true;
@@ -78,8 +88,11 @@ export default function BasvuruSihirbazi({ tur }: { tur: FormTanimi["tur"] }) {
       if (typeof window !== "undefined") {
         requestAnimationFrame(() => {
           const kutu = document.querySelector<HTMLElement>(`[data-alan="${eksik.ad}"]`);
-          kutu?.scrollIntoView({ behavior: "smooth", block: "center" });
-          kutu?.querySelector<HTMLElement>("input, select, textarea")?.focus();
+          if (kutu) gorunurKil(kutu);
+          // preventScroll: odaklama, ortak katmanın yaptığı hizalamayı bozmasın
+          kutu
+            ?.querySelector<HTMLElement>("input, select, textarea")
+            ?.focus({ preventScroll: true });
         });
       }
       return;
@@ -95,8 +108,15 @@ export default function BasvuruSihirbazi({ tur }: { tur: FormTanimi["tur"] }) {
     setAdimIx((i) => Math.max(i - 1, 0));
     kaydir();
   }
+  /* Aynı akış içinde ilerleme: kullanıcı sayfanın tepesine değil
+     sihirbazın (çalışma alanının) başına hizalanır. Ortak davranış
+     lib/kaydirma.ts içinde; statik sayfalardaki ikizi kk-kaydir.js.
+
+     Ölçüm yeni adım çizildikten sonra yapılmalı: React güncellemeyi toplu
+     işlediği için burada hemen ölçmek eski yerleşimi okur ve kısa adımlarda
+     tarayıcı kaydırmayı kırpar (adım ekranın üstünde kalır). */
   function kaydir() {
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+    hizalanacak.current = true;
   }
 
   /** veri JSON'unu kur: dosyalar hariç; boş sayı/dizi alanları atlanır. */
@@ -184,7 +204,7 @@ export default function BasvuruSihirbazi({ tur }: { tur: FormTanimi["tur"] }) {
   const ilerlemeYuzde = Math.round(((adimIx + 1) / adimlar.length) * 100);
 
   return (
-    <div className={stil.sihirbaz}>
+    <div className={stil.sihirbaz} data-kk-alan>
       {/* Aşama göstergesi */}
       <div className={stil.adimBar}>
         <div className={stil.adimBarUst}>
@@ -512,7 +532,7 @@ function BasariEkrani({ token }: { token: string }) {
   }
 
   return (
-    <div className={`${stil.kart} ${stil.basari}`}>
+    <div className={`${stil.kart} ${stil.basari}`} data-kk-alan>
       <div className={stil.basariIkon}>✅</div>
       <h2>Başvurunuz alındı!</h2>
       <p>
