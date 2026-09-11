@@ -318,9 +318,12 @@
      Koşul kriterlerinin referansı 100'dür: işaretlenmemiş koşul tam
      karşılama olduğundan katkı sıfır (nötr) olur; ancak öğrenci o
      koşulu sorun olarak işaretlemişse eksiye düşer. */
-  function cekirdekKarsilama(profil, aile, eksenler) {
+  /* kriterListesi yazılmazsa ailenin kendi çekirdeği kullanılır — aile
+     puanlaması bu yüzden bire bir aynı kalır. Parametre yalnız program
+     düzeyi ikinci kontrolü (programiDegerlendir) için eklendi. */
+  function cekirdekKarsilama(profil, aile, eksenler, kriterListesi) {
     var C = A.cekirdek, kriterler = [], sapmaToplam = 0, agirlik = 0, karToplam = 0;
-    (aile.cekirdek || []).forEach(function (k) {
+    (kriterListesi || aile.cekirdek || []).forEach(function (k) {
       var r = kriterKarsilama(profil, aile, k);
       if (!r) return;
       r.w = k.w || C.agirlikVarsayilan;
@@ -565,6 +568,46 @@
     };
   }
 
+  /* ══════════ 3b. PROGRAM DÜZEYİ İKİNCİ KONTROL ══════════
+
+     Ana eşleşme AİLE düzeyinde hesaplanır ve bu fonksiyon ona hiç
+     dokunmaz: aileleriPuanla / aileyiPuanla çıktısını değiştirmez,
+     sıralamaya girmez, hiçbir aileyi eleyip yükseltmez. Öğrenci ailenin
+     altındaki belirli bir bölümü incelediğinde çalışan AÇIKLAYICI bir
+     katmandır.
+
+     Döndürdüğü "ortusme", ailenin ana uyum puanıdır — yani bölümün alanı
+     öğrencinin profiliyle hangi düzeyde örtüşüyor. Bunun yanına bölüme
+     özgü çekirdek kriterlerin karşılanma durumu konur; ikisi ayrı ayrı
+     gösterilir ki ikinci kontrol ana sonucun yerine geçmesin.
+
+     Programın çekirdek tanımı yoksa null döner (bölümlerin çoğu böyledir);
+     arayüz o zaman ek bir panel çizmez. */
+  function programiDegerlendir(profil, prg) {
+    if (!prg) return null;
+    var tanim = (AILE.programCekirdek || {})[prg.id];
+    if (!tanim) return null;
+    var aile = AILE_HARITA[prg.aileId];
+    if (!aile) return null;
+
+    var anaSonuc = aileyiPuanla(profil, aile);
+    var cek = cekirdekKarsilama(profil, aile, anaSonuc.eksenler, tanim.kriterler);
+
+    return {
+      program: prg,
+      aile: aile,
+      // Ana eşleşme — ailenin puanı ve seviyesi olduğu gibi taşınır
+      ortusme: anaSonuc.genel,
+      seviye: anaSonuc.seviye,
+      // İkinci kontrol — yalnız açıklama üretir, puanı değiştirmez
+      baslik: tanim.baslik,
+      giris: tanim.giris,
+      kriterler: cek.kriterler,
+      zayif: cek.zayif,
+      cekirdekPuan: cek.puan,
+    };
+  }
+
   /** Bütün aileleri puanlar, uyumu yüksekten düşüğe sıralar. */
   function aileleriPuanla(profil) {
     return ETKIN_AILELER.map(function (f) { return aileyiPuanla(profil, f); })
@@ -629,6 +672,7 @@
     bolumCevapSayisi: bolumCevapSayisi,
     aileleriPuanla: aileleriPuanla,
     aileyiPuanla: aileyiPuanla,
+    programiDegerlendir: programiDegerlendir,
     aileBul: function (id) { return AILE_HARITA[id] || null; },
     programlar: programlar,
     programAra: programAra,

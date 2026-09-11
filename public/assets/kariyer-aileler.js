@@ -820,8 +820,14 @@
 
     /* ────────────── İNSAN, TOPLUM VE DÜŞÜNCE BİLİMLERİ ───────── */
     {
-      id: "sosyal-beseri", ad: "Sosyal ve Beşerî Bilimler", alan: "İnsan, Toplum ve Düşünce Bilimleri",
-      ozet: "Toplumun, tarihin, mekânın ve düşüncenin nasıl şekillendiğini araştıran alan.",
+      /* id tarihsel olarak "sosyal-beseri"dir ve KORUNUR: üretilmiş
+         katalogdaki aileId değerleri ile kullanıcıların kayıtlı favori/açık
+         aile durumu bu kimliğe bağlıdır. Görünen ad üst alanla aynıdır,
+         çünkü bu aile artık o üst alanın tamamını (sosyal-beşerî bilimler,
+         felsefe/düşünce ve ilahiyat programları) tek başına kapsar. */
+      id: "sosyal-beseri", ad: "İnsan, Toplum ve Düşünce Bilimleri", alan: "İnsan, Toplum ve Düşünce Bilimleri",
+      ozet: "Toplumun, tarihin, mekânın, inanç ve düşünce geleneklerinin nasıl şekillendiğini "
+        + "metin ve araştırma üzerinden inceleyen alan.",
       ilgi: { arastirma: 95, analitikDusunme: 85, yaziliIfade: 85, sozelIfade: 75, detayOdaklilik: 75, empati: 65, dogaIlgisi: 50 },
       calisma: { hareketlilik: 30, insanEtkilesimi: 50, gorevDegiskenligi: 45, saatEsnekligi: 65, ortamCanliligi: 30, uygulamalilik: 35 },
       deger: { bilgiUretme: 95, surekliOgrenme: 90, toplumsalFayda: 75, bagimsizlik: 65, ozelHayat: 60, yuksekGelir: 30, isGuvencesi: 45 },
@@ -834,22 +840,60 @@
       kosullar: ["yogunOkumaYazma", "surekliMasa", "belirsizGelir"],
       dersler: ["tarih", "cografya", "felsefe", "turkce", "arastirma"],
     },
-    {
-      id: "din-ilahiyat", ad: "İlahiyat ve Din Bilimleri", alan: "İnsan, Toplum ve Düşünce Bilimleri",
-      ozet: "Dinî metin, tarih ve düşünce geleneğini inceleyen; öğretim ve rehberlik yollarına açılan alan.",
-      ilgi: { arastirma: 95, yaziliIfade: 85, detayOdaklilik: 85, dilYatkinligi: 80, sozelIfade: 75, ogretme: 70, empati: 65, aktifDinleme: 65 },
-      calisma: { hareketlilik: 35, insanEtkilesimi: 75, gorevDegiskenligi: 40, saatEsnekligi: 40, uygulamalilik: 55 },
-      deger: { toplumsalFayda: 85, bilgiUretme: 80, insanlaraYardim: 80, isGuvencesi: 75, duzen: 70, surekliOgrenme: 75, yuksekGelir: 30 },
-      yol: { uzunEgitim: 50, zorSinav: 60, egitimSonrasiEgitim: 60, sehirDegisimi: 75 },
-      cekirdek: [
-        { ilgi: "arastirma", w: 3 }, { ilgi: "yaziliIfade", w: 2 },
-        { ilgi: "detayOdaklilik", w: 2 }, { ilgi: "dilYatkinligi" },
-        { calisma: "hareketlilik" }, { kosul: "yogunOkumaYazma", w: 2 },
-      ],
-      kosullar: ["yogunOkumaYazma", "yogunInsan"],
-      dersler: ["turkce", "tarih", "felsefe", "yabanciDil", "arastirma"],
-    },
   ];
+
+  /* ══════════ PROGRAM DÜZEYİ ÇEKİRDEK KRİTERLER ══════════
+
+     Ana eşleştirme AİLE düzeyinde kalır (dört eksen, %40/25/20/15) ve bu
+     tablo ona hiç karışmaz: sıralamaya, aile puanına ya da seviye
+     etiketine etkisi YOKTUR. Yalnız öğrenci ailenin altındaki belirli bir
+     bölümü incelediğinde çalışan İKİNCİ bir kontroldür.
+
+     Neden gerekli: "İlahiyat ve Din Bilimleri" daha önce 2 programlık
+     bağımsız bir aileydi ve 11 programlık geniş ailelerle aynı düzeyde
+     sıralanıyordu. Artık İnsan, Toplum ve Düşünce Bilimleri ailesinin
+     içinde bir programdır; kendine özgü akademik gereklilikleri de
+     program düzeyinde, açıklayıcı bir katman olarak sorulur.
+
+     Kriter biçimi ailelerdekiyle AYNIDIR (motor aynı kriterKarsilama
+     fonksiyonunu kullanır), bu yüzden ayrı bir puanlama mantığı doğmaz.
+
+     Ölçülmeyecek olanlar bilinçli olarak dışarıdadır: kişisel dinî inanç,
+     dindarlık, ibadet alışkanlığı, dinî aidiyet ve "yardımseverlik /
+     hitabet / genel sosyal beceri" gibi onlarca alana birden uyan genel
+     özellikler. Buradaki her kriter yalnız AKADEMİK ve ÇALIŞMA BİÇİMİNE
+     ilişkindir. */
+  var PROGRAM_CEKIRDEK = {
+    ilahiyat: {
+      baslik: "İlahiyat özelinde düşünmen gereken noktalar",
+      giris: "İlahiyat, bu alanın içinde metin ve kaynak çalışmasının en yoğun "
+        + "olduğu programlardan biridir. Aşağıdakiler senin profilinle bu programın "
+        + "günlük akademik yapısını karşılaştırır.",
+      kriterler: [
+        { kosul: "yogunOkumaYazma", w: 3, ad: "Yoğun okuma ve metin çalışmasına açıklık" },
+        { ilgi: "arastirma", w: 3, ad: "Araştırma" },
+        { ilgi: "detayOdaklilik", w: 2, ad: "Ayrıntılı metin inceleme" },
+        { ilgi: "yaziliIfade", w: 2, ad: "Yazılı ifade" },
+        { ilgi: "analitikDusunme", w: 2, ad: "Kavramsal ve soyut düşünme" },
+        { ilgi: "dilYatkinligi", w: 2, ad: "Kaynak dili öğrenmeye açıklık" },
+        { yol: "uzunEgitim", w: 1, ad: "Uzun ve düzenli akademik çalışma" },
+      ],
+    },
+    "islami-ilimler": {
+      baslik: "İslami İlimler özelinde düşünmen gereken noktalar",
+      giris: "İslami İlimler, kaynak metinlerle doğrudan çalışmayı ve kaynak dili "
+        + "öğrenmeyi İlahiyat'tan da ileri düzeyde bekleyen bir programdır.",
+      kriterler: [
+        { kosul: "yogunOkumaYazma", w: 3, ad: "Yoğun okuma ve metin çalışmasına açıklık" },
+        { ilgi: "dilYatkinligi", w: 3, ad: "Kaynak dili öğrenmeye açıklık" },
+        { ilgi: "arastirma", w: 3, ad: "Araştırma" },
+        { ilgi: "detayOdaklilik", w: 2, ad: "Ayrıntılı metin inceleme" },
+        { ilgi: "yaziliIfade", w: 2, ad: "Yazılı ifade" },
+        { ilgi: "analitikDusunme", w: 2, ad: "Kavramsal ve soyut düşünme" },
+        { yol: "uzunEgitim", w: 1, ad: "Uzun ve düzenli akademik çalışma" },
+      ],
+    },
+  };
 
   /* Kariyer alanları — sonuç ekranında aileler bu başlıklar altında
      gruplanır. Sıra ekran sırasıdır. */
@@ -866,6 +910,6 @@
     "İnsan, Toplum ve Düşünce Bilimleri",
   ];
 
-  kok.KP_AILELER = { surum: 1, liste: AILELER, alanlar: ALANLAR };
+  kok.KP_AILELER = { surum: 1, liste: AILELER, alanlar: ALANLAR, programCekirdek: PROGRAM_CEKIRDEK };
   if (typeof module !== "undefined" && module.exports) module.exports = kok.KP_AILELER;
 })(typeof window !== "undefined" ? window : globalThis);

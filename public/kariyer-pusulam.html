@@ -290,6 +290,36 @@
     }
     .kp-prg-ad { font-size: 15px; color: var(--murekkep, #1F141A); font-weight: 600; }
     .kp-prg-not { font-size: 12px; color: var(--kursun, #7C6F73); margin-top: 2px; }
+
+    /* Program düzeyi ikinci kontrol (ör. İlahiyat). Satırın iki sütunlu
+       ızgarasında kendi tam genişlikli satırlarını alır. */
+    .kp-prg-ikinci {
+      grid-column: 1 / -1; justify-self: start; font: inherit; font-size: 13px;
+      background: none; border: 0; padding: 6px 0 0; color: var(--bordo, #7A2035);
+      text-decoration: underline; cursor: pointer;
+    }
+    .kp-prg-ikinci::after { content: " ›"; }
+    .kp-prg-ikinci[aria-expanded="true"]::after { content: " ⌄"; }
+    .kp-prg-panel {
+      grid-column: 1 / -1; margin-top: 8px; padding: 12px;
+      background: var(--sis, #F6F1F0); border-radius: var(--radius-sm, 12px);
+    }
+    .kp-prg-ortusme { font-size: 14px; font-weight: 600; color: var(--murekkep, #1F141A); }
+    .kp-prg-giris { font-size: 13px; color: var(--grafit, #55474C); margin-top: 6px; line-height: 1.55; }
+    .kp-prg-baslik { font-size: 13px; font-weight: 700; color: var(--murekkep, #1F141A); margin-top: 12px; }
+    .kp-prg-kriter { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+    .kp-prg-kriter li {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: baseline;
+      font-size: 13px; color: var(--grafit, #55474C);
+      border-bottom: 1px solid var(--duman, #E4DBD9); padding: 5px 0;
+    }
+    .kp-prg-kriter li:last-child { border-bottom: 0; }
+    .kp-kriter-durum { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .kp-kriter-guclu  .kp-kriter-durum { color: #226b44; }
+    .kp-kriter-orta   .kp-kriter-durum { color: #8a6a16; }
+    .kp-kriter-zayif  .kp-kriter-durum { color: var(--bordo, #7A2035); }
+    .kp-kriter-olculemedi .kp-kriter-durum { color: var(--kursun, #7C6F73); }
+    .kp-prg-not-alt { font-size: 12px; color: var(--kursun, #7C6F73); margin-top: 10px; line-height: 1.5; }
     .kp-kalp {
       font: inherit; font-size: 18px; line-height: 1; background: none; border: 1px solid var(--duman, #E4DBD9);
       border-radius: 999px; width: 38px; height: 38px; cursor: pointer; color: var(--kursun, #7C6F73);
@@ -1328,6 +1358,59 @@
       kaydet(); favorileriTazele();
     });
     li.appendChild(kalp);
+
+    /* Program düzeyi İKİNCİ KONTROL — yalnız kendi çekirdek kriterleri
+       tanımlı bölümlerde (şu an İlahiyat ve İslami İlimler) çizilir.
+       Ana eşleşme ailenin puanıdır ve burada olduğu gibi tekrarlanır;
+       altındaki kriterler onun yerine geçmez, yanına eklenir. */
+    var deg = MOTOR.programiDegerlendir(profil(), prg);
+    if (deg) {
+      var ac = el("button", "kp-prg-ikinci", "Bu bölüm özelinde");
+      ac.type = "button";
+      var panelId = "kp-prg-ik-" + prg.id;
+      ac.setAttribute("aria-expanded", "false");
+      ac.setAttribute("aria-controls", panelId);
+
+      var panel = el("div", "kp-prg-panel");
+      panel.id = panelId;
+      panel.hidden = true;
+
+      /* Seviye adı ("Güçlü eşleşme") cümlenin içinde kötü okunuyor;
+         aynı seviyeden türetilen sıfat kullanılır. Kesin yargı üretmez:
+         en alt kademe bile "düşük düzeyde örtüşüyor"dur, "uygun değil" değil. */
+      var ORTUSME_ADI = {
+        "cok-guclu": "çok güçlü", guclu: "güçlü", orta: "orta",
+        kesif: "sınırlı", dusuk: "düşük",
+      };
+      panel.appendChild(el("p", "kp-prg-ortusme",
+        "Bu bölümün alanı profilinle " + (ORTUSME_ADI[deg.seviye.sinif] || "orta")
+        + " düzeyde örtüşüyor (uyum skoru " + deg.ortusme + ")."));
+      panel.appendChild(el("p", "kp-prg-giris", deg.giris));
+      panel.appendChild(el("h5", "kp-prg-baslik", deg.baslik));
+
+      var ul = el("ul", "kp-prg-kriter");
+      deg.kriterler.forEach(function (k) {
+        var durumAd = k.durum === "guclu" ? "güçlü"
+          : k.durum === "orta" ? "orta"
+            : k.durum === "zayif" ? "şu an zayıf" : "ölçülemedi";
+        var s = el("li", "kp-kriter-" + (k.durum || "olculemedi"));
+        s.appendChild(el("span", "kp-kriter-ad", k.ad));
+        s.appendChild(el("span", "kp-kriter-durum", durumAd));
+        ul.appendChild(s);
+      });
+      panel.appendChild(ul);
+
+      panel.appendChild(el("p", "kp-prg-not-alt",
+        "Bu satırlar bir eleme değildir; alanın genel eşleşmesini değiştirmez. "
+        + "Bölümü araştırırken nelere bakman gerektiğini gösterir."));
+
+      ac.addEventListener("click", function () {
+        panel.hidden = !panel.hidden;
+        ac.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
+      });
+      li.appendChild(ac);
+      li.appendChild(panel);
+    }
     return li;
   }
 
@@ -1392,7 +1475,10 @@
     bas.appendChild(el("span", "kp-sira", String(sira)));
     var orta = el("span");
     orta.appendChild(el("span", "kp-aile-ad", r.aile.ad));
-    orta.appendChild(el("span", "kp-aile-alan", r.aile.alan + " · " + r.programSayisi + " bölüm"));
+    // Aile adı üst alanla aynıysa (İnsan, Toplum ve Düşünce Bilimleri o alanın
+    // tamamını tek başına kapsar) başlığı iki kez yazmayız.
+    orta.appendChild(el("span", "kp-aile-alan",
+      (r.aile.ad === r.aile.alan ? "" : r.aile.alan + " · ") + r.programSayisi + " bölüm"));
     bas.appendChild(orta);
     var sag = el("span", "kp-aile-sag");
     sag.appendChild(el("span", "kp-rozet " + r.seviye.sinif, r.seviye.ad));
@@ -1692,6 +1778,32 @@
         });
         bK.appendChild(ulC);
         k.appendChild(bK);
+      }
+
+      /* BÖLÜME ÖZGÜ ikinci kontrol (ör. İlahiyat). Yukarıdaki aile
+         çekirdeğinden ayrıdır: aynı ailedeki bölümler burada kendi
+         akademik gereklilikleriyle ayrı ayrı okunur. Ana eşleşmeyi
+         (uyum skoru) değiştirmez, yanına açıklama ekler. */
+      var pDeg = MOTOR.programiDegerlendir(profil(), p);
+      if (pDeg) {
+        var bP = el("div", "kp-blok");
+        bP.appendChild(el("h4", null, pDeg.baslik));
+        bP.appendChild(el("p", "kp-aile-ozet", pDeg.giris));
+        var ulP = el("ul", "kp-cek");
+        var IMP = { guclu: "✓", orta: "•", zayif: "!", olculemedi: "–" };
+        pDeg.kriterler.forEach(function (kr) {
+          var li3 = el("li");
+          li3.appendChild(el("span", "kp-cek-im " + kr.durum, IMP[kr.durum]));
+          li3.appendChild(el("span", null, kr.ad));
+          li3.appendChild(el("span", "kp-cek-puan",
+            kr.karsilama == null ? "değerlendirilmedi" : kr.karsilama + "/100"));
+          ulP.appendChild(li3);
+        });
+        bP.appendChild(ulP);
+        bP.appendChild(el("p", "kp-alt-not",
+          "Bu liste bir eleme değildir ve yukarıdaki uyum skorunu değiştirmez; "
+          + "bölümün günlük akademik yapısında hangi yanların ağır bastığını gösterir."));
+        k.appendChild(bP);
       }
 
       var b2 = el("div", "kp-blok");

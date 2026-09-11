@@ -11,7 +11,6 @@ module.exports = [
   { aile: "kultur-miras", tam: ["Müzecilik", "Kültür Varlıklarını Koruma ve Onarım", "Eser Koruma", "Mimari Restorasyon", "Sanat Eserleri Konservasyonu ve Restorasyonu", "Geleneksel Tekstillerin Korunması ve Restorasyonu", "Bilgi ve Belge Yönetimi", "Sanat Tarihi", "Arkeoloji ve Sanat Tarihi", "Kültürel Miras ve Turizm", "Sanat ve Kültür Yönetimi"] },
   { aile: "kultur-miras", desen: [/Arkeoloji/] },
 
-  { aile: "din-ilahiyat", tam: ["İlahiyat", "İslami İlimler"] },
 
   { aile: "spor-hareket", desen: [/Antrenörlü/, /Spor/, /Rekreasyon/, /Egzersiz/, /Atçılık/] },
 
@@ -92,7 +91,7 @@ module.exports = [
   { aile: "psikoloji-davranis", tam: ["Psikoloji", "Rehberlik ve Psikolojik Danışmanlık"] },
   { aile: "sosyal-hizmet", tam: ["Sosyal Hizmet", "Sosyal Hizmetler", "Gerontoloji"] },
   { aile: "cocuk-aile", tam: ["Çocuk Gelişimi", "Çocuk Koruma ve Bakım Hizmetleri"] },
-  { aile: "sosyal-beseri", tam: ["Antropoloji", "Tarih ve Yapay Zeka", "Felsefe ve Yapay Zeka", "Sosyoloji", "Tarih", "Coğrafya", "Felsefe", "Bilim Tarihi", "Halkbilimi", "Türk Halkbilimi", "Sanat ve Sosyal Bilimler Programları"] },
+  { aile: "sosyal-beseri", tam: ["Antropoloji", "Tarih ve Yapay Zeka", "Felsefe ve Yapay Zeka", "Sosyoloji", "Tarih", "Coğrafya", "Felsefe", "Bilim Tarihi", "Halkbilimi", "Türk Halkbilimi", "Sanat ve Sosyal Bilimler Programları", "İlahiyat", "İslami İlimler"] },
 
   // ── Ulaşım ve hizmet ──
   { aile: "havacilik", tam: ["Pilotaj", "Uçak Mühendisliği", "Havacılık ve Uzay Mühendisliği", "Uzay Mühendisliği", "Havacılık Elektrik ve Elektroniği", "Havacılık Elektroniği Teknolojileri", "Uçak Bakım ve Onarım", "Uçak Elektrik ve Elektroniği", "Uçak Gövde ve Motor Bakımı", "Uçak Teknolojisi", "Hava Aracı İmalat Teknolojileri", "Hava Trafik Kontrolü", "Uçuş Harekat Yöneticiliği", "Sivil Hava Ulaştırma İşletmeciliği", "Sivil Havacılık Kabin Hizmetleri", "Hava Lojistiği", "İnsansız Hava Aracı Teknolojisi ve Operatörlüğü", "Havacılık Yönetimi"] },
