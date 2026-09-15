@@ -111,19 +111,24 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
           )}
         </nav>
 
-        {/* Giriş Yap / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) —
+        {/* Giriş Yap / Aramıza Katıl şimdilik gizli (kullanıcı kararı) —
             sayfalar duruyor, doğrudan adresle açılabiliyor. Geri almak için
-            bu bloğun yorumunu kaldırmak yeterli. Statik public/*.html
-            sayfalarında aynı düğmeler .sh-actions üzerinde hidden ile gizli.
+            yorumdaki iki Link'i açmak yeterli. Statik public/*.html
+            sayfalarında aynı düğmeler .sh-actions içinde hidden ile gizli;
+            Eğitim Başvurusu ise her iki tarafta görünür. */}
         <div className={s.eylemler}>
+          {/*
           <Link href="/giris" className={`${s.dugme} ${s.cizgili}`}>
             Giriş Yap
           </Link>
           <Link href="/basvuru" className={`${s.dugme} ${s.dolu}`}>
             Aramıza Katıl
           </Link>
+          */}
+          <Link href="/egitim-basvurusu" className={`${s.dugme} ${s.dolu}`}>
+            Eğitim Başvurusu
+          </Link>
         </div>
-        */}
 
         <button
           className={s.hamburger}
@@ -159,16 +164,20 @@ export default function SiteBaslik({ aktif }: { aktif?: string }) {
             </Link>
           ),
         )}
-        {/* Mobil çekmecedeki aynı düğmeler de gizli — yukarıdaki nota bakın.
+        {/* Mobil çekmecede Giriş / Aramıza Katıl gizli — yukarıdaki nota bakın. */}
         <div className={s.cekmeceEylemler}>
+          {/*
           <Link href="/giris" className={`${s.dugme} ${s.cizgili}`}>
             Giriş Yap
           </Link>
           <Link href="/basvuru" className={`${s.dugme} ${s.dolu}`}>
             Aramıza Katıl ✨
           </Link>
+          */}
+          <Link href="/egitim-basvurusu" className={`${s.dugme} ${s.dolu}`}>
+            Eğitim Başvurusu
+          </Link>
         </div>
-        */}
       </div>
     </header>
   );

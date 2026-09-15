@@ -58,6 +58,7 @@ export const NAVIGASYON: NavKalemi[] = [
   { grup: "Kullanıcılar", ad: "Koçlar", href: "/admin/koclar", ikon: "pusula", yetki: "panel:admin" },
   { grup: "Kullanıcılar", ad: "Öğretmenler", href: "/admin/ogretmenler", ikon: "ogretmen", yetki: "panel:admin" },
   { grup: "Kullanıcılar", ad: "Başvurular", href: "/admin/basvurular", ikon: "gelenKutusu", yetki: "basvuru:yonet" },
+  { grup: "Kullanıcılar", ad: "Eğitim Başvuruları", href: "/admin/egitim-basvurulari", ikon: "mezuniyet", yetki: "basvuru:yonet" },
   { grup: "Kullanıcılar", ad: "Değerlendirmeler", href: "/admin/degerlendirmeler", ikon: "yildiz", yetki: "panel:admin" },
   { grup: "Finans", ad: "Ödemeler", href: "/admin/odemeler", ikon: "odeme", yetki: "odeme:yonet" },
   { grup: "İçerik", ad: "Blog", href: "/admin/blog", ikon: "blog", yetki: "blog:yonet" },

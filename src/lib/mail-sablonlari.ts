@@ -13,6 +13,10 @@ export const MAIL_SABLON_ANAHTARLARI = [
   "basvuru-sonuc",
   "iletisim-mesaji",
   "iletisim-onay",
+  "egitim-basvurusu-ozel-ders",
+  "egitim-basvurusu-kocluk",
+  "egitim-basvurusu-onay-ozel-ders",
+  "egitim-basvurusu-onay-kocluk",
 ] as const;
 export type MailSablonAnahtar = (typeof MAIL_SABLON_ANAHTARLARI)[number];
 
@@ -32,7 +36,116 @@ const gomlek = (icerik: string) => `<div style="font-family:Arial,Helvetica,sans
   </p>
 </div>`;
 
+/* Eğitim başvurusu mailleri: form bölümleri sunucuda hazır HTML olarak
+   üretilir ve {{bolumler}} yerine kaçışlanMADAN konur (mailKuyrukla →
+   hamDegiskenler). Diğer değişkenler normal kaçışlanır. */
+const EGITIM_BASVURU_DEGISKENLERI = [
+  { ad: "ogrenciAd", aciklama: "Öğrencinin ad soyadı" },
+  { ad: "yas", aciklama: "Öğrencinin yaşı" },
+  { ad: "sinif", aciklama: "Sınıf (örn. 2. sınıf)" },
+  { ad: "basvuran", aciklama: "Başvuruyu yapan (Veli / Öğrencinin kendisi)" },
+  { ad: "iletisimAd", aciklama: "İletişim kurulacak kişinin ad soyadı" },
+  { ad: "telefon", aciklama: "Telefon numarası" },
+  { ad: "eposta", aciklama: "E-posta adresi" },
+  { ad: "bolumler", aciklama: "Tüm form bilgileri (hazır HTML tablo bölümleri)" },
+  { ad: "panelAdresi", aciklama: "Başvurunun yönetim panelindeki adresi" },
+];
+
+const egitimBasvuruGovdesi = (baslik: string) =>
+  gomlek(`<h2 style="color:#7A2035;margin-top:0">${baslik}</h2>
+  <p><b>{{ogrenciAd}}</b> ({{yas}} yaş, {{sinif}}) için yeni bir başvuru alındı.
+  Başvuruyu yapan: <b>{{basvuran}}</b> — {{iletisimAd}}.</p>
+  <p style="background:#f3f4f6;border-radius:14px;padding:12px 16px;margin:16px 0">
+    <b>Telefon:</b> <a href="tel:{{telefon}}" style="color:#7A2035">{{telefon}}</a><br/>
+    <b>E-posta:</b> <a href="mailto:{{eposta}}" style="color:#7A2035">{{eposta}}</a>
+  </p>
+  {{bolumler}}
+  <p style="margin-top:20px"><a href="{{panelAdresi}}" style="display:inline-block;background:#1F141A;color:#fff;text-decoration:none;padding:10px 18px;border-radius:12px;font-weight:600">Başvuruyu panelde aç</a></p>`);
+
+/* Başvuru sahibine giden onay mailleri (yönetici bildiriminden AYRI).
+   Kurallar: panel bağlantısı yok, iç durum/not yok, sistem içi kimlik yok,
+   gereksiz kişisel veri tekrarı yok — yalnız kısa bir başvuru özeti. */
+const ONAY_ORTAK_DEGISKENLER = [
+  { ad: "ad", aciklama: "Başvuruyu yapanın ad soyadı (veli ya da öğrencinin kendisi)" },
+  { ad: "ogrenciAd", aciklama: "Öğrencinin ad soyadı" },
+  { ad: "sinif", aciklama: "Sınıf (örn. 2. Sınıf)" },
+  { ad: "tarih", aciklama: "Başvuru tarihi (örn. 15 Eylül 2026)" },
+  { ad: "siteAdresi", aciklama: "Sitenin public adresi (SITE_ADRESI)" },
+  { ad: "siteAlan", aciklama: "Sitenin alan adı, bağlantı metni olarak (kaynakkampus.com)" },
+];
+
+const onayGovdesi = (girisCumlesi: string, ozetSatirlari: string) =>
+  gomlek(`<h2 style="color:#7A2035;margin-top:0">Merhaba {{ad}},</h2>
+  <p>${girisCumlesi}</p>
+  <p>Başvurunuz ekibimiz tarafından incelendikten sonra sizinle iletişime geçeceğiz.</p>
+  <h3 style="font-size:15px;color:#1F141A;margin:24px 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb">Başvuru Özeti</h3>
+  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#f3f4f6;border-radius:14px;margin:0 0 16px">
+${ozetSatirlari}
+  </table>
+  <p style="color:#6b7280">Başvurunuzla ilgili sizinle formda belirttiğiniz iletişim bilgileri üzerinden iletişime geçeceğiz.</p>
+  <p style="margin-top:24px;padding-top:16px;border-top:1px solid #e5e7eb">
+    <b style="color:#7A2035">Kaynak Kampüs</b><br/>
+    <a href="{{siteAdresi}}" style="color:#7A2035;text-decoration:none">{{siteAlan}}</a>
+  </p>`);
+
+const onaySatiri = (etiket: string, deger: string) =>
+  `    <tr><td style="padding:8px 14px;color:#6b7280">${etiket}</td><td style="padding:8px 14px;text-align:right"><b>${deger}</b></td></tr>`;
+
 export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
+  {
+    anahtar: "egitim-basvurusu-onay-ozel-ders",
+    ad: "Özel Ders Başvurusu — Başvurana Onay",
+    aciklama:
+      "Özel ders başvurusu gönderildiğinde başvuru sahibine (veli ya da öğrencinin kendisi) otomatik gönderilir. Yönetici bildiriminden ayrıdır.",
+    degiskenler: [
+      ...ONAY_ORTAK_DEGISKENLER,
+      { ad: "egitim", aciklama: "Seçilen eğitim (İngilizce, Almanca…)" },
+      { ad: "yas", aciklama: "Öğrencinin yaşı" },
+    ],
+    konu: "Özel Ders Başvurunuzu Aldık | Kaynak Kampüs",
+    govde: onayGovdesi(
+      "Kaynak Kampüs özel ders başvurunuzu aldık.",
+      [
+        onaySatiri("Öğrenci", "{{ogrenciAd}}"),
+        onaySatiri("Eğitim", "{{egitim}}"),
+        onaySatiri("Yaş / Sınıf", "{{yas}} / {{sinif}}"),
+        onaySatiri("Başvuru Tarihi", "{{tarih}}"),
+      ].join("\n"),
+    ),
+  },
+  {
+    anahtar: "egitim-basvurusu-onay-kocluk",
+    ad: "Eğitim Koçluğu Başvurusu — Başvurana Onay",
+    aciklama:
+      "Eğitim koçluğu başvurusu gönderildiğinde başvuru sahibine (veli ya da öğrencinin kendisi) otomatik gönderilir. Yönetici bildiriminden ayrıdır.",
+    degiskenler: ONAY_ORTAK_DEGISKENLER,
+    konu: "Eğitim Koçluğu Başvurunuzu Aldık | Kaynak Kampüs",
+    govde: onayGovdesi(
+      "Kaynak Kampüs eğitim koçluğu başvurunuzu aldık.",
+      [
+        onaySatiri("Öğrenci", "{{ogrenciAd}}"),
+        onaySatiri("Sınıf", "{{sinif}}"),
+        onaySatiri("Başvuru Türü", "Eğitim Koçluğu"),
+        onaySatiri("Başvuru Tarihi", "{{tarih}}"),
+      ].join("\n"),
+    ),
+  },
+  {
+    anahtar: "egitim-basvurusu-ozel-ders",
+    ad: "Eğitim Başvurusu — Özel Ders",
+    aciklama: "Sitedeki Eğitim Başvurusu formundan yeni bir özel ders başvurusu geldiğinde kurum adresine iletilir.",
+    degiskenler: [{ ad: "egitim", aciklama: "Seçilen eğitim (İngilizce, Almanca…)" }, ...EGITIM_BASVURU_DEGISKENLERI],
+    konu: "Yeni Özel Ders Başvurusu | {{egitim}} | {{yas}} Yaş / {{sinif}} | {{ogrenciAd}}",
+    govde: egitimBasvuruGovdesi("Yeni özel ders başvurusu: {{egitim}}"),
+  },
+  {
+    anahtar: "egitim-basvurusu-kocluk",
+    ad: "Eğitim Başvurusu — Eğitim Koçluğu",
+    aciklama: "Sitedeki Eğitim Başvurusu formundan yeni bir eğitim koçluğu başvurusu geldiğinde kurum adresine iletilir.",
+    degiskenler: EGITIM_BASVURU_DEGISKENLERI,
+    konu: "Yeni Eğitim Koçluğu Başvurusu | {{sinif}} | {{ogrenciAd}}",
+    govde: egitimBasvuruGovdesi("Yeni eğitim koçluğu başvurusu"),
+  },
   {
     anahtar: "iletisim-mesaji",
     ad: "Site İletişim Mesajı",
@@ -78,7 +191,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
       { ad: "ad", aciklama: "Kullanıcının ad soyadı" },
       { ad: "kullanici", aciklama: "Giriş için kullanıcı adı" },
       { ad: "rol", aciklama: "Koç / Öğrenci" },
-      { ad: "panelAdresi", aciklama: "Uygulama adresi (UYGULAMA_URL)" },
+      { ad: "panelAdresi", aciklama: "Sitenin public kok adresi (SITE_ADRESI); sablon sonuna /giris ekler" },
     ],
     konu: "Kaynak Kampüs'ye Hoş Geldin, {{ad}}! 🎉",
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Hoş Geldin, {{ad}}! 🎉</h2>
@@ -134,7 +247,7 @@ export const VARSAYILAN_SABLONLAR: MailSablonTanim[] = [
       { ad: "seviye", aciklama: "Yol haritası seviyesi ve XP" },
       { ad: "zayif", aciklama: "Öne çıkan zayıf konular" },
       { ad: "sonrakiDers", aciklama: "Sıradaki planlı özel ders" },
-      { ad: "panelAdresi", aciklama: "Uygulama adresi (UYGULAMA_URL)" },
+      { ad: "panelAdresi", aciklama: "Sitenin public kok adresi (SITE_ADRESI); sablon sonuna /giris ekler" },
     ],
     konu: "{{ogrenciAd}} · Haftalık İlerleme Raporu 📊",
     govde: gomlek(`<h2 style="color:#7A2035;margin-top:0">Haftalık İlerleme Raporu 📊</h2>

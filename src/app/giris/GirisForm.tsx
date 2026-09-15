@@ -42,7 +42,8 @@ function GozIkon({ acik }: { acik: boolean }) {
   );
 }
 
-export default function GirisForm() {
+/** devam: giriş sonrası dönülecek site-içi yol (proxy taşır, sunucuda süzülür) */
+export default function GirisForm({ devam }: { devam?: string | null }) {
   const [tur, setTur] = useState("egitimci");
   const [sifreAcik, setSifreAcik] = useState(false);
   const [sonuc, eylem, bekliyor] = useActionState<GirisSonuc | undefined, FormData>(
@@ -80,6 +81,7 @@ export default function GirisForm() {
 
       <form action={eylem} autoComplete="off">
         <input type="hidden" name="tur" value={tur} />
+        {devam && <input type="hidden" name="devam" value={devam} />}
         <div className={stil.formGrup}>
           <label htmlFor="kullanici">Kullanıcı Adı</label>
           <div className={stil.girdiSarici}>

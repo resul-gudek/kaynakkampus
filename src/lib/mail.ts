@@ -19,6 +19,7 @@
 import nodemailer from "nodemailer";
 import type { MailAyar } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { SITE_KOKU } from "@/lib/site";
 import { isoTarih, tarihNesnesi, tarihStr, gunKaydir } from "@/lib/hesap";
 import { VARSAYILAN_SABLONLAR } from "@/lib/mail-sablonlari";
 import { logcu } from "@/lib/log";
@@ -69,13 +70,18 @@ function htmlKacis(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-/** {{degisken}} yer tutucularını doldurur; html=true ise değerler kaçışlanır. */
+/** {{degisken}} yer tutucularını doldurur; html=true ise değerler kaçışlanır.
+    hamDegiskenler: sunucunun kendi ürettiği, içi zaten kaçışlanmış HTML
+    parçaları (örn. tablo) — kaçışlanmadan yerleştirilir. Tek geçişte
+    doldurulur; yerleştirilen değerler yeniden taranmaz. */
 export function sablonDoldur(
   metin: string,
   degiskenler: Record<string, string>,
-  html = false
+  html = false,
+  hamDegiskenler?: Record<string, string>
 ): string {
   return metin.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, anahtar: string) => {
+    if (hamDegiskenler && anahtar in hamDegiskenler) return hamDegiskenler[anahtar];
     const deger = degiskenler[anahtar] ?? "";
     return html ? htmlKacis(deger) : deger;
   });
@@ -103,6 +109,10 @@ export interface KuyrukGirdi {
   alici: string;
   aliciAd?: string;
   degiskenler: Record<string, string>;
+  /** Yalnız GÖVDEDE, kaçışlanmadan yerleştirilen hazır HTML parçaları.
+      Asla kullanıcı girdisi verilmez; sunucuda kaçışlanarak üretilmiş
+      HTML içindir (bkz. lib/egitim-basvurusu-mail.ts). */
+  hamDegiskenler?: Record<string, string>;
   /** Verilirse aynı (şablon, refTur, refId) için ikinci kez kuyruklanmaz. */
   refTur?: string;
   refId?: string;
@@ -142,7 +152,7 @@ export async function mailKuyrukla(girdi: KuyrukGirdi): Promise<boolean> {
         alici,
         aliciAd: girdi.aliciAd ?? "",
         konu: sablonDoldur(sablon.konu, girdi.degiskenler),
-        govde: sablonDoldur(sablon.govde, girdi.degiskenler, true),
+        govde: sablonDoldur(sablon.govde, girdi.degiskenler, true, girdi.hamDegiskenler),
         sablon: sablon.anahtar,
         refTur: girdi.refTur ?? "",
         refId: girdi.refId ?? "",
@@ -179,7 +189,11 @@ export async function hosgeldinMailiKuyrukla(kullanici: {
       ad: kullanici.ad,
       kullanici: kullanici.kullanici,
       rol: ROL_METNI[kullanici.rol] ?? kullanici.rol,
-      panelAdresi: process.env.UYGULAMA_URL ?? "http://localhost:37337",
+      /* Şablon bunu kök olarak kullanır ("{{panelAdresi}}/giris"). Mail dışarı
+         gittiği için public kök verilir; UYGULAMA_URL yerel/LAN adresi olabilir
+         ve dışarıdan açılmaz (bkz. lib/site.ts adres kuralı). SITE_KOKU sonunda
+         eğik çizgi taşımaz → çift eğik çizgi oluşmaz. */
+      panelAdresi: SITE_KOKU,
     },
     refTur: "kullanici",
     refId: kullanici.id,

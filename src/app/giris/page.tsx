@@ -2,18 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { ROL_ANASAYFA } from "@/lib/auth.config";
+import { DONUS_PARAM, guvenliDonusYolu, ROL_ANASAYFA } from "@/lib/auth.config";
 import SiteOlcum from "@/components/site/SiteOlcum";
 import GirisForm from "./GirisForm";
 import stil from "./giris.module.css";
 
 export const metadata: Metadata = { title: "Giriş Yap – Kaynak Kampüs" };
 
-export default async function GirisPage() {
-  // Zaten oturum açıksa doğrudan ilgili panele geç (legacy davranışı)
+type AramaParametreleri = Promise<Record<string, string | string[] | undefined>>;
+
+export default async function GirisPage({ searchParams }: { searchParams?: AramaParametreleri }) {
+  /* Korumalı bir sayfadan gelindiyse proxy hedefi "devam" ile taşır
+     (örn. mailden gelen başvuru detayı); giriş sonrası oraya dönülür. */
+  const params = (await searchParams) ?? {};
+  const ham = params[DONUS_PARAM];
+  const devam = guvenliDonusYolu(Array.isArray(ham) ? ham[0] : ham);
+
+  // Zaten oturum açıksa doğrudan hedefe / ilgili panele geç (legacy davranışı)
   const oturum = await auth();
   if (oturum?.user?.rol) {
-    redirect(ROL_ANASAYFA[oturum.user.rol] ?? "/");
+    redirect(devam ?? ROL_ANASAYFA[oturum.user.rol] ?? "/");
   }
 
   return (
@@ -72,7 +80,7 @@ export default async function GirisPage() {
             </h1>
             <p className={stil.alt}>Hesap türünü seç, bilgilerinle giriş yap.</p>
 
-            <GirisForm />
+            <GirisForm devam={devam} />
 
             <p className={stil.yardim}>
               Giriş yapamıyor musun? <Link href="/iletisim">Bize ulaş</Link>

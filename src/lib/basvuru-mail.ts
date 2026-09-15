@@ -2,6 +2,7 @@
    Mail sistemi kapalıysa / e-posta yoksa sessizce atlanır (asla fırlatmaz). */
 
 import { mailKuyrukla } from "@/lib/mail";
+import { mutlakAdres } from "@/lib/site";
 import { tarihStr } from "@/lib/hesap";
 import {
   BASVURU_TUR_ETIKETLERI,
@@ -10,12 +11,12 @@ import {
   type MulakatTur,
 } from "@/lib/sabitler";
 
-export function uygulamaUrl(): string {
-  return (process.env.UYGULAMA_URL ?? "http://localhost:37337").replace(/\/$/, "");
-}
-
+/** Başvuranın durumunu izlediği public takip adresi.
+    Mail dışarıdaki başvurana gittiği için adres public kökten üretilir
+    (SITE_ADRESI → kaynakkampus.com); UYGULAMA_URL kullanılmaz, o yerel/LAN
+    adresi olabiliyor ve dışarıdan açılmıyordu. Bkz. lib/site.ts adres kuralı. */
 export function takipAdresi(token: string): string {
-  return `${uygulamaUrl()}/basvuru/durum/${token}`;
+  return mutlakAdres(`/basvuru/durum/${token}`);
 }
 
 function turEtiketi(tur: string): string {

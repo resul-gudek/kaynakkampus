@@ -18,6 +18,7 @@ import {
   zayifKonular,
 } from "@/lib/hesap";
 import { mailAyarGetir, mailKuyrukla } from "@/lib/mail";
+import { SITE_KOKU } from "@/lib/site";
 import { logcu } from "@/lib/log";
 
 const log = logcu("veli-rapor");
@@ -90,7 +91,10 @@ export function veliRaporDegiskenleri(ogrenci: RaporOgrenci, donem: string): Rec
     sonrakiDers: sonraki
       ? `${sonraki.ders}${sonraki.konu ? " – " + sonraki.konu : ""} · ${tarihStr(sonraki.tarih)}${sonraki.saat ? " " + sonraki.saat : ""}`
       : "Planlanmış özel ders yok",
-    panelAdresi: process.env.UYGULAMA_URL ?? "http://localhost:37337",
+    /* Şablon bunu kök olarak kullanır ("{{panelAdresi}}/giris"). Rapor veliye
+       dışarıya gittiği için public kök verilir; UYGULAMA_URL yerel/LAN adresi
+       olabilir ve dışarıdan açılmaz (bkz. lib/site.ts adres kuralı). */
+    panelAdresi: SITE_KOKU,
   };
 }
 

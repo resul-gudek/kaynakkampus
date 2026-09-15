@@ -21,4 +21,5 @@
 ## Kurumsal
 
 - [Hakkımızda](https://kaynakkampus.com/hakkimizda.html): Platformun amacı ve kapsamı
+- [Eğitim Başvurusu](https://kaynakkampus.com/egitim-basvurusu): Özel ders (İngilizce, Almanca, ilkokul ders desteği, Din ve Kur'an eğitimi, değerler eğitimi) ve eğitim koçluğu için kısa başvuru formu
 - [Gizlilik ve Çerez Politikası](https://kaynakkampus.com/gizlilik.html): KVKK kapsamındaki haklar ve çerez kullanımı

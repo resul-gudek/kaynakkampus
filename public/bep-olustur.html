@@ -350,10 +350,11 @@
       <a href="hakkimizda.html" hidden>Hakkımızda</a>
     </nav>
 
-    <!-- Giriş / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) — hidden kaldırılınca geri gelir. -->
-    <div class="sh-actions" hidden>
-      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
-      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
+    <!-- Giriş / Aramıza Katıl şimdilik gizli (kullanıcı kararı) — bağlantılardaki hidden kaldırılınca geri gelir. Eğitim Başvurusu görünür. -->
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline" hidden>Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary" hidden>Aramıza Katıl</a>
+      <a href="/egitim-basvurusu" class="sh-btn sh-btn-primary">Eğitim Başvurusu</a>
     </div>
 
     <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
@@ -376,10 +377,11 @@
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
     <a href="sinav-takvimi.html">Sınav Takvimi</a>
-    <!-- Giriş / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) — hidden kaldırılınca geri gelir. -->
-    <div class="sh-drawer-actions" hidden>
-      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
-      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    <!-- Giriş / Aramıza Katıl şimdilik gizli (kullanıcı kararı) — bağlantılardaki hidden kaldırılınca geri gelir. Eğitim Başvurusu görünür. -->
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline" hidden>Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary" hidden>Aramıza Katıl ✨</a>
+      <a href="/egitim-basvurusu" class="sh-btn sh-btn-primary">Eğitim Başvurusu</a>
     </div>
   </div>
 </header>
@@ -599,6 +601,7 @@
         <ul>
           <li><a href="hakkimizda.html">Hakkımızda</a></li>
           <li><a href="/blog">Blog</a></li>
+          <li><a href="/egitim-basvurusu">Eğitim Başvurusu</a></li>
           <li hidden><a href="/basvuru">Aramıza Katıl</a></li>
           <li hidden><a href="/giris">Giriş Yap</a></li>
           <li><a href="gizlilik.html">Gizlilik ve Çerezler</a></li>

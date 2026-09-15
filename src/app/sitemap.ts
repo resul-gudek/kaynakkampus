@@ -29,6 +29,9 @@ const SABIT_SAYFALAR: { yol: string; oncelik: number; siklik: MetadataRoute.Site
   // çıkmaması için haritadan da çıkarıldı. Geri açarken bu satırı geri alın.
   // { yol: "/basvuru", oncelik: 0.6, siklik: "monthly" },
   { yol: "/iletisim", oncelik: 0.6, siklik: "yearly" },
+  { yol: "/egitim-basvurusu", oncelik: 0.8, siklik: "monthly" },
+  { yol: "/egitim-basvurusu/ozel-ders", oncelik: 0.7, siklik: "monthly" },
+  { yol: "/egitim-basvurusu/egitim-koclugu", oncelik: 0.7, siklik: "monthly" },
   { yol: "/gizlilik.html", oncelik: 0.3, siklik: "yearly" },
 ];
 

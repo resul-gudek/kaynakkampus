@@ -891,3 +891,30 @@ model KullanimSayaci {
 
   @@unique([gun, olay, detay])
 }
+
+// ── Eğitim Başvurusu (özel ders / eğitim koçluğu) ─────────────
+// Sitedeki "Eğitim Başvurusu" formlarından gelen talepler. Ön mülakat
+// sisteminden (Basvuru) ve panellerden BAĞIMSIZDIR: başvuran kayıtlı
+// kullanıcı değildir, takip sayfası yoktur. Liste/filtre alanları gerçek
+// kolon, formun tamamı ise `veri` içinde JSON tutulur (zod ile doğrulanır —
+// bkz. src/lib/egitim-basvurusu.ts). tur: "ozel_ders" | "egitim_koclugu";
+// durum: bkz. EGITIM_BASVURU_DURUMLARI.
+model EgitimBasvurusu {
+  id         String   @id @default(cuid())
+  tur        String
+  durum      String   @default("yeni")
+  ogrenciAd  String
+  yas        Int
+  sinif      String // "okul_oncesi" | "1".."12"
+  egitim     String   @default("") // özel ders: EGITIMLER anahtarı; koçlukta boş
+  basvuran   String // "veli" | "ogrenci"
+  iletisimAd String
+  telefon    String
+  eposta     String
+  veri       String   @db.NVarChar(Max) // doğrulanmış form verisi (JSON)
+  olusturma  DateTime @default(now())
+  guncelleme DateTime @default(now()) @updatedAt
+
+  @@index([tur, durum])
+  @@index([olusturma])
+}

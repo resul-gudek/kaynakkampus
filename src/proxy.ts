@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig, ROL_ANASAYFA } from "@/lib/auth.config";
+import { authConfig, DONUS_PARAM, ROL_ANASAYFA } from "@/lib/auth.config";
 import { egitmenMi } from "@/lib/sabitler";
 
 const { auth } = NextAuth(authConfig);
@@ -12,7 +12,12 @@ export default auth((req) => {
   const oturum = req.auth;
 
   if (!oturum?.user) {
-    return NextResponse.redirect(new URL("/giris", req.nextUrl));
+    /* İstenen sayfa giriş ekranına taşınır ki kullanıcı giriş yaptıktan sonra
+       oraya geri dönsün. Mailden gelen derin bağlantılar (örn. başvuru detayı)
+       bu sayede kaybolmaz; güvenlik süzgeci auth.config.ts'tedir. */
+    const giris = new URL("/giris", req.nextUrl);
+    giris.searchParams.set(DONUS_PARAM, yol + req.nextUrl.search);
+    return NextResponse.redirect(giris);
   }
 
   const rol = oturum.user.rol ?? "";

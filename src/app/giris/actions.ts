@@ -2,7 +2,7 @@
 
 import { AuthError } from "next-auth";
 import { signIn } from "@/lib/auth";
-import { GIRIS_TURU_ANASAYFA } from "@/lib/auth.config";
+import { GIRIS_TURU_ANASAYFA, guvenliDonusYolu } from "@/lib/auth.config";
 import { logcu } from "@/lib/log";
 
 const log = logcu("giris");
@@ -15,12 +15,16 @@ export async function girisYapAction(
 ): Promise<GirisSonuc> {
   // "tur" bir rol değil, hesap türüdür: egitimci (koç + öğretmen) | ogrenci | admin
   const tur = String(formData.get("tur") ?? "egitimci");
+  /* Korumalı bir sayfadan yönlendirildiyse giriş sonrası oraya dönülür
+     (mailden gelen derin bağlantı kaybolmasın). Yalnız site-içi yollar kabul
+     edilir; yanlış roldeki kullanıcıyı proxy kendi paneline yollar. */
+  const devam = guvenliDonusYolu(String(formData.get("devam") ?? ""));
   try {
     await signIn("credentials", {
       kullanici: String(formData.get("kullanici") ?? ""),
       sifre: String(formData.get("sifre") ?? ""),
       tur,
-      redirectTo: GIRIS_TURU_ANASAYFA[tur] ?? "/giris",
+      redirectTo: devam ?? GIRIS_TURU_ANASAYFA[tur] ?? "/giris",
     });
     return {};
   } catch (e) {

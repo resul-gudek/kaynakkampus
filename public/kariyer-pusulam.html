@@ -486,10 +486,11 @@
       <a href="hakkimizda.html" hidden>Hakkımızda</a>
     </nav>
 
-    <!-- Giriş / Aramıza Katıl şimdilik gizlendi (kullanıcı kararı) — hidden kaldırılınca geri gelir. -->
-    <div class="sh-actions" hidden>
-      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
-      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl</a>
+    <!-- Giriş / Aramıza Katıl şimdilik gizli (kullanıcı kararı) — bağlantılardaki hidden kaldırılınca geri gelir. Eğitim Başvurusu görünür. -->
+    <div class="sh-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline" hidden>Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary" hidden>Aramıza Katıl</a>
+      <a href="/egitim-basvurusu" class="sh-btn sh-btn-primary">Eğitim Başvurusu</a>
     </div>
 
     <button class="sh-burger" id="shMenuBtn" aria-label="Menüyü aç/kapat" aria-controls="shMobileNav" aria-expanded="false">
@@ -512,9 +513,10 @@
     <a href="/blog">Blog</a>
     <a href="haberler.html">Haberler</a>
     <a href="sinav-takvimi.html">Sınav Takvimi</a>
-    <div class="sh-drawer-actions" hidden>
-      <a href="/giris" class="sh-btn sh-btn-outline">Giriş Yap</a>
-      <a href="/basvuru" class="sh-btn sh-btn-primary">Aramıza Katıl ✨</a>
+    <div class="sh-drawer-actions">
+      <a href="/giris" class="sh-btn sh-btn-outline" hidden>Giriş Yap</a>
+      <a href="/basvuru" class="sh-btn sh-btn-primary" hidden>Aramıza Katıl ✨</a>
+      <a href="/egitim-basvurusu" class="sh-btn sh-btn-primary">Eğitim Başvurusu</a>
     </div>
   </div>
 </header>
@@ -597,6 +599,7 @@
         <ul>
           <li><a href="hakkimizda.html">Hakkımızda</a></li>
           <li><a href="/blog">Blog</a></li>
+          <li><a href="/egitim-basvurusu">Eğitim Başvurusu</a></li>
           <li hidden><a href="/basvuru">Aramıza Katıl</a></li>
           <li hidden><a href="/giris">Giriş Yap</a></li>
           <li><a href="gizlilik.html">Gizlilik ve Çerezler</a></li>
@@ -790,12 +793,6 @@
 
     app.innerHTML = "";
     app.appendChild(kutu);
-
-    var not = el("p", "kp-alt-not");
-    not.style.marginTop = "24px";
-    not.textContent = "Kariyer Pusulam yapay zekâ kullanmaz. Sonuçlar yalnız senin verdiğin yanıtlardan, "
-      + "önceden tanımlı ve herkes için aynı olan kurallarla hesaplanır. Cevapların hiçbir yere gönderilmez.";
-    app.appendChild(not);
   }
 
   /* ══════════════════════ BÖLÜM EKRANI ══════════════════════ */
@@ -1870,6 +1867,12 @@
       tum.addEventListener("click", function () { durum.tumAileler = !durum.tumAileler; ciz(); });
       app.appendChild(tum);
     }
+
+    var bilgi = el("p", "kp-alt-not");
+    bilgi.style.marginTop = "20px";
+    bilgi.textContent = "Bu test, ilgi alanlarını ve eğilimlerini keşfetmene yardımcı olmak için hazırlanmıştır. "
+      + "Sonuçlar kesin bir kariyer yönlendirmesi değildir; eğitim ve meslek tercihlerini yalnızca bu sonuca göre şekillendirmemelisin.";
+    app.appendChild(bilgi);
 
     app.appendChild(document.createElement("hr")).className = "kp-ayrac";
     app.appendChild(aramaBolumu());
