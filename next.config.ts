@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
     // Başvuru formu belge yükleme içerir; Server Action gövde limiti (varsayılan
     // 1 MB) yükseltilir. İstemci tarafında da toplam boyut kontrol edilir
     // (bkz. BasvuruSihirbazi) — bu limit son emniyet supabıdır.
+    //
+    // BÜYÜK dosyalar (ders videosu, etkinlik PDF'i) buradan GEÇMEZ: gövdeyi
+    // belleğe alan server action yerine diske akıtan yükleme rotaları
+    // kullanılır (/api/video-ders/[id]/yukle, /api/etkinlik/pdf/[id]/yukle),
+    // bu yüzden 50 MB'lık etkinlik PDF'i için bu sayıyı yükseltmek gerekmez.
     serverActions: { bodySizeLimit: "25mb" },
   },
   async rewrites() {

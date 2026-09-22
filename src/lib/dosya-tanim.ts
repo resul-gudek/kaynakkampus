@@ -9,6 +9,15 @@ export const MAX_DOSYA_BOYUT = 10 * 1024 * 1024; // 10 MB
     (bkz. /api/video-ders/[id]/yukle), o yüzden MAX_DOSYA_BOYUT'a tabi değildir. */
 export const MAX_VIDEO_BOYUT = 512 * 1024 * 1024; // 512 MB
 
+/** Etkinlik PDF'leri için ayrı tavan: çalışma kâğıdı arşivi çok sayfalı,
+    taranmış PDF'ler içerir. Video gibi bunlar da server action'dan DEĞİL
+    akış yapan yükleme rotasından geçer (bkz. /api/etkinlik/pdf/[id]/yukle):
+    dosya belleğe alınmadan doğrudan diske yazılır, böylece Server Action
+    gövde limiti (next.config.ts) ve bellek tavanı devreye girmez.
+    Etkinliğin ön izleme GÖRSELİ bu tavana tabi değildir — o küçük bir
+    resimdir ve MAX_DOSYA_BOYUT ile sınırlı kalır. */
+export const MAX_ETKINLIK_PDF_BOYUT = 50 * 1024 * 1024; // 50 MB
+
 /** İzin verilen MIME → uzantı eşlemesi (grup bazlı) */
 export const IZINLI_TURLER: Record<"image" | "doc" | "video", Record<string, string>> = {
   image: {

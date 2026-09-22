@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFile } from "node:fs/promises";
+import { createReadStream } from "node:fs";
+import { stat } from "node:fs/promises";
+import { Readable } from "node:stream";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { dosyaMutlakYol } from "@/lib/dosya-saklama";
@@ -36,13 +38,20 @@ export async function GET(istek: NextRequest, { params }: { params: Promise<{ id
     }
   }
 
-  let icerik: Buffer;
+  /* Dosya belleğe ALINMAZ, akıtılır: etkinlik PDF'i 50 MB'a kadar
+     olabilir (MAX_ETKINLIK_PDF_BOYUT) ve aynı anda birkaç ziyaretçi
+     indirebilir — tamamını tampona almak sunucunun belleğini yerdi. */
+  const mutlakYol = dosyaMutlakYol(dugum.dosyaYol);
+  let boyut: number;
   try {
-    icerik = await readFile(dosyaMutlakYol(dugum.dosyaYol));
+    boyut = (await stat(mutlakYol)).size;
   } catch (e) {
     log.error({ id, hata: e instanceof Error ? e.message : String(e) }, "pdf okunamadı");
     return NextResponse.json({ hata: "PDF dosyası bulunamadı." }, { status: 404 });
   }
+  const akis = Readable.toWeb(
+    createReadStream(mutlakYol)
+  ) as unknown as ReadableStream<Uint8Array>;
 
   const indir = istek.nextUrl.searchParams.get("indir") === "1";
   /* İndirme adı Türkçe karakter taşıyabilir: ASCII yedeği filename ile,
@@ -50,11 +59,11 @@ export async function GET(istek: NextRequest, { params }: { params: Promise<{ id
   const ad = (dugum.dosyaAd || `${dugum.ad}.pdf`).replace(/["\\]/g, "");
   const asciiAd = ad.replace(/[^\x20-\x7e]/g, "_");
 
-  return new NextResponse(new Uint8Array(icerik), {
+  return new NextResponse(akis, {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Length": String(icerik.length),
+      "Content-Length": String(boyut),
       "Content-Disposition": `${indir ? "attachment" : "inline"}; filename="${asciiAd}"; filename*=UTF-8''${encodeURIComponent(ad)}`,
       "Cache-Control":
         dugum.durum === "yayinda"

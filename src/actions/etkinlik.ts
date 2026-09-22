@@ -14,11 +14,15 @@
    (dosya-saklama.ts → etkinlik/<dugumId>/…) ve
    /api/etkinlik/pdf/[id] · /api/etkinlik/kapak/[id] üzerinden sunulur.
 
+   PDF'İN KENDİSİ BU EYLEMLERDEN GEÇMEZ: 50 MB'a varan çok sayfalı
+   dosyalar belleğe alınmasın diye önce kayıt oluşturulur, sonra dosya
+   /api/etkinlik/pdf/[id]/yukle rotasına akıtılır. Kapak görseli küçük
+   olduğu için burada kalır.
+
    SİLME ÖZYİNELEMELİDİR: kendine dönük FK'de cascade yoktur (SQL Server
    döngüsel cascade'i reddeder), alt ağaç burada tek işlemde silinir.
    ═══════════════════════════════════════════════════════════════ */
 
-import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { denetim } from "@/lib/log";
 import {
@@ -35,31 +39,18 @@ import {
   dugumleriSirala,
   etkinlikKlasoru,
   ETKINLIK_KAPAK_GRUPLARI,
-  ETKINLIK_PDF_GRUPLARI,
   type AgacDugumu,
 } from "@/lib/etkinlik";
 import { ETKINLIK_MAX_DERINLIK } from "@/lib/sabitler";
-import { agaciGetir, benzersizDugumSlug, sonrakiSira } from "@/lib/etkinlik-sunucu";
+import {
+  agaciGetir,
+  benzersizDugumSlug,
+  etkinlikTazele,
+  sonrakiSira,
+} from "@/lib/etkinlik-sunucu";
 import { oturumGerekli, hataMetni, type EylemSonuc } from "./yardimci";
 
 type DugumSonuc = EylemSonuc & { id?: string };
-
-/** Public sayfalar ISR ile önbelleklenir; mutasyondan sonra tazelenir.
-    Klasör adresleri iç içe olduğu için tüm alt yol tazelenir. */
-function etkinlikTazele() {
-  revalidatePath("/admin/etkinlikler");
-  revalidatePath("/etkinlikler");
-  revalidatePath("/etkinlikler/[[...yol]]", "page");
-  revalidatePath("/sitemap.xml");
-}
-
-/** Yalnız PDF yüklenebilir: doc grubu .doc/.docx'i de kapsar, burada dışlanır */
-function pdfMi(dosya: File): boolean {
-  return (
-    (dosya.type || "").toLowerCase() === "application/pdf" &&
-    dosya.name.toLowerCase().endsWith(".pdf")
-  );
-}
 
 /* ── Klasör ───────────────────────────────────────────────── */
 
@@ -104,8 +95,17 @@ export async function klasorEkle(ustId: string | null, ad: string): Promise<Dugu
 
 /* ── PDF etkinliği ────────────────────────────────────────── */
 
+/**
+ * PDF etkinliğinin KAYDINI oluşturur; PDF dosyasının kendisi buradan
+ * GEÇMEZ. Dosya, kayıt oluştuktan sonra /api/etkinlik/pdf/[id]/yukle
+ * rotasına akıtılır (50 MB'a kadar; bkz. MAX_ETKINLIK_PDF_BOYUT) —
+ * böylece çok sayfalı arşivler Server Action gövde limitine ve bellek
+ * tavanına takılmaz. Ön izleme GÖRSELİ küçük olduğu için burada kalır.
+ *
+ * Yükleme yarıda kalırsa istemci bu kaydı siler; silemese bile dosyasız
+ * PDF düğümü ziyaretçiye gösterilmez (bkz. yayindakiAgac).
+ */
 export async function pdfEkle(formData: FormData): Promise<DugumSonuc> {
-  let pdf: SaklananDosya | null = null;
   let kapak: SaklananDosya | null = null;
   let dugumId = "";
   try {
@@ -125,10 +125,6 @@ export async function pdfEkle(formData: FormData): Promise<DugumSonuc> {
       if (ust.tur !== "klasor") return { hata: "PDF yalnız klasörün içine eklenir." };
     }
 
-    const dosya = formData.get("pdf");
-    if (!(dosya instanceof File) || dosya.size === 0) return { hata: "PDF dosyası seçin." };
-    if (!pdfMi(dosya)) return { hata: "Yalnız PDF dosyası yüklenebilir." };
-
     const dugum = await prisma.etkinlikDugum.create({
       data: {
         ustId,
@@ -143,7 +139,6 @@ export async function pdfEkle(formData: FormData): Promise<DugumSonuc> {
     dugumId = dugum.id;
 
     // Dosyalar kayıt oluştuktan sonra saklanır (klasör adı kimliğe bağlı)
-    pdf = await dosyaSakla(etkinlikKlasoru(dugum.id), "dosya", dosya, ETKINLIK_PDF_GRUPLARI);
     const kapakDosyasi = formData.get("kapak");
     if (kapakDosyasi instanceof File && kapakDosyasi.size > 0) {
       kapak = await dosyaSakla(
@@ -152,17 +147,11 @@ export async function pdfEkle(formData: FormData): Promise<DugumSonuc> {
         kapakDosyasi,
         ETKINLIK_KAPAK_GRUPLARI
       );
+      await prisma.etkinlikDugum.update({
+        where: { id: dugum.id },
+        data: { kapakYol: kapak.yol, kapakTur: kapak.tur },
+      });
     }
-
-    await prisma.etkinlikDugum.update({
-      where: { id: dugum.id },
-      data: {
-        dosyaYol: pdf.yol,
-        dosyaAd: pdf.ad,
-        dosyaBoyut: pdf.boyut,
-        ...(kapak ? { kapakYol: kapak.yol, kapakTur: kapak.tur } : {}),
-      },
-    });
 
     denetim("etkinlik.pdfEkle", kim, { dugumId: dugum.id, ustId, ad: veri.ad, durum: veri.durum });
     etkinlikTazele();
@@ -177,9 +166,10 @@ export async function pdfEkle(formData: FormData): Promise<DugumSonuc> {
   }
 }
 
-/** Başlık / durum düzenleme + isteğe bağlı PDF ve kapak değiştirme */
+/** Başlık / durum düzenleme + isteğe bağlı kapak değiştirme.
+    PDF'in kendisi buradan GEÇMEZ; değiştirilecekse istemci dosyayı
+    /api/etkinlik/pdf/[id]/yukle rotasına akıtır (bkz. pdfEkle). */
 export async function pdfGuncelle(formData: FormData): Promise<DugumSonuc> {
-  let yeniPdf: SaklananDosya | null = null;
   let yeniKapak: SaklananDosya | null = null;
   try {
     const kim = await oturumGerekli("admin");
@@ -188,7 +178,7 @@ export async function pdfGuncelle(formData: FormData): Promise<DugumSonuc> {
 
     const mevcut = await prisma.etkinlikDugum.findUnique({
       where: { id },
-      select: { id: true, tur: true, ustId: true, dosyaYol: true, kapakYol: true },
+      select: { id: true, tur: true, ustId: true, kapakYol: true },
     });
     if (!mevcut) return { hata: "Etkinlik bulunamadı." };
     if (mevcut.tur !== "pdf") return { hata: "Bu kayıt bir PDF etkinliği değil." };
@@ -198,11 +188,6 @@ export async function pdfGuncelle(formData: FormData): Promise<DugumSonuc> {
       durum: formData.get("durum") || "taslak",
     });
 
-    const dosya = formData.get("pdf");
-    if (dosya instanceof File && dosya.size > 0) {
-      if (!pdfMi(dosya)) return { hata: "Yalnız PDF dosyası yüklenebilir." };
-      yeniPdf = await dosyaSakla(etkinlikKlasoru(id), "dosya", dosya, ETKINLIK_PDF_GRUPLARI);
-    }
     const kapakDosyasi = formData.get("kapak");
     if (kapakDosyasi instanceof File && kapakDosyasi.size > 0) {
       yeniKapak = await dosyaSakla(
@@ -219,27 +204,17 @@ export async function pdfGuncelle(formData: FormData): Promise<DugumSonuc> {
         ad: veri.ad,
         durum: veri.durum,
         slug: await benzersizDugumSlug(veri.ad, mevcut.ustId, id),
-        ...(yeniPdf
-          ? { dosyaYol: yeniPdf.yol, dosyaAd: yeniPdf.ad, dosyaBoyut: yeniPdf.boyut }
-          : {}),
         ...(yeniKapak ? { kapakYol: yeniKapak.yol, kapakTur: yeniKapak.tur } : {}),
       },
     });
 
     // Yenisi yerleştiyse eskisi diskten silinir
-    if (yeniPdf && mevcut.dosyaYol) await dosyaSil(mevcut.dosyaYol);
     if (yeniKapak && mevcut.kapakYol) await dosyaSil(mevcut.kapakYol);
 
-    denetim("etkinlik.pdfGuncelle", kim, {
-      dugumId: id,
-      ad: veri.ad,
-      durum: veri.durum,
-      pdfDegisti: !!yeniPdf,
-    });
+    denetim("etkinlik.pdfGuncelle", kim, { dugumId: id, ad: veri.ad, durum: veri.durum });
     etkinlikTazele();
     return { tamam: true, id };
   } catch (e) {
-    if (yeniPdf) await dosyaSil(yeniPdf.yol);
     if (yeniKapak) await dosyaSil(yeniKapak.yol);
     return { hata: hataMetni(e, "pdfGuncelle") };
   }

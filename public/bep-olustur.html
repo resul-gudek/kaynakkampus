@@ -88,7 +88,10 @@
 
     /* BUILDER LAYOUT */
     .builder { padding: 40px 0 80px; }
-    .builder-grid { display: grid; grid-template-columns: 400px 1fr; gap: 30px; align-items: start; }
+    /* Çıktı A4 YATAY olduğundan önizleme sütunu da yatay sayfa oranında
+       tutulur; ekranda görülen yerleşim yazdırılanla aynı olur. */
+    .builder .container { max-width: 1540px; }
+    .builder-grid { display: grid; grid-template-columns: 380px 1fr; gap: 26px; align-items: start; }
 
     .panel { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 92px; max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
     .panel::-webkit-scrollbar { width: 6px; }
@@ -142,48 +145,85 @@
     .toolbar-float { display: flex; gap: 10px; justify-content: center; margin-bottom: 18px; flex-wrap: wrap; }
     .toolbar-float .btn { padding: 11px 22px; font-size: .85rem; }
 
+    /* A4 yatay yazdırılabilir alan ≈ 273 mm ≈ 1030 px; önizleme de o genişlikte. */
     .sheet {
       background: #fff; border-radius: 12px; box-shadow: var(--shadow-lg);
-      padding: 40px 44px; max-width: 900px; margin: 0 auto;
-      font-size: var(--sheet-fs, .88rem); line-height: 1.55;
+      padding: 26px 30px; max-width: 1040px; margin: 0 auto;
+      font-size: var(--sheet-fs, .88rem); line-height: 1.4;
     }
     .sheet.bw, .sheet.bw * { color: #111 !important; }
-    .sheet.bw .bep-h, .sheet.bw th { background: #eee !important; }
+    .sheet.bw .bep-h, .sheet.bw th, .sheet.bw tr.uda-r > td { background: #eee !important; }
     .sheet.bw .bep-h.ders-h { background: #fff !important; }
+    .sheet.bw .uyar-t td:first-child, .sheet.bw .kimlik-t td:nth-child(odd) { background: #f6f6f6 !important; }
     .sheet [contenteditable]:hover { outline: 1.5px dashed rgba(122,32,53,.35); outline-offset: 2px; }
     .sheet [contenteditable]:focus { outline: 2px solid var(--teal); outline-offset: 2px; }
 
-    .bep-head { text-align: center; border-bottom: 3px double var(--blue); padding-bottom: 14px; margin-bottom: 18px; }
-    .bep-head .tc { font-size: .85em; font-weight: 700; letter-spacing: .08em; }
-    .bep-head .okul { font-size: .95em; font-weight: 700; letter-spacing: .04em; margin-top: 2px; }
-    .bep-head h2 { color: var(--blue); font-size: 1.25em; font-weight: 800; margin-top: 8px; letter-spacing: .02em; }
-    .bep-head .yil { font-size: .82em; color: var(--muted); font-weight: 600; margin-top: 4px; }
+    /* Künye tek şeride indirildi: üç satır yerine iki satır, yatay sayfada
+       gereksiz yer kaplamaz. */
+    .bep-head { text-align: center; border-bottom: 2px solid var(--blue); padding-bottom: 6px; margin-bottom: 10px; }
+    .bep-head .tc { font-size: .8em; font-weight: 700; letter-spacing: .06em; }
+    .bep-head h2 { color: var(--blue); font-size: 1.08em; font-weight: 800; margin-top: 1px; letter-spacing: .02em; }
+    .bep-head .yil { font-size: .78em; color: var(--muted); font-weight: 600; margin-top: 1px; }
 
     .bep-h {
-      background: var(--bg-soft); color: var(--blue); font-weight: 800; font-size: .95em;
-      padding: 8px 14px; border-radius: 14px; margin: 22px 0 12px; letter-spacing: .02em;
+      background: var(--bg-soft); color: var(--blue); font-weight: 800; font-size: .92em;
+      padding: 4px 11px; border-radius: 8px; margin: 12px 0 6px; letter-spacing: .02em;
       break-after: avoid;
     }
     .bep-h small { color: var(--muted); font-weight: 600; }
 
     table.bep-t { width: 100%; border-collapse: collapse; font-size: .92em; }
-    table.bep-t th, table.bep-t td { border: 1px solid #E4C4CB; padding: 7px 10px; text-align: left; vertical-align: top; }
-    table.bep-t th { background: #F3ECEE; color: var(--blue-dk); font-weight: 700; font-size: .88em; }
+    table.bep-t th, table.bep-t td { border: 1px solid #E4C4CB; padding: 3.5px 7px; text-align: left; vertical-align: top; }
+    table.bep-t th { background: #F3ECEE; color: var(--blue-dk); font-weight: 700; font-size: .9em; }
     table.bep-t td b { color: var(--blue-dk); }
-    .kimlik-t td:nth-child(odd) { background: #FAF7F5; font-weight: 700; width: 18%; white-space: nowrap; }
-    .kimlik-t td:nth-child(even) { width: 32%; }
+    /* Kimlik şeridi: yatay sayfada üç etiket/değer çifti yan yana. */
+    .kimlik-t td:nth-child(odd) { background: #FAF7F5; font-weight: 700; width: 11%; white-space: nowrap; }
+    .kimlik-t td:nth-child(even) { width: 22.3%; }
 
-    .uda-block { margin-bottom: 18px; break-inside: avoid; }
-    .uda-title { font-weight: 800; color: var(--blue-dk); margin-bottom: 8px; font-size: .95em; }
-    .uda-title .no { color: var(--orange); }
+    /* ── Ders bloğu: bir dersin tüm UDA/KDA'sı TEK tabloda ── */
+    .ders-blok { margin-bottom: 12px; }
+    .ders-not { font-size: .78em; color: var(--muted); line-height: 1.35; margin: 0 0 4px; }
+    .ders-not b { color: var(--blue-dk); }
+    .ders-not .et { font-weight: 700; color: var(--blue-dk); }
+    tr.uda-r > td { background: #FBF1F3; font-weight: 600; color: var(--blue-dk); }
+    tr.uda-r .no { color: var(--orange); font-weight: 800; margin-right: 3px; }
+    tr.uda-r .uda-bilgi { color: var(--muted); font-weight: 500; font-size: .92em; }
+    .kda-no { white-space: nowrap; }
+    /* Tarih aralığı iki satıra düşerse TÜM satır iki katına çıkıyordu. */
+    .kda-t .tar { white-space: nowrap; font-size: .94em; }
+    /* Ders genelindeki ortak ölçüt/yöntemden ayrılan satırın kendi notu. */
+    .oz { font-size: .84em; color: var(--muted); font-style: italic; }
 
-    .perf-p, .uyar-li { text-align: justify; }
-    ul.bep-ul { padding-left: 20px; list-style: disc; display: flex; flex-direction: column; gap: 5px; }
+    .perf-p { text-align: justify; column-count: 2; column-gap: 26px; margin-bottom: 6px; }
+    .uyar-li { text-align: left; }
+    ul.bep-ul { padding-left: 15px; list-style: disc; margin: 0; }
+    ul.bep-ul li { break-inside: avoid; margin-bottom: 2px; }
+    /* Uyarlama maddeleri geniş hücrede iki sütuna akar (yatay sayfada
+       tek sütun satırları gereksiz uzatıyordu). */
+    .uyar-t ul.bep-ul { column-count: 2; column-gap: 20px; }
+    .uyar-t td:first-child { background: #FAF7F5; font-weight: 700; }
 
-    .sign-t td { height: 64px; text-align: center; vertical-align: bottom; padding-bottom: 8px; }
-    .sign-t .rol { height: auto; background: #FAF7F5; font-weight: 700; vertical-align: middle; }
+    /* BEP geliştirme birimi: solda ünvan/ad/imza tablosu, sağda kararlar
+       ve müdür onayı — yan yana durunca tek blokta kalır. */
+    .sign-t td { height: 26px; vertical-align: middle; }
+    .sign-t .ad-h { font-weight: 600; }
+    /* Bölümün tamamına "bölünme" demek, blok sığmayınca onu bütün olarak
+       sonraki sayfaya itiyor ve önceki sayfanın altında koca bir boşluk
+       bırakıyordu. Bölünmezlik iki iç tabloda kalır; bölüm gerekirse
+       sayfanın kalan alanından başlar. */
+    .birim-kap { display: flex; gap: 14px; align-items: flex-start; }
+    .birim-imza { flex: 1 1 58%; break-inside: avoid; }
+    .birim-karar { flex: 1 1 42%; break-inside: avoid; }
+    .birim-karar td { height: 24px; vertical-align: middle; }
+    .birim-karar td:first-child { background: #FAF7F5; font-weight: 600; }
+    .onay {
+      margin-top: 8px; border: 1px solid #E4C4CB; border-radius: 6px;
+      padding: 6px 10px; text-align: center; line-height: 1.5;
+    }
+    .onay-bas { font-weight: 800; letter-spacing: .06em; font-size: .92em; }
+    .onay-alt { font-size: .85em; }
+    .onay-imza { font-size: .78em; color: var(--muted); margin-top: 16px; }
 
-    .sheet-footer { margin-top: 26px; text-align: center; font-size: .72em; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
     .edit-note { font-size: .74rem; color: var(--muted); text-align: center; margin-bottom: 12px; }
 
     /* ── PERFORMANS PROFİLİ PANELİ ── */
@@ -213,6 +253,88 @@
     .chip:hover { border-color: var(--blue); color: var(--blue); }
     .chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
 
+    /* ── HIZLI AKIŞ: ders kartı + ihtiyaç alanları ── */
+    .ders-kart { border-radius: 12px; margin-bottom: 6px; transition: background .2s; }
+    .ders-kart.acik { background: #fff; border: 1px solid rgba(122,32,53,.16); padding: 8px 10px 10px; }
+    .ders-kart .ders-sec span { font-size: .84rem; font-weight: 700; }
+    .ders-ihtiyac { padding-left: 23px; margin-top: 4px; }
+    .ders-ihtiyac .mini-head { margin: 4px 0 6px; font-size: .7rem; }
+    .ders-ihtiyac .chip { padding: 4px 10px; font-size: .72rem; }
+    .ders-alt { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
+    .ders-alt > span { font-size: .72rem; font-weight: 600; color: var(--muted); }
+    .ders-alt .sev-sel { font-size: .72rem; padding: 4px 7px; flex: 0 0 58%; max-width: 58%; }
+
+    /* ── Özet / ön izleme kartı ── */
+    .ozet-satir {
+      background: #fff; border: 1px solid rgba(122,32,53,.14); border-radius: 10px;
+      padding: 7px 11px; margin-bottom: 6px;
+    }
+    .ozet-satir.bos { border-style: dashed; opacity: .7; }
+    .ozet-ders { font-size: .82rem; font-weight: 800; }
+    .ozet-say { font-size: .74rem; color: var(--muted); margin-top: 1px; }
+    .ozet-say b { color: var(--blue); }
+    .ozet-alan { font-size: .68rem; color: var(--muted); margin-top: 3px; font-style: italic; }
+
+    /* ── İsteğe bağlı alanlar ve Gelişmiş bölümü ── */
+    .ek-alan { margin-top: 10px; }
+    .ek-alan > summary, .gelismis > summary {
+      cursor: pointer; font-size: .76rem; font-weight: 700; color: var(--blue);
+      list-style: none; padding: 5px 0;
+    }
+    .ek-alan > summary::-webkit-details-marker, .gelismis > summary::-webkit-details-marker { display: none; }
+    .ek-alan > summary::before { content: "＋ "; }
+    .ek-alan[open] > summary::before { content: "－ "; }
+    .gelismis { margin-top: 4px; }
+    .gelismis > summary {
+      background: var(--bg-soft); border-radius: var(--radius); padding: 13px 18px; font-size: .88rem;
+    }
+    .gelismis > summary i { font-weight: 500; color: var(--muted); font-style: normal; font-size: .76rem; }
+    .gelismis[open] > summary .gel-ok { display: inline-block; transform: rotate(90deg); }
+    .gelismis .step-box { margin-top: 10px; }
+    .gelismis .step-head { margin-bottom: 10px; }
+
+    /* ── BEP KAPSAMI PANELİ ── */
+    .kapsam-ozet {
+      font-size: .78rem; font-weight: 600; line-height: 1.45; margin: 4px 0 10px;
+      background: #fff; border: 1px solid rgba(122,32,53,.18); border-radius: 10px; padding: 8px 11px;
+    }
+    .kapsam-ozet.bos { border-style: dashed; color: var(--muted); font-weight: 500; }
+    .kap-ders { background: #fff; border: 1px solid rgba(122,32,53,.14); border-radius: 12px; padding: 10px 11px; margin-bottom: 10px; }
+    .kap-bas { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: .82rem; font-weight: 800; }
+    .kap-sev { font-style: normal; font-size: .68rem; font-weight: 700; color: var(--muted); margin-left: 4px; }
+    .kap-say { font-size: .74rem; font-weight: 800; color: var(--blue); white-space: nowrap; }
+    .kap-not { font-size: .72rem; color: var(--muted); line-height: 1.4; margin: 4px 0 7px; }
+    .kap-alan { margin-bottom: 7px; }
+    .kap-alan .chip { padding: 3px 9px; font-size: .68rem; }
+    .kap-alan .chip.oncelikli { border-color: var(--blue); color: var(--blue); background: #FBF1F3; }
+    .kap-arac { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .kap-btn {
+      border: 1px solid rgba(122,32,53,.2); background: #FDF7F8; color: var(--blue);
+      border-radius: 8px; font-size: .7rem; font-weight: 700; padding: 4px 9px;
+      cursor: pointer; font-family: inherit;
+    }
+    .kap-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .kap-unite { border-top: 1px solid rgba(122,32,53,.1); padding: 5px 0; }
+    .kap-unite > summary {
+      display: flex; align-items: center; gap: 7px; cursor: pointer;
+      font-size: .74rem; font-weight: 700; list-style: none; padding: 2px 0;
+    }
+    .kap-unite > summary::-webkit-details-marker { display: none; }
+    .kap-unite > summary::before { content: "▸"; color: var(--blue); flex-shrink: 0; }
+    .kap-unite[open] > summary::before { content: "▾"; }
+    .kap-u-ad { flex: 1 1 auto; }
+    .kap-u-say { font-size: .68rem; font-weight: 800; color: var(--blue); white-space: nowrap; }
+    .kap-mini { display: flex; gap: 4px; flex-shrink: 0; }
+    .kap-mini .kap-btn { padding: 2px 6px; font-size: .64rem; }
+    .kap-kaz { align-items: flex-start; padding: 2px 0 2px 16px; }
+    .kap-kaz span { font-size: .73rem; font-weight: 500; line-height: 1.35; }
+    .kap-kod { font-size: .66rem; font-weight: 800; background: #EDF3F3; color: #1F6B6B; border-radius: 4px; padding: 0 4px; }
+    .kap-et {
+      font-style: normal; font-size: .62rem; font-weight: 700; color: var(--muted);
+      border: 1px solid rgba(122,32,53,.16); border-radius: 5px; padding: 0 4px; margin-left: 3px; white-space: nowrap;
+    }
+    .kap-et.oncelikli { color: var(--blue); border-color: var(--blue); background: #FBF1F3; }
+
     .panel textarea {
       width: 100%; font-family: inherit; font-size: .78rem; padding: 9px 11px; margin-bottom: 8px;
       border-radius: 12px; border: 1px solid rgba(122,32,53,.2); background: #fff;
@@ -223,19 +345,18 @@
     /* ── BELGEDEKİ BİREYSELLEŞTİRME BÖLÜMLERİ ── */
     .bep-uyari {
       background: #FBF1F3; border-left: 4px solid var(--blue); border-radius: 8px;
-      padding: 10px 14px; font-size: .88em; margin-bottom: 16px; line-height: 1.5;
+      padding: 6px 12px; font-size: .84em; margin-bottom: 8px; line-height: 1.4;
     }
-    .alt-h { font-weight: 800; color: var(--blue-dk); font-size: .9em; margin: 14px 0 7px; break-after: avoid; }
-    .alt-not { font-size: .78em; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+    .alt-h { font-weight: 800; color: var(--blue-dk); font-size: .88em; margin: 8px 0 4px; break-after: avoid; }
+    .alt-not { font-size: .76em; color: var(--muted); margin-top: 3px; line-height: 1.4; }
     .prof-t td { font-size: .95em; }
-    .bep-h.ders-h { background: #fff; border: 1.5px solid #E4C4CB; }
-    .ders-plan { font-size: .82em; color: var(--blue-dk); margin: -6px 0 12px; font-weight: 600; }
-    .uda-plan { font-size: .78em; color: var(--muted); margin: -4px 0 7px; }
+    .bep-h.ders-h { background: #fff; border: 1.5px solid #E4C4CB; margin: 10px 0 4px; }
     .rozet-ok {
       font-size: .72em; font-weight: 800; letter-spacing: .02em; background: #F3ECEE;
       color: var(--blue-dk); border-radius: 6px; padding: 2px 7px; margin-left: 6px; white-space: nowrap;
     }
-    .kay { font-size: .82em; color: var(--muted); font-style: italic; white-space: nowrap; }
+    /* Kaynak etiketi dar sütunlarda da taşmasın diye satır sonu alabilir. */
+    .kay { font-size: .82em; color: var(--muted); font-style: italic; }
     .bsm { color: var(--blue-dk); font-weight: 700; font-style: normal; }
 
     /* RESPONSIVE */
@@ -266,8 +387,7 @@
     }
     .ar-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
     .ar-btn.ar-metin { padding: 3px 9px; font-size: .72em; }
-    .ar-bar { margin: 6px 0 14px; }
-    .ar-bar.ar-sag { text-align: right; margin: -2px 0 6px; }
+    .ar-bar { margin: 5px 0 10px; }
     .ar-ekle {
       border: 1px dashed #D8A0AC; background: #FDF7F8; color: var(--blue); cursor: pointer;
       border-radius: 8px; font-size: .78em; padding: 5px 12px; font-family: inherit; font-weight: 700;
@@ -277,20 +397,46 @@
       font-size: .72em; font-weight: 800; background: #EDF3F3; color: #1F6B6B;
       border-radius: 5px; padding: 1px 5px; margin-left: 4px; white-space: nowrap;
     }
-    .muf-kaynak { font-weight: 500; color: var(--muted); font-size: .78em; margin: -8px 0 12px; }
+
+    /* ── ÇIKTI: A4 YATAY ──────────────────────────────────────────────
+       Belge okulda doğrudan dosyalanabilsin diye kenar boşlukları dar ama
+       delgeç payı bırakacak kadar tutuldu. Yazı boyutu kullanıcının seçtiği
+       ölçekten gelir; sayfaya sığdırmak için ayrıca küçültülmez. */
+    /* Kenar boşluğu SIFIR: tarayıcı, üstbilgi/altbilgi (tarih, sekme başlığı,
+       sayfa adresi) için yer bulamayınca onları basmaz. Gerçek kenar boşluğu
+       .sheet'in iç dolgusuyla verilir; belge okulda dosyalanabilir kalır. */
+    @page { size: A4 landscape; margin: 0; }
 
     @media print {
       header, .page-hero, .panel, .toolbar-float, footer, .mobile-nav, .edit-note,
       .no-print, .ar-bar, td.ar, .ar-th { display: none !important; }
       .builder { padding: 0; }
+      .builder .container { max-width: none; padding: 0; }
       .builder-grid { display: block; }
-      .sheet { box-shadow: none; padding: 0; max-width: none; border-radius: 0; }
+      /* @page margin:0 olduğu için fiziksel kenar boşluğu burada verilir. */
+      .sheet { box-shadow: none; padding: 10mm 11mm; max-width: none; border-radius: 0; line-height: 1.28; }
+      /* Yazı boyutu küçültülmez; yalnızca hücre içi boşluk kısılır. */
+      table.bep-t th, table.bep-t td { padding: 2.5px 6px; }
+      .bep-h { margin: 9px 0 5px; }
+      .bep-h.ders-h { margin: 8px 0 3px; }
+      .ders-blok { margin-bottom: 8px; }
       .bep-h { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .bep-h.ders-h { background: #fff !important; }
       .bep-uyari { background: #f2f2f2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      table.bep-t th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .page-break { page-break-before: always; }
+      table.bep-t th, tr.uda-r > td { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body { background: #fff; }
+
+      /* Satır ve tablolar sayfa geçişinde parçalanmasın; uzun bir tablo
+         bölünmek zorunda kalırsa başlık satırı yeni sayfada tekrarlansın. */
+      table.bep-t { break-inside: auto; }
+      table.bep-t thead { display: table-header-group; }
+      table.bep-t tr { break-inside: avoid; }
+      /* Bir uzun dönemli amaç ile kısa dönemli amaçları BİRLİKTE kalır:
+         her amaç kendi <tbody>'sindedir ve gövde bölünmez. */
+      table.kda-t tbody { break-inside: avoid; }
+      tr.uda-r { break-after: avoid; }
+      .bep-h, .alt-h, .ders-not { break-after: avoid; }
+      .ders-blok { break-before: auto; }
     }
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
@@ -389,7 +535,7 @@
 <section class="page-hero ince">
   <div class="container">
     <div class="meb-badge">🇹🇷 MEB Özel Eğitim Hizmetleri Yönetmeliği'ne uygun format</div>
-    <h1>Akıllı <span>BEP Oluşturucu</span></h1>
+    <h1>BEP <span>Oluşturucu</span></h1>
     <p>Öğrencinin sınıfını, performans profilini ve derslerini girin: müfredat sınıf düzeyinden gelsin, amaçlar ve uyarlamalar öğrencinin bireysel performansına göre şekillensin.</p>
   </div>
 </section>
@@ -401,119 +547,154 @@
       <!-- ══════════ PANEL ══════════ -->
       <aside class="panel">
 
+        <!-- ══════════════════════════════════════════════════════════
+             HIZLI AKIŞ: Öğrenci → Dersleri seç → İhtiyaç alanlarını seç
+             → BEP Oluştur. Üç adımda biter. MEB'in istediği ama akışı
+             yavaşlatan her ayrıntı "Gelişmiş" bölümünde durur; hiçbiri
+             kaldırılmadı, yalnızca zorunlu olmaktan çıkarıldı.
+             ══════════════════════════════════════════════════════════ -->
+
         <div class="step-box">
-          <div class="step-head"><div class="step-num">1</div><div class="step-title">Öğrenci Bilgileri</div></div>
-          <div class="opt-row"><label>Ad Soyad</label><input type="text" id="stName" placeholder="Öğrencinin adı soyadı" /></div>
-          <div class="opt-row"><label>Doğum Tarihi</label><input type="date" id="stBirth" /></div>
+          <div class="step-head"><div class="step-num">1</div><div class="step-title">Künye Bilgileri</div></div>
+          <div class="opt-row"><label>Adı Soyadı</label><input type="text" id="stName" placeholder="Öğrencinin adı soyadı" /></div>
           <div class="opt-row"><label>Okul No</label><input type="text" id="stNo" placeholder="Örn. 124" /></div>
-          <div class="opt-row"><label>Veli Adı</label><input type="text" id="stParent" placeholder="Veli adı soyadı" /></div>
           <div style="font-size:.8rem;font-weight:700;margin:12px 0 8px;">Sınıf</div>
           <div class="pills" id="gradePills"></div>
+          <!-- Şube ayrı alandır; çıktıda sınıfla birlikte "4/A" biçiminde yazılır. -->
+          <div class="opt-row" style="margin-top:10px;">
+            <label>Şube</label>
+            <input type="text" id="stSube" maxlength="4" placeholder="Örn. A" style="width:38%;text-transform:uppercase;" />
+          </div>
+          <details class="ek-alan">
+            <summary>Okul, veli ve dönem bilgileri</summary>
+            <div class="opt-row"><label>Doğum Tarihi</label><input type="date" id="stBirth" /></div>
+            <div class="opt-row"><label>Veli Adı</label><input type="text" id="stParent" placeholder="Veli adı soyadı" /></div>
+            <div class="opt-row"><label>Okul Adı</label><input type="text" id="schoolName" placeholder="....... İlkokulu" /></div>
+            <div class="opt-row"><label>İl / İlçe</label><input type="text" id="schoolCity" placeholder="Örn. Ankara / Çankaya" /></div>
+            <div class="opt-row"><label>RAM Rapor No</label><input type="text" id="ramNo" placeholder="İsteğe bağlı" /></div>
+            <div class="opt-row"><label>Rapor Tarihi</label><input type="date" id="ramDate" /></div>
+            <div class="opt-row"><label>Dönem Başlangıcı</label><input type="date" id="termStart" /></div>
+            <div class="opt-row"><label>Dönem Bitişi</label><input type="date" id="termEnd" /></div>
+            <div class="hint">Bunlar belgede yer alır ama BEP'i oluşturmak için şart değildir; boş bırakırsan çıktıda doldurulacak boşluk olarak basılır.</div>
+          </details>
+          <details class="ek-alan">
+            <summary>Tanı bilgisi (isteğe bağlı)</summary>
+            <div class="pills" id="disabPills"></div>
+            <div class="hint" id="disabHint"></div>
+          </details>
         </div>
 
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">2</div><div class="step-title">Tanılama Bilgileri</div></div>
-          <div class="pills" id="disabPills"></div>
-          <div class="opt-row" style="margin-top:12px;"><label>RAM Rapor No</label><input type="text" id="ramNo" placeholder="İsteğe bağlı" /></div>
-          <div class="opt-row"><label>Rapor Tarihi</label><input type="date" id="ramDate" /></div>
-          <div class="hint" id="disabHint">Birden fazla tanı seçebilirsin; ilk seçtiğin tanı birincil tanı sayılır. Tanı, BEP'i tek başına belirlemez; program 3. adımdaki performans bilgilerine göre şekillenir.</div>
-        </div>
-
-        <!-- Bireyselleştirmenin kalbi: tanı değil, öğrencinin gerçek performansı.
-             Boş bırakılan alanlar için varsayım yapılmaz; sınıf düzeyi korunur. -->
+        <!-- Dersler + derse özgü ihtiyaç alanları TEK adımda. İlkokulda
+             bile hiçbir ders kendiliğinden seçili gelmez. -->
         <div class="step-box vurgu">
-          <div class="step-head"><div class="step-num">3</div><div class="step-title">Performans Profili</div></div>
-          <div class="opt-row">
-            <label>Genel hazır bulunuşluk</label>
-            <select id="pGenel">
-              <option value="">Belirtilmedi</option>
-              <option value="sinif">Sınıf düzeyinde</option>
-              <option value="hafif">Hafif destek</option>
-              <option value="orta">Orta düzey destek</option>
-              <option value="yogun">Yoğun destek</option>
-            </select>
-          </div>
-          <div class="opt-row">
-            <label>Kesintisiz çalışma süresi</label>
-            <select id="pDikkat">
-              <option value="">Belirtilmedi</option>
-              <option value="kisa">10 dakikadan kısa</option>
-              <option value="orta">10 – 20 dakika</option>
-              <option value="uzun">20 dakika ve üzeri</option>
-            </select>
-          </div>
-          <div class="mini-head">Beceri alanlarında performans</div>
-          <div id="beceriList"></div>
-          <div class="hint">Yalnızca bildiğin alanları işaretle. Boş bıraktığın alanlar için varsayımda bulunulmaz; öğrenci o alanda sınıf düzeyinde kabul edilir. <b>"uyarlama"</b> etiketli alanlar müfredat düzeyini değil, yalnızca uyarlama ve yöntemi etkiler.</div>
-        </div>
-
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">4</div><div class="step-title">Destek Eğitim Hizmetleri</div></div>
-          <div id="supportList"></div>
-        </div>
-
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">5</div><div class="step-title">Dersler ve Ders Bazlı Performans</div></div>
+          <div class="step-head"><div class="step-num">2</div><div class="step-title">BEP Uygulanacak Dersler ve İhtiyaç Alanları</div></div>
           <div id="subjectList"></div>
-          <div class="mini-head">Ders bazlı performans düzeyi</div>
-          <div id="dersPerfList"></div>
-          <div class="hint" id="subjectHint">Öğrencinin Matematikte güçlüğü olup Türkçede sınıf düzeyinde olması mümkündür. Boş bırakırsan düzey, beceri alanlarından türetilir; o da yoksa sınıf düzeyi müfredatı korunur.</div>
+          <div class="hint" id="subjectHint">Yalnızca öğrencinin BEP'e ihtiyaç duyduğu dersleri işaretle. Ders açıldığında o dersin ihtiyaç alanları gelir; birkaçını seçmen yeterli — kazanımları, amaçları, yöntem ve ölçütleri sistem kurar.</div>
         </div>
 
         <div class="step-box">
-          <div class="step-head"><div class="step-num">6</div><div class="step-title">Güçlü Yönler ve Uyarlama İhtiyaçları</div></div>
-          <div class="mini-head">Güçlü olduğu alanlar</div>
-          <div class="chipset" id="gucluChips"></div>
-          <div class="mini-head">İhtiyaç duyduğu uyarlamalar</div>
-          <div id="ihtiyacList"></div>
-          <div class="mini-head">Öğretmen / veli / uzman notları</div>
-          <textarea id="pIlgi" rows="2" placeholder="İlgi alanları (örn. hayvanlar, futbol, çizim)"></textarea>
-          <textarea id="pGuclu" rows="2" placeholder="Güçlü yönlerine ilişkin ek not"></textarea>
-          <textarea id="pZorluk" rows="2" placeholder="Zorlandığı alanlara ilişkin gözlem"></textarea>
-          <textarea id="pGozlem" rows="3" placeholder="Davranışsal / gelişimsel gözlemler, veli ve uzman görüşleri"></textarea>
-          <div class="hint">Buraya yazdıkların eğitsel performans bölümüne aynen aktarılır ve uyarlamaları etkiler.</div>
-        </div>
-
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">7</div><div class="step-title">BEP Dönemi ve Kurum</div></div>
-          <div class="opt-row"><label>Başlangıç</label><input type="date" id="termStart" /></div>
-          <div class="opt-row"><label>Bitiş</label><input type="date" id="termEnd" /></div>
-          <div class="opt-row"><label>Okul Adı</label><input type="text" id="schoolName" placeholder="....... İlkokulu" /></div>
-          <div class="opt-row"><label>İl / İlçe</label><input type="text" id="schoolCity" placeholder="Örn. Ankara / Çankaya" /></div>
-        </div>
-
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">8</div><div class="step-title">BEP Geliştirme Birimi</div></div>
-          <div class="opt-row"><label>Müdür / Bşk.</label><input type="text" id="mPrincipal" placeholder="Ad Soyad" /></div>
-          <div class="opt-row"><label>Sınıf Öğretmeni</label><input type="text" id="mTeacher" placeholder="Ad Soyad" /></div>
-          <div class="opt-row"><label>Rehber Öğretmen</label><input type="text" id="mCounselor" placeholder="Ad Soyad" /></div>
-          <div class="opt-row"><label>Özel Eğitim Öğrt.</label><input type="text" id="mSpecial" placeholder="Varsa" /></div>
-        </div>
-
-        <div class="step-box">
-          <div class="step-head"><div class="step-num">9</div><div class="step-title">Belge Ayarları</div></div>
-          <div class="opt-row">
-            <label>Yazı Boyutu</label>
-            <select id="fontSize">
-              <option value=".8rem">Küçük</option>
-              <option value=".88rem" selected>Normal</option>
-              <option value=".98rem">Büyük</option>
-            </select>
+          <div class="step-head"><div class="step-num">3</div><div class="step-title">Özet ve Oluştur</div></div>
+          <div class="kapsam-ozet" id="kapsamOzet"></div>
+          <div id="ozetKart"></div>
+          <div class="gen-actions">
+            <button class="btn btn-primary" id="genBtn" style="font-size:1rem;">📋 BEP'i Oluştur</button>
+            <div class="action-row">
+              <button class="btn btn-outline" id="duzenleBtn">✏️ Amaçları düzenle</button>
+              <button class="btn btn-outline" id="printBtn">🖨 Yazdır / PDF</button>
+            </div>
           </div>
-          <label class="check-row"><input type="checkbox" id="optUyarlama" checked /><span>Öğretim uyarlamaları bölümünü ekle</span></label>
-          <label class="check-row"><input type="checkbox" id="optDegerlendirme" checked /><span>İzleme ve değerlendirme bölümünü ekle</span></label>
-          <label class="check-row"><input type="checkbox" id="optSign" checked /><span>BEP birimi imza bloğunu ekle</span></label>
-          <label class="check-row"><input type="checkbox" id="optBW" /><span>Siyah-beyaz çıktı (toner dostu)</span></label>
+          <div class="hint" style="text-align:center;">Başarı ölçütü, yöntem-teknik, materyal ve değerlendirme sistem tarafından hazırlanır; belgede her metnin üzerine tıklayıp değiştirebilirsin.</div>
         </div>
 
-        <div class="gen-actions">
-          <button class="btn btn-primary" id="genBtn" style="font-size:1rem;">📋 BEP'i Oluştur</button>
-          <div class="action-row">
-            <button class="btn btn-outline" id="printBtn">🖨 Yazdır / PDF</button>
-            <button class="btn btn-outline" id="clearBtn">🗑 Temizle</button>
+        <!-- ══════════ GELİŞMİŞ: hiçbiri zorunlu değil ══════════ -->
+        <details class="gelismis" id="gelismisKutu">
+          <summary><span class="gel-ok">▸</span> Gelişmiş ayarlar <i>— performans profili, uyarlamalar, kurul, belge ayarları</i></summary>
+
+          <div class="step-box" id="kapsamKutu">
+            <div class="step-head"><div class="step-title">Amaç ve kazanım seçimi</div></div>
+            <div id="kapsamList"></div>
+            <div class="hint">Yıllık müfredat burada yalnızca <b>aday havuzdur</b>. Sistem ihtiyaç alanlarıyla eşleşen kazanımları işaretler; ünite ve alan düğmeleriyle toplu ekleyip çıkarabilirsin. Kazanım metinleri ve kodları değiştirilmez.</div>
           </div>
-          <div class="hint" style="text-align:center;">💡 Girdiğin bilgiler tarayıcında otomatik saklanır; sayfayı kapatıp açsan da kaybolmaz. "Yazdır / PDF" penceresinde <b>PDF'e kaydet</b> seçerek dosya indirebilirsin.</div>
-        </div>
+
+          <div class="step-box">
+            <div class="step-head"><div class="step-title">Performans profili (ayrıntılı)</div></div>
+            <div class="opt-row">
+              <label>Genel hazır bulunuşluk</label>
+              <select id="pGenel">
+                <option value="">Belirtilmedi</option>
+                <option value="sinif">Sınıf düzeyinde</option>
+                <option value="hafif">Hafif destek</option>
+                <option value="orta">Orta düzey destek</option>
+                <option value="yogun">Yoğun destek</option>
+              </select>
+            </div>
+            <div class="opt-row">
+              <label>Kesintisiz çalışma süresi</label>
+              <select id="pDikkat">
+                <option value="">Belirtilmedi</option>
+                <option value="kisa">10 dakikadan kısa</option>
+                <option value="orta">10 – 20 dakika</option>
+                <option value="uzun">20 dakika ve üzeri</option>
+              </select>
+            </div>
+            <div class="mini-head">Beceri alanlarında performans</div>
+            <div id="beceriList"></div>
+            <div class="hint">Yalnızca bildiğin alanları işaretle. Boş bıraktığın alanlar için varsayımda bulunulmaz. <b>"uyarlama"</b> etiketli alanlar müfredat düzeyini değil, yalnızca uyarlama ve yöntemi etkiler.</div>
+            <div class="mini-head">Ders bazlı destek düzeyi</div>
+            <div id="dersPerfList"></div>
+          </div>
+
+          <div class="step-box">
+            <div class="step-head"><div class="step-title">Güçlü yönler, uyarlamalar ve notlar</div></div>
+            <div class="mini-head">Güçlü olduğu alanlar</div>
+            <div class="chipset" id="gucluChips"></div>
+            <div class="mini-head">İhtiyaç duyduğu uyarlamalar</div>
+            <div id="ihtiyacList"></div>
+            <div class="mini-head">Öğretmen / veli / uzman notları</div>
+            <textarea id="pIlgi" rows="2" placeholder="İlgi alanları (örn. hayvanlar, futbol, çizim)"></textarea>
+            <textarea id="pGuclu" rows="2" placeholder="Güçlü yönlerine ilişkin ek not"></textarea>
+            <textarea id="pZorluk" rows="2" placeholder="Zorlandığı alanlara ilişkin gözlem"></textarea>
+            <textarea id="pGozlem" rows="3" placeholder="Davranışsal / gelişimsel gözlemler, veli ve uzman görüşleri"></textarea>
+            <div class="hint">Buraya yazdıkların eğitsel performans bölümüne aynen aktarılır ve uyarlamaları etkiler.</div>
+          </div>
+
+          <div class="step-box">
+            <div class="step-head"><div class="step-title">Destek eğitim hizmetleri</div></div>
+            <div id="supportList"></div>
+          </div>
+
+          <div class="step-box">
+            <div class="step-head"><div class="step-title">BEP Geliştirme Birimi Bilgileri</div></div>
+            <div class="opt-row"><label>Okul Müdürü / Md. Yrd.</label><input type="text" id="mPrincipal" placeholder="Ad Soyad" /></div>
+            <div class="opt-row"><label>Sınıf Öğretmeni</label><input type="text" id="mTeacher" placeholder="Ad Soyad" /></div>
+            <div class="opt-row"><label>Ders / Alan Öğrt.</label><input type="text" id="mBranch" placeholder="Ad Soyad" /></div>
+            <div class="opt-row"><label>Rehber Öğretmen</label><input type="text" id="mCounselor" placeholder="Ad Soyad" /></div>
+            <div class="opt-row"><label>Özel Eğitim Öğrt.</label><input type="text" id="mSpecial" placeholder="Varsa" /></div>
+            <div class="opt-row"><label>Sonraki Değerlendirme</label><input type="date" id="nextEval" /></div>
+            <div class="hint">Boş bıraktığın satırlar belgede <b>ad alanı boş</b> olarak basılır; "Belirtilmedi" yazılmaz. Özel eğitim ve branş öğretmeni yalnızca girildiğinde ya da gerekli olduğunda satır açar. Veli adı künye bilgilerinden alınır.</div>
+          </div>
+
+          <div class="step-box">
+            <div class="step-head"><div class="step-title">Belge ayarları</div></div>
+            <div class="opt-row">
+              <label>Yazı Boyutu</label>
+              <select id="fontSize">
+                <option value=".8rem">Küçük</option>
+                <option value=".88rem" selected>Normal</option>
+                <option value=".98rem">Büyük</option>
+              </select>
+            </div>
+            <label class="check-row"><input type="checkbox" id="optUyarlama" checked /><span>Öğretim uyarlamaları bölümünü ekle</span></label>
+            <label class="check-row"><input type="checkbox" id="optSign" checked /><span>BEP birimi imza bloğunu ekle</span></label>
+            <label class="check-row"><input type="checkbox" id="optBW" /><span>Siyah-beyaz çıktı (toner dostu)</span></label>
+          </div>
+
+          <div class="step-box">
+            <div class="step-head"><div class="step-title">Taslak</div></div>
+            <button class="btn btn-outline" id="clearBtn" style="width:100%;justify-content:center;">🗑 Formu Temizle</button>
+            <div class="hint">Girdiğin bilgiler tarayıcında otomatik saklanır; sayfayı kapatıp açsan da kaybolmaz.</div>
+          </div>
+        </details>
 
       </aside>
 
@@ -743,6 +924,9 @@ const DISAB = {
 };
 
 /* ═══════════════ VERİ: DESTEK HİZMETLERİ ═══════════════ */
+/* Bunlar YERLEŞTİRME türüdür, destek eğitim hizmeti değil: belgede
+   "Eğitim Ortamı" satırında görünür, hizmet tablosuna girmez. */
+const ORTAM_TURU = ["kaynastirma", "ozelsinif"];
 const SUPPORTS = [
   { id: "destekoda", name: "Destek Eğitim Odası", detail: "Haftalık plan dahilinde birebir/küçük grup çalışması" },
   { id: "kaynastirma", name: "Kaynaştırma / Bütünleştirme", detail: "Tam zamanlı, sınıf içi destekle" },
@@ -884,6 +1068,33 @@ const BECERI_MAP = Object.fromEntries(BECERI.map(b => [b.id, b]));
    kazanımları yalnızca bu nedenle sadeleştirilmez. */
 const BECERI_AKADEMIK = ["okuma", "anlama", "yazma", "islem", "problem"];
 
+/* ═══════════════ KAZANIM – İHTİYAÇ ALANI EŞLEMESİ ═══════════════
+   Resmî kazanım metni DEĞİŞTİRİLMEZ; yalnızca hangi beceri alanına
+   dokunduğu etiketlenir. Etiket, "BEP Kapsamı" adımında hangi kazanımın
+   öğrencinin öncelikli ihtiyacıyla ilişkili olduğunu göstermek ve ön
+   seçim önermek içindir. Son karar öğretmenindir: öneri ekranda açıkça
+   işaretlenir, öğretmen ekleyip çıkarabilir.
+   Anahtarlar Türkçe küçük harfe çevrilmiş metinde ALT DİZİ olarak aranır;
+   bu yüzden ekleri de kapsayan kökler yazılmıştır. */
+const ALAN_ANAHTAR = {
+  okuma:   ["okur", "okuma", "okuduğ", "okudukl", "okunan", "akıcı", "sesli oku", "hece", "telaffuz", "seslet", "sözcüğü tanı"],
+  anlama:  ["anlar", "anlama", "anladığ", "dinle", "izle", "ana fikir", "ana düşünce", "konusunu belirle", "çıkarım", "yorumla", "özetle", "tahmin ed", "karşılaştır", "sorulara cevap", "içeriğini değerlendir", "metni ana hatlar"],
+  yazma:   ["yazar", "yazma", "yazdığ", "yazılı anlatım", "metin oluştur", "yazım", "noktalama", "paragraf", "cümle kur", "not al", "doldur"],
+  islem:   ["işlem", "toplama", "toplar", "çıkarma", "çıkarır", "çarpma", "çarpar", "bölme", "böler", "sayı", "basamak", "kesir", "hesapla", "ondalık", "yüzde", "ritmik", "zihinden", "birim"],
+  problem: ["problem", "çözer", "çözme", "problem kur", "strateji", "modelle", "sonucunu tahmin"],
+  dil:     ["sözcük", "kelime", "kavram", "iletişim", "konuş", "ifade ed", "anlatır", "soru sor", "dinleyici", "görüşlerini"],
+  sosyal:  ["birlikte", "grup", "arkadaş", "iş birliği", "kural", "paylaş", "sorumluluk", "nezaket", "toplum", "hak ve özgürlük"],
+  dikkat:  ["sırala", "eşleştir", "ayırt ed", "dikkat", "örüntü", "adım adım", "sınıflandır"],
+  motor:   ["çizer", "çizim", "ölçer", "ölçme", "keser", "yapıştır", "el becerisi", "araç gereç kullan"],
+  ozdz:    ["planlar", "planlama", "gözden geçir", "değerlendirir", "süreci izle", "öz değerlendirme"],
+};
+
+/** Kazanım metninin dokunduğu beceri alanları (etiket; metin değişmez). */
+function kazanimAlanlari(metin) {
+  const t = String(metin || "").toLocaleLowerCase("tr");
+  return Object.keys(ALAN_ANAHTAR).filter(a => ALAN_ANAHTAR[a].some(k => t.includes(k)));
+}
+
 /* Dikkat / kesintisiz çalışma süresi */
 const DIKKAT_SURE = {
   "":     { ad: "Belirtilmedi", uyar: null, y: null, blok: null },
@@ -959,6 +1170,357 @@ const DERS_BECERI = {
   din:   ["okuma", "anlama", "yazma"],
 };
 
+/* ═══════════════ DERSE ÖZGÜ ÖNCELİKLİ İHTİYAÇ ALANLARI ═══════════════
+   Öğretmenin BEP hazırlarken düşündüğü dil budur: "bu öğrencinin akıcı
+   okumada ve yazım-noktalamada desteğe ihtiyacı var". Birkaç kutucuk
+   işaretlenir; kazanım seçimi, yöntem-materyal ve uyarlamalar buradan çıkar.
+   Öğretmen yüzlerce kazanımı tek tek gezmek zorunda kalmaz.
+
+     ad      → öğretmene görünen kısa ad
+     beceri  → mevcut BECERI alanı (uyarlama/ölçüt motoru bunu kullanır)
+     anahtar → resmî kazanım metninde aranan kökler (metin DEĞİŞTİRİLMEZ)
+     y       → bu alan seçilince yöntem/materyal sütununa eklenecek ibare
+     sinif   → yalnız bu sınıflarda göster (yoksa dersin tüm sınıfları)
+
+   Alanlar sınıf ve derse göre dinamik gelir: `dersIhtiyacAlanlari()`
+   listeyi sınıfa göre süzer ve o sınıf-ders müfredatında karşılığı
+   bulunmayan alanları (hiç kazanım eşleşmiyorsa) gizler. */
+const DERS_IHTIYAC = {
+  tr: [
+    { id: "sesharf", ad: "Ses ve harf bilgisi", beceri: "okuma", sinif: [1, 2],
+      uda: "Sesleri ve harfleri tanır, hece ve sözcükleri doğru okuyup yazar.",
+      anahtar: ["ses", "harf", "hece", "seslet", "okuma yazma"], y: "ses-harf kartları, hece tablosu" },
+    { id: "akici", ad: "Akıcı okuma", beceri: "okuma",
+      uda: "Sınıf düzeyine uygun metinleri noktalama ve vurguya dikkat ederek akıcı biçimde okur.",
+      anahtar: ["okur", "okuma", "okumayı", "okunan", "akıcı", "sesli oku", "vurgu", "tonlama", "telaffuz", "hece", "okuma stratejileri", "noktalama işaretlerine dikkat"],
+      // Anlam kurma/çözümleme kazanımları akıcılık değil, anlama alanıdır
+      disla: ["anlam oluştur", "çözümleyebilme", "yorumlayabilme"],
+      y: "tekrarlı okuma, hece/kelime kartları, okuma takip kartı" },
+    /* Okuduğunu anlama ile dinlediğini anlama AYRI alanlardır. Tek alanda
+       toplanınca UDA "okuduğu ve dinlediği" diyor ama altına yalnız okuma
+       kazanımları düşebiliyordu; `disla` ikisini kesin ayırır. */
+    { id: "anlama", ad: "Okuduğunu anlama", beceri: "anlama",
+      uda: "Okuduğu metnin temel unsurlarını belirler ve içeriğini anlamlandırır.",
+      kalip: "%s.",
+      ozetKalip: "Okuduğunu anlama – %s",
+      yuz: [
+        { id: "sozcuk", ozet: "sözcük anlamı", ad: "Okuduğu metindeki sözcük ve söz gruplarının anlamını belirler", ara: ["sözcük", "kelime", "gerçek, mecaz", "anlamını tahmin", "deyim", "atasöz"] },
+        { id: "tahmin", ozet: "konu tahmini", ad: "metnin konusunu ve içeriğini tahmin eder", ara: ["konusunu tahmin", "tahmin eder", "konusunu belirle", "başlık"] },
+        { id: "anafikir", ozet: "ana fikir", ad: "ana fikrini belirler", ara: ["ana fikir", "ana düşünce", "ana duygu"] },
+        { id: "anlatim", ozet: "anlatma", ad: "okuduklarını ana hatlarıyla anlatır", ara: ["ana hatlarıyla", "anlatır", "özetle"] },
+      ],
+      anahtar: ["anlam oluştur", "anlam kur", "çözümleyebilme", "yorumlayabilme", "değerlendirebilme", "ana fikir", "ana düşünce", "konusunu belirle", "özetle", "çıkarım", "tahmin ed", "sorulara cevap", "yorumla", "karşılaştır", "olayların gelişimi", "okuduğ", "okudukl"],
+      disla: ["dinle", "izle", "dinledik", "izledik", "dinlediğ", "izlediğ", "dinlemeyi", "izlemeyi", "konuş", "yaz"],
+      y: "ön bilgi hazırlığı, metin haritası" },
+    { id: "dinleme", ad: "Dinlediğini/izlediğini anlama", beceri: "anlama",
+      uda: "Dinlediği ve izlediği içeriği takip eder, anladıklarını ifade eder.",
+      anahtar: ["dinle", "izle", "dinledik", "izledik", "dinlediğ", "izlediğ", "dinlemeyi", "izlemeyi"],
+      y: "dinleme öncesi soru, sesli metin" },
+    { id: "yazili", ad: "Yazılı anlatım", beceri: "yazma",
+      uda: "Düşüncelerini planlayarak anlaşılır ve kurallı metinler yazar.",
+      anahtar: ["yazar", "yazma", "yazmayı", "yazdığ", "yazılı anlatım", "yazı yaz", "metin yaz", "metin oluştur", "paragraf", "planlar", "hikâye edici metin yaz", "bilgilendirici metin yaz", "not al", "kısa metin"],
+      y: "yazı planı, kılavuz şablon" },
+    { id: "yazim", ad: "Yazım ve noktalama", beceri: "yazma",
+      uda: "Yazılarında yazım ve noktalama kurallarını doğru uygular.",
+      anahtar: ["yazım", "noktalama", "büyük harf", "imla", "kurallarına uygun yaz"],
+      y: "yazım kuralı kartı, kontrol listesi" },
+    { id: "sozvarligi", ad: "Söz varlığı ve kelime bilgisi", beceri: "dil",
+      uda: "Söz varlığını geliştirir; sözcük ve söz gruplarının anlamını bağlama göre kullanır.",
+      anahtar: ["sözcük", "kelime", "eş anlam", "zıt anlam", "deyim", "atasöz", "anlamını tahmin", "söz varlığı"],
+      y: "kelime defteri, görsel sözlük" },
+    { id: "sozlu", ad: "Sözlü ifade / konuşma", beceri: "dil",
+      uda: "Düşüncelerini sınıf ortamında anlaşılır ve düzenli biçimde sözlü olarak ifade eder.",
+      anahtar: ["konuş", "konuşmayı", "sözlü anlatım", "ifade ed", "görüşlerini", "sunum", "sunabilme", "sorular sor", "hazırlıksız konuşma", "hazırlıklı konuşma"],
+      y: "konuşma planı, örnek diyalog" },
+  ],
+  mat: [
+    { id: "sayi", ad: "Sayı bilgisi", beceri: "islem",
+      uda: "Sınıf düzeyindeki doğal sayıları okur, yazar, karşılaştırır ve basamak değerlerini kullanır.",
+      anahtar: ["sayı", "basamak", "sayar", "sıralar", "ritmik", "yuvarla", "tek ve çift", "çarpan", "asal", "bölünebilme", "üslü", "köklü", "örüntü"],
+      disla: ["toplama", "çıkarma", "çarpma", "bölme", "problem", "kesir", "ondalık", "grafik", "geometri"],
+      y: "sayı doğrusu, onluk taban blokları" },
+    { id: "islem", ad: "Dört işlem", beceri: "islem",
+      uda: "Doğal sayılarla dört işlemi doğru yapar.",
+      anahtar: ["toplama", "toplar", "çıkarma", "çıkarır", "çarpma", "çarpar", "bölme", "böler", "zihinden", "hesapla", "dört işlem"],
+      disla: ["kesir", "ondalık", "grafik"],
+      y: "somut materyal, işlem basamağı kartı" },
+    { id: "kesir", ad: "Kesirler ve ondalık gösterim", beceri: "islem",
+      uda: "Kesirleri ve ondalık gösterimleri tanır, karşılaştırır ve işlemlerde kullanır.",
+      anahtar: ["kesir", "ondalık", "yüzde", "payda"], y: "kesir takımı, bölgeli model" },
+    { id: "problem", ad: "Problem çözme", beceri: "problem",
+      uda: "Verilen ve istenenleri belirleyerek problemleri uygun stratejiyle çözer.",
+      anahtar: ["problem"],
+      y: "verilen-istenen şeması, dört adımlı problem kartı" },
+    /* Bu alan üç YÜZ taşır. Seçim her yüzden en az bir kazanım almaya
+       çalışır; uzun dönemli amaç ve performans özeti de yalnızca gerçekten
+       temsil edilen yüzleri sayar (para kazanımı girmediyse "para" yazmaz). */
+    { id: "olcme", ad: "Ölçme – uzunluk, zaman, para", beceri: "islem",
+      uda: "Uzunluk, zaman ve para ölçülerini uygun birimlerle ölçer ve günlük yaşamda kullanır.",
+      kalip: "%s ölçülerini uygun birimlerle ölçer ve günlük yaşamda kullanır.",
+      ozetKalip: "Ölçme – %s",
+      yuz: [
+        { id: "uzunluk", ad: "Uzunluk", ara: ["uzunluk", "metre", "santimetre", "milimetre", "kilometre"] },
+        { id: "zaman", ad: "zaman", ara: ["zaman", "saat", "dakika", "takvim", "süre"] },
+        { id: "para", ad: "para", ara: ["para", "lira", "kuruş"] },
+      ],
+      anahtar: ["uzunluk", "metre", "santimetre", "milimetre", "kilometre", "zaman", "saat", "dakika", "takvim", "para", "lira", "kuruş", "süre"],
+      // Şekil sınıflandırma ve çevre/alan kazanımları kendi alanlarına gider
+      disla: ["problem", "üçgen", "çokgen", "çevre", "alanını", "sınıflandır"],
+      y: "cetvel, model saat, oyun parası" },
+    { id: "tarti", ad: "Tartma ve sıvı ölçme", beceri: "islem",
+      uda: "Kütle ve sıvı ölçme birimlerini tanır, uygun araçlarla ölçüm yapar.",
+      kalip: "%s ölçme birimlerini tanır ve uygun araçlarla ölçüm yapar.",
+      ozetKalip: "%s ölçme",
+      yuz: [
+        { id: "kutle", ad: "Kütle", ara: ["kilogram", "gram", "ton", "tartı", "kütle"] },
+        { id: "sivi", ad: "sıvı", ara: ["litre", "mililitre", "sıvı"] },
+      ],
+      anahtar: ["kilogram", "gram", "ton", "litre", "mililitre", "tartı", "kütle", "sıvı"],
+      disla: ["problem"],
+      y: "terazi, ölçü kapları" },
+    { id: "cevrealan", ad: "Çevre, alan ve hacim", beceri: "islem",
+      uda: "Şekillerin çevresini ve alanını uygun birimlerle hesaplar.",
+      anahtar: ["çevre", "alanını", "alan ölç", "alanı hesap", "hacim", "kaplama"],
+      disla: ["problem"],
+      y: "kareli kâğıt, birim kare" },
+    { id: "geometri", ad: "Geometri ve uzamsal beceriler", beceri: "islem",
+      uda: "Geometrik şekil ve cisimleri özelliklerine göre tanır, çizer ve konumlarını belirler.",
+      /* "açı" kökü "AÇIklar"ı da yakalıyordu; açı kazanımları tam
+         biçimleriyle aranır. */
+      anahtar: ["geometri", "şekil", "cisim", "simetri", "köşe", "kenar", "küp", "prizma", "çokgen", "üçgen", "dörtgen", "kare", "dikdörtgen", "çember", "daire", "izometrik", "kareli kâğıt", "doğru parçası", "dik açı", "dar açı", "geniş açı", "açıyı", "açının", "açıları", "açılar", "paralel", "koordinat", "yansıma", "öteleme"],
+      disla: ["problem", "grafik", "örüntü", "eşitlik"],
+      y: "geometri tahtası, şekil kartları, kareli kâğıt" },
+    { id: "veri", ad: "Veri toplama ve grafik", beceri: "problem",
+      uda: "Veri toplar, tablo ve grafiklerle gösterir, verilerden sonuç çıkarır.",
+      olcut: "Verileri uygun tablo/grafikte doğru gösterir", deg: "Ürün değerlendirme",
+      anahtar: ["grafik", "sıklık tablosu", "çetele", "araştırma sorusu", "olasılık", "istatistik", "veri toplama", "veri grubu", "verileri", "veriye dayalı"],
+      y: "hazır tablo şablonu, sayım kartı" },
+  ],
+  fen: [
+    { id: "kavram", ad: "Temel kavramları anlama", beceri: "anlama",
+      uda: "Derse ait temel kavramları açıklar, örneklendirir ve birbiriyle ilişkilendirir.",
+      anahtar: ["açıklar", "tanımlar", "ifade eder", "örnek verir", "sınıflandır", "ayırt ed", "fark eder", "ilişkilendir", "çözümleyebilme", "yorumlayabilme", "akıl yürüt", "tanımlayabilme", "açıklayabilme", "sınıflandırabilme"],
+      y: "kavram haritası, görsel model" },
+    { id: "deney", ad: "Deney, gözlem ve süreç becerileri", beceri: "problem",
+      olcut: "Yönergedeki adımların en az 4/5'ini doğru uygular", deg: "Performans görevi (deney gözlem formu)",
+      uda: "Basit deney ve gözlemleri tasarlar, yürütür ve sonuçlarını kaydeder.",
+      kalip: "Basit deney ve gözlemleri %s.",
+      ozetKalip: "Deney ve süreç becerileri – %s",
+      yuz: [
+        { id: "tasarla", ozet: "tasarlama", ad: "tasarlar", ara: ["tasarla", "planla", "model oluştur", "kurgula"] },
+        { id: "yurut", ozet: "yürütme", ad: "yönergeye uygun yürütür", ara: ["deney yap", "deneyler yap", "gözlem", "araştır", "test ed", "keşfeder", "yapar"] },
+        { id: "kaydet", ozet: "ölçme ve kaydetme", ad: "sonuçlarını ölçüp kaydeder", ara: ["ölçerek", "veri topla", "verileri", "sonuç çıkar", "bilgi topla", "kaydeder", "karşılaştırır"] },
+      ],
+      anahtar: ["deney", "gözlem", "tasarla", "araştır", "test ed", "ölçerek", "veri topla", "verileri", "sonuç çıkar", "model oluştur", "bilgi topla", "tasarlayabilme", "kanıt"],
+      y: "adım adım deney kartı, gözlem formu" },
+    { id: "hesap", ad: "Hesaplama ve ölçme", beceri: "islem",
+      uda: "Ölçme yapar ve derse ait temel hesaplamaları doğru gerçekleştirir.",
+      anahtar: ["hesapla", "ölç", "birim", "hesaplar", "grafik", "tablo", "matematiksel", "ölçebilme"], y: "formül kartı, hesap makinesi" },
+    { id: "gunluk", ad: "Günlük yaşamla ilişkilendirme", beceri: "anlama",
+      uda: "Öğrendiği bilgileri günlük yaşamdaki durumlarla ilişkilendirir.",
+      anahtar: ["günlük yaşam", "günlük hayat", "çözüm önerir", "tartışır", "değerlendirir", "tasarruf", "geri dönüşüm", "sağlık", "güvenlik", "gerçek yaşam", "çözüm öner", "değerlendirebilme", "katkı sağla"],
+      y: "gerçek yaşam örnekleri, görsel senaryo" },
+  ],
+  sos: [
+    { id: "kavram", ad: "Temel kavram ve olguları anlama", beceri: "anlama",
+      uda: "Derse ait temel kavram ve olguları açıklar, örneklerle ilişkilendirir.",
+      anahtar: ["açıklar", "tanımlar", "fark eder", "ayırt ed", "örnek verir", "ilişkilendir", "çözümleyebilme", "yorumlayabilme", "kültür", "toplum", "ilişki"], y: "kavram kartı, görsel şema" },
+    { id: "okuma", ad: "Harita, kroki ve grafik okuma-oluşturma", beceri: "okuma",
+      uda: "Harita, kroki ve grafikleri okur, yorumlar ve oluşturur.",
+      kalip: "%s.",
+      ozetKalip: "Harita ve grafik becerileri – %s",
+      yuz: [
+        { id: "konum", ozet: "harita ve konum", ad: "Harita ve görsellerden konum ve yön ilişkilerini belirler", ara: ["konum", "mekânsal", "yön", "harita", "coğrafi", "ölçek"] },
+        { id: "grafik", ozet: "grafik ve tablo", ad: "grafik ve tabloları okuyup oluşturur", ara: ["grafik", "tablo", "veri", "sütun"] },
+        { id: "kroki", ozet: "kroki", ad: "kroki çizer", ara: ["kroki", "plan çiz", "çizer"] },
+      ],
+      // Ölçüt/değerlendirme bu alanda "metin okuma" değildir
+      olcut: "Konum ve yön ilişkilerini doğru belirler", deg: "Uygulamalı değerlendirme",
+      anahtar: ["harita", "grafik", "tablo", "kroki", "konum", "mekânsal", "ölçek", "yön bulma", "coğrafi", "plan çiz"],
+      y: "büyük ölçekli harita, kroki şablonu" },
+    { id: "zaman", ad: "Zaman ve kronoloji", beceri: "anlama",
+      uda: "Olayları zaman sırasına koyar, geçmiş ile bugün arasında ilişki kurar.",
+      anahtar: ["zaman", "kronoloji", "tarih", "geçmiş", "değişim", "süreklilik", "sıralar", "dönem"], y: "zaman şeridi, olay kartları" },
+    { id: "yazma", ad: "Yazılı ve sözlü anlatım", beceri: "yazma",
+      uda: "Araştırma sonuçlarını yazılı ve sözlü olarak düzenli biçimde sunar.",
+      anahtar: ["yazar", "sunar", "anlatır", "hazırlar", "tartışır", "görüş", "sunabilme", "katkı sağla", "araştırma"], y: "sunum şablonu, yazı planı" },
+  ],
+  hay: [
+    { id: "ozbakim", ad: "Öz bakım ve günlük beceriler", beceri: "ozdz",
+      uda: "Öz bakım ve günlük yaşam becerilerini bağımsız olarak yerine getirir.",
+      anahtar: ["öz bakım", "temizlik", "sağlık", "beslenme", "giyin", "düzen", "kişisel", "rutin"], y: "görsel iş analizi, resimli rutin kartı" },
+    { id: "guvenlik", ad: "Güvenlik ve kurallar", beceri: "sosyal",
+      uda: "Okulda, evde ve trafikte güvenlik kurallarına uyar.",
+      anahtar: ["güvenlik", "kural", "tehlike", "trafik", "acil", "korun", "hakları", "hakkı", "sorumluluk"], y: "güvenlik kartları, canlandırma" },
+    { id: "iletisim", ad: "İletişim ve sosyal beceriler", beceri: "sosyal",
+      uda: "Arkadaşlarıyla ve yetişkinlerle olumlu iletişim kurar, iş birliği yapar.",
+      anahtar: ["iletişim", "arkadaş", "paylaş", "iş birliği", "nezaket", "duygu", "birlikte", "aile", "okul"], y: "sosyal öykü, akran eşleştirmesi" },
+    { id: "cevre", ad: "Çevre ve doğa bilgisi", beceri: "anlama",
+      uda: "Yakın çevresindeki canlıları ve doğa olaylarını tanır, çevreyi korur.",
+      anahtar: ["doğa", "çevre", "canlı", "bitki", "hayvan", "mevsim", "hava", "gözlem"], y: "gerçek nesne, görsel kart" },
+  ],
+  /* İngilizce kazanım METNİ İngilizcedir; Türkçe kök aramak işe yaramaz.
+     Buna karşılık resmî kod beceriyi zaten söylüyor: L dinleme, R okuma,
+     S/SI/SP konuşma, W yazma, V söz varlığı, G-P dil bilgisi-telaffuz.
+     Eşleştirme bu yüzden koda bakar. */
+  ing: [
+    /* Kazanım metni İngilizce olduğu için Türkçe eylem kuralları (KDA_KURAL)
+       burada çalışmaz; ölçüt ve değerlendirme alan düzeyinde AÇIKÇA
+       tanımlanır, beceri varsayılanına düşmez. */
+    { id: "dinleme", ad: "Dinleme (listening)", beceri: "anlama",
+      uda: "Seviyesine uygun İngilizce dinleme metinlerini anlar.", kod: "\\.L\\d",
+      olcut: "Dinlediklerine ilişkin soruların %75'ini doğru yanıtlar", deg: "Soru-cevap değerlendirmesi",
+      y: "yavaşlatılmış ses, görsel destekli dinleme" },
+    { id: "okuma", ad: "Okuma (reading)", beceri: "okuma",
+      uda: "Seviyesine uygun kısa İngilizce metinleri okur ve anlar.", kod: "\\.R\\d",
+      olcut: "Metni anlayarak okur, soruların %75'ini doğru yanıtlar", deg: "Okuma-anlama değerlendirmesi",
+      y: "resimli kısa metin, okuma rehberi" },
+    { id: "konusma", ad: "Konuşma (speaking)", beceri: "dil",
+      uda: "Öğrendiği kalıplarla kendini İngilizce olarak sözlü ifade eder.", kod: "\\.S[IP]?\\d",
+      olcut: "Öğrendiği kalıpları %70 doğrulukla kullanır", deg: "Yapılandırılmış gözlem",
+      y: "kalıp cümle kartı, model diyalog" },
+    { id: "yazma", ad: "Yazma (writing)", beceri: "yazma",
+      uda: "Öğrendiği kalıpları kullanarak kısa İngilizce metinler yazar.", kod: "\\.W\\d",
+      olcut: "Çalışmayı %70 doğrulukla tamamlar", deg: "Ürün dosyası değerlendirmesi",
+      y: "boşluk doldurmalı şablon, örnek cümle" },
+    { id: "kelime", ad: "Kelime bilgisi (vocabulary)", beceri: "dil",
+      uda: "Temaya ait İngilizce sözcükleri tanır ve yerinde kullanır.", kod: "\\.V\\d",
+      olcut: "Hedef sözcüklerin en az %75'ini doğru kullanır", deg: "Ölçüt bağımlı test",
+      y: "görsel kelime kartı, ikili eşleştirme" },
+    { id: "dilbilgisi", ad: "Dil bilgisi ve telaffuz", beceri: "dil",
+      uda: "Temaya ait dil yapılarını ve sesletimi doğru kullanır.", kod: "\\.(G|P|PC)\\d",
+      olcut: "Dil yapısını ve sesletimi %70 doğrulukla kullanır", deg: "Yapılandırılmış gözlem",
+      y: "kalıp tablosu, sesletim modeli" },
+  ],
+  din: [
+    { id: "kavram", ad: "Temel dinî kavramlar", beceri: "anlama",
+      uda: "Derse ait temel dinî kavramları açıklar ve örneklendirir.",
+      anahtar: ["açıklar", "tanımlar", "fark eder", "ayırt ed", "örnek verir", "anlam"], y: "kavram kartı, görsel şema" },
+    { id: "ezber", ad: "Sure, dua ve ezber", beceri: "okuma",
+      olcut: "Öğrendiği metni doğru ve eksiksiz okur", deg: "Sözlü uygulama değerlendirmesi",
+      uda: "Öğrendiği sure ve duaları doğru okur, anlamlarını açıklar.",
+      anahtar: ["sure", "dua", "ezber", "okur", "anlamını", "tekrar"], y: "bölümlere ayrılmış ezber kartı, doğrulanmış ses kaydı" },
+    { id: "ahlak", ad: "Ahlaki değerler ve davranış", beceri: "sosyal",
+      uda: "Ahlaki değerleri tanır ve günlük davranışlarına yansıtır.",
+      anahtar: ["değerler", "değerini", "ahlak", "davranış", "saygı", "doğruluk", "sorumluluk", "paylaş", "yardım"], y: "sosyal öykü, örnek olay" },
+    { id: "ibadet", ad: "İbadet bilgisi", beceri: "anlama",
+      uda: "İbadetlerle ilgili temel bilgileri açıklar.",
+      anahtar: ["ibadet", "namaz", "oruç", "abdest", "zekât", "hac"], y: "adım adım görsel yönerge" },
+  ],
+};
+/* Ortaöğretim ve dal dersleri, kendilerine en yakın temel dersin ihtiyaç
+   alanlarını paylaşır; ayrı bir liste tutmak veriyi ikizlerdi. */
+DERS_IHTIYAC.tde = DERS_IHTIYAC.tr;
+DERS_IHTIYAC.fiz = DERS_IHTIYAC.fen;
+DERS_IHTIYAC.kim = DERS_IHTIYAC.fen;
+DERS_IHTIYAC.bio = DERS_IHTIYAC.fen;
+DERS_IHTIYAC.tarih = DERS_IHTIYAC.sos;
+DERS_IHTIYAC.cog = DERS_IHTIYAC.sos;
+DERS_IHTIYAC.ink = DERS_IHTIYAC.sos;
+
+/* Başarı ölçütü ve değerlendirme yöntemi, amacın TÜRÜNE göre belirlenir.
+   Her amaca "10 denemenin 8'inde" yazmak ölçmeyi anlamsızlaştırıyordu.
+   Öğretmen bunları belgede tıklayıp değiştirebilir. */
+const BECERI_OLCUT = {
+  okuma:   { olcut: "Metni %90 doğrulukla okur",             deg: "Okuma gözlem formu" },
+  anlama:  { olcut: "Sorulara %75 doğrulukla yanıt verir",   deg: "Ölçüt bağımlı test" },
+  yazma:   { olcut: "Çalışmayı %70 doğrulukla tamamlar",     deg: "Öğrenci ürün dosyası" },
+  islem:   { olcut: "İşlemleri %80 doğrulukla yapar",        deg: "Ölçüt bağımlı test" },
+  problem: { olcut: "Problemlerin %70'ini doğru çözer",      deg: "Problem çözme çalışması" },
+  dil:     { olcut: "Etkinliklerin %70'inde doğru kullanır", deg: "Gözlem" },
+  sosyal:  { olcut: "Art arda 3 etkinlikte uygun davranır",  deg: "Gözlem formu" },
+  dikkat:  { olcut: "Görevin %70'ini tamamlar",              deg: "Gözlem" },
+  motor:   { olcut: "Çalışmayı yönergeye uygun tamamlar",    deg: "Öğrenci ürünü" },
+  ozdz:    { olcut: "Art arda 3 çalışmada uygular",          deg: "Kontrol listesi" },
+};
+/* Alanın kendi ölçütü varsa beceri varsayılanının önüne geçer: Sosyal
+   Bilgiler harita/kroki alanının becerisi "okuma" olsa da ölçütü "metni
+   doğrulukla okur" olamaz. */
+const olcutBilgisi = alan => (alan && alan.olcut)
+  ? { olcut: alan.olcut, deg: alan.deg || "Uygulamalı değerlendirme" }
+  : (BECERI_OLCUT[alan && alan.beceri] || BECERI_OLCUT.anlama);
+
+/* Ölçüt ve değerlendirme yöntemi KAZANIMIN KENDİ EYLEMİNDEN çıkar; bir
+   dersin bütün amaçlarına aynı ölçütü kopyalamak ölçmeyi anlamsızlaştırıyor
+   ve deney kazanımına "problem çözme çalışması", kroki kazanımına "okuma
+   gözlem formu" gibi yanlış yöntemler yazdırıyordu.
+   Sıra önemlidir: ilk eşleşen kural kazanır, en özgül eylem en üstte. */
+const KDA_KURAL = [
+  { ara: ["problem"],                          olcut: "Problemlerin %70'ini doğru çözer",                     deg: "Problem çözme çalışması" },
+  { ara: ["bilgi topla", "araştırma yap", "araştırır"], olcut: "Araştırma ürününü yönergeye uygun hazırlar", deg: "Ürün değerlendirme" },
+  { ara: ["deney"],                            olcut: "Yönergedeki adımların en az 4/5'ini doğru uygular",    deg: "Performans görevi (deney gözlem formu)" },
+  { ara: ["gözlem"],                           olcut: "Gözlem bulgularını uygun biçimde kaydeder",            deg: "Yapılandırılmış gözlem" },
+  { ara: ["para", "lira", "kuruş"],            olcut: "Para değerlerini doğru tanır ve kullanır",           deg: "Uygulamalı değerlendirme" },
+  { ara: ["saat", "zamanı oku", "takvim"],     olcut: "Saati ve zaman birimlerini doğru okur",              deg: "Uygulamalı değerlendirme" },
+  { ara: ["dönüştür", "birimleri arasında"],   olcut: "Ölçü birimlerini doğru dönüştürür",                  deg: "Ölçüt bağımlı test" },
+  { ara: ["kroki", "harita çiz", "plan çiz"],  olcut: "Yön ve konum ilişkilerini doğru göstererek çizer",     deg: "Ürün değerlendirme" },
+  { ara: ["konum", "mekânsal", "harita üzerinde", "yön bulma"], olcut: "Konum ve yön ilişkilerini doğru belirler", deg: "Uygulamalı değerlendirme" },
+  { ara: ["çıkarım", "akıl yürüt", "muhakeme", "algılayabilme"], olcut: "Verilen durumlarda doğru çıkarım yapar", deg: "Soru-cevap değerlendirmesi" },
+  { ara: ["grafik", "sıklık tablosu", "çetele"], olcut: "Verileri uygun grafik/tabloda doğru gösterir",       deg: "Ürün değerlendirme" },
+  { ara: ["ölçer", "ölçme", "ölçü", "tartar", "tahmin eder ve ölç"], olcut: "Ölçümlerin en az %80'ini doğru yapar", deg: "Uygulamalı değerlendirme" },
+  { ara: ["çizer", "oluşturur", "model"],      olcut: "Çalışmayı yönergeye uygun biçimde tamamlar",           deg: "Ürün değerlendirme" },
+  { ara: ["yazar", "yazma"],                   olcut: "Çalışmayı %70 doğrulukla tamamlar",                    deg: "Ürün dosyası değerlendirmesi" },
+  { ara: ["okur", "akıcı", "sesli oku"],       olcut: "Metni %90 doğrulukla okur",                            deg: "Okuma gözlem formu" },
+  { ara: ["dinle", "izle"],                    olcut: "Dinlediklerine ilişkin soruların %75'ini doğru yanıtlar", deg: "Soru-cevap değerlendirmesi" },
+  { ara: ["konuş", "anlatır", "sunar", "ifade eder"], olcut: "Anlatımını konu dışına çıkmadan tamamlar",      deg: "Yapılandırılmış gözlem" },
+  { ara: ["hesapla", "toplar", "çıkarır", "çarpar", "böler", "işlemi yapar"], olcut: "İşlemlerin en az %80'ini doğru yapar", deg: "Ölçüt bağımlı test" },
+  { ara: ["sınıflandır", "eşleştir", "sıralar", "ayırt ed"], olcut: "Verilen örneklerin %80'ini doğru ayırt eder", deg: "Ölçüt bağımlı test" },
+  { ara: ["anlam oluştur", "anlam kur", "çözümleyebilme", "yorumlayabilme", "değerlendirebilme"], olcut: "Soruların en az %75'ini doğru yanıtlar", deg: "Ölçüt bağımlı test" },
+  { ara: ["veri grubu", "veriye dayalı", "veri toplama"], olcut: "Verileri uygun tablo/grafikte doğru gösterir", deg: "Ürün değerlendirme" },
+  { ara: ["açıkla", "tanımla", "belirtir", "örnek", "ilişkilendir"], olcut: "Soruların en az %75'ini doğru yanıtlar", deg: "Ölçüt bağımlı test" },
+  { ara: ["belirler", "tahmin ed", "yorumla", "özetle", "karşılaştır"], olcut: "Soruların en az %75'ini doğru yanıtlar", deg: "Ölçüt bağımlı test" },
+  { ara: ["uygular", "kullanır", "uyar", "katılır"], olcut: "Art arda 3 etkinlikte doğru uygular",            deg: "Yapılandırılmış gözlem" },
+];
+
+/** Kazanımın kendi eylemine uygun ölçüt/değerlendirme; bulunamazsa
+    ihtiyaç alanının varsayılanına düşer. */
+function kdaOlcutu(kaz, alan) {
+  const t = String(kaz && kaz.t || "").toLocaleLowerCase("tr");
+  for (const k of KDA_KURAL) if (metinEslesir(t, k.ara)) return k;
+  return olcutBilgisi(alan);
+}
+
+/** Bir ders-sınıf için gösterilecek ihtiyaç alanları (sınıfa göre süzülür,
+    o müfredatta hiç kazanım eşleşmeyen alan gizlenir). */
+function dersIhtiyacAlanlari(key, grade) {
+  const liste = (DERS_IHTIYAC[key] || []).filter(a => !a.sinif || a.sinif.includes(grade));
+  if (!grade || !window.MUFREDAT) return liste;
+  const havuz = amacHavuzu(key, grade);
+  if (!havuz.bloklar.length) return liste;
+  const sayili = liste.map(a => ({ a, n: havuz.bloklar.reduce((t, b) =>
+    t + b.kda.filter(k => ihtiyacEslesir(k, a)).length, 0) }));
+  const dolu = sayili.filter(x => x.n > 0);
+  // Hiçbiri eşleşmiyorsa (veri seti ünite düzeyinde kalmış olabilir) tümünü göster
+  return (dolu.length ? dolu : sayili).map(x => Object.assign({ adet: x.n }, x.a));
+}
+
+/* Anahtar eşleşmesi KELİME BAŞINDAN yapılır. Düz alt dizi araması yanlış
+   alanlara kazanım çekiyordu: "veri" → "VERİlen", "eş" → "EŞitlik",
+   "birim" → "BİRİM kesirleri", "ölç" → açı ÖLÇme. Türkçe sondan eklemeli
+   olduğu için kelime başı yeterlidir ("okur" → "okurken"); geri kalan
+   yanlış eşleşmeler alanın `disla` listesiyle elenir. */
+const kelimeBasi = a => new RegExp("(^|[^\\p{L}\\p{N}])" + a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "u");
+const ESLESME_BELLEK = new Map();
+function metinEslesir(t, liste) {
+  return (liste || []).some(a => {
+    if (a.indexOf(" ") >= 0) return t.indexOf(a) >= 0;   // çok kelimeli kalıp
+    let re = ESLESME_BELLEK.get(a);
+    if (!re) { re = kelimeBasi(a); ESLESME_BELLEK.set(a, re); }
+    return re.test(t);
+  });
+}
+
+/** Kazanım bu ihtiyaç alanına giriyor mu? Metin ve kod okunur, DEĞİŞTİRİLMEZ.
+    Kod deseni varsa o esastır (İngilizce'de L/R/S/W/V/G ekleri beceriyi
+    resmî olarak zaten söylüyor); yoksa metin kökleri aranır. */
+function ihtiyacEslesir(k, alan) {
+  const kaz = (k && typeof k === "object") ? k : { t: k, kod: "" };
+  if (alan.kod) return new RegExp(alan.kod, "i").test(kaz.kod || "");
+  const t = String(kaz.t || "").toLocaleLowerCase("tr");
+  if (metinEslesir(t, alan.disla)) return false;
+  return metinEslesir(t, alan.anahtar);
+}
+
 /* Dersin kendi bant listesinde daha alt bant yoksa ön koşul amacın
    alınacağı ders (MEB'de o dersin öncülü olan ders). */
 const ONKOSUL_KAYNAK = { tde: "tr", fiz: "fen", kim: "fen", bio: "fen", tarih: "sos", cog: "sos", fen: "hay", sos: "hay", ink: "sos" };
@@ -966,21 +1528,21 @@ const ONKOSUL_KAYNAK = { tde: "tr", fiz: "fen", kim: "fen", bio: "fen", tarih: "
 /* Destek düzeyinin programa yansıması: basamak sayısı, ölçüt katsayısı,
    kapsam oranı, ön koşul gereksinimi, tekrar ve hız açıklaması. */
 const PLAN = {
-  "":    { basamak: 1, olcut: 1,    udaOran: 1,    kdaSinir: 99, onkosul: false,
+  "":    { basamak: 1, olcut: 1,    onkosul: false,
            hiz: "Sınıf düzeyinde ilerleme (performans bilgisi girilmediği için müfredat sırası korunmuştur)",
-           tekrar: "Kazanım başına 2 tekrar" },
-  sinif: { basamak: 1, olcut: 1,    udaOran: 1,    kdaSinir: 99, onkosul: false,
+           tekrarSayi: 2, tekrar: "Kazanım başına 2 tekrar" },
+  sinif: { basamak: 1, olcut: 1,    onkosul: false,
            hiz: "Sınıf düzeyinde ilerleme; müfredat sırası ve kapsamı korunur",
-           tekrar: "Kazanım başına 2 tekrar" },
-  hafif: { basamak: 1, olcut: 0.95, udaOran: 1,    kdaSinir: 99, onkosul: false,
+           tekrarSayi: 2, tekrar: "Kazanım başına 2 tekrar" },
+  hafif: { basamak: 1, olcut: 0.95, onkosul: false,
            hiz: "Sınıf düzeyinde ilerleme; yalnızca sunum ve materyal desteklenir",
-           tekrar: "Kazanım başına 3 tekrar" },
-  orta:  { basamak: 2, olcut: 0.85, udaOran: 0.8,  kdaSinir: 99, onkosul: false,
-           hiz: "Kapsam korunur, ilerleme hızı yavaşlatılır; her amaç ipuçlu ve bağımsız basamakla çalışılır",
-           tekrar: "Kazanım başına 4 tekrar ve haftalık hatırlama çalışması" },
-  yogun: { basamak: 3, olcut: 0.75, udaOran: 0.55, kdaSinir: 3,  onkosul: true,
+           tekrarSayi: 3, tekrar: "Kazanım başına 3 tekrar" },
+  orta:  { basamak: 2, olcut: 0.85, onkosul: false,
+           hiz: "İlerleme hızı yavaşlatılır; dönem kapsamı öncelikli kazanımlarla sınırlandırılır, her amaç ipuçlu ve bağımsız basamakla çalışılır",
+           tekrarSayi: 4, tekrar: "Kazanım başına 4 tekrar ve haftalık hatırlama çalışması" },
+  yogun: { basamak: 3, olcut: 0.75, onkosul: true,
            hiz: "Ön koşul becerilerden başlanır; dönemde temel kazanımlara odaklanılır",
-           tekrar: "Kazanım başına en az 5 tekrar; her oturumda 5 dk hatırlama çalışması" },
+           tekrarSayi: 5, tekrar: "Kazanım başına en az 5 tekrar; her oturumda 5 dk hatırlama çalışması" },
 };
 
 /* Amaç basamakları (ipucu silikleştirme sırası). f → ölçüt katsayısı. */
@@ -995,9 +1557,10 @@ const BASAMAK_DIZI = { 1: ["bagimsiz"], 2: ["ipucu", "bagimsiz"], 3: ["model", "
    kullanılan Türkçe ek tablosu. */
 const SAYI_ICINDE = { 1: "1'inde", 2: "2'sinde", 3: "3'ünde", 4: "4'ünde", 5: "5'inde", 6: "6'sında", 7: "7'sinde", 8: "8'inde", 9: "9'unda", 10: "10'unda" };
 
-/* ═══════════════ VERİ: DERSLER VE AMAÇ BANKASI ═══════════════
-   Her ders için sınıf bantlarına göre UDA (uzun dönemli amaç) ve
-   KDA (kısa dönemli amaçlar: metin + ölçüt + yöntem) tanımlıdır. */
+
+/* ═══════════════ VERİ: DERSLER ═══════════════
+   Sınıf bantlarındaki amaç listeleri YALNIZCA ön koşul amaç kaynağıdır;
+   BEP'e giren kazanımlar resmî müfredattan gelir (bkz. amacHavuzu). */
 const SUBJECTS = {
   tr: { name: "Türkçe", icon: "📖", grades: [1,2,3,4,5,6,7,8],
     bands: {
@@ -1470,14 +2033,6 @@ const SUBJECTS = {
     } },
 };
 
-const ASSESS = [
-  "Ölçüt bağımlı testler (her kısa dönemli amaç için öğretim öncesi ve sonrası uygulanır)",
-  "Yapılandırılmış gözlem formları ve kontrol listeleri",
-  "Öğrenci ürün dosyası (portfolyo) incelemesi",
-  "Sözlü değerlendirme ve performans görevleri",
-  "Aile görüşmeleri ile ev ortamındaki genelleme takibi",
-];
-
 /* ═══════════════ DURUM ═══════════════ */
 const state = {
   grade: null,
@@ -1486,7 +2041,18 @@ const state = {
   ders: {},     // ders id → doğrudan girilen destek düzeyi
   guclu: [],    // güçlü yön id'leri
   ihtiyac: [],  // uyarlama ihtiyacı id'leri
+  ihtiyacAlan: {}, // ders id → [derse özgü öncelikli ihtiyaç alanı id'leri]
+  kapsam: {},   // ders id → { secili: [amaç id], elle: öğretmen dokundu mu }
 };
+
+/** Bir ders için işaretlenmiş öncelikli ihtiyaç alanı id'leri. */
+const dersIhtiyaci = key => state.ihtiyacAlan[key] || [];
+
+/** İşaretli ihtiyaç alanlarının tanım nesneleri. */
+function dersIhtiyacNesneleri(key) {
+  const id = new Set(dersIhtiyaci(key));
+  return (DERS_IHTIYAC[key] || []).filter(a => id.has(a.id));
+}
 
 /* ═══════════════ PANEL KURULUM ═══════════════ */
 const $ = id => document.getElementById(id);
@@ -1498,7 +2064,9 @@ function buildGradePills() {
   for (let g = 1; g <= 12; g++) {
     const b = document.createElement("button");
     b.className = "pill"; b.textContent = g + ". Sınıf";
-    b.onclick = () => { state.grade = g; [...box.children].forEach(x => x.classList.remove("active")); b.classList.add("active"); buildSubjectList(); buildDersPerf(); saveDraft(); };
+    b.onclick = () => { state.grade = g; [...box.children].forEach(x => x.classList.remove("active")); b.classList.add("active");
+      sinifaGoreTemizle();
+      buildSubjectList(); buildDersPerf(); kapsamiYenile(true); saveDraft(); };
     box.appendChild(b);
   }
 }
@@ -1533,14 +2101,14 @@ function tazeleDisabPills() {
 function taniHatirlatmasi() {
   const box = $("disabHint");
   if (!state.disabs.length) {
-    box.innerHTML = "Birden fazla tanı seçebilirsin; ilk seçtiğin tanı birincil tanı sayılır. Tanı, BEP'i tek başına belirlemez; program 3. adımdaki performans bilgilerine göre şekillenir.";
+    box.innerHTML = "Tanı girmek zorunlu değildir ve BEP'i tek başına belirlemez; program, 2. adımda işaretlediğin ihtiyaç alanlarına göre şekillenir. Birden fazla tanı seçebilirsin; ilk seçtiğin birincil tanı sayılır.";
     return;
   }
   const alanlar = [...new Set(state.disabs.flatMap(k => DISAB[k].alan || []))];
   const isim = state.disabs.map(k => DISAB[k].name).join(" + ");
   box.innerHTML = alanlar.length
-    ? `<b>${esc(isim)}</b> · Bu tanıda genellikle şu alanların değerlendirilmesi önerilir: <b>${alanlar.map(a => esc(BECERI_MAP[a].ad)).join(", ")}</b>. Seviyeler otomatik atanmaz; 3. adımda öğrencinin gerçek performansını gir.`
-    : `<b>${esc(isim)}</b> · Öğrencinin performansını 3. adımda gir; program buna göre şekillenir.`;
+    ? `<b>${esc(isim)}</b> · Bu tanıda genellikle şu alanların değerlendirilmesi önerilir: <b>${alanlar.map(a => esc(BECERI_MAP[a].ad)).join(", ")}</b>. Seviyeler otomatik atanmaz; 2. adımda dersin ihtiyaç alanlarını işaretle.`
+    : `<b>${esc(isim)}</b> · Programı 2. adımda işaretlediğin ihtiyaç alanları belirler.`;
 }
 
 function buildSupportList() {
@@ -1572,7 +2140,7 @@ function buildBeceriList() {
     row.innerHTML = `<span>${b.ad}${BECERI_AKADEMIK.includes(b.id) ? "" : " <i class='rozet'>uyarlama</i>"}</span>${seviyeSecim(state.alan[b.id] || "")}`;
     row.querySelector("select").addEventListener("change", e => {
       state.alan[b.id] = e.target.value;
-      buildDersPerf(); saveDraft();
+      buildDersPerf(); kapsamiYenile(); saveDraft();
     });
     box.appendChild(row);
   });
@@ -1580,19 +2148,64 @@ function buildBeceriList() {
 
 const SUBJECT_ORDER = ["tr", "tde", "mat", "hay", "fen", "fiz", "kim", "bio", "sos", "ink", "tarih", "cog", "ing", "din"];
 
+/* Hızlı akışın merkezi: ders seçimi VE o derse özgü öncelikli ihtiyaç
+   alanları aynı kartta. Hiçbir ders kendiliğinden seçili gelmez —
+   ilkokulda tüm dersleri BEP'e almak yanlış olurdu. Ders işaretlenince
+   ihtiyaç alanları açılır; öğretmen birkaç kutucuk işaretler, kazanım
+   seçimini sistem yapar. */
 function buildSubjectList() {
   const box = $("subjectList");
-  const prev = new Set([...box.querySelectorAll("input:checked")].map(i => i.dataset.sub));
+  const prev = new Set([...box.querySelectorAll("input[data-sub]:checked")].map(i => i.dataset.sub));
   box.innerHTML = "";
   if (!state.grade) { box.innerHTML = '<div class="hint">Önce sınıf seçmelisin.</div>'; return; }
   SUBJECT_ORDER.map(k => [k, SUBJECTS[k]]).forEach(([key, s]) => {
     if (!s.grades.includes(state.grade)) return;
-    const l = document.createElement("label");
-    l.className = "check-row";
-    const on = prev.size ? prev.has(key) : (key === "tr" || key === "tde" || key === "mat");
-    l.innerHTML = `<input type="checkbox" data-sub="${key}" ${on ? "checked" : ""} /><span>${s.icon} ${s.name}</span>`;
-    l.querySelector("input").addEventListener("change", () => { buildDersPerf(); saveDraft(); });
-    box.appendChild(l);
+    const acik = prev.has(key);
+    const kart = document.createElement("div");
+    kart.className = "ders-kart" + (acik ? " acik" : "");
+    kart.dataset.ders = key;
+    const secili = new Set(dersIhtiyaci(key));
+    const alanlar = acik ? dersIhtiyacAlanlari(key, state.grade) : [];
+    kart.innerHTML = `<label class="check-row ders-sec"><input type="checkbox" data-sub="${key}"${acik ? " checked" : ""} />`
+      + `<span>${s.icon} ${s.name}</span></label>`
+      + (acik ? `<div class="ders-ihtiyac">
+          <div class="mini-head">Desteğe ihtiyaç duyduğu alanlar</div>
+          <div class="chipset">${alanlar.length
+            ? alanlar.map(a => `<button type="button" class="chip${secili.has(a.id) ? " active" : ""}" data-alan="${a.id}">${esc(a.ad)}</button>`).join("")
+            : '<span class="hint">Bu ders için hazır ihtiyaç alanı yok; amaçları Gelişmiş bölümünden seçebilirsin.</span>'}</div>
+          <div class="ders-alt">
+            <span>Destek düzeyi</span>${seviyeSecim(state.ders[key] || "",
+              secili.size ? "Otomatik — orta düzey destek" : "Belirtilmedi (sınıf düzeyi)")}
+          </div>
+        </div>` : "");
+    kart.querySelector("input[data-sub]").addEventListener("change", () => {
+      /* Ders geçici olarak kapatılsa bile ihtiyaç alanı seçimleri SİLİNMEZ;
+         aynı oturumda ders yeniden açıldığında seçimler ve amaçlar geri
+         gelir. Temizlik yalnızca form sıfırlanınca ya da sınıf değişince
+         yapılır (o zaman amaç kimlikleri başka müfredata işaret eder). */
+      buildSubjectList(); buildDersPerf(); kapsamiYenile(); saveDraft();
+    });
+    if (acik) {
+      kart.querySelectorAll("[data-alan]").forEach(b => b.addEventListener("click", () => {
+        const liste = dersIhtiyaci(key).slice();
+        const i = liste.indexOf(b.dataset.alan);
+        if (i >= 0) liste.splice(i, 1); else liste.push(b.dataset.alan);
+        state.ihtiyacAlan[key] = liste;
+        /* İhtiyaç değişti: o dersin önerisi elle düzenlense bile yeniden
+           kurulur, çünkü öğretmenin kendisi ihtiyacı değiştirdi. */
+        delete state.kapsam[key];
+        /* Kart yeniden çizilir: düzey kutusunun "Otomatik — orta düzey
+           destek" etiketi ancak böyle güncellenir. */
+        buildSubjectList(); buildDersPerf(); kapsamiYenile(); saveDraft();
+      }));
+      const sec = kart.querySelector(".ders-alt select");
+      if (sec) sec.addEventListener("change", e => {
+        state.ders[key] = e.target.value;
+        delete state.kapsam[key];
+        buildDersPerf(); kapsamiYenile(); saveDraft();
+      });
+    }
+    box.appendChild(kart);
   });
 }
 
@@ -1618,7 +2231,8 @@ function buildDersPerf() {
     row.className = "prof-row";
     row.innerHTML = `<span>${s.icon} ${s.name}</span>${seviyeSecim(state.ders[key] || "", bos)}`;
     row.querySelector("select").addEventListener("change", e => {
-      state.ders[key] = e.target.value; buildDersPerf(); saveDraft();
+      state.ders[key] = e.target.value; delete state.kapsam[key];
+      buildSubjectList(); buildDersPerf(); kapsamiYenile(); saveDraft();
     });
     box.appendChild(row);
   });
@@ -1683,11 +2297,17 @@ const dash = s => esc(s) || "………………………………";
 const val = id => ($(id) ? $(id).value : "");
 const txt = id => val(id).trim();
 
+/* Sınıf ve şube ayrı girilir, çıktıda birlikte gösterilir: şube varsa
+   "4/A", yoksa "4. Sınıf". */
+const subeAdi = () => txt("stSube").toLocaleUpperCase("tr");
+const sinifEtiketi = () => subeAdi() ? `${state.grade}/${subeAdi()}` : `${state.grade}. Sınıf`;
+
 /* Profilde hiç bilgi girilmemişse true. Bu durumda program varsayım
    yapmaz: sınıf düzeyi korunur, genel-güvenli uyarlamalar önerilir ve
    belgeye düzenleme uyarısı eklenir. */
 function profilBosMu() {
   return !Object.values(state.alan).some(v => v)
+    && !Object.values(state.ihtiyacAlan).some(v => v && v.length)
     && !Object.values(state.ders).some(v => v)
     && !val("pGenel") && !val("pDikkat")
     && !state.guclu.length && !state.ihtiyac.length
@@ -1699,6 +2319,11 @@ function profilBosMu() {
    yoksa düzey atanmaz ve ders sınıf düzeyinde planlanır. */
 function dersSeviyesi(key) {
   if (state.ders[key]) return { sev: state.ders[key], kaynak: "girildi" };
+  /* Hızlı akış: öğretmen o derste öncelikli ihtiyaç alanı işaretlediyse
+     destek gereksinimi doğrudan BEYAN EDİLMİŞ demektir. Varsayılan "orta
+     düzey destek"tir; öğretmen Gelişmiş bölümünden değiştirebilir. Bu bir
+     tanıdan çıkarım değildir — öğretmenin kendi işaretidir. */
+  if (dersIhtiyaci(key).length) return { sev: "orta", kaynak: "ihtiyac" };
   const alanlar = (DERS_BECERI[key] || []).filter(a => BECERI_AKADEMIK.includes(a));
   const girili = alanlar.filter(a => rankOf(state.alan[a] || "") >= 0);
   if (girili.length) {
@@ -1708,7 +2333,23 @@ function dersSeviyesi(key) {
   if (val("pGenel")) return { sev: val("pGenel"), kaynak: "genel" };
   return { sev: "", kaynak: "yok" };
 }
-const KAYNAK_AD = { girildi: "ders performansı girildi", turetildi: "beceri alanlarından türetildi", genel: "genel hazır bulunuşluktan", yok: "bilgi girilmedi – sınıf düzeyi korundu" };
+
+/* Bir beceri alanının ETKİN düzeyi. Doğrudan girilmiş değer önceliklidir;
+   yoksa o beceriyi kapsayan bir ihtiyaç alanı işaretlenmişse dersin destek
+   düzeyi kullanılır. Böylece hızlı akıştaki birkaç kutucuk, uyarlama ve
+   yöntem motorunu eskisi gibi besler. */
+function alanDuzeyi(beceriId) {
+  if (state.alan[beceriId]) return state.alan[beceriId];
+  let en = "";
+  Object.keys(state.ihtiyacAlan).forEach(ders => {
+    dersIhtiyacNesneleri(ders).forEach(a => {
+      if (a.beceri !== beceriId) return;
+      const sv = dersSeviyesi(ders).sev;
+      if (rankOf(sv) > rankOf(en)) en = sv;
+    });
+  });
+  return en;
+}
 
 /* Başarı ölçütünü destek düzeyine ve amaç basamağına göre yeniden yazar.
    Katsayı 1 ise ölçüt hiç değiştirilmez (sınıf düzeyindeki öğrenci). */
@@ -1727,14 +2368,32 @@ function olcutUyarla(o, f) {
    satır satır değiştirilir; böylece her satır aynı eki tekrarlamaz. */
 function yontemEkleri(key) {
   const out = [];
+  /* Derse özgü ihtiyaç alanı işaretlendiyse yöntem/materyal önce ondan
+     gelir: "akıcı okuma" için okuma takip kartı, "geometri" için geometri
+     tahtası gibi. Öğretmen bunları belgede düzenleyebilir. */
+  const ihtiyaclar = dersIhtiyacNesneleri(key);
+  const kapsanan = new Set(ihtiyaclar.map(a => a.beceri));
+  ihtiyaclar.forEach(a => { if (a.y) out.push(a.y); });
   (DERS_BECERI[key] || []).forEach(a => {
-    if (rankOf(state.alan[a] || "") >= 1 && BECERI_MAP[a].y) out.push(BECERI_MAP[a].y);
+    // Alanı zaten bir ihtiyaç alanı kapsıyorsa genel ibare tekrar yazılmaz
+    if (kapsanan.has(a)) return;
+    if (rankOf(alanDuzeyi(a)) >= 1 && BECERI_MAP[a].y) out.push(BECERI_MAP[a].y);
   });
   state.ihtiyac.forEach(id => { const x = IHTIYAC_MAP[id]; if (x && x.y) out.push(x.y); });
   const ds = DIKKAT_SURE[val("pDikkat")] || DIKKAT_SURE[""];
   if (ds.y) out.push(ds.y);
   state.guclu.forEach(id => { const g = GUCLU_MAP[id]; if (g && g.y) out.push(g.y); });
-  return [...new Set(out)];
+  /* Tekilleştirme ÖĞE düzeyinde yapılır: ibareler virgülle ayrılmış
+     listelerdir, tam metin karşılaştırması "tekrarlı okuma"nın iki ayrı
+     ibarede geçmesini yakalayamıyordu. */
+  const gorulen = new Set(), tekil = [];
+  out.join(", ").split(",").forEach(p => {
+    const t = p.trim();
+    const anahtar = t.toLocaleLowerCase("tr");
+    if (!t || gorulen.has(anahtar)) return;
+    gorulen.add(anahtar); tekil.push(t);
+  });
+  return tekil;
 }
 
 /* Sınıf düzeyinde daha alt bant yoksa öncül dersten ön koşul amaç alınır. */
@@ -1764,7 +2423,14 @@ function grupAraliklari(startIso, endIso, n) {
   for (let i = 0; i < n; i++) {
     const a = new Date(s.getTime() + step * i * 86400000);
     const b = new Date(s.getTime() + step * (i + 1) * 86400000);
-    out.push({ label: `${fmtAy(a)} – ${fmtAy(b)}`, hafta: Math.max(1, Math.round((b - a) / 604800000)) });
+    /* Aynı yıl içindeki aralıkta yıl iki kez yazılmaz ("Eylül – Ekim 2025"),
+       aynı ay ise tek kez ("Eylül 2025"): bilgi aynı kalır, tarih sütunu
+       tek satıra sığar. */
+    const ayniYil = a.getFullYear() === b.getFullYear();
+    const label = ayniYil && a.getMonth() === b.getMonth() ? fmtAy(b)
+      : ayniYil ? `${AYLAR[a.getMonth()]} – ${AYLAR[b.getMonth()]} ${b.getFullYear()}`
+      : `${fmtAy(a)} – ${fmtAy(b)}`;
+    out.push({ label, hafta: Math.max(1, Math.round((b - a) / 604800000)) });
   }
   return out;
 }
@@ -1786,95 +2452,678 @@ function grupAraliklari(startIso, endIso, n) {
     "İslam", "Hz. Muhammed" gibi özel adlar bozulur), yalnızca ölçülebilir bir
     yüklem eklenir: "<resmî kazanım> becerisini gösterir." */
 function kazanimdanKda(metin) {
-  const t = String(metin || "").trim().replace(/\s+/g, " ").replace(/[.]$/, "");
+  /* Resmî öğrenme çıktısı metni ZATEN ölçülebilir bir davranış ifadesidir;
+     sonuna "becerisini gösterir." eklemek metni bozuyordu. Yalnızca boşluk
+     düzeltilir ve cümle noktalanır. Ölçüt ayrı sütunda yönetilir. */
+  const t = String(metin || "").trim().replace(/\s+/g, " ").replace(/[.\s]+$/, "");
   if (!t) return "";
-  return `${t} becerisini gösterir.`;
+  return t + ".";
 }
 
 /** Ders + sınıf için müfredat temelli UDA/KDA blokları. Veri yoksa null. */
-function mufredatBloklari(key, grade, plan) {
+function mufredatBloklari(key, grade) {
   if (!window.MUFREDAT) return null;
   const uniteler = MUFREDAT.uniteListesi(key, grade);
   if (!uniteler.length) return null;
   const durum = MUFREDAT.kapsamDurumu(key, grade);
 
-  // Yedek beceri havuzu: yalnız ünite düzeyinde kalan derslerde KDA kaynağıdır
-  const bant = (SUBJECTS[key] && SUBJECTS[key].bands) ? SUBJECTS[key].bands[bandFor(key, grade)] : null;
-  const beceriHavuzu = [];
-  if (bant) bant.forEach(g => g.kda.forEach(k => beceriHavuzu.push(k)));
-
-  let hi = 0;
-  const bloklar = uniteler.map((unite, i) => {
+  /* YALNIZCA resmî öğrenme çıktıları havuza girer. Ünite düzeyinde kalan
+     ders-sınıflarda eskiden beceri havuzundan amaç ÜRETİLİYOR ve belgeye
+     "BEP birimi bunu değiştirmelidir" notuyla basılıyordu. Doğrulanmamış
+     amaç artık hiç üretilmez; karşılığı olmayan ünite havuza alınmaz ve
+     durum yalnızca arayüzde bildirilir. */
+  const bloklar = [];
+  uniteler.forEach((unite, i) => {
     const kazanimlar = MUFREDAT.kazanimListesi(key, grade, unite);
-    let kda;
-    if (kazanimlar.length) {
-      kda = kazanimlar.map(kz => ({
-        t: kazanimdanKda(kz.k), kod: kz.kod, resmi: true,
-        o: "10 denemenin 8'inde", y: "",
-      }));
-    } else if (beceriHavuzu.length) {
-      // Kazanım metni doğrulanmadığı için ünite kapsamında beceri temelli amaç
-      const adet = Math.min(3, beceriHavuzu.length);
-      kda = Array.from({ length: adet }, () => {
-        const k = beceriHavuzu[hi++ % beceriHavuzu.length];
-        return { t: k.t, o: k.o, y: k.y, resmi: false };
-      });
-    } else {
-      kda = [{ t: "Ünite kapsamındaki hedef davranış (BEP birimince yazılacaktır).",
-        o: "10 denemenin 8'inde", y: "", resmi: false }];
-    }
-    return { uda: `Öğrenci, "${unite}" ünitesindeki kazanımları bireysel performans düzeyine uygun biçimde edinir.`,
-      unite, uniteNo: i + 1, kda, onkosul: false };
+    if (!kazanimlar.length) return;
+    bloklar.push({
+      unite, uniteNo: i + 1, onkosul: false,
+      kda: kazanimlar.map(kz => ({ t: kazanimdanKda(kz.k), kod: kz.kod || "", resmi: true })),
+    });
   });
-  return { bloklar, durum };
+  return { bloklar, durum, uniteToplam: uniteler.length, resmiUnite: bloklar.length };
+}
+
+/* ═══════════════ BEP KAPSAMI: ADAY AMAÇ HAVUZU ═══════════════
+   Yıllık müfredatın tamamı BEP'e OTOMATİK girmez. Müfredat burada yalnızca
+   bir ADAY HAVUZU olarak durur; hangi kazanımın BEP kapsamına alınacağına
+   öğrencinin performansına bakan öneri motoru ve onu onaylayan öğretmen
+   karar verir (bkz. kapsamOnerisi / buildKapsam).
+
+   Her aday amaç kararlı bir `id` taşır ("üniteSırası:kazanımSırası");
+   seçim bu id'lerle saklanır, kazanım metni ve kodu hiç kopyalanmaz. */
+const HAVUZ_BELLEK = new Map();
+
+function amacHavuzu(key, grade) {
+  const anahtar = key + "-" + grade;
+  if (HAVUZ_BELLEK.has(anahtar)) return HAVUZ_BELLEK.get(anahtar);
+  /* Havuz YALNIZCA resmî müfredattan beslenir; bant listeleri artık amaç
+     kaynağı değildir (yalnızca ön koşul amaç için kullanılır). */
+  const muf = mufredatBloklari(key, grade);
+  const ham = muf ? muf.bloklar : [];
+  const bloklar = ham.map((g, i) => ({
+    unite: g.unite || null,
+    uniteNo: g.uniteNo || i + 1,
+    baslik: g.unite || `Ünite ${i + 1}`,
+    kda: g.kda.map((k, j) => ({
+      id: i + ":" + j,
+      t: k.t, kod: k.kod || "", resmi: true,
+      alanlar: kazanimAlanlari(k.t),
+    })),
+  }));
+  const sonuc = {
+    bloklar,
+    durum: muf ? muf.durum : null,
+    toplam: bloklar.reduce((a, b) => a + b.kda.length, 0),
+    // Veri bütünlüğü: kaç ünitenin resmî çıktısı var (arayüz uyarısı için)
+    uniteToplam: muf ? muf.uniteToplam : 0,
+    resmiUnite: muf ? muf.resmiUnite : 0,
+  };
+  HAVUZ_BELLEK.set(anahtar, sonuc);
+  return sonuc;
+}
+
+/* Dönemde gerçekçi biçimde çalışılabilecek kısa dönemli amaç sayısı.
+   Uydurma bir üst sınır değil, dönem uzunluğundan türetilir: bir kısa
+   dönemli amaç, destek düzeyine göre yaklaşık `tekrarSayi` hafta çalışılır.
+     adet ≈ dönem haftası ÷ amaç başına hafta
+   Hesap "BEP Kapsamı" kartında açıkça yazılıdır. */
+function donemKapasitesi(key) {
+  const t = { start: val("termStart") || defaultTerm().start, end: val("termEnd") || defaultTerm().end };
+  const hafta = Math.max(4, Math.round((new Date(t.end) - new Date(t.start)) / 604800000));
+  const plan = PLAN[dersSeviyesi(key).sev] || PLAN[""];
+  return { hafta, haftaBasi: plan.tekrarSayi, adet: Math.max(3, Math.round(hafta / plan.tekrarSayi)) };
+}
+
+/* Bir dersin öncelikli ihtiyaç alanları: o dersin beceri alanlarından
+   destek gereksinimi girilmiş olanlar (rank ≥ 1). Boşsa öneri yapılmaz. */
+function dersOncelikAlanlari(key) {
+  const out = {};
+  (DERS_BECERI[key] || []).forEach(a => {
+    const r = rankOf(alanDuzeyi(a));
+    if (r >= 1) out[a] = r;
+  });
+  return out;
+}
+
+/* ═══════════════ BEP KAPSAMI: ÖNERİ MOTORU ═══════════════
+   İlke: kazanım, öğrencinin ÖNCELİKLİ İHTİYAÇ ALANIYLA ilişkiliyse
+   önerilir. Sıralama ihtiyacın şiddetine göredir; eşitlikte üniteler
+   arasında sırayla dolaşılır, böylece kapsam yılın tamamını temsil eder
+   ve "ilk N kazanım" kesmesi olmaz. Eşleşen kazanım kapasiteden azsa
+   yapay olarak tamamlanmaz; bilgi yoksa öneri tamamen boştur. */
+function kapsamOnerisi(key) {
+  const havuz = amacHavuzu(key, state.grade);
+  const ds = dersSeviyesi(key);
+  const kap = donemKapasitesi(key);
+  const bos = { secili: [], gerekce: "", kapasite: kap };
+
+  /* Birincil girdi: öğretmenin o ders için işaretlediği ÖNCELİKLİ İHTİYAÇ
+     ALANLARI. Hiç işaretlenmemişse eski yol (genel beceri alanları)
+     yedek olarak kullanılır; o da yoksa öneri yapılmaz. */
+  const ihtiyaclar = dersIhtiyacNesneleri(key);
+  const oncelik = dersOncelikAlanlari(key);
+
+  if (!havuz.bloklar.length) return { ...bos, gerekce: "Bu ders-sınıf için amaç verisi tanımlı değil." };
+  /* İhtiyaç alanı işaretlemek, öğretmenin "bu öğrencinin burada desteğe
+     ihtiyacı var" beyanıdır ve her şeyin üstündedir. Destek düzeyi yalnızca
+     ölçütü, basamağı ve hızı belirler; amaç ÜRETİLİP ÜRETİLMEYECEĞİNİ
+     belirlemez. (Düzey "sınıf düzeyinde" seçilince işaretli alanlara
+     rağmen kapsam sıfırlanıyor, üstelik "ihtiyaç alanı seçilmedi" uyarısı
+     veriliyordu.) Aşağıdaki iki çıkış yalnızca HİÇ alan işaretlenmemişken
+     geçerlidir. */
+  if (!ihtiyaclar.length) {
+    if (!ds.sev) return { ...bos, gerekce: "Bu ders için ihtiyaç alanı işaretlenmedi; öneri yapılmadı." };
+    if (ds.sev === "sinif") return { ...bos, gerekce: "Öğrenci bu derste sınıf düzeyinde ve ihtiyaç alanı işaretlenmedi; BEP'e amaç alınması zorunlu değildir." };
+    if (!Object.keys(oncelik).length) {
+      return { ...bos, gerekce: `Bu ders için öncelikli ihtiyaç alanı işaretlenmedi; kazanım önerilmedi.` };
+    }
+  }
+
+  /* Her aday amaç, hangi ihtiyaç alanlarına giriyorsa onlara yazılır.
+     İşaretli alan yoksa genel beceri etiketleri kullanılır. */
+  const gruplar = ihtiyaclar.length
+    ? ihtiyaclar.map(a => ({ ad: a.ad, adaylar: [] }))
+    : Object.keys(oncelik).map(a => ({ ad: BECERI_MAP[a].ad, adaylar: [] }));
+  const gorulen = new Set();      // aynı metin iki kez kapsama girmesin
+  let ilgiliToplam = 0;
+  havuz.bloklar.forEach((b, bi) => b.kda.forEach(k => {
+    const anahtarMetin = k.t.toLocaleLowerCase("tr").replace(/[^\p{L}\p{N} ]/gu, "").replace(/\s+/g, " ").trim();
+    if (gorulen.has(anahtarMetin)) return;
+    const hedef = [];
+    if (ihtiyaclar.length) ihtiyaclar.forEach((a, i) => { if (ihtiyacEslesir(k, a)) hedef.push(i); });
+    else Object.keys(oncelik).forEach((a, i) => { if (k.alanlar.includes(a)) hedef.push(i); });
+    if (!hedef.length) return;
+    gorulen.add(anahtarMetin);
+    ilgiliToplam++;
+    // Kazanım birden çok alana giriyorsa en az doldurulmuş alana yazılır
+    hedef.sort((x, y) => gruplar[x].adaylar.length - gruplar[y].adaylar.length);
+    gruplar[hedef[0]].adaylar.push({ id: k.id, bi, sira: ilgiliToplam });
+  }));
+
+  const dolu = gruplar.filter(g => g.adaylar.length);
+  if (!dolu.length) {
+    return { ...bos, gerekce: `İşaretlenen ihtiyaç alanlarıyla eşleşen resmî kazanım bulunamadı; kapsamı elle seçebilirsin.` };
+  }
+
+  /* BEP yıllık plan DEĞİLDİR: her ihtiyaç alanı bir uzun dönemli amaç,
+     her uzun dönemli amacın altında 2-4 kısa dönemli amaç. Onlarca üniteye
+     yayılan kapsam yerine öğretmenin işaretlediği önceliğe odaklanılır.
+     Sert bir sınır değil: öğretmen Gelişmiş'ten amaç ekleyebilir. */
+  const alanBasi = Math.max(2, Math.min(4, Math.round(kap.adet / dolu.length)));
+  const secili = [];
+  const havuzKda = new Map();
+  havuz.bloklar.forEach(b => b.kda.forEach(k => havuzKda.set(k.id, k)));
+  dolu.forEach((g, gi) => {
+    /* Alan içinde adaylar kendi yoğun ünitesinde kümelenir; böylece bir
+       uzun dönemli amacın kısa dönemli amaçları birbirine yakın içerikten
+       gelir ve müfredat sırası korunur. */
+    const uniteYuk = {};
+    g.adaylar.forEach(a => uniteYuk[a.bi] = (uniteYuk[a.bi] || 0) + 1);
+    const sirali = g.adaylar.slice()
+      .sort((x, y) => (uniteYuk[y.bi] - uniteYuk[x.bi]) || (x.bi - y.bi) || (x.sira - y.sira));
+
+    /* Alanın birden çok YÜZÜ varsa (ölçme → uzunluk, zaman, para) her
+       yüzden en az bir kazanım alınır. Yoksa kontenjan ilk yüze gidiyor,
+       amaç metni "para" diyor ama altında para kazanımı bulunmuyordu. */
+    const alan = ihtiyaclar.length ? ihtiyaclar[gruplar.indexOf(g)] || ihtiyaclar[gi] : null;
+    const yuzler = alan && alan.yuz ? alan.yuz : null;
+    const alinan = [];
+    if (yuzler) {
+      const kuyruk = yuzler.map(y => sirali.filter(a => {
+        const k = havuzKda.get(a.id);
+        return k && metinEslesir(String(k.t || "").toLocaleLowerCase("tr"), y.ara);
+      }));
+      let kaldi = true;
+      while (kaldi && alinan.length < alanBasi) {
+        kaldi = false;
+        for (const q of kuyruk) {
+          let a; while ((a = q.shift()) && alinan.includes(a.id));
+          if (!a) continue;
+          kaldi = true; alinan.push(a.id);
+          if (alinan.length >= alanBasi) break;
+        }
+      }
+    }
+    // Kalan kontenjan sıradan doldurulur
+    for (const a of sirali) {
+      if (alinan.length >= alanBasi) break;
+      if (!alinan.includes(a.id)) alinan.push(a.id);
+    }
+    alinan.forEach(id => secili.push(id));
+  });
+
+  const gerekce = `<b>${dolu.map(g => g.ad).join(", ")}</b> alanlarıyla ${ilgiliToplam} resmî kazanım eşleşti;`
+    + ` her alan için <b>${alanBasi}</b> kısa dönemli amaç seçildi (${dolu.length} uzun dönemli amaç, ${secili.length} kısa dönemli amaç).`;
+  return { secili, gerekce, kapasite: kap, ilgili: ilgiliToplam, alanSay: dolu.length, alanBasi };
+}
+
+/* ═══════════════ BEP KAPSAMI: DURUM VE ARAYÜZ ═══════════════
+   state.kapsam[ders] = { secili: [id…], elle: true|false }
+   `elle`, öğretmenin o derse elle dokunduğunu söyler: profil değiştiğinde
+   öneri yalnızca DOKUNULMAMIŞ derslerde tazelenir, öğretmenin seçimi
+   sessizce ezilmez. */
+
+/* Sınıf değişince: amaç id'leri artık başka bir müfredata işaret ettiği
+   için kapsam her durumda yeniden kurulur. İhtiyaç alanı seçimleri ise
+   YALNIZCA yeni sınıfla uyumsuz olanlar atılır (o sınıfta verilmeyen ders,
+   o sınıfta geçerli olmayan alan); uyumlu seçimler korunur. */
+function sinifaGoreTemizle() {
+  state.kapsam = {};
+  Object.keys(state.ihtiyacAlan).forEach(ders => {
+    const s = SUBJECTS[ders];
+    if (!s || !s.grades.includes(state.grade)) { delete state.ihtiyacAlan[ders]; return; }
+    const gecerli = new Set(dersIhtiyacAlanlari(ders, state.grade).map(a => a.id));
+    const kalan = (state.ihtiyacAlan[ders] || []).filter(id => gecerli.has(id));
+    if (kalan.length) state.ihtiyacAlan[ders] = kalan; else delete state.ihtiyacAlan[ders];
+  });
+}
+
+/** Bir dersin BEP kapsamına alınmış amaç id'leri. */
+function seciliKapsam(key) {
+  const k = state.kapsam[key];
+  return k && Array.isArray(k.secili) ? k.secili : [];
+}
+
+/** Seçimi müfredat sırasına dizerek saklar (çıktıda ünite sırası korunur). */
+function kapsamYaz(key, idler, elle) {
+  const havuz = amacHavuzu(key, state.grade);
+  const kume = new Set(idler);
+  const sira = [];
+  havuz.bloklar.forEach(b => b.kda.forEach(k => { if (kume.has(k.id)) sira.push(k.id); }));
+  state.kapsam[key] = { secili: sira, elle: !!elle };
+}
+
+/** Dokunulmamış derslerde öneriyi yeniden kurar (profil değişince). */
+function kapsamOtoTazele(zorla) {
+  if (!state.grade) return;
+  const subs = seciliDersler();
+  /* Seçimi kaldırılan dersin kapsamı SİLİNMEZ, yalnızca belgeye girmez;
+     ders yeniden işaretlendiğinde öğretmenin düzenlemesi geri gelir. */
+  subs.forEach(key => {
+    const mevcut = state.kapsam[key];
+    if (mevcut && mevcut.elle && !zorla) {
+      // Taslaktan gelen seçim eski bir veri sürümüne ait olabilir; havuzda
+      // karşılığı kalmayan id'ler burada ayıklanır.
+      kapsamYaz(key, mevcut.secili, true);
+      return;
+    }
+    kapsamYaz(key, kapsamOnerisi(key).secili, false);
+  });
+}
+
+function buildKapsam() {
+  const box = $("kapsamList");
+  if (!box) return;
+  const acik = new Set([...box.querySelectorAll("details[open]")].map(d => d.dataset.yol));
+  box.innerHTML = "";
+  if (!state.grade) { box.innerHTML = '<div class="hint">Önce sınıf ve ders seçmelisin.</div>'; return; }
+  const subs = seciliDersler();
+  if (!subs.length) { box.innerHTML = '<div class="hint">Ders seçtiğinde BEP kapsamı burada listelenir.</div>'; return; }
+
+  subs.forEach(key => {
+    const s = SUBJECTS[key];
+    const havuz = amacHavuzu(key, state.grade);
+    const ds = dersSeviyesi(key);
+    const oneri = kapsamOnerisi(key);
+    const secili = new Set(seciliKapsam(key));
+    const oncelik = dersOncelikAlanlari(key);
+
+    const kap = document.createElement("div");
+    kap.className = "kap-ders";
+    kap.dataset.ders = key;
+
+    if (!havuz.bloklar.length) {
+      kap.innerHTML = `<div class="kap-bas"><span>${s.icon} ${s.name}</span><span class="kap-say">—</span></div>
+        <div class="kap-not">Bu ders-sınıf için amaç verisi tanımlı değil; BEP'e amaç eklenmez.</div>`;
+      box.appendChild(kap);
+      return;
+    }
+
+    /* İhtiyaç alanı özeti. Yalnızca O DERSİN beceri alanları gösterilir:
+       anahtar kelime eşleşmesi zaman zaman ders dışı alanlara da değiyor
+       (Türkçe kazanımında "çözer" → problem çözme gibi) ve bu alanlar
+       zaten kapsam kararına girmiyor. */
+    const dersAlanlari = new Set(DERS_BECERI[key] || []);
+    const alanSay = {};
+    havuz.bloklar.forEach(b => b.kda.forEach(k => k.alanlar.forEach(a => {
+      if (dersAlanlari.has(a)) alanSay[a] = (alanSay[a] || 0) + 1;
+    })));
+    const alanlar = Object.keys(alanSay).sort((a, b) => (oncelik[b] || 0) - (oncelik[a] || 0) || alanSay[b] - alanSay[a]);
+
+    let ic = `<div class="kap-bas"><span>${s.icon} ${s.name} <i class="kap-sev">${ds.sev ? SEV[ds.sev].kisa : "düzey girilmedi"}</i></span>`
+      + `<span class="kap-say" data-say="${key}">${secili.size} / ${havuz.toplam}</span></div>`
+      + `<div class="kap-not">${oneri.gerekce || ""}</div>`;
+
+    if (alanlar.length) {
+      ic += `<div class="chipset kap-alan">` + alanlar.map(a =>
+        `<button type="button" class="chip${oncelik[a] ? " oncelikli" : ""}" data-alan="${a}" title="${esc(BECERI_MAP[a].ad)} ile ilişkili kazanımların tümünü ekle / çıkar">${esc(BECERI_MAP[a].ad.split(" (")[0])} <b>${alanSay[a]}</b></button>`
+      ).join("") + `</div>`;
+    }
+    ic += `<div class="kap-arac">`
+      + `<button type="button" class="kap-btn" data-kap="oneri">✨ Öneriyi uygula</button>`
+      + `<button type="button" class="kap-btn" data-kap="tumu">Tümünü seç</button>`
+      + `<button type="button" class="kap-btn" data-kap="hic">Temizle</button></div>`;
+
+    havuz.bloklar.forEach((b, bi) => {
+      const bSec = b.kda.filter(k => secili.has(k.id)).length;
+      const yol = key + "#" + bi;
+      ic += `<details class="kap-unite" data-blok="${bi}" data-yol="${yol}"${acik.has(yol) || bSec ? " open" : ""}>`
+        + `<summary><span class="kap-u-ad">${b.uniteNo}. ${esc(b.baslik)}</span>`
+        + `<span class="kap-u-say" data-usay="${bi}">${bSec}/${b.kda.length}</span>`
+        + `<span class="kap-mini"><button type="button" class="kap-btn" data-uni="tumu">tümü</button><button type="button" class="kap-btn" data-uni="hic">hiç</button></span></summary>`;
+      b.kda.forEach(k => {
+        const etiket = k.alanlar.filter(a => dersAlanlari.has(a))
+          .map(a => `<i class="kap-et${oncelik[a] ? " oncelikli" : ""}">${esc(BECERI_MAP[a].ad.split(" (")[0])}</i>`).join("");
+        ic += `<label class="check-row kap-kaz"><input type="checkbox" data-kaz="${k.id}"${secili.has(k.id) ? " checked" : ""} />`
+          + `<span>${k.kod ? `<b class="kap-kod">${esc(k.kod)}</b> ` : ""}${esc(k.t)} ${etiket}</span></label>`;
+      });
+      ic += `</details>`;
+    });
+    kap.innerHTML = ic;
+    box.appendChild(kap);
+  });
+  kapsamOzetiTazele();
+}
+
+/** Seçim sayılarını yeniden çizmeden günceller (açık üniteler kapanmasın). */
+function kapsamSayacTazele(key) {
+  const kap = $("kapsamList").querySelector(`.kap-ders[data-ders="${key}"]`);
+  if (!kap) return;
+  const havuz = amacHavuzu(key, state.grade);
+  const secili = new Set(seciliKapsam(key));
+  const say = kap.querySelector(".kap-say");
+  if (say) say.textContent = `${secili.size} / ${havuz.toplam}`;
+  havuz.bloklar.forEach((b, bi) => {
+    const et = kap.querySelector(`[data-usay="${bi}"]`);
+    if (et) et.textContent = `${b.kda.filter(k => secili.has(k.id)).length}/${b.kda.length}`;
+  });
+  kapsamOzetiTazele();
+}
+
+/* Oluşturmadan önceki ön izleme: ders başına kaç uzun / kaç kısa dönemli
+   amaç çıkacağı. Öğretmen ayrıntıya girmek zorunda değil; isterse
+   "Amaçları düzenle" ile kazanım listesine iner. */
+function kapsamOzetiTazele() {
+  const et = $("kapsamOzet");
+  const kart = $("ozetKart");
+  if (!et || !kart) return;
+  const subs = seciliDersler();
+  const satirlar = subs.map(key => {
+    const havuz = amacHavuzu(key, state.grade);
+    const secili = new Set(seciliKapsam(key));
+    const kda = secili.size;
+    const uda = havuz.bloklar.filter(b => b.kda.some(k => secili.has(k.id))).length;
+    const basamak = basamakSayisi(PLAN[dersSeviyesi(key).sev] || PLAN[""], kda);
+    return { key, s: SUBJECTS[key], uda, kda, basamak, ihtiyac: dersIhtiyacNesneleri(key).map(a => a.ad) };
+  });
+  const toplam = satirlar.reduce((a, x) => a + x.kda, 0);
+
+  et.innerHTML = !state.grade ? "Önce sınıf seç."
+    : !subs.length ? "BEP uygulanacak dersleri 2. adımdan seç."
+    : toplam ? `Toplam <b>${toplam} kısa dönemli amaç</b> · ${satirlar.filter(x => x.kda).length}/${subs.length} ders`
+    : "Ders seçtin ama henüz ihtiyaç alanı işaretlemedin; alanları işaretleyince amaçlar kendiliğinden oluşur.";
+  et.classList.toggle("bos", !toplam);
+
+  kart.innerHTML = satirlar.map(x => `<div class="ozet-satir${x.kda ? "" : " bos"}">
+      <div class="ozet-ders">${x.s.icon} ${x.s.name}</div>
+      <div class="ozet-say">${x.kda
+        ? `<b>${x.uda}</b> uzun dönemli amaç · <b>${x.kda}</b> kısa dönemli amaç${x.basamak > 1 ? ` (${x.basamak} ipucu basamağında çalışılır)` : ""}`
+        : `ihtiyaç alanı seçilmedi — BEP'e girmeyecek`}</div>
+      ${x.ihtiyac.length ? `<div class="ozet-alan">${x.ihtiyac.map(a => esc(a)).join(" · ")}</div>` : ""}
+    </div>`).join("");
+}
+
+function kapsamAraclariniBagla() {
+  const box = $("kapsamList");
+  if (!box || box.dataset.bagli) return;
+  box.dataset.bagli = "1";
+
+  const dersiAl = el => {
+    const kap = el.closest(".kap-ders");
+    return kap ? kap.dataset.ders : null;
+  };
+  const uygula = (key, idler) => {
+    kapsamYaz(key, idler, true);
+    const secili = new Set(seciliKapsam(key));
+    box.querySelectorAll(`.kap-ders[data-ders="${key}"] input[data-kaz]`)
+      .forEach(i => i.checked = secili.has(i.dataset.kaz));
+    kapsamSayacTazele(key);
+    saveDraft();
+  };
+
+  box.addEventListener("change", e => {
+    const kutu = e.target.closest("input[data-kaz]");
+    if (!kutu) return;
+    const key = dersiAl(kutu);
+    const mevcut = seciliKapsam(key).filter(x => x !== kutu.dataset.kaz);
+    if (kutu.checked) mevcut.push(kutu.dataset.kaz);
+    kapsamYaz(key, mevcut, true);
+    kapsamSayacTazele(key);
+    saveDraft();
+  });
+
+  box.addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const key = dersiAl(btn);
+    if (!key) return;
+    const havuz = amacHavuzu(key, state.grade);
+    const tumIdler = havuz.bloklar.flatMap(b => b.kda.map(k => k.id));
+
+    if (btn.dataset.kap) {
+      e.preventDefault();
+      if (btn.dataset.kap === "oneri") uygula(key, kapsamOnerisi(key).secili);
+      else if (btn.dataset.kap === "tumu") uygula(key, tumIdler);
+      else uygula(key, []);
+      return;
+    }
+    if (btn.dataset.uni) {
+      // Düğme <summary> içinde: tıklama üniteyi açıp kapatmasın
+      e.preventDefault(); e.stopPropagation();
+      const bi = +btn.closest("details").dataset.blok;
+      const uniteIdler = havuz.bloklar[bi].kda.map(k => k.id);
+      const mevcut = seciliKapsam(key).filter(x => !uniteIdler.includes(x));
+      uygula(key, btn.dataset.uni === "tumu" ? mevcut.concat(uniteIdler) : mevcut);
+      return;
+    }
+    if (btn.dataset.alan) {
+      e.preventDefault();
+      const alan = btn.dataset.alan;
+      const alanIdler = havuz.bloklar.flatMap(b => b.kda.filter(k => k.alanlar.includes(alan)).map(k => k.id));
+      const mevcut = seciliKapsam(key);
+      const hepsiVar = alanIdler.every(id => mevcut.includes(id));
+      uygula(key, hepsiVar ? mevcut.filter(id => !alanIdler.includes(id)) : [...new Set(mevcut.concat(alanIdler))]);
+    }
+  });
+}
+
+/** Profil/ders/dönem değişince kapsamı tazeler ve paneli yeniden çizer. */
+function kapsamiYenile(zorla) {
+  kapsamOtoTazele(zorla);
+  buildKapsam();
+  kapsamAraclariniBagla();
+}
+
+/* Amaç gruplarının süre planı. Her kısa dönemli amaç destek düzeyine göre
+   ~`haftaBasi` hafta çalışılır; gruplar öğretim sırasına göre dönem
+   başından itibaren dizilir. Toplam dönemi aşarsa oransal sıkıştırılır.
+   Etiket sadedir: aynı ay ise "Ekim 2026", değilse "Ekim – Aralık 2026". */
+function blokAraliklari(term, kdaSayilari, haftaBasi) {
+  const bas = new Date(term.start), son = new Date(term.end);
+  const toplamHafta = Math.max(4, (son - bas) / 604800000);
+  const istenen = kdaSayilari.map(n => Math.max(2, n * (haftaBasi || 2)));
+  const istenenToplam = istenen.reduce((a, b) => a + b, 0);
+  const olcek = istenenToplam > toplamHafta ? toplamHafta / istenenToplam : 1;
+  let imlec = 0;
+  return istenen.map(h => {
+    const hafta = h * olcek;
+    const a = new Date(bas.getTime() + imlec * 604800000);
+    imlec += hafta;
+    const b = new Date(bas.getTime() + Math.min(imlec, toplamHafta) * 604800000);
+    const ayniYil = a.getFullYear() === b.getFullYear();
+    const label = ayniYil && a.getMonth() === b.getMonth() ? fmtAy(b)
+      : ayniYil ? `${AYLAR[a.getMonth()]} – ${AYLAR[b.getMonth()]} ${b.getFullYear()}`
+      : `${fmtAy(a)} – ${fmtAy(b)}`;
+    return { label, hafta: Math.max(1, Math.round(hafta)) };
+  });
+}
+
+/* ═══════════════ UZUN DÖNEMLİ AMAÇ METNİ ═══════════════
+   UDA yalnızca ihtiyaç alanının adına bakılarak yazılamaz: alanın hazır
+   cümlesi, altına gerçekte düşen kısa dönemli amaçlardan DAHA GENİŞ
+   kalabiliyor (hepsi okumayken "okuduğu ve dinlediği" demek gibi).
+   Bu yüzden alanın cümlesi, seçilen kazanımların ortak odağına göre
+   daraltılır. Daraltma yalnızca ÖNCEDEN TANIMLI, doğrulanmış varyantlarla
+   yapılır; cümle uydurulmaz. */
+const UDA_DARALT = {
+  anlama: [
+    { ara: ["dinle", "izle"], hepsi: true, metin: "Dinlediği metnin temel unsurlarını belirler ve içeriğini anlamlandırır." },
+  ],
+  olcme: [
+    { ara: ["zaman", "saat", "takvim", "dakika"], hepsi: true, metin: "Zaman ölçme birimlerini tanır ve günlük yaşamda kullanır." },
+    { ara: ["para", "lira", "kuruş"], hepsi: true, metin: "Para birimlerini tanır ve alışveriş durumlarında kullanır." },
+    { ara: ["uzunluk", "metre"], hepsi: true, metin: "Uzunlukları uygun ölçme birimleriyle tahmin eder ve ölçer." },
+  ],
+  tarti: [
+    { ara: ["litre", "mililitre", "sıvı"], hepsi: true, metin: "Sıvı ölçme birimlerini tanır ve uygun araçlarla ölçüm yapar." },
+    { ara: ["kilogram", "gram", "kütle", "tartı"], hepsi: true, metin: "Kütle ölçme birimlerini tanır ve uygun araçlarla tartım yapar." },
+  ],
+  islem: [
+    { ara: ["toplama", "toplar"], hepsi: true, metin: "Doğal sayılarla toplama işlemini doğru yapar." },
+    { ara: ["çıkarma", "çıkarır"], hepsi: true, metin: "Doğal sayılarla çıkarma işlemini doğru yapar." },
+    { ara: ["çarpma", "çarpar"], hepsi: true, metin: "Doğal sayılarla çarpma işlemini doğru yapar." },
+    { ara: ["bölme", "böler"], hepsi: true, metin: "Doğal sayılarla bölme işlemini doğru yapar." },
+  ],
+  geometri: [
+    { ara: ["simetri", "yansıma", "öteleme"], hepsi: true, metin: "Şekillerin simetrisini belirler ve simetrik şekiller oluşturur." },
+    { ara: ["açı"], hepsi: true, metin: "Açıları tanır, uygun araçlarla ölçer ve çizer." },
+  ],
+  yazili: [
+    { ara: ["not al"], hepsi: true, metin: "Okuduğu ve dinlediği içerikten düzenli not alır." },
+  ],
+};
+
+/* ── İHTİYAÇ ALANININ "YÜZ"LERİ ──────────────────────────────────────
+   Bir alan birden çok alt beceriyi kapsayabilir (ölçme → uzunluk, zaman,
+   para). Uzun dönemli amaç ve performans özeti, o alanın YALNIZCA gerçekten
+   kapsama giren yüzlerini saymalıdır: para kazanımı seçilmediyse amaçta
+   "para" yazmak, karşılığı olmayan bir hedef ilan etmek olur. */
+
+/** Verilen kazanımlar arasında hangi yüzlerin temsil edildiği (alan sırasıyla). */
+function temsilEdilenYuzler(alan, kda) {
+  if (!alan || !alan.yuz) return [];
+  const metinler = (kda || []).map(k => String(k.t || "").toLocaleLowerCase("tr"));
+  return alan.yuz.filter(y => metinler.some(t => metinEslesir(t, y.ara)));
+}
+
+/** "a, b ve c" — Türkçe liste birleştirme. */
+function veListe(parcalar) {
+  if (parcalar.length <= 1) return parcalar[0] || "";
+  return parcalar.slice(0, -1).join(", ") + " ve " + parcalar[parcalar.length - 1];
+}
+const ilkHarfBuyuk = s => s ? s.charAt(0).toLocaleUpperCase("tr") + s.slice(1) : s;
+
+/** Bir bloğun uzun dönemli amaç metni. Yüzlü alanlarda cümle, temsil edilen
+    yüzlerden kurulur; değilse alanın cümlesi (gerekirse daraltılmış
+    varyantıyla) kullanılır. Cümle asla uydurulmaz, hep tanımlı parçalardan
+    kurulur. */
+function udaMetni(alan, kda) {
+  if (alan && alan.kalip && alan.yuz) {
+    const yuzler = temsilEdilenYuzler(alan, kda);
+    if (yuzler.length) return ilkHarfBuyuk(alan.kalip.replace("%s", veListe(yuzler.map(y => y.ad))));
+  }
+  const varyant = UDA_DARALT[alan && alan.id];
+  if (varyant && kda.length) {
+    const metinler = kda.map(k => String(k.t || "").toLocaleLowerCase("tr"));
+    for (const v of varyant) {
+      const uyan = metinler.filter(t => metinEslesir(t, v.ara)).length;
+      if (v.hepsi ? uyan === metinler.length : uyan > metinler.length / 2) return v.metin;
+    }
+  }
+  return alan.uda;
+}
+
+/** Performans özetinde görünecek alan adı; yüzlü alanlarda yalnızca
+    kapsama giren yüzler yazılır. */
+function alanOzetAdi(alan, kda) {
+  if (alan && alan.ozetKalip && alan.yuz) {
+    const yuzler = temsilEdilenYuzler(alan, kda);
+    if (yuzler.length) {
+      const adlar = yuzler.map(y => (y.ozet || y.ad).toLocaleLowerCase("tr"));
+      return alan.ozetKalip.replace("%s", veListe(adlar));
+    }
+  }
+  return alan ? alan.ad : "";
+}
+
+/* Kaç ipucu basamağıyla çalışılacağı. Basamaklı satırlar amaç sayısını
+   katlar; ders tablosu okunabilir kalsın diye toplam satır 24'ü aşacaksa
+   basamak azaltılır. Özet kartı da aynı hesabı kullanır. */
+function basamakSayisi(plan, kdaToplam) {
+  let n = plan.basamak;
+  while (n > 1 && kdaToplam * n > 14) n--;
+  return n;
 }
 
 /* Bir dersin tüm planı: düzey, kapsam, ön koşul, basamaklı KDA grupları. */
+/* Bir dersin planı. UZUN DÖNEMLİ AMAÇ = öğretmenin işaretlediği İHTİYAÇ
+   ALANI; kısa dönemli amaçlar o alana gerçekten giren resmî kazanımlardır.
+
+   Önceden uzun dönemli amaç müfredat ÜNİTESİ idi. MEB'de ünite adı temadır
+   ("Gerçek – Mecaz – Terim Anlam") ama kazanım kodları beceri şeridine göre
+   dizilir (T.4.1 dinleme, T.4.3 okuma…). Bu yüzden tema başlığının altına
+   dinleme kazanımı düşebiliyordu. Gruplamayı ihtiyaç alanına çevirmek bu
+   uyumsuzluğu yapısal olarak ortadan kaldırır. */
 function dersPlani(key, term) {
   const s = SUBJECTS[key];
   const ds = dersSeviyesi(key);
   const plan = PLAN[ds.sev] || PLAN[""];
-  const muf = mufredatBloklari(key, state.grade, plan);
-  // Müfredat verisi varsa yıllık kapsamın TAMAMI kullanılır (1. üniteden
-  // son üniteye); öğretmen fazlasını çıktıda silebilir.
-  const tumu = muf ? muf.bloklar : s.bands[bandFor(key, state.grade)];
-  const kapsam = muf ? tumu.length : Math.max(1, Math.ceil(tumu.length * plan.udaOran));
-  const bloklar = tumu.slice(0, kapsam).map(g => ({ uda: g.uda, kda: muf ? g.kda : g.kda.slice(0, plan.kdaSinir),
-    onkosul: false, unite: g.unite, uniteNo: g.uniteNo }));
+  const havuz = amacHavuzu(key, state.grade);
+  const secili = new Set(seciliKapsam(key));
+  const tumKda = [];
+  havuz.bloklar.forEach(b => b.kda.forEach(k => { if (secili.has(k.id)) tumKda.push(k); }));
+
+  /* Kazanım birden çok alana girebilir ("…toplama işlemini gerektiren
+     problemleri çözer" hem Dört işlem hem Problem çözme). Alanları sırayla
+     doldurmak tüm amaçları ilk alanın altında yığıyordu; kazanım, eşleştiği
+     alanlar arasından O ANA KADAR EN AZ dolmuş olana yazılır. Öneri motoru
+     da aynı dengelemeyi yapar, böylece ikisi tutarlı kalır. */
+  const ihtiyaclar = dersIhtiyacNesneleri(key);
+  const kova = new Map(ihtiyaclar.map(a => [a.id, []]));
+  const artan = [];
+  /* Yalnızca TEK alana giren kazanımlar önce yerleşir; birden çok alana
+     girenler sonra kalan boşlukları doldurur. Tersi sırada esnek kazanımlar
+     ilk alanı şişirip öteki amacı boş bırakıyordu. */
+  tumKda
+    .map(k => ({ k, uygun: ihtiyaclar.filter(a => ihtiyacEslesir(k, a)) }))
+    .sort((x, y) => x.uygun.length - y.uygun.length)
+    .forEach(({ k, uygun }) => {
+      if (!uygun.length) { artan.push(k); return; }
+      uygun.slice().sort((x, y) => kova.get(x.id).length - kova.get(y.id).length);
+      const hedef = uygun.reduce((en, a) =>
+        kova.get(a.id).length < kova.get(en.id).length ? a : en, uygun[0]);
+      kova.get(hedef.id).push(k);
+    });
+  // Grup içi sıra müfredat sırasına döndürülür
+  const sira = new Map(tumKda.map((k, i) => [k.id, i]));
+  kova.forEach(liste => liste.sort((a, b) => sira.get(a.id) - sira.get(b.id)));
+  const bloklar = [];
+  ihtiyaclar.forEach(alan => {
+    const kda = kova.get(alan.id);
+    if (kda.length) bloklar.push({ alan, uda: udaMetni(alan, kda), kda, onkosul: false });
+  });
+  /* Öğretmenin Gelişmiş'ten elle eklediği, hiçbir işaretli alana girmeyen
+     kazanımlar kaybolmaz; tek bir amaç altında toplanır. */
+  if (artan.length) {
+    bloklar.push({ alan: null, kda: artan, onkosul: false,
+      uda: "BEP geliştirme birimince öncelikli görülen diğer kazanımları edinir." });
+  }
+
   let onk = null;
-  if (plan.onkosul) { onk = onkosulAmac(key); if (onk) bloklar.unshift(onk); }
-  // Yıllık kapsamın tamamı alındığında basamaklı satırlar belgeyi kullanılamaz
-  // hâle getirebilir; toplam KDA çoksa her amaç tek satır olarak yazılır
-  // (basamak bilgisi ölçüt sütununda korunur).
+  if (plan.onkosul && bloklar.length) { onk = onkosulAmac(key); if (onk) bloklar.unshift(onk); }
+
   const kdaToplam = bloklar.reduce((a, b) => a + b.kda.length, 0);
-  const basamakSay = kdaToplam > 14 ? 1 : plan.basamak;
+  const basamakSay = basamakSayisi(plan, kdaToplam);
   const basamaklar = BASAMAK_DIZI[basamakSay];
-  const ekler = yontemEkleri(key);
-  let grupNo = 0;
-  bloklar.forEach(b => { b.gruplar = b.kda.map(k => ({ k, satir: basamaklar })); grupNo += b.kda.length; });
-  const araliklar = grupAraliklari(term.start, term.end, grupNo);
-  let gi = 0, ei = 0;
-  bloklar.forEach(b => {
-    b.hafta = 0;
-    b.gruplar.forEach(gr => {
-      gr.aralik = araliklar[gi] || { label: "", hafta: 0 };
-      b.hafta += gr.aralik.hafta; gi++;
-      gr.satirlar = gr.satir.map(bkey => {
-        const bs = BASAMAK[bkey];
-        const ek = ekler.length ? ekler[ei++ % ekler.length] : null;
-        return {
-          basamak: bkey,
-          etiket: basamakSay > 1 ? bs.et : "",
-          metin: gr.k.t,
-          kod: gr.k.kod || "",
-          olcut: olcutUyarla(gr.k.o, plan.olcut * bs.f) + (basamakSay > 1 ? ` <i>(${bs.ek})</i>` : ""),
-          yontem: [gr.k.y, ek].filter(Boolean).join(", "),
-        };
-      });
+  /* Süre, amaç grubunun BÜYÜKLÜĞÜNDEN çıkar: her kısa dönemli amaç destek
+     düzeyine göre ~tekrarSayi hafta çalışılır, gruplar öğretim sırasına
+     göre dönem başından itibaren arka arkaya dizilir. Dönemi amaç sayısına
+     bölmek, iki amaçlı bir derse "Eylül – Ocak" gibi gerçekçi olmayan
+     aralıklar yazdırıyordu. */
+  const araliklar = blokAraliklari(term, bloklar.map(b => b.kda.length), plan.tekrarSayi);
+  bloklar.forEach((b, bi) => {
+    b.aralik = araliklar[bi] || { label: "", hafta: 0 };
+    b.hafta = b.aralik.hafta;
+    b.yontem = b.alan ? b.alan.y : "";
+    b.gruplar = b.kda.map(k => {
+      // Ölçüt ve değerlendirme her kazanımın KENDİ eylemine göre belirlenir
+      const ol = kdaOlcutu(k, b.alan);
+      return {
+        k,
+        satirlar: basamaklar.map(bkey => {
+          const bs = BASAMAK[bkey];
+          return {
+            basamak: bkey,
+            etiket: basamakSay > 1 ? bs.et : "",
+            metin: k.t,
+            kod: k.kod || "",
+            olcut: olcutUyarla(ol.olcut, plan.olcut * bs.f) + (basamakSay > 1 ? ` (${bs.ek})` : ""),
+            deg: ol.deg,
+          };
+        }),
+      };
     });
   });
-  return { key, s, ds, plan, bloklar, kapsam, toplamUda: tumu.length, onkosul: !!onk,
-    muf: muf ? muf.durum : null, basamakSay };
+
+  /* Performans özetinde alan adları, o alandan BEP'e gerçekten giren
+     yüzlerle yazılır; kapsama girmeyen yüz (ör. para) özet metninde de
+     sayılmaz. Hiç amacı olmayan alan özete hiç girmez. */
+  const ozetAdlari = bloklar.filter(b => b.alan).map(b => alanOzetAdi(b.alan, b.kda));
+
+  return { key, s, ds, plan, bloklar, onkosul: !!onk, basamakSay,
+    kdaSecili: kdaToplam, udaSayisi: bloklar.length,
+    ihtiyacAdlari: ozetAdlari };
 }
 
 /* ═══════════════ SATIR ARAÇLARI (ekle / sil / düzenle) ═══════════════
@@ -1905,13 +3154,21 @@ function udaEkleBar() {
   return `<div class="ar-bar no-print" contenteditable="false"><button type="button" class="ar-ekle" data-ar="uda-ekle">+ Uzun Dönemli Amaç Ekle</button></div>`;
 }
 
-function satirAracBar(baslik, tur) {
-  return `<div class="ar-bar ar-sag no-print" contenteditable="false"><button type="button" class="ar-btn ar-metin" data-ar="${tur}" title="${baslik}">✕ Amacı sil</button></div>`;
+/** UDA başlık satırının araç hücresi: bu amaca satır ekle / amacı sil. */
+function udaArHucre() {
+  return `<td class="ar no-print" contenteditable="false" style="white-space:nowrap;">`
+    + `<button type="button" class="ar-btn" data-ar="kda-ekle" title="Bu amaca kısa dönemli amaç ekle" aria-label="Bu amaca satır ekle">+</button>`
+    + `<button type="button" class="ar-btn" data-ar="uda-sil" title="Bu uzun dönemli amacı sil" aria-label="Uzun dönemli amacı sil">✕</button></td>`;
 }
 
-/** Bir tabloya, sütun sayısı kadar boş ve düzenlenebilir hücreyle yeni satır ekler. */
-function yeniSatirEkle(tbody) {
-  const ornek = tbody.querySelector("tr");
+
+/** Bir tabloya, sütun sayısı kadar boş ve düzenlenebilir hücreyle yeni satır ekler.
+    `oncesi` verilirse satır o düğümün önüne, verilmezse sona eklenir (amaç
+    tablolarında satır kendi UDA grubunun içine girsin diye). */
+function yeniSatirEkle(tbody, oncesi) {
+  /* UDA başlık satırları tek birleşik hücredir; sütun sayısı onlardan
+     okunamaz, örnek satır olarak kullanılmaz. */
+  const ornek = tbody.querySelector("tr:not(.uda-r)");
   const sutun = ornek ? ornek.querySelectorAll("td:not(.ar)").length
     : (tbody.closest("table").querySelectorAll("thead th:not(.ar-th)").length || 2);
   const tr = document.createElement("tr");
@@ -1923,59 +3180,60 @@ function yeniSatirEkle(tbody) {
     ic += (i === 0 && kdaMi) ? '<td class="kda-no"></td>' : "<td></td>";
   }
   tr.innerHTML = ic + (tbody.querySelector("td.ar") || tbody.closest("table").querySelector(".ar-th") ? arHucre() : "");
-  tbody.appendChild(tr);
+  if (oncesi) tbody.insertBefore(tr, oncesi); else tbody.appendChild(tr);
   numaralariTazele(tbody);
   const ilk = tr.querySelector("td");
   if (ilk) { ilk.focus(); }
   return tr;
 }
 
-/** KDA tablolarında "UDA no . sıra" numaralandırmasını yeniden kurar. */
+/** KDA tablosunda "UDA no . sıra" numaralandırmasını yeniden kurar.
+    Bir dersin tüm amaçları TEK tabloda durduğu için gövde baştan sona
+    dolaşılır: her `tr.uda-r` yeni bir grup başlatır, sayaç sıfırlanır. */
 function numaralariTazele(tbody) {
   if (!tbody || tbody.dataset.satir !== "kda") return;
-  const blok = tbody.closest(".uda-block");
-  const baslik = blok ? blok.querySelector(".uda-title .no") : null;
-  const m = baslik ? baslik.textContent.match(/(ÖK|UDA\s*(\d+))/) : null;
-  const onek = m ? (m[2] ? m[2] : "ÖK") : "";
-  [...tbody.querySelectorAll("tr")].forEach((tr, i) => {
+  let onek = "", i = 0;
+  [...tbody.children].forEach(tr => {
+    if (tr.classList.contains("uda-r")) {
+      const et = tr.querySelector(".no");
+      const m = et ? et.textContent.match(/ÖK|UDA\s*(\d+)/) : null;
+      onek = m ? (m[1] || "ÖK") : "";
+      i = 0;
+      return;
+    }
     const hucre = tr.querySelector(".kda-no");
-    if (hucre) hucre.innerHTML = `<b>${onek}.${i + 1}</b>`;
+    if (hucre) { i++; hucre.innerHTML = `<b>${onek}.${i}</b>`; }
   });
 }
 
-/** Bir dersin UDA bloklarını yeniden numaralandırır. */
+/** Bir dersin UDA başlık satırlarını yeniden numaralandırır. */
 function udaNumaralariTazele(liste) {
   if (!liste) return;
+  // Her uzun dönemli amaç kendi <tbody>'sindedir; numaralar tablo boyunca akar.
   let no = 0;
-  [...liste.querySelectorAll(".uda-block")].forEach(blok => {
-    const et = blok.querySelector(".uda-title .no");
-    if (!et) return;
-    if (/ÖK/.test(et.textContent)) { numaralariTazele(blok.querySelector("tbody[data-satir]")); return; }
-    no++;
-    et.textContent = "UDA " + no + ".";
-    numaralariTazele(blok.querySelector("tbody[data-satir]"));
+  [...liste.querySelectorAll('tbody[data-satir="kda"]')].forEach(tbody => {
+    const et = tbody.querySelector("tr.uda-r .no");
+    if (et && !/ÖK/.test(et.textContent)) { no++; et.textContent = "UDA " + no + "."; }
+    numaralariTazele(tbody);
   });
 }
 
-/** Yeni boş UDA bloğu (ünite/amaç) oluşturur. */
+/** Dersin amaç tablosuna yeni bir UDA başlık satırı ve altına bir KDA ekler. */
 function yeniUdaBlok(liste) {
-  const ornek = liste.querySelector(".uda-block");
-  const blok = document.createElement("div");
-  blok.className = "uda-block";
-  const basliklar = ornek ? [...ornek.querySelectorAll("thead tr")].map(tr => tr.outerHTML).join("") : "";
-  blok.innerHTML = `
-    <div class="uda-title" contenteditable="true"><span class="no">UDA</span> </div>
-    <div class="uda-plan" contenteditable="true">Planlanan öğretim süresi: … hafta</div>
-    ${satirAracBar("Bu uzun dönemli amacı sil", "uda-sil")}
-    <table class="bep-t" contenteditable="true">
-      <thead>${basliklar}</thead>
-      <tbody data-satir="kda"></tbody>
-    </table>
-    ${satirEkleBar("kda")}`;
-  liste.appendChild(blok);
-  yeniSatirEkle(blok.querySelector("tbody[data-satir]"));
+  const tablo = liste.querySelector("table.kda-t") || liste.querySelector("table");
+  if (!tablo) return null;
+  const kolon = liste.querySelectorAll("thead th:not(.ar-th)").length || 4;
+  // Yeni amaç kendi gövdesini alır; sayfa geçişinde bütün kalır.
+  const tbody = document.createElement("tbody");
+  tbody.dataset.satir = "kda";
+  const tr = document.createElement("tr");
+  tr.className = "uda-r";
+  tr.innerHTML = `<td colspan="${kolon}"><span class="no">UDA</span> </td>` + udaArHucre();
+  tbody.appendChild(tr);
+  tablo.appendChild(tbody);
+  yeniSatirEkle(tbody);
   udaNumaralariTazele(liste);
-  return blok;
+  return tr;
 }
 
 /** Sayfa ömrü boyunca tek kez bağlanan olay dinleyicisi (sheet yeniden çizilir). */
@@ -1993,9 +3251,15 @@ function satirAraclariniBagla() {
       if (tr) { tr.remove(); numaralariTazele(tbody); }
     } else if (is === "ekle") {
       // "+ Satır Ekle" çubuğu her zaman tablosunu içeren kabın içindedir
-      const kap = btn.closest(".uda-block, .ar-kap");
-      const hedef = kap ? kap.querySelector("tbody[data-satir]") : null;
+      const kap = btn.closest(".uda-liste, .ar-kap");
+      const govdeler = kap ? kap.querySelectorAll("tbody[data-satir]") : [];
+      const hedef = govdeler[govdeler.length - 1];   // son amaç grubu
       if (hedef) yeniSatirEkle(hedef);
+    } else if (is === "kda-ekle") {
+      /* Satır, düğmenin bulunduğu UDA grubunun SONUNA girer: bir sonraki
+         UDA başlık satırının önüne. */
+      const tbody = btn.closest("tbody");
+      if (tbody) yeniSatirEkle(tbody);
     } else if (is === "li-sil") {
       const li = btn.closest("li");
       if (li) li.remove();
@@ -2010,11 +3274,29 @@ function satirAraclariniBagla() {
         li.focus && li.focus();
       }
     } else if (is === "uda-sil") {
-      const blok = btn.closest(".uda-block"), liste = blok && blok.closest(".uda-liste");
-      if (blok) { blok.remove(); udaNumaralariTazele(liste); }
+      /* Amaç, başlık satırı + ardından gelen tüm KDA satırlarıdır. */
+      const tbody = btn.closest("tbody"), liste = tbody && tbody.closest(".uda-liste");
+      if (!tbody) return;
+      tbody.remove();
+      udaNumaralariTazele(liste);
     } else if (is === "uda-ekle") {
-      const liste = btn.closest(".ar-bar").previousElementSibling;
-      if (liste && liste.classList.contains("uda-liste")) yeniUdaBlok(liste);
+      const liste = btn.closest(".uda-liste");
+      if (liste) yeniUdaBlok(liste);
+    } else if (is === "imza-ekle" || is === "imza-sil") {
+      /* İmza şeridi sütun düzenindedir: üye eklemek = sütun eklemek. */
+      const kap = btn.closest(".ar-kap");
+      const govde = kap ? kap.querySelector('tbody[data-satir="imza"]') : null;
+      if (!govde) return;
+      const satirlar = [...govde.children];
+      if (is === "imza-ekle") {
+        satirlar.forEach((tr, i) => {
+          const h = document.createElement(i === 0 ? "th" : "td");
+          if (i === 0) h.textContent = "Üye";
+          tr.appendChild(h);
+        });
+      } else if (satirlar[0] && satirlar[0].children.length > 1) {
+        satirlar.forEach(tr => tr.lastElementChild && tr.lastElementChild.remove());
+      }
     }
   });
 }
@@ -2033,7 +3315,7 @@ function uyarlamaTopla(dersDurum) {
   const bos = profilBosMu();
   /* Akademik yükü azaltan uyarlamalar yalnızca gerçekten akademik güçlük
      girildiğinde eklenir; yalnızca tanıya bakılarak eklenmez. */
-  const akademikGucluk = Object.entries(state.alan).some(([a, v]) => BECERI_AKADEMIK.includes(a) && rankOf(v) >= 1)
+  const akademikGucluk = BECERI_AKADEMIK.some(a => rankOf(alanDuzeyi(a)) >= 1)
     || Object.values(state.ders).some(v => rankOf(v) >= 1)
     || rankOf(val("pGenel")) >= 1;
   const gruplar = {}; UYAR_SIRA.forEach(k => gruplar[k] = []);
@@ -2055,9 +3337,10 @@ function uyarlamaTopla(dersDurum) {
   });
 
   BECERI.forEach(b => {
-    const r = rankOf(state.alan[b.id] || "");
+    const d = alanDuzeyi(b.id);
+    const r = rankOf(d);
     if (r < 1) return;
-    const kay = `${b.ad} – ${SEV[state.alan[b.id]].kisa}`;
+    const kay = `${b.ad.split(" (")[0]} – ${SEV[d].kisa}`;
     b.uyar.filter(u => u.min <= r).forEach(u => ekle(u.k, u.t, kay));
     (b.deg || []).filter(u => u.min <= r).forEach(u => degEkle(u.t, kay));
   });
@@ -2067,8 +3350,8 @@ function uyarlamaTopla(dersDurum) {
 
   state.ihtiyac.forEach(id => {
     const x = IHTIYAC_MAP[id]; if (!x) return;
-    if (x.k === "deg") degEkle(x.t, "Öğretmen tarafından işaretlendi");
-    else ekle(x.k, x.t, "Öğretmen tarafından işaretlendi");
+    if (x.k === "deg") degEkle(x.t, "Öğretmen işareti");
+    else ekle(x.k, x.t, "Öğretmen işareti");
   });
 
   if (state.guclu.length) {
@@ -2080,7 +3363,10 @@ function uyarlamaTopla(dersDurum) {
   /* Sınıf düzeyindeki derslerde sadeleştirme yapılmaması ilkesi. */
   const sinifDers = dersDurum.filter(x => x.ds.sev === "sinif").map(x => x.s.name);
   if (sinifDers.length) {
-    ekle("ogretim", `${sinifDers.join(", ")} ders${sinifDers.length > 1 ? "lerinde" : "inde"} öğrenci sınıf düzeyinde performans gösterdiğinden kazanımlar sadeleştirilmez ve müfredat sırası korunur; uyarlamalar sunum, süre ve yanıt biçimiyle sınırlı tutulur.`, "Ders bazlı performans");
+    /* Öğretmen "sınıf düzeyinde performans gösteriyor" BİLGİSİNİ girmediyse
+       bunu sonuç olarak yazmak, girilmemiş bir performans değerlendirmesi
+       uydurmak olur. Nötr ve güvenli ifade kullanılır. */
+    ekle("ogretim", `${sinifDers.join(", ")} ders${sinifDers.length > 1 ? "lerinde" : "inde"} öğretimde sınıf düzeyi kazanımlar esas alınır; gerekli uyarlamalar sunum, süre ve yanıt biçiminde yapılır.`, "Ders bazlı performans");
   }
   const yokDers = dersDurum.filter(x => x.ds.kaynak === "yok").map(x => x.s.name);
   if (yokDers.length) {
@@ -2094,58 +3380,46 @@ function uyarlamaTopla(dersDurum) {
   }
   const ortaDers = dersDurum.filter(x => rankOf(x.ds.sev) === 2).map(x => x.s.name);
   if (ortaDers.length) {
-    ekle("ogretim", `${ortaDers.join(", ")} ders${ortaDers.length > 1 ? "lerinde" : "inde"} her kısa dönemli amaç ipuçlu ve bağımsız basamak olarak çalışılır; ipucu kademeli olarak azaltılır ve ilerleme hızı öğrencinin temposuna göre ayarlanır.`, "Ders bazlı performans");
+    ekle("ogretim", `${ortaDers.join(", ")} ders${ortaDers.length > 1 ? "lerinde" : "inde"} ilerleme hızı öğrencinin temposuna göre ayarlanır; her oturumda önceki amacın hatırlanmasına zaman ayrılır.`, "Ders bazlı performans");
   }
   const yogunDers = dersDurum.filter(x => rankOf(x.ds.sev) === 3).map(x => x.s.name);
   if (yogunDers.length) {
-    ekle("akademik", `${yogunDers.join(", ")} ders${yogunDers.length > 1 ? "lerinde" : "inde"} önce ön koşul becerilere zaman ayrılır; dönem kapsamı temel kazanımlarla sınırlandırılır ve her amaç model – ipucu – bağımsız basamaklarıyla öğretilir.`, "Ders bazlı performans");
+    ekle("akademik", `${yogunDers.join(", ")} ders${yogunDers.length > 1 ? "lerinde" : "inde"} önce ön koşul becerilere zaman ayrılır ve dönem kapsamı temel kazanımlarla sınırlandırılır.`, "Ders bazlı performans");
   }
   return { gruplar, deg, bos };
 }
 
 /* ═══════════════ EĞİTSEL PERFORMANS METNİ ═══════════════ */
-const GENEL_METIN = {
-  sinif: "Akademik hazır bulunuşluğu genel olarak sınıf düzeyiyle uyumludur.",
-  hafif: "Akademik hazır bulunuşluğu genel olarak sınıf düzeyine yakındır; belirli alanlarda sunum ve materyal desteğiyle ilerlemektedir.",
-  orta: "Akademik hazır bulunuşluğu sınıf düzeyinin bir miktar gerisinde olup yapılandırılmış destekle ilerleme göstermektedir.",
-  yogun: "Akademik hazır bulunuşluğu sınıf düzeyinin belirgin biçimde gerisindedir; ön koşul becerilerden başlayan yoğun destekle ilerleme göstermektedir.",
-};
 
 const bas = s => s ? s.charAt(0).toLocaleUpperCase("tr") + s.slice(1) : s;
 const nokta = s => (s || "").replace(/[\s.;,]+$/, "");
-const alanListe = arr => `${arr.join(", ")} alan${arr.length > 1 ? "larında" : "ında"}`;
 
-function performansMetni(ad, ortam, dersDurum) {
+/* Eğitsel performans: KISA ve yalnızca GİRİLMİŞ bilgiye dayanır.
+   Girilmeyen alan için "belirtilmedi / bilgi girilmedi / BEP birimince
+   tamamlanacaktır" gibi cümleler yazılmaz, öğretmenin girmediği düzey
+   hakkında ("akranlarıyla benzer düzeydedir" gibi) çıkarım yapılmaz. */
+function performansMetni(ad, ortam, planlar) {
   const c = [];
   const taniAd = state.disabs.map(k => DISAB[k].name).join(", ");
-  c.push(`${ad}, ${state.grade}. sınıf öğrencisi olup ${ortam} kapsamında eğitimine devam etmektedir.`);
-  if (taniAd) {
-    c.push(`RAM raporunda ${taniAd} ${state.disabs.length > 1 ? "tanıları" : "tanısı"} yer almaktadır.`);
-    c.push(DISAB[state.disabs[0]].ozet);
-  }
-  if (val("pGenel")) c.push(GENEL_METIN[val("pGenel")]);
-  else c.push("Genel hazır bulunuşluk düzeyine ilişkin ayrı bir bilgi girilmediğinden bu bölüm, kaba değerlendirme sonrasında BEP geliştirme birimince tamamlanacaktır.");
+  c.push(`${ad}, ${subeAdi() ? `${state.grade}/${subeAdi()} sınıfı` : `${state.grade}. sınıf`} öğrencisi olup ${ortam} kapsamında eğitimine devam etmektedir.`);
+  if (taniAd) c.push(`RAM raporunda ${taniAd} ${state.disabs.length > 1 ? "tanıları" : "tanısı"} yer almaktadır.`);
+
+  // Öncelikli ihtiyaçlar doğrudan öğretmenin işaretlediği alanlardan gelir.
+  const ihtiyac = planlar.filter(p => p.ihtiyacAdlari.length)
+    .map(p => `${p.s.name} (${p.ihtiyacAdlari.join(", ")})`);
+  if (ihtiyac.length) c.push(`Öncelikli öğrenme ihtiyaçları: ${ihtiyac.join("; ")}.`);
 
   const guclu = state.guclu.map(id => GUCLU_MAP[id].ad.toLocaleLowerCase("tr"));
   if (guclu.length || txt("pGuclu")) {
     c.push(`Güçlü olduğu alanlar: ${[guclu.join(", "), nokta(txt("pGuclu"))].filter(Boolean).join("; ")}.`);
   }
-  const sinifAlan = BECERI.filter(b => state.alan[b.id] === "sinif").map(b => b.ad.toLocaleLowerCase("tr"));
-  if (sinifAlan.length) c.push(`${bas(alanListe(sinifAlan))} akranlarıyla benzer düzeyde performans göstermektedir; bu alan${sinifAlan.length > 1 ? "larda" : "da"} kazanımlar sadeleştirilmemiştir.`);
-
-  ["hafif", "orta", "yogun"].forEach(sv => {
-    const list = BECERI.filter(b => state.alan[b.id] === sv).map(b => b.ad.toLocaleLowerCase("tr"));
-    if (list.length) c.push(`${bas(alanListe(list))} ${SEV[sv].ad.toLocaleLowerCase("tr")} gereksinimi bulunmaktadır.`);
-  });
-  if (txt("pZorluk")) c.push(`Zorlandığı alanlara ilişkin gözlem: ${nokta(txt("pZorluk"))}.`);
-
-  const ds = DIKKAT_SURE[val("pDikkat")] || DIKKAT_SURE[""];
-  if (val("pDikkat")) c.push(`Kesintisiz çalışma süresi ${ds.ad.toLocaleLowerCase("tr")} olarak gözlenmiştir; öğretim oturumları buna göre planlanmıştır.`);
-  if (txt("pGozlem")) c.push(`Öğretmen, veli ve uzman gözlemleri: ${nokta(txt("pGozlem"))}.`);
-
-  const farkli = [...new Set(dersDurum.map(x => x.ds.sev))].length > 1;
-  if (farkli) c.push("Performans dersten derse farklılaştığından her ders için ayrı düzey, kapsam ve ölçüt belirlenmiştir.");
-  c.push("Aşağıdaki amaçlar; öğrencinin yukarıdaki güncel performansı, sınıf düzeyine ait güncel öğretim programı ve BEP geliştirme birimi kararları birlikte değerlendirilerek belirlenmiştir.");
+  if (txt("pZorluk")) c.push(`Gözlem: ${nokta(txt("pZorluk"))}.`);
+  if (val("pDikkat")) {
+    const ds = DIKKAT_SURE[val("pDikkat")];
+    c.push(`Kesintisiz çalışma süresi ${ds.ad.toLocaleLowerCase("tr")} olarak gözlenmiştir.`);
+  }
+  if (txt("pGozlem")) c.push(nokta(txt("pGozlem")) + ".");
+  if (txt("pIlgi")) c.push(`İlgi alanları: ${nokta(txt("pIlgi"))}.`);
   return c.map(x => esc(x)).join(" ");
 }
 
@@ -2157,8 +3431,7 @@ function generate() {
 
   const term = { start: $("termStart").value || defaultTerm().start, end: $("termEnd").value || defaultTerm().end };
   const yilLabel = `${new Date(term.start).getFullYear()} – ${new Date(term.end).getFullYear()} Eğitim Öğretim Yılı`;
-  const okul = dash($("schoolName").value);
-  const name = dash($("stName").value);
+  const okul = txt("schoolName");
   const adMetni = txt("stName") ? txt("stName") : "Öğrenci";
   const sups = [...document.querySelectorAll("#supportList input:checked")].map(i => SUPPORTS.find(s => s.id === i.dataset.sup));
   const ortamId = ["kaynastirma", "ozelsinif", "destekoda"].find(k => sups.some(s => s.id === k));
@@ -2166,162 +3439,201 @@ function generate() {
     : ortamId === "kaynastirma" ? "kaynaştırma/bütünleştirme uygulamaları"
     : ortamId === "destekoda" ? "destek eğitim odası hizmeti"
     : "genel eğitim sınıfı";
+  /* Yerleştirme türü destek eğitim HİZMETİ değildir; "Eğitim Ortamı"
+     satırında yerini alır ve hizmet tablosuna girmez. */
+  const hizmetler = sups.filter(x => !ORTAM_TURU.includes(x.id));
 
   const planlar = subs.map(k => dersPlani(k, term));
-  const { gruplar, deg, bos } = uyarlamaTopla(planlar);
-  const taniAdlari = state.disabs.length ? state.disabs.map(k => DISAB[k].name).join(" · ") : "Tanı belirtilmedi";
+  /* BEP boş amaçla basılmaz: kapsam adımında hiçbir kazanım seçilmemişse
+     belge üretilmez, öğretmen kapsam adımına yönlendirilir. */
+  if (!planlar.some(p => p.kdaSecili)) {
+    /* Uyarı, gerçekte neyin engellediğini DERS DERS söyler. Önceden her
+       durumda "ihtiyaç alanı seçilmedi" yazıyordu; alanlar seçiliyken bile
+       çıkan bu metin öğretmeni yanlış yönlendiriyordu. */
+    const alansiz = planlar.filter(p => !dersIhtiyaci(p.key).length);
+    const neden = planlar.map(p => `<li><b>${p.s.name}:</b> ${esc((kapsamOnerisi(p.key).gerekce || "Amaç oluşmadı.").replace(/<[^>]+>/g, ""))}</li>`).join("");
+    KKUyari.uyari(
+      (alansiz.length === planlar.length
+        ? "Amaçların oluşması için her dersin <b>ihtiyaç alanlarından</b> en az birini işaretlemen yeterli."
+        : "Seçtiğin derslerde amaç oluşmadı. Nedeni aşağıda ders ders yazıyor; ihtiyaç alanlarını değiştirebilir ya da Gelişmiş ayarlardan amaçları elle seçebilirsin.")
+      + `<ul style="margin:8px 0 0 18px;line-height:1.5;">${neden}</ul>`,
+      { baslik: "BEP'e girecek amaç yok" });
+    /* Önceki denemeden kalan belge ekranda bırakılmaz: forma uymayan bir
+       çıktının yazdırılması yanlış BEP basılmasına yol açar. */
+    $("sheetArea").style.display = "none";
+    $("previewEmpty").style.display = "";
+    if (window.KKKaydir) KKKaydir.hizala("#subjectList");
+    return;
+  }
+  const { gruplar, deg } = uyarlamaTopla(planlar);
+  // Tanı girilmemişse "Tanı belirtilmedi" YAZILMAZ; satır hiç açılmaz.
+  const taniAdlari = state.disabs.map(k => DISAB[k].name).join(" · ");
 
+  /* Künye tek şeride indirildi (T.C. + okul + il aynı satırda). */
+  /* ══════════════════════════════════════════════════════════════
+     BELGE. Okulda doğrudan kullanılacak resmî bir BEP; sistem raporu
+     değil. Bu yüzden burada müfredat/kapsam/havuz açıklaması, emoji,
+     "belirtilmedi" ifadesi ve altbilgi YOKTUR.
+     ══════════════════════════════════════════════════════════════ */
+  const okulSatiri = [okul, txt("schoolCity")].filter(Boolean).join(" · ");
   let h = `
     <div class="bep-head">
-      <div class="tc" contenteditable="true">T.C. MİLLÎ EĞİTİM BAKANLIĞI</div>
-      <div class="okul" contenteditable="true">${okul}${$("schoolCity").value ? " · " + esc($("schoolCity").value) : ""}</div>
-      <h2>BİREYSELLEŞTİRİLMİŞ EĞİTİM PROGRAMI (BEP)</h2>
+      <div class="tc" contenteditable="true">T.C. MİLLÎ EĞİTİM BAKANLIĞI${okulSatiri ? " · " + esc(okulSatiri) : ""}</div>
+      <h2>BİREYSELLEŞTİRİLMİŞ EĞİTİM PROGRAMI</h2>
       <div class="yil" contenteditable="true">${yilLabel} · ${fmtD(term.start)} – ${fmtD(term.end)}</div>
     </div>`;
 
-  if (bos) {
-    h += `<div class="bep-uyari" contenteditable="true"><b>Uyarı:</b> Öğrenciye ait performans profili girilmediğinden bu taslak yalnızca sınıf düzeyi müfredatına ve genel-güvenli uyarlamalara dayanmaktadır. Öğrencinin akademik düzeyi, dikkat, dil ve iletişim özellikleri hakkında varsayım yapılmamıştır. Kaba değerlendirme sonrasında bölümler BEP geliştirme birimince düzenlenmelidir.</div>`;
-  }
+  /* Kimlik şeridi YALNIZCA girilmiş alanlardan kurulur. Girilmeyen isteğe
+     bağlı alan için satır açılmaz; "Belirtilmedi" yazılmaz. */
+  const kimlik = [["Adı Soyadı", esc(txt("stName"))], ["Sınıfı / Şubesi", esc(sinifEtiketi())]];
+  if (txt("stNo")) kimlik.push(["Okul No", esc(txt("stNo"))]);
+  if (val("stBirth")) kimlik.push(["Doğum Tarihi", fmtD(val("stBirth"))]);
+  if (txt("stParent")) kimlik.push(["Veli Adı", esc(txt("stParent"))]);
+  kimlik.push(["Eğitim Ortamı", esc(bas(ortam))]);
+  if (taniAdlari) kimlik.push(["Tanı", esc(taniAdlari)]);
+  if (txt("ramNo")) kimlik.push(["RAM Rapor No", esc(txt("ramNo"))]);
+  if (val("ramDate")) kimlik.push(["Rapor Tarihi", fmtD(val("ramDate"))]);
+  // Üçerli çiftler hâlinde satırlara böl
+  const kimlikSatir = [];
+  for (let k = 0; k < kimlik.length; k += 3) kimlikSatir.push(kimlik.slice(k, k + 3));
 
   h += `
-    <div class="bep-h">1. ÖĞRENCİNİN KİMLİK BİLGİLERİ</div>
-    <table class="bep-t kimlik-t" contenteditable="true"><tbody>
-      <tr><td>Adı Soyadı</td><td>${name}</td><td>Sınıfı</td><td>${state.grade}. Sınıf</td></tr>
-      <tr><td>Doğum Tarihi</td><td>${$("stBirth").value ? fmtD($("stBirth").value) : "…/…/……"}</td><td>Okul No</td><td>${dash($("stNo").value)}</td></tr>
-      <tr><td>Veli Adı</td><td>${dash($("stParent").value)}</td><td>Eğitim Ortamı</td><td>${esc(ortam.charAt(0).toLocaleUpperCase("tr") + ortam.slice(1))}</td></tr>
-      <tr><td>RAM Rapor No</td><td>${dash($("ramNo").value)}</td><td>Rapor Tarihi</td><td>${$("ramDate").value ? fmtD($("ramDate").value) : "…/…/……"}</td></tr>
-      <tr><td>Tanı / Destek Gereksinimi</td><td colspan="3"><b>${esc(taniAdlari)}</b></td></tr>
+    <div class="bep-h">1. ÖĞRENCİ BİLGİLERİ VE EĞİTSEL PERFORMANS</div>
+    <table class="bep-t kimlik-t" contenteditable="true"><tbody>${kimlikSatir.map(sat =>
+      `<tr>${sat.map(c => `<td>${c[0]}</td><td>${c[1]}</td>`).join("")}${
+        sat.length < 3 ? `<td colspan="${(3 - sat.length) * 2}"></td>` : ""}</tr>`).join("")}
     </tbody></table>
+    <p class="perf-p" contenteditable="true">${performansMetni(adMetni, ortam, planlar)}</p>`;
 
-    <div class="bep-h">2. EĞİTSEL PERFORMANS DÜZEYİ</div>
-    <p class="perf-p" contenteditable="true">${performansMetni(adMetni, ortam, planlar)}</p>
-    <div class="alt-h">2.1. Ders Bazlı Performans Profili ve Planlama Kararı</div>
-    <div class="ar-kap">
-    <table class="bep-t prof-t" contenteditable="true">
-      <thead><tr><th style="width:22%">Ders</th><th style="width:18%">Destek Düzeyi</th><th style="width:24%">Düzeyin Kaynağı</th><th>Programa Yansıması</th><th class="ar-th no-print"></th></tr></thead>
-      <tbody data-satir="profil">${planlar.map(p => `<tr>
-        <td><b>${p.s.icon} ${p.s.name}</b></td>
-        <td>${p.ds.sev ? SEV[p.ds.sev].ad : "Sınıf düzeyi (varsayılan)"}</td>
-        <td>${KAYNAK_AD[p.ds.kaynak]}${p.ds.alanlar && p.ds.alanlar.length ? ": " + p.ds.alanlar.map(a => esc(BECERI_MAP[a].ad)).join(", ") : ""}</td>
-        <td>${p.plan.hiz}. Kapsam: ${p.kapsam}/${p.toplamUda} uzun dönemli amaç · Basamak: ${p.basamakSay} · ${p.plan.tekrar}${p.onkosul ? " · Ön koşul beceri eklendi" : ""}</td>
-        ${arHucre()}
-      </tr>`).join("")}</tbody>
-    </table>
-    ${satirEkleBar("profil")}
-    </div>
-    <div class="alt-not">Bu tablo, aynı sınıf ve derste bile öğrencinin performansına göre farklı bir program uygulanmasını sağlar. Düzeyi "belirtilmedi" olan derslerde sınıf düzeyi müfredatı korunur.</div>`;
-
-  let sec = 2;
+  let sec = 1;
+  /* Uyarlamalar: gerçek BEP içeriğidir, tek kompakt tabloda kalır.
+     Ölçme-değerlendirme uyarlamaları da ayrı bölüm açmadan buraya girer. */
   if ($("optUyarlama").checked) {
-    sec++;
-    h += `<div class="bep-h">${sec}. ÖĞRETİM SÜRECİNDE YAPILACAK UYARLAMALAR</div>`;
-    const dolu = UYAR_SIRA.filter(k => gruplar[k].length);
-    if (!dolu.length) h += `<p contenteditable="true">Uyarlama gerektiren bir alan girilmemiştir.</p>`;
-    dolu.forEach(k => {
-      h += `<div class="alt-h">${UYAR_BASLIK[k]}</div>
-      <ul class="bep-ul" contenteditable="true">${gruplar[k].map(u => `<li class="uyar-li">${esc(u.t)} <span class="kay">${esc(u.kay)}</span>${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}`;
-    });
+    const satirlar = UYAR_SIRA.filter(k => gruplar[k].length)
+      .map(k => [UYAR_BASLIK[k], gruplar[k]]);
+    if (deg.length) satirlar.push(["Ölçme ve değerlendirme uyarlamaları", deg]);
+    if (satirlar.length) {
+      sec++;
+      h += `<div class="bep-h">${sec}. ÖĞRETİM SÜRECİNDE YAPILACAK UYARLAMALAR</div>
+      <table class="bep-t uyar-t" contenteditable="true"><tbody>${satirlar.map(([ad, liste]) => `<tr>
+        <td style="width:19%">${ad}</td>
+        <td><ul class="bep-ul">${liste.map(u => `<li class="uyar-li">${esc(u.t)}${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}</td>
+      </tr>`).join("")}</tbody></table>`;
+    }
   }
 
-  sec++;
-  h += `
+  /* Destek eğitim hizmetleri: yerleştirme türü (kaynaştırma, özel eğitim
+     sınıfı) bir HİZMET değildir; o bilgi Eğitim Ortamı'nda durur. Bölüm
+     yalnızca gerçek bir destek hizmeti seçildiyse açılır. */
+  if (hizmetler.length) {
+    sec++;
+    h += `
     <div class="bep-h">${sec}. DESTEK EĞİTİM HİZMETLERİ</div>
     <div class="ar-kap">
       <table class="bep-t" contenteditable="true">
-        <thead><tr><th style="width:38%">Destek Hizmeti</th><th>Açıklama / Uygulama Biçimi</th><th class="ar-th no-print"></th></tr></thead>
-        <tbody data-satir="destek">${sups.length
-          ? sups.map(s => `<tr><td><b>${s.name}</b></td><td>${s.detail}</td>${arHucre()}</tr>`).join("")
-          : `<tr><td>Destek eğitim hizmeti seçilmedi.</td><td></td>${arHucre()}</tr>`}</tbody>
+        <thead><tr><th style="width:26%">Hizmet</th><th>Uygulama Biçimi</th><th class="ar-th no-print"></th></tr></thead>
+        <tbody data-satir="destek">${hizmetler.map(x => `<tr><td><b>${x.name}</b></td><td>${x.detail}</td>${arHucre()}</tr>`).join("")}</tbody>
       </table>
       ${satirEkleBar("destek")}
     </div>`;
+  }
 
   sec++;
-  h += `<div class="bep-h page-break">${sec}. UZUN VE KISA DÖNEMLİ AMAÇLAR <small>· UDA: Uzun Dönemli Amaç, KDA: Kısa Dönemli Amaç</small></div>`;
+  h += `<div class="bep-h">${sec}. BİREYSELLEŞTİRİLMİŞ EĞİTİM PLANI</div>`;
 
   planlar.forEach(p => {
-    const md = p.muf;
-    // Müfredat kaynağı çıktıda açıkça yazılır: hangi programdan, hangi derinlikte
-    let kaynakNot = "";
-    if (md && md.durum === "kazanim") {
-      kaynakNot = `Müfredat kaynağı: ${state.grade}. sınıf ${MUFREDAT.dersAdi(p.key, state.grade)} dersi öğretim programı`
-        + `${md.program === "onceki" ? " (önceki öğretim programı)" : " (Türkiye Yüzyılı Maarif Modeli)"}`
-        + ` · ${md.unite} ünite/tema, ${md.kazanim} resmî öğrenme çıktısı. Kısa dönemli amaçlar resmî kazanımlardan uyarlanmıştır; kazanım kodları korunmuştur.`;
-    } else if (md && md.durum === "unite") {
-      kaynakNot = `Müfredat kaynağı: ${state.grade}. sınıf ${MUFREDAT.dersAdi(p.key, state.grade)} dersinin resmî ${md.unite} ünite/temasıdır`
-        + `${md.program === "onceki" ? " (önceki öğretim programı)" : ""}. `
-        + `<b>Bu ders-sınıf için resmî öğrenme çıktısı metni veri setinde henüz bulunmadığından</b> kısa dönemli amaçlar beceri temelli havuzdan üretilmiştir; BEP birimi bunları ünitenin kazanımlarıyla değiştirmelidir.`;
-    } else {
-      kaynakNot = `Bu ders-sınıf için ünite bazlı müfredat verisi tanımlı olmadığından amaçlar beceri temelli havuzdan üretilmiştir.`;
-    }
-    h += `<div class="bep-h ders-h">${p.s.icon} ${p.s.name} <small>· ${state.grade}. Sınıf müfredatı</small></div>
-    <div class="ders-plan">Destek düzeyi: <b>${p.ds.sev ? SEV[p.ds.sev].ad : "Sınıf düzeyi (varsayılan)"}</b> · ${p.plan.hiz} · ${p.plan.tekrar}.</div>
-    <div class="ders-plan muf-kaynak">${kaynakNot}</div>
-    <div class="uda-liste" data-ders="${p.key}">`;
+    if (!p.kdaSecili) return;
+    /* Ders başlığı sade ve resmî: "TÜRKÇE – 4. SINIF". Emoji kullanılmaz. */
+    const dersBaslik = `${p.s.name.toLocaleUpperCase("tr")} – ${state.grade}. SINIF`;
+    const kolonlar = [
+      { b: "No", w: 4 }, { b: "Kısa Dönemli Amaç (Kazanım)", w: 42 },
+      { b: "Başarı Ölçütü", w: 16 }, { b: "Süre", w: 10 },
+      { b: "Değerlendirme", w: 14 }, { b: "Ulaşıldı", w: 8 },
+    ];
+    h += `<div class="ders-blok">
+      <div class="bep-h ders-h">${esc(dersBaslik)}</div>
+      <div class="uda-liste ar-kap" data-ders="${p.key}">
+        <table class="bep-t kda-t" contenteditable="true">
+          <thead><tr>${kolonlar.map(k => `<th style="width:${k.w}%">${k.b}</th>`).join("")}<th class="ar-th no-print"></th></tr></thead>`;
+    /* HER UZUN DÖNEMLİ AMAÇ KENDİ <tbody>'sinde. Tek gövdede, bir amacın
+       kısa dönemli amaçları sayfa ortasında bölünüp başlıksız satır
+       kalabiliyordu; tbody'ye `break-inside: avoid` verilince grup
+       bütün olarak bir sonraki sayfaya iner. */
     let no = 0;
     p.bloklar.forEach(b => {
       const onk = b.onkosul;
       if (!onk) no++;
-      h += `
-      <div class="uda-block">
-        <div class="uda-title" contenteditable="true"><span class="no">${onk ? "ÖK." : "UDA " + no + "."}</span> ${b.uda}${onk ? ` <span class="rozet-ok">ÖN KOŞUL · ${esc(b.etiket)}</span>` : ""}</div>
-        <div class="uda-plan">Planlanan öğretim süresi: yaklaşık ${b.hafta} hafta · Amaç basamağı: ${p.basamakSay} · ${p.plan.tekrar}${onk ? " · Bu amaç tamamlandığında sınıf düzeyi kazanımına geçilir" : ""}${b.unite ? ` · Ünite/tema: <b>${esc(b.unite)}</b>` : ""}</div>
-        ${satirAracBar("Bu uzun dönemli amacı sil", "uda-sil")}
-        <table class="bep-t" contenteditable="true">
-          <thead><tr>
-            <th style="width:5%">No</th><th style="width:32%">Kısa Dönemli Amaç</th>
-            <th style="width:16%">Başarı Ölçütü</th><th style="width:22%">Yöntem / Teknik ve Materyal</th>
-            <th style="width:12%">Tarih Aralığı</th><th style="width:7%">Ulaşıldı mı?</th>
-            <th class="ar-th no-print"></th>
-          </tr></thead>
-          <tbody data-satir="kda">${b.gruplar.map((gr, ki) => gr.satirlar.map((r, si) => `<tr>
+      const ek = [b.yontem ? "Yöntem/materyal: " + b.yontem : "", onk ? "ön koşul beceri" : ""]
+        .filter(Boolean).join(" · ");
+      h += `<tbody data-satir="kda">
+          <tr class="uda-r">
+            <td colspan="${kolonlar.length}"><span class="no">${onk ? "ÖK." : "UDA " + no + "."}</span>${esc(b.uda)}${
+              ek ? ` <span class="uda-bilgi">· ${esc(ek)}</span>` : ""}</td>
+            ${udaArHucre()}
+          </tr>`;
+      b.gruplar.forEach((gr, ki) => gr.satirlar.forEach((r, si) => {
+        h += `<tr>
             <td class="kda-no"><b>${onk ? "ÖK" : no}.${ki + 1}${gr.satirlar.length > 1 ? "." + "abc"[si] : ""}</b></td>
             <td>${r.etiket ? `<i class="bsm">${r.etiket}:</i> ` : ""}${r.metin}${r.kod ? ` <span class="kaz-kod">${esc(r.kod)}</span>` : ""}</td>
-            <td>${r.olcut}</td><td>${r.yontem}</td>
-            <td>${gr.aralik.label}</td>
-            <td></td>${arHucre()}
-          </tr>`).join("")).join("")}</tbody>
-        </table>
-        ${satirEkleBar("kda")}
-      </div>`;
+            <td>${esc(r.olcut)}</td>
+            <td class="tar">${esc(b.aralik.label)}</td>
+            <td>${esc(r.deg)}</td><td></td>${arHucre()}
+          </tr>`;
+      }));
+      h += `</tbody>`;
     });
-    h += `</div>${udaEkleBar()}`;
+    h += `</table>
+        ${satirEkleBar("kda")}${udaEkleBar()}
+      </div>
+    </div>`;
   });
 
-  if ($("optDegerlendirme").checked) {
-    sec++;
-    h += `
-    <div class="bep-h">${sec}. İZLEME VE DEĞERLENDİRME</div>
-    <p contenteditable="true">Kısa dönemli amaçlara ulaşma düzeyi aşağıdaki yöntemlerle izlenir. Başarı ölçütleri, öğrencinin ders bazlı destek düzeyine ve amacın basamağına göre belirlenmiştir; ipuçlu basamaklarda ölçüt daha esnek, bağımsız basamakta hedeflenen düzeydedir. BEP geliştirme birimi programı her dönem sonunda gözden geçirir; amaçlara ulaşılamadığında ölçütler, yöntemler ve süreler güncellenir, beklenenden hızlı ilerlendiğinde kapsam genişletilir.</p>
-    <ul class="bep-ul" contenteditable="true">${ASSESS.map(a => `<li>${a}${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}`;
-    if (deg.length) {
-      h += `<div class="alt-h">${sec}.1. Ölçme ve Değerlendirme Uyarlamaları</div>
-      <ul class="bep-ul" contenteditable="true">${deg.map(u => `<li class="uyar-li">${esc(u.t)} <span class="kay">${esc(u.kay)}</span>${arMadde()}</li>`).join("")}</ul>${maddeEkleBar()}`;
-    }
-  }
-
+  /* ── BEP geliştirme birimi, kararlar ve onay: tek kompakt bölüm ── */
   if ($("optSign").checked) {
     sec++;
-    const rows = [
-      ["BEP Birimi Başkanı (Müdür / Md. Yrd.)", $("mPrincipal").value],
-      ["Sınıf / Ders Öğretmeni", $("mTeacher").value],
-      ["Rehber Öğretmen / Psikolojik Danışman", $("mCounselor").value],
-      ["Özel Eğitim Öğretmeni", $("mSpecial").value],
-      ["Veli", $("stParent").value],
-    ];
+    /* Sabit üyeler her zaman; branş ve özel eğitim öğretmeni yalnızca
+       gerekliyse ya da adı girilmişse satır açar. Ad girilmemişse hücre
+       boş kalır — "Belirtilmedi" yazılmaz. */
+    const uyeler = [
+      { unvan: "Müdür / Müdür Yardımcısı (BEP Geliştirme Birimi Başkanı)", ad: txt("mPrincipal"), her: true },
+      { unvan: "Sınıf Öğretmeni", ad: txt("mTeacher"), her: true },
+      { unvan: "Ders / Alan Öğretmeni", ad: txt("mBranch"), her: state.grade >= 5 },
+      { unvan: "Rehber Öğretmen / Psikolojik Danışman", ad: txt("mCounselor"), her: true },
+      { unvan: "Özel Eğitim Öğretmeni", ad: txt("mSpecial"), her: false },
+      { unvan: "Öğrenci Velisi", ad: txt("stParent"), her: true },
+    ].filter(u => u.her || u.ad);
+
+    // Kararlar: yalnızca gerçekten içeriği olanlar
+    const kararlar = [];
+    if (hizmetler.length) kararlar.push(["Destek eğitim hizmeti", hizmetler.map(x => x.name).join(", ")]);
+    kararlar.push(["Ailenin bilgilendirilmesi", ""]);
+    // Öğretmen girmediyse boş kalır; eğitim yılının son günü dayatılmaz.
+    kararlar.push(["Bir sonraki değerlendirme tarihi", val("nextEval") ? fmtD(val("nextEval")) : ""]);
+    kararlar.push(["Genel değerlendirme", ""]);
+
     h += `
-    <div class="bep-h">${sec}. BEP GELİŞTİRME BİRİMİ</div>
-    <p style="font-size:.85em;" contenteditable="true">Bu Bireyselleştirilmiş Eğitim Programı, ${fmtD(term.start)} tarihinde BEP geliştirme birimi tarafından hazırlanmış olup aşağıdaki üyelerce kabul edilmiştir.</p>
-    <div class="ar-kap">
-    <table class="bep-t sign-t" contenteditable="true">
-      <thead><tr><th style="width:40%">Görevi</th><th style="width:35%">Adı Soyadı</th><th>İmza</th><th class="ar-th no-print"></th></tr></thead>
-      <tbody data-satir="imza">${rows.map(r => `<tr><td class="rol">${r[0]}</td><td style="vertical-align:middle;text-align:center;">${dash(r[1])}</td><td></td>${arHucre()}</tr>`).join("")}</tbody>
-    </table>
-    ${satirEkleBar("imza")}
+    <div class="bep-h">${sec}. BEP GELİŞTİRME BİRİMİ VE KARARLAR</div>
+    <div class="birim-kap">
+      <div class="ar-kap birim-imza">
+        <table class="bep-t sign-t" contenteditable="true">
+          <thead><tr><th style="width:52%">Ünvanı</th><th style="width:30%">Adı Soyadı</th><th>İmza</th><th class="ar-th no-print"></th></tr></thead>
+          <tbody data-satir="imza">${uyeler.map(u =>
+            `<tr><td>${u.unvan}</td><td class="ad-h">${esc(u.ad)}</td><td></td>${arHucre()}</tr>`).join("")}</tbody>
+        </table>
+        ${satirEkleBar("imza")}
+      </div>
+      <div class="birim-karar">
+        <table class="bep-t" contenteditable="true"><tbody>${kararlar.map(k =>
+          `<tr><td style="width:44%">${k[0]}</td><td>${esc(k[1])}</td></tr>`).join("")}</tbody></table>
+        <div class="onay" contenteditable="true">
+          <div class="onay-bas">UYGUNDUR</div>
+          <div class="onay-alt">…… / …… / 20……</div>
+          <div class="onay-alt">Okul Müdürü${txt("mPrincipal") ? " · " + esc(txt("mPrincipal")) : ""}</div>
+          <div class="onay-imza">İmza / Mühür</div>
+        </div>
+      </div>
     </div>`;
   }
-
-  h += `<div class="sheet-footer">Kaynak Kampüs BEP Oluşturucu ile hazırlanmıştır · Müfredat öğrencinin sınıfından, uygulama biçimi öğrencinin bireysel performansından türetilmiştir. Bu belge bir taslaktır; BEP geliştirme birimince gözden geçirilerek kullanılmalıdır.</div>`;
 
   const sheet = $("sheet");
   sheet.innerHTML = h;
@@ -2338,17 +3650,17 @@ function generate() {
 }
 
 /* ═══════════════ TASLAK SAKLAMA ═══════════════ */
-const FIELDS = ["stName","stBirth","stNo","stParent","ramNo","ramDate","termStart","termEnd","schoolName","schoolCity","mPrincipal","mTeacher","mCounselor","mSpecial","fontSize","pGenel","pDikkat","pIlgi","pGuclu","pZorluk","pGozlem"];
-const CHECKS = ["optUyarlama","optDegerlendirme","optSign","optBW"];
+const FIELDS = ["stName","stSube","stBirth","stNo","stParent","ramNo","ramDate","termStart","termEnd","schoolName","schoolCity","mPrincipal","mTeacher","mBranch","mCounselor","mSpecial","nextEval","fontSize","pGenel","pDikkat","pIlgi","pGuclu","pZorluk","pGozlem"];
+const CHECKS = ["optUyarlama","optSign","optBW"];
 
 function saveDraft() {
   try {
     const data = { grade: state.grade, disabs: state.disabs, alan: state.alan, ders: state.ders,
-      guclu: state.guclu, ihtiyac: state.ihtiyac, f: {}, c: {}, sup: [], sub: [] };
+      guclu: state.guclu, ihtiyac: state.ihtiyac, ihtiyacAlan: state.ihtiyacAlan, kapsam: state.kapsam, f: {}, c: {}, sup: [], sub: [] };
     FIELDS.forEach(id => data.f[id] = $(id).value);
     CHECKS.forEach(id => data.c[id] = $(id).checked);
     document.querySelectorAll("#supportList input:checked").forEach(i => data.sup.push(i.dataset.sup));
-    document.querySelectorAll("#subjectList input:checked").forEach(i => data.sub.push(i.dataset.sub));
+    document.querySelectorAll("#subjectList input[data-sub]:checked").forEach(i => data.sub.push(i.dataset.sub));
     localStorage.setItem("bepDraft", JSON.stringify(data));
   } catch (e) { /* localStorage kapalıysa sessizce geç */ }
 }
@@ -2367,11 +3679,16 @@ function loadDraft() {
   state.ders = data.ders && typeof data.ders === "object" ? data.ders : {};
   state.guclu = (data.guclu || []).filter(id => GUCLU_MAP[id]);
   state.ihtiyac = (data.ihtiyac || []).filter(id => IHTIYAC_MAP[id]);
+  state.kapsam = data.kapsam && typeof data.kapsam === "object" ? data.kapsam : {};
+  state.ihtiyacAlan = data.ihtiyacAlan && typeof data.ihtiyacAlan === "object" ? data.ihtiyacAlan : {};
   tazeleDisabPills(); taniHatirlatmasi();
   buildBeceriList(); buildGucluChips(); buildIhtiyacList();
   document.querySelectorAll("#supportList input").forEach(i => i.checked = (data.sup || []).includes(i.dataset.sup));
   buildSubjectList();
-  if (data.sub && data.sub.length) document.querySelectorAll("#subjectList input").forEach(i => i.checked = data.sub.includes(i.dataset.sub));
+  if (data.sub && data.sub.length) {
+    document.querySelectorAll("#subjectList input[data-sub]").forEach(i => i.checked = data.sub.includes(i.dataset.sub));
+    buildSubjectList();   // ders kartları ihtiyaç alanlarıyla birlikte yeniden çizilir
+  }
   buildDersPerf();
 }
 
@@ -2391,14 +3708,26 @@ const t = defaultTerm();
 $("termStart").value = t.start; $("termEnd").value = t.end;
 loadDraft();
 taniHatirlatmasi(); buildDersPerf();
+kapsamiYenile();
 
 FIELDS.forEach(id => { $(id).addEventListener("change", saveDraft); $(id).addEventListener("input", saveDraft); });
 CHECKS.forEach(id => $(id).addEventListener("change", saveDraft));
 /* Genel hazır bulunuşluk değişince türetilen ders düzeyleri tazelenir */
-$("pGenel").addEventListener("change", buildDersPerf);
+$("pGenel").addEventListener("change", () => { buildDersPerf(); kapsamiYenile(); });
+/* Dönem uzunluğu ve haftalık saat, dönem kapasitesini dolayısıyla öneriyi
+   değiştirir; elle düzenlenmiş dersler korunur. */
+["termStart", "termEnd"].forEach(id =>
+  $(id).addEventListener("change", () => kapsamiYenile()));
 /* Anonim kullanım sayacı (assets/kullanim-sayac.js) — yalnızca adet tutar */
 const sayac = (d) => { if (window.KKSayac) KKSayac.gonder("bep", d); };
 $("genBtn").onclick = () => { generate(); sayac("olusturuldu"); };
+/* "Amaçları düzenle": Gelişmiş bölümünü açıp kazanım listesine götürür.
+   Öğretmen bunu yapmak ZORUNDA değil; varsayılan akış düğmeye basmadan işler. */
+$("duzenleBtn").onclick = () => {
+  $("gelismisKutu").open = true;
+  if (window.KKKaydir) KKKaydir.hizala("#kapsamKutu");
+  else $("kapsamKutu").scrollIntoView({ behavior: "smooth", block: "start" });
+};
 $("regenBtn").onclick = generate;
 $("printBtn").onclick = () => { if ($("sheetArea").style.display === "none") generate(); sayac("yazdirildi"); window.print(); };
 $("printBtn2").onclick = () => { sayac("yazdirildi"); window.print(); };

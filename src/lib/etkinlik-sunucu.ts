@@ -1,9 +1,20 @@
 /* Etkinlikler (PDF arşivi) — DB'ye dokunan yardımcılar (yalnız sunucu).
    Saf/istemci-güvenli yardımcılar: etkinlik.ts */
 
+import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
 import { slugla } from "./blog";
 import { altAgac, type AgacDugumu } from "./etkinlik";
+
+/** Public sayfalar ISR ile önbelleklenir; mutasyondan sonra tazelenir.
+    Klasör adresleri iç içe olduğu için tüm alt yol tazelenir.
+    Hem server action'lar hem PDF yükleme rotası buradan çağırır. */
+export function etkinlikTazele() {
+  revalidatePath("/admin/etkinlikler");
+  revalidatePath("/etkinlikler");
+  revalidatePath("/etkinlikler/[[...yol]]", "page");
+  revalidatePath("/sitemap.xml");
+}
 
 /** Ağaç tek sorguyla çekilir: yüzlerce düğümde bile tek gidiş-geliş, ve
     kırıntı yolu / alt ağaç sayımı ek sorgu istemez. */
@@ -49,6 +60,10 @@ export async function agaciGetir(): Promise<HamDugum[]> {
  *
  * Ayrıca içinde (hiçbir derinlikte) yayında PDF bulunmayan klasörler
  * elenir: ziyaretçi boş klasörlere girip çıkmasın.
+ *
+ * Dosyası henüz bağlanmamış PDF düğümü de gizlenir: PDF, düğüm
+ * oluştuktan SONRA akış rotasıyla yüklenir (bkz. /api/etkinlik/pdf/[id]/yukle);
+ * yükleme yarıda kalırsa ziyaretçi açılmayan bir kart görmemelidir.
  */
 export async function yayindakiAgac(): Promise<HamDugum[]> {
   const hepsi = await agaciGetir();
@@ -63,7 +78,7 @@ export async function yayindakiAgac(): Promise<HamDugum[]> {
     return true;
   };
 
-  const gorunur = hepsi.filter(zincirYayinda);
+  const gorunur = hepsi.filter((d) => zincirYayinda(d) && (d.tur !== "pdf" || !!d.dosyaYol));
   // PDF'i olmayan (ve altında da olmayan) klasörler listelenmez
   return gorunur.filter(
     (d) =>

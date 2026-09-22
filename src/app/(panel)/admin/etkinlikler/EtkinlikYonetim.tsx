@@ -9,13 +9,18 @@
    Ağacın tamamı sunucudan tek seferde gelir; klasöre girmek yalnız adres
    parametresini değiştirir (?klasor=<id>) — her tıklamada sorgu yok.
 
+   PDF DOSYASI İKİ ADIMDA GİDER: önce kayıt server action ile oluşturulur,
+   sonra dosya /api/etkinlik/pdf/[id]/yukle rotasına XHR ile akıtılır
+   (yükleme yüzdesi gösterilebilsin ve 50 MB'a varan çok sayfalı PDF
+   belleğe alınmasın diye). Ön izleme görseli küçüktür, action ile gider.
+
    Bu modül bir takvim DEĞİLDİR: tarih, saat, yer, kategori yoktur. */
 
 import { useEffect, useMemo, useRef, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { hizala } from "@/lib/kaydirma";
-import { MAX_DOSYA_BOYUT, IZINLI_TURLER } from "@/lib/dosya-tanim";
+import { MAX_DOSYA_BOYUT, MAX_ETKINLIK_PDF_BOYUT, IZINLI_TURLER } from "@/lib/dosya-tanim";
 import {
   altlari,
   boyutMetni,
@@ -26,6 +31,7 @@ import {
   etkinlikPdfUrl,
   ETKINLIK_KAPAK_ACCEPT,
   ETKINLIK_PDF_ACCEPT,
+  etkinlikYuklemeUrl,
   kirintiYolu,
   pdfSayisi,
   type EtkinlikDugumu,
@@ -47,6 +53,8 @@ import KlasorIkonu from "@/components/etkinlik/KlasorIkonu";
 import s from "./etkinlik.module.css";
 
 const KAPAK_MB = Math.round(MAX_DOSYA_BOYUT / 1024 / 1024);
+const PDF_MB = Math.round(MAX_ETKINLIK_PDF_BOYUT / 1024 / 1024);
+const PDF_BOYUT_HATASI = `Dosya çok büyük. En fazla ${PDF_MB} MB PDF yükleyebilirsiniz.`;
 const KAPAK_MIME = Object.keys(IZINLI_TURLER.image);
 
 type Kip = { tur: "pdf-ekle" } | { tur: "pdf-duzenle"; dugum: EtkinlikDugumu } | { tur: "tasi"; dugum: EtkinlikDugumu } | null;
@@ -588,11 +596,14 @@ function PdfKip({
   onKapat: () => void;
   onBitti: () => void;
 }) {
+  const router = useRouter();
   const duzenleme = !!mevcut;
   const [ad, setAd] = useState(mevcut?.ad ?? "");
   const [durum, setDurum] = useState(mevcut?.durum ?? "taslak");
   const [kapakOnizleme, setKapakOnizleme] = useState<string | null>(null);
+  const [pdfDosyasi, setPdfDosyasi] = useState<File | null>(null);
   const [pdfAdi, setPdfAdi] = useState("");
+  const [yuzde, setYuzde] = useState<number | null>(null);
   const [hata, setHata] = useState("");
   const [bekliyor, setBekliyor] = useState(false);
 
@@ -600,17 +611,19 @@ function PdfKip({
     const dosya = e.target.files?.[0] ?? null;
     setHata("");
     setPdfAdi("");
+    setPdfDosyasi(null);
     if (!dosya) return;
     if ((dosya.type || "").toLowerCase() !== "application/pdf") {
       setHata(`"${dosya.name}" bir PDF değil.`);
       e.target.value = "";
       return;
     }
-    if (dosya.size > MAX_DOSYA_BOYUT) {
-      setHata(`"${dosya.name}" çok büyük (en fazla ${KAPAK_MB} MB).`);
+    if (dosya.size > MAX_ETKINLIK_PDF_BOYUT) {
+      setHata(PDF_BOYUT_HATASI);
       e.target.value = "";
       return;
     }
+    setPdfDosyasi(dosya);
     setPdfAdi(`${dosya.name} · ${boyutMetni(dosya.size)}`);
     // Başlık boşsa dosya adından öneri üret
     if (!ad.trim()) setAd(dosya.name.replace(/\.pdf$/i, "").replace(/[_-]+/g, " ").trim());
@@ -646,15 +659,40 @@ function PdfKip({
       setHata("Başlık gerekli.");
       return;
     }
+    if (!duzenleme && !pdfDosyasi) {
+      setHata("PDF dosyası seçin.");
+      return;
+    }
     if (duzenleme) fd.set("id", mevcut.id);
     else if (ustId) fd.set("ustId", ustId);
+    /* PDF server action'dan GEÇMEZ (50 MB'a kadar olabilir): önce kayıt
+       yazılır, sonra dosya akış rotasına XHR ile gönderilir. */
+    fd.delete("pdf");
 
     setBekliyor(true);
     try {
       const sonuc = duzenleme ? await pdfGuncelle(fd) : await pdfEkle(fd);
-      if (sonuc.hata) {
-        setHata(sonuc.hata);
+      if (sonuc.hata || !sonuc.id) {
+        setHata(sonuc.hata ?? "Etkinlik kaydedilemedi.");
         return;
+      }
+
+      if (pdfDosyasi) {
+        setYuzde(0);
+        const yuklemeHatasi = await pdfYukle(sonuc.id, pdfDosyasi, setYuzde);
+        setYuzde(null);
+        if (yuklemeHatasi) {
+          /* Yeni kayıtta dosyasız düğüm kalmasın: kayıt geri alınır ve
+             kip açık kalır — yönetici düzeltip yeniden deneyebilir. */
+          if (!duzenleme) await dugumSil(sonuc.id);
+          setHata(
+            duzenleme
+              ? `Bilgiler kaydedildi ama PDF yüklenemedi: ${yuklemeHatasi}`
+              : yuklemeHatasi
+          );
+          router.refresh();
+          return;
+        }
       }
       onBitti();
     } finally {
@@ -699,7 +737,7 @@ function PdfKip({
             {pdfAdi ||
               (duzenleme && mevcut?.dosyaVar
                 ? `Yüklü: ${mevcut.dosyaAd || "dosya.pdf"} · ${boyutMetni(mevcut.dosyaBoyut)} — yeni dosya seçmezsen korunur.`
-                : `Yalnız PDF · en fazla ${KAPAK_MB} MB`)}
+                : `Yalnız PDF · en fazla ${PDF_MB} MB`)}
           </small>
         </label>
 
@@ -739,6 +777,14 @@ function PdfKip({
           </small>
         </label>
 
+        {yuzde !== null && (
+          <div className={s.yuklemeSatir}>
+            <div className={s.yuklemeCubuk}>
+              <i style={{ width: `${yuzde}%` }} />
+            </div>
+            <span>PDF yükleniyor… %{yuzde}</span>
+          </div>
+        )}
         {hata && <div className={s.hata}>{hata}</div>}
 
         <div className={s.kipAlt}>
@@ -832,4 +878,40 @@ function TasiKip({
       </div>
     </div>
   );
+}
+
+/* ── Yardımcılar ──────────────────────────────────────────── */
+
+/** PDF'i akış rotasına XHR ile gönderir (yükleme yüzdesi için; dosya
+    server action'dan geçse belleğe alınır ve gövde limitine takılırdı).
+    Hata mesajı döner; null → başarılı. */
+function pdfYukle(
+  dugumId: string,
+  dosya: File,
+  ilerleme: (yuzde: number) => void
+): Promise<string | null> {
+  return new Promise((coz) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", etkinlikYuklemeUrl(dugumId));
+    xhr.setRequestHeader("Content-Type", dosya.type || "application/pdf");
+    // Türkçe karakterli dosya adı başlıkta güvenle taşınsın
+    xhr.setRequestHeader("x-dosya-adi", encodeURIComponent(dosya.name));
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) ilerleme(Math.round((e.loaded / e.total) * 100));
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        coz(null);
+        return;
+      }
+      try {
+        coz(String(JSON.parse(xhr.responseText)?.hata ?? "PDF yüklenemedi."));
+      } catch {
+        coz("PDF yüklenemedi.");
+      }
+    };
+    xhr.onerror = () => coz("Bağlantı hatası nedeniyle PDF yüklenemedi.");
+    xhr.onabort = () => coz("Yükleme iptal edildi.");
+    xhr.send(dosya);
+  });
 }

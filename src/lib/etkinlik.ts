@@ -37,6 +37,13 @@ export function etkinlikKapakUrl(id: string): string {
   return `/api/etkinlik/kapak/${id}`;
 }
 
+/** PDF'i düğüme bağlayan akış rotası (yalnız yönetici).
+    PDF server action ile DEĞİL bu rotayla gider: dosya belleğe alınmadan
+    diske akıtılır, 50 MB'a kadar çok sayfalı arşivler sorunsuz yüklenir. */
+export function etkinlikYuklemeUrl(id: string): string {
+  return `/api/etkinlik/pdf/${id}/yukle`;
+}
+
 /** Ziyaretçi adresi: /etkinlikler/<slug>/<slug>… */
 export function etkinlikYolUrl(slugYolu: readonly string[]): string {
   return slugYolu.length ? `/etkinlikler/${slugYolu.join("/")}` : "/etkinlikler";
