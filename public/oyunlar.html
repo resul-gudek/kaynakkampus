@@ -16166,6 +16166,252 @@
       .hd-ev:hover:not(:disabled), button.hl-kam:hover:not(:disabled) { transform: none; }
     }
 
+    /* ═══ 7. SINIF İNGİLİZCE · SCHOOL CHALLENGE – HEDEFİ VUR (hv-) ══════════════
+       Sade gökyüzü arenası, dört renkli balon hedef (beyaz yazı, AA kontrast),
+       lacivert HUD. Hedefler JS ile yavaşça salınır; butonun kendisi taşınır,
+       iç katman (.hv-hedef-ic) giriş/patlama animasyonunu taşır. */
+    .hv-oyun { display: grid; gap: 10px; max-width: 940px; margin: 0 auto; }
+    .hv-giris { background: #fff; border: 2px solid #D9E2F2; border-radius: 22px; padding: 20px 18px 22px; text-align: center; box-shadow: var(--shadow); display: grid; gap: 12px; }
+    .hv-giris-rozet { justify-self: center; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 2.1rem; background: radial-gradient(circle, #fff 0 28%, #FFE1E1 29% 46%, #fff 47% 62%, #FFD2D2 63%); box-shadow: 0 4px 14px rgba(200,60,60,.18); }
+    .hv-giris-bas { margin: 0; font-size: clamp(1.25rem, 4.6vw, 1.7rem); font-weight: 800; color: #1B2A4A; }
+    .hv-giris-bas span { display: block; font-size: .62em; font-weight: 700; color: #C0392B; letter-spacing: .02em; margin-top: 2px; }
+    .hv-giris-alt { margin: 0; font-size: .86rem; font-weight: 700; color: #5A6B8C; }
+    .hv-giris-not { margin: 0 auto; max-width: 620px; font-size: .95rem; font-weight: 600; color: #34425F; line-height: 1.55; }
+    .hv-konular { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .hv-konular span { font-size: .76rem; font-weight: 700; color: #34425F; background: #F2F5FB; border: 1.5px solid #D9E2F2; border-radius: 999px; padding: 4px 10px; }
+    .hv-kontrol-bilgi { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hv-kontrol-bilgi span { font-size: .78rem; font-weight: 700; color: #1B2A4A; background: #FFF6E0; border: 1.5px solid #F4DDA0; border-radius: 10px; padding: 4px 10px; }
+    .hv-secim { text-align: left; max-width: 600px; margin: 0 auto; width: 100%; display: grid; gap: 8px; }
+    .hv-secim-bas { font-size: .76rem; font-weight: 800; color: #7A879F; text-transform: uppercase; letter-spacing: .06em; }
+    .hv-secim-sira { display: flex; gap: 8px; }
+    .hv-sec { flex: 1; border: 2px solid #D9E2F2; background: #fff; border-radius: 14px; padding: 10px 8px; font-family: inherit; font-weight: 800; font-size: .98rem; color: #1B2A4A; cursor: pointer; touch-action: manipulation; min-height: 56px; }
+    .hv-sec small { display: block; font-weight: 600; color: #7A879F; font-size: .72rem; margin-top: 2px; }
+    .hv-sec.aktif { border-color: #2D5BD8; background: #EEF3FF; color: #1F47B8; }
+    .hv-sabit-sec { display: flex; align-items: center; gap: 10px; font-weight: 700; color: #1B2A4A; font-size: .9rem; cursor: pointer; min-height: 44px; }
+    .hv-sabit-sec input { width: 22px; height: 22px; accent-color: #2D5BD8; }
+    .hv-sabit-sec small { font-weight: 600; color: #7A879F; }
+    .hv-giris-kunye { margin: 0; font-size: .76rem; font-weight: 600; color: #7A879F; line-height: 1.5; }
+    .hv-basla { justify-self: center; min-width: 240px; min-height: 52px; font-size: 1.05rem; }
+
+    .hv-hud { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; }
+    .hv-hud-kutu { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 999px; background: #1B2A4A; color: #E8EEFA; font-size: .8rem; font-weight: 700; border: 0; font-family: inherit; }
+    .hv-hud-kutu b { color: #FFD166; font-size: .98rem; }
+    .hv-hud-kutu i { font-style: normal; opacity: .7; font-size: .74rem; }
+    .hv-hud-kutu.hv-seri.acik { background: #E0662F; }
+    .hv-hareket { cursor: pointer; background: #fff; color: #1B2A4A; border: 2px solid #D9E2F2; min-height: 36px; touch-action: manipulation; }
+    .hv-hareket[aria-pressed="true"] { border-color: #2D5BD8; color: #1F47B8; background: #EEF3FF; }
+    .hv-ilerleme { height: 6px; border-radius: 99px; background: #E3E9F5; overflow: hidden; }
+    .hv-ilerleme i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #2D5BD8, #1FA37A); transition: width .4s ease; }
+
+    .hv-soru-kart { background: #fff; border: 2px solid #D9E2F2; border-radius: 20px; padding: 14px 18px; box-shadow: var(--shadow); display: flex; gap: 16px; align-items: center; text-align: left; }
+    .hv-gorsel { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
+    .hv-soru-ic { flex: 1 1 auto; min-width: 0; display: grid; gap: 6px; }
+    .hv-cip { justify-self: start; font-size: .7rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #1F47B8; background: #EEF3FF; border-radius: 30px; padding: 3px 10px; }
+    .hv-yonerge { margin: 0; font-size: .88rem; font-weight: 700; color: #5A6B8C; }
+    .hv-soru { margin: 0; font-size: clamp(1.08rem, 3.9vw, 1.4rem); font-weight: 800; color: #1B2A4A; line-height: 1.45; }
+    .hv-soru mark { background: #FFE9A8; color: inherit; border-radius: 6px; padding: 0 4px; }
+    .hv-bos { display: inline-block; min-width: 3.2em; border-bottom: 3px solid #2D5BD8; color: #2D5BD8; text-align: center; line-height: 1.1; }
+    .hv-ipucu-fiil { font-size: .8em; font-weight: 700; color: #7A879F; white-space: nowrap; }
+    .hv-durum { display: block; font-weight: 700; font-size: .92em; background: #FFF8E6; border-left: 4px solid #F0B429; border-radius: 10px; padding: 8px 12px; color: #3A3320; }
+    .hv-dinle { justify-self: start; display: inline-flex; align-items: center; gap: 6px; border: 2px solid #2D5BD8; background: #fff; color: #1F47B8; border-radius: 40px; padding: 7px 16px; font: inherit; font-weight: 800; font-size: .92rem; cursor: pointer; touch-action: manipulation; min-height: 44px; }
+    .hv-dinle.caliyor { background: #2D5BD8; color: #fff; }
+    .hv-sahne { display: flex; gap: 6px; align-items: center; font-size: clamp(1.7rem, 5vmin, 2.4rem); background: #F2F5FB; border-radius: 18px; padding: 10px 14px; white-space: nowrap; line-height: 1; }
+    .hv-sahne-buyuk { font-size: clamp(2rem, 6.4vmin, 3.1rem); letter-spacing: .04em; padding: 12px 18px; }
+    .hv-olcek { display: flex; flex-wrap: wrap; gap: 4px; }
+    .hv-olcek { align-items: center; }
+    .hv-olcek span { display: grid; justify-items: center; gap: 3px; background: #F2F5FB; border-radius: 8px; padding: 4px 7px; }
+    .hv-olcek b { color: #1B2A4A; font-size: .78rem; }
+    .hv-olcek em { display: flex; gap: 2px; }
+    .hv-olcek em i { width: 7px; height: 7px; border-radius: 50%; background: #fff; border: 1.5px solid #C9D5EA; }
+    .hv-olcek em i.dolu { background: #1FA37A; border-color: #138A63; }
+    .hv-olcek-ok { font-style: normal; font-weight: 800; color: #7A879F; font-size: .8rem; }
+    .hv-sayac { display: grid; gap: 8px; background: #F2F5FB; border-radius: 16px; padding: 10px 14px; min-width: 200px; }
+    .hv-sayac-bas { font-size: .8rem; font-weight: 800; color: #5A6B8C; display: flex; align-items: center; gap: 6px; }
+    .hv-sayac-bas span { font-size: 1.3rem; }
+    .hv-sayac-daire { display: flex; gap: 8px; }
+    .hv-sayac-daire i { width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 3px solid #C9D5EA; }
+    .hv-sayac-daire i.dolu { background: #1FA37A; border-color: #138A63; }
+    .hv-sayac-alt { display: flex; justify-content: space-between; font-size: .7rem; font-weight: 700; color: #7A879F; }
+    .hv-tarih { width: 104px; border-radius: 16px; overflow: hidden; background: #fff; border: 2px solid #D9E2F2; box-shadow: 0 3px 0 #D9E2F2; text-align: center; }
+    .hv-tarih-ay { display: block; background: #C0392B; color: #fff; font-weight: 800; font-size: .86rem; padding: 5px 4px; letter-spacing: .04em; }
+    .hv-tarih-gun { display: block; font-size: 2.3rem; font-weight: 800; color: #1B2A4A; padding: 6px 0 8px; line-height: 1; }
+    .hv-isaret { position: relative; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; background: #fff; }
+    .hv-isaret.yasak { border: 8px solid #D63031; }
+    .hv-isaret.zorunlu { border: 8px solid #1F6FD1; background: #EAF2FF; }
+    .hv-isaret-ikon { font-size: 2.3rem; line-height: 1; }
+    .hv-isaret-cizgi { position: absolute; left: 6%; right: 6%; top: 50%; height: 8px; margin-top: -4px; background: #D63031; transform: rotate(-45deg); border-radius: 4px; }
+    .hv-isaret-tik { position: absolute; right: -8px; bottom: -8px; width: 32px; height: 32px; border-radius: 50%; background: #1F6FD1; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1.1rem; border: 3px solid #fff; }
+    .hv-isaret-yazi { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); font-size: .66rem; font-weight: 800; letter-spacing: .06em; white-space: nowrap; color: #5A6B8C; }
+    .hv-soru-kart:has(.hv-isaret-yazi) .hv-gorsel { padding-bottom: 24px; }
+
+    /* Arena */
+    .hv-arena { position: relative; width: 100%; height: clamp(250px, 38vh, 340px); border-radius: 22px; overflow: hidden; border: 3px solid #BCD3F0; box-shadow: var(--shadow); touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: crosshair;
+      background: linear-gradient(180deg, #CFE6FF 0%, #E9F4FF 80%, #D8F0DC 80%, #BFE3C6 100%); }
+    .hv-arena.dar { height: 380px; }
+    .hv-bulut { position: absolute; background: #fff; border-radius: 999px; opacity: .8; pointer-events: none; }
+    .hv-bulut::before, .hv-bulut::after { content: ""; position: absolute; background: #fff; border-radius: 50%; }
+    .hv-bulut.b1 { width: 110px; height: 30px; left: 6%; top: 10%; } .hv-bulut.b1::before { width: 50px; height: 44px; left: 18px; top: -22px; } .hv-bulut.b1::after { width: 38px; height: 34px; left: 56px; top: -14px; }
+    .hv-bulut.b2 { width: 84px; height: 24px; right: 10%; top: 22%; } .hv-bulut.b2::before { width: 40px; height: 36px; left: 14px; top: -18px; } .hv-bulut.b2::after { width: 30px; height: 28px; left: 44px; top: -12px; }
+    .hv-bulut.b3 { width: 70px; height: 20px; left: 46%; top: 6%; opacity: .6; } .hv-bulut.b3::before { width: 32px; height: 30px; left: 12px; top: -15px; } .hv-bulut.b3::after { display: none; }
+    .hv-hedef { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); border: 0; padding: 0 0 20px; margin: 0; background: none; font: inherit; cursor: crosshair; touch-action: manipulation; z-index: 2; -webkit-tap-highlight-color: transparent; }
+    .hv-hedef-ic { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 64px; padding: 14px 12px 12px; border-radius: 28px; color: #fff; text-align: center; box-shadow: inset -6px -8px 0 rgba(0,0,0,.12), 0 6px 14px rgba(27,42,74,.18); animation: hvGir .45s cubic-bezier(.3,1.4,.5,1) both; transition: box-shadow .15s, filter .15s; }
+    .hv-hedef-ic::before { content: ""; position: absolute; left: 14px; top: 8px; width: 22px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.35); transform: rotate(-20deg); }
+    .hv-hedef-ic::after { content: ""; position: absolute; left: 50%; bottom: -20px; width: 2px; height: 20px; margin-left: -1px; background: rgba(27,42,74,.35); }
+    .hv-hedef:nth-child(5) .hv-hedef-ic { animation-delay: .06s; } .hv-hedef:nth-child(6) .hv-hedef-ic { animation-delay: .12s; } .hv-hedef:nth-child(7) .hv-hedef-ic { animation-delay: .18s; }
+    .hv-hedef.r0 .hv-hedef-ic { background: #1F6FD1; } .hv-hedef.r1 .hv-hedef-ic { background: #138A63; }
+    .hv-hedef.r2 .hv-hedef-ic { background: #C2551A; } .hv-hedef.r3 .hv-hedef-ic { background: #7A45C4; }
+    /* Harf rozeti balonun köşesinde: yazıya tam genişlik kalır, uzun sözcükler bölünmez */
+    .hv-hedef-harf { position: absolute; top: -9px; left: -5px; z-index: 1; width: 28px; height: 28px; border-radius: 50%; background: #fff; color: #1B2A4A; font-size: .82rem; font-weight: 800; display: grid; place-items: center; box-shadow: 0 1px 4px rgba(27,42,74,.35); }
+    .hv-hedef-yazi { flex: 1 1 auto; font-size: clamp(.92rem, 1.9vw, 1.1rem); font-weight: 800; line-height: 1.28; overflow-wrap: break-word; hyphens: none; min-width: 0; text-shadow: 0 1px 1px rgba(0,0,0,.18); }
+    .hv-hedef.uzun .hv-hedef-yazi { font-size: clamp(.84rem, 1.6vw, .98rem); }
+    .hv-hedef:hover:not(.kilitli) .hv-hedef-ic, .hv-hedef:focus-visible .hv-hedef-ic { box-shadow: inset -6px -8px 0 rgba(0,0,0,.12), 0 0 0 5px rgba(255,209,102,.85), 0 8px 18px rgba(27,42,74,.25); }
+    .hv-hedef:focus-visible { outline: none; }
+    .hv-hedef.kilitli { cursor: default; }
+    .hv-hedef.sondu .hv-hedef-ic { filter: grayscale(1) opacity(.35); }
+    .hv-hedef.iska .hv-hedef-ic { background: #8B94A7; animation: hvIska .5s ease both; }
+    .hv-hedef.goster .hv-hedef-ic { box-shadow: 0 0 0 5px #fff, 0 0 0 9px #1FA37A, 0 8px 18px rgba(27,42,74,.25); }
+    .hv-hedef.goster .hv-hedef-harf { background: #1FA37A; color: #fff; }
+    .hv-hedef.goster .hv-hedef-harf::after { content: "✓"; position: absolute; }
+    .hv-hedef.goster .hv-hedef-harf { font-size: 0; } .hv-hedef.goster .hv-hedef-harf::after { font-size: 1rem; }
+    .hv-hedef.vuruldu .hv-hedef-ic { animation: hvPatla .45s ease-out forwards; }
+    .hv-parca { position: absolute; left: 50%; top: 40%; width: 10px; height: 10px; border-radius: 3px; pointer-events: none; animation: hvParca .6s ease-out forwards; }
+    @keyframes hvGir { from { opacity: 0; transform: scale(.4) translateY(30px); } to { opacity: 1; transform: none; } }
+    @keyframes hvPatla { 0% { transform: scale(1); opacity: 1; } 40% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+    @keyframes hvIska { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-9px) rotate(-3deg); } 45% { transform: translateX(8px) rotate(2deg); } 70% { transform: translateX(-5px); } }
+    @keyframes hvParca { from { transform: translate(-50%, -50%); opacity: 1; } to { transform: translate(calc(-50% + var(--px)), calc(-50% + var(--py))) rotate(160deg); opacity: 0; } }
+    .hv-dart { position: absolute; left: 0; top: 0; width: 20px; height: 44px; z-index: 4; pointer-events: none; opacity: 0; }
+    .hv-dart.ucuyor { opacity: 1; }
+    .hv-dart svg { width: 100%; height: 100%; display: block; fill: #C0392B; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+    .hv-atici { position: absolute; left: 50%; bottom: 4px; width: 54px; height: 54px; transform: translateX(-50%); pointer-events: none; z-index: 3; filter: drop-shadow(0 2px 3px rgba(0,0,0,.25)); }
+
+    .hv-geri { border-radius: 18px; padding: 12px 16px; display: grid; gap: 8px; text-align: left; border: 2px solid; }
+    .hv-geri.iyi { background: #E8F7EF; border-color: #9ED9B8; }
+    .hv-geri.kotu { background: #FFF1EC; border-color: #F4C2AE; }
+    .hv-geri-bas { display: flex; align-items: center; gap: 10px; font-size: .98rem; font-weight: 700; color: #1B2A4A; }
+    .hv-geri-bas img { width: 42px; height: 42px; flex: 0 0 auto; }
+    .hv-geri.iyi .hv-geri-bas b { color: #137046; } .hv-geri.kotu .hv-geri-bas b { color: #B23A12; }
+    .hv-geri-neden { margin: 0; font-size: .95rem; font-weight: 600; color: #3A2A20; line-height: 1.5; }
+    .hv-geri-tam { margin: 0; font-size: 1rem; font-weight: 800; color: #137046; line-height: 1.45; }
+    .hv-devam { justify-self: end; min-width: 170px; min-height: 48px; }
+
+    @media (max-width: 640px) {
+      .hv-soru-kart { flex-direction: column; align-items: stretch; padding: 12px 14px; gap: 10px; }
+      .hv-gorsel { justify-content: flex-start; }
+      .hv-secim-sira { flex-direction: column; }
+      .hv-hedef-ic { min-height: 56px; padding: 12px 8px 10px; gap: 6px; border-radius: 22px; }
+      .hv-hedef-harf { width: 24px; height: 24px; font-size: .74rem; }
+      .hv-hedef-yazi, .hv-hedef.uzun .hv-hedef-yazi { font-size: .88rem; }
+      .hv-hedef.uzun .hv-hedef-yazi { font-size: .8rem; }
+      .hv-arena.dar .hv-hedef-ic { padding: 12px 8px 10px; }
+      .hv-devam { justify-self: stretch; }
+    }
+    @media (max-height: 700px) and (min-width: 641px) {
+      .hv-arena { height: clamp(230px, 42vh, 300px); }
+    }
+    body.tahta .hv-arena { height: clamp(300px, 44vh, 460px); }
+    body.tahta .hv-hedef-yazi { font-size: clamp(1rem, 1.7vw, 1.3rem); }
+    @media (prefers-reduced-motion: reduce) {
+      .hv-hedef-ic, .hv-hedef.iska .hv-hedef-ic, .hv-hedef.vuruldu .hv-hedef-ic, .hv-parca { animation: none; }
+      .hv-hedef.vuruldu .hv-hedef-ic { opacity: .25; }
+    }
+
+    /* ═══ 7. SINIF DKAB · KAVRAM HATTI (mh-) ══════════════════════════════════
+       Sade kart + kutu düzeni. Kart ortada DURUR (akmaz); --tur görev türünün
+       rengidir. İki kutulu görevde kutular kartın iki yanında (dar ekranda
+       altında); ahiret sıralamasında kutular aşama hattının boşluklarıdır. */
+    .mh-oyun { --tur: #4C6FD8; display: grid; gap: 10px; max-width: 980px; margin: 0 auto; }
+    .mh-hud { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .mh-hud-kutu { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 999px; background: #22284A; color: #EEF0FA; font-size: .82rem; font-weight: 700; }
+    .mh-hud-kutu b { color: #FFD166; font-size: 1rem; }
+    .mh-hud-kutu i { font-style: normal; opacity: .7; font-size: .76rem; }
+    .mh-hud-kutu.mh-seri.acik { background: #D9822B; }
+    .mh-cizgi { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; padding: 2px 4px; }
+    .mh-cizgi i { width: 12px; height: 12px; border-radius: 50%; background: #E3E6F0; }
+    .mh-cizgi i.dogru { background: #2FA36B; } .mh-cizgi i.yanlis { background: #E0735E; } .mh-cizgi i.atla { background: #B7BCCD; }
+    .mh-cizgi i.simdi { background: #fff; box-shadow: 0 0 0 3px var(--tur); }
+
+    .mh-sahne { position: relative; display: grid; gap: 14px; justify-items: center; background: linear-gradient(180deg, #F6F7FC, #EEF1F9); border: 2px solid #E1E5F1; border-radius: 24px; padding: 16px 16px 18px; }
+    .mh-yonerge { margin: 0; font-size: clamp(1rem, 3.4vw, 1.18rem); font-weight: 800; color: #22284A; text-align: center; line-height: 1.4; }
+    .mh-orta { width: 100%; display: grid; justify-items: center; }
+    .mh-sahne.yan .mh-orta { grid-template-columns: 1fr minmax(260px, 380px) 1fr; gap: 16px; align-items: center; }
+    .mh-kutular.yan { display: contents; }
+    .mh-sahne.yan .mh-kutu:nth-child(1) { order: 0; } .mh-sahne.yan .mh-kart-yer { order: 1; } .mh-sahne.yan .mh-kutu:nth-child(2) { order: 2; }
+    .mh-sahne.yan .mh-kutu { width: 100%; min-height: 150px; font-size: clamp(1rem, 2vw, 1.12rem); }
+
+    .mh-kart-yer { width: 100%; display: flex; justify-content: center; }
+    .mh-kart { position: relative; width: min(380px, 100%); min-height: 170px; display: grid; align-content: start; gap: 8px; background: #fff; border-radius: 22px; border-top: 7px solid var(--tur); padding: 14px 18px 18px; box-shadow: 0 10px 26px rgba(34,40,74,.14); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; animation: mhGel .5s cubic-bezier(.25,.9,.35,1.1) both; z-index: 3; outline: none; }
+    .mh-kart:focus-visible { box-shadow: 0 0 0 4px rgba(76,111,216,.35), 0 10px 26px rgba(34,40,74,.14); }
+    .mh-kart.tutuldu { cursor: grabbing; box-shadow: 0 18px 36px rgba(34,40,74,.26); z-index: 10; animation: none; }
+    .mh-kart.ucuyor { transition: transform .38s cubic-bezier(.5,0,.75,.4), opacity .38s ease-in; animation: none; }
+    .mh-kart.donus { transition: transform .35s ease-out, opacity .2s; animation: mhSalla .45s .32s ease both; }
+    .mh-kart-ust { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .mh-kart-tur { font-size: .74rem; font-weight: 800; color: var(--tur); background: color-mix(in srgb, var(--tur) 12%, #fff); padding: 3px 10px; border-radius: 999px; }
+    .mh-kart-zor { font-size: .7rem; font-weight: 800; color: #6B7290; }
+    .mh-kart-zor.z3::before { content: "💡 "; }
+    .mh-kart-etiket { font-size: .76rem; font-weight: 700; color: #8A90A8; text-transform: uppercase; letter-spacing: .05em; }
+    .mh-kart-metin { margin: 0; padding-right: 30px; font-size: clamp(1.02rem, 3.6vw, 1.18rem); font-weight: 700; color: #22284A; line-height: 1.5; }
+    .mh-kart.buyuk .mh-kart-metin { font-size: clamp(1.5rem, 5.4vw, 2rem); font-weight: 800; text-align: center; padding: 14px 0 6px; }
+    .mh-dinle { position: absolute; right: 10px; bottom: 10px; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #E1E5F1; background: #fff; font-size: 1rem; cursor: pointer; touch-action: manipulation; }
+
+    .mh-kutular { width: 100%; display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
+    .mh-kutular.n2 { grid-template-columns: repeat(2, 1fr); } .mh-kutular.n4 { grid-template-columns: repeat(4, 1fr); }
+    .mh-kutu { position: relative; display: flex; align-items: center; justify-content: center; min-height: 72px; padding: 14px 12px 12px; border: 2.5px dashed color-mix(in srgb, var(--tur) 45%, #fff); background: #fff; border-radius: 18px; font: inherit; font-weight: 800; font-size: clamp(.95rem, 2.2vw, 1.05rem); color: #22284A; line-height: 1.35; text-align: center; cursor: pointer; touch-action: manipulation; transition: transform .15s, background .15s, border-color .15s; }
+    .mh-kutu.uzun { font-size: clamp(.9rem, 2vw, .98rem); font-weight: 700; }
+    .mh-kutu-no { position: absolute; top: 6px; left: 8px; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--tur) 14%, #fff); color: var(--tur); font-size: .72rem; font-weight: 800; display: grid; place-items: center; }
+    .mh-kutu-yazi { padding: 0 6px; overflow-wrap: break-word; }
+    .mh-kutu:hover:not(.kilitli), .mh-kutu.uzerinde { border-style: solid; border-color: var(--tur); background: color-mix(in srgb, var(--tur) 8%, #fff); transform: translateY(-2px); }
+    .mh-kutu.uzerinde { transform: scale(1.04); }
+    .mh-kutu.kilitli { cursor: default; }
+    .mh-kutu.dogru, .mh-kutu.goster { border: 2.5px solid #2FA36B; background: #E8F7EF; color: #17603D; }
+    .mh-kutu.goster { box-shadow: 0 0 0 4px rgba(47,163,107,.25); }
+    .mh-kutu.yanlis { border: 2.5px solid #D2553F; background: #FDEDEA; color: #8E2A1A; }
+    .mh-kutu.sondu { opacity: .35; }
+    .mh-kutular.durt .mh-kutu, .mh-hat.durt .mh-kutu { animation: mhDurt .6s ease; }
+
+    .mh-hat { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 6px; }
+    .mh-hat-oge { display: inline-flex; align-items: center; gap: 6px; }
+    .mh-hat-dolu { display: inline-flex; align-items: center; min-height: 56px; padding: 8px 14px; border-radius: 14px; background: color-mix(in srgb, var(--tur) 14%, #fff); color: #3F2A6B; font-weight: 800; font-size: .98rem; }
+    .mh-yuva { min-width: 118px; min-height: 56px; }
+    .mh-yuva .mh-kutu-yazi { font-size: 1.3rem; color: color-mix(in srgb, var(--tur) 70%, #22284A); }
+    .mh-yuva.dogru .mh-kutu-yazi { font-size: .98rem; color: #17603D; }
+    .mh-hat-ok { font-weight: 800; color: #9AA0B8; }
+
+    .mh-meal { width: 100%; max-width: 620px; background: #fff; border: 1.5px solid #E1E5F1; border-radius: 14px; padding: 8px 14px; font-size: .9rem; color: #3A4060; }
+    .mh-meal summary { cursor: pointer; font-weight: 800; color: #C9486A; min-height: 32px; display: flex; align-items: center; }
+    .mh-meal p { margin: 6px 0 4px; line-height: 1.6; font-style: italic; }
+    .mh-ipucu { margin: 0; font-size: .84rem; font-weight: 700; color: #6B7290; text-align: center; }
+
+    .mh-geri { border-radius: 18px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border: 2px solid; font-size: 1rem; }
+    .mh-geri.iyi { background: #E8F7EF; border-color: #A8DDBF; color: #17603D; }
+    .mh-geri.iyi span { font-weight: 700; color: #2E7D50; }
+    .mh-geri.kotu { background: #FFF3EE; border-color: #F2C3B2; color: #4A2A20; }
+    .mh-geri-a { margin: 0; flex: 1 1 320px; line-height: 1.5; font-weight: 600; }
+    .mh-geri-a b { color: #17603D; }
+    .mh-devam { min-width: 150px; min-height: 48px; }
+
+    @keyframes mhGel { from { opacity: 0; transform: translateY(-26px) scale(.94); } to { opacity: 1; transform: none; } }
+    @keyframes mhSalla { 0%, 100% { translate: 0; } 25% { translate: -8px; } 50% { translate: 7px; } 75% { translate: -4px; } }
+    @keyframes mhDurt { 0%, 100% { transform: none; } 40% { transform: scale(1.05); } }
+
+    @media (max-width: 700px) {
+      .mh-sahne { padding: 12px 10px 14px; border-radius: 20px; }
+      .mh-sahne.yan .mh-orta { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .mh-sahne.yan .mh-kart-yer { order: -1; grid-column: 1 / -1; }
+      .mh-sahne.yan .mh-kutu { min-height: 84px; }
+      .mh-kutular.n4 { grid-template-columns: repeat(2, 1fr); }
+      .mh-kutular.n3:not(.uzun-var) { grid-template-columns: 1fr; }
+      .mh-kutular .mh-kutu { min-height: 58px; }
+      .mh-kart { min-height: 150px; }
+      .mh-devam { flex: 1 1 100%; }
+    }
+    body.tahta .mh-kart-metin { font-size: clamp(1.2rem, 1.8vw, 1.5rem); }
+    body.tahta .mh-kart.buyuk .mh-kart-metin { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+    body.tahta .mh-kutu { font-size: clamp(1.05rem, 1.5vw, 1.3rem); min-height: 84px; }
+    @media (prefers-reduced-motion: reduce) {
+      .mh-kart, .mh-kart.donus, .mh-kutular.durt .mh-kutu, .mh-hat.durt .mh-kutu { animation: none; }
+      .mh-kart.ucuyor, .mh-kart.donus { transition: none; }
+    }
+
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
@@ -17236,6 +17482,8 @@ const UNITE_BILGI = {
   "Classroom Life": { emoji: "🎒", aciklama: "İngilizce Theme 2: sınıf yönergeleri, sınıf eşyaları ve mobilyaları, teknolojik araçlar, renkler, 1-20 sayıları ve sınıf içi kibar izin ifadeleri." },
   "School Life": { emoji: "🏫", aciklama: "İngilizce Theme 1: selamlaşma ve tanışma, okuldaki kişiler, okul bölümleri ve haftanın günleri. Dinleme ve konuşma kalıpları İngilizce sesle çalışılır." },
   "Global School Life": { emoji: "🌍", aciklama: "İngilizce 9. sınıf Theme 1 – School Life: ülkeler, milliyetler, diller ve başkentler; turistik yerler, tarihî yapılar ve müzeler; gezide yapılabilecek etkinlikler. Gramerde «to be» (am/is/are) ve yetenek/olasılık bildiren «can» kalıpları cümle içinde çalışılır." },
+  "7|1. Ünite · Melek ve Ahiret İnancı": { emoji: "🕊️", aciklama: "Din Kültürü ve Ahlak Bilgisi 7. sınıf 1. ünite: melekler ve görevleri (Cebrail, Mikail, İsrafil, Azrail, Kiramen Kâtibin, Münker ve Nekir), gözle görülen ve görülemeyen varlıklar, ahiret hayatının aşamaları (ömür, ecel, kıyamet, baas, mahşer, amel defteri, mizan, cennet, cehennem), melek ve ahiret inancının davranışlara etkisi ve Nâs suresinin anlamı." },
+  "7|Theme 1: School Life & Education": { emoji: "🏆", aciklama: "İngilizce 7. sınıf Theme 1 – School Life & Education: okul içi etkinlikler ve kulüpler, yarışmalar ve kutlamalar, okul gezileri, millî ve dinî günler. Tema sözcükleri (drama play, exhibition, audience, competition, winner, prize, race, act, attend, celebrate, beat, break a record) okul bağlamında kullanılır. Gramerde Simple Present ile Present Progressive ayrımı, always → usually → often → sometimes → rarely → never sıklık sırası (oran verilmez) ve must / can't ile kural ve yasaklar. Özel günler: 29 Ekim, 23 Nisan, 19 Mayıs, 15 Temmuz, 30 Ağustos, Ramazan ve Kurban Bayramı." },
   "School Clubs": { emoji: "🎭", aciklama: "İngilizce 9. sınıf Theme 1 – School Life: okul kulüpleri, yetenekler ve günlük beceriler. «can / can't» ile yapabildiklerini ve yapamadıklarını söyleme, «Can he/she …?» sorusuna «Yes/No» kısa yanıtı verme, «Who can …?» ve «Find someone who can …» kalıplarıyla kulübe uygun kişiyi seçme." },
   "Yaşadığım Yer ve Ülkem": { emoji: "🗺️", aciklama: "Yaşadığım Yer ve Ülkem, Doğa ve Çevre ile Bilim, Teknoloji ve Sanat öğrenme alanları: tarihî ve doğal değerler, yönetim birimleri, özel günler, hava-mevsim ilişkisi, ana yönler, afetlere hazırlık, doğal kaynakları tasarruflu kullanma, bilim insanları ve teknolojinin değişimi." },
   "Günlük Yaşamım": { emoji: "📅", aciklama: "Ben ve Okulum ile Ailem ve Toplum öğrenme alanları: planlı olma ve zaman yönetimi, öğretmen ve arkadaşlarla etkili iletişim, arkadaşlık ilişkileri, sınıf içinde ortak karar alma, nezaket ve görgü kuralları, yaşa uygun görev ve sorumluluklar." },
@@ -37899,6 +38147,1549 @@ const INGILIZCE_5 = [
       "To be, who/what questions, personal pronouns in short dialogues", "Listening and reading comprehension; positive-statement intonation awareness"] },
 ];
 
+/* ═════════ 7. SINIF İNGİLİZCE · SCHOOL CHALLENGE – HEDEFİ VUR (hv-) ═════════
+   Türkiye Yüzyılı Maarif Modeli, Çoklu Yabancı Dil Eğitim Modeli İngilizce
+   (Ortaokul) · 7. sınıf · THEME 1: SCHOOL LIFE & EDUCATION (bkz. mufredat.js
+   «ing-7», ENG.7.1.*): okul içi eğitsel etkinlikler, yarışmalar ve
+   kutlamalar, okul gezileri, millî/dinî günler.
+
+   Kapsam: extra-curricular activities · competitions and celebrations ·
+   national / religious days (29 October Republic Day, 23 April National
+   Sovereignty and Children's Day, 19 May Commemoration of Atatürk, Youth and
+   Sports Day, 15 July Democracy and National Unity Day, 30 August Victory
+   Day, Eid al-Fitr, Eid al-Adha / Festival of Sacrifice) · tema sözcükleri (drama play, exhibition,
+   audience, competition, winner, prize, race, act, attend, celebrate, beat,
+   break a record …) · Simple Present · Present Progressive · always / usually
+   / often / sometimes / rarely / never · must / can't ile kural ve yasaklar.
+
+   İLKELER: kural adı ezberletilmez, yapı okul bağlamında KULLANILIR; hiçbir
+   soru yalın Türkçe→İngilizce çeviri değildir. Çeldiriciler 7. sınıfın gerçek
+   hatalarıdır (draws/draw, is draw, -ing'i be'siz bırakma, won the other team,
+   must to, don't must, sıklık zarfını fiilden sonra koyma, studys/runing…).
+   İki savunulabilir cevap aynı hedef kümesine GİRMEZ: can't doğruyken
+   «mustn't» seçenek olmaz; «beat the record» kabul edilebilir olduğu için
+   record sorusunda beat çeldirici değildir; sıklık zarfının cümle başı/sonu
+   kullanımı (bazen doğru) çeldirici yapılmaz.
+
+   MEKANİK: üstte soru kartı, altta yavaşça süzülen 3-4 hedef balon. Hedefler
+   kendi şeritlerinde (masaüstü tek satır, dar ekran 2×2) salınır, birbirine
+   değmez; refleks yarışı yoktur — en hızlı hedef saniyede ~25 px yol alır,
+   «Still targets» ile tamamen durur (prefers-reduced-motion'da varsayılan).
+   Dokun / tıkla / 1-4 ya da A-D tuşu → dart uçar → balon patlar. Yanlışta
+   seçilen çeldiriciye ÖZGÜ kısa Türkçe açıklama çıkar, doğru hedef yeşil
+   işaretlenir, öğrenci okuyup «Continue» der. Tur 25/28/30 soru; soru
+   üreticileri + el yazımı havuzlar ≥ 1000 farklı kombinasyon verir, bir turda
+   soru tekrarlanmaz, doğru cevabın konumu turda dengeli dağıtılır ve arka
+   arkaya aynı konuma düşmez. */
+
+const HV_KAT = {
+  activities: "🎨 Extra-curricular Activities", events: "🏆 Competitions & Celebrations",
+  days: "🎉 National & Religious Days", vocab: "🔤 Theme Vocabulary", situations: "🏫 School Situations",
+  present: "🔁 Simple Present", progressive: "⏱️ Present Progressive", frequency: "📊 Frequency Adverbs",
+  rules: "🚦 Rules: must / can't",
+};
+const HV_SEVIYE = {
+  1: { ad: "Easy", n: 3, soru: 25, periyot: 12, genlik: .5, plan: { gorsel: 4, kelime: 4, durum: 2, gun: 3, simple: 3, prog: 3, anlam: 1, siklik: 3, kural: 2 } },
+  2: { ad: "Medium", n: 4, soru: 28, periyot: 9.5, genlik: .75, plan: { gorsel: 3, kelime: 4, durum: 3, gun: 3, simple: 3, prog: 3, anlam: 2, siklik: 3, siklikSira: 1, kural: 2, isaret: 1 } },
+  3: { ad: "Hard", n: 4, soru: 30, periyot: 8, genlik: .85, plan: { gorsel: 2, kelime: 5, durum: 3, gun: 3, simple: 3, prog: 3, anlam: 2, siklik: 3, siklikSira: 2, kural: 3, isaret: 1 } },
+};
+
+/* Kişiler kurgusaldır. z: zamir anahtarı (be / -s uyumu ondan çıkar) */
+const HV_KISI = [
+  { ad: "Elif", z: "she", k: "👧" }, { ad: "Mert", z: "he", k: "👦" }, { ad: "Zeynep", z: "she", k: "👧" },
+  { ad: "Kerem", z: "he", k: "👦" }, { ad: "Defne", z: "she", k: "👧" }, { ad: "Emir", z: "he", k: "👦" },
+  { ad: "My friends", z: "they", k: "👧👦" }, { ad: "Ali and Ece", z: "they", k: "👦👧" },
+  { ad: "We", z: "we", k: "🧑‍🤝‍🧑" }, { ad: "I", z: "i", k: "🙋" },
+];
+/* Okul etkinlikleri: kök · 3. tekil · -ing · tümleç. yil: yalnız yılda bir
+   olan etkinlik («every year» ile), yazim/yazimS: gerçek yazım hatası
+   (yalnız Hard'da çeldirici), aile: resimde karışabilecek etkinlikler */
+const HV_ETK = [
+  { id: "draw", kok: "draw", s: "draws", ing: "drawing", obj: "a poster for the art exhibition", e: "🎨", sahne: "🎨🖼️✏️" },
+  { id: "act", kok: "act", s: "acts", ing: "acting", obj: "in the school drama play", e: "🎭", sahne: "🎭👑🎟️", aile: "drama" },
+  { id: "sing", kok: "sing", s: "sings", ing: "singing", obj: "in the school choir", e: "🎤", sahne: "🎤🎶🎼", dinle: true, aile: "muzik" },
+  { id: "guitar", kok: "practise", s: "practises", ing: "practising", obj: "the guitar for the talent show", e: "🎸", sahne: "🎸⭐🎙️", dinle: true, aile: "muzik" },
+  { id: "chess", kok: "play", s: "plays", ing: "playing", obj: "chess in the chess club", e: "♟️", sahne: "♟️♞🏁" },
+  { id: "race", kok: "run", s: "runs", ing: "running", obj: "in the school race", e: "🏃", sahne: "🏃💨🏁", yil: true, yazim: "runing", aile: "spor" },
+  { id: "science", kok: "prepare", s: "prepares", ing: "preparing", obj: "a model for the science fair", e: "🔬", sahne: "🔬🌋🧪", yazim: "prepareing" },
+  { id: "basket", kok: "train", s: "trains", ing: "training", obj: "with the basketball team", e: "🏀", sahne: "🏀⛹️🥅", aile: "spor" },
+  { id: "decorate", kok: "decorate", s: "decorates", ing: "decorating", obj: "the classroom for Republic Day", e: "🎈", sahne: "🎈🎉🏫", yil: true, yazim: "decorateing" },
+  { id: "poem", kok: "read", s: "reads", ing: "reading", obj: "a poem at the 23 April ceremony", e: "📜", sahne: "📜🎙️👏", yil: true },
+  { id: "magazine", kok: "write", s: "writes", ing: "writing", obj: "stories for the school magazine", e: "📝", sahne: "📝📰✨", yazim: "writeing" },
+  { id: "spelling", kok: "study", s: "studies", ing: "studying", obj: "for the spelling competition", e: "📚", sahne: "📚🔤🏆", yazimS: "studys" },
+  { id: "volley", kok: "watch", s: "watches", ing: "watching", obj: "the volleyball match", e: "🏐", sahne: "🏐👀📣", yazimS: "watchs", aile: "spor" },
+  { id: "robot", kok: "build", s: "builds", ing: "building", obj: "a robot in the robotics club", e: "🤖", sahne: "🤖🔧💻" },
+  { id: "dance", kok: "dance", s: "dances", ing: "dancing", obj: "in the folk dance team", e: "💃", sahne: "💃🕺🎶", yazim: "danceing", aile: "muzik" },
+  { id: "swim", kok: "swim", s: "swims", ing: "swimming", obj: "for the school swimming team", e: "🏊", sahne: "🏊🌊🥇", yazim: "swiming", aile: "spor" },
+  { id: "photo", kok: "take", s: "takes", ing: "taking", obj: "photos for the school yearbook", e: "📷", sahne: "📷📸🗂️", yazim: "takeing" },
+  { id: "rehearse", kok: "rehearse", s: "rehearses", ing: "rehearsing", obj: "for the end-of-year show", e: "🎬", sahne: "🎬📋🕒", yazim: "rehearseing", aile: "drama" },
+];
+const HV_SIMDI = ["now", "right now", "at the moment"];
+const HV_RUTIN = ["every Friday", "on Wednesdays", "twice a week", "after school every day"];
+/* Yalnız SIRA vardır, sabit yüzde yoktur. d: göstergede dolu daire (0-5) —
+   oran değil, sıradaki basamak. */
+const HV_SIKLIK = [
+  { z: "always", d: 5 }, { z: "usually", d: 4 }, { z: "often", d: 3 },
+  { z: "sometimes", d: 2 }, { z: "rarely", d: 1 }, { z: "never", d: 0 },
+];
+const HV_SIKLIK_OLCEK = "always → usually → often → sometimes → rarely → never";
+const hvDaireler = d => Array.from({ length: 5 }, (_, i) => `<i class="${i < d ? "dolu" : ""}"></i>`).join("");
+/* «be» ile sıklık zarfı (zarf be'den SONRA gelir) */
+const HV_BE_DURUM = ["late for the drama rehearsal", "excited on Sports Day", "nervous before a competition",
+  "busy on Friday afternoons", "on time for the school trip", "happy at the end-of-year show"];
+
+/* Kurallar: must = zorunluluk, can't = yasak. mustn't bilerek YOK (can't ile
+   ikisi birden doğru olurdu). */
+const HV_KURAL = [
+  { yer: "🏆 Competition", c: "You ___ follow the competition rules.", m: "must", i: "📋" },
+  { yer: "🏆 Quiz competition", c: "You ___ look at other students' answers.", m: "can't", i: "👀" },
+  { yer: "📚 Library", c: "You ___ talk loudly in the library.", m: "can't", i: "🗣️" },
+  { yer: "📚 Library", c: "You ___ return the books on time.", m: "must", i: "📕" },
+  { yer: "🔬 Science lab", c: "You ___ wear safety glasses in the lab.", m: "must", i: "🥽" },
+  { yer: "🔬 Science lab", c: "You ___ eat or drink in the lab.", m: "can't", i: "🍔" },
+  { yer: "🚌 School trip", c: "You ___ stay with your group on the school trip.", m: "must", i: "👫" },
+  { yer: "🏛️ Museum trip", c: "You ___ touch the old objects in the museum.", m: "can't", i: "🏺" },
+  { yer: "🏃 School race", c: "Runners ___ start before the whistle.", m: "can't", i: "📣" },
+  { yer: "🏃 School race", c: "Runners ___ stay in their own lane.", m: "must", i: "🛤️" },
+  { yer: "🖼️ Art exhibition", c: "Visitors ___ touch the paintings.", m: "can't", i: "🖼️" },
+  { yer: "🎭 Drama play", c: "The audience ___ switch off their phones during the play.", m: "must", i: "📴" },
+  { yer: "🎭 Drama play", c: "The audience ___ take photos with a flash.", m: "can't", i: "📸" },
+  { yer: "🎤 Ceremony", c: "Students ___ stand still during the National Anthem.", m: "must", i: "🧍" },
+  { yer: "📝 Exam", c: "You ___ use your phone during the exam.", m: "can't", i: "📱" },
+  { yer: "📝 Exam", c: "You ___ write your name on the answer sheet.", m: "must", i: "✍️" },
+  { yer: "🏀 Sports Day", c: "Players ___ wear their team T-shirts.", m: "must", i: "👕" },
+  { yer: "🏫 Corridor", c: "You ___ run in the corridors.", m: "can't", i: "🏃" },
+];
+
+/* Tema sözcükleri — bağlam cümlesi, el ile seçilmiş gerçek çeldiriciler.
+   k: kategori (vocab / activities / events) */
+const HV_KELIME = [
+  { k: "vocab", c: "The ___ clapped and cheered at the end of the drama play.", d: "audience", y: ["winner", "prize", "race"], not: "audience = seyirciler: oyunu izleyip alkışlayan kişiler." },
+  { k: "vocab", c: "Ece came first in the poetry competition. She is the ___.", d: "winner", y: ["audience", "exhibition", "race"], not: "winner = kazanan. Yarışmada birinci olan kişi." },
+  { k: "vocab", c: "The winner of the spelling competition got a ___: a big box of books.", d: "prize", y: ["race", "audience", "stage"], not: "prize = ödül. Kazanana verilen şey." },
+  { k: "vocab", c: "Our art teacher is organising a big ___ of students' paintings in the hall.", d: "exhibition", y: ["audience", "race", "winner"], not: "exhibition = sergi. Resimler, projeler insanlara gösterilir." },
+  { k: "vocab", c: "Students from ten schools will join the robotics ___ next week.", d: "competition", y: ["audience", "winner", "prize"], not: "competition = yarışma. Okullar ya da öğrenciler birbiriyle yarışır." },
+  { k: "vocab", c: "Kerem is the fastest runner in our class. He always wins the ___ on Sports Day.", d: "race", y: ["exhibition", "audience", "poem"], not: "race = koşu yarışı. «win the race» = yarışı kazanmak." },
+  { k: "vocab", c: "Mert wants to ___ in the school play. He wants to be the king!", d: "act", y: ["beat", "attend", "celebrate"], not: "act = rol yapmak, oynamak. «act in a play» = oyunda rol almak." },
+  { k: "vocab", c: "Zeynep ___ the chess club every Tuesday after school.", d: "attends", y: ["celebrates", "beats", "acts"], not: "attend = katılmak, devam etmek: «attend a club / a lesson / a ceremony»." },
+  { k: "vocab", c: "We ___ Republic Day on 29 October every year.", d: "celebrate", y: ["beat", "attend", "win"], not: "celebrate = kutlamak. Bayramlar ve özel günler kutlanır." },
+  { k: "vocab", c: "Our team played very well. We ___ the other team 3–1.", d: "beat", y: ["won", "attended", "celebrated"], not: "beat + RAKİP (beat the other team), win + YARIŞMA/ÖDÜL (win the match). «won the other team» yanlış." },
+  { k: "vocab", c: "Defne ran 100 metres in 12 seconds. Nobody ran faster before. She ___ the school record.", d: "broke", y: ["won", "attended", "celebrated"], not: "break a record = rekor kırmak (geçmiş: broke). Rekor «kazanılmaz» — «won the record» yanlış." },
+  { k: "vocab", c: "The actors ___ on the stage every afternoon before the big show.", d: "rehearse", y: ["celebrate", "beat", "win"], not: "rehearse = prova yapmak. Gösteriden önce tekrar tekrar çalışılır." },
+  { k: "vocab", c: "Please be quiet. The play is starting and the ___ is waiting.", d: "audience", y: ["winner", "prize", "race"], not: "audience = seyirci topluluğu; oyunun başlamasını bekleyenler onlardır." },
+  { k: "activities", c: "The students are wearing colourful ___ for the drama play.", d: "costumes", y: ["prizes", "races", "audiences"], not: "costume = kostüm. Oyuncular rol için giyer." },
+  { k: "events", c: "The winner will get a gold ___ and a certificate.", d: "medal", y: ["race", "audience", "stage"], not: "medal = madalya. Gold / silver / bronze medal." },
+  { k: "events", c: "Hundreds of people visited the science ___ and looked at our projects.", d: "fair", y: ["race", "winner", "audience"], not: "science fair = bilim şenliği. Projeler sergilenir, ziyaretçiler gezer." },
+  { k: "events", c: "We are ___ the classroom with flags and balloons for Republic Day.", d: "decorating", y: ["beating", "attending", "winning"], not: "decorate = süslemek. Bayram öncesi sınıflar bayrak ve balonla süslenir." },
+  { k: "activities", c: "Our class is going on a school ___ to Anıtkabir next week.", d: "trip", y: ["race", "prize", "audience"], not: "school trip = okul gezisi. «go on a trip» = geziye çıkmak." },
+  { k: "events", c: "Kaan ___ the competition because he made a mistake in the last question.", d: "lost", y: ["beat", "celebrated", "broke"], not: "lose (lost) = kaybetmek. Son soruda hata yaptığı için kazanamadı." },
+  { k: "events", c: "In the talent show, Ayşe played the violin on the ___.", d: "stage", y: ["audience", "prize", "winner"], not: "stage = sahne. Gösteri sahnede yapılır, seyirci karşısındadır." },
+  { k: "vocab", c: "The ___ of the drawing competition is Emir. His picture is the best.", d: "winner", y: ["audience", "race", "exhibition"], not: "winner = kazanan kişi. Resmi en iyi olan yarışmayı kazanır." },
+  { k: "events", c: "Many students ___ part in the school's charity run.", d: "take", y: ["make", "do", "have"], not: "take part in = katılmak (kalıp). «make part / do part» Türkçeden çeviri hatasıdır." },
+  { k: "events", c: "The school band ___ at the Republic Day ceremony every year.", d: "performs", y: ["beats", "wins", "breaks"], not: "perform = gösteri yapmak, sahnede çalmak/söylemek." },
+  { k: "events", c: "Our school ___ a book fair every spring.", d: "organises", y: ["beats", "wins", "acts"], not: "organise = düzenlemek. Okul bir etkinliği hazırlar ve yönetir." },
+  { k: "events", c: "The whole school ___ for our basketball team during the final match.", d: "cheers", y: ["acts", "breaks", "attends"], not: "cheer for = tezahürat yapmak, desteklemek." },
+  { k: "activities", c: "Selin joins the ___ club because she loves taking photos.", d: "photography", y: ["chess", "drama", "robotics"], not: "Fotoğraf çekmeyi seven biri photography club'a katılır." },
+  { k: "activities", c: "Can loves robots and coding, so he joins the ___ club.", d: "robotics", y: ["drama", "folk dance", "photography"], not: "Robot ve kodlama → robotics club." },
+  { k: "activities", c: "Ela has a beautiful voice. She sings in the school ___.", d: "choir", y: ["team", "race", "exhibition"], not: "choir = koro. Şarkı söyleyen öğrenci grubu." },
+  { k: "activities", c: "Our volleyball ___ practises every Thursday.", d: "team", y: ["audience", "prize", "stage"], not: "team = takım. Spor kulübünde birlikte oynayanlar." },
+  { k: "events", c: "At the end of the year, all club members get a ___ of achievement.", d: "certificate", y: ["race", "stage", "audience"], not: "certificate = belge, sertifika (certificate of achievement = başarı belgesi)." },
+  { k: "events", c: "The school ___ is on 19 May. There are races and games in the schoolyard.", d: "sports day", y: ["exhibition", "book fair", "choir"], not: "Koşular ve oyunlar varsa bu bir sports day (spor şenliği)." },
+  { k: "vocab", ek: true, c: "10 November is a commemoration day. We ___ Atatürk and stand in silence at 9:05.", d: "commemorate", y: ["celebrate", "beat", "attend"], not: "10 Kasım bir kutlama değil, anma günüdür (commemoration day): commemorate = anmak. celebrate = kutlamak." },
+  { k: "events", c: "I can't come to the ceremony, but my parents will ___ it.", d: "attend", y: ["beat", "win", "break"], not: "attend a ceremony = törene katılmak." },
+  { k: "events", c: "Our class won the quiz show, so we are going to ___ with a big cake!", d: "celebrate", y: ["attend", "beat", "rehearse"], not: "Kazanınca kutlarız: celebrate." },
+];
+
+/* Kısa okul durumları → en uygun cümle */
+const HV_DURUM = [
+  { k: "situations", d: "Deniz is sitting in the hall with 200 other students. They are watching the drama play.", s: "Which sentence is true?", dogru: "Deniz is in the audience.", y: ["Deniz is acting on the stage.", "Deniz is the winner of the play.", "Deniz is decorating the hall."], not: "Oyunu izleyenler audience'tır; sahnede oynayan değil." },
+  { k: "situations", d: "Our team scored 3 goals. The other team scored 1 goal.", s: "What can we say?", dogru: "We beat them.", y: ["We won them.", "They beat us.", "We attended them."], not: "beat + rakip: We beat them. «won them» yanlış; win + maç/yarışma (We won the match)." },
+  { k: "situations", d: "Aylin ran faster than any other student in the history of the school.", s: "What happened?", dogru: "She broke the school record.", y: ["She won the school record.", "She lost the race.", "She is watching the race."], not: "Daha önce kimsenin yapamadığını yaptı → break a record (rekor kırmak)." },
+  { k: "situations", d: "Mert goes to the chess club on Mondays and Thursdays.", s: "Which sentence is true?", dogru: "He attends the chess club twice a week.", y: ["He attends the chess club every day.", "He never attends the chess club.", "He attend the chess club twice a week."], not: "İki gün = twice a week. He → attends (-s)." },
+  { k: "days", d: "It's 23 April. The students are dancing and reading poems in the schoolyard.", s: "Which day are they celebrating?", dogru: "National Sovereignty and Children's Day", y: ["Victory Day", "Republic Day", "Eid al-Adha / Festival of Sacrifice"], not: "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı: dans, şiir, gösteri." },
+  { k: "situations", d: "Your friend won the poetry competition.", s: "What do you say?", dogru: "Congratulations! Well done!", y: ["Get well soon!", "Never mind, maybe next time.", "Happy birthday!"], not: "Kazanan birini kutlarken: Congratulations! Well done!" },
+  { k: "situations", d: "Your friend lost the race and feels sad.", s: "What do you say?", dogru: "Never mind. You can win next time.", y: ["Congratulations! You are the winner!", "Happy holiday!", "You must lose again."], not: "Kaybeden arkadaşı teselli ederken: Never mind. / Maybe next time." },
+  { k: "activities", d: "The teacher asks: “Who wants to join the drama club?” You love acting.", s: "What do you say?", dogru: "Me! I want to act in the school play.", y: ["No, I never act in plays.", "Yes, she does.", "I am the audience."], not: "Rol yapmayı seviyorsan gönüllü olursun: Me! I want to act…" },
+  { k: "rules", d: "A student is talking on the phone in the library.", s: "What does the librarian say?", dogru: "You can't talk on the phone here.", y: ["You must talk on the phone here.", "You can't to talk on the phone here.", "You can talk loudly here."], not: "Yasak → can't + yalın fiil. can't'tan sonra «to» gelmez." },
+  { k: "rules", d: "Kaan is often late for the drama rehearsal.", s: "What does the teacher say?", dogru: "You must be on time.", y: ["You must to be on time.", "You can't be on time.", "You are always on time."], not: "Kural/zorunluluk → must + yalın fiil (must to yanlış)." },
+  { k: "events", d: "The school is choosing the best science project. Five students are showing their projects.", s: "What is happening?", dogru: "There is a science competition.", y: ["There is a drama play.", "There is a school trip.", "There is a folk dance show."], not: "En iyi proje seçiliyor → science competition / science fair." },
+  { k: "events", d: "Everybody is clapping for Zeynep. She is holding a trophy and a certificate.", s: "Why?", dogru: "She is the winner of the competition.", y: ["She is in the audience.", "She lost the competition.", "She is late for school."], not: "Kupa ve belge tutan, alkışlanan kişi winner'dır." },
+  { k: "activities", d: "Ece loves nature. Every Saturday she plants trees with her club.", s: "Which club does she attend?", dogru: "She attends the environment club.", y: ["She attends the chess club.", "She attend the environment club.", "She is attending a race."], not: "Doğa + ağaç dikmek → environment club. She → attends." },
+  { k: "situations", d: "It's 9:05 on 10 November. The bell rings.", s: "What do students do?", dogru: "They stand in silence for two minutes.", y: ["They have a party with fireworks.", "They run in the school race.", "They give presents to their friends."], not: "10 Kasım saat 9.05'te iki dakikalık saygı duruşu yapılır; kutlama yapılmaz." },
+];
+
+/* Millî ve dinî günler — MEB Theme 1 kapsamındaki yedi gün. «ek» işaretli
+   10 Kasım MEB kapsamı hesabına girmez: soru hedefi yapılmaz, yalnız
+   çeldirici ve iki ek kültürel soruda «commemoration day» (anma) olarak
+   geçer; hiçbir yerde celebration olarak gösterilmez. */
+const HV_GUN = [
+  { id: "cumhuriyet", ad: "Republic Day", tarih: "29 October", e: "🎆", ne: "celebrate the foundation of the Republic", tanim: "Türkiye became a republic on this day in 1923.", tr: "29 Ekim Cumhuriyet Bayramı: 1923'te Cumhuriyet ilan edildi." },
+  { id: "cocuk", ad: "National Sovereignty and Children's Day", tarih: "23 April", e: "🎈", ne: "let children sit in the officials' seats for a day", tanim: "The Grand National Assembly opened in 1920, and Atatürk gave this day to children.", tr: "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı." },
+  { id: "genclik", ad: "Commemoration of Atatürk, Youth and Sports Day", tarih: "19 May", e: "🏟️", ne: "do sports shows in stadiums", tanim: "Atatürk arrived in Samsun on this day in 1919 and gave it to young people.", tr: "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı." },
+  { id: "zafer", ad: "Victory Day", tarih: "30 August", e: "🎖️", ne: "remember the Great Victory of 1922", tanim: "The Turkish army won the Great Offensive on this day in 1922.", tr: "30 Ağustos Zafer Bayramı: 1922 Büyük Taarruz zaferi." },
+  { id: "demokrasi", ad: "Democracy and National Unity Day", tarih: "15 July", e: "🤝", ne: "stand together for democracy", tanim: "People stood together for democracy on this night in 2016.", tr: "15 Temmuz Demokrasi ve Millî Birlik Günü." },
+  { id: "ramazan", ad: "Eid al-Fitr", tarih: null, e: "🍬", ne: "end a month of fasting and offer sweets", tanim: "It comes after Ramadan, a month of fasting. Families visit their elders.", tr: "Ramazan Bayramı (Eid al-Fitr): bir aylık oruçtan sonra gelir; büyükler ziyaret edilir, şeker ikram edilir.", dini: true },
+  { id: "kurban", ad: "Eid al-Adha / Festival of Sacrifice", tarih: null, e: "🐑", ne: "share meat with neighbours and people in need", tanim: "Families share meat with relatives, neighbours and people in need.", tr: "Kurban Bayramı (Eid al-Adha / Festival of Sacrifice): kurban eti akraba, komşu ve ihtiyaç sahipleriyle paylaşılır.", dini: true },
+  { id: "ataturk", ad: "Atatürk Commemoration Day", tarih: "10 November", e: "🕯️", ne: "stand in silence for two minutes at 9:05", tanim: "Atatürk passed away at 9:05 on this day in 1938.", tr: "10 Kasım Atatürk'ü Anma Günü bir kutlama değil, anma günüdür (commemoration day).", anma: true, ek: true },
+];
+const HV_ZAMAN_AD = {
+  prog: "⏱️ Present Progressive", simple: "🔁 Simple Present", past: "✅ Simple Past", future: "🔮 Future (will)",
+};
+
+/* ── dil yardımcıları ── */
+const hvTekil = z => z === "he" || z === "she";
+const hvBe = z => z === "i" ? "am" : hvTekil(z) ? "is" : "are";
+const hvZamir = z => ({ she: "She", he: "He", they: "They", we: "We", i: "I" })[z];
+const hvFiil = (e, z) => hvTekil(z) ? e.s : e.kok;
+const hvIlkBuyuk = s => s.charAt(0).toUpperCase() + s.slice(1);
+/* Cümle içinde özne (soru cümlesinde yardımcı fiilden sonra): «Do my friends…?» */
+const hvIc = k => k.ad === "My friends" ? "my friends" : k.ad;
+const hvBeDegil = z => z === "i" ? "am not" : hvBe(z) + "n't";
+const hvKim = k => k.ad === "I" || k.ad === "We" ? k.ad : k.ad + " (" + hvZamir(k.z).toLowerCase() + ")";
+
+/* Çeldiriciye özgü açıklama (Türkçe, kısa). x: {k, e, sik} */
+const HV_NEDEN = {
+  zamanSimdi: x => "«" + x.isaret + "» şu anda gerçekleşen eylemi gösterir → am / is / are + V-ing (Present Progressive).",
+  zamanRutin: x => "«" + x.isaret + "» düzenli yapılan işi gösterir → Simple Present. Burada am / is / are + V-ing kullanılmaz.",
+  beYok: () => "V-ing tek başına fiil olamaz; önüne am / is / are gelmeli.",
+  uyumTekil: x => hvKim(x.k) + " tek kişi → is. «are»; you, we, they içindir.",
+  uyumCogul: x => x.k.ad + " → " + hvBe(x.k.z) + ". «is» yalnız he / she / it içindir.",
+  uyumBen: () => "I ile «am» kullanılır: I am …",
+  beYalin: x => "am / is / are'dan sonra yalın fiil gelmez. Şu an → " + hvBe(x.k.z) + " " + x.e.ing + "; rutin → " + hvFiil(x.e, x.k.z) + ".",
+  ekYok: x => "He / She / tekil isimle Simple Present'te fiile -s / -es eklenir: " + x.e.s + ".",
+  ekFazla: x => hvKim(x.k) + " ile fiile -s eklenmez: " + x.e.kok + ".",
+  beRutin: x => "Simple Present'te is / are kullanılmaz: " + x.k.ad + " " + hvFiil(x.e, x.k.z) + " …",
+  ingRutin: () => "-ing tek başına fiil olamaz; üstelik rutin için Simple Present gerekir.",
+  yazim: x => /(.)\1ing$/.test(x.e.ing) ?"Kısa fiillerde son harf ikizlenir: " + x.e.ing + "." : "Sondaki -e düşer, sonra -ing eklenir: " + x.e.ing + ".",
+  yazimS: x => /ies$/.test(x.e.s) ? "Sessiz harf + y → -ies: " + x.e.s + "." : "-ch, -sh, -s, -x, -o ile biten fiillere -es eklenir: " + x.e.s + ".",
+  olumsuzUyum: x => hvTekil(x.k.z) ? "He / She → doesn't + yalın fiil." : x.k.ad + " → don't + yalın fiil.",
+  olumsuzBe: x => "Simple Present olumsuzunda is / are kullanılmaz: " + (hvTekil(x.k.z) ? "doesn't " : "don't ") + x.e.kok + ".",
+  olumsuzEk: () => "doesn't / don't'tan sonra fiil yalın kalır, -s almaz.",
+  olumsuzNot: x => "Tek başına «not» yetmez: " + (hvTekil(x.k.z) ? "doesn't " : "don't ") + x.e.kok + ".",
+  olumsuzProgDo: x => "Şu an olan eylemin olumsuzu am / is / are + not ile yapılır: " + hvBeDegil(x.k.z) + " " + x.e.ing + ".",
+  olumsuzProgYalin: x => "Olumsuzda da -ing kalır: " + hvBeDegil(x.k.z) + " " + x.e.ing + ".",
+  soruDo: () => "Cümlede -ing'li fiil var → soru am / is / are ile kurulur (Is he running…?).",
+  soruBe: () => "Cümlede yalın fiil var → Simple Present sorusu: Do / Does + özne + fiil?",
+  soruUyumDo: x => hvTekil(x.k.z) ? "He / She / tekil isim → Does." : x.k.ad + " → Do.",
+  soruUyumBe: x => x.k.ad + " → " + hvIlkBuyuk(hvBe(x.k.z)) + ".",
+};
+
+/* ── SORU ÜRETİCİLERİ ────────────────────────────────────────────────────
+   Her üretici { iz, kat, cip, gorsel, yonerge, metin, dinle, dogru:{m,..},
+   celdiriciler:[{m, neden}], not, tam } döndürür; iz tekrar denetimi içindir. */
+function hvEtkSec(S, suzgec){
+  let aday = HV_ETK.filter(e => !suzgec || suzgec(e));
+  const taze = aday.filter(e => !(S.etkSayac[e.id] > 0));
+  if (taze.length) aday = taze;
+  else { const az = Math.min(...aday.map(e => S.etkSayac[e.id] || 0)); aday = aday.filter(e => (S.etkSayac[e.id] || 0) === az); }
+  const e = fenSec(aday);
+  S.etkSayac[e.id] = (S.etkSayac[e.id] || 0) + 1;
+  return e;
+}
+const hvKisiSec = suzgec => fenSec(HV_KISI.filter(k => !suzgec || suzgec(k)));
+const hvVurgu = s => "<mark>" + kacis(s) + "</mark>";
+function hvSahne(k, e){ return `<div class="hv-sahne" aria-hidden="true"><span>${k.k}</span><span>${e.e}</span></div>`; }
+
+function hvUretProg(S){
+  const k = hvKisiSec(), e = hvEtkSec(S);
+  const olumsuz = S.A.zorluk > 1 && Math.random() < (S.A.zorluk === 3 ? .35 : .2);
+  /* «Look! / Listen!» yalnız olumlu cümlede: «Look! Mert isn't swimming» tuhaf */
+  const on = !olumsuz && S.A.zorluk > 1 && Math.random() < .3;
+  const isaret = on ? (e.dinle && Math.random() < .5 ? "Listen!" : "Look!") : fenSec(HV_SIMDI);
+  const be = hvBe(k.z);
+  const soru = !olumsuz && S.A.zorluk === 3 && k.z !== "i" && k.z !== "we" && Math.random() < .35;
+  const x = { k, e, isaret };
+  const vurgu = S.A.zorluk < 3 ? hvVurgu(isaret) : kacis(isaret);
+  const cumle = (bos, arka) => on ? `${vurgu} ${kacis(k.ad)} ${bos} ${kacis(e.obj)}${arka || "."}` : `${kacis(k.ad)} ${bos} ${kacis(e.obj)} ${vurgu}${arka || "."}`;
+  const BOS = `<span class="hv-bos">___</span>`;
+  if (soru){
+    const dogru = hvIlkBuyuk(be);
+    const metin = on ? `${vurgu} ${BOS} ${kacis(hvIc(k))} ${kacis(e.ing)} ${kacis(e.obj)}?` : `${BOS} ${kacis(hvIc(k))} ${kacis(e.ing)} ${kacis(e.obj)} ${vurgu}?`;
+    return { iz: "pq|" + k.ad + "|" + e.id, kat: "progressive", cip: "Ask a question", gorsel: hvSahne(k, e), yonerge: "Complete the question.",
+      metin, dinle: (on ? isaret + " … " : "… ") + hvIc(k) + " " + e.ing + " " + e.obj + (on ? "" : " " + isaret) + "?",
+      dogru: { m: dogru }, celdiriciler: [{ m: hvTekil(k.z) ? "Does" : "Do", neden: "soruDo" }, { m: be === "is" ? "Are" : "Is", neden: "soruUyumBe" }, { m: hvTekil(k.z) ? "Do" : "Does", neden: "soruDo" }],
+      x, tam: (on ? isaret + " " : "") + dogru + " " + hvIc(k) + " " + e.ing + " " + e.obj + (on ? "" : " " + isaret) + "?" };
+  }
+  if (olumsuz){
+    const dogru = hvBeDegil(k.z) + " " + e.ing;
+    const cel = [{ m: (hvTekil(k.z) ? "doesn't " : "don't ") + e.ing, neden: "olumsuzProgDo" }, { m: "not " + e.ing, neden: "beYok" },
+      { m: hvBeDegil(k.z) + " " + e.kok, neden: "olumsuzProgYalin" }];
+    if (be !== "am") cel.push({ m: (be === "is" ? "aren't " : "isn't ") + e.ing, neden: hvTekil(k.z) ? "uyumTekil" : "uyumCogul" });
+    return { iz: "pn|" + k.ad + "|" + e.id + "|" + isaret, kat: "progressive", cip: "Now · negative", gorsel: hvSahne(k, e),
+      yonerge: "Complete the sentence with the negative form of «" + e.kok + "».", metin: cumle(BOS + ` <span class="hv-ipucu-fiil">(not · ${kacis(e.kok)})</span>`),
+      dinle: (on ? isaret + " " : "") + k.ad + " … " + e.obj + (on ? "" : " " + isaret) + ".", dogru: { m: dogru }, celdiriciler: cel, x,
+      tam: (on ? isaret + " " : "") + k.ad + " " + dogru + " " + e.obj + (on ? "" : " " + isaret) + "." };
+  }
+  const dogru = be + " " + e.ing;
+  const cel = [{ m: hvFiil(e, k.z), neden: "zamanSimdi", ana: true }, { m: e.ing, neden: "beYok" }];
+  if (k.z === "i") cel.push({ m: "is " + e.ing, neden: "uyumBen" });
+  else cel.push({ m: (be === "is" ? "are " : "is ") + e.ing, neden: hvTekil(k.z) ? "uyumTekil" : "uyumCogul" });
+  /* Yazım tuzağı yalnız Hard'da ve seyrek: oyun bir spelling testine dönmesin */
+  if (S.A.zorluk === 3 && e.yazim && Math.random() < .3) cel.push({ m: be + " " + e.yazim, neden: "yazim", once: true });
+  else cel.push({ m: be + " " + e.kok, neden: "beYalin" });
+  return { iz: "pf|" + k.ad + "|" + e.id + "|" + isaret, kat: "progressive", cip: "What's happening now?", gorsel: hvSahne(k, e),
+    yonerge: "Complete the sentence.", metin: cumle(BOS), dinle: (on ? isaret + " " : "") + k.ad + " … " + e.obj + (on ? "" : " " + isaret) + ".",
+    dogru: { m: dogru }, celdiriciler: cel, x, tam: (on ? isaret + " " : "") + k.ad + " " + dogru + " " + e.obj + (on ? "" : " " + isaret) + "." };
+}
+
+function hvUretSimple(S){
+  const k = hvKisiSec(), e = hvEtkSec(S);
+  const isaret = e.yil ? "every year" : fenSec(HV_RUTIN);
+  const x = { k, e, isaret };
+  const vurgu = S.A.zorluk < 3 ? hvVurgu(isaret) : kacis(isaret);
+  const BOS = `<span class="hv-bos">___</span>`;
+  const olumsuz = S.A.zorluk > 1 && Math.random() < (S.A.zorluk === 3 ? .3 : .2);
+  const soru = !olumsuz && S.A.zorluk === 3 && k.z !== "i" && k.z !== "we" && Math.random() < .35;
+  const sozcuk = (bos) => `${kacis(k.ad)} ${bos} ${kacis(e.obj)} ${vurgu}.`;
+  if (soru){
+    const dogru = hvTekil(k.z) ? "Does" : "Do";
+    return { iz: "sq|" + k.ad + "|" + e.id, kat: "present", cip: "Ask a question", gorsel: hvSahne(k, e), yonerge: "Complete the question.",
+      metin: `${BOS} ${kacis(hvIc(k))} ${kacis(e.kok)} ${kacis(e.obj)} ${vurgu}?`, dinle: "… " + hvIc(k) + " " + e.kok + " " + e.obj + " " + isaret + "?",
+      dogru: { m: dogru }, celdiriciler: [{ m: hvIlkBuyuk(hvBe(k.z)), neden: "soruBe" }, { m: hvTekil(k.z) ? "Do" : "Does", neden: "soruUyumDo" }, { m: hvBe(k.z) === "is" ? "Are" : "Is", neden: "soruBe" }],
+      x, tam: dogru + " " + hvIc(k) + " " + e.kok + " " + e.obj + " " + isaret + "?" };
+  }
+  if (olumsuz){
+    const yard = hvTekil(k.z) ? "doesn't" : "don't";
+    const dogru = yard + " " + e.kok;
+    const cel = [{ m: (hvTekil(k.z) ? "don't " : "doesn't ") + e.kok, neden: "olumsuzUyum" }, { m: (k.z === "i" ? "am not " : hvBe(k.z) + "n't ") + e.kok, neden: "olumsuzBe" }];
+    cel.push(hvTekil(k.z) ? { m: "doesn't " + e.s, neden: "olumsuzEk" } : { m: "not " + e.kok, neden: "olumsuzNot" });
+    return { iz: "sn|" + k.ad + "|" + e.id + "|" + isaret, kat: "present", cip: "Routine · negative", gorsel: hvSahne(k, e),
+      yonerge: "Complete the sentence with the negative form of «" + e.kok + "».", metin: sozcuk(BOS + ` <span class="hv-ipucu-fiil">(not · ${kacis(e.kok)})</span>`),
+      dinle: k.ad + " … " + e.obj + " " + isaret + ".", dogru: { m: dogru }, celdiriciler: cel, x, tam: k.ad + " " + dogru + " " + e.obj + " " + isaret + "." };
+  }
+  const dogru = hvFiil(e, k.z);
+  const cel = [{ m: hvBe(k.z) + " " + e.ing, neden: "zamanRutin", ana: true }];
+  if (hvTekil(k.z)){
+    cel.push({ m: e.kok, neden: "ekYok", ana: true });
+    if (S.A.zorluk === 3 && e.yazimS && Math.random() < .3) cel.push({ m: e.yazimS, neden: "yazimS", once: true });
+    else cel.push({ m: "is " + e.kok, neden: "beRutin" });
+  } else {
+    cel.push({ m: e.s, neden: "ekFazla", ana: true });
+    cel.push({ m: hvBe(k.z) + " " + e.kok, neden: "beRutin" });
+  }
+  cel.push({ m: e.ing, neden: "ingRutin" });
+  return { iz: "sf|" + k.ad + "|" + e.id + "|" + isaret, kat: "present", cip: "Routines", gorsel: hvSahne(k, e), yonerge: "Complete the sentence.",
+    metin: sozcuk(BOS), dinle: k.ad + " … " + e.obj + " " + isaret + ".", dogru: { m: dogru }, celdiriciler: cel, x, tam: k.ad + " " + dogru + " " + e.obj + " " + isaret + "." };
+}
+
+/* «She is drawing a picture now.» → zamanı seç */
+function hvUretAnlam(S){
+  const k = hvKisiSec(k => k.z !== "i"), e = hvEtkSec(S);
+  const prog = Math.random() < .5;
+  const isaret = prog ? fenSec(HV_SIMDI) : e.yil ? "every year" : fenSec(HV_RUTIN);
+  const cumle = prog ? k.ad + " " + hvBe(k.z) + " " + e.ing + " " + e.obj + " " + isaret + "." : k.ad + " " + hvFiil(e, k.z) + " " + e.obj + " " + isaret + ".";
+  const dogruAnah = prog ? "prog" : "simple";
+  const obur = prog ? "simple" : "prog";
+  const notlar = {
+    prog: "am / is / are + -ing ve «" + isaret + "» → şu anda olan eylem: Present Progressive.",
+    simple: "Yalın fiil / -s ve «" + isaret + "» → düzenli tekrarlanan iş: Simple Present.",
+  };
+  return { iz: "an|" + k.ad + "|" + e.id + "|" + dogruAnah, kat: prog ? "progressive" : "present", cip: "Which tense?", gorsel: hvSahne(k, e),
+    yonerge: "Read the sentence. Which tense is it?", metin: `«${kacis(cumle)}»`, dinle: cumle,
+    dogru: { m: HV_ZAMAN_AD[dogruAnah] },
+    celdiriciler: [{ m: HV_ZAMAN_AD[obur], neden: "_", aciklama: notlar[dogruAnah], ana: true },
+      { m: HV_ZAMAN_AD.past, neden: "_", aciklama: "Simple Past bitmiş, geçmişteki eylemdir (drew, acted…). Cümlede geçmiş zaman yok. " + notlar[dogruAnah] },
+      { m: HV_ZAMAN_AD.future, neden: "_", aciklama: "Future «will» ile kurulur (will draw…). Cümlede will yok. " + notlar[dogruAnah] }],
+    tam: cumle };
+}
+
+/* Görsele uygun cümle */
+function hvUretGorsel(S){
+  const k = hvKisiSec(k => k.z === "he" || k.z === "she" || k.ad === "My friends");
+  const e = hvEtkSec(S);
+  const zamir = k.ad === "My friends" ? "They" : hvZamir(k.z);
+  const be = zamir === "They" ? "are" : "is";
+  const cum = x => zamir + " " + be + " " + x.ing + " " + x.obj + ".";
+  const digerleri = karistir(HV_ETK.filter(x => x.id !== e.id && (!e.aile || x.aile !== e.aile)));
+  const cel = digerleri.slice(0, 3).map(x => ({ m: cum(x), neden: "_", aciklama: "Bu cümle " + x.e + " ile ilgili; resimdeki ipuçları ise " + e.sahne + ". Resmi anlatan eylem: " + e.ing + "." }));
+  if (S.A.zorluk === 3) cel.unshift({ m: zamir + " " + be + " " + e.kok + " " + e.obj + ".", neden: "_", aciklama: "Resim şu anı gösteriyor: " + be + " + " + e.ing + ". «" + be + " " + e.kok + "» yanlış.", once: true });
+  return { iz: "gr|" + e.id + "|" + zamir, kat: "activities", cip: "Look at the picture", yonerge: "Which sentence matches the picture?",
+    gorsel: `<div class="hv-sahne hv-sahne-buyuk" aria-hidden="true"><span>${k.ad === "My friends" ? "👧👦" : k.k}</span><span>${e.sahne}</span></div>`,
+    metin: "What " + (zamir === "They" ? "are they" : "is " + zamir.toLowerCase()) + " doing?", dinle: "What " + (zamir === "They" ? "are they" : "is " + zamir.toLowerCase()) + " doing?",
+    dogru: { m: cum(e) }, celdiriciler: cel, tam: cum(e) };
+}
+
+/* Sıklık: basamak göstergesi (5 daire) → zarf. Oran söylenmez. */
+function hvUretSiklik(S){
+  const k = hvKisiSec(k => k.z !== "we"), e = hvEtkSec(S);
+  const ix = Math.floor(Math.random() * HV_SIKLIK.length);
+  const s = HV_SIKLIK[ix];
+  const komsu = HV_SIKLIK.map((o, i) => ({ o, f: Math.abs(i - ix) + Math.random() * .4 })).filter(o => o.o !== s).sort((a, b) => a.f - b.f).map(o => o.o);
+  const gorsel = `<div class="hv-sayac" role="img" aria-label="Frequency level ${s.d} of 5" data-d="${s.d}">
+      <div class="hv-sayac-bas"><span>${e.e}</span> How often?</div>
+      <div class="hv-sayac-daire">${hvDaireler(s.d)}</div>
+      <div class="hv-sayac-alt"><span>never</span><span>always</span></div></div>`;
+  const aciklama = o => {
+    const oi = HV_SIKLIK.indexOf(o);
+    return "«" + o.z + "» " + (oi < ix ? "daha SIK" : "daha SEYREK") + " yapılan işi anlatır; göstergede «" + s.z + "» basamağı işaretli. Sıra: " + HV_SIKLIK_OLCEK + ".";
+  };
+  return { iz: "fq|" + k.ad + "|" + e.id + "|" + s.z, kat: "frequency", cip: "How often?", gorsel, yonerge: "Look at the frequency meter. Choose the right word.",
+    metin: `${kacis(k.ad)} <span class="hv-bos">___</span> ${kacis(hvFiil(e, k.z))} ${kacis(e.obj)}.`, dinle: k.ad + " … " + hvFiil(e, k.z) + " " + e.obj + ".",
+    dogru: { m: s.z }, celdiriciler: komsu.map(o => ({ m: o.z, neden: "_", aciklama: aciklama(o) })), tam: k.ad + " " + s.z + " " + hvFiil(e, k.z) + " " + e.obj + ".",
+    olcek: S.A.zorluk === 1 };
+}
+
+/* Sıklık zarfının yeri: fiilden önce, be'den sonra */
+function hvUretSiklikSira(S){
+  const s = fenSec(HV_SIKLIK).z;
+  const k = hvKisiSec(k => k.z !== "i" && k.z !== "we");
+  if (Math.random() < .4){
+    const durum = fenSec(HV_BE_DURUM), be = hvBe(k.z);
+    const dogru = `${k.ad} ${be} ${s} ${durum}.`;
+    return { iz: "fo|be|" + k.ad + "|" + durum + "|" + s, kat: "frequency", cip: "Word order", yonerge: "Choose the correct sentence.",
+      metin: "Where does «" + s + "» go?", dinle: dogru, dogru: { m: dogru },
+      celdiriciler: [{ m: `${k.ad} ${s} ${be} ${durum}.`, neden: "_", aciklama: "Sıklık zarfı «be» fiilinden SONRA gelir: " + be + " " + s + "." },
+        { m: `${k.ad} ${be === "is" ? "are" : "is"} ${s} ${durum}.`, neden: "_", aciklama: k.ad + " → " + be + ". Zarfın yeri doğru ama be uyumu yanlış." },
+        { m: `${k.ad} ${s} be ${durum}.`, neden: "_", aciklama: "«be» çekimlenmeli: " + k.ad + " " + be + " " + s + "…" }],
+      tam: dogru };
+  }
+  const e = hvEtkSec(S);
+  const f = hvFiil(e, k.z);
+  const dogru = `${k.ad} ${s} ${f} ${e.obj}.`;
+  return { iz: "fo|v|" + k.ad + "|" + e.id + "|" + s, kat: "frequency", cip: "Word order", yonerge: "Choose the correct sentence.",
+    metin: "Where does «" + s + "» go?", dinle: dogru, dogru: { m: dogru },
+    celdiriciler: [{ m: `${k.ad} ${f} ${s} ${e.obj}.`, neden: "_", aciklama: "Sıklık zarfı ana fiilden ÖNCE gelir: " + s + " " + f + "." },
+      { m: `${k.ad} ${s} ${hvTekil(k.z) ? e.kok : e.s} ${e.obj}.`, neden: "_", aciklama: hvTekil(k.z) ? "He / She ile fiil -s alır: " + e.s + "." : k.ad + " ile fiil -s almaz: " + e.kok + "." },
+      { m: `${k.ad} ${hvBe(k.z)} ${s} ${f} ${e.obj}.`, neden: "_", aciklama: "Fiil varken araya is / are girmez: " + k.ad + " " + s + " " + f + "…" }],
+    tam: dogru };
+}
+
+/* must ile can't turda dönüşümlü gelsin: az kullanılan seçilir (eşitse rastgele) */
+function hvModalSec(S){
+  const m = S.modal || (S.modal = { must: 0, "can't": 0 });
+  const hedef = m.must === m["can't"] ? (Math.random() < .5 ? "must" : "can't") : m.must < m["can't"] ? "must" : "can't";
+  m[hedef]++;
+  return r => r.m === hedef;
+}
+/* Kurallar: boşluk (must / can't) */
+function hvUretKural(S){
+  const r = hvHavuzSec(S, "kural", HV_KURAL, hvModalSec(S));
+  const must = r.m === "must";
+  const cel = must
+    ? [{ m: "can't", neden: "_", aciklama: "Bu bir zorunluluk (yapılması gereken kural) → must. can't = yasak.", ana: true },
+       { m: "must to", neden: "_", aciklama: "must'tan sonra «to» gelmez: must + yalın fiil." },
+       { m: "don't must", neden: "_", aciklama: "«don't must» diye bir yapı yok. Zorunluluk → must." },
+       { m: "can", neden: "_", aciklama: "can = yapabilirsin (izin). Kural zorunluluk bildiriyor → must." }]
+    : [{ m: "must", neden: "_", aciklama: "Bu bir yasak → can't. must = zorunluluk, yapmak gerekir.", ana: true },
+       { m: "can't to", neden: "_", aciklama: "can't'tan sonra «to» gelmez: can't + yalın fiil." },
+       { m: "can", neden: "_", aciklama: "can = izin var. Kural bunu yasaklıyor → can't." },
+       { m: "don't can", neden: "_", aciklama: "«don't can» diye bir yapı yok. Yasak → can't." }];
+  const tam = r.c.replace("___", r.m);
+  return { iz: "ru|" + r.c, kat: "rules", cip: r.yer, yonerge: "Complete the rule.", gorsel: hvIsaretHtml(r, false),
+    metin: kacis(r.c).replace("___", `<span class="hv-bos">___</span>`), dinle: r.c.replace("___", "…"), dogru: { m: r.m }, celdiriciler: cel, tam };
+}
+function hvIsaretHtml(r, yazili){
+  const yasak = r.m === "can't";
+  return `<div class="hv-isaret ${yasak ? "yasak" : "zorunlu"}" role="img" aria-label="${yasak ? "Not allowed" : "Required"}">
+    <span class="hv-isaret-ikon">${r.i}</span>${yasak ? `<span class="hv-isaret-cizgi"></span>` : `<span class="hv-isaret-tik">✓</span>`}
+    ${yazili ? `<span class="hv-isaret-yazi">${yasak ? "NOT ALLOWED" : "RULE"}</span>` : ""}</div>`;
+}
+/* Kurallar: işarete uygun kural cümlesi */
+function hvUretIsaret(S){
+  const r = hvHavuzSec(S, "isaret", HV_KURAL, hvModalSec(S));
+  const must = r.m === "must";
+  const c = m => r.c.replace("___", m);
+  return { iz: "si|" + r.c, kat: "rules", cip: r.yer, yonerge: "Look at the sign. Which rule is it?", gorsel: hvIsaretHtml(r, true),
+    metin: must ? "This sign shows something you have to do." : "This sign shows something you are not allowed to do.", dinle: c(r.m),
+    dogru: { m: c(r.m) },
+    celdiriciler: [{ m: c(must ? "can't" : "must"), neden: "_", aciklama: must ? "İşaret yapılması gerekeni gösteriyor → must." : "İşaret yasağı gösteriyor → can't.", ana: true },
+      { m: c(must ? "must to" : "can't to"), neden: "_", aciklama: (must ? "must" : "can't") + "'tan sonra «to» gelmez." },
+      { m: c("can"), neden: "_", aciklama: "can izin bildirir; işaret " + (must ? "zorunluluk" : "yasak") + " gösteriyor." }],
+    tam: c(r.m) };
+}
+
+/* El yazımı havuzlardan tekrarsız seçim (turda tekrar yok, önceki
+   oyunlarda görülenler sona itilir) */
+function hvHavuzSec(S, ad, havuz, suzgec){
+  const kul = S.havuzKul[ad] || (S.havuzKul[ad] = {});
+  let tum = havuz.map((o, i) => i);
+  if (suzgec){ const sz = tum.filter(i => suzgec(havuz[i])); if (sz.length) tum = sz; }
+  let aday = tum.filter(i => !kul[i]);
+  if (!aday.length){ tum.forEach(i => { delete kul[i]; }); aday = tum; }
+  const taze = aday.filter(i => !S.eski[ad + "#" + i]);
+  const i = fenSec(taze.length ? taze : aday);
+  S.havuzKul[ad][i] = 1;
+  S.sonHavuz = ad + "#" + i;
+  return havuz[i];
+}
+/* Kelime soruları kategoriler arasında dönüşümlü: tema sözcüğü, okul
+   etkinliği, yarışma/kutlama (özel günler kendi «gun» üreticisinde) */
+function hvUretKelime(S){
+  const say = S.kelimeKat || (S.kelimeKat = { vocab: 0, activities: 0, events: 0 });
+  const enAz = Math.min(...Object.values(say));
+  const k = fenSec(Object.keys(say).filter(x => say[x] === enAz));
+  say[k]++;
+  const w = hvHavuzSec(S, "kelime", HV_KELIME, x => x.k === k);
+  const tam = w.c.replace("___", w.d);
+  return { iz: S.sonHavuz, kat: w.k, cip: "Complete the sentence", yonerge: "Find the missing word.",
+    metin: kacis(w.c).replace("___", `<span class="hv-bos">___</span>`), dinle: w.c.replace("___", "…"),
+    dogru: { m: w.d }, celdiriciler: w.y.map(m => ({ m, neden: "_", aciklama: w.not })), tam };
+}
+function hvUretDurum(S){
+  const d = hvHavuzSec(S, "durum", HV_DURUM);
+  return { iz: S.sonHavuz, kat: d.k, cip: "School situation", yonerge: d.s, metin: `<span class="hv-durum">${kacis(d.d)}</span>`, dinle: d.d + " " + d.s,
+    dogru: { m: d.dogru }, celdiriciler: d.y.map(m => ({ m, neden: "_", aciklama: d.not })), tam: d.dogru };
+}
+function hvUretGun(S){
+  const g = hvHavuzSec(S, "gun", HV_GUN, x => !x.ek);
+  const tip = fenSec(g.tarih ? ["tarih", "tanim", "etkinlik"] : ["tanim", "etkinlik"]);
+  const diger = karistir(HV_GUN.filter(x => x.id !== g.id && (tip !== "tarih" || x.tarih)));
+  if (tip === "tarih"){
+    return { iz: "gt|" + g.id, kat: "days", cip: "Special days", yonerge: "Which special day is it?",
+      gorsel: `<div class="hv-tarih" aria-hidden="true"><span class="hv-tarih-ay">${kacis(g.tarih.split(" ")[1])}</span><span class="hv-tarih-gun">${kacis(g.tarih.split(" ")[0])}</span></div>`,
+      metin: "It's " + kacis(g.tarih) + ". Which day is it?", dinle: "It's " + g.tarih + ". Which day is it?",
+      dogru: { m: g.ad }, celdiriciler: diger.slice(0, 3).map(x => ({ m: x.ad, neden: "_", aciklama: g.tr + " «" + x.ad + "» ise " + (x.tarih || "başka bir gün") + "." })), tam: "It's " + g.tarih + ": " + g.ad + "." };
+  }
+  if (tip === "tanim"){
+    return { iz: "gd|" + g.id, kat: "days", cip: "Special days", yonerge: "Read and find the day.",
+      gorsel: `<div class="hv-sahne" aria-hidden="true"><span>${g.e}</span></div>`, metin: `<span class="hv-durum">${kacis(g.tanim)}</span>`, dinle: g.tanim,
+      dogru: { m: g.ad }, celdiriciler: diger.slice(0, 3).map(x => ({ m: x.ad, neden: "_", aciklama: g.tr })), tam: g.ad + ": " + g.tanim };
+  }
+  const cel = diger.filter(x => x.ne !== g.ne);
+  return { iz: "ge|" + g.id, kat: "days", cip: "Special days", yonerge: "What do people do on this day?",
+    gorsel: `<div class="hv-sahne" aria-hidden="true"><span>${g.e}</span></div>`, metin: kacis(g.ad) + (g.tarih ? " · " + kacis(g.tarih) : ""), dinle: "What do people do on " + g.ad + "?",
+    dogru: { m: "They " + g.ne + "." }, celdiriciler: cel.slice(0, 3).map(x => ({ m: "They " + x.ne + ".", neden: "_", aciklama: g.tr + (x.anma ? " 10 Kasım'da ise saygı duruşu yapılır; o gün bir anma günüdür." : "") })),
+    tam: "On " + g.ad + ", people " + g.ne + "." };
+}
+const HV_URETICI = { gorsel: hvUretGorsel, kelime: hvUretKelime, durum: hvUretDurum, gun: hvUretGun, simple: hvUretSimple, prog: hvUretProg,
+  anlam: hvUretAnlam, siklik: hvUretSiklik, siklikSira: hvUretSiklikSira, kural: hvUretKural, isaret: hvUretIsaret };
+
+/* Kombinasyon sayısı (tanıtım ekranı + test): üretici × veri çarpımı */
+function hvKombinasyonSay(){
+  const K = HV_KISI.length, E = HV_ETK.length, Eg = HV_ETK.filter(e => !e.yil).length, Ey = E - Eg;
+  const K3 = HV_KISI.filter(k => k.z !== "i" && k.z !== "we").length;
+  const prog = K * E * (HV_SIMDI.length + 1) * 2 + K3 * E;
+  const simple = K * (Eg * HV_RUTIN.length + Ey) * 2 + K3 * E;
+  const anlam = (K - 1) * E * 2;
+  const gorsel = E * 3;
+  const siklik = (K - 1) * E * HV_SIKLIK.length;
+  const siklikSira = K3 * HV_SIKLIK.length * (HV_BE_DURUM.length + E);
+  const el = HV_KELIME.length + HV_DURUM.length + HV_KURAL.length * 2 + HV_GUN.filter(g => !g.ek).length * 2 + HV_GUN.filter(g => g.tarih && !g.ek).length;
+  return { prog, simple, anlam, gorsel, siklik, siklikSira, el, toplam: prog + simple + anlam + gorsel + siklik + siklikSira + el };
+}
+
+/* Tur planı: seviye planındaki üreticiler karıştırılır, aynı üretici arka
+   arkaya gelmez. Doğru konumları turda dengeli dağıtılır. */
+/* Adetleri verilen öğeleri, aynısı arka arkaya gelmeyecek biçimde rastgele
+   dizer. Kalanın yarısından fazlası tek öğedeyse önce o seçilir — yoksa
+   sonda aynı öğeler yan yana kalırdı. */
+function hvArdisiksizDiz(sayac){
+  const kalan = Object.assign({}, sayac), dizi = [];
+  let toplam = Object.values(kalan).reduce((a, b) => a + b, 0), onceki = null;
+  while (toplam > 0){
+    const aday = Object.keys(kalan).filter(k => kalan[k] > 0 && k !== onceki);
+    if (!aday.length){ dizi.push(onceki); kalan[onceki]--; toplam--; continue; }
+    const baski = aday.find(k => kalan[k] * 2 > toplam);
+    let sec = baski;
+    if (!sec){ let r = Math.random() * aday.reduce((t, k) => t + kalan[k], 0); sec = aday.find(k => (r -= kalan[k]) < 0) || aday[0]; }
+    dizi.push(sec); kalan[sec]--; toplam--; onceki = sec;
+  }
+  return dizi;
+}
+function hvPlanKur(S){ return hvArdisiksizDiz(S.ayar.plan); }
+function hvKonumKur(T, n){
+  const sayac = {};
+  for (let i = 0; i < T; i++) sayac[i % n] = (sayac[i % n] || 0) + 1;
+  return hvArdisiksizDiz(sayac).map(Number);
+}
+/* Üreticiden soru al: turda aynı iz yoksa kabul (en çok 30 deneme) */
+function hvSoruAl(S, tip, konum){
+  let q = null;
+  for (let d = 0; d < 30; d++){
+    const aday = HV_URETICI[tip](S);
+    if (S.izler[aday.iz]) continue;
+    if (d < 20 && S.eski[aday.iz] && tip !== "kelime" && tip !== "durum") continue;
+    q = aday; break;
+  }
+  if (!q) q = HV_URETICI[tip](S);
+  S.izler[q.iz] = 1;
+  return hvSecenekDiz(S, q, konum);
+}
+function hvSecenekDiz(S, q, konum){
+  const n = S.ayar.n;
+  const gorulen = { [q.dogru.m]: 1 };
+  const havuz = q.celdiriciler.filter(c => { if (gorulen[c.m]) return false; gorulen[c.m] = 1; return true; });
+  const once = havuz.filter(c => c.once), ana = havuz.filter(c => c.ana && !c.once), kalan = karistir(havuz.filter(c => !c.ana && !c.once));
+  const secilen = once.concat(ana, kalan).slice(0, n - 1);
+  const dizi = karistir(secilen);
+  const k = Math.min(konum, dizi.length);
+  dizi.splice(k, 0, Object.assign({ dogru: true }, q.dogru));
+  q.secenekler = dizi; q.dogruIx = k;
+  return q;
+}
+
+/* ── OYUN DURUMU ── */
+function hvKur(oyun, bitir){
+  const A = oyunAyarVars(oyun.id, { zorluk: oyun.zorluk || 2 });
+  const hareketAz = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const eski = {};
+  (A.hvGorulen || []).forEach(iz => { eski[iz] = 1; });
+  const S = { oyun, bitir, A, ayar: HV_SEVIYE[A.zorluk] || HV_SEVIYE[2], eski, izler: {}, havuzKul: {}, etkSayac: {},
+    sabit: A.hvSabit != null ? !!A.hvSabit : hareketAz, hareketAz,
+    ix: 0, sorular: [], puan: 0, dogru: 0, yanlis: 0, atlanan: 0, seri: 0, enUzunSeri: 0, yildiz: 0, kat: {},
+    canli: true, zamanlar: [], baslangic: Date.now(), t: 0, sonTs: 0 };
+  S.bekle = (f, ms) => { const t = setTimeout(() => { if (S.canli) f(); }, ms); S.zamanlar.push(t); return t; };
+  S.durdur = () => {
+    S.canli = false;
+    S.zamanlar.forEach(clearTimeout); S.zamanlar = [];
+    if (S.rafId) cancelAnimationFrame(S.rafId);
+    hvTuslarCoz(S);
+    if (S.boyut) removeEventListener("resize", S.boyut);
+    konusmaDur();
+  };
+  temizleyici.push(S.durdur);
+  return S;
+}
+function hvTurHazirla(S){
+  const T = S.ayar.soru;
+  S.plan = hvPlanKur(S);
+  S.konumlar = hvKonumKur(T, S.ayar.n);
+  S.sorular = S.plan.map((tip, i) => Object.assign(hvSoruAl(S, tip, S.konumlar[i]), { tipAd: tip }));
+}
+
+function hvEkranGiris(S){
+  const o = S.oyun, K = hvKombinasyonSay();
+  $("app").innerHTML = `${oyunBaslik(o)}
+    <div class="hv-oyun" lang="en">
+      <div class="hv-giris">
+        <div class="hv-giris-rozet" aria-hidden="true">🎯</div>
+        <h2 class="hv-giris-bas">School Challenge <span>Hedefi Vur</span></h2>
+        <p class="hv-giris-alt">${kacis(o.unite)}</p>
+        <p class="hv-giris-not">Read the question at the top. Answers float slowly on balloons below. <b>Aim and hit the right balloon!</b> There is no rush — take your time and read carefully. A wrong hit? Read the short tip and continue.</p>
+        <div class="hv-konular">${Object.keys(HV_KAT).map(k => `<span>${kacis(HV_KAT[k])}</span>`).join("")}</div>
+        <div class="hv-kontrol-bilgi"><span>👆 Tap a balloon</span><span>🖱️ Click</span><span>⌨️ Keys 1–4 / A–D</span><span>🔊 Listen</span></div>
+        <div class="hv-secim">
+          <div class="hv-secim-bas">Level</div>
+          <div class="hv-secim-sira" id="hvZorluk">${[1, 2, 3].map(z => `<button type="button" class="hv-sec${S.A.zorluk === z ? " aktif" : ""}" data-z="${z}">${HV_SEVIYE[z].ad} <small>${HV_SEVIYE[z].n} targets · ${HV_SEVIYE[z].soru} questions</small></button>`).join("")}</div>
+          <label class="hv-sabit-sec"><input type="checkbox" id="hvSabitSec"${S.sabit ? " checked" : ""} /> <span>Still targets <small>(balloons do not move)</small></span></label>
+          <p class="hv-giris-kunye">Easy: 3 balloons, frequency scale shown. Medium: 4 balloons, negatives and word order. Hard: questions, spelling traps and more reading. Every game builds new questions (${K.toplam.toLocaleString("en-US")}+ combinations); no question repeats in one game.</p>
+        </div>
+        <button class="btn btn-primary hv-basla" id="hvBasla">🎯 Start the challenge</button>
+      </div>
+    </div>`;
+  $("hvZorluk").addEventListener("click", e => { const b = e.target.closest("[data-z]"); if (!b) return; oyunAyarYaz(S.oyun.id, { zorluk: +b.dataset.z }); S.durdur(); hvEkranGiris(hvKur(S.oyun, S.bitir)); });
+  $("hvSabitSec").addEventListener("change", e => { S.sabit = e.target.checked; oyunAyarYaz(S.oyun.id, { hvSabit: S.sabit }); });
+  $("hvBasla").addEventListener("click", () => { hvTurHazirla(S); S.baslangic = Date.now(); hvTahtaBagla(S); hvEkranSoru(S); });
+  tahtaSigdirIste();
+}
+
+/* Akıllı tahta komutları */
+function hvTahtaBagla(S){
+  tahtaBaglan({
+    sonraki: () => { if (S.bitti) return; if (!S.kilit){ S.atlanan++; } hvSonraki(S); },
+    degistir: () => { if (S.bitti || S.kilit) return; const eski = S.sorular[S.ix]; S.sorular[S.ix] = Object.assign(hvSoruAl(S, eski.tipAd, S.konumlar[S.ix]), { tipAd: eski.tipAd }); hvEkranSoru(S); },
+    ipucu: () => hvIpucu(S),
+    cevap: () => { const q = S.sorular[S.ix]; if (!q) return; const el = document.querySelector(`.hv-hedef[data-i="${q.dogruIx}"]`); if (el) el.classList.add("goster"); },
+    yeniden: () => { S.durdur(); const Y = hvKur(S.oyun, S.bitir); hvTurHazirla(Y); hvTahtaBagla(Y); hvEkranSoru(Y); },
+  });
+}
+/* İpucu: bir yanlış balonu söndürür (puan yarıya iner) */
+function hvIpucu(S){
+  const q = S.sorular[S.ix]; if (!q || S.kilit) return;
+  const acik = [...document.querySelectorAll(".hv-hedef:not(.sondu)")].filter(b => +b.dataset.i !== q.dogruIx);
+  if (acik.length <= 1) return;
+  const b = fenSec(acik); b.classList.add("sondu"); b.disabled = true;
+  q.ipucu = (q.ipucu || 0) + 1;
+  sesEfekt("ipucu");
+}
+
+function hvHudHtml(S){
+  const T = S.sorular.length;
+  return `<div class="hv-hud">
+    <span class="hv-hud-kutu">Question <b>${S.ix + 1}</b><i>/ ${T}</i></span>
+    <span class="hv-hud-kutu">Score <b id="hvPuan">${S.puan}</b></span>
+    <span class="hv-hud-kutu hv-seri${S.seri >= 3 ? " acik" : ""}" id="hvSeri">🔥 <b>${S.seri}</b></span>
+    <span class="hv-hud-kutu">⭐ <b id="hvYildiz">${S.yildiz}</b></span>
+    <button type="button" class="hv-hud-kutu hv-hareket" id="hvHareket" aria-pressed="${S.sabit}">${S.sabit ? "▶ Move targets" : "⏸ Still targets"}</button>
+  </div>
+  <div class="hv-ilerleme" aria-hidden="true"><i style="width:${Math.round(S.ix / T * 100)}%"></i></div>`;
+}
+function hvEkranSoru(S){
+  if (S.rafId){ cancelAnimationFrame(S.rafId); S.rafId = 0; }
+  const q = S.sorular[S.ix];
+  S.kilit = false;
+  konusmaDur();
+  const harf = ["A", "B", "C", "D"];
+  const renk = ["r0", "r1", "r2", "r3"];
+  const olcek = q.olcek ? `<div class="hv-olcek">${HV_SIKLIK.map(s => `<span><b>${s.z}</b><em>${hvDaireler(s.d)}</em></span>`).join('<i class="hv-olcek-ok">→</i>')}</div>` : "";
+  $("app").innerHTML = `${oyunBaslik(S.oyun)}
+    <div class="hv-oyun" lang="en">
+      ${hvHudHtml(S)}
+      <div class="hv-soru-kart${q.gorsel ? " gorselli" : ""}">
+        ${q.gorsel ? `<div class="hv-gorsel">${q.gorsel}</div>` : ""}
+        <div class="hv-soru-ic">
+          <span class="hv-cip">${kacis(HV_KAT[q.kat] || q.kat)} · ${kacis(q.cip)}</span>
+          <p class="hv-yonerge">${kacis(q.yonerge)}</p>
+          <p class="hv-soru" id="hvSoru">${q.metin}</p>
+          ${olcek}
+          <button type="button" class="hv-dinle" id="hvDinle">🔊 Listen</button>
+        </div>
+      </div>
+      <div class="hv-arena n${q.secenekler.length}${S.hareketAz ? " az" : ""}" id="hvArena">
+        <span class="hv-bulut b1"></span><span class="hv-bulut b2"></span><span class="hv-bulut b3"></span>
+        ${q.secenekler.map((s, i) => `<button type="button" class="hv-hedef ${renk[i]}${s.m.length > 30 ? " uzun" : ""}" data-i="${i}" aria-label="${harf[i]}: ${kacis(s.m)}">
+          <span class="hv-hedef-ic"><span class="hv-hedef-harf">${harf[i]}</span><span class="hv-hedef-yazi">${kacis(s.m)}</span></span>
+        </button>`).join("")}
+        <span class="hv-dart" id="hvDart" aria-hidden="true"><svg viewBox="0 0 20 44"><path d="M10 0 L15 12 L11.5 12 L11.5 34 L16 42 L10 38 L4 42 L8.5 34 L8.5 12 L5 12 Z" /></svg></span>
+        <img class="hv-atici" src="assets/maskot/kivilcim.svg" alt="" aria-hidden="true" draggable="false" />
+      </div>
+      <div class="hv-geri" id="hvGeri" hidden></div>
+    </div>`;
+  $("hvDinle").addEventListener("click", () => {
+    const b = $("hvDinle"); b.classList.add("caliyor");
+    konusEn(S.kilit && q.tam ? q.tam : q.dinle, undefined, () => b.classList.remove("caliyor"));
+  });
+  $("hvHareket").addEventListener("click", () => {
+    S.sabit = !S.sabit; oyunAyarYaz(S.oyun.id, { hvSabit: S.sabit });
+    const b = $("hvHareket"); b.textContent = S.sabit ? "▶ Move targets" : "⏸ Still targets"; b.setAttribute("aria-pressed", S.sabit);
+  });
+  $("hvArena").addEventListener("click", e => {
+    const b = e.target.closest(".hv-hedef"); if (!b || b.disabled) return;
+    hvAtis(S, +b.dataset.i);
+  });
+  hvTuslarBagla(S);
+  hvYerlesim(S);
+  if (!S.boyut){ S.boyut = () => { if (S.canli && $("hvArena")) hvYerlesim(S); }; addEventListener("resize", S.boyut); }
+  S.sonTs = 0;
+  S.rafId = requestAnimationFrame(ts => hvDongu(S, ts));
+  tahtaSigdirIste();
+}
+
+/* Yerleşim: masaüstünde tek satır, dar alanda 2 sütun. Her hedef kendi
+   hücresinde salınır; genlik hücrede kalan boşluktan hesaplanır. */
+function hvYerlesim(S){
+  const ar = $("hvArena"); if (!ar) return;
+  const hedefler = [...ar.querySelectorAll(".hv-hedef")];
+  const n = hedefler.length;
+  const W = ar.clientWidth;
+  const sutun = W < 560 ? 2 : n;
+  ar.classList.toggle("dar", sutun < n);
+  const H = ar.clientHeight;
+  const satir = Math.ceil(n / sutun);
+  const altBosluk = 64;                                   /* atıcı (Kıvılcım) için */
+  const hucreW = W / sutun, hucreH = (H - altBosluk - 10) / satir;
+  S.hedefler = hedefler.map((el, i) => {
+    const r = Math.floor(i / sutun), sonSatirAdet = r === satir - 1 ? n - r * sutun : sutun;
+    const c = i % sutun;
+    const kay = (sutun - sonSatirAdet) * hucreW / 2;
+    /* Salınım payı hücrenin İÇİNDE kalır: komşu balonlar hiçbir anda değmez */
+    const pay = hucreW < 200 ? 8 : 24;
+    const w = Math.min(hucreW - 2 * (pay + 5), 250);
+    el.style.width = w + "px";
+    hvYaziSigdir(el);
+    const cx = kay + (c + .5) * hucreW, cy = 10 + (r + .5) * hucreH;
+    el.style.left = cx + "px"; el.style.top = cy + "px";
+    const h = el.offsetHeight;
+    const g = S.ayar.genlik;
+    const ax = Math.max(0, Math.min(pay, (hucreW - w) / 2 - 5)) * g;
+    const ay = Math.min(18, Math.max(4, (hucreH - h) / 2 - 2)) * g;
+    const eski = (S.hedefler || [])[i];
+    const om = 2 * Math.PI / S.ayar.periyot;
+    return { el, cx, cy, ax, ay, w1: eski ? eski.w1 : om * (0.85 + Math.random() * .3), w2: eski ? eski.w2 : om * (1.2 + Math.random() * .4),
+      p1: eski ? eski.p1 : Math.random() * 6.28, p2: eski ? eski.p2 : Math.random() * 6.28, dx: 0, dy: 0 };
+  });
+  hvKonumYaz(S);
+}
+/* En uzun sözcük satıra sığmıyorsa («Congratulations!», «Commemoration»)
+   yazı 1 px adımlarla küçülür (en az 12 px) — sözcük ortadan bölünmez. */
+function hvYaziSigdir(el){
+  const y = el.querySelector(".hv-hedef-yazi"); if (!y) return;
+  y.style.fontSize = ""; y.style.overflowWrap = "normal";
+  let boy = parseFloat(getComputedStyle(y).fontSize) || 16;
+  while (y.scrollWidth > y.clientWidth + 1 && boy > 12){ boy -= 1; y.style.fontSize = boy + "px"; }
+  y.style.overflowWrap = "";
+}
+function hvKonumYaz(S){
+  (S.hedefler || []).forEach(h => {
+    h.dx = h.ax * Math.sin(h.w1 * S.t + h.p1);
+    h.dy = h.ay * Math.sin(h.w2 * S.t + h.p2);
+    h.el.style.transform = `translate(-50%, -50%) translate(${h.dx.toFixed(1)}px, ${h.dy.toFixed(1)}px)`;
+  });
+}
+function hvDongu(S, ts){
+  if (!S.canli) return;
+  const dt = S.sonTs ? Math.min(.05, (ts - S.sonTs) / 1000) : 0;
+  S.sonTs = ts;
+  const durgun = S.sabit || S.kilit || (typeof TAHTA !== "undefined" && TAHTA.duraklatildi);
+  if (!durgun){ S.t += dt; hvKonumYaz(S); }
+  S.rafId = requestAnimationFrame(t => hvDongu(S, t));
+}
+
+const HV_TUS = { "1": 0, "2": 1, "3": 2, "4": 3, a: 0, b: 1, c: 2, d: 3, A: 0, B: 1, C: 2, D: 3 };
+function hvTuslarBagla(S){
+  hvTuslarCoz(S);
+  S.tusIn = e => {
+    if (e.target.closest && e.target.closest("input, select, textarea, [contenteditable]")) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if ((e.key === "Enter" || e.key === " ") && S.devam){ e.preventDefault(); S.devam(); return; }
+    const i = HV_TUS[e.key];
+    if (i == null || S.kilit) return;
+    const b = document.querySelector(`.hv-hedef[data-i="${i}"]`);
+    if (!b || b.disabled) return;
+    e.preventDefault();
+    hvAtis(S, i);
+  };
+  addEventListener("keydown", S.tusIn);
+}
+function hvTuslarCoz(S){ if (S.tusIn) removeEventListener("keydown", S.tusIn); S.tusIn = null; }
+
+/* Atış: dart atıcıdan hedefin o anki merkezine uçar (koordinatlar arena
+   içi yerleşim pikseli — akıllı tahta ölçeğinden etkilenmez). */
+function hvAtis(S, i){
+  if (S.kilit) return;
+  S.kilit = true;
+  konusmaDur();
+  const h = S.hedefler[i], ar = $("hvArena"), dart = $("hvDart");
+  const bitis = () => hvCevap(S, i);
+  if (!dart || !ar || S.hareketAz){ bitis(); return; }
+  const x0 = ar.clientWidth / 2, y0 = ar.clientHeight - 58;
+  const x1 = h.cx + h.dx, y1 = h.cy + h.dy;
+  const aci = Math.atan2(x1 - x0, y0 - y1) * 180 / Math.PI;
+  dart.style.transition = "none";
+  dart.style.transform = `translate(${x0}px, ${y0}px) translate(-50%, -50%) rotate(${aci}deg)`;
+  dart.classList.add("ucuyor");
+  void dart.offsetWidth;
+  dart.style.transition = "transform .3s cubic-bezier(.3,.7,.4,1)";
+  dart.style.transform = `translate(${x1}px, ${y1}px) translate(-50%, -50%) rotate(${aci}deg)`;
+  sesEfekt("adim");
+  S.bekle(() => { dart.classList.remove("ucuyor"); bitis(); }, 310);
+}
+function hvKatYaz(S, q, dogruMu){ const c = S.kat[q.kat] || (S.kat[q.kat] = { d: 0, y: 0 }); if (dogruMu) c.d++; else c.y++; }
+function hvCevap(S, i){
+  const q = S.sorular[S.ix];
+  const b = document.querySelector(`.hv-hedef[data-i="${i}"]`);
+  const dg = document.querySelector(`.hv-hedef[data-i="${q.dogruIx}"]`);
+  document.querySelectorAll(".hv-hedef").forEach(x => x.classList.add("kilitli"));
+  const geri = $("hvGeri");
+  if (i === q.dogruIx){
+    S.dogru++; S.seri++; S.enUzunSeri = Math.max(S.enUzunSeri, S.seri);
+    let kazanc = 100 + (S.seri >= 3 ? 20 : 0) + (S.A.zorluk === 3 ? 30 : 0);
+    if (q.ipucu) kazanc = Math.round(kazanc / 2);
+    S.puan += kazanc;
+    let odul = "";
+    if (S.seri % 5 === 0){ S.yildiz++; odul = " · ⭐ +1"; }
+    hvKatYaz(S, q, true);
+    if (b){ b.classList.add("vuruldu"); hvPatlama(b); }
+    sesEfekt("patla"); S.bekle(() => sesEfekt(odul ? "bonus" : "dogru"), 120);
+    geri.className = "hv-geri iyi"; geri.hidden = false;
+    geri.innerHTML = `<div class="hv-geri-bas"><img src="assets/maskot/kivilcim-kutlama.svg" alt="" /><span><b>${fenSec(["Bullseye!", "Great shot!", "Well done!", "Excellent!", "Perfect!"])}</b> +${kazanc}${odul}</span></div>
+      <p class="hv-geri-tam">✔ ${kacis(q.tam)}</p>`;
+    hvHudTazele(S);
+    S.devam = () => hvSonraki(S);
+    S.bekle(() => hvSonraki(S), 1900);
+  } else {
+    S.yanlis++; S.seri = 0;
+    hvKatYaz(S, q, false);
+    const s = q.secenekler[i];
+    if (b) b.classList.add("iska");
+    if (dg) dg.classList.add("goster");
+    sesEfekt("yanlis");
+    const neden = s.aciklama || (HV_NEDEN[s.neden] ? HV_NEDEN[s.neden](q.x || {}) : "");
+    geri.className = "hv-geri kotu"; geri.hidden = false;
+    geri.innerHTML = `<div class="hv-geri-bas"><img src="assets/maskot/kivilcim-konusan.svg" alt="" /><span><b>Not quite.</b> «${kacis(s.m)}» doesn't fit here.</span></div>
+      <p class="hv-geri-neden" lang="tr">💡 ${kacis(neden)}</p>
+      <p class="hv-geri-tam">✔ ${kacis(q.tam)}</p>
+      <button type="button" class="btn btn-primary hv-devam" id="hvDevam">Continue ▶</button>`;
+    hvHudTazele(S);
+    S.devam = () => hvSonraki(S);
+    $("hvDevam").addEventListener("click", () => S.devam && S.devam());
+    try { $("hvDevam").focus({ preventScroll: true }); } catch (e) {}
+  }
+  tahtaSigdirIste();
+}
+function hvPatlama(b){
+  const ic = b.querySelector(".hv-hedef-ic"); if (!ic) return;
+  const renkler = ["#FFC94D", "#FF7A59", "#4FC3F7", "#7ED957", "#C792EA"];
+  for (let k = 0; k < 10; k++){
+    const p = document.createElement("i");
+    p.className = "hv-parca";
+    const a = k / 10 * Math.PI * 2, r = 46 + Math.random() * 26;
+    p.style.setProperty("--px", (Math.cos(a) * r).toFixed(0) + "px");
+    p.style.setProperty("--py", (Math.sin(a) * r).toFixed(0) + "px");
+    p.style.background = renkler[k % renkler.length];
+    b.appendChild(p);
+  }
+}
+function hvHudTazele(S){
+  const p = $("hvPuan"); if (p) p.textContent = S.puan;
+  const s = $("hvSeri"); if (s){ s.innerHTML = "🔥 <b>" + S.seri + "</b>"; s.classList.toggle("acik", S.seri >= 3); }
+  const y = $("hvYildiz"); if (y) y.textContent = S.yildiz;
+}
+function hvSonraki(S){
+  if (!S.canli || S.bitti) return;
+  S.devam = null;
+  S.zamanlar.forEach(clearTimeout); S.zamanlar = [];
+  S.ix++;
+  if (S.ix >= S.sorular.length) return hvBitir(S);
+  hvEkranSoru(S);
+}
+
+function hvBitir(S){
+  if (S.bitti) return;
+  S.bitti = true;
+  const sure = Math.round((Date.now() - S.baslangic) / 1000);
+  const toplam = S.dogru + S.yanlis;
+  const yuzde = toplam ? Math.round(S.dogru / toplam * 100) : 0;
+  const satir = [{ ad: "Accuracy", deger: "%" + yuzde }, { ad: "Best streak", deger: "🔥 " + S.enUzunSeri }, { ad: "Stars", deger: "⭐ " + S.yildiz }];
+  let zayif = null;
+  Object.keys(HV_KAT).forEach(k => { const c = S.kat[k]; if (!c || !(c.d + c.y)) return; const o = c.d / (c.d + c.y); satir.push({ ad: HV_KAT[k], deger: c.d + " / " + (c.d + c.y) }); if (o < .6 && (!zayif || o < zayif.o)) zayif = { k, o }; });
+  if (S.atlanan) satir.push({ ad: "Skipped", deger: String(S.atlanan) });
+  const not = zayif ? "Practise «" + HV_KAT[zayif.k].replace(/^\S+\s/, "") + "» and play again — new questions are waiting." : yuzde >= 90 ? "Challenge complete! You are a School Challenge champion." : "Challenge complete! Play again for new questions.";
+  oyunAyarYaz(S.oyun.id, { hvGorulen: (S.A.hvGorulen || []).concat(Object.keys(S.izler)).slice(-160) });
+  S.durdur();
+  S.bitir({ dogru: S.dogru, yanlis: S.yanlis, sure, hedefSure: S.sorular.length * 30, oyunPuan: S.puan, ekBilgi: satir, not,
+    rozet: yuzde >= 80 ? "School Challenge Champion rozeti" : null });
+}
+
+/* ═════════ 7. SINIF İNGİLİZCE — OYUN KAYDI ═════════ */
+const INGILIZCE_7 = [
+  { id: "en7-school-challenge", kademe: "ortaokul", sinif: "7", ders: "İngilizce",
+    unite: "Theme 1: School Life & Education",
+    konu: "Activities, Competitions, Special Days, Tenses, Frequency, Rules",
+    tur: "hedefiVur", zorluk: 2, baslik: "School Challenge – Hedefi Vur",
+    etiket: "Activities • Competitions • National Days • Simple Present • Present Progressive • Frequency • must / can't",
+    ozet: "Read the question and hit the right balloon. Slow, floating targets; picture, gap-fill, tense, frequency, rules, school situations and special days.",
+    kazanimlar: ["Extra-curricular activities, competitions and celebrations in context (ENG.7.1.R3, ENG.7.1.V1)",
+      "Theme vocabulary: drama play, exhibition, audience, competition, winner, prize, race, act, attend, celebrate, beat, break a record",
+      "Simple Present vs Present Progressive: routines and actions happening now (ENG.7.1.G1)",
+      "Frequency adverbs always / usually / often / sometimes / rarely / never and their position",
+      "Rules and prohibitions with must / can't",
+      "National and religious days: Republic Day, National Sovereignty and Children's Day, Commemoration of Atatürk, Youth and Sports Day, Democracy and National Unity Day, Victory Day, Eid al-Fitr, Eid al-Adha",
+      "Short school situations: reading and listening for meaning (ENG.7.1.L3, ENG.7.1.R2)"] },
+];
+
+/* ═════════ 7. SINIF DKAB · KAVRAM HATTI (mh-) ═════════════════════════════
+   Türkiye Yüzyılı Maarif Modeli, Din Kültürü ve Ahlak Bilgisi Dersi Öğretim
+   Programı · 7. sınıf · 1. ÜNİTE: MELEK VE AHİRET İNANCI (bkz. mufredat.js
+   «din-7»).
+     DKAB.7.1.1  Melekleri sınıflandırabilme
+     DKAB.7.1.2  Ahiret hayatının aşamalarını çözümleyebilme
+     DKAB.7.1.3  Melek ve ahiret inancının insana kazandırdıkları konusunda
+                 analitik düşünebilme
+     DKAB.7.1.4  Nâs suresini ve bu surenin anlamını okuyarak yorumlayabilme
+
+   MEKANİK: bölüm, hikâye ve seviye seçimi YOK — oyun açılınca ilk kart gelir.
+   Kart ortada durur (akmaz, süre yok); öğrenci onu doğru kutuya sürükler ya
+   da kutuya dokunur (1-4 tuşları da çalışır). Yanlışta tek cümlelik doğru
+   açıklama çıkar ve «Devam» beklenir. Tur 28 görev: melek 6 · varlık 5 ·
+   ahiret 7 · davranış 5 · Nâs 5; zorluk %35 kolay / %45 orta / %20
+   düşündüren (10/12/6). Turda aynı görev tekrarlanmaz; aynı kavram en çok iki
+   kez sorulur; önceki turlarda görülen kartlar sona itilir.
+
+   İÇERİK SINIRI: melek, cin ve şeytan için yalnız MEB'in verdiği temel
+   bilgiler (meleklerin itaati, cinlerde iman eden de etmeyen de olması,
+   şeytanın vesvesesi ve apaçık düşman oluşu) kullanılır; yaratılış maddesi
+   gibi ayrıntılar soru odağı yapılmaz. Nâs suresinde Mekkî-Medenî, ayet sayısı ve
+   sıra numarası SORULMAZ; meal Diyanet mealine dayanır. Kategori kutuları
+   (görülen/görülemeyen, uygun/bağdaşmaz…) sabit sırada durur; seçenek
+   kutularında doğru cevabın yeri turda dengeli dağıtılır. */
+
+const MH_TUR = {
+  melek: { ad: "Melekler ve Görevleri", ikon: "🕊️", renk: "#4C6FD8" },
+  varlik: { ad: "Görülen – Görülemeyen", ikon: "👁️", renk: "#2E9C8C" },
+  ahiret: { ad: "Ahiret Aşamaları", ikon: "⏳", renk: "#8A5CC9" },
+  davranis: { ad: "İnanç → Davranış", ikon: "🤝", renk: "#D9822B" },
+  nas: { ad: "Nâs Suresi", ikon: "📖", renk: "#C9486A" },
+};
+const MH_ZORLUK = { 1: "Kolay", 2: "Orta", 3: "Düşündüren" };
+const MH_PLAN = { tur: { melek: 6, varlik: 5, ahiret: 7, davranis: 5, nas: 5 }, zorluk: { 1: 10, 2: 12, 3: 6 } };
+
+/* ── MELEKLER ── dört büyük melek + Kiramen Kâtibin + Münker ve Nekir */
+const MH_MELEK = [
+  { id: "cebrail", ad: "Cebrail", buyuk: true, kisa: "Vahiy getirir",
+    gorev: [["Peygamberlere vahiy getirir.", 1], ["Allah'ın mesajlarını peygamberlere ulaştırır.", 2], ["Kur'an ayetlerini Hz. Muhammed'e (sav) getirmiştir.", 2]],
+    a: "Cebrail, Allah'ın vahyini peygamberlere getirmekle görevli melektir." },
+  { id: "mikail", ad: "Mikail", buyuk: true, kisa: "Tabiat olaylarıyla görevli",
+    gorev: [["Allah'ın izniyle tabiat olaylarının düzeniyle görevlidir.", 1], ["Yağmurun yağması, rüzgârın esmesi gibi tabiat olaylarıyla görevlidir.", 2]],
+    a: "Mikail, Allah'ın izniyle tabiat olaylarının düzeniyle görevli melektir." },
+  { id: "israfil", ad: "İsrafil", buyuk: true, kisa: "Sûr'a üfler",
+    gorev: [["Sûr'a üflemekle görevlidir.", 1], ["Sûr'a ilk üflediğinde kıyamet kopar.", 2], ["Sûr'a ikinci kez üflediğinde insanlar yeniden dirilir.", 3]],
+    a: "İsrafil, Sûr'a üflemekle görevlidir; ilk üfleyişte kıyamet kopar, ikincisinde insanlar yeniden dirilir." },
+  { id: "azrail", ad: "Azrail", buyuk: true, kisa: "Can alır",
+    gorev: [["Eceli gelen canlıların canını alır.", 1], ["Ölüm meleği olarak bilinir.", 2]],
+    a: "Azrail, eceli gelenlerin canını almakla görevli ölüm meleğidir." },
+  { id: "katibin", ad: "Kiramen Kâtibin", buyuk: false, kisa: "Amelleri yazar",
+    gorev: [["İnsanların iyi ve kötü bütün davranışlarını yazar.", 1], ["Her insanın amel defterini tutar.", 2]],
+    a: "Kiramen Kâtibin, insanların iyi ve kötü amellerini yazan meleklerdir." },
+  { id: "munker", ad: "Münker ve Nekir", buyuk: false, kisa: "Kabirde sorgular",
+    gorev: [["Kabirde insanı sorguya çeker.", 1], ["Ölen kişiye kabirde inancıyla ilgili sorular sorar.", 2]],
+    a: "Münker ve Nekir, kabirde insanları sorguya çeken meleklerdir." },
+];
+const MH_MELEK_SENARYO = [
+  { m: "katibin", z: 3, t: "Kerem, “Kimse görmese de yaptıklarım kayda geçiyor.” diyerek sınavda kopya çekmedi. Kerem hangi meleklerin görevini düşünmüştür?" },
+  { m: "cebrail", z: 2, t: "Öğretmen, “Kur'an ayetleri Hz. Muhammed'e (sav) bir melek aracılığıyla ulaştı.” diyor. Bu melek hangisidir?" },
+  { m: "israfil", z: 3, t: "Bir kitapta “Sûr'a üflenince dünya hayatı sona erecek.” yazıyor. Burada hangi melekten söz edilir?" },
+  { m: "munker", z: 3, t: "Zeynep, “Kabirde inancım sorulacak; bugünden hazırlıklı olmalıyım.” diyor. Zeynep hangi melekleri düşünüyor?" },
+  { m: "mikail", z: 2, t: "Uzun süredir beklenen yağmur sonunda yağdı. Bu tabiat olayı hangi meleğin göreviyle ilişkilendirilir?" },
+  { m: "azrail", z: 2, t: "Dedesini kaybeden Ali, “Eceli gelen herkes ölümü tadacak.” diye düşünüyor. Ölüm meleği hangisidir?" },
+];
+
+/* ── GÖRÜLEN / GÖRÜLEMEYEN ── */
+const MH_GORULEN = ["☀️ Güneş", "☁️ Bulut", "🌳 Ağaç", "🦋 Kelebek", "🌊 Deniz", "⛰️ Dağ", "🧑 İnsan", "🐦 Kuş", "🌷 Çiçek", "💧 Yağmur damlası", "🌈 Gökkuşağı", "🐝 Arı", "⭐ Yıldız", "🪨 Taş"];
+const MH_GORULMEZ = [["Melek", 1], ["Cin", 1], ["Şeytan", 1], ["Cebrail", 2], ["Mikail", 2], ["İsrafil", 2], ["Azrail", 2], ["Kiramen Kâtibin", 2], ["Münker ve Nekir", 2]];
+/* Melek · Cin · Şeytan: yalnız MEB'in temel bilgileri */
+const MH_MCS = [
+  { t: "Allah'ın verdiği görevleri eksiksiz yerine getirir.", d: 0, z: 2, a: "Melekler Allah'ın verdiği görevleri eksiksiz yerine getirirler." },
+  { t: "Allah'ın emirlerine her zaman uyar, O'na karşı gelmez.", d: 0, z: 2, a: "Melekler Allah'ın emirlerine her zaman itaat ederler." },
+  { t: "İçlerinde iman edenler de etmeyenler de vardır.", d: 1, z: 3, a: "Cinlerin içinde iman edenler de etmeyenler de bulunur." },
+  { t: "İnsanın içine kötü düşünceler (vesvese) vermeye çalışır.", d: 2, z: 2, a: "Şeytan, insanı vesvese vererek kötülüğe yöneltmeye çalışır." },
+  { t: "Kur'an'da insanın apaçık düşmanı olarak tanıtılır.", d: 2, z: 3, a: "Kur'an, şeytanı insanın apaçık düşmanı olarak tanıtır." },
+];
+
+/* ── AHİRET ── */
+const MH_SIRA = [
+  { id: "omur", ad: "Ömür" }, { id: "ecel", ad: "Ecel" }, { id: "kiyamet", ad: "Kıyamet" }, { id: "baas", ad: "Baas" },
+  { id: "mahser", ad: "Mahşer" }, { id: "amel", ad: "Amel defteri" }, { id: "mizan", ad: "Mizan" }, { id: "son", ad: "Cennet / Cehennem" },
+];
+const MH_TANIM = [
+  { id: "omur", ad: "Ömür", t: "İnsanın doğumundan ölümüne kadar geçen hayat süresi", k: "Doğumdan ölüme kadar geçen süre", yakin: ["ecel"], a: "Ömür, insanın doğumundan ölümüne kadar geçen hayat süresidir." },
+  { id: "ecel", ad: "Ecel", t: "Allah'ın her canlı için belirlediği hayatın sona erme vakti", k: "Hayatın sona erme vakti", yakin: ["omur", "kiyamet"], a: "Ecel, Allah'ın her canlı için belirlediği ölüm vaktidir." },
+  { id: "kiyamet", ad: "Kıyamet", t: "Evrendeki düzenin bozulup dünya hayatının sona ermesi", k: "Dünya hayatının sona ermesi", yakin: ["ecel", "baas"], a: "Kıyamet, evrendeki düzenin bozulup dünya hayatının sona ermesidir." },
+  { id: "baas", ad: "Baas", t: "Ölümden sonra bütün insanların yeniden diriltilmesi", k: "Yeniden diriliş", yakin: ["kiyamet", "mahser"], a: "Baas, ölümden sonra bütün insanların yeniden diriltilmesidir." },
+  { id: "mahser", ad: "Mahşer", t: "Diriltilen insanların hesap için toplanacağı yer", k: "Hesap için toplanılan yer", yakin: ["baas", "mizan"], a: "Mahşer, diriltilen insanların hesap için toplanacağı yerdir." },
+  { id: "amel", ad: "Amel defteri", t: "İnsanın dünyada yaptığı iyi ve kötü işlerin kaydedildiği defter", k: "Yapılanların kaydı", yakin: ["mizan"], a: "Amel defteri, insanın dünyadaki iyi ve kötü işlerinin kaydıdır." },
+  { id: "mizan", ad: "Mizan", t: "Amellerin adaletle tartılması", k: "Amellerin tartılması", yakin: ["amel", "mahser"], a: "Mizan, ahirette amellerin adaletle tartılmasıdır." },
+  { id: "cennet", ad: "Cennet", t: "İman edip iyi işler yapanların sonsuz mutluluk yurdu", k: "Sonsuz mutluluk yurdu", yakin: ["cehennem"], a: "Cennet, iman edip iyi işler yapanların sonsuz mutluluk yurdudur." },
+  { id: "cehennem", ad: "Cehennem", t: "Kötülüklerin cezasının çekileceği yer", k: "Kötülüklerin ceza yeri", yakin: ["cennet"], a: "Cehennem, kötülüklerin cezasının çekileceği yerdir." },
+];
+const MH_AHIRET_SENARYO = [
+  { d: "omur", z: 3, t: "Ece, “Dünyadaki hayatım sınırlı; zamanımı boşa harcamamalıyım.” diyor. Ece hangi kavramı düşünüyor?" },
+  { d: "amel", z: 3, t: "Bir öğrenci, “Her yaptığımın kaydı tutuluyor; ahirette bu kayıt önüme konacak.” diyor. Hangi kavramdan söz ediyor?" },
+  { d: "mizan", z: 2, t: "“İyiliklerle kötülükler hiçbir haksızlık olmadan ölçülecek.” sözü hangi kavramla ilgilidir?" },
+  { d: "mahser", z: 3, t: "Dede torununa, “Kimse kimsenin hakkını yemesin; o büyük toplanma yerinde herkes hesap verecek.” diyor. Dede nereden söz ediyor?" },
+  { d: "ecel", z: 3, t: "Ayşe, “Ölümün ne zaman geleceğini bilmiyoruz; her an hazırlıklı olmalıyız.” diyor. Ayşe hangi kavramı düşünüyor?" },
+  { d: "kiyamet", z: 3, t: "Bir sitede “Dünyanın sonu şu tarihte gelecek.” yazıyor. Öğretmen, dünya hayatının ne zaman sona ereceğini yalnız Allah'ın bildiğini söylüyor. Konu hangi kavramdır?" },
+  { d: "baas", z: 2, t: "İsrafil Sûr'a ikinci kez üfleyince bütün insanlar yeniden dirilecek. Bu aşamanın adı nedir?" },
+];
+
+/* ── İNANÇ → DAVRANIŞ ── */
+const MH_UYGUN = [
+  "Kimse görmese de bulduğu cüzdanı sahibine ulaştırıyor.", "Yaptığı hatayı saklamadan arkadaşından özür diliyor.",
+  "Sınavda kopya çekmiyor; başarıyı kendi emeğiyle istiyor.", "Verdiği sözü tutuyor, ödevini zamanında yapıyor.",
+  "İnternette kimseyi kırmamak için yazdıklarına dikkat ediyor.", "Kantinde fazla verilen para üstünü geri veriyor.",
+];
+const MH_UYMAZ = [
+  "Kimse görmüyor diye okulun duvarına yazı yazıyor.", "“Nasılsa kimse bilmez.” deyip arkadaşının kalemini alıyor.",
+  "Yaptığı kötülüğün hiçbir karşılığı olmayacağını düşünüyor.", "Yalan söyleyip suçu arkadaşının üstüne atıyor.",
+  "Öğretmen sınıftan çıkınca kurallara uymayı bırakıyor.",
+];
+const MH_ETKI = ["Sorumluluk bilinci", "Doğruluk", "İyilik yapma", "Kendini kontrol etme"];
+const MH_ETKI_DURUM = [
+  { d: 0, t: "Sınıf başkanı Bilal, üstlendiği görevleri aksatmıyor; yaptıklarından hesap vereceğini biliyor.", a: "Üstlendiği görevi aksatmadan yapmak sorumluluk bilincidir." },
+  { d: 0, t: "Selin, okul bahçesindeki kedilere su vermeyi üstlendi ve bu görevi her gün yerine getiriyor.", a: "Üstlenilen görevi her gün yerine getirmek sorumluluk bilincidir." },
+  { d: 1, t: "Ahmet, notunu yüksek göstermek için yalan söylemek yerine gerçeği anlatıyor.", a: "Yalan yerine gerçeği söylemek doğruluktur." },
+  { d: 1, t: "Mert, hakem görmese de topun kendisine çarparak dışarı çıktığını söylüyor.", a: "Kimse görmese de gerçeği söylemek doğruluktur." },
+  { d: 2, t: "Elif, okula yeni gelen öğrenciye kimse istemeden yardım ediyor.", a: "Karşılık beklemeden yardım etmek iyilik yapmaktır." },
+  { d: 2, t: "Can, harçlığının bir kısmını ihtiyaç sahibi bir aileye veriyor.", a: "İhtiyacı olana paylaşmak iyilik yapmaktır." },
+  { d: 3, t: "Kaan çok sinirlendiğinde kırıcı bir söz söylemeden önce durup sakinleşiyor.", a: "Öfke anında kendini tutmak, kendini kontrol etmektir." },
+  { d: 3, t: "Duru, oyunda arkadaşına kızsa da sözlerinin yazıldığını düşünüp kötü söz söylemiyor.", a: "Kötü söz söylemekten kendini alıkoymak, kendini kontrol etmektir." },
+];
+const MH_DUSUN = [
+  { t: "Deniz, “Nasılsa kimse görmüyor.” diyor. Arkadaşı ona melek ve ahiret inancını hatırlatmak istiyor. En uygun söz hangisi?",
+    d: "Kimse görmese de yaptıklarımız yazılıyor; bir gün hesabını vereceğiz.", y: ["Görülmezsen sorun olmaz.", "Sadece öğretmen varken dikkatli olmalıyız."],
+    a: "Melek ve ahiret inancı, insanın kimse görmese de davranışlarına dikkat etmesini sağlar." },
+  { t: "Yarışmada kaybeden Efe, hile yapan rakibine çok kızıyor. Ahiret inancına göre Efe'nin düşünmesi en uygun olan hangisi?",
+    d: "Ahirette herkese adaletle hakkı verilecek; ben doğru kalmalıyım.", y: ["Ben de bir dahaki sefere hile yapmalıyım.", "Hiçbir zaman adalet gerçekleşmez."],
+    a: "Ahiret inancı, adaletin mutlaka gerçekleşeceği bilinciyle insanı doğru kalmaya yöneltir." },
+  { t: "Ödevini yapmayı unuttuğunu fark eden Yusuf için en doğru davranış hangisi?",
+    d: "Öğretmenine doğruyu söyleyip ödevini tamamlamak", y: ["Defterini evde unuttuğunu söyleyerek yalan söylemek", "Arkadaşının ödevini kendi adıyla vermek"],
+    a: "Doğruyu söyleyip sorumluluğu üstlenmek, hesap bilinciyle uyumlu davranıştır." },
+  { t: "Tuba evde yalnızken de annesine verdiği sözü tutuyor. Bu davranışı en çok hangi inanç destekler?",
+    d: "Yaptıklarımın Kiramen Kâtibin tarafından yazıldığına inanmak", y: ["Mikail'in tabiat olaylarıyla görevli olduğuna inanmak", "İsrafil'in Sûr'a üfleyeceğine inanmak"],
+    a: "Amellerin yazıldığına inanmak, insanın yalnızken de doğru davranmasını destekler." },
+  { t: "Sınıfta biri, “Ahiret inancı insanın günlük hayatını değiştirmez.” diyor. Bu söze en iyi cevap hangisi?",
+    d: "Hesap vereceğini bilen insan sözlerine ve davranışlarına dikkat eder.", y: ["İnanç yalnızca ibadet zamanlarını ilgilendirir.", "İnsan davranışlarından hiçbir zaman sorumlu değildir."],
+    a: "Ahiret inancı, insanın sorumluluk bilinciyle davranışlarını kontrol etmesini sağlar." },
+];
+
+/* ── NÂS SURESİ ── (anlam: Diyanet meali) */
+const MH_NAS_MEAL = "De ki: İnsanların Rabbine, insanların Melik'ine (mutlak sahip ve hâkimine), insanların İlahına sığınırım; o sinsi vesvesecinin şerrinden. O ki insanların göğüslerine vesvese verir; gerek cinlerden, gerek insanlardan.";
+const MH_NAS_SORU = [
+  { z: 1, t: "Nâs suresinde kime sığınılması öğütlenir?", d: "İnsanların Rabbi olan Allah'a", y: ["Güçlü ve zengin insanlara", "Uğurlu sayılan eşyalara"], a: "Nâs suresi, her türlü kötülükten insanların Rabbi olan Allah'a sığınmayı öğütler." },
+  { z: 1, t: "Surede geçen “vesvese” ne demektir?", d: "İnsanın içine kötü düşünceler fısıldanması", y: ["Yüksek sesle dua etmek", "Bir işi sabırla sürdürmek"], a: "Vesvese, insanın içine gizlice kötü düşünceler fısıldanmasıdır." },
+  { z: 1, t: "“De ki: İnsanların Rabbine sığınırım.” ayeti bize ne öğretir?", d: "Kötülüklerden Allah'a sığınmayı", y: ["Yalnızca kendi gücümüze güvenmeyi", "Kötülüğe kötülükle karşılık vermeyi"], a: "Ayet, kötülüklerden korunmak için Allah'a sığınmayı öğretir." },
+  { z: 2, t: "Nâs suresinde Allah hangi sıfatlarla anılır?", d: "İnsanların Rabbi, Meliki ve İlahı", y: ["Göklerin ve yerin nuru", "Her şeyi işiten ve bilen"], a: "Surede Allah, insanların Rabbi, Meliki ve İlahı olarak anılır." },
+  { z: 2, t: "“Gerek cinlerden gerek insanlardan” ifadesi neyi gösterir?", d: "Kötülüğe çağıranların cinlerden de insanlardan da olabileceğini", y: ["Kötülüğün yalnızca cinlerden geldiğini", "İnsanların hiç kötülüğe çağırmadığını"], a: "Surede, vesvese verenlerin hem cinlerden hem insanlardan olabileceği bildirilir." },
+];
+const MH_NAS_IFADE = [
+  { t: "Kötülüklerden korunmak için Allah'a sığınırız.", d: 0, z: 1 },
+  { t: "Vesvese veren sinsi kötülüklerden Allah'a sığınılır.", d: 0, z: 1 },
+  { t: "Allah bütün insanların sahibi ve hâkimidir.", d: 0, z: 2 },
+  { t: "Vesvese yalnızca cinlerden gelir.", d: 1, z: 2, a: "Surede vesvesenin cinlerden de insanlardan da gelebileceği bildirilir." },
+  { t: "Kötü düşünceler karşısında hiçbir şey yapılamaz.", d: 1, z: 2, a: "Sure, kötü düşünceler karşısında Allah'a sığınmayı öğütler." },
+  { t: "İnsan yalnızca zor bir durumdayken Allah'a sığınmalıdır.", d: 1, z: 3, a: "Sure, her türlü kötülüğe karşı her zaman Allah'a sığınmayı öğretir." },
+];
+const MH_NAS_HAYAT = [
+  { z: 2, t: "Arkadaşları Emre'ye “Ödevini kopyala, kimse anlamaz.” diye ısrar ediyor. Surenin mesajına uygun davranış hangisi?",
+    d: "Kötü telkine uymaz, Allah'a sığınır ve doğru olanı yapar.", y: ["Israr edildiği için ödevi kopyalar.", "Kimse görmüyorsa sorun olmadığını düşünür."],
+    a: "Nâs suresi, kötülüğe çağıran sözlerin insanlardan da gelebileceğini hatırlatır; bu telkinlere uyulmaz." },
+  { z: 2, t: "Gece yatarken aklına korkutucu düşünceler gelen Aslı ne yapabilir?",
+    d: "Nâs suresini okuyarak Allah'a sığınır ve sakinleşir.", y: ["Korkusunu kimseye söylemeden büyütür.", "Aklına gelen kötü düşüncelere göre davranır."],
+    a: "Nâs suresi, içe düşen kötü düşüncelere karşı Allah'a sığınmayı öğretir." },
+  { z: 2, t: "İnternette biri Berk'i bir arkadaşıyla alay etmeye kışkırtıyor. Surenin mesajına uygun davranış hangisi?",
+    d: "Kışkırtmaya kapılmaz, kırıcı söz yazmaz.", y: ["Herkes yapıyor diye alay eder.", "Takma adla yazarsa sorun olmayacağını düşünür."],
+    a: "Sure, insanlardan gelen kötü telkinlere karşı dikkatli olmayı ve Allah'a sığınmayı öğütler." },
+  { z: 3, t: "Zehra'nın içinden “Bir kere yalan söylesen ne olur ki?” diye bir düşünce geçiyor. Surenin mesajına göre Zehra ne yapmalı?",
+    d: "Bunun bir vesvese olduğunu fark edip doğruyu söylemeli.", y: ["İçinden geçtiği için bu düşünceye uymalı.", "Düşünceyi yok sayıp yalanı başkasına söyletmeli."],
+    a: "Sure, içe düşen kötü düşüncelerin vesvese olabileceğini ve onlardan Allah'a sığınmayı öğretir." },
+  { z: 3, t: "Bir öğrenci, “Nâs suresini okumak kötü alışkanlıklardan korunmama nasıl yardım eder?” diye soruyor. En uygun cevap hangisi?",
+    d: "Kötülüğe çağıran düşünce ve sözleri fark etmemi, Allah'a sığınarak uzak durmamı hatırlatır.", y: ["Hiçbir çaba göstermesem de beni korur.", "Sadece sınav zamanlarında işe yarar."],
+    a: "Sure, kötülüğe çağıran etkileri fark edip Allah'a sığınarak onlardan uzak durmayı öğütler." },
+];
+
+/* ── KART ÜRETİMİ ──────────────────────────────────────────────────────────
+   Her kart: { id, tur, z, anahtar (aynı kavram tekrar sınırı), ust, metin,
+   yonerge, kutular:[metin], dogru (kutu dizini), sabit (kategori kutusu:
+   sıra korunur), duzen ("izgara" | "yan" | "hat"), hat, a (tek cümle) }.
+   Seçenek kutulu kartlarda doğru kutunun yeri tur kurulurken atanır. */
+function mhSecenekKart(o){ return Object.assign({ sabit: false, duzen: "izgara" }, o); }
+function mhMelekBul(id){ return MH_MELEK.find(m => m.id === id); }
+function mhDigerMelek(id, kac){ return karistir(MH_MELEK.filter(m => m.id !== id)).slice(0, kac); }
+
+function mhKartlarUret(){
+  const K = [];
+  /* 1. Melek ↔ Görev */
+  MH_MELEK.forEach(m => {
+    m.gorev.forEach(([g, z], i) => K.push(mhSecenekKart({ id: "mg|" + m.id + "|" + i, tur: "melek", z, anahtar: m.id, ust: "Görev kartı",
+      metin: g, yonerge: "Bu görev hangi meleğe ait?", secenekUret: () => [m.ad].concat(mhDigerMelek(m.id, z === 1 ? 1 : 2).map(x => x.ad)), a: m.a })));
+    K.push(mhSecenekKart({ id: "gm|" + m.id, tur: "melek", z: 2, anahtar: m.id, ust: "Melek kartı", metin: m.ad, buyukMetin: true,
+      yonerge: "Bu meleğin görevi hangisi?", secenekUret: () => [m.kisa].concat(mhDigerMelek(m.id, 2).map(x => x.kisa)), a: m.a }));
+    K.push({ id: "ms|" + m.id, tur: "melek", z: m.buyuk ? 1 : 2, anahtar: m.id, ust: "Sınıflandır", metin: m.ad, buyukMetin: true,
+      yonerge: "Bu melek hangi gruptadır?", kutular: ["Dört büyük melek", "Diğer melekler"], dogru: m.buyuk ? 0 : 1, sabit: true, duzen: "yan",
+      a: m.buyuk ? m.ad + ", dört büyük melekten biridir." : m.ad + ", dört büyük melek arasında sayılmaz; " + m.a.replace(/^[^,]+, /, "") });
+  });
+  MH_MELEK_SENARYO.forEach((s, i) => { const m = mhMelekBul(s.m);
+    K.push(mhSecenekKart({ id: "mx|" + i, tur: "melek", z: s.z, anahtar: m.id, ust: "Durum", metin: s.t, yonerge: "Kartı doğru meleğe gönder.",
+      secenekUret: () => [m.ad].concat(mhDigerMelek(m.id, 2).map(x => x.ad)), a: m.a })); });
+
+  /* 2. Görülen / görülemeyen */
+  const GK = ["Gözle görülebilen varlıklar", "Gözle görülemeyen varlıklar"];
+  MH_GORULEN.forEach((v, i) => K.push({ id: "vg|" + i, tur: "varlik", z: 1, anahtar: "gorulen", ust: "Varlık kartı", metin: v, buyukMetin: true,
+    yonerge: "Bu varlık hangi gruba girer?", kutular: GK, dogru: 0, sabit: true, duzen: "yan", a: v.replace(/^\S+\s/, "") + " gözle görebildiğimiz varlıklardandır." }));
+  MH_GORULMEZ.forEach(([v, z], i) => K.push({ id: "vm|" + i, tur: "varlik", z, anahtar: "gorulmez", ust: "Varlık kartı", metin: v, buyukMetin: true,
+    yonerge: "Bu varlık hangi gruba girer?", kutular: GK, dogru: 1, sabit: true, duzen: "yan",
+    a: z === 2 ? v + " bir melektir; melekler gözle görülemeyen varlıklardır." : v + ", gözle görülemeyen varlıklardandır." }));
+  MH_MCS.forEach((c, i) => K.push({ id: "vc|" + i, tur: "varlik", z: c.z, anahtar: "mcs" + c.d, ust: "Özellik kartı", metin: c.t,
+    yonerge: "Bu özellik hangi varlığa aittir?", kutular: ["Melek", "Cin", "Şeytan"], dogru: c.d, sabit: true, duzen: "izgara", a: c.a }));
+
+  /* 3. Ahiret aşamaları */
+  MH_TANIM.forEach(t => {
+    K.push(mhSecenekKart({ id: "at|" + t.id, tur: "ahiret", z: 1, anahtar: t.id, ust: "Açıklama kartı", metin: t.t + ".",
+      yonerge: "Bu açıklama hangi kavrama ait?", secenekUret: () => [t.ad].concat(karistir(MH_TANIM.filter(x => x.id !== t.id && t.yakin.indexOf(x.id) < 0)).slice(0, 2).map(x => x.ad)), a: t.a }));
+    K.push(mhSecenekKart({ id: "ay|" + t.id, tur: "ahiret", z: 2, anahtar: t.id, ust: "Açıklama kartı", metin: t.t + ".",
+      yonerge: "Bu açıklama hangi kavrama ait? (Kavramlar birbirine yakın!)", secenekUret: () => {
+        const yakin = t.yakin.map(id => MH_TANIM.find(x => x.id === id));
+        const dolgu = karistir(MH_TANIM.filter(x => x.id !== t.id && t.yakin.indexOf(x.id) < 0));
+        return [t.ad].concat(yakin.concat(dolgu).slice(0, 3).map(x => x.ad));
+      }, a: t.a }));
+    K.push(mhSecenekKart({ id: "ak|" + t.id, tur: "ahiret", z: 2, anahtar: t.id, ust: "Kavram kartı", metin: t.ad, buyukMetin: true,
+      yonerge: "Bu kavramın açıklaması hangisi?", secenekUret: () => [t.k].concat(karistir(MH_TANIM.filter(x => x.id !== t.id)).slice(0, 2).map(x => x.k)), a: t.a }));
+  });
+  MH_AHIRET_SENARYO.forEach((s, i) => { const t = MH_TANIM.find(x => x.id === s.d);
+    K.push(mhSecenekKart({ id: "ax|" + i, tur: "ahiret", z: s.z, anahtar: t.id, ust: "Durum", metin: s.t, yonerge: "Kartı doğru kavrama gönder.",
+      secenekUret: () => { const yakin = t.yakin.map(id => MH_TANIM.find(x => x.id === id)); return [t.ad].concat(yakin.concat(karistir(MH_TANIM.filter(x => x.id !== t.id && t.yakin.indexOf(x.id) < 0))).slice(0, 2).map(x => x.ad)); }, a: t.a })); });
+  /* Hat: aşama dizisinde boş yuvalar — kart kendi yuvasına gider.
+     z1: 4'lük pencere, 2 boş · z2: 4'lük pencere, 3 boş · z3: 5'lik pencere, 3 boş */
+  const hatAyar = { 1: [4, 2], 2: [4, 3], 3: [5, 3] };
+  [1, 2, 3].forEach(z => {
+    const [uz, bos] = hatAyar[z];
+    for (let bas = 0; bas + uz <= MH_SIRA.length; bas++){
+      const pencere = MH_SIRA.slice(bas, bas + uz);
+      /* Her pencere + zorlukta birkaç boşluk düzeni; kart boşluklardan biri */
+      const duzenler = mhBosDuzenler(uz, bos);
+      duzenler.forEach(bosIx => bosIx.forEach(kartIx => {
+        const hat = pencere.map((p, i) => ({ ad: p.ad, bos: bosIx.indexOf(i) >= 0 }));
+        const yuvalar = bosIx;
+        const kart = pencere[kartIx];
+        const onceki = kartIx > 0 ? pencere[kartIx - 1].ad : null, sonraki = kartIx < uz - 1 ? pencere[kartIx + 1].ad : null;
+        K.push({ id: "ah|" + bas + "|" + z + "|" + bosIx.join("") + "|" + kartIx, tur: "ahiret", z, anahtar: "hat-" + kart.id, ust: "Aşama kartı",
+          metin: kart.ad, buyukMetin: true, yonerge: "Kartı aşama hattındaki doğru boşluğa gönder.",
+          kutular: yuvalar.map((y, j) => (j + 1) + ". boşluk"), dogru: yuvalar.indexOf(kartIx), sabit: true, duzen: "hat", hat,
+          a: onceki && sonraki ? kart.ad + ", " + onceki + " ile " + sonraki + " arasında gelir." : onceki ? kart.ad + ", " + onceki + " aşamasından sonra gelir." : kart.ad + ", " + sonraki + " aşamasından önce gelir." });
+      }));
+    }
+  });
+  /* Önce / sonra: referans aşamaya göre */
+  for (let r = 2; r <= 5; r++) for (let c = 0; c < MH_SIRA.length; c++){
+    if (c === r || Math.abs(c - r) > 3) continue;
+    const ref = MH_SIRA[r], kart = MH_SIRA[c];
+    K.push({ id: "ao|" + r + "|" + c, tur: "ahiret", z: Math.abs(c - r) === 1 ? 3 : 2, anahtar: "once-" + kart.id, ust: "Aşama kartı", metin: kart.ad, buyukMetin: true,
+      yonerge: "Bu aşama " + ref.ad + " aşamasından önce mi, sonra mı gelir?", kutular: ["⬅️ " + ref.ad + " öncesi", ref.ad + " sonrası ➡️"], dogru: c < r ? 0 : 1, sabit: true, duzen: "yan",
+      a: kart.ad + ", " + ref.ad + " aşamasından " + (c < r ? "önce" : "sonra") + " gelir." });
+  }
+
+  /* 4. İnanç → davranış */
+  const DK = ["Melek ve ahiret inancına uygun", "Bu inançla bağdaşmaz"];
+  MH_UYGUN.forEach((t, i) => K.push({ id: "du|" + i, tur: "davranis", z: 1, anahtar: "uygun", ust: "Davranış kartı", metin: t, yonerge: "Bu davranış hangi kutuya gider?",
+    kutular: DK, dogru: 0, sabit: true, duzen: "yan", a: "Kimse görmese de doğru davranmak, yapılanların yazıldığı ve hesabının verileceği inancıyla uyumludur." }));
+  MH_UYMAZ.forEach((t, i) => K.push({ id: "db|" + i, tur: "davranis", z: 1, anahtar: "uymaz", ust: "Davranış kartı", metin: t, yonerge: "Bu davranış hangi kutuya gider?",
+    kutular: DK, dogru: 1, sabit: true, duzen: "yan", a: "Yapılanların yazıldığına ve hesabının verileceğine inanan kişi böyle davranmaz." }));
+  MH_ETKI_DURUM.forEach((s, i) => K.push(mhSecenekKart({ id: "de|" + i, tur: "davranis", z: 2, anahtar: "etki" + s.d, ust: "Durum", metin: s.t,
+    yonerge: "Bu davranış en çok hangi değeri gösterir?", secenekUret: () => [MH_ETKI[s.d]].concat(karistir(MH_ETKI.filter((x, j) => j !== s.d)).slice(0, 2)), a: s.a })));
+  MH_DUSUN.forEach((s, i) => K.push(mhSecenekKart({ id: "dd|" + i, tur: "davranis", z: i === 2 ? 2 : 3, anahtar: "dusun" + i, ust: "Düşün", metin: s.t,
+    yonerge: "En uygun cevabı seç ve kartı oraya gönder.", secenekUret: () => [s.d].concat(s.y), a: s.a, uzunKutu: true })));
+
+  /* 5. Nâs suresi */
+  MH_NAS_SORU.forEach((s, i) => K.push(mhSecenekKart({ id: "ns|" + i, tur: "nas", z: s.z, anahtar: "nas" + i, ust: "Soru kartı", metin: s.t,
+    yonerge: "Kartı doğru cevaba gönder.", secenekUret: () => [s.d].concat(s.y), a: s.a, meal: true, uzunKutu: true })));
+  const NK = ["Surenin mesajına uygun", "Surenin mesajına uygun değil"];
+  MH_NAS_IFADE.forEach((s, i) => K.push({ id: "ni|" + i, tur: "nas", z: s.z, anahtar: "nasi" + i, ust: "İfade kartı", metin: s.t, yonerge: "Bu ifade surenin mesajına uygun mu?",
+    kutular: NK, dogru: s.d, sabit: true, duzen: "yan", meal: true, a: s.a || "Bu ifade Nâs suresinin mesajına uygundur: " + s.t.charAt(0).toLocaleLowerCase("tr") + s.t.slice(1) }));
+  MH_NAS_HAYAT.forEach((s, i) => K.push(mhSecenekKart({ id: "nh|" + i, tur: "nas", z: s.z, anahtar: "nash" + i, ust: "Hayatımda Nâs", metin: s.t,
+    yonerge: "Surenin mesajına uygun davranışı seç.", secenekUret: () => [s.d].concat(s.y), a: s.a, uzunKutu: true })));
+  return K;
+}
+/* n uzunluklu pencerede k boşluklu düzenler: en fazla 3 örnek, boşluklar
+   iki uçta birden olmasın diye çeşitlenir */
+function mhBosDuzenler(n, k){
+  const tum = [];
+  const gez = (bas, sec) => { if (sec.length === k){ tum.push(sec.slice()); return; } for (let i = bas; i < n; i++){ sec.push(i); gez(i + 1, sec); sec.pop(); } };
+  gez(0, []);
+  /* en az bir dolu aşama ipucu olarak kalsın (k < n zaten) */
+  return tum.length <= 3 ? tum : [tum[0], tum[Math.floor(tum.length / 2)], tum[tum.length - 1]];
+}
+function mhKombinasyonSay(){ return mhKartlarUret().length; }
+
+/* ── TUR KURULUMU ── */
+/* Zorluk kotası türlere orantılı dağıtılır (en büyük kalan yöntemi): her tür
+   kendi içinde de %35/%45/%20'ye yakın olur, «düşündüren» kartlar tek türe
+   yığılmaz. */
+function mhMatris(){
+  const T = Object.values(MH_PLAN.tur).reduce((a, b) => a + b, 0), M = {};
+  const zK = Object.assign({}, MH_PLAN.zorluk);
+  const kalanlar = [];
+  Object.keys(MH_PLAN.tur).forEach(t => { M[t] = {}; [1, 2, 3].forEach(z => { const x = MH_PLAN.tur[t] * MH_PLAN.zorluk[z] / T; M[t][z] = Math.floor(x); zK[z] -= M[t][z]; kalanlar.push({ t, z, f: x - Math.floor(x) }); }); });
+  kalanlar.sort((a, b) => b.f - a.f);
+  const turK = {}; Object.keys(MH_PLAN.tur).forEach(t => { turK[t] = MH_PLAN.tur[t] - [1, 2, 3].reduce((a, z) => a + M[t][z], 0); });
+  kalanlar.forEach(k => { if (zK[k.z] > 0 && turK[k.t] > 0){ M[k.t][k.z]++; zK[k.z]--; turK[k.t]--; } });
+  return M;
+}
+const mhOnek = k => k.id.split("|")[0];
+function mhTurKur(S){
+  const havuz = mhKartlarUret(), M = mhMatris();
+  const secilen = [], anahtar = {}, onek = {}, metin = {};
+  const uygun = (k, gevsek) => !secilen.includes(k) && (anahtar[k.anahtar] || 0) < 2 && (gevsek || (onek[mhOnek(k)] || 0) < 2) && !metin[k.metin];
+  const al = k => { secilen.push(k); anahtar[k.anahtar] = (anahtar[k.anahtar] || 0) + 1; onek[mhOnek(k)] = (onek[mhOnek(k)] || 0) + 1; metin[k.metin] = 1; };
+  const sec = aday => {
+    if (!aday.length) return null;
+    const taze = aday.filter(k => !S.eski[k.id]); if (taze.length) aday = taze;
+    const enAz = Math.min(...aday.map(k => onek[mhOnek(k)] || 0));
+    return fenSec(aday.filter(k => (onek[mhOnek(k)] || 0) === enAz));
+  };
+  /* Önce kıt hücreler (düşündüren), sonra orta, sonra kolay */
+  [3, 2, 1].forEach(z => Object.keys(M).forEach(t => {
+    for (let n = 0; n < M[t][z]; n++){
+      /* Önce hücrenin kendisi; kart türü sınırı gevşetilerek yine aynı hücre; en son aynı türün başka zorluğu */
+      const k = sec(havuz.filter(k => k.tur === t && k.z === z && uygun(k))) || sec(havuz.filter(k => k.tur === t && k.z === z && uygun(k, true))) || sec(havuz.filter(k => k.tur === t && uygun(k, true)));
+      if (k) al(k);
+    }
+  }));
+  const enIyi = secilen;
+  /* Sıralama: aynı tür arka arkaya gelmez; ilk iki görev kolay */
+  const kalan = enIyi.slice(), dizi = [];
+  let onceki = null;
+  while (kalan.length){
+    const sayac = {}; kalan.forEach(k => { sayac[k.tur] = (sayac[k.tur] || 0) + 1; });
+    const baski = Object.keys(sayac).find(t => sayac[t] * 2 > kalan.length && t !== onceki);
+    let aday = kalan.filter(k => k.tur !== onceki && (!baski || k.tur === baski));
+    if (dizi.length < 2){ const kolay = aday.filter(k => k.z === 1); if (kolay.length) aday = kolay; }
+    if (!aday.length) aday = kalan;
+    const k = fenSec(aday);
+    kalan.splice(kalan.indexOf(k), 1); dizi.push(k); onceki = k.tur;
+  }
+  /* Seçenek kutuları: doğru kutunun yeri dengeli ve bir öncekinden farklı */
+  /* Konum sayacı kutu sayısına göre AYRI tutulur: paylaşılırsa 4 kutulu kartlarda
+     hiç kullanılmamış 4. kutu hep «en az kullanılan» görünür ve doğru hep oraya düşer */
+  const konumSay = {};
+  /* «Bir öncekiyle aynı yer olmasın» yalnız aynı kutu sayılı kartlar arasında */
+  const oncekiIx = {};
+  S.gorevler = dizi.map(k => mhKartHazirla(k, konumSay, n => oncekiIx[n] == null ? -1 : oncekiIx[n], (n, ix) => { oncekiIx[n] = ix; }));
+}
+function mhKartHazirla(k, konumSay, oncekiAl, oncekiYaz){
+  const q = Object.assign({}, k);
+  if (k.secenekUret){
+    const [d, ...c] = k.secenekUret();
+    const n = 1 + c.length;
+    const say = konumSay[n] || (konumSay[n] = Array(n).fill(0));
+    const adaylar = Array.from({ length: n }, (_, i) => i).filter(i => i !== oncekiAl(n));
+    const enAz = Math.min(...adaylar.map(i => say[i]));
+    const ix = fenSec(adaylar.filter(i => say[i] === enAz));
+    say[ix]++; oncekiYaz(n, ix);
+    const karisik = karistir(c);
+    karisik.splice(ix, 0, d);
+    q.kutular = karisik; q.dogru = ix;
+  }
+  return q;
+}
+
+/* ── DURUM ── */
+function mhKur(oyun, bitir){
+  const A = oyunAyarVars(oyun.id, {});
+  const eski = {};
+  (A.mhGorulen || []).forEach(id => { eski[id] = 1; });
+  const S = { oyun, bitir, A, eski, ix: 0, gorevler: [], puan: 0, dogru: 0, yanlis: 0, atlanan: 0, seri: 0, enUzunSeri: 0,
+    tur: {}, zor: {}, sonuc: [], canli: true, zamanlar: [], baslangic: Date.now(),
+    hareketAz: typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches };
+  S.bekle = (f, ms) => { const t = setTimeout(() => { if (S.canli) f(); }, ms); S.zamanlar.push(t); return t; };
+  S.durdur = () => { S.canli = false; S.zamanlar.forEach(clearTimeout); S.zamanlar = []; mhTuslarCoz(S); konusmaDur(); };
+  temizleyici.push(S.durdur);
+  mhTurKur(S);
+  return S;
+}
+function mhBaslat(oyun, bitir){
+  const S = mhKur(oyun, bitir);
+  mhTahtaBagla(S);
+  mhEkran(S);
+}
+function mhTahtaBagla(S){
+  tahtaBaglan({
+    sonraki: () => { if (S.bitti) return; if (!S.kilit){ S.atlanan++; S.sonuc[S.ix] = "atla"; } mhSonraki(S); },
+    degistir: () => {
+      if (S.bitti || S.kilit) return;
+      const eski = S.gorevler[S.ix];
+      const kullanilan = {}; S.gorevler.forEach(g => { kullanilan[g.id] = 1; });
+      const aday = mhKartlarUret().filter(k => k.tur === eski.tur && k.z === eski.z && !kullanilan[k.id] && k.anahtar !== eski.anahtar);
+      if (!aday.length) return;
+      S.gorevler[S.ix] = mhKartHazirla(fenSec(aday), {}, () => -1, () => {});
+      mhEkran(S);
+    },
+    ipucu: () => {
+      const q = S.gorevler[S.ix]; if (!q || S.kilit) return;
+      const yanlis = [...document.querySelectorAll(".mh-kutu:not(.sondu)")].filter(b => +b.dataset.i !== q.dogru);
+      if (yanlis.length <= 1 && q.kutular.length <= 2) return;
+      if (!yanlis.length) return;
+      const b = fenSec(yanlis); b.classList.add("sondu"); b.disabled = true; q.ipucu = true; sesEfekt("ipucu");
+    },
+    cevap: () => { const q = S.gorevler[S.ix]; if (!q) return; const b = document.querySelector(`.mh-kutu[data-i="${q.dogru}"]`); if (b) b.classList.add("goster"); },
+    yeniden: () => { S.durdur(); mhBaslat(S.oyun, S.bitir); },
+  });
+}
+
+/* ── EKRAN ── */
+function mhEkran(S){
+  const q = S.gorevler[S.ix];
+  S.kilit = false; S.devam = null;
+  konusmaDur();
+  const tr = MH_TUR[q.tur], T = S.gorevler.length;
+  const kutuHtml = (m, i) => `<button type="button" class="mh-kutu${q.uzunKutu ? " uzun" : ""}" data-i="${i}" aria-label="${i + 1}. kutu: ${kacis(m)}"><span class="mh-kutu-no">${i + 1}</span><span class="mh-kutu-yazi">${kacis(m)}</span></button>`;
+  let kutular;
+  if (q.duzen === "hat"){
+    let y = 0;
+    kutular = `<div class="mh-hat" id="mhKutular">${q.hat.map((h, i) => {
+      const ok = i < q.hat.length - 1 ? `<span class="mh-hat-ok" aria-hidden="true">→</span>` : "";
+      if (h.bos){ const j = y++; return `<span class="mh-hat-oge"><button type="button" class="mh-kutu mh-yuva" data-i="${j}" aria-label="${j + 1}. boşluk"><span class="mh-kutu-no">${j + 1}</span><span class="mh-kutu-yazi">?</span></button>${ok}</span>`; }
+      return `<span class="mh-hat-oge"><span class="mh-hat-dolu">${kacis(h.ad)}</span>${ok}</span>`;
+    }).join("")}</div>`;
+  } else {
+    kutular = `<div class="mh-kutular n${q.kutular.length} ${q.duzen}" id="mhKutular">${q.kutular.map(kutuHtml).join("")}</div>`;
+  }
+  const noktalar = S.gorevler.map((g, i) => `<i class="${S.sonuc[i] || (i === S.ix ? "simdi" : "")}"></i>`).join("");
+  $("app").innerHTML = `${oyunBaslik(S.oyun)}
+    <div class="mh-oyun" style="--tur:${tr.renk}">
+      <div class="mh-hud">
+        <span class="mh-hud-kutu">Görev <b>${S.ix + 1}</b><i>/ ${T}</i></span>
+        <span class="mh-hud-kutu">Puan <b id="mhPuan">${S.puan}</b></span>
+        <span class="mh-hud-kutu mh-seri${S.seri >= 3 ? " acik" : ""}" id="mhSeri">🔥 <b>${S.seri}</b></span>
+      </div>
+      <div class="mh-cizgi" aria-hidden="true">${noktalar}</div>
+      <div class="mh-sahne${q.duzen === "yan" ? " yan" : ""}">
+        <p class="mh-yonerge">${kacis(q.yonerge)}</p>
+        <div class="mh-orta">
+          ${q.duzen === "yan" ? kutular.replace('id="mhKutular"', 'id="mhKutular" data-yan="1"') : ""}
+          <div class="mh-kart-yer" id="mhKartYer">
+            <div class="mh-kart${q.buyukMetin ? " buyuk" : ""}" id="mhKart" role="group" aria-label="Kart: ${kacis(q.metin)}" tabindex="0">
+              <div class="mh-kart-ust"><span class="mh-kart-tur">${tr.ikon} ${kacis(tr.ad)}</span><span class="mh-kart-zor z${q.z}">${MH_ZORLUK[q.z]}</span></div>
+              <div class="mh-kart-etiket">${kacis(q.ust)}</div>
+              <p class="mh-kart-metin">${kacis(q.metin)}</p>
+              <button type="button" class="mh-dinle" id="mhDinle" aria-label="Kartı sesli oku">🔊</button>
+            </div>
+          </div>
+        </div>
+        ${q.duzen !== "yan" ? kutular : ""}
+        ${q.meal ? `<details class="mh-meal"><summary>📖 Nâs suresinin anlamı</summary><p>${kacis(MH_NAS_MEAL)}</p></details>` : ""}
+        <p class="mh-ipucu"${S.ix < 3 ? "" : " hidden"}>👆 Kartı sürükleyip doğru kutuya bırak — ya da kutuya dokun. Acele yok.</p>
+      </div>
+      <div class="mh-geri" id="mhGeri" hidden></div>
+    </div>`;
+  $("mhDinle").addEventListener("click", e => { e.stopPropagation(); konus(q.metin + (q.duzen !== "hat" ? " " + q.kutular.join(". ") : "")); });
+  $("mhKutular").addEventListener("click", e => { const b = e.target.closest(".mh-kutu"); if (!b || b.disabled || S.kilit) return; mhGonder(S, +b.dataset.i); });
+  mhSurukleBagla(S);
+  mhTuslarBagla(S);
+  tahtaSigdirIste();
+}
+
+/* Sürükleme: ölçek (akıllı tahta) için delta ölçeğe bölünür */
+function mhOlcek(el){ const r = el.getBoundingClientRect(); return el.offsetWidth ? r.width / el.offsetWidth : 1; }
+function mhSurukleBagla(S){
+  const kart = $("mhKart"); if (!kart) return;
+  let d = null;
+  const kutuBul = (x, y) => { const el = document.elementFromPoint(x, y); return el ? el.closest(".mh-kutu:not(:disabled)") : null; };
+  kart.addEventListener("pointerdown", e => {
+    if (S.kilit || e.target.closest(".mh-dinle")) return;
+    e.preventDefault();
+    d = { x0: e.clientX, y0: e.clientY, sy0: scrollY, id: e.pointerId, olcek: mhOlcek(kart), hareket: false, x: e.clientX, y: e.clientY };
+    try { kart.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  /* Kart ekran kenarına yaklaşınca sayfa kayar (kutular ekranın altında
+     kalmış olabilir); kaydırma farkı karta eklenir, kart parmakta kalır. */
+  const konumla = () => {
+    const dx = (d.x - d.x0) / d.olcek, dy = (d.y - d.y0 + (scrollY - d.sy0)) / d.olcek;
+    kart.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.max(-6, Math.min(6, dx / 30))}deg)`;
+  };
+  const kenarKaydir = () => {
+    if (!d || !d.hareket){ if (d) d.kaydir = 0; return; }
+    /* Üst kenar, yapışkan site menüsünün ALTINDAN başlar */
+    const menu = document.querySelector(".site-header");
+    const ust = menu && /sticky|fixed/.test(getComputedStyle(menu).position) ? Math.max(0, menu.getBoundingClientRect().bottom) : 0;
+    const pay = 70, h = innerHeight;
+    const hiz = d.y > h - pay ? Math.min(18, (d.y - (h - pay)) / 3) : d.y < ust + pay ? -Math.min(18, (ust + pay - d.y) / 3) : 0;
+    if (hiz){ const once = scrollY; scrollBy({ top: hiz, behavior: "instant" }); if (scrollY !== once) konumla(); }  /* smooth kaydırma her karede yeniden başlar, ilerlemez */
+    d.kaydir = hiz ? setTimeout(kenarKaydir, 16) : 0;
+  };
+  kart.addEventListener("pointermove", e => {
+    if (!d || e.pointerId !== d.id) return;
+    d.x = e.clientX; d.y = e.clientY;
+    if (!d.hareket && Math.hypot(d.x - d.x0, d.y - d.y0) > 6){ d.hareket = true; kart.classList.add("tutuldu"); }
+    if (!d.hareket) return;
+    konumla();
+    if (!d.kaydir) d.kaydir = setTimeout(kenarKaydir, 16);
+    kart.style.pointerEvents = "none";
+    const k = kutuBul(e.clientX, e.clientY);
+    kart.style.pointerEvents = "";
+    document.querySelectorAll(".mh-kutu.uzerinde").forEach(b => { if (b !== k) b.classList.remove("uzerinde"); });
+    if (k) k.classList.add("uzerinde");
+  });
+  const birak = e => {
+    if (!d || e.pointerId !== d.id) return;
+    if (d.kaydir) clearTimeout(d.kaydir);
+    const hareket = d.hareket; d = null;
+    kart.classList.remove("tutuldu");
+    kart.style.pointerEvents = "none";
+    const k = hareket ? kutuBul(e.clientX, e.clientY) : null;
+    kart.style.pointerEvents = "";
+    document.querySelectorAll(".mh-kutu.uzerinde").forEach(b => b.classList.remove("uzerinde"));
+    if (k && !S.kilit){ mhGonder(S, +k.dataset.i, true); return; }
+    kart.style.transform = "";
+    if (!hareket){ const kt = $("mhKutular"); if (kt){ kt.classList.remove("durt"); void kt.offsetWidth; kt.classList.add("durt"); } }
+  };
+  kart.addEventListener("pointerup", birak);
+  kart.addEventListener("pointercancel", birak);
+}
+const MH_TUS = { "1": 0, "2": 1, "3": 2, "4": 3 };
+function mhTuslarBagla(S){
+  mhTuslarCoz(S);
+  S.tusIn = e => {
+    if (e.target.closest && e.target.closest("input, select, textarea, summary")) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if ((e.key === "Enter" || e.key === " ") && S.devam){ e.preventDefault(); S.devam(); return; }
+    const i = MH_TUS[e.key]; if (i == null || S.kilit) return;
+    const b = document.querySelector(`.mh-kutu[data-i="${i}"]`); if (!b || b.disabled) return;
+    e.preventDefault(); mhGonder(S, i);
+  };
+  addEventListener("keydown", S.tusIn);
+}
+function mhTuslarCoz(S){ if (S.tusIn) removeEventListener("keydown", S.tusIn); S.tusIn = null; }
+
+/* Kart kutuya uçar (sürüklenmişse bulunduğu yerden). Uçuş ölçek-bağımsız:
+   ekran farkı ölçeğe bölünür. */
+function mhGonder(S, i){
+  if (S.kilit) return;
+  S.kilit = true;
+  konusmaDur();
+  const kart = $("mhKart"), kutu = document.querySelector(`.mh-kutu[data-i="${i}"]`);
+  if (!kart || !kutu || S.hareketAz){ mhCevap(S, i); return; }
+  kart.classList.add("ucuyor");                 /* animasyonu kapat: ölçülen dönüşüm yalnız sürükleme olsun */
+  const olcek = mhOlcek(kart);
+  const kr = kart.getBoundingClientRect(), br = kutu.getBoundingClientRect();
+  const simdiki = new DOMMatrixReadOnly(getComputedStyle(kart).transform === "none" ? undefined : getComputedStyle(kart).transform);
+  const dx = simdiki.m41 + ((br.left + br.width / 2) - (kr.left + kr.width / 2)) / olcek;
+  const dy = simdiki.m42 + ((br.top + br.height / 2) - (kr.top + kr.height / 2)) / olcek;
+  void kart.offsetWidth;
+  kart.style.transform = `translate(${dx}px, ${dy}px) scale(.35)`;
+  kart.style.opacity = ".15";
+  S.bekle(() => mhCevap(S, i), 380);
+}
+function mhCevap(S, i){
+  const q = S.gorevler[S.ix];
+  const kart = $("mhKart"), kutu = document.querySelector(`.mh-kutu[data-i="${i}"]`), dg = document.querySelector(`.mh-kutu[data-i="${q.dogru}"]`);
+  const geri = $("mhGeri");
+  document.querySelectorAll(".mh-kutu").forEach(b => b.classList.add("kilitli"));
+  const say = (o, k, ok) => { const c = o[k] || (o[k] = { d: 0, y: 0 }); if (ok) c.d++; else c.y++; };
+  const ipucu = document.querySelector(".mh-ipucu"); if (ipucu) ipucu.hidden = true;
+  if (i === q.dogru){
+    S.dogru++; S.seri++; S.enUzunSeri = Math.max(S.enUzunSeri, S.seri);
+    let kazanc = { 1: 10, 2: 15, 3: 20 }[q.z] + (S.seri >= 3 ? 5 : 0);
+    if (q.ipucu) kazanc = Math.ceil(kazanc / 2);
+    S.puan += kazanc; S.sonuc[S.ix] = "dogru";
+    say(S.tur, q.tur, true); say(S.zor, q.z, true);
+    if (kutu){ kutu.classList.add("dogru"); if (q.duzen === "hat"){ const y = kutu.querySelector(".mh-kutu-yazi"); if (y) y.textContent = q.metin; } }
+    sesEfekt(S.seri % 5 === 0 ? "bonus" : "dogru");
+    geri.className = "mh-geri iyi"; geri.hidden = false;
+    geri.innerHTML = `<b>✓ ${fenSec(["Doğru!", "Harika!", "Çok iyi!", "Tam isabet!"])}</b> <span>+${kazanc} puan</span>`;
+    mhHudTazele(S);
+    S.devam = () => mhSonraki(S);
+    S.bekle(() => mhSonraki(S), 1300);
+  } else {
+    S.yanlis++; S.seri = 0; S.sonuc[S.ix] = "yanlis";
+    say(S.tur, q.tur, false); say(S.zor, q.z, false);
+    if (kutu) kutu.classList.add("yanlis");
+    if (dg) dg.classList.add("goster");
+    if (kart){ kart.classList.remove("ucuyor"); kart.classList.add("donus"); kart.style.transform = ""; kart.style.opacity = ""; }
+    sesEfekt("yanlis");
+    geri.className = "mh-geri kotu"; geri.hidden = false;
+    geri.innerHTML = `<p class="mh-geri-a"><b>Doğrusu: ${kacis(q.duzen === "hat" ? (q.dogru + 1) + ". boşluk" : q.kutular[q.dogru])}.</b> ${kacis(q.a)}</p>
+      <button type="button" class="btn btn-primary mh-devam" id="mhDevam">Devam ➜</button>`;
+    mhHudTazele(S);
+    S.devam = () => mhSonraki(S);
+    $("mhDevam").addEventListener("click", () => S.devam && S.devam());
+    try { $("mhDevam").focus({ preventScroll: true }); } catch (e) {}
+  }
+  tahtaSigdirIste();
+}
+function mhHudTazele(S){
+  const p = $("mhPuan"); if (p) p.textContent = S.puan;
+  const s = $("mhSeri"); if (s){ s.innerHTML = "🔥 <b>" + S.seri + "</b>"; s.classList.toggle("acik", S.seri >= 3); }
+}
+function mhSonraki(S){
+  if (!S.canli || S.bitti) return;
+  S.devam = null;
+  S.zamanlar.forEach(clearTimeout); S.zamanlar = [];
+  S.ix++;
+  if (S.ix >= S.gorevler.length) return mhBitir(S);
+  mhEkran(S);
+}
+function mhBitir(S){
+  if (S.bitti) return;
+  S.bitti = true;
+  const sure = Math.round((Date.now() - S.baslangic) / 1000);
+  const toplam = S.dogru + S.yanlis;
+  const yuzde = toplam ? Math.round(S.dogru / toplam * 100) : 0;
+  const satir = [{ ad: "Başarı", deger: "%" + yuzde }, { ad: "En uzun seri", deger: "🔥 " + S.enUzunSeri }];
+  let zayif = null;
+  Object.keys(MH_TUR).forEach(k => { const c = S.tur[k]; if (!c) return; const o = c.d / (c.d + c.y); satir.push({ ad: MH_TUR[k].ikon + " " + MH_TUR[k].ad, deger: c.d + " / " + (c.d + c.y) }); if (o < .6 && (!zayif || o < zayif.o)) zayif = { k, o }; });
+  [1, 2, 3].forEach(z => { const c = S.zor[z]; if (c) satir.push({ ad: MH_ZORLUK[z] + " görevler", deger: c.d + " / " + (c.d + c.y) }); });
+  if (S.atlanan) satir.push({ ad: "Atlanan", deger: String(S.atlanan) });
+  const not = zayif ? "«" + MH_TUR[zayif.k].ad + "» kartlarını tekrar etmeni öneririm; yeni turda farklı kartlar gelecek." : yuzde >= 90 ? "Kavram hattını neredeyse kusursuz tamamladın!" : "Kavram hattını tamamladın. Yeni turda farklı kartlar seni bekliyor.";
+  oyunAyarYaz(S.oyun.id, { mhGorulen: (S.A.mhGorulen || []).concat(S.gorevler.map(g => g.id)).slice(-120) });
+  S.durdur();
+  S.bitir({ dogru: S.dogru, yanlis: S.yanlis, sure, hedefSure: S.gorevler.length * 25, oyunPuan: S.puan, ekBilgi: satir, not,
+    rozet: yuzde >= 80 ? "Kavram Hattı Ustası rozeti" : null });
+}
+
+/* ═════════ 7. SINIF DKAB — OYUN KAYDI ═════════ */
+const DIN_7 = [
+  { id: "din7-kavram-hatti", kademe: "ortaokul", sinif: "7", ders: "Din Kültürü ve Ahlak Bilgisi",
+    unite: "1. Ünite · Melek ve Ahiret İnancı",
+    konu: "Melekler ve Görevleri, Görülen–Görülemeyen Varlıklar, Ahiret Aşamaları, İnanç ve Davranış, Nâs Suresi",
+    tur: "kavramHatti", zorluk: 2, baslik: "Kavram Hattı",
+    etiket: "Melek ↔ Görev • Görülen / Görülemeyen • Ahiret Aşamaları • İnanç → Davranış • Nâs Suresi",
+    ozet: "Ortaya gelen kartı doğru kutuya gönder: melekler ve görevleri, ahiret aşamaları, günlük hayattan durumlar ve Nâs suresinin mesajı. Süre yok, acele yok.",
+    kazanimlar: ["Melekleri sınıflandırabilme (DKAB.7.1.1)",
+      "Ahiret hayatının aşamalarını çözümleyebilme (DKAB.7.1.2)",
+      "Melek ve ahiret inancının insana kazandırdıkları konusunda analitik düşünebilme (DKAB.7.1.3)",
+      "Nâs suresini ve bu surenin anlamını okuyarak yorumlayabilme (DKAB.7.1.4)"] },
+];
+
 /* ═════════ 5. SINIF DKAB · İZLERİ TAKİP ET (it-) ═══════════════════════════
    Türkiye Yüzyılı Maarif Modeli, Din Kültürü ve Ahlak Bilgisi Dersi Öğretim
    Programı · 5. sınıf · 1. ÜNİTE: ALLAH İNANCI (bkz. mufredat.js «din-5»).
@@ -48714,7 +50505,7 @@ const OYUNLAR = [
   ...TURKCE_3,
   ...TURKCE_4,
   ...MATEMATIK_4,
-  ...FEN_4, ...SOSYAL_4, ...INGILIZCE_4, ...DIN_4, ...TURKCE_5, ...MATEMATIK_5, ...FEN_5, ...SOSYAL_5, ...INGILIZCE_5, ...DIN_5, ...KURAN_5, ...TDB_6, ...TURKCE_6, ...MATEMATIK_6, ...FEN_6, ...SOSYAL_6, ...DIN_6, ...TURKCE_7, ...MATEMATIK_7, ...FEN_7, ...SOSYAL_7,
+  ...FEN_4, ...SOSYAL_4, ...INGILIZCE_4, ...DIN_4, ...TURKCE_5, ...MATEMATIK_5, ...FEN_5, ...SOSYAL_5, ...INGILIZCE_5, ...DIN_5, ...KURAN_5, ...TDB_6, ...TURKCE_6, ...MATEMATIK_6, ...FEN_6, ...SOSYAL_6, ...DIN_6, ...TURKCE_7, ...MATEMATIK_7, ...FEN_7, ...SOSYAL_7, ...INGILIZCE_7, ...DIN_7,
   ...MATEMATIK_3,
   ...FEN_3,
   ...HAYAT_3,
@@ -56550,6 +58341,14 @@ const TUR_ISLEYICI = {
   schoolRush: {
     ad: "School Rush", ikon: "🏫", yeniOyuncu: true, yeniOyuncuAd: "New Player",
     baslat(oyun, bitir){ srEkranGiris(srKur(oyun, bitir)); },
+  },
+  hedefiVur: {
+    ad: "Hedefi Vur", ikon: "🎯", yeniOyuncu: true, yeniOyuncuAd: "New Player",
+    baslat(oyun, bitir){ hvEkranGiris(hvKur(oyun, bitir)); },
+  },
+  kavramHatti: {
+    ad: "Kavram Hattı", ikon: "🧭", yeniOyuncu: true, yeniOyuncuAd: "Yeni Oyuncu",
+    baslat(oyun, bitir){ mhBaslat(oyun, bitir); },
   },
   izleriTakipEt: {
     ad: "İzleri Takip Et", ikon: "👣", yeniOyuncu: true, yeniOyuncuAd: "Yeni Oyuncu",
