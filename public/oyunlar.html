@@ -16412,6 +16412,195 @@
       .mh-kart.ucuyor, .mh-kart.donus { transition: none; }
     }
 
+    /* ═══ 7. SINIF PEYGAMBERİMİZİN HAYATI · HİCRET YOLU (hr-) ════════════════
+       Kum-lacivert sade palet; altı başlık kendi rengiyle (--r). Kartlar
+       sürüklenir ya da seçilip başlığa/yuvaya dokunulur. */
+    .hr-oyun { display: grid; gap: 10px; max-width: 980px; margin: 0 auto; }
+    .hr-hud { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .hr-hud-kutu { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 999px; background: #1F2A44; color: #F1EFE8; font-size: .82rem; font-weight: 700; }
+    .hr-hud-kutu b { color: #F4C95D; font-size: 1rem; }
+    .hr-hud-kutu i { font-style: normal; opacity: .7; font-size: .76rem; }
+    .hr-hud-kutu.hr-seri.acik { background: #C7902B; }
+    .hr-yol { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+    .hr-yol i { width: 12px; height: 12px; border-radius: 50%; background: #E6E2D6; }
+    .hr-yol i.dogru { background: #3E9E73; } .hr-yol i.yanlis { background: #D66A4F; } .hr-yol i.atla { background: #BDB8A8; }
+    .hr-yol i.simdi { background: #fff; box-shadow: 0 0 0 3px #1F2A44; }
+
+    .hr-sahne { display: grid; gap: 14px; background: linear-gradient(180deg, #FBF8F1, #F4EFE3); border: 2px solid #E7DFCC; border-radius: 24px; padding: 16px; }
+    .hr-yonerge { margin: 0; text-align: center; font-size: clamp(1rem, 3.4vw, 1.2rem); font-weight: 800; color: #1F2A44; }
+    .hr-ipucu { margin: 0; text-align: center; font-size: .84rem; font-weight: 700; color: #7A7462; }
+
+    .hr-tepsi { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 64px; padding: 10px; border-radius: 18px; background: #fff; border: 2px dashed #D9CFB6; }
+    .hr-kart { position: relative; max-width: 300px; min-height: 56px; padding: 10px 14px; border-radius: 14px; border: 2px solid #1F2A44; background: #fff; color: #1F2A44; font: inherit; font-weight: 700; font-size: clamp(.92rem, 2.4vw, 1.02rem); line-height: 1.35; text-align: left; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 0 3px 0 #1F2A44; transition: transform .12s, box-shadow .12s; z-index: 2; }
+    .hr-kart:hover:not(.kilit) { transform: translateY(-2px); }
+    .hr-kart.secili { border-color: #C7902B; box-shadow: 0 0 0 4px rgba(199,144,43,.35), 0 3px 0 #C7902B; }
+    .hr-kart.tutuldu { cursor: grabbing; z-index: 20; box-shadow: 0 14px 28px rgba(31,42,68,.28); transition: none; }
+    .hr-kart.yerli { max-width: 100%; width: 100%; min-height: 0; padding: 7px 10px; font-size: .86rem; box-shadow: none; border-width: 1.5px; }
+    .hr-kart.kilit { cursor: default; }
+    .hr-kart.dogru { border-color: #3E9E73; background: #EAF6EF; color: #1E5E40; }
+    .hr-kart.duzeltildi { border-color: #D66A4F; background: #FDF0EC; color: #7A2E1D; }
+    .hr-kart.duzeltildi::after { content: "düzeltildi"; display: block; font-size: .7rem; font-weight: 800; color: #B0482F; margin-top: 2px; }
+    .hr-kart.yanlis { border-color: #D66A4F; background: #FDF0EC; color: #7A2E1D; }
+    .hr-kart.ipucu { box-shadow: 0 0 0 4px rgba(62,158,115,.45); }
+    .hr-kart.cevapli::before { content: attr(data-cevap); display: block; font-size: .7rem; font-weight: 800; color: #3E9E73; margin-bottom: 2px; }
+
+    .hr-basliklar { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
+    .hr-baslik { display: flex; flex-direction: column; gap: 6px; min-height: 96px; padding: 10px; border-radius: 18px; background: #fff; border: 2.5px solid color-mix(in srgb, var(--r) 40%, #fff); color: #1F2A44; cursor: pointer; text-align: left; transition: background .15s, border-color .15s, transform .12s; outline: none; }
+    .hr-baslik:focus-visible { box-shadow: 0 0 0 4px color-mix(in srgb, var(--r) 35%, transparent); }
+    .hr-baslik-ust { display: flex; align-items: center; gap: 6px; font-size: clamp(.92rem, 2.2vw, 1.04rem); }
+    .hr-baslik-ust b { color: color-mix(in srgb, var(--r) 75%, #1F2A44); }
+    .hr-baslik-no { width: 22px; height: 22px; border-radius: 50%; background: var(--r); color: #fff; font-size: .72rem; font-weight: 800; display: grid; place-items: center; flex: 0 0 auto; }
+    .hr-baslik-ikon { font-size: 1.15rem; }
+    .hr-baslik-ic { display: grid; gap: 6px; }
+    .hr-basliklar .hr-baslik.hazir, .hr-baslik.uzerinde { background: color-mix(in srgb, var(--r) 9%, #fff); border-style: dashed; border-color: var(--r); }
+    .hr-baslik.uzerinde { transform: scale(1.03); }
+    .hr-baslik.yanlis-an { border-color: #D66A4F; background: #FDF0EC; animation: hrSalla .45s ease; }
+    .hr-baslik.ipucu { box-shadow: 0 0 0 4px rgba(62,158,115,.45); }
+
+    .hr-yuvalar { display: flex; align-items: stretch; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .hr-yuva { position: relative; flex: 1 1 160px; max-width: 220px; min-height: 86px; display: flex; align-items: center; justify-content: center; padding: 22px 8px 8px; border-radius: 16px; background: #fff; border: 2.5px dashed #BFB395; color: #9A9179; font-size: .8rem; font-weight: 700; cursor: pointer; outline: none; }
+    .hr-yuva:focus-visible { box-shadow: 0 0 0 4px rgba(31,42,68,.25); }
+    .hr-yuva-no { position: absolute; top: 6px; left: 8px; width: 24px; height: 24px; border-radius: 50%; background: #1F2A44; color: #F4C95D; font-weight: 800; font-size: .8rem; display: grid; place-items: center; }
+    .hr-yuva-ic { width: 100%; text-align: center; }
+    .hr-yuvalar.hazir-var .hr-yuva, .hr-yuva.hazir { border-color: #C7902B; background: #FFF8EA; }
+    .hr-yuva.uzerinde { border-style: solid; border-color: #C7902B; background: #FFF3D9; }
+    .hr-yuva.ipucu { box-shadow: 0 0 0 4px rgba(62,158,115,.45); }
+    .hr-ok { align-self: center; font-weight: 800; color: #BFB395; }
+    .hr-kontrol-sira { display: flex; justify-content: center; }
+    .hr-kontrol { min-width: 220px; min-height: 48px; }
+
+    .hr-soru-kart { position: relative; display: grid; gap: 8px; background: #fff; border-radius: 20px; border-top: 6px solid #1F2A44; padding: 14px 18px 16px; box-shadow: 0 8px 22px rgba(31,42,68,.1); }
+    .hr-soru-cip { justify-self: start; font-size: .74rem; font-weight: 800; color: #7A5A12; background: #FBF0D4; padding: 3px 10px; border-radius: 999px; }
+    .hr-soru { margin: 0; padding-right: 40px; font-size: clamp(1.04rem, 3.6vw, 1.24rem); font-weight: 800; color: #1F2A44; line-height: 1.45; }
+    .hr-dinle { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #E7DFCC; background: #fff; cursor: pointer; }
+    .hr-secenekler { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+    .hr-secenek { display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 10px 14px; border-radius: 16px; border: 2px solid #E0D7C1; background: #fff; color: #1F2A44; font: inherit; font-weight: 700; font-size: clamp(.94rem, 2.4vw, 1.04rem); line-height: 1.35; text-align: left; cursor: pointer; transition: border-color .15s, transform .12s; }
+    .hr-secenek:hover:not(:disabled) { border-color: #1F2A44; transform: translateY(-2px); }
+    .hr-harf { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; background: #1F2A44; color: #F4C95D; font-weight: 800; font-size: .82rem; display: grid; place-items: center; }
+    .hr-secenek:disabled { cursor: default; }
+    .hr-secenek.dogru, .hr-secenek.goster { border-color: #3E9E73; background: #EAF6EF; color: #1E5E40; }
+    .hr-secenek.dogru .hr-harf, .hr-secenek.goster .hr-harf { background: #3E9E73; color: #fff; }
+    .hr-secenek.yanlis { border-color: #D66A4F; background: #FDF0EC; color: #7A2E1D; }
+    .hr-secenek.yanlis .hr-harf { background: #D66A4F; color: #fff; }
+    .hr-secenek.sondu { opacity: .35; }
+
+    .hr-geri { border-radius: 18px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border: 2px solid; }
+    .hr-geri.iyi { background: #EAF6EF; border-color: #A9D9C0; color: #1E5E40; font-size: 1.02rem; }
+    .hr-geri.kotu { background: #FFF4EE; border-color: #F0C6B4; color: #4A2A20; }
+    .hr-geri-liste { margin: 0; padding-left: 18px; flex: 1 1 360px; display: grid; gap: 4px; line-height: 1.5; font-weight: 600; }
+    .hr-devam { min-width: 150px; min-height: 48px; }
+    @keyframes hrSalla { 0%, 100% { translate: 0; } 25% { translate: -6px; } 50% { translate: 6px; } 75% { translate: -3px; } }
+
+    @media (max-width: 700px) {
+      .hr-sahne { padding: 12px 10px; }
+      .hr-basliklar { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .hr-baslik { min-height: 78px; padding: 8px; }
+      .hr-secenekler { grid-template-columns: 1fr; }
+      .hr-yuvalar { display: grid; grid-template-columns: 1fr; gap: 6px; }
+      .hr-yuva { max-width: none; min-height: 64px; padding: 8px 8px 8px 40px; }
+      .hr-yuva-no { top: 50%; transform: translateY(-50%); }
+      .hr-ok { display: none; }
+      .hr-kart { max-width: 100%; }
+      .hr-devam { flex: 1 1 100%; }
+    }
+    body.tahta .hr-kart, body.tahta .hr-secenek { font-size: clamp(1.02rem, 1.5vw, 1.25rem); }
+    body.tahta .hr-soru { font-size: clamp(1.2rem, 1.9vw, 1.6rem); }
+    body.tahta .hr-baslik-ust { font-size: clamp(1.02rem, 1.5vw, 1.25rem); }
+    @media (prefers-reduced-motion: reduce) { .hr-baslik.yanlis-an { animation: none; } .hr-kart, .hr-secenek, .hr-baslik { transition: none; } }
+
+    /* ═══ 8. SINIF TÜRKÇE · MESAJI ÇÖZ (ms-) ══════════════════════════════════
+       Sade gri-lacivert zemin; uyarıcı kartlar türüne göre biçimlenir.
+       Paylaşım/sohbet kartları gerçek platformları taklit etmez. */
+    .ms-oyun { display: grid; gap: 10px; max-width: 920px; margin: 0 auto; }
+    .ms-hud { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .ms-hud-kutu { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 999px; background: #1E2640; color: #EEF0F7; font-size: .82rem; font-weight: 700; }
+    .ms-hud-kutu b { color: #7FD6C2; font-size: 1rem; }
+    .ms-hud-kutu i { font-style: normal; opacity: .7; font-size: .76rem; }
+    .ms-hud-kutu.ms-seri.acik { background: #D0621F; }
+    .ms-ilerleme { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+    .ms-ilerleme i { width: 11px; height: 11px; border-radius: 50%; background: #E2E5EE; }
+    .ms-ilerleme i.dogru { background: #2E9D78; } .ms-ilerleme i.yanlis { background: #D9604A; } .ms-ilerleme i.atla { background: #B8BDCC; }
+    .ms-ilerleme i.simdi { background: #fff; box-shadow: 0 0 0 3px #1E2640; }
+
+    .ms-sahne { display: grid; gap: 14px; background: #F4F6FA; border: 2px solid #E2E5EE; border-radius: 24px; padding: 16px; }
+    .ms-ust { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .ms-kat { font-size: .78rem; font-weight: 800; color: #1E2640; background: #fff; border: 1.5px solid #E2E5EE; border-radius: 999px; padding: 4px 12px; }
+    .ms-zor { font-size: .74rem; font-weight: 800; color: #6B7389; }
+    .ms-zor.z3::before { content: "💡 "; }
+
+    .ms-u { justify-self: center; width: min(560px, 100%); background: #fff; border-radius: 18px; box-shadow: 0 6px 18px rgba(30,38,64,.08); overflow: hidden; }
+    .ms-u-ust { display: flex; align-items: center; padding: 8px 14px; border-bottom: 1px solid #EEF0F5; }
+    .ms-u-etiket { font-size: .74rem; font-weight: 800; color: #6B7389; letter-spacing: .02em; }
+    .ms-p-bas { display: flex; align-items: center; gap: 10px; padding: 12px 14px 4px; }
+    .ms-avatar { width: 42px; height: 42px; border-radius: 50%; color: #fff; font-weight: 800; display: grid; place-items: center; font-size: .9rem; flex: 0 0 auto; }
+    .ms-p-kim { display: grid; line-height: 1.25; } .ms-p-kim b { color: #1E2640; } .ms-p-kim i { font-style: normal; font-size: .8rem; color: #8A91A5; }
+    .ms-p-metin { margin: 0; padding: 6px 14px 10px; font-size: clamp(1rem, 3.3vw, 1.1rem); line-height: 1.55; color: #1E2640; }
+    .ms-etiket { color: #2F5FD0; font-weight: 700; }
+    .ms-p-gorsel { margin: 0 14px 10px; border-radius: 14px; background: linear-gradient(135deg, #E8EEFA, #F6E9F0); font-size: clamp(2.2rem, 8vw, 3.2rem); text-align: center; padding: 18px 8px; letter-spacing: .1em; }
+    .ms-p-alt { display: flex; gap: 18px; padding: 8px 14px 12px; border-top: 1px solid #EEF0F5; font-size: .82rem; color: #8A91A5; }
+    .ms-s-akis { display: grid; gap: 8px; padding: 12px 14px 14px; background: #F7F8FB; }
+    .ms-balon { justify-self: start; max-width: 85%; display: grid; gap: 2px; background: #fff; border: 1.5px solid #E2E5EE; border-radius: 16px 16px 16px 4px; padding: 8px 12px; font-size: clamp(.98rem, 3.2vw, 1.06rem); line-height: 1.45; color: #1E2640; }
+    .ms-balon b { font-size: .74rem; color: #6B7389; }
+    .ms-balon.sag { justify-self: end; background: #E4F4EF; border-color: #BFE4D8; border-radius: 16px 16px 4px 16px; }
+    .ms-afis { display: grid; justify-items: center; gap: 6px; text-align: center; padding: 18px 18px 20px; background: var(--az); border: 3px solid var(--ar); position: relative; }
+    .ms-afis-ikon { font-size: clamp(2rem, 7vw, 2.8rem); line-height: 1; }
+    .ms-afis-bas { margin: 0; font-size: clamp(1.15rem, 4vw, 1.5rem); font-weight: 800; color: var(--ar); line-height: 1.3; }
+    .ms-afis-alt { margin: 0; font-weight: 700; color: #3A4258; font-size: .95rem; }
+    .ms-afis-satir { margin: 0; color: #3A4258; font-size: .95rem; line-height: 1.45; }
+    .ms-reklam-et { position: absolute; top: 8px; right: 10px; font-size: .64rem; font-weight: 800; letter-spacing: .08em; color: #fff; background: #3A4258; border-radius: 4px; padding: 2px 6px; }
+    .ms-marka { font-size: .9rem; color: #3A4258; text-transform: uppercase; letter-spacing: .06em; }
+    .ms-haber { padding: 0 0 14px; }
+    .ms-h-kunye { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: .86rem; text-transform: uppercase; letter-spacing: .08em; color: #1E2640; border-bottom: 3px double #1E2640; padding: 10px 16px 6px; }
+    .ms-h-bar { display: flex; align-items: center; gap: 5px; background: #EEF0F5; padding: 7px 12px; font-size: .74rem; color: #5A6275; }
+    .ms-h-bar i { width: 9px; height: 9px; border-radius: 50%; background: #C8CDDA; } .ms-h-bar span { margin-left: 8px; }
+    .ms-h-manset { margin: 12px 16px 6px; font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: clamp(1.15rem, 4vw, 1.4rem); line-height: 1.3; color: #121826; }
+    .ms-haber.dijital .ms-h-manset { font-family: inherit; }
+    .ms-h-spot { margin: 0 16px; color: #3A4258; line-height: 1.5; }
+    .ms-gorsel, .ms-grafik { display: grid; justify-items: center; gap: 8px; padding: 16px; }
+    .ms-g-sahne { font-size: clamp(2.6rem, 10vw, 3.8rem); letter-spacing: .12em; background: linear-gradient(135deg, #EEF3FF, #EFFAF5); border-radius: 16px; padding: 14px 18px; line-height: 1.2; text-align: center; }
+    .ms-g-yazi { margin: 0; font-weight: 800; font-size: clamp(1.02rem, 3.4vw, 1.2rem); color: #1E2640; text-align: center; }
+    .ms-grafik svg { width: min(320px, 100%); height: auto; }
+    .ms-beden { display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
+    .ms-b-sahne { font-size: clamp(2.4rem, 9vw, 3.2rem); flex: 0 0 auto; }
+    .ms-b-betim { margin: 0; font-style: italic; line-height: 1.55; color: #1E2640; font-size: clamp(.98rem, 3.2vw, 1.06rem); }
+    .ms-metin { padding: 14px 18px; border-left: 5px solid #7FD6C2; }
+    .ms-metin p { margin: 0; font-size: clamp(1rem, 3.3vw, 1.1rem); line-height: 1.6; color: #1E2640; }
+    .ms-metin.cumle p { font-size: clamp(1.08rem, 3.6vw, 1.25rem); font-weight: 700; text-align: center; }
+    .ms-bos { display: inline-block; min-width: 3.5em; border-bottom: 3px solid #2F5FD0; color: transparent; }
+
+    .ms-soru-sira { display: flex; align-items: flex-start; gap: 10px; }
+    .ms-soru { flex: 1; margin: 0; font-size: clamp(1.04rem, 3.6vw, 1.22rem); font-weight: 800; color: #1E2640; line-height: 1.45; }
+    .ms-dinle { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 2px solid #E2E5EE; background: #fff; cursor: pointer; }
+    .ms-secenekler { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+    .ms-secenekler.uzun { grid-template-columns: 1fr; }
+    .ms-secenek { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 10px 14px; border-radius: 16px; border: 2px solid #DDE1EA; background: #fff; color: #1E2640; font: inherit; font-weight: 700; font-size: clamp(.95rem, 2.6vw, 1.04rem); line-height: 1.4; text-align: left; cursor: pointer; transition: border-color .15s, transform .12s; }
+    .ms-secenek:hover:not(:disabled) { border-color: #1E2640; transform: translateY(-2px); }
+    .ms-harf { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; background: #1E2640; color: #7FD6C2; font-weight: 800; font-size: .82rem; display: grid; place-items: center; }
+    .ms-sec-yazi { min-width: 0; overflow-wrap: break-word; }
+    .ms-secenek:disabled { cursor: default; }
+    .ms-secenek.dogru, .ms-secenek.goster { border-color: #2E9D78; background: #E6F6F0; color: #16553F; }
+    .ms-secenek.dogru .ms-harf, .ms-secenek.goster .ms-harf { background: #2E9D78; color: #fff; }
+    .ms-secenek.yanlis { border-color: #D9604A; background: #FDEEEA; color: #7A2A1C; }
+    .ms-secenek.yanlis .ms-harf { background: #D9604A; color: #fff; }
+    .ms-secenek.sondu { opacity: .35; }
+
+    .ms-geri { border-radius: 18px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border: 2px solid; }
+    .ms-geri.iyi { background: #E6F6F0; border-color: #A8DCC8; color: #16553F; font-size: 1.02rem; }
+    .ms-geri.kotu { background: #FFF3EE; border-color: #F1C4B4; color: #4A2A20; }
+    .ms-geri-a { margin: 0; flex: 1 1 360px; line-height: 1.5; font-weight: 600; }
+    .ms-geri-a b { color: #16553F; }
+    .ms-devam { min-width: 150px; min-height: 48px; }
+
+    @media (max-width: 700px) {
+      .ms-sahne { padding: 12px 10px; }
+      .ms-secenekler { grid-template-columns: 1fr; }
+      .ms-beden { flex-direction: column; text-align: center; }
+      .ms-devam { flex: 1 1 100%; }
+    }
+    body.tahta .ms-soru { font-size: clamp(1.2rem, 1.9vw, 1.6rem); }
+    body.tahta .ms-secenek, body.tahta .ms-p-metin, body.tahta .ms-balon, body.tahta .ms-metin p { font-size: clamp(1.05rem, 1.5vw, 1.3rem); }
+    @media (prefers-reduced-motion: reduce) { .ms-secenek { transition: none; } }
+
   </style>
   <link rel="stylesheet" href="assets/site-tema.css" />
   <link rel="stylesheet" href="assets/site-header.css" />
@@ -16616,7 +16805,7 @@ function ikiliOyunlar(){ return OYUNLAR.filter(ikiOyunculuMu); }
 function kacis(s){ return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
 function dersEmoji(d){
   return { "Türkçe":"📖","Matematik":"🔢","Hayat Bilgisi":"🌍","Fen Bilimleri":"🔬","Sosyal Bilgiler":"🗺️",
-    "İngilizce":"🔤","Din Kültürü ve Ahlak Bilgisi":"🕊️","Kur'an-ı Kerim":"📿","Temel Dinî Bilgiler":"🤲","Biyoloji":"🧬","Fizik":"⚛️","Kimya":"🧪","Geometri":"📐","Tarih":"🏛️","Coğrafya":"🌐",
+    "İngilizce":"🔤","Din Kültürü ve Ahlak Bilgisi":"🕊️","Kur'an-ı Kerim":"📿","Temel Dinî Bilgiler":"🤲","Peygamberimizin Hayatı":"🌙","Biyoloji":"🧬","Fizik":"⚛️","Kimya":"🧪","Geometri":"📐","Tarih":"🏛️","Coğrafya":"🌐",
     "T.C. İnkılap Tarihi ve Atatürkçülük":"🇹🇷","Almanca":"📗" }[d] || "📚";
 }
 
@@ -17482,6 +17671,8 @@ const UNITE_BILGI = {
   "Classroom Life": { emoji: "🎒", aciklama: "İngilizce Theme 2: sınıf yönergeleri, sınıf eşyaları ve mobilyaları, teknolojik araçlar, renkler, 1-20 sayıları ve sınıf içi kibar izin ifadeleri." },
   "School Life": { emoji: "🏫", aciklama: "İngilizce Theme 1: selamlaşma ve tanışma, okuldaki kişiler, okul bölümleri ve haftanın günleri. Dinleme ve konuşma kalıpları İngilizce sesle çalışılır." },
   "Global School Life": { emoji: "🌍", aciklama: "İngilizce 9. sınıf Theme 1 – School Life: ülkeler, milliyetler, diller ve başkentler; turistik yerler, tarihî yapılar ve müzeler; gezide yapılabilecek etkinlikler. Gramerde «to be» (am/is/are) ve yetenek/olasılık bildiren «can» kalıpları cümle içinde çalışılır." },
+  "8|1. Tema: İletişim ve Sosyal İlişkiler": { emoji: "💬", aciklama: "Türkiye Yüzyılı Maarif Modeli · Ortaokul Türkçe 8. sınıf 1. tema: tahmin edebilme, yüzey ve derin anlamı belirleyebilme, söz sanatlarını tanıyabilme, ikna tekniklerini belirleme ve medya içeriğini sorgulayabilme. Yazım ve noktalamada virgülün, noktalı virgülün ve künye sonundaki noktanın 8. sınıf kullanımları (T.Y.8.20)." },
+  "7|1. Ünite · Hicretten Önce Peygamberimiz": { emoji: "🐪", aciklama: "Peygamberimizin Hayatı 7. sınıf 1. ünite: gizli ve açık davet, Taif yolculuğu, İsra ve Miraç, yeni yurt arayışı ve Akabe biatları, hicretin sebepleri ve hicret yolculuğu; biat, davet, hicret ve muhacir kavramları. Medine dönemi bu ünitenin kapsamında değildir." },
   "7|1. Ünite · Melek ve Ahiret İnancı": { emoji: "🕊️", aciklama: "Din Kültürü ve Ahlak Bilgisi 7. sınıf 1. ünite: melekler ve görevleri (Cebrail, Mikail, İsrafil, Azrail, Kiramen Kâtibin, Münker ve Nekir), gözle görülen ve görülemeyen varlıklar, ahiret hayatının aşamaları (ömür, ecel, kıyamet, baas, mahşer, amel defteri, mizan, cennet, cehennem), melek ve ahiret inancının davranışlara etkisi ve Nâs suresinin anlamı." },
   "7|Theme 1: School Life & Education": { emoji: "🏆", aciklama: "İngilizce 7. sınıf Theme 1 – School Life & Education: okul içi etkinlikler ve kulüpler, yarışmalar ve kutlamalar, okul gezileri, millî ve dinî günler. Tema sözcükleri (drama play, exhibition, audience, competition, winner, prize, race, act, attend, celebrate, beat, break a record) okul bağlamında kullanılır. Gramerde Simple Present ile Present Progressive ayrımı, always → usually → often → sometimes → rarely → never sıklık sırası (oran verilmez) ve must / can't ile kural ve yasaklar. Özel günler: 29 Ekim, 23 Nisan, 19 Mayıs, 15 Temmuz, 30 Ağustos, Ramazan ve Kurban Bayramı." },
   "School Clubs": { emoji: "🎭", aciklama: "İngilizce 9. sınıf Theme 1 – School Life: okul kulüpleri, yetenekler ve günlük beceriler. «can / can't» ile yapabildiklerini ve yapamadıklarını söyleme, «Can he/she …?» sorusuna «Yes/No» kısa yanıtı verme, «Who can …?» ve «Find someone who can …» kalıplarıyla kulübe uygun kişiyi seçme." },
@@ -39690,6 +39881,1133 @@ const DIN_7 = [
       "Nâs suresini ve bu surenin anlamını okuyarak yorumlayabilme (DKAB.7.1.4)"] },
 ];
 
+/* ═════════ 7. SINIF PEYGAMBERİMİZİN HAYATI · HİCRET YOLU (hr-) ════════════
+   Peygamberimizin Hayatı seçmeli dersi · 7. sınıf · 1. ÜNİTE: HİCRETTEN
+   ÖNCE PEYGAMBERİMİZ. Bu seçmeli ders mufredat.js'te YOKTUR; ünite ve konu
+   adı oyun kaydında elle yazılır.
+
+   Kapsam: gizli ve açık davetin benzerlik/farklılıkları, ilk üç yıllık
+   gizli davet, açık davet, Taif yolculuğu, İsra, Miraç ve mucizevi oluşu,
+   yeni yurt arayışı (hac mevsimi, Akabe biatları), hicretin sebepleri ve
+   hicret yolculuğu (Yesrib'e varışta biter); kavramlar: biat, davet,
+   muhacir, hicret. MEDİNE DÖNEMİ YOK (mescit inşası, kardeşlik, savaşlar,
+   ensarın yardımları vb. hiçbir kartta geçmez).
+
+   MEKANİK: bölüm haritası / hikâye YOK. Üç görev türü:
+     yerleştir · 3 olay kartını altı başlıktan doğrusunun altına koy
+     sırala    · 4 olayı kronolojik sıraya diz
+     seç       · 4 seçenekli soru (neden? · hangi olaydan sonra? · hangi
+                 kavramla ilgilidir? · benzerlik/farklılık)
+   Kart sürüklenebilir; mobilde «kartı seç → başlığa/yuvaya dokun» aynı işi
+   görür (sürükleme zorunlu değil). Yanlışta kısa açıklama çıkar.
+   Tur 22 görev (6 yerleştir · 5 sırala · 11 seç); turda kart/soru tekrarı
+   yok. Kronolojide tarihi tartışmalı ya da iç içe geçen olay çiftleri
+   (İsra-Miraç ↔ Yesribli ilk Müslümanlar / I. Akabe / Mus'ab'ın gönderilişi)
+   aynı sıralama sorusuna konmaz. */
+
+const HR_BASLIK = [
+  { id: "gizli", ad: "Gizli Davet", ikon: "🤫", renk: "#5B6BD6" },
+  { id: "acik", ad: "Açık Davet", ikon: "📣", renk: "#E07B39" },
+  { id: "taif", ad: "Taif Yolculuğu", ikon: "⛰️", renk: "#3E9E73" },
+  { id: "isra", ad: "İsra ve Miraç", ikon: "🌙", renk: "#7A4FC4" },
+  { id: "yurt", ad: "Yeni Yurt Arayışı", ikon: "🤝", renk: "#C7902B" },
+  { id: "hicret", ad: "Hicret", ikon: "🐪", renk: "#C24B64" },
+];
+const HR_PLAN = { yerlestir: 6, sirala: 5, sec: 11 };
+
+/* Başlığa yerleştirilecek olay kartları: [başlık, metin, açıklama] */
+const HR_KART = [
+  ["gizli", "Hz. Hatice'nin ilk Müslüman olması", "İlk Müslümanlar, davetin gizlice yapıldığı ilk yıllarda iman etti."],
+  ["gizli", "Hz. Ali'nin çocuk yaşta Müslüman olması", "Hz. Ali, gizli davet döneminde Müslüman olan ilk çocuktur."],
+  ["gizli", "Hz. Ebubekir'in güvendiği arkadaşlarını İslam'a çağırması", "Gizli davette İslam, güvenilir yakın çevreye anlatılıyordu."],
+  ["gizli", "Müslümanların Erkam'ın evinde (Dârülerkam) toplanması", "Dârülerkam, gizli davet döneminde Müslümanların buluşup Kur'an öğrendiği evdir."],
+  ["gizli", "Davetin yalnızca güvenilir yakın çevreye yapılması", "Davetin yakın çevreyle sınırlı tutulması gizli davetin özelliğidir."],
+  ["gizli", "İlk üç yıl davetin gizlice sürdürülmesi", "Davet ilk üç yıl gizli yürütüldü, sonra açık davete geçildi."],
+  ["acik", "“En yakın akrabanı uyar.” ayetinin inmesi", "Bu ayetle önce akrabalara, ardından herkese açık davet başladı."],
+  ["acik", "Akrabaların bir yemekte İslam'a çağrılması", "Akrabaların davet edilmesi açık davetin ilk adımıdır."],
+  ["acik", "Safa tepesinde Mekkelilere seslenilmesi", "Safa tepesindeki çağrı, davetin herkese açıkça duyurulmasıdır."],
+  ["acik", "Müşriklerin alay, baskı ve işkenceye başlaması", "Baskılar, davet açıkça yapılmaya başlanınca yoğunlaştı."],
+  ["acik", "Müslümanlara uygulanan üç yıllık boykot", "Boykot, açık davete karşı müşriklerin uyguladığı baskılardandır."],
+  ["acik", "İslam'ın bütün Mekkelilere duyurulması", "Davetin herkese duyurulması açık davetin özelliğidir."],
+  ["taif", "Hüzün Yılı'ndan sonra destek aramak için yola çıkılması", "Hz. Hatice ve Ebu Talib'in vefatından sonra Peygamberimiz destek bulmak için Taif'e gitti."],
+  ["taif", "Zeyd b. Harise ile birlikte yapılan yolculuk", "Peygamberimize Taif yolculuğunda Zeyd b. Harise eşlik etti."],
+  ["taif", "Şehrin ileri gelenlerinin daveti reddetmesi", "Taif'in ileri gelenleri daveti kabul etmedi."],
+  ["taif", "Peygamberimizin taşlanıp yaralanması", "Taif'te Peygamberimiz taşlanarak şehirden çıkarıldı."],
+  ["taif", "Beddua yerine hidayetleri için dua edilmesi", "Peygamberimiz kendisini taşlayan Taiflilere beddua etmeyip dua etti."],
+  ["taif", "Addas'ın üzüm ikram edip Müslüman olması", "Addas, Taif dönüşünde Peygamberimize üzüm ikram edip Müslüman oldu."],
+  ["isra", "Mescid-i Haram'dan Mescid-i Aksa'ya gece yolculuğu", "Mescid-i Haram'dan Mescid-i Aksa'ya yapılan gece yolculuğu İsra'dır."],
+  ["isra", "Mescid-i Aksa'dan göklere yükseliş", "Mescid-i Aksa'dan göklere yükseliş Miraç'tır."],
+  ["isra", "Beş vakit namazın farz kılınması", "Beş vakit namaz Miraç'ta farz kılındı."],
+  ["isra", "Bakara suresinin son ayetlerinin hediye edilmesi", "Bakara suresinin son ayetleri Miraç'ın hediyelerindendir."],
+  ["isra", "Hz. Ebubekir'in olayı hemen tasdik edip “Sıddık” diye anılması", "Hz. Ebubekir, İsra ve Miraç'ı tereddütsüz tasdik ettiği için Sıddık diye anıldı."],
+  ["isra", "Tek gecede gerçekleşen mucizevi yolculuk", "İsra ve Miraç, Allah'ın izniyle tek gecede gerçekleşen bir mucizedir."],
+  ["yurt", "Hac mevsiminde kabilelere İslam'ın anlatılması", "Peygamberimiz yeni bir yurt ve destek ararken hac mevsiminde kabilelere İslam'ı anlattı."],
+  ["yurt", "Yesribli altı kişinin Müslüman olması", "Yesribli altı kişinin Müslüman olması yeni yurt arayışının ilk adımıdır."],
+  ["yurt", "Birinci Akabe Biatı", "Birinci Akabe Biatı'nda Yesribli Müslümanlar Peygamberimize söz verdi."],
+  ["yurt", "Mus'ab b. Umeyr'in öğretmen olarak Yesrib'e gönderilmesi", "Mus'ab b. Umeyr, Birinci Akabe Biatı'ndan sonra İslam'ı öğretmek için Yesrib'e gönderildi."],
+  ["yurt", "İkinci Akabe Biatı ve koruma sözü", "İkinci Akabe Biatı'nda Yesribliler Peygamberimizi koruyacaklarına söz verdi."],
+  ["hicret", "Müslümanların küçük gruplar hâlinde Yesrib'e göç etmesi", "Müslümanlar Akabe biatlarından sonra gruplar hâlinde Yesrib'e hicret etti."],
+  ["hicret", "Müşriklerin Dârünnedve'de öldürme kararı alması", "Müşriklerin öldürme kararı, Peygamberimizin hicretini hızlandıran olaydır."],
+  ["hicret", "Hz. Ali'nin Peygamberimizin yatağında yatması", "Hicret gecesi Hz. Ali, Peygamberimizin yatağında yattı."],
+  ["hicret", "Sevr mağarasında üç gün saklanılması", "Peygamberimiz ve Hz. Ebubekir hicret yolculuğunda Sevr mağarasında saklandı."],
+  ["hicret", "“Üzülme, Allah bizimle beraberdir.” sözü", "Bu söz, Sevr mağarasında Peygamberimizin Hz. Ebubekir'e söylediği sözdür."],
+  ["hicret", "Yol arkadaşı Hz. Ebubekir ile yola çıkılması", "Peygamberimizin hicret yolculuğundaki arkadaşı Hz. Ebubekir'dir."],
+  ["hicret", "Yesrib'e varılması", "Yesrib'e varış, hicret yolculuğunun sonudur."],
+];
+
+/* Kronoloji: r = sıra. cakisir: aynı sıralama sorusuna konamayacak olaylar
+   (tarihleri iç içe / kaynaklarda farklı) */
+const HR_SIRA = [
+  { id: "vahiy", r: 1, ad: "Hira'da ilk vahyin gelmesi" },
+  { id: "hatice", r: 2, ad: "Hz. Hatice'nin Müslüman olması" },
+  { id: "erkam", r: 3, ad: "Müslümanların Dârülerkam'da toplanması" },
+  { id: "akraba", r: 4, ad: "Akrabaların İslam'a çağrılması" },
+  { id: "safa", r: 5, ad: "Safa tepesinde halka seslenilmesi" },
+  { id: "habes", r: 6, ad: "Bazı Müslümanların Habeşistan'a göç etmesi" },
+  { id: "boykot", r: 7, ad: "Üç yıllık boykotun uygulanması" },
+  { id: "huzun", r: 8, ad: "Hz. Hatice ve Ebu Talib'in vefatı (Hüzün Yılı)" },
+  { id: "taif", r: 9, ad: "Taif yolculuğu" },
+  { id: "isra", r: 10, ad: "İsra ve Miraç", cakisir: ["alti", "akabe1", "musab"] },
+  { id: "alti", r: 11, ad: "Yesribli altı kişinin Müslüman olması" },
+  { id: "akabe1", r: 12, ad: "Birinci Akabe Biatı" },
+  { id: "musab", r: 13, ad: "Mus'ab b. Umeyr'in Yesrib'e gönderilmesi" },
+  { id: "akabe2", r: 14, ad: "İkinci Akabe Biatı" },
+  { id: "goc", r: 15, ad: "Müslümanların Yesrib'e göç etmesi" },
+  { id: "nedve", r: 16, ad: "Müşriklerin Dârünnedve'de öldürme kararı" },
+  { id: "yatak", r: 17, ad: "Hz. Ali'nin Peygamberimizin yatağında yatması" },
+  { id: "sevr", r: 18, ad: "Sevr mağarasında saklanılması" },
+  { id: "varis", r: 19, ad: "Yesrib'e varılması" },
+];
+
+/* Seçmeli sorular: [konu, soru, doğru, yanlışlar[3], açıklama] */
+const HR_SORU = [
+  /* gizli / açık davet · benzerlik ve farklılık */
+  ["karsilastir", "Gizli ve açık davetin ortak yönü nedir?", "İnsanları tek Allah'a inanmaya çağırması", ["Yalnızca akrabalara yapılması", "Hicretten sonra başlaması", "Sadece hac mevsiminde yapılması"], "İki dönemde de amaç insanları tek Allah'a inanmaya çağırmaktı; değişen yalnız yöntemdi."],
+  ["karsilastir", "Gizli davetin açık davetten farkı nedir?", "Güvenilir yakın çevreye gizlice yapılması", ["Safa tepesinde herkese duyurulması", "Hac mevsiminde kabilelere anlatılması", "Taiflilere yapılması"], "Gizli davette İslam yalnız güvenilir yakın çevreye anlatılıyordu."],
+  ["karsilastir", "Açık davetin gizli davetten farkı hangisidir?", "İslam'ın bütün Mekkelilere duyurulması", ["Müslümanların Dârülerkam'da toplanması", "İlk vahyin Hira'da gelmesi", "Davetin yakın çevreyle sınırlı kalması"], "Açık davette İslam artık herkese açıkça duyuruldu."],
+  ["gizli", "Gizli davet yaklaşık ne kadar sürmüştür?", "Üç yıl", ["Bir yıl", "On yıl", "Yirmi üç yıl"], "Davet ilk üç yıl gizli yürütüldü."],
+  ["gizli", "Davet neden önce gizli yapılmıştır?", "Müslümanlar azdı; tepkilerden korunmak gerekiyordu.", ["Vahiy henüz gelmemişti.", "Mekkeliler İslam'ı zaten biliyordu.", "Hicret için izin bekleniyordu."], "Müslümanların sayısı azken davet, tepkilerden korunmak için gizli yürütüldü."],
+  ["gizli", "Gizli davet döneminde Müslümanların toplanıp Kur'an öğrendiği yer neresidir?", "Dârülerkam (Erkam'ın evi)", ["Dârünnedve", "Sevr mağarası", "Safa tepesi"], "Dârülerkam gizli davetin merkeziydi; Dârünnedve ise müşriklerin toplantı yeriydi."],
+  ["gizli", "İlk Müslüman olan kişi kimdir?", "Hz. Hatice", ["Hz. Ömer", "Hz. Hamza", "Mus'ab b. Umeyr"], "Peygamberimize ilk iman eden, eşi Hz. Hatice'dir."],
+  ["acik", "Açık davet hangi ayetle başladı?", "“En yakın akrabanı uyar.”", ["“Oku!”", "“Üzülme, Allah bizimle beraberdir.”", "“Kulunu bir gece Mescid-i Haram'dan Mescid-i Aksa'ya götüren Allah…”"], "“En yakın akrabanı uyar.” ayetiyle önce akrabalar, sonra herkes davet edildi."],
+  ["acik", "Safa tepesinde Mekkeliler Peygamberimize “Senin yalan söylediğini hiç görmedik.” dedi. Bu söz neyi gösterir?", "Peygamberimizin güvenilir biri olarak tanındığını", ["Mekkelilerin hemen Müslüman olduğunu", "Peygamberimizin zengin olduğunu", "Davetin gizli yapıldığını"], "Mekkeliler Peygamberimizi dürüst ve güvenilir (Emin) biri olarak tanıyordu."],
+  ["acik", "Açık davetten sonra müşriklerin tepkisi ne oldu?", "Alay, baskı ve işkence uyguladılar.", ["Hepsi hemen Müslüman oldu.", "Peygamberimize biat ettiler.", "Müslümanları Yesrib'e davet ettiler."], "Davet açıkça yapılınca müşrikler alaya, baskıya ve işkenceye başladı."],
+  ["acik", "Müşriklerin Müslümanlara uyguladığı boykotun amacı neydi?", "Müslümanları yalnız bırakıp davetten vazgeçirmek", ["Müslümanları Taif'e göndermek", "Ticareti geliştirmek", "Hac mevsimini düzenlemek"], "Boykotla Müslümanlar yalnızlaştırılıp davetten vazgeçirilmek istendi."],
+  /* Taif */
+  ["taif", "Peygamberimiz Taif'e neden gitti?", "İslam'ı anlatmak ve yeni destek bulmak için", ["Ticaret yapmak için", "Hac ibadetini yapmak için", "Yesriblilerle biatlaşmak için"], "Hüzün Yılı'ndan sonra Peygamberimiz Taif'e İslam'ı anlatmak ve destek bulmak için gitti."],
+  ["taif", "Taif yolculuğu hangi olaydan sonra yapıldı?", "Hz. Hatice ve Ebu Talib'in vefatından sonra", ["Hicretten sonra", "İkinci Akabe Biatı'ndan sonra", "İsra ve Miraç'tan sonra"], "Taif yolculuğu, Hüzün Yılı olarak anılan kayıplardan sonra yapıldı."],
+  ["taif", "Taif yolculuğunda Peygamberimize kim eşlik etti?", "Zeyd b. Harise", ["Hz. Ebubekir", "Mus'ab b. Umeyr", "Hz. Ali"], "Taif'e Zeyd b. Harise eşlik etti; Hz. Ebubekir ise hicret yolculuğunun arkadaşıdır."],
+  ["taif", "Taşlanan Peygamberimizin Taifliler için beddua etmeyip dua etmesi neyi gösterir?", "Merhametini ve sabrını", ["Taif'e bir daha gitmeyeceğini", "Taiflilerin daveti kabul ettiğini", "Hicretin başladığını"], "Peygamberimiz kendisine zarar verenlere bile merhametle dua etti."],
+  ["taif", "Taif dönüşünde Peygamberimize üzüm ikram edip Müslüman olan kişi kimdir?", "Addas", ["Zeyd b. Harise", "Mus'ab b. Umeyr", "Hz. Ali"], "Addas, Taif dönüşünde üzüm ikram edip Müslüman oldu."],
+  /* İsra ve Miraç */
+  ["isra", "İsra nedir?", "Mescid-i Haram'dan Mescid-i Aksa'ya yapılan gece yolculuğu", ["Mescid-i Aksa'dan göklere yükseliş", "Mekke'den Yesrib'e göç", "Taif'e yapılan yolculuk"], "İsra, Mescid-i Haram'dan Mescid-i Aksa'ya yapılan gece yolculuğudur."],
+  ["isra", "Miraç nedir?", "Mescid-i Aksa'dan göklere yükseliş", ["Mescid-i Haram'dan Mescid-i Aksa'ya yolculuk", "Akabe'de verilen söz", "Sevr mağarasında saklanma"], "Miraç, Mescid-i Aksa'dan göklere yükseliştir."],
+  ["isra", "Miraç'ta Müslümanlara hediye edilen ibadet hangisidir?", "Beş vakit namaz", ["Oruç", "Hac", "Zekât"], "Beş vakit namaz Miraç'ta farz kılındı."],
+  ["isra", "İsra ve Miraç neden bir mucize olarak kabul edilir?", "Allah'ın izniyle olağan sınırların dışında, tek gecede gerçekleştiği için", ["Yıllarca sürdüğü için", "Bir ticaret kervanıyla yapıldığı için", "Mekkelilerin hepsi birlikte katıldığı için"], "İsra ve Miraç, insan gücünü aşan ve Allah'ın izniyle tek gecede gerçekleşen bir mucizedir."],
+  ["isra", "Hz. Ebubekir'in “Sıddık” diye anılması hangi olayla ilgilidir?", "İsra ve Miraç'ı tereddütsüz tasdik etmesiyle", ["Sevr mağarasında bulunmasıyla", "Taif'e gitmesiyle", "Akabe'de biat etmesiyle"], "Hz. Ebubekir, İsra ve Miraç'ı duyar duymaz doğruladığı için Sıddık diye anıldı."],
+  ["isra", "İsra ve Miraç, Peygamberimiz için hangi dönemden sonra bir teselli olmuştur?", "Hüzün Yılı ve Taif'teki sıkıntılardan sonra", ["Yesrib'e vardıktan sonra", "Gizli davetin ilk gününde", "İkinci Akabe Biatı'ndan sonra"], "İsra ve Miraç, Hüzün Yılı ve Taif sıkıntılarından sonra Peygamberimize teselli oldu."],
+  /* Yeni yurt arayışı */
+  ["yurt", "Peygamberimiz yeni bir yurt aramaya neden ihtiyaç duydu?", "Mekke'de baskılar artmış, davet engellenmişti.", ["Mekke'de su kalmamıştı.", "Taifliler onu şehirlerine davet etmişti.", "Ticaret yolları kapanmıştı."], "Artan baskılar Mekke'de daveti sürdürmeyi zorlaştırınca yeni bir yurt arayışı başladı."],
+  ["yurt", "Peygamberimiz hac mevsiminde ne yaptı?", "Mekke'ye gelen kabilelere İslam'ı anlattı.", ["Mekke'den ayrılıp Taif'e yerleşti.", "Dârünnedve'de toplantı yaptı.", "Sevr mağarasına sığındı."], "Hac mevsiminde Mekke'ye gelen kabilelere İslam'ı anlatarak destek aradı."],
+  ["yurt", "Birinci Akabe Biatı'ndan sonra İslam'ı öğretmek için Yesrib'e gönderilen sahabi kimdir?", "Mus'ab b. Umeyr", ["Zeyd b. Harise", "Hz. Ali", "Addas"], "Mus'ab b. Umeyr, Yesrib'e İslam'ı öğretmek üzere gönderilen ilk öğretmendir."],
+  ["yurt", "İkinci Akabe Biatı hicret için neden önemlidir?", "Yesribliler Peygamberimizi ve Müslümanları koruyacaklarına söz verdi.", ["Müşrikler Müslümanlara barış teklif etti.", "Taifliler Müslüman oldu.", "Beş vakit namaz farz kılındı."], "İkinci Akabe'deki koruma sözü, Yesrib'i Müslümanlar için güvenli bir yurt hâline getirdi."],
+  ["yurt", "Müslümanların baskılardan kurtulmak için ilk göç ettiği ülke hangisidir?", "Habeşistan", ["Yemen", "Mısır", "Şam"], "Baskılar artınca bazı Müslümanlar önce Habeşistan'a göç etti."],
+  /* Hicret */
+  ["hicret", "Aşağıdakilerden hangisi hicretin sebeplerinden biri DEĞİLDİR?", "Mekke'de ticaretin tamamen durması", ["Müslümanlara yapılan baskı ve işkenceler", "Müşriklerin Peygamberimizi öldürme kararı", "Yesriblilerin koruma sözü vermesi"], "Hicretin sebepleri baskılar, öldürme kararı ve Yesrib'in güvenli yurt olmasıdır; ticaretle ilgisi yoktur."],
+  ["hicret", "Hicret gecesi Peygamberimizin yatağında kim yattı?", "Hz. Ali", ["Hz. Ebubekir", "Zeyd b. Harise", "Mus'ab b. Umeyr"], "Hicret gecesi Hz. Ali, Peygamberimizin yatağında yattı."],
+  ["hicret", "Hicret yolculuğunda Peygamberimizin yol arkadaşı kimdir?", "Hz. Ebubekir", ["Hz. Ali", "Zeyd b. Harise", "Addas"], "Peygamberimiz hicret yolculuğunu Hz. Ebubekir ile yaptı."],
+  ["hicret", "Peygamberimiz ve Hz. Ebubekir takipçilerden korunmak için nerede saklandı?", "Sevr mağarası", ["Hira mağarası", "Dârülerkam", "Safa tepesi"], "Sevr mağarasında üç gün saklandılar; Hira ise ilk vahyin geldiği yerdir."],
+  ["hicret", "“Üzülme, Allah bizimle beraberdir.” sözü hangi olayla ilgilidir?", "Sevr mağarasında saklanma", ["Taif'te taşlanma", "Safa tepesindeki davet", "Miraç"], "Peygamberimiz bu sözü Sevr mağarasında Hz. Ebubekir'e söyledi."],
+  ["hicret", "Hz. Ali'nin hicretten sonra birkaç gün Mekke'de kalmasının sebebi neydi?", "Peygamberimize bırakılan emanetleri sahiplerine vermek", ["Taif'e gitmek", "Dârülerkam'ı korumak", "Hac mevsimini beklemek"], "Hz. Ali, Mekkelilerin Peygamberimize bıraktığı emanetleri sahiplerine teslim etti."],
+  ["hicret", "Emanetlerin müşriklere bile geri verilmesi Peygamberimizin hangi özelliğini gösterir?", "Güvenilir olmasını", ["Zengin olmasını", "Güçlü bir orduya sahip olmasını", "Mekke'de kalmak istemesini"], "Peygamberimiz kendisine düşman olanların emanetlerini bile koruyacak kadar güvenilirdi."],
+  ["hicret", "Müşrikler Peygamberimizi öldürme kararını nerede aldı?", "Dârünnedve", ["Dârülerkam", "Sevr mağarası", "Akabe"], "Dârünnedve müşriklerin toplantı yeriydi; öldürme kararı orada alındı."],
+  /* Kavramlar */
+  ["kavram", "Allah rızası için yurdunu bırakıp göç eden kişiye ne denir?", "Muhacir", ["Biat", "Davet", "Hicret"], "Allah rızası için yurdunu bırakıp göç eden kişiye muhacir denir."],
+  ["kavram", "Bir kişiye bağlılık ve destek sözü vermeye ne denir?", "Biat", ["Muhacir", "Davet", "Hicret"], "Biat, bağlılık ve destek sözü vermektir."],
+  ["kavram", "İnsanları İslam'a çağırmaya ne denir?", "Davet", ["Biat", "Muhacir", "Hicret"], "İnsanları İslam'a çağırmaya davet denir."],
+  ["kavram", "Allah rızası için Mekke'den Yesrib'e yapılan göçe ne denir?", "Hicret", ["Biat", "Davet", "Muhacir"], "Peygamberimizin ve Müslümanların Mekke'den Yesrib'e göçüne hicret denir."],
+  ["kavram", "Yesribliler, “Seni kendimizi koruduğumuz gibi koruyacağız.” diye söz verdi. Bu durum hangi kavramla ilgilidir?", "Biat", ["Muhacir", "Davet", "Miraç"], "Akabe'de verilen bu koruma sözü bir biattır."],
+  ["kavram", "Mus'ab b. Umeyr Yesrib'de insanlara İslam'ı anlattı. Bu durum hangi kavramla ilgilidir?", "Davet", ["Biat", "Hicret", "İsra"], "İnsanlara İslam'ı anlatıp çağırmak davettir."],
+  ["kavram", "Evini ve malını Mekke'de bırakıp Yesrib'e giden bir Müslüman için hangi kavram kullanılır?", "Muhacir", ["Biat", "Davet", "Miraç"], "Hicret eden Müslümanlara muhacir denir."],
+  ["kavram", "Peygamberimizin Safa tepesinde halka seslenmesi hangi kavramla ilgilidir?", "Davet", ["Biat", "Muhacir", "Hicret"], "Safa tepesindeki çağrı, açık davetin örneğidir."],
+];
+
+/* ── GÖREV ÜRETİMİ ── */
+const hrBaslikIx = id => HR_BASLIK.findIndex(b => b.id === id);
+function hrCakisir(a, b){ return (a.cakisir || []).indexOf(b.id) >= 0 || (b.cakisir || []).indexOf(a.id) >= 0; }
+/* 4 olaylık sıralama: çakışan çift yok, olaylar turda en çok iki kez kullanılır */
+function hrSiraUret(S){
+  for (let d = 0; d < 200; d++){
+    const aday = karistir(HR_SIRA.filter(o => (S.olayKul[o.id] || 0) < 2)).slice(0, 4).sort((a, b) => a.r - b.r);
+    if (aday.length < 4) break;
+    if (aday.some((a, i) => aday.some((b, j) => j > i && hrCakisir(a, b)))) continue;
+    const iz = "s|" + aday.map(o => o.id).join(",");
+    if (S.izler[iz]) continue;
+    aday.forEach(o => { S.olayKul[o.id] = (S.olayKul[o.id] || 0) + 1; });
+    S.izler[iz] = 1;
+    return { tip: "sirala", iz, olaylar: aday, konu: "kronoloji" };
+  }
+  return null;
+}
+/* 3 kartlık yerleştirme: üç farklı başlıktan, turda kart tekrarı yok */
+function hrYerlestirUret(S){
+  const kalan = HR_KART.map((k, i) => i).filter(i => !S.kartKul[i]);
+  const taze = kalan.filter(i => !S.eski["k" + i]);
+  const havuz = taze.length >= 6 ? taze : kalan;
+  const baslik = {};
+  const secilen = [];
+  karistir(havuz).forEach(i => { if (secilen.length < 3 && !baslik[HR_KART[i][0]]){ baslik[HR_KART[i][0]] = 1; secilen.push(i); } });
+  if (secilen.length < 3) return null;
+  secilen.forEach(i => { S.kartKul[i] = 1; });
+  return { tip: "yerlestir", iz: "y|" + secilen.join(","), kartlar: secilen.map(i => ({ ix: i, baslik: hrBaslikIx(HR_KART[i][0]), metin: HR_KART[i][1], a: HR_KART[i][2] })), konu: "baslik" };
+}
+/* «Hangi olaydan sonra/önce?» — kronolojiden üretilir */
+function hrZamanSoruUret(S){
+  for (let d = 0; d < 200; d++){
+    const ref = fenSec(HR_SIRA.filter(o => o.r > 2 && o.r < 18));
+    const sonra = Math.random() < .6;
+    const uygun = HR_SIRA.filter(o => o.id !== ref.id && !hrCakisir(o, ref));
+    const dogru = fenSec(uygun.filter(o => sonra ? o.r > ref.r : o.r < ref.r));
+    const yanlis = karistir(uygun.filter(o => sonra ? o.r < ref.r : o.r > ref.r)).slice(0, 3);
+    if (!dogru || yanlis.length < 3) continue;
+    const iz = "z|" + ref.id + "|" + (sonra ? "s" : "o") + "|" + dogru.id;
+    if (S.izler[iz] || S.zamanRef[ref.id]) continue;
+    S.zamanRef[ref.id] = 1; S.izler[iz] = 1;
+    return { tip: "sec", iz, konu: "kronoloji",
+      soru: "“" + ref.ad + "” olayından " + (sonra ? "SONRA" : "ÖNCE") + " gerçekleşen olay hangisidir?",
+      dogru: dogru.ad, yanlis: yanlis.map(o => o.ad),
+      a: "Olaylar " + (sonra ? ref.ad + " ➜ " + dogru.ad : dogru.ad + " ➜ " + ref.ad) + " sırasıyla gerçekleşti." };
+  }
+  return null;
+}
+function hrSecUret(S, konuTercih){
+  let aday = HR_SORU.map((s, i) => i).filter(i => !S.soruKul[i] && (!konuTercih || HR_SORU[i][0] === konuTercih));
+  const taze = aday.filter(i => !S.eski["q" + i]); if (taze.length) aday = taze;
+  if (!aday.length) return null;
+  const i = fenSec(aday); S.soruKul[i] = 1;
+  const [konu, soru, dogru, yanlis, a] = HR_SORU[i];
+  return { tip: "sec", iz: "q" + i, konu, soru, dogru, yanlis, a };
+}
+function hrKombinasyonSay(){
+  let sira = 0;
+  const n = HR_SIRA.length;
+  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) for (let c = b + 1; c < n; c++) for (let d = c + 1; d < n; d++){
+    const s = [HR_SIRA[a], HR_SIRA[b], HR_SIRA[c], HR_SIRA[d]];
+    if (!s.some((x, i) => s.some((y, j) => j > i && hrCakisir(x, y)))) sira++;
+  }
+  return { kart: HR_KART.length, soru: HR_SORU.length, sira, toplam: HR_KART.length + HR_SORU.length + sira };
+}
+
+/* Tur: 6 yerleştir · 5 sırala · 11 seç (8 el yazımı soru — konular
+   dönüşümlü — + 3 «hangi olaydan sonra/önce?»). Sıra: tür arka arkaya
+   gelmez; ilk görev yerleştirme (oyunun ne olduğu hemen anlaşılsın). */
+function hrTurKur(S){
+  const G = [];
+  for (let i = 0; i < HR_PLAN.yerlestir; i++){ const g = hrYerlestirUret(S); if (g) G.push(g); }
+  for (let i = 0; i < HR_PLAN.sirala; i++){ const g = hrSiraUret(S); if (g) G.push(g); }
+  const konular = karistir(["karsilastir", "gizli", "acik", "taif", "isra", "yurt", "hicret", "kavram"]);
+  const secEl = HR_PLAN.sec - 3;
+  for (let i = 0; i < secEl; i++){ const g = hrSecUret(S, konular[i % konular.length]) || hrSecUret(S); if (g) G.push(g); }
+  for (let i = 0; i < 3; i++){ const g = hrZamanSoruUret(S) || hrSecUret(S); if (g) G.push(g); }
+  G.forEach(g => { S.izler[g.iz] = 1; });
+  /* dizilim: yerleştir ve sırala arka arkaya gelmez; seçim en çok iki kez
+     üst üste (11/22 olduğu için tam dönüşüm imkânsız) */
+  /* Tür seçimi kalan adedin karesiyle ağırlıklı: bol olan tür (seç) öne
+     çekilir, böylece sonda yan yana kalan yerleştir/sırala birikmez. */
+  let dizi = null;
+  for (let d = 0; d < 200 && !dizi; d++){
+    const havuz = { yerlestir: karistir(G.filter(g => g.tip === "yerlestir")), sirala: karistir(G.filter(g => g.tip === "sirala")), sec: karistir(G.filter(g => g.tip === "sec")) };
+    const sira = [];
+    if (havuz.yerlestir.length) sira.push(havuz.yerlestir.pop());
+    let takildi = false;
+    while (sira.length < G.length){
+      const a = sira[sira.length - 1], b = sira[sira.length - 2];
+      const turler = Object.keys(havuz).filter(t => havuz[t].length && !(a && t === a.tip && (t !== "sec" || (b && b.tip === "sec"))));
+      if (!turler.length){ takildi = true; break; }
+      const w = turler.map(t => havuz[t].length * havuz[t].length);
+      let r = Math.random() * w.reduce((x, y) => x + y, 0), t = turler[0];
+      for (let i = 0; i < turler.length; i++){ r -= w[i]; if (r < 0){ t = turler[i]; break; } }
+      sira.push(havuz[t].pop());
+    }
+    if (!takildi) dizi = sira;
+  }
+  if (!dizi) dizi = G;
+  /* Seçenekli sorularda doğru şıkkın yeri dengeli, bir öncekiyle aynı değil */
+  const konum = [0, 0, 0, 0]; let son = -1;
+  dizi.forEach(g => {
+    if (g.tip !== "sec") return;
+    const ad = [0, 1, 2, 3].filter(i => i !== son);
+    const enAz = Math.min(...ad.map(i => konum[i]));
+    const ix = fenSec(ad.filter(i => konum[i] === enAz));
+    konum[ix]++; son = ix;
+    const s = karistir(g.yanlis.slice()); s.splice(ix, 0, g.dogru);
+    g.secenekler = s; g.dogruIx = ix;
+  });
+  S.gorevler = dizi;
+}
+
+/* ── DURUM ── */
+function hrKur(oyun, bitir){
+  const A = oyunAyarVars(oyun.id, {});
+  const eski = {}; (A.hrGorulen || []).forEach(k => { eski[k] = 1; });
+  const S = { oyun, bitir, A, eski, izler: {}, kartKul: {}, soruKul: {}, olayKul: {}, zamanRef: {},
+    ix: 0, puan: 0, dogru: 0, yanlis: 0, atlanan: 0, seri: 0, enUzunSeri: 0, kartD: 0, kartY: 0, tipSay: {}, sonuc: [],
+    canli: true, zamanlar: [], baslangic: Date.now(), gorulenYeni: [] };
+  S.bekle = (f, ms) => { const t = setTimeout(() => { if (S.canli) f(); }, ms); S.zamanlar.push(t); return t; };
+  S.durdur = () => { S.canli = false; S.zamanlar.forEach(clearTimeout); S.zamanlar = []; hrTuslarCoz(S); konusmaDur(); };
+  temizleyici.push(S.durdur);
+  hrTurKur(S);
+  return S;
+}
+function hrBaslat(oyun, bitir){ const S = hrKur(oyun, bitir); hrTahtaBagla(S); hrEkran(S); }
+function hrTahtaBagla(S){
+  tahtaBaglan({
+    sonraki: () => { if (S.bitti) return; if (!S.bitti && S.durumG !== "bitti"){ S.atlanan++; S.sonuc[S.ix] = "atla"; } hrSonraki(S); },
+    degistir: () => {
+      if (S.bitti || S.durumG !== "acik" || S.dokunuldu) return;
+      const g = S.gorevler[S.ix];
+      let y = null;
+      if (g.tip === "yerlestir") y = hrYerlestirUret(S);
+      else if (g.tip === "sirala") y = hrSiraUret(S);
+      else { y = g.iz.startsWith("z|") ? hrZamanSoruUret(S) : hrSecUret(S, g.konu) || hrSecUret(S);
+        if (y){ const ix = g.dogruIx, s = karistir(y.yanlis.slice()); s.splice(ix, 0, y.dogru); y.secenekler = s; y.dogruIx = ix; } }
+      if (!y) return;
+      S.izler[y.iz] = 1; S.gorevler[S.ix] = y; hrEkran(S);
+    },
+    ipucu: () => hrIpucu(S),
+    cevap: () => hrCevapGoster(S),
+    yeniden: () => { S.durdur(); hrBaslat(S.oyun, S.bitir); },
+  });
+}
+
+/* ── EKRAN ── */
+function hrEkran(S){
+  const g = S.gorevler[S.ix], T = S.gorevler.length;
+  S.durumG = "acik"; S.dokunuldu = false; S.secili = null; S.devam = null; S.yer = {}; S.hataVar = false;
+  konusmaDur();
+  const noktalar = S.gorevler.map((x, i) => `<i class="${S.sonuc[i] || (i === S.ix ? "simdi" : "")}"></i>`).join("");
+  const baslik = { yerlestir: "📌 Kartları doğru başlığın altına yerleştir.", sirala: "🧭 Olayları oluş sırasına diz: en önce olan 1'e.", sec: "✅ Doğru cevabı seç." }[g.tip];
+  const ipucu = g.tip === "sec" ? "" : `<p class="hr-ipucu">👆 Kartı sürükle — ya da kartı seç, sonra ${g.tip === "sirala" ? "yuvaya" : "başlığa"} dokun.</p>`;
+  let govde = "";
+  if (g.tip === "yerlestir"){
+    govde = `<div class="hr-tepsi" id="hrTepsi" aria-label="Kartlar">${g.kartlar.map((k, i) => `<button type="button" class="hr-kart" data-k="${i}">${kacis(k.metin)}</button>`).join("")}</div>
+      <div class="hr-basliklar" id="hrHedefler">${HR_BASLIK.map((b, i) => `<div class="hr-baslik" role="button" tabindex="0" data-h="${i}" style="--r:${b.renk}" aria-label="${i + 1}. başlık: ${kacis(b.ad)}">
+        <span class="hr-baslik-ust"><span class="hr-baslik-no">${i + 1}</span><span class="hr-baslik-ikon">${b.ikon}</span><b>${kacis(b.ad)}</b></span>
+        <span class="hr-baslik-ic" data-ic="${i}"></span></div>`).join("")}</div>`;
+  } else if (g.tip === "sirala"){
+    S.sira = [null, null, null, null];
+    S.siraKarisik = karistir(g.olaylar.map((o, i) => i));
+    govde = `<div class="hr-yuvalar" id="hrHedefler">${[0, 1, 2, 3].map(i => `<div class="hr-yuva" role="button" tabindex="0" data-h="${i}" aria-label="${i + 1}. sıra"><span class="hr-yuva-no">${i + 1}</span><span class="hr-yuva-ic" data-ic="${i}">${i === 0 ? "en önce" : i === 3 ? "en son" : ""}</span></div>${i < 3 ? `<span class="hr-ok" aria-hidden="true">➜</span>` : ""}`).join("")}</div>
+      <div class="hr-tepsi" id="hrTepsi" aria-label="Olay kartları">${S.siraKarisik.map(i => `<button type="button" class="hr-kart" data-k="${i}">${kacis(g.olaylar[i].ad)}</button>`).join("")}</div>
+      <div class="hr-kontrol-sira"><button type="button" class="btn btn-primary hr-kontrol" id="hrKontrol" disabled>✓ Sırayı kontrol et</button></div>`;
+  } else {
+    govde = `<div class="hr-soru-kart"><span class="hr-soru-cip">${kacis(hrKonuAd(g.konu))}</span><p class="hr-soru" id="hrSoru">${kacis(g.soru)}</p>
+        <button type="button" class="hr-dinle" id="hrDinle" aria-label="Soruyu sesli oku">🔊</button></div>
+      <div class="hr-secenekler" id="hrSecenekler">${g.secenekler.map((s, i) => `<button type="button" class="hr-secenek" data-i="${i}"><span class="hr-harf">${"ABCD"[i]}</span><span>${kacis(s)}</span></button>`).join("")}</div>`;
+  }
+  $("app").innerHTML = `${oyunBaslik(S.oyun)}
+    <div class="hr-oyun">
+      <div class="hr-hud">
+        <span class="hr-hud-kutu">Görev <b>${S.ix + 1}</b><i>/ ${T}</i></span>
+        <span class="hr-hud-kutu">Puan <b id="hrPuan">${S.puan}</b></span>
+        <span class="hr-hud-kutu hr-seri${S.seri >= 3 ? " acik" : ""}" id="hrSeri">🔥 <b>${S.seri}</b></span>
+      </div>
+      <div class="hr-yol" aria-hidden="true">${noktalar}</div>
+      <div class="hr-sahne hr-${g.tip}">
+        <p class="hr-yonerge">${baslik}</p>
+        ${govde}
+        ${ipucu}
+      </div>
+      <div class="hr-geri" id="hrGeri" hidden></div>
+    </div>`;
+  if (g.tip === "sec"){
+    $("hrSecenekler").addEventListener("click", e => { const b = e.target.closest(".hr-secenek"); if (b && !b.disabled) hrSecCevap(S, +b.dataset.i); });
+    $("hrDinle").addEventListener("click", () => konus(g.soru + " " + g.secenekler.map((s, i) => "ABCD"[i] + ". " + s).join(". ")));
+  } else {
+    hrKartBagla(S);
+    if (g.tip === "sirala") $("hrKontrol").addEventListener("click", () => hrSiraKontrol(S));
+  }
+  hrTuslarBagla(S);
+  tahtaSigdirIste();
+}
+function hrKonuAd(k){
+  return { karsilastir: "Gizli ve açık davet", gizli: "Gizli davet", acik: "Açık davet", taif: "Taif yolculuğu", isra: "İsra ve Miraç",
+    yurt: "Yeni yurt arayışı", hicret: "Hicret", kavram: "Kavramlar", kronoloji: "Hangi olaydan önce / sonra?" }[k] || "";
+}
+
+/* ── KART: seç → hedefe dokun  ya da  sürükle-bırak ── */
+function hrSec(S, i){
+  S.secili = S.secili === i ? null : i;
+  document.querySelectorAll(".hr-kart").forEach(b => b.classList.toggle("secili", +b.dataset.k === S.secili));
+  document.querySelectorAll("#hrHedefler [data-h]").forEach(h => h.classList.toggle("hazir", S.secili != null));
+}
+function hrKartBagla(S){
+  const alan = document.querySelector(".hr-sahne");
+  let d = null;
+  const hedefBul = (x, y) => { const el = document.elementFromPoint(x, y); return el ? el.closest("#hrHedefler [data-h]") : null; };
+  alan.addEventListener("click", e => {
+    if (S.durumG !== "acik") return;
+    const k = e.target.closest(".hr-kart");
+    if (k){ if (S.surukBitti){ S.surukBitti = false; return; } if (k.classList.contains("yerli")) return hrGeriAl(S, +k.dataset.k); hrSec(S, +k.dataset.k); return; }
+    const h = e.target.closest("#hrHedefler [data-h]");
+    if (h){
+      if (S.secili != null) return hrBirak(S, S.secili, +h.dataset.h);
+      /* Sıralamada dolu yuvaya dokunmak kartı tepsiye geri alır */
+      const g = S.gorevler[S.ix];
+      if (g.tip === "sirala" && S.sira[+h.dataset.h] != null) hrGeriAl(S, S.sira[+h.dataset.h]);
+    }
+  });
+  alan.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("#hrHedefler [data-h]")){ e.preventDefault(); e.stopPropagation(); e.target.click(); }
+  });
+  alan.addEventListener("pointerdown", e => {
+    const k = e.target.closest(".hr-kart"); if (!k || S.durumG !== "acik" || k.classList.contains("kilit")) return;
+    const r = k.getBoundingClientRect();
+    d = { k, x0: e.clientX, y0: e.clientY, sy0: scrollY, x: e.clientX, y: e.clientY, id: e.pointerId, olcek: k.offsetWidth ? r.width / k.offsetWidth : 1, hareket: false };
+  });
+  const konumla = () => { d.k.style.transform = `translate(${(d.x - d.x0) / d.olcek}px, ${(d.y - d.y0 + scrollY - d.sy0) / d.olcek}px)`; };
+  const kenar = () => {
+    if (!d || !d.hareket){ if (d) d.kay = 0; return; }
+    const menu = document.querySelector(".site-header");
+    const ust = menu && /sticky|fixed/.test(getComputedStyle(menu).position) ? Math.max(0, menu.getBoundingClientRect().bottom) : 0;
+    const hiz = d.y > innerHeight - 70 ? Math.min(18, (d.y - innerHeight + 70) / 3) : d.y < ust + 70 ? -Math.min(18, (ust + 70 - d.y) / 3) : 0;
+    if (hiz){ const o = scrollY; scrollBy({ top: hiz, behavior: "instant" }); if (scrollY !== o) konumla(); }
+    d.kay = hiz ? setTimeout(kenar, 16) : 0;
+  };
+  alan.addEventListener("pointermove", e => {
+    if (!d || e.pointerId !== d.id) return;
+    d.x = e.clientX; d.y = e.clientY;
+    if (!d.hareket && Math.hypot(d.x - d.x0, d.y - d.y0) > 8){
+      d.hareket = true; d.k.classList.add("tutuldu");
+      try { d.k.setPointerCapture(e.pointerId); } catch (er) {}
+    }
+    if (!d.hareket) return;
+    e.preventDefault();
+    konumla();
+    if (!d.kay) d.kay = setTimeout(kenar, 16);
+    d.k.style.pointerEvents = "none"; const h = hedefBul(e.clientX, e.clientY); d.k.style.pointerEvents = "";
+    document.querySelectorAll("#hrHedefler .uzerinde").forEach(x => { if (x !== h) x.classList.remove("uzerinde"); });
+    if (h) h.classList.add("uzerinde");
+  });
+  const birak = e => {
+    if (!d || e.pointerId !== d.id) return;
+    if (d.kay) clearTimeout(d.kay);
+    const { k, hareket } = d; d = null;
+    document.querySelectorAll("#hrHedefler .uzerinde").forEach(x => x.classList.remove("uzerinde"));
+    if (!hareket) return;
+    S.surukBitti = true; setTimeout(() => { S.surukBitti = false; }, 0);
+    k.style.pointerEvents = "none"; const h = hedefBul(e.clientX, e.clientY); k.style.pointerEvents = "";
+    k.classList.remove("tutuldu"); k.style.transform = "";
+    if (h && S.durumG === "acik") hrBirak(S, +k.dataset.k, +h.dataset.h);
+  };
+  alan.addEventListener("pointerup", birak);
+  alan.addEventListener("pointercancel", birak);
+}
+function hrBirak(S, k, h){
+  const g = S.gorevler[S.ix];
+  S.dokunuldu = true;
+  const kart = document.querySelector(`.hr-kart[data-k="${k}"]`);
+  if (g.tip === "yerlestir"){
+    if (S.yer[k] != null) return;
+    const kk = g.kartlar[k], dogru = kk.baslik === h;
+    S.yer[k] = kk.baslik;
+    if (dogru){ S.kartD++; S.puan += 10; sesEfekt("dogru"); }
+    else { S.kartY++; S.hataVar = true; sesEfekt("yanlis"); hrAciklamaEkle(S, "«" + kk.metin + "» → " + HR_BASLIK[kk.baslik].ad + ". " + kk.a); const yb = document.querySelector(`.hr-baslik[data-h="${h}"]`); if (yb){ yb.classList.add("yanlis-an"); S.bekle(() => yb.classList.remove("yanlis-an"), 700); } }
+    kart.classList.add("yerli", "kilit", dogru ? "dogru" : "duzeltildi"); kart.classList.remove("secili");
+    kart.disabled = false;
+    document.querySelector(`.hr-baslik-ic[data-ic="${kk.baslik}"]`).appendChild(kart);
+    hrSec(S, null); S.secili = null;
+    hrHudTazele(S);
+    if (Object.keys(S.yer).length === g.kartlar.length) hrGorevBitti(S, !S.hataVar);
+    return;
+  }
+  /* sırala: yuva doluysa eski kart tepsiye döner */
+  const onceki = S.sira[h];
+  const eskiYuva = S.sira.indexOf(k);
+  if (eskiYuva >= 0) S.sira[eskiYuva] = null;
+  if (onceki != null && onceki !== k){ const ok = document.querySelector(`.hr-kart[data-k="${onceki}"]`); ok.classList.remove("yerli"); $("hrTepsi").appendChild(ok); }
+  S.sira[h] = k;
+  const ic = document.querySelector(`.hr-yuva-ic[data-ic="${h}"]`);
+  ic.textContent = ""; ic.appendChild(kart);
+  kart.classList.add("yerli"); kart.classList.remove("secili");
+  hrSec(S, null); S.secili = null;
+  hrYuvaEtiket();
+  $("hrKontrol").disabled = S.sira.some(x => x == null);
+  sesEfekt("adim");
+}
+function hrYuvaEtiket(){
+  document.querySelectorAll(".hr-yuva-ic").forEach(ic => { const i = +ic.dataset.ic; if (!ic.querySelector(".hr-kart")) ic.textContent = i === 0 ? "en önce" : i === 3 ? "en son" : ""; });
+}
+function hrGeriAl(S, k){
+  const g = S.gorevler[S.ix];
+  if (g.tip !== "sirala" || S.durumG !== "acik") return;
+  const y = S.sira.indexOf(k); if (y < 0) return;
+  S.sira[y] = null;
+  const kart = document.querySelector(`.hr-kart[data-k="${k}"]`);
+  kart.classList.remove("yerli"); $("hrTepsi").appendChild(kart);
+  hrYuvaEtiket();
+  $("hrKontrol").disabled = true;
+}
+function hrSiraKontrol(S){
+  const g = S.gorevler[S.ix];
+  if (S.durumG !== "acik" || S.sira.some(x => x == null)) return;
+  let tam = true;
+  S.sira.forEach((k, i) => { const ok = k === i; if (!ok) tam = false; const kart = document.querySelector(`.hr-kart[data-k="${k}"]`); kart.classList.add("kilit", ok ? "dogru" : "yanlis"); });
+  $("hrKontrol").disabled = true;
+  if (tam){ S.puan += 20; sesEfekt("dogru"); }
+  else { sesEfekt("yanlis"); hrAciklamaEkle(S, "Doğru sıra: " + g.olaylar.map(o => o.ad).join(" ➜ ") + "."); }
+  hrGorevBitti(S, tam);
+}
+function hrSecCevap(S, i){
+  const g = S.gorevler[S.ix];
+  if (S.durumG !== "acik") return;
+  S.dokunuldu = true;
+  document.querySelectorAll(".hr-secenek").forEach(b => { b.disabled = true; });
+  const b = document.querySelector(`.hr-secenek[data-i="${i}"]`), dg = document.querySelector(`.hr-secenek[data-i="${g.dogruIx}"]`);
+  if (i === g.dogruIx){ b.classList.add("dogru"); S.puan += g.ipucu ? 5 : 10; sesEfekt("dogru"); hrGorevBitti(S, true); }
+  else { b.classList.add("yanlis"); dg.classList.add("dogru"); sesEfekt("yanlis"); hrAciklamaEkle(S, "Doğrusu: " + g.dogru.replace(/[.!?]$/, "") + ". " + g.a); hrGorevBitti(S, false); }
+}
+function hrAciklamaEkle(S, metin){
+  const geri = $("hrGeri");
+  geri.hidden = false; geri.className = "hr-geri kotu";
+  let liste = geri.querySelector(".hr-geri-liste");
+  if (!liste){ geri.innerHTML = `<ul class="hr-geri-liste"></ul>`; liste = geri.querySelector(".hr-geri-liste"); }
+  const li = document.createElement("li"); li.textContent = metin; liste.appendChild(li);
+  tahtaSigdirIste();
+}
+function hrGorevBitti(S, dogru){
+  S.durumG = "bitti";
+  const g = S.gorevler[S.ix];
+  S.tipSay[g.tip] = S.tipSay[g.tip] || { d: 0, y: 0 };
+  if (dogru){ S.dogru++; S.seri++; S.enUzunSeri = Math.max(S.enUzunSeri, S.seri); S.tipSay[g.tip].d++; S.sonuc[S.ix] = "dogru"; if (S.seri >= 3) S.puan += 5; }
+  else { S.yanlis++; S.seri = 0; S.tipSay[g.tip].y++; S.sonuc[S.ix] = "yanlis"; }
+  hrHudTazele(S);
+  const geri = $("hrGeri");
+  if (dogru && geri.hidden){
+    geri.hidden = false; geri.className = "hr-geri iyi";
+    geri.innerHTML = `<b>✓ ${fenSec(["Doğru!", "Harika!", "Çok iyi!", "Tam isabet!"])}</b>`;
+    S.devam = () => hrSonraki(S);
+    S.bekle(() => hrSonraki(S), 1300);
+  } else {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "btn btn-primary hr-devam"; btn.id = "hrDevam"; btn.textContent = "Devam ➜";
+    geri.appendChild(btn);
+    S.devam = () => hrSonraki(S);
+    btn.addEventListener("click", () => S.devam && S.devam());
+    try { btn.focus({ preventScroll: true }); } catch (e) {}
+  }
+  tahtaSigdirIste();
+}
+function hrHudTazele(S){
+  const p = $("hrPuan"); if (p) p.textContent = S.puan;
+  const s = $("hrSeri"); if (s){ s.innerHTML = "🔥 <b>" + S.seri + "</b>"; s.classList.toggle("acik", S.seri >= 3); }
+}
+function hrIpucu(S){
+  const g = S.gorevler[S.ix]; if (!g || S.durumG !== "acik") return;
+  if (g.tip === "sec"){
+    const yanlis = [...document.querySelectorAll(".hr-secenek:not(:disabled)")].filter(b => +b.dataset.i !== g.dogruIx);
+    if (yanlis.length <= 1) return;
+    const b = fenSec(yanlis); b.disabled = true; b.classList.add("sondu"); g.ipucu = true;
+  } else if (g.tip === "yerlestir"){
+    const k = g.kartlar.findIndex((x, i) => S.yer[i] == null); if (k < 0) return;
+    const bas = document.querySelector(`.hr-baslik[data-h="${g.kartlar[k].baslik}"]`); if (bas) bas.classList.add("ipucu");
+    hrSec(S, k);
+  } else {
+    const bos = S.sira.findIndex((x, i) => x !== i); if (bos < 0) return;
+    const kart = document.querySelector(`.hr-kart[data-k="${bos}"]`);
+    if (kart) kart.classList.add("ipucu");
+    const y = document.querySelector(`.hr-yuva[data-h="${bos}"]`); if (y) y.classList.add("ipucu");
+  }
+  sesEfekt("ipucu");
+}
+function hrCevapGoster(S){
+  const g = S.gorevler[S.ix]; if (!g) return;
+  if (g.tip === "sec"){ const b = document.querySelector(`.hr-secenek[data-i="${g.dogruIx}"]`); if (b) b.classList.add("goster"); return; }
+  if (g.tip === "yerlestir"){ g.kartlar.forEach((k, i) => { const kart = document.querySelector(`.hr-kart[data-k="${i}"]`); if (kart && S.yer[i] == null) kart.dataset.cevap = HR_BASLIK[k.baslik].ad; }); document.querySelectorAll(".hr-kart[data-cevap]").forEach(k => k.classList.add("cevapli")); return; }
+  g.olaylar.forEach((o, i) => { const kart = document.querySelector(`.hr-kart[data-k="${i}"]`); if (kart){ kart.dataset.cevap = (i + 1) + ". sıra"; kart.classList.add("cevapli"); } });
+}
+const HR_TUS = { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5 };
+function hrTuslarBagla(S){
+  hrTuslarCoz(S);
+  S.tusIn = e => {
+    if (e.target.closest && e.target.closest("input, select, textarea")) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === "Enter" && S.devam && !(e.target.closest && e.target.closest(".hr-kart, .hr-baslik, .hr-yuva, .hr-secenek"))){ e.preventDefault(); S.devam(); return; }
+    const g = S.gorevler[S.ix]; if (S.durumG !== "acik") return;
+    let i = HR_TUS[e.key];
+    if (g.tip === "sec" && i == null && /^[a-dA-D]$/.test(e.key)) i = "abcd".indexOf(e.key.toLowerCase());
+    if (i == null) return;
+    if (g.tip === "sec"){ if (i < 4){ const b = document.querySelector(`.hr-secenek[data-i="${i}"]`); if (b && !b.disabled){ e.preventDefault(); hrSecCevap(S, i); } } return; }
+    /* Kart seçiliyse sayı tuşu hedefi seçer */
+    if (S.secili != null && document.querySelector(`#hrHedefler [data-h="${i}"]`)){ e.preventDefault(); hrBirak(S, S.secili, i); }
+  };
+  addEventListener("keydown", S.tusIn);
+}
+function hrTuslarCoz(S){ if (S.tusIn) removeEventListener("keydown", S.tusIn); S.tusIn = null; }
+function hrSonraki(S){
+  if (!S.canli || S.bitti) return;
+  S.devam = null; S.zamanlar.forEach(clearTimeout); S.zamanlar = [];
+  S.ix++;
+  if (S.ix >= S.gorevler.length) return hrBitir(S);
+  hrEkran(S);
+}
+function hrBitir(S){
+  if (S.bitti) return;
+  S.bitti = true;
+  const sure = Math.round((Date.now() - S.baslangic) / 1000);
+  const toplam = S.dogru + S.yanlis, yuzde = toplam ? Math.round(S.dogru / toplam * 100) : 0;
+  const ad = { yerlestir: "📌 Başlığa yerleştirme", sirala: "🧭 Kronolojik sıralama", sec: "✅ Seçmeli sorular" };
+  const satir = [{ ad: "Başarı", deger: "%" + yuzde }, { ad: "En uzun seri", deger: "🔥 " + S.enUzunSeri }, { ad: "Doğru yerleşen kart", deger: S.kartD + " / " + (S.kartD + S.kartY) }];
+  let zayif = null;
+  Object.keys(ad).forEach(t => { const c = S.tipSay[t]; if (!c) return; satir.push({ ad: ad[t], deger: c.d + " / " + (c.d + c.y) }); const o = c.d / (c.d + c.y); if (o < .6 && (!zayif || o < zayif.o)) zayif = { t, o }; });
+  if (S.atlanan) satir.push({ ad: "Atlanan", deger: String(S.atlanan) });
+  const not = zayif ? "«" + ad[zayif.t].replace(/^\S+\s/, "") + "» görevlerini tekrar etmeni öneririm; yeni turda farklı kartlar gelecek." : yuzde >= 90 ? "Hicret yolunu neredeyse kusursuz tamamladın!" : "Hicret yolunu tamamladın. Yeni turda farklı kartlar seni bekliyor.";
+  const gorulen = [];
+  S.gorevler.forEach(g => { if (g.tip === "yerlestir") g.kartlar.forEach(k => gorulen.push("k" + k.ix)); else if (g.iz.startsWith("q")) gorulen.push(g.iz); });
+  oyunAyarYaz(S.oyun.id, { hrGorulen: (S.A.hrGorulen || []).concat(gorulen).slice(-60) });
+  S.durdur();
+  S.bitir({ dogru: S.dogru, yanlis: S.yanlis, sure, hedefSure: S.gorevler.length * 30, oyunPuan: S.puan, ekBilgi: satir, not,
+    rozet: yuzde >= 80 ? "Hicret Yolu Rehberi rozeti" : null });
+}
+
+/* ═════════ 7. SINIF PEYGAMBERİMİZİN HAYATI — OYUN KAYDI ═════════ */
+const PH_7 = [
+  { id: "ph7-hicret-yolu", kademe: "ortaokul", sinif: "7", ders: "Peygamberimizin Hayatı",
+    unite: "1. Ünite · Hicretten Önce Peygamberimiz",
+    konu: "Gizli ve Açık Davet, Taif Yolculuğu, İsra ve Miraç, Yeni Yurt Arayışı, Hicret",
+    tur: "hicretYolu", zorluk: 2, baslik: "Hicret Yolu",
+    etiket: "Başlığa Yerleştir • Kronolojik Sırala • Neden? • Hangi Olaydan Sonra? • Kavramlar",
+    ozet: "Olay kartlarını doğru başlığın altına yerleştir, olayları oluş sırasına diz ve kısa yorum sorularını yanıtla. 22 görev, acele yok.",
+    kazanimlar: ["Gizli ve açık davetin benzerlik ve farklılıklarını açıklar.",
+      "İlk üç yıllık gizli davet sürecini ve açık davete geçişi değerlendirir.",
+      "Taif yolculuğunun sebeplerini ve Peygamberimizin tutumunu yorumlar.",
+      "İsra ve Miraç olaylarını ve mucizevi oluşunu açıklar.",
+      "Yeni yurt arayışını, Akabe biatlarını ve hicretin sebeplerini ilişkilendirir.",
+      "Hicret yolculuğunu olayların sırasıyla anlatır; biat, davet, hicret ve muhacir kavramlarını kullanır."] },
+];
+
+/* ═════════ 8. SINIF TÜRKÇE · MESAJI ÇÖZ (ms-) ═════════════════════════════
+   Türkiye Yüzyılı Maarif Modeli · Ortaokul Türkçe Dersi Öğretim Programı ·
+   8. SINIF · 1. TEMA: İLETİŞİM VE SOSYAL İLİŞKİLER (kaynak: TYMM tema sayfası
+   tymm.meb.gov.tr/ortaokul-turkce-dersi/unite/319). Alanlar resmî öğrenme
+   çıktılarına MS_KAT.kod ile bağlıdır; kodlar ve metinler sayfadan aynen
+   alınmıştır. (mufredat.js «tr-8» henüz 2019 programını taşır; bu oyun ona
+   değil doğrudan TYMM temasına bağlıdır.)
+
+   Kapsam: yüzey ve derin anlam, anahtar kelime, bağlamdan kelime anlamı,
+   söz sanatları, görselle iletilen anlam, ikna teknikleri, medya içeriğini
+   sorgulama, basılı/dijital medya metnini değerlendirme, beden dili,
+   bağlantı ifadeleri, yazım ve noktalama (virgül · noktalı virgül).
+
+   MEKANİK: her soruda bir uyarıcı (paylaşım, sohbet, afiş, reklam, haber,
+   kısa metin, görsel, beden dili sahnesi, grafik) + 4 seçenek. Tur 30 soru;
+   zorluk %30/%50/%20 (9/15/6) altı sonuç alanına orantılı dağıtılır.
+   Paylaşım ve sohbet kartları gerçek bir platformu TAKLİT ETMEZ: tanınır
+   logo, renk düzeni, arayüz öğesi yok; «Kampüs Akış» ve «Mesajlar» adlı
+   genel kartlar kullanılır. Kişi, marka ve kurum adları kurgusaldır.
+
+   NOKTALAMA İLKESİ (T.Y.8.20 — temada tanımlanan kapsam): virgül · yüklemden
+   uzak düşmüş özne, ara söz/ara cümle, kelimeler arası bağlantısızlığı
+   gösterme ve anlam karışıklığını önleme, art arda gelen zarf-fiiller, özne
+   olan bu/şu/o zamirleri; noktalı virgül · ögeleri arasında virgül bulunan
+   sıralı cümleler, ikiden fazla eş değer ögeli cümlede özneden sonra;
+   nokta · kitap/dergi künyesinin sonu. Kapsam dışı ya da tartışmalı
+   kullanımlar sorulmaz; yanlış şıklar açıkça hatalıdır. */
+
+const MS_KAT = {
+  anlama: { ad: "Metni Anlama", ikon: "📖", kod: ["T.D.8.3", "T.D.8.4", "T.D.8.5", "T.D.8.13", "T.D.8.18", "T.O.8.3", "T.O.8.4", "T.O.8.5", "T.O.8.14", "T.O.8.20", "T.Y.8.19"] },
+  derin: { ad: "Derin Anlam ve Çıkarım", ikon: "🔍", kod: ["T.D.8.6", "T.D.8.7", "T.O.8.7", "T.O.8.8", "T.O.8.18"] },
+  ikna: { ad: "İkna Teknikleri", ikon: "📣", kod: ["T.D.8.17"] },
+  medya: { ad: "Medya Okuryazarlığı", ikon: "📰", kod: ["T.D.8.22", "T.O.8.23"] },
+  gorsel: { ad: "Görsel Anlam", ikon: "🖼️", kod: ["T.O.8.6", "T.K.8.25"] },
+  yazim: { ad: "Yazım ve Noktalama", ikon: "✍️", kod: ["T.Y.8.20"] },
+};
+const MS_ZOR = { 1: "Kolay", 2: "Orta", 3: "Düşündüren" };
+const MS_PLAN = { kat: { anlama: 6, derin: 5, ikna: 5, medya: 5, gorsel: 4, yazim: 5 }, zorluk: { 1: 9, 2: 15, 3: 6 } };
+
+/* Soru: [kategori, zorluk, uyarıcı, soru, doğru, [yanlış×3], açıklama] */
+const MS_SORU = [
+  /* ── METNİ ANLAMA ── */
+  ["anlama", 1, { t: "afis", renk: "mavi", ikon: "📚", baslik: "KİTAP TAKAS GÜNÜ", alt: "Cuma · 13.00 · Okul Kütüphanesi", satir: ["Okuduğun bir kitabı getir, yeni bir kitapla dön!", "Getirilen kitaplar temiz ve sağlam olmalıdır."] },
+    "Bu afişin asıl amacı nedir?", "Öğrencileri kitap takas etkinliğine davet etmek", ["Kütüphanenin kapanacağını duyurmak", "Yeni kitapların satışa çıktığını bildirmek", "Öğrencilere kitap ödünç almayı yasaklamak"], "Afiş; yer, zaman ve katılım koşulu vererek bir etkinliğe davet ediyor."],
+  ["anlama", 1, { t: "sohbet", baslik: "8/B Sınıf Grubu", m: [["Mert", "Yarınki gezi için saat kaçta okulda olmalıyız?"], ["Öğretmen", "8.30'da okul bahçesinde buluşuyoruz. Geç kalan otobüsü kaçırır!"]] },
+    "Öğretmenin mesajına göre hangisi doğrudur?", "Öğrenciler 8.30'da okul bahçesinde olmalıdır.", ["Gezi iptal edilmiştir.", "Otobüs öğrencileri evlerinden alacaktır.", "Buluşma yeri okulun ön kapısıdır."], "Mesaj buluşma saatini ve yerini açıkça veriyor: 8.30, okul bahçesi."],
+  ["anlama", 1, { t: "metin", metin: "Kütüphanemiz yarından itibaren hafta içi 08.00-17.00, cumartesi 10.00-14.00 saatleri arasında açık olacaktır. Pazar günleri kapalıdır." },
+    "Bu duyuruya göre hangisi söylenemez?", "Kütüphane pazar günleri açıktır.", ["Kütüphane cumartesi öğleden sonra kapanır.", "Kütüphane hafta içi sabah sekizde açılır.", "Kütüphane haftanın altı günü hizmet verir."], "Duyuruda pazar günleri kütüphanenin kapalı olduğu açıkça yazıyor."],
+  ["anlama", 1, { t: "afis", renk: "kirmizi", ikon: "🩸", baslik: "KAN BAĞIŞI KAMPANYASI", alt: "Okul spor salonu · 12 Ekim", satir: ["18 yaş üstü velilerimizi bekliyoruz.", "Bir ünite kan, üç hayat kurtarabilir."] },
+    "Afişin hedef kitlesi kimlerdir?", "18 yaşından büyük veliler", ["Okuldaki tüm öğrenciler", "Yalnızca öğretmenler", "Spor takımındaki öğrenciler"], "Afişte açıkça “18 yaş üstü velilerimizi bekliyoruz” deniyor."],
+  ["anlama", 1, { t: "metin", metin: "Arılar, dünyadaki bitkilerin önemli bir bölümünün tozlaşmasını sağlar. Bu nedenle arı sayısının azalması tarımı doğrudan etkiliyor." },
+    "Metne göre arı sayısının azalması neden önemlidir?", "Tozlaşma azalacağı için tarım etkilenir.", ["Bal fiyatları düşer.", "Arılar şehirlere taşınır.", "Bitkiler daha hızlı büyür."], "Metin, arıların tozlaşmayı sağladığını ve azalmalarının tarımı etkilediğini söylüyor."],
+  ["anlama", 1, { t: "afis", renk: "yesil", ikon: "🤫", baslik: "SESSİZ ÇALIŞMA ALANI", satir: ["Telefonlar sessize alınmalıdır.", "Grup çalışmaları için 2. kattaki odayı kullanınız."] },
+    "Bu yazının amacı nedir?", "Bir alanda uyulması gereken kuralları bildirmek", ["Yeni bir telefon modelini tanıtmak", "Grup çalışmalarını tamamen yasaklamak", "2. kattaki odanın kapandığını duyurmak"], "Yazı, sessiz çalışma alanında nasıl davranılacağını bildiriyor."],
+  ["anlama", 2, { t: "metin", metin: "Ekrana bakarak geçirdiğimiz her saat, göz sağlığımızdan bir parça götürüyor. Uzmanlar, her yirmi dakikada bir uzağa bakmayı ve düzenli mola vermeyi öneriyor." },
+    "Bu metnin anahtar kelimesi hangisidir?", "Göz sağlığı", ["Uzmanlar", "Saat", "Dakika"], "Metnin bütün cümleleri göz sağlığını korumak etrafında şekilleniyor."],
+  ["anlama", 2, { t: "paylasim", ad: "Deniz Arslan", kul: "@denizcizer", metin: "Resim yarışmasında elendim ama pes etmiyorum. Bu yenilgi beni yıldırmadı, tam tersine hırslandırdı! 🎨" },
+    "Paylaşımdaki “yıldırmak” sözcüğü hangi anlamda kullanılmıştır?", "Cesaretini kırıp vazgeçirmek", ["Çok parlak göstermek", "Hızla ilerletmek", "Yıldız gibi öne çıkarmak"], "“Pes etmiyorum” ve “tam tersine hırslandırdı” ifadeleri sözcüğün “cesaretini kırmak” anlamında olduğunu gösteriyor."],
+  ["anlama", 2, { t: "metin", metin: "Ahmet her gün düzenli çalıştı. ____ sınavda istediği sonucu aldı." },
+    "Boşluğa hangi bağlantı ifadesi gelmelidir?", "Bu sayede", ["Buna rağmen", "Oysa", "Öte yandan"], "İkinci cümle birincinin sonucu olduğu için neden-sonuç bildiren “bu sayede” gelir."],
+  ["anlama", 2, { t: "metin", metin: "Hava çok soğuktu. ____ maç ertelenmedi." },
+    "Boşluğa hangi bağlantı ifadesi gelmelidir?", "Buna rağmen", ["Bu yüzden", "Böylece", "Bu sayede"], "Beklenenin tersi bir durum anlatıldığı için karşıtlık bildiren “buna rağmen” gelir."],
+  ["anlama", 2, { t: "metin", metin: "Kitap okumak kelime hazinemizi geliştirir. ____ hayal gücümüzü de besler." },
+    "Boşluğa hangi bağlantı ifadesi gelmelidir?", "Bunun yanı sıra", ["Buna rağmen", "Oysa", "Aksine"], "İkinci cümle birinciye yeni bir bilgi eklediği için ekleme bildiren “bunun yanı sıra” gelir."],
+  ["anlama", 2, { t: "metin", metin: "Sosyal medyada çok vakit geçiriyordu. ____ son aylarda telefonunu bırakıp spora başladı." },
+    "Boşluğa hangi bağlantı ifadesi gelmelidir?", "Ancak", ["Bu yüzden", "Örneğin", "Böylece"], "Önceki durumla çelişen bir değişim anlatıldığı için karşıtlık bildiren “ancak” uygundur."],
+  ["anlama", 2, { t: "sohbet", baslik: "Proje Ekibi", m: [["Zeynep", "Sunumu ben hazırlarım, sen de afişi yapar mısın?"], ["Can", "Olur ama bu akşam kursum var, yarın öğlene kadar bitiririm."]] },
+    "Can'ın cevabının amacı nedir?", "Görevi kabul edip ne zaman bitireceğini bildirmek", ["Görevi reddetmek", "Zeynep'ten yardım istemek", "Sunumu kendisinin yapmak istediğini söylemek"], "Can “Olur” diyerek kabul ediyor, “yarın öğlene kadar” diyerek süre veriyor."],
+  ["anlama", 2, { t: "metin", metin: "Takım kaptanı maçtan önce arkadaşlarına moral verdi; herkesin yüzü güldü ve sahaya kenetlenmiş bir şekilde çıktılar." },
+    "“Kenetlenmek” sözcüğü bu metinde hangi anlamdadır?", "Sıkı bir birlik ve dayanışma içinde olmak", ["Birbirine bağırmak", "Kilitli bir kapıyı açmak", "Yorgun düşmek"], "Moral verilmesi ve herkesin mutlu olması, takımın birlik hâlinde olduğunu anlatıyor."],
+  ["anlama", 2, { t: "metin", metin: "Eskiden mektuplar günlerce yol alır, cevabı haftalarca beklenirdi. Bugün bir ileti saniyeler içinde dünyanın öbür ucuna ulaşıyor. Hız arttıkça sabrımız mı azaldı, yoksa iletişimimiz mi güçlendi?" },
+    "Bu metnin konusu nedir?", "İletişimin hızlanmasının insanlara etkisi", ["Mektup yazmanın kuralları", "Postanelerin tarihi", "Telefon fiyatları"], "Metin, iletişimin hızlanmasını ve bunun insanlar üzerindeki etkisini sorguluyor."],
+  ["anlama", 3, { t: "paylasim", ad: "Okul Çevre Kulübü", kul: "@yesilokul", metin: "Plastik şişe yerine matara, poşet yerine bez çanta, kâğıt havlu yerine kumaş mendil. Küçük seçimler, büyük fark! ♻️" },
+    "Bu paylaşımın anahtar kavramı hangisidir?", "Atık azaltma", ["Alışveriş", "Moda", "Temizlik"], "Sayılan tüm örnekler tek kullanımlık ürünler yerine yeniden kullanılabilir olanları seçmeyi, yani atığı azaltmayı anlatıyor."],
+  ["anlama", 3, { t: "metin", metin: "Toplantıda herkes söz aldı; ancak kimse diğerini dinlemedi. Sonunda bir karara varılamadı." },
+    "Metinde anlatılan sorunun temel nedeni nedir?", "Etkili dinlemenin olmaması", ["Toplantının kısa sürmesi", "Kimsenin konuşmaması", "Toplantıya az kişinin katılması"], "Herkes konuşup kimse dinlemediği için ortak bir karar çıkmadı."],
+
+  /* ── DERİN ANLAM VE ÇIKARIM ── */
+  ["derin", 1, { t: "metin", metin: "Rüzgâr, pencereme bütün gece masallar fısıldadı." },
+    "Bu cümlede hangi söz sanatı kullanılmıştır?", "Kişileştirme", ["Benzetme", "Abartma", "Karşıtlık"], "Rüzgâra insana özgü “masal fısıldamak” eylemi yüklenmiştir."],
+  ["derin", 1, { t: "metin", metin: "Kardeşimin gülüşü güneş gibi evimizi aydınlattı." },
+    "Bu cümlede hangi söz sanatı kullanılmıştır?", "Benzetme", ["Kişileştirme", "Abartma", "Konuşturma"], "Gülüş “gibi” sözcüğüyle güneşe benzetilmiştir."],
+  ["derin", 1, { t: "metin", metin: "Seni aramaktan telefonun tuşları eridi." },
+    "Bu cümlede hangi söz sanatı kullanılmıştır?", "Abartma", ["Benzetme", "Kişileştirme", "Konuşturma"], "Tuşların erimesi, bir durumun olduğundan çok büyük gösterilmesidir."],
+  ["derin", 2, { t: "metin", metin: "Yaşlı çınar, “Ben bu köyün bütün düğünlerini gördüm.” dedi." },
+    "Bu cümlede hangi söz sanatı kullanılmıştır?", "Konuşturma", ["Abartma", "Benzetme", "Karşıtlık"], "Çınar ağacı tırnak içinde bir sözü söyleyerek konuşturulmuştur."],
+  ["derin", 2, { t: "metin", metin: "Gülerek girdiği sınavdan ağlayarak çıktı." },
+    "Bu cümlede hangi söz sanatı kullanılmıştır?", "Karşıtlık", ["Kişileştirme", "Konuşturma", "Benzetme"], "Gülmek ve ağlamak gibi zıt kavramlar bir arada kullanılmıştır."],
+  ["derin", 2, { t: "paylasim", ad: "Selin K.", kul: "@selin_k", metin: "Bugün yine otobüste yer vermeyen gençler gördüm. Neyse ki bazıları hâlâ büyüklerine saygılı. 👏" },
+    "Paylaşımdaki örtük anlam hangisidir?", "Gençlerin bir kısmının büyüklerine yeterince saygı göstermediği", ["Otobüslerin çok kalabalık olduğu", "Gençlerin hiç otobüse binmediği", "Paylaşımı yapanın otobüs şoförü olduğu"], "“Neyse ki bazıları hâlâ” ifadesi, pek çoğunun saygısız davrandığı eleştirisini dolaylı olarak veriyor."],
+  ["derin", 2, { t: "sohbet", baslik: "Annem", m: [["Anne", "Akşam misafir gelecek, eve erken gelebilir misin?"], ["Ece", "Basketbol antrenmanım var ama antrenörden izin isterim."]] },
+    "Ece'nin cevabından hangisi çıkarılabilir?", "Erken gelmek için çaba göstereceği", ["Misafirlerden hoşlanmadığı", "Antrenmanı bırakacağı", "Annesine kızdığı"], "“İzin isterim” demesi, annesinin isteğini yerine getirmeye çalışacağını gösteriyor."],
+  ["derin", 2, { t: "metin", metin: "“Söz gümüşse sükût altındır.”" },
+    "Bu sözle anlatılmak istenen nedir?", "Bazen susmanın konuşmaktan daha değerli olduğu", ["Gümüşün altından ucuz olduğu", "Çok konuşanın zengin olacağı", "Hiçbir zaman konuşmamak gerektiği"], "Söz, yerinde susmanın değerini gümüş-altın karşılaştırmasıyla anlatıyor."],
+  ["derin", 2, { t: "metin", metin: "Kitaplar, zaman makinesidir." },
+    "Bu sözle anlatılmak istenen nedir?", "Kitaplar bizi farklı zamanlara ve dünyalara götürür.", ["Kitaplar makine gibi çalışır.", "Kitap okumak çok zaman alır.", "Kitaplar saat gibi zamanı gösterir."], "Söz mecaz anlamlıdır: okuyan kişi kitap sayesinde başka zamanları yaşar."],
+  ["derin", 3, { t: "metin", metin: "Sınıfta en çok konuşan o, ödev zamanı gelince en sessizi de yine o oluyor." },
+    "Bu cümlede ima edilen düşünce hangisidir?", "Kişinin sözleri ile sorumlulukları arasında tutarsızlık olduğu", ["Kişinin çok çalışkan olduğu", "Kişinin utangaç biri olduğu", "Ödevlerin çok kolay olduğu"], "Konuşurken öne çıkıp iş zamanı geri çekilmesi, söz ve davranış tutarsızlığını ima ediyor."],
+  ["derin", 3, { t: "paylasim", ad: "Kaan Yıldız", kul: "@kaan.voleybol", metin: "Maçı kaybettik ama kimse kimseyi suçlamadı. Asıl kazancımız bu bence. 🤝" },
+    "Kaan'ın “asıl kazancımız” sözüyle kastettiği nedir?", "Takım içindeki birlik ve saygının korunması", ["Maçın skorunun yakın olması", "Bir sonraki maçı kazanacak olmaları", "Maça çok seyirci gelmesi"], "Kaybetmelerine rağmen birbirlerini suçlamamaları, dayanışmayı asıl kazanç olarak görmesini sağlıyor."],
+  ["derin", 3, { t: "metin", metin: "Güneş, bulutların arkasından utangaç bir çocuk gibi başını uzattı." },
+    "Bu cümlede hangi söz sanatları kullanılmıştır?", "Benzetme ve kişileştirme", ["Yalnızca abartma", "Yalnızca konuşturma", "Karşıtlık ve abartma"], "Güneş “gibi” ile çocuğa benzetilmiş, ona “başını uzatmak” gibi insana özgü bir hareket verilmiştir."],
+  ["derin", 3, { t: "afis", renk: "mor", ikon: "📵", baslik: "Telefonunu değil, arkadaşını dinle.", alt: "Okul Rehberlik Servisi" },
+    "Bu sloganın derin anlamı nedir?", "Yüz yüze iletişimde dikkatimizi karşımızdakine vermeliyiz.", ["Telefonlar ses çıkarmamalıdır.", "Arkadaşlarımızı telefonla aramalıyız.", "Rehberlik servisi telefonları toplayacaktır."], "Slogan, sohbet sırasında ekrana değil insana odaklanmanın önemini vurguluyor."],
+  ["derin", 3, { t: "sohbet", baslik: "Elif", m: [["Elif", "Doğum günü partime gelecek misin?"], ["Arda", "Cumartesi mi? Hmm… O gün anneannemlere gidebiliriz, bakarız artık."]] },
+    "Arda'nın cevabında sezdirilen durum nedir?", "Partiye gelme konusunda kararsız ya da isteksiz olduğu", ["Kesinlikle geleceği", "Partiyi kendisinin düzenleyeceği", "Elif'e kızgın olduğu"], "“Hmm”, “gidebiliriz”, “bakarız artık” ifadeleri kesin olmayan, çekingen bir tutumu sezdiriyor."],
+
+  /* ── İKNA TEKNİKLERİ ── */
+  ["ikna", 1, { t: "reklam", renk: "mavi", ikon: "🦷", marka: "Işıltı Diş Macunu", slogan: "Diş hekimlerinin %90'ı öneriyor!" },
+    "Bu reklamda hangi ikna tekniği kullanılmıştır?", "Uzman görüşüne başvurma", ["Aciliyet oluşturma", "Duygulara seslenme", "Mizah kullanma"], "Diş hekimlerinin önerisi, uzman otoritesine dayanarak güven oluşturmayı amaçlıyor."],
+  ["ikna", 1, { t: "reklam", renk: "turuncu", ikon: "👟", marka: "Hız Koşu Ayakkabısı", slogan: "Sınıfındaki herkes giyiyor, sen hâlâ bekliyor musun?" },
+    "Bu reklamda hangi ikna tekniği kullanılmıştır?", "Çoğunluğa uyma (herkes yapıyor)", ["Uzman görüşü", "Bilimsel veri sunma", "Karşılaştırma yapma"], "“Herkes giyiyor” diyerek kişiyi gruptan geri kalmama duygusuyla etkilemeye çalışıyor."],
+  ["ikna", 1, { t: "reklam", renk: "kirmizi", ikon: "⏰", marka: "Kitap Kulübü", slogan: "Son 24 saat! Üyelik fırsatını kaçırma!" },
+    "Bu reklamda hangi ikna tekniği kullanılmıştır?", "Aciliyet ve kıtlık hissi oluşturma", ["Uzman görüşü", "Tanınmış kişi desteği", "Duygulara seslenme"], "“Son 24 saat” ifadesi, hemen karar vermesi için alıcıda aciliyet duygusu yaratıyor."],
+  ["ikna", 1, { t: "reklam", renk: "yesil", ikon: "🐱", marka: "Pati Mama", slogan: "Mutlu kediler Pati Mama yer. 😺" },
+    "Bu reklamın asıl amacı nedir?", "Ürünü satın aldırmak", ["Kedilerin beslenmesi hakkında bilimsel bilgi vermek", "Kedi sahiplenmeye davet etmek", "Hayvan hakları yasasını duyurmak"], "Reklam, ürünü mutlulukla ilişkilendirerek satın alınmasını amaçlıyor."],
+  ["ikna", 2, { t: "afis", renk: "turuncu", ikon: "🐾", baslik: "Sokaktaki dostlarımız da üşüyor…", alt: "Mama ve battaniye bağışı için kulübümüze uğrayın." },
+    "Bu afişte hangi ikna tekniği kullanılmıştır?", "Duygulara seslenme", ["İstatistik kullanma", "Tanınmış kişi desteği", "Karşılaştırma yapma"], "“Dostlarımız da üşüyor” ifadesi okuyucunun merhamet duygusuna sesleniyor."],
+  ["ikna", 2, { t: "paylasim", ad: "Mavi Su", kul: "@mavisu_resmi", metin: "Millî yüzücümüz Deniz Kaya antrenman sonrası hep Mavi Su içiyor! 💧 #reklam" },
+    "Bu paylaşımda hangi ikna tekniği kullanılmıştır?", "Tanınmış kişinin desteğini kullanma", ["Aciliyet oluşturma", "Bilimsel araştırma sunma", "Mizah kullanma"], "Tanınmış bir sporcunun ürünü kullanması, takipçileri de kullanmaya yöneltmek için gösteriliyor."],
+  ["ikna", 2, { t: "reklam", renk: "mor", ikon: "⚡", marka: "Şimşek İnternet", slogan: "Diğer firmalardan iki kat hızlı, yarı fiyatına!" },
+    "Bu reklamda hangi ikna tekniği kullanılmıştır?", "Karşılaştırma yapma", ["Duygulara seslenme", "Çoğunluğa uyma", "Uzman görüşü"], "Ürün, diğer firmalarla hız ve fiyat bakımından karşılaştırılarak üstün gösteriliyor."],
+  ["ikna", 2, { t: "metin", metin: "Araştırmalara göre düzenli kitap okuyan öğrencilerin okuduğunu anlama becerisi, okumayanlara göre belirgin biçimde yüksek. Sen de her gün 20 dakika oku!" },
+    "Bu metinde okumaya ikna etmek için ne kullanılmıştır?", "Araştırma sonucuna dayanma", ["Tanınmış kişi desteği", "Aciliyet oluşturma", "Mizah kullanma"], "Metin, okumaya ikna etmek için bir araştırma sonucunu kanıt olarak sunuyor."],
+  ["ikna", 2, { t: "afis", renk: "yesil", ikon: "🌱", baslik: "Bir fidan dik, çocuğun nefes alsın.", alt: "Ağaçlandırma Günü · Pazar 10.00" },
+    "Bu afişte hangi ikna tekniği kullanılmıştır?", "Duygulara seslenme", ["Karşılaştırma yapma", "Tanınmış kişi desteği", "İstatistik kullanma"], "Çocukların geleceğiyle ilişkilendirilerek sevgi ve sorumluluk duygularına sesleniliyor."],
+  ["ikna", 2, { t: "paylasim", ad: "Oyun Dünyası", kul: "@oyundunyasi", metin: "1 milyon oyuncu bu oyunu indirdi. Sıra sende! 🎮" },
+    "Bu paylaşımda hangi ikna tekniği kullanılmıştır?", "Çoğunluğa uyma", ["Uzman görüşü", "Duygulara seslenme", "Karşılaştırma yapma"], "Çok sayıda kişinin indirdiği vurgulanarak “sen de katıl” baskısı oluşturuluyor."],
+  ["ikna", 3, { t: "afis", renk: "mavi", ikon: "🗳️", baslik: "Geleceğin kendi elinde değil mi?", alt: "Seçim günü sandığa git, okul meclisine oy ver." },
+    "Bu afişte hangi ikna tekniği kullanılmıştır?", "Cevabı belli, düşündürücü bir soru sorma", ["Tanınmış kişi desteği", "Karşılaştırma yapma", "İstatistik kullanma"], "Cevabı belli bir soru sorularak okuyucunun kendi sorumluluğunu düşünmesi sağlanıyor."],
+  ["ikna", 3, { t: "paylasim", ad: "Burak Demir", kul: "@burakdemir", metin: "Üç ay önce ekran süremi yarıya indirdim. Uykum düzeldi, derslerime odaklanabiliyorum. Siz de deneyin! ⏳" },
+    "Burak, takipçilerini ikna etmek için neye başvuruyor?", "Kişisel deneyimini örnek göstermeye", ["Uzman görüşüne", "Aciliyet oluşturmaya", "Çoğunluğa uymaya"], "Burak kendi yaşadığı değişimi örnek göstererek başkalarını ikna etmeye çalışıyor."],
+  ["ikna", 3, { t: "reklam", renk: "turuncu", ikon: "🍫", marka: "Enerji Bar", slogan: "Beden eğitimi öğretmenleri öneriyor! Sadece bu hafta %40 indirim!" },
+    "Bu reklamda hangi ikna tekniği KULLANILMAMIŞTIR?", "Tanınmış kişi desteği", ["Uzman görüşüne başvurma", "Aciliyet oluşturma", "Fiyat avantajı sunma"], "Reklamda uzman önerisi, süre sınırı ve indirim var; tanınmış bir kişi yok."],
+
+  /* ── MEDYA OKURYAZARLIĞI ── */
+  ["medya", 1, { t: "paylasim", ad: "Gerçek Haberler 24", kul: "@gercekhaber24", metin: "ŞOK!!! Yarın bütün okullar tatil! Paylaş, herkes duysun!!! 😱", begeni: "12 B" },
+    "Bu bilgiye güvenmeden önce hangisi kontrol edilmelidir?", "Bilginin resmî kurumların duyurularında yer alıp almadığı", ["Paylaşımın beğeni sayısı", "Paylaşımdaki emojilerin sayısı", "Paylaşımın yazı rengi"], "Okul tatili gibi resmî kararlar, kurumların resmî duyurularından doğrulanmalıdır."],
+  ["medya", 1, { t: "metin", metin: "Bir ödev için Güneş sistemi hakkında bilgi arıyorsun." },
+    "Hangi kaynak en güvenilirdir?", "Bir bilim kurumunun resmî sayfası", ["Tanımadığın birinin sosyal medya paylaşımı", "Bir paylaşımın altındaki yorumlar", "Reklamlarla dolu bir oyun sitesi"], "Bilimsel konularda uzman kurumların hazırladığı kaynaklar en güvenilir olanlardır."],
+  ["medya", 1, { t: "sohbet", baslik: "Bilinmeyen numara", m: [["?", "Tebrikler! Çekilişi kazandın. Ödül için okul numaranı ve ev adresini gönder."]] },
+    "Bu mesaj karşısında ne yapılmalıdır?", "Kişisel bilgileri paylaşmamak ve bir büyüğe haber vermek", ["Hemen adresi göndermek", "Mesajı arkadaşlara iletmek", "Ödülü almak için numarayı aramak"], "Tanımadığımız kaynaklara kişisel bilgi verilmez; bu tür mesajlar dolandırıcılık amaçlı olabilir."],
+  ["medya", 1, { t: "gorsel", sahne: "📸🌐🔁", yazi: "Paylaştığın fotoğraf…" },
+    "İnternette paylaştığımız bir fotoğrafla ilgili hangisi doğrudur?", "Silinse bile başkaları tarafından kaydedilmiş olabilir.", ["Silindiği anda her yerden kaybolur.", "Yalnızca yakın arkadaşlarımız görebilir.", "Hiçbir zaman başkası tarafından paylaşılamaz."], "Dijital içerikler kopyalanıp saklanabildiği için paylaşmadan önce düşünmek gerekir."],
+  ["medya", 2, { t: "haber", dijital: true, kaynak: "Haber sitesi", manset: "Bu yiyeceği yiyen herkes 10 yaş gençleşiyor! Doktorlar şokta!", spot: "Devamı için tıklayın…" },
+    "Bu başlıkla ilgili en doğru değerlendirme hangisidir?", "Merak uyandırıp tıklatmak için abartılı bir dil kullanılmıştır.", ["Bilimsel bir araştırmanın sonucudur.", "Başlık tarafsız ve ölçülüdür.", "Doktorların ortak açıklamasıdır."], "“Herkes”, “şokta” gibi abartılı sözler ve kanıt olmaması, tıklatma amaçlı başlığın işaretleridir."],
+  ["medya", 2, { t: "haber", kaynak: "Günlük Gazete · Kent", manset: "Belediye, parka 40 yeni bank yerleştirdi", spot: "Bence bu banklar çok çirkin olmuş ve kimse oturmayacak." },
+    "Haberdeki ikinci cümle için ne söylenebilir?", "Kanıtlanamayan kişisel bir yorumdur.", ["Nesnel bir bilgidir.", "Resmî bir açıklamadır.", "Sayısal bir veridir."], "“Bence” ve “çirkin” ifadeleri kişisel görüş bildirir; haber metninde nesnellik beklenir."],
+  ["medya", 2, { t: "paylasim", ad: "İlginç Dünya", kul: "@ilgincdunya", metin: "Köpekbalığı otoyolda yüzerken görüntülendi! 🦈🚗", gorsel: "🦈🛣️🌊" },
+    "Bu fotoğrafın gerçek olup olmadığını anlamak için ne yapılmalıdır?", "Fotoğrafın ilk nerede ve ne zaman yayımlandığını araştırmak", ["Fotoğrafı daha çok kişiye göndermek", "Yorumlardaki emojilere bakmak", "Paylaşımın kaç saat önce yapıldığına bakmak"], "Görselin kaynağını ve ilk yayımlandığı yeri araştırmak, düzenlenmiş fotoğrafları ayırt etmeyi sağlar."],
+  ["medya", 2, { t: "paylasim", ad: "Ayşe Gezer", kul: "@aysegezer", metin: "Bu kulaklığı bir haftadır kullanıyorum, harika! Kodumla %20 indirim 🎧 #işbirliği" },
+    "Bu paylaşımla ilgili hangisi doğrudur?", "Ücretli bir tanıtımdır; tarafsız olmayabilir.", ["Bağımsız bir test sonucudur.", "Paylaşımda hiçbir çıkar ilişkisi yoktur.", "Kulaklığın en iyisi olduğu kanıtlanmıştır."], "İndirim kodu ve #işbirliği etiketi, paylaşımın ücretli tanıtım olduğunu gösteriyor."],
+  ["medya", 2, { t: "metin", metin: "Basılı gazete ve dijital haber sitesi" },
+    "Bu iki medya türü arasındaki farklardan biri hangisidir?", "Dijital haberler anında güncellenip hızla paylaşılabilir.", ["Basılı gazetelerde hiç fotoğraf olmaz.", "Dijital haberlerde yazım kuralları geçerli değildir.", "Basılı gazeteler yalnızca reklam içerir."], "Dijital medya hızlı güncellenir ve kolayca paylaşılır; bu yüzden doğrulama daha da önem kazanır."],
+  ["medya", 2, { t: "paylasim", ad: "Sağlık Köşesi", kul: "@saglikkosesi", metin: "Bilim insanları kanıtladı: Günde 10 bardak çay içmek bütün hastalıkları önlüyor! ☕" },
+    "Bu paylaşımdaki en önemli eksiklik nedir?", "Hangi araştırmaya dayandığının belirtilmemesi", ["Emojinin küçük olması", "Çay çeşidinin yazılmaması", "Paylaşımın kısa olması"], "“Bilim insanları kanıtladı” deyip kaynak göstermemek, bilginin doğrulanmasını engeller."],
+  ["medya", 3, { t: "haber", dijital: true, kaynak: "Haber sitesi · 2019", manset: "Okulumuza yeni kütüphane yapılacak", spot: "Bu haber bu hafta yeniden paylaşılmaya başladı." },
+    "Bu haber paylaşılmadan önce özellikle neye dikkat edilmelidir?", "Haberin tarihine ve güncelliğine", ["Başlığın yazı tipine", "Haberde kaç kelime olduğuna", "Paylaşanın profil fotoğrafına"], "Eski tarihli bir haber güncelmiş gibi yayılabilir; yayın tarihi kontrol edilmelidir."],
+  ["medya", 3, { t: "paylasim", ad: "Kantin Sever", kul: "@kantinsever", metin: "Ankete katılan 10 kişiden 9'u kantindeki tostun şehrin en iyisi olduğunu söyledi! 🥪" },
+    "Bu sonuç neden yeterince güvenilir değildir?", "Çok az kişiyle yapılmış bir ankete dayandığı için", ["Tost sevilmeyen bir yiyecek olduğu için", "Sonuç yüzde ile verilmediği için", "Paylaşım akşam yapıldığı için"], "Genel bir yargıya varmak için geniş ve tarafsız bir katılımcı grubu gerekir."],
+  ["medya", 3, { t: "haber", dijital: true, kaynak: "Haber sitesi", manset: "Uzmanlar: Kahvaltı yapmayan öğrenciler dersten kalıyor!", spot: "Araştırmada kahvaltı yapan öğrencilerin derslerde daha dikkatli olduğu belirtildi." },
+    "Başlık ile haberin içeriği arasındaki ilişki nasıldır?", "Başlık, içerikteki bilgiyi abartarak veriyor.", ["Başlık içerikle tamamen aynıdır.", "İçerik başlıktan daha abartılıdır.", "Başlığın içerikle hiçbir ilgisi yoktur."], "İçerik yalnızca dikkatin arttığını söylerken başlık “dersten kalıyor” diyerek abartıyor."],
+  ["medya", 3, { t: "metin", metin: "Bir maç haberi yazıyorsun." },
+    "Hangisi haber metnine yazılabilecek nesnel bir bilgidir?", "Maç 2-1 sona erdi.", ["Maç çok heyecanlıydı.", "Hakem berbat bir performans gösterdi.", "Takımımız sahanın en iyisiydi."], "Skor herkesçe doğrulanabilen nesnel bir bilgidir; diğerleri kişisel yorumdur."],
+  ["medya", 3, { t: "reklam", renk: "mor", ikon: "💊", marka: "Zeka Plus Vitamin", slogan: "İçen öğrencilerin notları hemen yükseliyor!" },
+    "Bu reklamdaki iddiayı değerlendirmek için en çok neye ihtiyaç vardır?", "İddiayı destekleyen güvenilir bir araştırmaya", ["Ürünün renkli ambalajına", "Reklamdaki müziğe", "Ürünün kaç markette satıldığına"], "“Notlar hemen yükseliyor” iddiası ancak güvenilir bir kanıtla değerlendirilebilir."],
+
+  /* ── GÖRSEL ANLAM ── */
+  ["gorsel", 1, { t: "gorsel", sahne: "🌍🔥🌡️", yazi: "Dünya ısınıyor. Sen ne yapıyorsun?" },
+    "Görsel ile metin arasında nasıl bir ilişki vardır?", "Görsel, metindeki küresel ısınma mesajını destekliyor.", ["Görsel ile metin birbiriyle çelişiyor.", "Görsel, metinden bağımsız bir konuyu anlatıyor.", "Görsel yalnızca süs amacıyla kullanılmış."], "Yanan dünya ve termometre görseli, “Dünya ısınıyor” mesajını güçlendiriyor."],
+  ["gorsel", 1, { t: "beden", sahne: "🧍", betim: "Konuşurken kollarını göğsünde kavuşturuyor ve karşısındakine hiç bakmıyor." },
+    "Bu beden dili karşıdaki kişiye hangi mesajı verebilir?", "Konuşmaya kapalı ya da ilgisiz olduğunu", ["Çok heyecanlı ve mutlu olduğunu", "Konuyu dikkatle dinlediğini", "Karşısındakine hayran olduğunu"], "Kolları kavuşturmak ve göz teması kurmamak genellikle kapalı ya da ilgisiz bir tutum olarak algılanır."],
+  ["gorsel", 1, { t: "beden", sahne: "😊🤝", betim: "Yeni tanıştığı biriyle gülümseyerek el sıkışıyor ve adını söylüyor." },
+    "Bu davranış iletişime nasıl katkı sağlar?", "Güven ve sıcaklık hissi oluşturarak olumlu bir başlangıç yapar.", ["Karşıdakinde korku oluşturur.", "Konuşmayı hemen bitirir.", "İletişime hiçbir etkisi yoktur."], "Gülümseme ve el sıkışma, ilk karşılaşmada güven ve samimiyet iletir."],
+  ["gorsel", 1, { t: "sohbet", baslik: "Mert", m: [["Mert", "Sınav sonuçları açıklandı!"], ["Ece", "😭😭📉"]] },
+    "Ece'nin emojilerle verdiği mesaj nedir?", "Sınav sonucundan memnun olmadığı", ["Çok yüksek not aldığı", "Sınavın ertelendiği", "Mert'e kızdığı"], "Ağlayan yüzler ve düşen grafik emojisi, sonucun kötü geçtiğini anlatıyor."],
+  ["gorsel", 1, { t: "gorsel", sahne: "♿🅿️", yazi: "" },
+    "Bu işaret ne anlatır?", "Bu park yeri engelli bireylere ayrılmıştır.", ["Burada park etmek herkese serbesttir.", "Bisiklet park yeri buradadır.", "Otopark ücretlidir."], "Tekerlekli sandalye simgesi, park yerinin engelli bireylere ayrıldığını gösterir."],
+  ["gorsel", 2, { t: "gorsel", sahne: "👨‍👩‍👧‍👦📱📱📱", yazi: "Aynı sofradayız ama…" },
+    "Bu görselle verilmek istenen mesaj nedir?", "Teknoloji aynı ortamdaki insanları birbirinden uzaklaştırabilir.", ["Aileler her gün birlikte yemek yemelidir.", "Telefonlar sofraya konursa kırılabilir.", "Aile üyeleri birbirleriyle çok iyi anlaşıyor."], "Aynı sofrada olup telefona dalmış kişiler, yakınken bile iletişimsiz kalabileceğimizi anlatıyor."],
+  ["gorsel", 2, { t: "beden", sahne: "🙂👀", betim: "Arkadaşı konuşurken göz teması kuruyor, başını sallıyor ve ara ara “Anlıyorum.” diyor." },
+    "Bu kişi hangi iletişim becerisini gösteriyor?", "Etkin dinleme", ["Sözünü kesme", "Konuyu değiştirme", "Kendini öne çıkarma"], "Göz teması, baş sallama ve kısa geri bildirimler etkin dinlemenin işaretleridir."],
+  ["gorsel", 2, { t: "gorsel", sahne: "🚰💧", yazi: "Her damla değerlidir." },
+    "Görsel ile metin birlikte hangi mesajı veriyor?", "Su boşa harcanmamalıdır.", ["Musluklar sık sık değiştirilmelidir.", "Her gün bol su içilmelidir.", "Yağmur suyu toplanmalıdır."], "Damlayan musluk ve “Her damla değerlidir.” sözü, suyu boşa harcamamaya çağırıyor."],
+  ["gorsel", 2, { t: "afis", renk: "sari", ikon: "⚠️", baslik: "DİKKAT! ISLAK ZEMİN", alt: "Kayma tehlikesi" },
+    "Afişte sarı renk ve uyarı işaretinin kullanılmasının amacı nedir?", "Dikkat çekip olası bir tehlikeye karşı uyarmak", ["Afişi daha neşeli göstermek", "Zeminin yeni boyandığını söylemek", "Bir temizlik ürünü satmak"], "Sarı renk ve ünlem işareti, tehlikeye karşı hızlıca dikkat çekmek için kullanılır."],
+  ["gorsel", 3, { t: "beden", sahne: "😠🗣️", betim: "Kaşlarını çatmış, sert bir sesle “Tamam, hiç sorun değil!” diyor." },
+    "Bu durumda sözlü ve sözsüz mesaj arasında nasıl bir ilişki vardır?", "Birbiriyle çelişiyor; yüz ifadesi kırgınlık ya da öfke sezdiriyor.", ["Birbirini tamamen destekliyor.", "Yüz ifadesi sevinci gösteriyor.", "Sözsüz iletişim hiçbir şey anlatmıyor."], "“Sorun değil” sözü ile çatık kaş ve sert ses uyuşmuyor; asıl duygu beden dilinden anlaşılır."],
+  ["gorsel", 3, { t: "grafik", baslik: "Kantin satışları UÇTU!", eksen: 97, veri: [["Eylül", 98], ["Ekim", 100]] },
+    "Grafikle ilgili hangisi doğrudur?", "Dikey eksen 97'den başladığı için küçük bir artış çok büyük görünüyor.", ["Satışlar iki katından fazla artmış.", "Satışlar Ekim'de azalmış.", "Grafikte hiçbir değer yazmıyor."], "Eksenin sıfırdan başlamaması, 98'den 100'e çıkan satışları büyük bir artış gibi gösteriyor."],
+  ["gorsel", 3, { t: "paylasim", ad: "Sakin Tatil Oteli", kul: "@sakintatil", metin: "Sessiz ve sakin bir tatil için bizi seçin! 🌿", gorsel: "🏗️🚧🔊" },
+    "Paylaşımdaki görsel ile metin arasındaki ilişki nasıldır?", "Görsel, metindeki “sessiz ve sakin” iddiasıyla çelişiyor.", ["Görsel, metni tamamen destekliyor.", "Görsel, otelin doğa içinde olduğunu kanıtlıyor.", "Görsel ile metin aynı bilgiyi tekrar ediyor."], "İnşaat ve gürültü simgeleri, sessiz tatil vaadiyle uyuşmuyor."],
+
+  /* ── YAZIM VE NOKTALAMA ── T.Y.8.20 kapsamı (TYMM 8. sınıf 1. tema):
+     virgül — yüklemden uzak özne, ara söz/ara cümle, bağlantısızlık ve anlam
+     karışıklığı, art arda zarf-fiiller, özne olan bu/şu/o; noktalı virgül —
+     ögeleri arasında virgül bulunan sıralı cümleler, eş değer ögeli cümlede
+     özneden sonra; nokta — künye sonu. */
+  ["yazim", 1, null, "Hangi cümlede virgül doğru kullanılmıştır?", "Bu, dedemin bana hediye ettiği saat.", ["Bu dedemin, bana hediye ettiği saat.", "Bu dedemin bana, hediye ettiği saat.", "Bu; dedemin bana hediye ettiği saat."], "Özne olarak kullanılan “bu” zamirinden sonra virgül konur."],
+  ["yazim", 1, null, "Hangi cümlede virgül doğru kullanılmıştır?", "Kardeşim, ailemizin en küçüğü, bugün okula başladı.", ["Kardeşim ailemizin en küçüğü, bugün okula başladı.", "Kardeşim, ailemizin en küçüğü bugün, okula başladı.", "Kardeşim; ailemizin en küçüğü; bugün okula başladı."], "Ara sözler cümleden virgülle ayrılır."],
+  ["yazim", 1, null, "Hangi kitap künyesi noktalama bakımından doğru yazılmıştır?", "Ayşe Yılmaz, Rüzgârın Sesi, Kaynak Yayınları, Ankara, 2024.", ["Ayşe Yılmaz, Rüzgârın Sesi, Kaynak Yayınları, Ankara, 2024", "Ayşe Yılmaz; Rüzgârın Sesi; Kaynak Yayınları; Ankara; 2024.", "Ayşe Yılmaz. Rüzgârın Sesi. Kaynak Yayınları. Ankara. 2024"], "Künyenin ögeleri virgülle ayrılır, künyenin sonuna nokta konur."],
+  ["yazim", 2, null, "Hangi cümlede virgül doğru kullanılmıştır?", "Yarışmaya katılan öğrencilerin hepsi, projelerini jüriye heyecanla sundu.", ["Yarışmaya, katılan öğrencilerin hepsi projelerini jüriye heyecanla sundu.", "Yarışmaya katılan öğrencilerin, hepsi projelerini jüriye heyecanla sundu.", "Yarışmaya katılan öğrencilerin hepsi projelerini, jüriye, heyecanla sundu."], "Uzun cümlelerde yüklemden uzak düşen özneden sonra virgül konur."],
+  ["yazim", 2, null, "Hangi cümlede virgül doğru kullanılmıştır?", "Koşarak, gülerek, zıplayarak bahçeye çıktılar.", ["Koşarak gülerek, zıplayarak, bahçeye çıktılar.", "Koşarak; gülerek; zıplayarak bahçeye çıktılar.", "Koşarak gülerek zıplayarak, bahçeye, çıktılar."], "Art arda gelen zarf-fiil eki almış kelimelerden sonra virgül konur."],
+  ["yazim", 2, { t: "metin", metin: "Yaşlı adama yardım etti.", cumle: true },
+    "“Yardım eden kişi yaşlıdır.” anlamının çıkması için virgül nereye konmalıdır?", "Yaşlı, adama yardım etti.", ["Yaşlı adama, yardım etti.", "Yaşlı adama yardım, etti.", "Virgül konmasına gerek yoktur."], "Virgül, “yaşlı” sözcüğünün “adama” ile bağlantısı olmadığını gösterir ve anlam karışıklığını önler."],
+  ["yazim", 2, null, "Hangi cümlede noktalı virgül doğru kullanılmıştır?", "Sabah erkenden kalktık, kahvaltımızı yaptık; sonra eşyalarımızı toplayıp yola çıktık.", ["Sabah erkenden kalktık; kahvaltımızı yaptık, sonra; eşyalarımızı toplayıp yola çıktık.", "Sabah; erkenden kalktık, kahvaltımızı yaptık, sonra eşyalarımızı toplayıp yola çıktık.", "Sabah erkenden kalktık kahvaltımızı; yaptık sonra eşyalarımızı toplayıp yola çıktık."], "Ögeleri arasında virgül bulunan sıralı cümleler birbirinden noktalı virgülle ayrılır."],
+  ["yazim", 2, null, "Hangi cümlede noktalı virgül doğru kullanılmıştır?", "Ahmet; kitap, defter, kalem ve silgi aldı.", ["Ahmet, kitap; defter; kalem ve silgi aldı.", "Ahmet kitap; defter, kalem; ve silgi aldı.", "Ahmet; kitap; defter; kalem; ve silgi aldı."], "İkiden fazla eş değer öge arasında virgül bulunan cümlelerde özneden sonra noktalı virgül konur."],
+  ["yazim", 2, { t: "metin", metin: "Annem; elma, armut, üzüm ve incir aldı.", cumle: true },
+    "Bu cümlede noktalı virgülün görevi nedir?", "Eş değer ögeler arasında virgül bulunan cümlede özneyi ayırmak", ["Hitap sözünden sonra kullanılmak", "Cümlenin bittiğini göstermek", "Tırnak içindeki sözü ayırmak"], "İkiden fazla eş değer öge virgülle ayrıldığı için özne “Annem”den sonra noktalı virgül konmuştur."],
+  ["yazim", 2, { t: "paylasim", ad: "Duru Ak", kul: "@duruak", metin: "Bu benim ilk yazdığım öykü. Okuyup yorum yazar mısınız? 📖" },
+    "Paylaşımdaki ilk cümlede hangi noktalama işareti eksiktir?", "“Bu” zamirinden sonra virgül", ["“öykü” sözcüğünden sonra noktalı virgül", "“ilk” sözcüğünden sonra virgül", "Cümle sonunda ünlem işareti"], "Özne olarak kullanılan “bu” zamirinden sonra virgül konur: “Bu, benim ilk yazdığım öykü.”"],
+  ["yazim", 2, null, "Hangi cümlede virgül ara cümleyi ayırmak için kullanılmıştır?", "Babam, hepiniz bilirsiniz, çok titiz biridir.", ["Bu, benim en sevdiğim kitap.", "Genç, kadına yol gösterdi.", "Koşarak, gülerek eve geldik."], "“hepiniz bilirsiniz” cümleye sonradan eklenmiş bir ara cümledir ve virgüllerle ayrılır."],
+  ["yazim", 3, null, "Hangi cümlede virgül YANLIŞ kullanılmıştır?", "Arkadaşlarımla sinemaya, gittik.", ["Bu, benim en sevdiğim film.", "Genç, kadına yardım etti.", "Yarışmaya katılan bütün öğrenciler, törende ödüllerini aldı."], "Tümleç ile yüklem arasına (“sinemaya, gittik”) gereksiz yere virgül konmaz."],
+  ["yazim", 3, null, "Hangi cümlede noktalı virgül YANLIŞ kullanılmıştır?", "Eyvah; otobüsü kaçırdık!", ["Sabah kalktım, yüzümü yıkadım; kahvaltı yapıp okula gittim.", "Ayşe; ekmek, peynir, zeytin ve süt aldı.", "Hava soğudu, rüzgâr çıktı; biz de eve döndük."], "“Eyvah” ünleminden sonra noktalı virgül konmaz; diğer cümlelerde noktalı virgül sıralı cümleleri ya da özneyi ayırıyor."],
+  ["yazim", 3, null, "“Genç, kıza baktı.” ile “Genç kıza baktı.” cümleleri arasındaki fark nedir?", "Birincide bakan kişi gençtir; ikincide genç olan kızdır.", ["İki cümle aynı anlamdadır.", "Birincide kız gençtir; ikincide bakan kişi gençtir.", "İkinci cümle yanlıştır; virgül her zaman zorunludur."], "Virgül, “genç” sözcüğünün “kıza” ile bağlantısı olmadığını gösterir; bakan kişinin genç olduğunu anlatır."],
+  ["yazim", 3, { t: "metin", metin: "Bu yıl okulumuzda düzenlenen kitap fuarına katılan yazarların çoğu imza günü düzenledi.", cumle: true },
+    "Bu cümle kurala uygun olsun diye virgül nereye konmalıdır?", "“çoğu” sözcüğünden sonra", ["“Bu” sözcüğünden sonra", "“okulumuzda” sözcüğünden sonra", "“imza” sözcüğünden sonra"], "Özne (“yazarların çoğu”) yüklemden uzak düştüğü için arkasına virgül konur; buradaki “Bu” zamir değil, “yıl”ın sıfatıdır."],
+];
+
+/* Virgülün görevi — cümle bankasından üretilir (turda en çok 2). Görevler
+   T.Y.8.20'nin virgül maddeleridir; «bağlantısızlığı gösterme» ile «anlam
+   karışıklığını önleme» aynı örneklerde birlikte işlediği için tek şıkta
+   birleştirildi (iki ayrı şık iki doğru cevap doğururdu). */
+const MS_VIRGUL_GOREV = {
+  ozne: "Yüklemden uzak düşmüş özneyi belirtmek için", ara: "Ara sözü ya da ara cümleyi ayırmak için",
+  karisiklik: "Anlam karışıklığını önlemek (kelimeler arasında bağlantı olmadığını göstermek) için",
+  zarffiil: "Art arda gelen zarf-fiil eki almış kelimeleri ayırmak için", zamir: "Özne olarak kullanılan bu, şu, o zamirinden sonra",
+};
+const MS_VIRGUL = [
+  ["Bu, annemin en sevdiği şarkı.", "zamir", 1], ["Şu, okulumuzun yeni kütüphanesi.", "zamir", 1], ["O, sınıfımızın en iyi satranç oyuncusu.", "zamir", 1], ["Bu, bizim için çok önemli bir gün.", "zamir", 1],
+  ["Ali, takımımızın kaptanı, bugün maça gelmedi.", "ara", 1], ["Ankara, başkentimiz, her yıl biraz daha büyüyor.", "ara", 1], ["Öğretmenimiz, her zaman olduğu gibi, derse gülümseyerek girdi.", "ara", 1],
+  ["Okulumuzun en eski öğretmenlerinden biri olan Ayşe Hanım, emekliye ayrılacağını törende açıkladı.", "ozne", 2], ["Bahçedeki yaşlı ceviz ağacı, her sonbahar mahallenin bütün çocuklarını sevindirirdi.", "ozne", 2],
+  ["Mahallemizin en yaşlı sakini olan Hasan Amca, bu yıl doksanıncı yaşını kutladı.", "ozne", 2], ["Okulun bahçesinde her sabah top oynayan çocuklar, zil çalınca sınıflarına koştu.", "ozne", 2],
+  ["Şarkı söyleyerek, el çırparak, dans ederek bayramı kutladılar.", "zarffiil", 2], ["Gülerek, konuşarak, şakalaşarak yola koyulduk.", "zarffiil", 2],
+  ["Düşünerek, tartarak, danışarak kararını verdi.", "zarffiil", 2], ["Bakarak, dinleyerek, not alarak dersi takip etti.", "zarffiil", 2],
+  ["Küçük, kediyi sevdi.", "karisiklik", 2], ["Çalışkan, öğrenciyi tebrik etti.", "karisiklik", 2], ["Hasta, doktora teşekkür etti.", "karisiklik", 2],
+];
+const MS_VIRGUL_NOT = {
+  ozne: "Uzun cümlelerde yüklemden uzak düşen öznenin arkasına virgül konur.", ara: "Cümleye ek bilgi katan ara söz ya da ara cümle virgüllerle ayrılır.",
+  karisiklik: "Virgül, sözcüğün kendisinden sonra gelen kelimeyle bağlantısı olmadığını gösterip anlam karışıklığını önler.",
+  zarffiil: "Art arda gelen zarf-fiil eki almış kelimelerden sonra virgül konur.", zamir: "Özne olarak kullanılan bu, şu, o zamirlerinden sonra virgül konur.",
+};
+
+/* ── SORU HAVUZU ── */
+function msHavuz(){
+  const H = MS_SORU.map((s, i) => ({ id: "s" + i, kat: s[0], z: s[1], u: s[2], soru: s[3], dogru: s[4], yanlis: s[5], a: s[6] }));
+  MS_VIRGUL.forEach(([c, g, z], i) => H.push({ id: "v" + i, kat: "yazim", z, banka: true, u: { t: "metin", metin: c, cumle: true },
+    soru: "Bu cümlede virgül hangi görevde kullanılmıştır?", dogru: MS_VIRGUL_GOREV[g], gorev: g, a: MS_VIRGUL_NOT[g] }));
+  return H;
+}
+function msKombinasyonSay(){ return { el: MS_SORU.length, virgul: MS_VIRGUL.length, toplam: MS_SORU.length + MS_VIRGUL.length }; }
+/* Zorluk kotası kategorilere en büyük kalan yöntemiyle dağıtılır */
+function msMatris(){
+  const T = Object.values(MS_PLAN.kat).reduce((a, b) => a + b, 0), M = {}, zK = Object.assign({}, MS_PLAN.zorluk), kalan = [];
+  Object.keys(MS_PLAN.kat).forEach(k => { M[k] = {}; [1, 2, 3].forEach(z => { const x = MS_PLAN.kat[k] * MS_PLAN.zorluk[z] / T; M[k][z] = Math.floor(x); zK[z] -= M[k][z]; kalan.push({ k, z, f: x - Math.floor(x) }); }); });
+  kalan.sort((a, b) => b.f - a.f);
+  const katK = {}; Object.keys(MS_PLAN.kat).forEach(k => { katK[k] = MS_PLAN.kat[k] - [1, 2, 3].reduce((a, z) => a + M[k][z], 0); });
+  kalan.forEach(x => { if (zK[x.z] > 0 && katK[x.k] > 0){ M[x.k][x.z]++; zK[x.z]--; katK[x.k]--; } });
+  return M;
+}
+function msSecenekHazirla(q, konum){
+  let yanlis = q.yanlis;
+  if (q.banka) yanlis = karistir(Object.keys(MS_VIRGUL_GOREV).filter(g => g !== q.gorev)).slice(0, 3).map(g => MS_VIRGUL_GOREV[g]);
+  const s = karistir(yanlis.slice()); s.splice(konum, 0, q.dogru);
+  return Object.assign({}, q, { secenekler: s, dogruIx: konum });
+}
+function msTurKur(S){
+  const H = msHavuz(), M = msMatris(), secilen = [];
+  let banka = 0;
+  const uygun = q => !secilen.includes(q) && (!q.banka || banka < 2);
+  const sec = aday => { if (!aday.length) return null; const taze = aday.filter(q => !S.eski[q.id]); return fenSec(taze.length ? taze : aday); };
+  [3, 2, 1].forEach(z => Object.keys(M).forEach(k => {
+    for (let n = 0; n < M[k][z]; n++){
+      const q = sec(H.filter(q => q.kat === k && q.z === z && uygun(q))) || sec(H.filter(q => q.kat === k && uygun(q)));
+      if (q){ secilen.push(q); if (q.banka) banka++; }
+    }
+  }));
+  /* Dizilim: aynı kategori arka arkaya gelmez; ilk iki soru kolay */
+  let dizi = null;
+  for (let d = 0; d < 200 && !dizi; d++){
+    const kalan = karistir(secilen.slice()), sira = [];
+    let takildi = false;
+    while (kalan.length){
+      const onceki = sira[sira.length - 1];
+      const say = {}; kalan.forEach(q => { say[q.kat] = (say[q.kat] || 0) + 1; });
+      let aday = kalan.filter(q => !onceki || q.kat !== onceki.kat);
+      const baski = Object.keys(say).find(k => say[k] * 2 > kalan.length);
+      if (baski) aday = aday.filter(q => q.kat === baski);
+      if (sira.length < 2){ const kolay = aday.filter(q => q.z === 1); if (kolay.length) aday = kolay; }
+      if (!aday.length){ takildi = true; break; }
+      const q = fenSec(aday); kalan.splice(kalan.indexOf(q), 1); sira.push(q);
+    }
+    if (!takildi) dizi = sira;
+  }
+  if (!dizi) dizi = secilen;
+  const konum = [0, 0, 0, 0]; let son = -1;
+  S.sorular = dizi.map(q => {
+    const ad = [0, 1, 2, 3].filter(i => i !== son), enAz = Math.min(...ad.map(i => konum[i]));
+    const ix = fenSec(ad.filter(i => konum[i] === enAz)); konum[ix]++; son = ix;
+    return msSecenekHazirla(q, ix);
+  });
+}
+
+/* ── UYARICI ÇİZİMİ ── (genel kartlar; gerçek platform taklidi YOK) */
+const MS_RENK = { mavi: ["#2F5FD0", "#EAF0FF"], yesil: ["#1F8A5B", "#E6F6EE"], kirmizi: ["#C23B3B", "#FDECEC"], sari: ["#B7791F", "#FFF6DB"], mor: ["#6D4AC9", "#F0EBFF"], turuncu: ["#D0621F", "#FFF0E6"] };
+function msBasHarf(ad){ return String(ad).split(/\s+/).map(p => p.charAt(0)).join("").slice(0, 2).toLocaleUpperCase("tr"); }
+function msAvatarRenk(ad){ let h = 0; for (const c of String(ad)) h = (h * 31 + c.charCodeAt(0)) % 360; return `hsl(${h} 55% 45%)`; }
+function msUyariciHtml(u){
+  if (!u) return "";
+  const k = kacis;
+  if (u.t === "paylasim") return `<div class="ms-u ms-paylasim" aria-label="Sosyal medya paylaşımı">
+      <div class="ms-u-ust"><span class="ms-u-etiket">🌐 Kampüs Akış</span></div>
+      <div class="ms-p-bas"><span class="ms-avatar" style="background:${msAvatarRenk(u.ad)}">${k(msBasHarf(u.ad))}</span><span class="ms-p-kim"><b>${k(u.ad)}</b><i>${k(u.kul || "")} · 2 sa</i></span></div>
+      <p class="ms-p-metin">${k(u.metin).replace(/(#[\wçğıöşüÇĞİÖŞÜ]+)/g, "<span class=\"ms-etiket\">$1</span>")}</p>
+      ${u.gorsel ? `<div class="ms-p-gorsel" aria-hidden="true">${u.gorsel}</div>` : ""}
+      <div class="ms-p-alt" aria-hidden="true"><span>♡ ${k(u.begeni || "128")}</span><span>💬 14</span><span>↪ Paylaş</span></div></div>`;
+  if (u.t === "sohbet") return `<div class="ms-u ms-sohbet" aria-label="Mesajlaşma">
+      <div class="ms-u-ust"><span class="ms-u-etiket">💬 Mesajlar · ${k(u.baslik)}</span></div>
+      <div class="ms-s-akis">${u.m.map(([kim, m], i) => { const ben = i > 0 && u.m.length > 1 && kim !== u.m[0][0]; return `<div class="ms-balon${ben ? " sag" : ""}"><b>${k(kim)}</b><span>${k(m)}</span></div>`; }).join("")}</div></div>`;
+  if (u.t === "afis" || u.t === "reklam"){
+    const [r, z] = MS_RENK[u.renk] || MS_RENK.mavi;
+    return `<div class="ms-u ms-afis${u.t === "reklam" ? " reklam" : ""}" style="--ar:${r};--az:${z}" aria-label="${u.t === "reklam" ? "Reklam" : "Afiş"}">
+      ${u.t === "reklam" ? `<span class="ms-reklam-et">REKLAM</span><span class="ms-afis-ikon" aria-hidden="true">${u.ikon}</span><b class="ms-marka">${k(u.marka)}</b><p class="ms-afis-bas">${k(u.slogan)}</p>`
+        : `<span class="ms-afis-ikon" aria-hidden="true">${u.ikon}</span><p class="ms-afis-bas">${k(u.baslik)}</p>${u.alt ? `<p class="ms-afis-alt">${k(u.alt)}</p>` : ""}${(u.satir || []).map(s => `<p class="ms-afis-satir">${k(s)}</p>`).join("")}`}</div>`;
+  }
+  if (u.t === "haber") return `<div class="ms-u ms-haber${u.dijital ? " dijital" : ""}" aria-label="${u.dijital ? "Dijital haber" : "Gazete haberi"}">
+      ${u.dijital ? `<div class="ms-h-bar" aria-hidden="true"><i></i><i></i><i></i><span>🔒 ${k(u.kaynak)}</span></div>` : `<div class="ms-h-kunye">${k(u.kaynak)}</div>`}
+      <p class="ms-h-manset">${k(u.manset)}</p><p class="ms-h-spot">${k(u.spot)}</p></div>`;
+  if (u.t === "gorsel") return `<div class="ms-u ms-gorsel" aria-label="Görsel"><div class="ms-g-sahne" aria-hidden="true">${u.sahne}</div>${u.yazi ? `<p class="ms-g-yazi">${k(u.yazi)}</p>` : ""}</div>`;
+  if (u.t === "beden") return `<div class="ms-u ms-beden" aria-label="Beden dili sahnesi"><div class="ms-b-sahne" aria-hidden="true">${u.sahne}</div><p class="ms-b-betim">${k(u.betim)}</p></div>`;
+  if (u.t === "grafik"){
+    const max = Math.max(...u.veri.map(v => v[1])), W = 260, H = 150, ust = 18, alt = 26, sol = 34;
+    const bw = 64, ara = (W - sol - bw * u.veri.length) / (u.veri.length + 1);
+    const y = v => ust + (H - ust - alt) * (1 - (v - u.eksen) / (max - u.eksen));
+    return `<div class="ms-u ms-grafik" aria-label="Grafik"><p class="ms-g-yazi">${k(u.baslik)}</p>
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Sütun grafiği: ${u.veri.map(v => v[0] + " " + v[1]).join(", ")}; dikey eksen ${u.eksen}'den başlıyor">
+        <line x1="${sol}" y1="${ust}" x2="${sol}" y2="${H - alt}" stroke="#8A93A8" stroke-width="1.5"/><line x1="${sol}" y1="${H - alt}" x2="${W - 6}" y2="${H - alt}" stroke="#8A93A8" stroke-width="1.5"/>
+        ${[u.eksen, max].map(v => `<text x="${sol - 5}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="#5A6275">${v}</text>`).join("")}
+        ${u.veri.map((v, i) => { const x = sol + ara * (i + 1) + bw * i; return `<rect x="${x}" y="${y(v[1])}" width="${bw}" height="${H - alt - y(v[1])}" rx="4" fill="${i ? "#E0662F" : "#4C6FD8"}"/><text x="${x + bw / 2}" y="${H - 9}" text-anchor="middle" font-size="11" fill="#2B3245">${k(v[0])}</text><text x="${x + bw / 2}" y="${y(v[1]) - 4}" text-anchor="middle" font-size="11" font-weight="700" fill="#2B3245">${v[1]}</text>`; }).join("")}
+      </svg></div>`;
+  }
+  return `<div class="ms-u ms-metin${u.cumle ? " cumle" : ""}"><p>${k(u.metin).replace(/____/g, '<span class="ms-bos">____</span>')}</p></div>`;
+}
+function msUyariciSes(u){
+  if (!u) return "";
+  if (u.t === "paylasim") return u.ad + " paylaştı: " + u.metin;
+  if (u.t === "sohbet") return u.m.map(m => m[0] + ": " + m[1]).join(". ");
+  if (u.t === "afis") return [u.baslik, u.alt].concat(u.satir || []).filter(Boolean).join(". ");
+  if (u.t === "reklam") return u.marka + ". " + u.slogan;
+  if (u.t === "haber") return u.manset + ". " + u.spot;
+  if (u.t === "gorsel") return u.yazi || "";
+  if (u.t === "beden") return u.betim;
+  if (u.t === "grafik") return u.baslik;
+  return (u.metin || "").replace(/____/g, "boşluk");
+}
+
+/* ── DURUM ── */
+function msKur(oyun, bitir){
+  const A = oyunAyarVars(oyun.id, {});
+  const eski = {}; (A.msGorulen || []).forEach(id => { eski[id] = 1; });
+  const S = { oyun, bitir, A, eski, ix: 0, puan: 0, dogru: 0, yanlis: 0, atlanan: 0, seri: 0, enUzunSeri: 0, kat: {}, zor: {}, sonuc: [],
+    canli: true, zamanlar: [], baslangic: Date.now() };
+  S.bekle = (f, ms) => { const t = setTimeout(() => { if (S.canli) f(); }, ms); S.zamanlar.push(t); return t; };
+  S.durdur = () => { S.canli = false; S.zamanlar.forEach(clearTimeout); S.zamanlar = []; msTuslarCoz(S); konusmaDur(); };
+  temizleyici.push(S.durdur);
+  msTurKur(S);
+  return S;
+}
+function msBaslat(oyun, bitir){ const S = msKur(oyun, bitir); msTahtaBagla(S); msEkran(S); }
+function msTahtaBagla(S){
+  tahtaBaglan({
+    sonraki: () => { if (S.bitti) return; if (!S.kilit){ S.atlanan++; S.sonuc[S.ix] = "atla"; } msSonraki(S); },
+    degistir: () => {
+      if (S.bitti || S.kilit) return;
+      const q = S.sorular[S.ix], kul = {}; S.sorular.forEach(x => { kul[x.id] = 1; });
+      const bankaSay = S.sorular.filter(x => x.banka).length;
+      const aday = msHavuz().filter(x => x.kat === q.kat && x.z === q.z && !kul[x.id] && (!x.banka || q.banka || bankaSay < 2));
+      if (!aday.length) return;
+      S.sorular[S.ix] = msSecenekHazirla(fenSec(aday), q.dogruIx); msEkran(S);
+    },
+    ipucu: () => {
+      const q = S.sorular[S.ix]; if (!q || S.kilit) return;
+      const y = [...document.querySelectorAll(".ms-secenek:not(:disabled)")].filter(b => +b.dataset.i !== q.dogruIx);
+      if (y.length <= 1) return;
+      const b = fenSec(y); b.disabled = true; b.classList.add("sondu"); q.ipucu = true; sesEfekt("ipucu");
+    },
+    cevap: () => { const q = S.sorular[S.ix]; if (!q) return; const b = document.querySelector(`.ms-secenek[data-i="${q.dogruIx}"]`); if (b) b.classList.add("goster"); },
+    yeniden: () => { S.durdur(); msBaslat(S.oyun, S.bitir); },
+  });
+}
+function msEkran(S){
+  const q = S.sorular[S.ix], T = S.sorular.length;
+  S.kilit = false; S.devam = null; konusmaDur();
+  const kat = MS_KAT[q.kat];
+  const uzun = q.secenekler.some(s => s.length > 44);
+  $("app").innerHTML = `${oyunBaslik(S.oyun)}
+    <div class="ms-oyun">
+      <div class="ms-hud">
+        <span class="ms-hud-kutu">Soru <b>${S.ix + 1}</b><i>/ ${T}</i></span>
+        <span class="ms-hud-kutu">Puan <b id="msPuan">${S.puan}</b></span>
+        <span class="ms-hud-kutu ms-seri${S.seri >= 3 ? " acik" : ""}" id="msSeri">🔥 <b>${S.seri}</b></span>
+      </div>
+      <div class="ms-ilerleme" aria-hidden="true">${S.sorular.map((x, i) => `<i class="${S.sonuc[i] || (i === S.ix ? "simdi" : "")}"></i>`).join("")}</div>
+      <div class="ms-sahne">
+        <div class="ms-ust"><span class="ms-kat">${kat.ikon} ${kacis(kat.ad)}</span><span class="ms-zor z${q.z}">${MS_ZOR[q.z]}</span></div>
+        ${msUyariciHtml(q.u)}
+        <div class="ms-soru-sira"><p class="ms-soru" id="msSoru">${kacis(q.soru)}</p><button type="button" class="ms-dinle" id="msDinle" aria-label="Soruyu sesli oku">🔊</button></div>
+        <div class="ms-secenekler${uzun ? " uzun" : ""}" id="msSecenekler">${q.secenekler.map((s, i) => `<button type="button" class="ms-secenek" data-i="${i}"><span class="ms-harf">${"ABCD"[i]}</span><span class="ms-sec-yazi">${kacis(s)}</span></button>`).join("")}</div>
+      </div>
+      <div class="ms-geri" id="msGeri" hidden></div>
+    </div>`;
+  $("msSecenekler").addEventListener("click", e => { const b = e.target.closest(".ms-secenek"); if (b && !b.disabled) msCevap(S, +b.dataset.i); });
+  $("msDinle").addEventListener("click", () => konus([msUyariciSes(q.u), q.soru].concat(q.secenekler.map((s, i) => "ABCD"[i] + ". " + s)).filter(Boolean).join(". ")));
+  msTuslarBagla(S);
+  tahtaSigdirIste();
+}
+function msCevap(S, i){
+  const q = S.sorular[S.ix];
+  if (S.kilit) return;
+  S.kilit = true; konusmaDur();
+  document.querySelectorAll(".ms-secenek").forEach(b => { b.disabled = true; });
+  const b = document.querySelector(`.ms-secenek[data-i="${i}"]`), dg = document.querySelector(`.ms-secenek[data-i="${q.dogruIx}"]`);
+  const say = (o, k, ok) => { const c = o[k] || (o[k] = { d: 0, y: 0 }); if (ok) c.d++; else c.y++; };
+  const geri = $("msGeri"); geri.hidden = false;
+  if (i === q.dogruIx){
+    S.dogru++; S.seri++; S.enUzunSeri = Math.max(S.enUzunSeri, S.seri); S.sonuc[S.ix] = "dogru";
+    let kazanc = { 1: 10, 2: 15, 3: 20 }[q.z] + (S.seri >= 3 ? 5 : 0); if (q.ipucu) kazanc = Math.ceil(kazanc / 2);
+    S.puan += kazanc; say(S.kat, q.kat, true); say(S.zor, q.z, true);
+    b.classList.add("dogru"); sesEfekt(S.seri % 5 === 0 ? "bonus" : "dogru");
+    geri.className = "ms-geri iyi";
+    geri.innerHTML = `<b>✓ ${fenSec(["Doğru!", "Harika!", "Çok iyi!", "Tam isabet!"])}</b> <span>+${kazanc} puan</span>`;
+    S.devam = () => msSonraki(S);
+    S.bekle(() => msSonraki(S), 1300);
+  } else {
+    S.yanlis++; S.seri = 0; S.sonuc[S.ix] = "yanlis"; say(S.kat, q.kat, false); say(S.zor, q.z, false);
+    b.classList.add("yanlis"); dg.classList.add("dogru"); sesEfekt("yanlis");
+    geri.className = "ms-geri kotu";
+    geri.innerHTML = `<p class="ms-geri-a"><b>Doğrusu: ${kacis(q.dogru.replace(/[.!?]$/, ""))}.</b> ${kacis(q.a)}</p><button type="button" class="btn btn-primary ms-devam" id="msDevam">Devam ➜</button>`;
+    S.devam = () => msSonraki(S);
+    $("msDevam").addEventListener("click", () => S.devam && S.devam());
+    try { $("msDevam").focus({ preventScroll: true }); } catch (e) {}
+  }
+  const p = $("msPuan"); if (p) p.textContent = S.puan;
+  const s = $("msSeri"); if (s){ s.innerHTML = "🔥 <b>" + S.seri + "</b>"; s.classList.toggle("acik", S.seri >= 3); }
+  tahtaSigdirIste();
+}
+function msTuslarBagla(S){
+  msTuslarCoz(S);
+  S.tusIn = e => {
+    if (e.target.closest && e.target.closest("input, select, textarea")) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === "Enter" && S.devam && !(e.target.closest && e.target.closest(".ms-secenek"))){ e.preventDefault(); S.devam(); return; }
+    if (S.kilit) return;
+    let i = { "1": 0, "2": 1, "3": 2, "4": 3 }[e.key];
+    if (i == null && /^[a-dA-D]$/.test(e.key)) i = "abcd".indexOf(e.key.toLowerCase());
+    if (i == null) return;
+    const b = document.querySelector(`.ms-secenek[data-i="${i}"]`); if (!b || b.disabled) return;
+    e.preventDefault(); msCevap(S, i);
+  };
+  addEventListener("keydown", S.tusIn);
+}
+function msTuslarCoz(S){ if (S.tusIn) removeEventListener("keydown", S.tusIn); S.tusIn = null; }
+function msSonraki(S){
+  if (!S.canli || S.bitti) return;
+  S.devam = null; S.zamanlar.forEach(clearTimeout); S.zamanlar = [];
+  S.ix++;
+  if (S.ix >= S.sorular.length) return msBitir(S);
+  msEkran(S);
+}
+function msBitir(S){
+  if (S.bitti) return;
+  S.bitti = true;
+  const sure = Math.round((Date.now() - S.baslangic) / 1000);
+  const toplam = S.dogru + S.yanlis, yuzde = toplam ? Math.round(S.dogru / toplam * 100) : 0;
+  const satir = [{ ad: "Başarı", deger: "%" + yuzde }];
+  let zayif = null;
+  /* Altı alan ayrı ayrı: doğru / toplam ve yüzde */
+  Object.keys(MS_KAT).forEach(k => {
+    const c = S.kat[k] || { d: 0, y: 0 }, n = c.d + c.y;
+    satir.push({ ad: MS_KAT[k].ikon + " " + MS_KAT[k].ad, deger: n ? c.d + " / " + n + " · %" + Math.round(c.d / n * 100) : "—" });
+    if (n && c.d / n < .6 && (!zayif || c.d / n < zayif.o)) zayif = { k, o: c.d / n };
+  });
+  satir.push({ ad: "En uzun seri", deger: "🔥 " + S.enUzunSeri });
+  if (S.atlanan) satir.push({ ad: "Atlanan", deger: String(S.atlanan) });
+  const not = zayif ? "«" + MS_KAT[zayif.k].ad + "» alanında biraz daha çalışmanı öneririm; yeni turda farklı mesajlar gelecek." : yuzde >= 90 ? "Mesajları neredeyse kusursuz çözdün!" : "Mesajları çözdün. Yeni turda farklı metinler seni bekliyor.";
+  oyunAyarYaz(S.oyun.id, { msGorulen: (S.A.msGorulen || []).concat(S.sorular.map(q => q.id)).slice(-70) });
+  S.durdur();
+  S.bitir({ dogru: S.dogru, yanlis: S.yanlis, sure, hedefSure: S.sorular.length * 30, oyunPuan: S.puan, ekBilgi: satir, not,
+    rozet: yuzde >= 80 ? "Mesaj Çözücü rozeti" : null });
+}
+
+/* ═════════ 8. SINIF TÜRKÇE — OYUN KAYDI ═════════ */
+const TURKCE_8 = [
+  { id: "tr8-mesaji-coz", kademe: "ortaokul", sinif: "8", ders: "Türkçe",
+    unite: "1. Tema: İletişim ve Sosyal İlişkiler",
+    konu: "Yüzey ve Derin Anlam, Söz Varlığı, Söz Sanatları, İkna Teknikleri, Medya İçeriğini Sorgulama, Görsel Anlam, Yazım ve Noktalama",
+    tur: "mesajiCoz", zorluk: 2, baslik: "Mesajı Çöz",
+    etiket: "Paylaşım • Sohbet • Afiş • Reklam • Haber • Görsel • Beden Dili • Virgül, Noktalı Virgül, Nokta",
+    ozet: "Kısa bir mesajı, paylaşımı, afişi ya da görseli oku; dört seçenekten doğru yorumu bul. 30 soru, altı alanda ayrı başarı.",
+    kazanimlar: [
+      "Dinleyeceğinin/izleyeceğinin içeriğine yönelik tahminde bulunabilme (T.D.8.3)",
+      "Dinlediğinde/izlediğinde geçen anlamını bilmediği söz varlığı unsurlarının anlamını tahmin edebilme (T.D.8.4)",
+      "Dinlediğinin/izlediğinin yüzey anlamını belirleyebilme (T.D.8.5)",
+      "Basit çıkarımlar yoluyla dinlediğinin/izlediğinin derin anlamını belirleyebilme (T.D.8.6)",
+      "Üst düzey çıkarımlar yoluyla dinlediğinin/izlediğinin derin anlamını belirleyebilme (T.D.8.7)",
+      "Dinlediğinin/izlediğinin anahtar kelimelerini belirlemeye yönelik çözümleme yapabilme (T.D.8.13)",
+      "Dinlediğinde/izlediğinde kullanılan ikna tekniklerini belirlemeye yönelik çözümleme yapabilme (T.D.8.17)",
+      "Dinlediğinden/izlediğinden hareketle söz varlığını geliştirmeye yönelik çözümleme yapabilme (T.D.8.18)",
+      "Medya içeriğini sorgulayabilme (T.D.8.22)",
+      "Okuyacağı metnin içeriğine yönelik tahminde bulunabilme (T.O.8.3)",
+      "Metinde geçen anlamını bilmediği söz varlığı unsurlarının anlamını tahmin edebilme (T.O.8.4)",
+      "Metnin yüzey anlamını belirleyebilme (T.O.8.5)",
+      "Görselle iletilen anlamı belirleyebilme (T.O.8.6)",
+      "Basit çıkarımlar yoluyla metnin derin anlamını belirleyebilme (T.O.8.7)",
+      "Üst düzey çıkarımlar yoluyla metnin derin anlamını belirleyebilme (T.O.8.8)",
+      "Metnin anahtar kelimelerini belirlemeye yönelik çözümleme yapabilme (T.O.8.14)",
+      "Metindeki söz sanatlarını belirlemeye yönelik çözümleme yapabilme (T.O.8.18)",
+      "Metinden hareketle söz varlığını geliştirmeye yönelik çözümleme yapabilme (T.O.8.20)",
+      "Basılı ve dijital medya metnini sorgulayabilme (T.O.8.23)",
+      "Yazım ve noktalama işaretleriyle ilgili kuralları uygulayabilme (T.Y.8.20)"] },
+];
+
 /* ═════════ 5. SINIF DKAB · İZLERİ TAKİP ET (it-) ═══════════════════════════
    Türkiye Yüzyılı Maarif Modeli, Din Kültürü ve Ahlak Bilgisi Dersi Öğretim
    Programı · 5. sınıf · 1. ÜNİTE: ALLAH İNANCI (bkz. mufredat.js «din-5»).
@@ -50505,7 +51823,7 @@ const OYUNLAR = [
   ...TURKCE_3,
   ...TURKCE_4,
   ...MATEMATIK_4,
-  ...FEN_4, ...SOSYAL_4, ...INGILIZCE_4, ...DIN_4, ...TURKCE_5, ...MATEMATIK_5, ...FEN_5, ...SOSYAL_5, ...INGILIZCE_5, ...DIN_5, ...KURAN_5, ...TDB_6, ...TURKCE_6, ...MATEMATIK_6, ...FEN_6, ...SOSYAL_6, ...DIN_6, ...TURKCE_7, ...MATEMATIK_7, ...FEN_7, ...SOSYAL_7, ...INGILIZCE_7, ...DIN_7,
+  ...FEN_4, ...SOSYAL_4, ...INGILIZCE_4, ...DIN_4, ...TURKCE_5, ...MATEMATIK_5, ...FEN_5, ...SOSYAL_5, ...INGILIZCE_5, ...DIN_5, ...KURAN_5, ...TDB_6, ...TURKCE_6, ...MATEMATIK_6, ...FEN_6, ...SOSYAL_6, ...DIN_6, ...TURKCE_7, ...MATEMATIK_7, ...FEN_7, ...SOSYAL_7, ...INGILIZCE_7, ...DIN_7, ...PH_7, ...TURKCE_8,
   ...MATEMATIK_3,
   ...FEN_3,
   ...HAYAT_3,
@@ -58349,6 +59667,14 @@ const TUR_ISLEYICI = {
   kavramHatti: {
     ad: "Kavram Hattı", ikon: "🧭", yeniOyuncu: true, yeniOyuncuAd: "Yeni Oyuncu",
     baslat(oyun, bitir){ mhBaslat(oyun, bitir); },
+  },
+  hicretYolu: {
+    ad: "Hicret Yolu", ikon: "🐪", yeniOyuncu: true, yeniOyuncuAd: "Yeni Oyuncu",
+    baslat(oyun, bitir){ hrBaslat(oyun, bitir); },
+  },
+  mesajiCoz: {
+    ad: "Mesajı Çöz", ikon: "💬", yeniOyuncu: true, yeniOyuncuAd: "Yeni Oyuncu",
+    baslat(oyun, bitir){ msBaslat(oyun, bitir); },
   },
   izleriTakipEt: {
     ad: "İzleri Takip Et", ikon: "👣", yeniOyuncu: true, yeniOyuncuAd: "Yeni Oyuncu",
