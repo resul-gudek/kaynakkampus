@@ -12,6 +12,7 @@ import {
 } from "@/lib/etkinlik";
 import { yayindakiAgac, type HamDugum } from "@/lib/etkinlik-sunucu";
 import KlasorIkonu from "@/components/etkinlik/KlasorIkonu";
+import { aracOzeti, toplamSayilar } from "@/lib/kullanim-sayaci";
 import s from "../etkinlik.module.css";
 
 /* Herkese açık PDF etkinlik arşivi — oturum gerekmez.
@@ -22,6 +23,9 @@ import s from "../etkinlik.module.css";
    Arşiv seyrek değişir; sayfa önbelleklenir ve panelden yapılan her
    değişiklikte revalidatePath ile tazelenir (bkz. actions/etkinlik.ts). */
 export const revalidate = 300;
+
+/** 1234 → "1.234" (binlik ayırıcı elle — SSR/CSR tutarlılığı) */
+const binlik = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 /** Yol parçalarını izleyerek klasörü bulur; yol geçersizse null */
 function klasoruCoz(agac: HamDugum[], yol: string[]): HamDugum | null | undefined {
@@ -89,6 +93,11 @@ export default async function EtkinlikArsivSayfasi({
   }));
   const ustAdres = parcalar.length ? etkinlikYolUrl(parcalar.slice(0, -1)) : "";
 
+  /* Anonim indirme sayıları: başlıkta arşiv toplamı, kartta PDF başına
+     (sayaç detayı etkinlik kimliğidir — bkz. api/etkinlik/pdf/[id]) */
+  const [ozet, indirmeler] = await Promise.all([aracOzeti(), toplamSayilar("etkinlik")]);
+  const toplamIndirme = ozet.etkinlikler ?? 0;
+
   return (
     <main>
       <section className={s.sahneBas}>
@@ -110,6 +119,9 @@ export default async function EtkinlikArsivSayfasi({
               ? "Klasörlere girerek ilgili çalışma kâğıtlarına ulaşabilir, PDF'leri görüntüleyip indirebilirsiniz."
               : "İlkokul, ortaokul ve lise için sınıf ve ders klasörlerine göre düzenlenmiş ücretsiz PDF etkinlikler. Klasöre girip dilediğinizi indirin."}
           </p>
+          {!!toplamIndirme && (
+            <p className={s.kullanim}>📈 {binlik(toplamIndirme)} kez indirildi</p>
+          )}
         </div>
       </section>
 
@@ -205,8 +217,15 @@ export default async function EtkinlikArsivSayfasi({
                   </a>
                   <div className={s.kartGovde}>
                     <h2 className={s.kartBaslik}>{p.ad}</h2>
-                    {!!p.dosyaBoyut && (
-                      <span className={s.kartNot}>{boyutMetni(p.dosyaBoyut)}</span>
+                    {(!!p.dosyaBoyut || !!indirmeler.get(p.id)) && (
+                      <span className={s.kartNot}>
+                        {[
+                          p.dosyaBoyut ? boyutMetni(p.dosyaBoyut) : "",
+                          indirmeler.get(p.id) ? `⬇ ${binlik(indirmeler.get(p.id)!)} indirme` : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
                     )}
                     <div className={s.pdfEylem}>
                       <a

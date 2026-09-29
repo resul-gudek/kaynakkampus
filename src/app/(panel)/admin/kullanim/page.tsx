@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { aktifKullanici } from "@/lib/oturum";
-import { bugunIstanbul } from "@/lib/kullanim-sayaci";
+import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
+import { bugunIstanbul, toplamSayilar } from "@/lib/kullanim-sayaci";
 import stil from "../admin.module.css";
 
 export const metadata: Metadata = { title: "Site Kullanımı – Kaynak Kampüs" };
@@ -11,6 +12,7 @@ export const metadata: Metadata = { title: "Site Kullanımı – Kaynak Kampüs"
    (bkz. src/lib/kullanim-sayaci.ts); burada da yalnızca sayılar vardır. */
 
 const GUN_SAYISI = 30;
+const BLOG_ONEK = "/blog/";
 
 /** Tablo kolonları — olay anahtarı → ekran başlığı (sıra ekran sırasıdır) */
 const KOLONLAR: [string, string][] = [
@@ -20,6 +22,8 @@ const KOLONLAR: [string, string][] = [
   ["odev", "Ödev"],
   ["bep", "BEP"],
   ["ders-programi", "Ders Prog."],
+  ["test", "Zekâ Testi"],
+  ["kariyer", "Kariyer"],
 ];
 
 function gunEtiket(gun: Date, bugun: Date): string {
@@ -49,6 +53,10 @@ export default async function KullanimSayfasi() {
   /* Detay dökümleri: en çok oynanan oyunlar / indirilen etkinlikler (30 gün) */
   const oyunlar = new Map<string, number>();
   const etkinlikler = new Map<string, number>();
+  /* Blog okumaları "sayfa" olayı içinde "/blog/<slug>" yoluyla sayılır */
+  const bloglar = new Map<string, number>();
+  const gunlukBlog = new Map<number, number>();
+  let bugunBlog = 0;
   const bugunToplam = new Map<string, number>();
 
   for (const s of satirlar) {
@@ -61,13 +69,49 @@ export default async function KullanimSayfasi() {
     if (s.olay === "oyun" && s.detay) oyunlar.set(s.detay, (oyunlar.get(s.detay) ?? 0) + s.sayi);
     if (s.olay === "etkinlik" && s.detay)
       etkinlikler.set(s.detay, (etkinlikler.get(s.detay) ?? 0) + s.sayi);
+    if (s.olay === "sayfa" && s.detay.startsWith(BLOG_ONEK)) {
+      const slug = s.detay.slice(BLOG_ONEK.length);
+      bloglar.set(slug, (bloglar.get(slug) ?? 0) + s.sayi);
+      gunlukBlog.set(g, (gunlukBlog.get(g) ?? 0) + s.sayi);
+      if (g === bugun.getTime()) bugunBlog += s.sayi;
+    }
   }
 
   const gunler = [...gunluk.keys()].sort((a, b) => b - a).map((t) => new Date(t));
   const enCok = (m: Map<string, number>) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
   const enCokOyun = enCok(oyunlar);
-  const enCokEtkinlik = enCok(etkinlikler);
+  /* Etkinlik detayı indirme rotasında etkinlik KİMLİĞİDİR; ekranda ada
+     çevrilir (eski, adla tutulmuş satırlar olduğu gibi gösterilir) */
+  const enCokEtkinlikHam = enCok(etkinlikler);
+  const etkinlikAdlari = new Map(
+    (
+      await prisma.etkinlikDugum.findMany({
+        where: { id: { in: enCokEtkinlikHam.map(([d]) => d) } },
+        select: { id: true, ad: true },
+      })
+    ).map((d) => [d.id, d.ad])
+  );
+  const enCokEtkinlik = enCokEtkinlikHam.map(
+    ([d, n]) => [etkinlikAdlari.get(d) ?? d, n] as [string, number]
+  );
   const otuzGunToplam = satirlar.reduce((t, s) => t + s.sayi, 0);
+
+  /* Blog tablosu: yayındaki tüm yazılar, 30 gün + tüm zamanlar okunmasıyla
+     (hiç okunmamış yazı da listede görünsün diye yazılardan yola çıkılır) */
+  const [yazilar, blogTumZaman] = await Promise.all([
+    prisma.blogYazi.findMany({
+      where: YAYINDA_KOSUL,
+      select: { slug: true, baslik: true },
+    }),
+    toplamSayilar("sayfa", BLOG_ONEK),
+  ]);
+  const blogSatirlari = yazilar
+    .map((y) => ({
+      ...y,
+      otuz: bloglar.get(y.slug) ?? 0,
+      tum: blogTumZaman.get(BLOG_ONEK + y.slug) ?? 0,
+    }))
+    .sort((a, b) => b.otuz - a.otuz || b.tum - a.tum);
 
   return (
     <main className="container" style={{ maxWidth: 1160, paddingBottom: 40 }}>
@@ -93,6 +137,10 @@ export default async function KullanimSayfasi() {
           <div className={stil.statKutu}>
             <b>{bugunToplam.get("etkinlik") ?? 0}</b>
             <small>Etkinlik indirme</small>
+          </div>
+          <div className={stil.statKutu}>
+            <b>{bugunBlog}</b>
+            <small>Blog okuma</small>
           </div>
           <div className={stil.statKutu}>
             <b>
@@ -132,6 +180,9 @@ export default async function KullanimSayfasi() {
                       {baslik}
                     </th>
                   ))}
+                  <th style={{ textAlign: "right" }} title="Sayfa sütununun blog yazısı kısmı">
+                    Blog
+                  </th>
                   <th style={{ textAlign: "right" }}>Toplam</th>
                 </tr>
               </thead>
@@ -149,6 +200,9 @@ export default async function KullanimSayfasi() {
                           {olaylar.get(olay) ?? 0}
                         </td>
                       ))}
+                      <td data-label="Blog" style={{ textAlign: "right" }}>
+                        {gunlukBlog.get(gun.getTime()) ?? 0}
+                      </td>
                       <td data-label="Toplam" style={{ textAlign: "right" }}>
                         <b>{toplam}</b>
                       </td>
@@ -188,6 +242,48 @@ export default async function KullanimSayfasi() {
                     </td>
                     <td data-label="Başlatma" style={{ textAlign: "right" }}>
                       {sayi}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className={stil.bolum}>
+        <h2>
+          📰 <span>Blog Yazılarının Okunması</span>
+        </h2>
+        {blogSatirlari.length === 0 ? (
+          <p style={{ color: "var(--muted)", fontSize: ".86rem", padding: "8px 4px" }}>
+            Yayında blog yazısı yok.
+          </p>
+        ) : (
+          <div className={stil.tabloSarici}>
+            <table className={stil.tablo}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Yazı</th>
+                  <th style={{ textAlign: "right" }}>Son {GUN_SAYISI} gün</th>
+                  <th style={{ textAlign: "right" }}>Tüm zamanlar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {blogSatirlari.map((y, i) => (
+                  <tr key={y.slug}>
+                    <td>{i + 1}</td>
+                    <td data-label="Yazı">
+                      <a href={`${BLOG_ONEK}${y.slug}`} target="_blank" rel="noreferrer">
+                        <b>{y.baslik}</b>
+                      </a>
+                    </td>
+                    <td data-label={`Son ${GUN_SAYISI} gün`} style={{ textAlign: "right" }}>
+                      {y.otuz}
+                    </td>
+                    <td data-label="Tüm zamanlar" style={{ textAlign: "right" }}>
+                      {y.tum}
                     </td>
                   </tr>
                 ))}

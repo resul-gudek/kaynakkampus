@@ -167,6 +167,11 @@ export function yayinTarihiMetni(tarih: Date | string | null | undefined): strin
   return `${t.getDate()} ${AYLAR[t.getMonth()]} ${t.getFullYear()}`;
 }
 
+/** "1.234 kez okundu" — binlik ayırıcı elle konur (SSR/CSR tutarlılığı) */
+export function okunmaMetni(sayi: number): string {
+  return `${String(sayi).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} kez okundu`;
+}
+
 /* ── Arama / filtreleme ──────────────────────────────────────
    Liste sayfasındaki arama ve kategori süzgeci; hem istemci hem
    test tarafından kullanılır. */

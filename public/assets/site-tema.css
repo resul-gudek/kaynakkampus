@@ -320,6 +320,20 @@ strong, b { font-weight: var(--agirlik-orta); }
   line-height: var(--leading-subheading); letter-spacing: -.2px;
 }
 .kart-not { display: block; margin-top: var(--bosluk-4); font-size: 13px; color: var(--grafit); }
+/* Anonim sayaçtan gelen "N kez kullanıldı" satırı (assets/kullanim-sayac.js
+   doldurur); veri yoksa ya da eşiğin altındaysa boş kalır ve yer kaplamaz */
+.kart-kullanim { display: block; margin-top: var(--bosluk-4); font-size: 12px; font-weight: var(--agirlik-kalin); color: var(--bordo); }
+.kart-kullanim:empty { display: none; }
+/* Araç sayfası başlığının altındaki aynı sayı — küçük hap. İki sınıflı seçici:
+   sayfaların gömülü ".page-hero p" kurallarını ezmek için (bu dosya onlardan
+   sonra yüklenir ama tek sınıflı kural hap görünümünü kaybedebilir) */
+.page-hero p.hero-kullanim {
+  display: inline-block; margin: var(--bosluk-12) 0 0; padding: 4px 12px;
+  border-radius: 999px; background: var(--gul-sis); border: 1px solid var(--gul-ac);
+  font-size: 13px; font-weight: var(--agirlik-kalin); color: var(--bordo); line-height: 1.5;
+}
+.page-hero p.hero-kullanim::before { content: "📈 "; }
+.page-hero p.hero-kullanim:empty { display: none; }
 .kart-metin { display: block; margin-top: var(--bosluk-8); font-size: var(--text-small); line-height: 1.6; color: var(--grafit); }
 
 /* Katalog satırı: ikon + başlık + sayaç + sağ şevron */

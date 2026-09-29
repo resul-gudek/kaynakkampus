@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { hizSiniriIzin } from "@/lib/rate-limit";
-import { OLAYLAR, detayTemizle, sayacArtir } from "@/lib/kullanim-sayaci";
+import {
+  OLAYLAR,
+  aracOzeti,
+  detayTemizle,
+  sayacArtir,
+  toplamSayilar,
+} from "@/lib/kullanim-sayaci";
 
 /**
  * Anonim kullanım sayacı ucu — public sayfalardaki assets/kullanim-sayac.js
@@ -36,4 +42,22 @@ export async function POST(req: Request) {
     return new NextResponse(null, { status: 500 });
   }
   return new NextResponse(null, { status: 204 });
+}
+
+/** Herkese açık toplamlar — oyunlar.html kartlarındaki "kez oynandı"
+ *  sayısı buradan okunur: { "<oyun adı>": toplam }. Yalnız izinli olaylar
+ *  açılır (sayfa yolları, araç kullanımı vb. dışarı verilmez). */
+const ACIK_TOPLAMLAR = new Set(["oyun"]);
+
+export async function GET(req: Request) {
+  const sorgu = new URL(req.url).searchParams;
+  const onbellek = { headers: { "Cache-Control": "public, max-age=300" } };
+
+  /* ?ozet=araclar → araç kartlarındaki "kaç kez kullanıldı" sayıları */
+  if (sorgu.get("ozet") === "araclar") return NextResponse.json(await aracOzeti(), onbellek);
+
+  const olay = sorgu.get("olay") ?? "";
+  if (!ACIK_TOPLAMLAR.has(olay)) return new NextResponse(null, { status: 400 });
+  const toplam = await toplamSayilar(olay);
+  return NextResponse.json(Object.fromEntries(toplam), onbellek);
 }

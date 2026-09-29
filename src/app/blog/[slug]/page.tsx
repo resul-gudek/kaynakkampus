@@ -8,11 +8,13 @@ import {
   etiketleriAyir,
   kategoriEtiketi,
   kategoriIkonu,
+  okunmaMetni,
   ozetUret,
   slugGecerli,
   yayinTarihiMetni,
 } from "@/lib/blog";
 import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
+import { blogSayfaDetayi, toplamSayilar } from "@/lib/kullanim-sayaci";
 import { mutlakAdres } from "@/lib/site";
 import Icerik from "../Icerik";
 import YaziKarti from "../YaziKarti";
@@ -130,6 +132,8 @@ export default async function BlogYaziSayfasi({
 
   const etiketler = etiketleriAyir(yazi.etiketler);
   const tarih = yayinTarihiMetni(yazi.yayinTarihi);
+  const okunmalar = await toplamSayilar("sayfa", "/blog/");
+  const okunma = okunmalar.get(blogSayfaDetayi(yazi.slug)) ?? 0;
 
   /* Arama motorları için yapısal veri (JSON-LD). Kullanıcı verisi
      JSON.stringify ile kaçırılır; içeriğe HTML enjekte edilemez. */
@@ -175,6 +179,7 @@ export default async function BlogYaziSayfasi({
               {tarih && <time dateTime={yazi.yayinTarihi?.toISOString()}>📅 {tarih}</time>}
               {!!yazi.okuma && <span>⏱ {yazi.okuma} dk okuma</span>}
               {yazi.yazarAd && <span>✍️ {yazi.yazarAd}</span>}
+              {!!okunma && <span>👁 {okunmaMetni(okunma)}</span>}
             </div>
             {yazi.ozet && <p className={s.yaziOzet}>{yazi.ozet}</p>}
           </header>
@@ -209,7 +214,10 @@ export default async function BlogYaziSayfasi({
             <p>Bu yazıyı okuyanların ilgisini çekebilecek diğer içerikler.</p>
             <div className={s.izgara}>
               {ilgili.map((y) => (
-                <YaziKarti key={y.id} yazi={kartaCevir(y)} />
+                <YaziKarti
+                  key={y.id}
+                  yazi={kartaCevir(y, okunmalar.get(blogSayfaDetayi(y.slug)) ?? 0)}
+                />
               ))}
             </div>
           </div>
@@ -253,7 +261,7 @@ type KartKaydi = {
   kapakYol: string | null;
 };
 
-function kartaCevir(y: KartKaydi): YaziKartiVerisi {
+function kartaCevir(y: KartKaydi, okunma: number): YaziKartiVerisi {
   return {
     id: y.id,
     slug: y.slug,
@@ -265,5 +273,6 @@ function kartaCevir(y: KartKaydi): YaziKartiVerisi {
     tarihIso: y.yayinTarihi?.toISOString() ?? "",
     okuma: y.okuma,
     kapakVar: !!y.kapakYol,
+    okunma,
   };
 }

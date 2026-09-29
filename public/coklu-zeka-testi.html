@@ -369,6 +369,7 @@
     <span class="kk-badge">🧭 Öğrenme Eğilimleri Envanteri</span>
     <h1>Çoklu Zekâ <span>Testi</span></h1>
     <p>Howard Gardner’ın Çoklu Zekâ Kuramı’ndan esinlenen bu çalışma, hangi yöntemlerle daha rahat öğrendiğini fark etmene yardımcı olur. Kesin bir zekâ ölçümü değil; yol gösterici bir öğrenme eğilimleri envanteridir.</p>
+    <p class="hero-kullanim" data-kullanim="coklu-zeka-testi"></p>
   </div>
 </section>
 
@@ -1124,6 +1125,7 @@ function ekranTest() {
       const kalan = bosIndeksler();
       if (!kalan.length) {                       // eksik kalmadı → doğrudan sonuç
         eksikModunuKapat();
+        testSayac();
         durum.ekran = "sonuc"; render(); alanaHizala();
       } else if (kalan.length === 1 && kalan[0] === i) {
         // Tek kalan boş soru bu ve hâlâ cevaplanmadı: atlanacak yer yok
@@ -1182,6 +1184,7 @@ function ekranKontrol() {
   } else {
     $("bitir").addEventListener("click", () => {
       eksikModunuKapat();
+      testSayac();
       durum.ekran = "sonuc"; render(); alanaHizala();
     });
   }
@@ -1214,6 +1217,11 @@ function alanDetaylari(sonuclar, seviye) {
       </div>
     </details>`;
   }).join("");
+}
+
+/* Anonim kullanım sayacı (assets/kullanim-sayac.js) — tamamlanan test adedi */
+function testSayac() {
+  if (window.KKSayac) KKSayac.gonder("test", String(durum.seviye || ""));
 }
 
 function ekranSonuc() {

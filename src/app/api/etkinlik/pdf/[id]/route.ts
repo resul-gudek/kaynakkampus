@@ -6,6 +6,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { dosyaMutlakYol } from "@/lib/dosya-saklama";
 import { logcu } from "@/lib/log";
+import { hizSiniriIzin } from "@/lib/rate-limit";
+import { sayacArtir } from "@/lib/kullanim-sayaci";
 
 const log = logcu("etkinlik-pdf");
 
@@ -54,6 +56,17 @@ export async function GET(istek: NextRequest, { params }: { params: Promise<{ id
   ) as unknown as ReadableStream<Uint8Array>;
 
   const indir = istek.nextUrl.searchParams.get("indir") === "1";
+
+  /* Anonim indirme sayacı (detay: etkinlik kimliği — adlar sınıflar arasında
+     tekrarlanabildiği için). Yalnız yayındaki PDF'in "İndir"i sayılır; aynı
+     IP aynı PDF'i 10 dk içinde yeniden indirirse bir kez sayılır. IP yalnız
+     bellek-içi anahtardır, kaydedilmez. Sayaç yanıtı bekletmez. */
+  if (indir && dugum.durum === "yayinda") {
+    const ip = (istek.headers.get("x-forwarded-for") ?? "yerel").split(",")[0].trim();
+    if (hizSiniriIzin(`etkinlik-indir:${ip}:${id}`, 1, 10 * 60_000)) {
+      sayacArtir("etkinlik", id).catch(() => {});
+    }
+  }
   /* İndirme adı Türkçe karakter taşıyabilir: ASCII yedeği filename ile,
      gerçek ad RFC 5987 filename* ile gönderilir. */
   const ad = (dugum.dosyaAd || `${dugum.ad}.pdf`).replace(/["\\]/g, "");

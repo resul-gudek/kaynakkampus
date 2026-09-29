@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { blogKapakUrl, blogYaziUrl, kategoriEtiketi, kategoriIkonu } from "@/lib/blog";
+import { blogKapakUrl, blogYaziUrl, kategoriEtiketi, kategoriIkonu, okunmaMetni } from "@/lib/blog";
 import type { YaziKarti as YaziKartiVerisi } from "./tipler";
 import s from "./blog.module.css";
 
@@ -34,6 +34,7 @@ export default function YaziKarti({ yazi }: { yazi: YaziKartiVerisi }) {
           <span>
             {yazi.tarihMetni}
             {yazi.okuma ? ` · ${yazi.okuma} dk okuma` : ""}
+            {yazi.okunma ? ` · 👁 ${okunmaMetni(yazi.okunma)}` : ""}
           </span>
           <Link href={adres} className={s.devam}>
             Okumaya başla →

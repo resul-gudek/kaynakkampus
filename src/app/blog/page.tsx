@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { gecerliKategori, yayinTarihiMetni } from "@/lib/blog";
 import { YAYINDA_KOSUL } from "@/lib/blog-sunucu";
+import { blogSayfaDetayi, toplamSayilar } from "@/lib/kullanim-sayaci";
 import BlogListe from "./BlogListe";
 import type { YaziKarti } from "./tipler";
 import s from "./blog.module.css";
@@ -50,6 +51,8 @@ export default async function BlogSayfasi({
     },
   });
 
+  const okunmalar = await toplamSayilar("sayfa", "/blog/");
+
   const kartlar: YaziKarti[] = yazilar.map((y) => ({
     id: y.id,
     slug: y.slug,
@@ -61,6 +64,7 @@ export default async function BlogSayfasi({
     tarihIso: y.yayinTarihi?.toISOString() ?? "",
     okuma: y.okuma,
     kapakVar: !!y.kapakYol,
+    okunma: okunmalar.get(blogSayfaDetayi(y.slug)) ?? 0,
   }));
 
   /* Geçersiz kategori parametresi yok sayılır (süzgeç açılışta boş kalır) */

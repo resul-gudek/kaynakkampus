@@ -13,4 +13,6 @@ export interface YaziKarti {
   tarihIso: string;
   okuma: number;
   kapakVar: boolean;
+  /** Tüm zamanlar okunma sayısı (anonim sayaçtan) */
+  okunma: number;
 }

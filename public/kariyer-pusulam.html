@@ -525,6 +525,7 @@
   <div class="container">
     <h1>Kariyer <span>Pusulam</span></h1>
     <p>Geleceğini tek bir test belirleyemez. Kariyer Pusulam; ilgi alanlarını, yeteneklerini, beklentilerini ve çalışma tercihlerini bir arada görmene yardımcı olur.</p>
+    <p class="hero-kullanim" data-kullanim="kariyer-pusulam"></p>
   </div>
 </section>
 
@@ -1290,6 +1291,7 @@
       git.type = "button";
       git.style.marginTop = "18px";
       git.addEventListener("click", function () {
+        if (window.KKSayac) KKSayac.gonder("kariyer", "tamamlandi");
         durum.ekran = "sonuc"; kaydet(); ciz(); basaGit();
       });
       kutu.appendChild(git);
